@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -79,24 +80,28 @@ public class ModMain {
 	 private void initBlocks()
 	 {
 		 oreTin = new Block(601, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
-				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:tinore");
+				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:tinore").setUnlocalizedName("allomancy:tinore");
 		 oreLead = new Block(602, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
-				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:leadore");
+				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:leadore").setUnlocalizedName("allomancy:leadore");
 
 		 oreCopper = new Block(603, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
-				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:copperore");
+				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:copperore").setUnlocalizedName("allomancy:copperore")				 ;
 
 	 }
 	 private void setupBlocks()
 	 {
-		 GameRegistry.registerBlock(oreTin, "allomancy:oreTin");
+		 GameRegistry.registerBlock(oreTin, "allomancy:tinore");
 		 LanguageRegistry.addName(oreTin, "Tin Ore");
+		 MinecraftForge.setBlockHarvestLevel(oreTin, "pick", 1);
 
-		 GameRegistry.registerBlock(oreLead, "allomancy:oreLead");
+		 GameRegistry.registerBlock(oreLead, "allomancy:leadore");
 		 LanguageRegistry.addName(oreLead, "Lead Ore");
+		 MinecraftForge.setBlockHarvestLevel(oreLead, "pick", 1);
 
-		 GameRegistry.registerBlock(oreLead, "allomancy:orecopper");
-		 LanguageRegistry.addName(oreLead, "Copper Ore");
+		 GameRegistry.registerBlock(oreCopper, "allomancy:copperore");
+		 LanguageRegistry.addName(oreCopper, "Copper Ore");
+		 MinecraftForge.setBlockHarvestLevel(oreCopper, "pick", 1);
+
 
 	 }
 	 
@@ -107,7 +112,7 @@ public class ModMain {
 		itemTinIngot = new Item(501).setUnlocalizedName("allomancy:tiningot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemTinFlakes = new Item(502).setUnlocalizedName("allomancy:tinflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		itemLeadIngot = new Item(503).setUnlocalizedName("allomancy:leadingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		itemLeadFlakes = new Item(504).setUnlocalizedName("allomancy:Leadflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemLeadFlakes = new Item(504).setUnlocalizedName("allomancy:leadflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		itemCopperIngot = new Item(505).setUnlocalizedName("allomancy:copperingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemCopperFlakes = new Item(506).setUnlocalizedName("allomancy:copperflakes").setCreativeTab(CreativeTabs.tabMaterials);
 
@@ -141,7 +146,7 @@ public class ModMain {
 		 
 		 GameRegistry.registerItem(itemCopperFlakes, "allomancy:copperflakes");
 		 LanguageRegistry.addName(itemCopperFlakes, "Copper Flakes");
-		 itemLeadFlakes.setTextureName("allomancy:copperflakes");
+		 itemCopperFlakes.setTextureName("allomancy:copperflakes");
 		 
 
 	 }
