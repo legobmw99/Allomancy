@@ -28,9 +28,13 @@ public class ModMain {
 	public static Item itemTinFlakes;
 	public static Item itemLeadIngot;
 	public static Item itemLeadFlakes;
+	public static Item itemCopperIngot;
+	public static Item itemCopperFlakes;
+	
 	
 	public static Block oreTin;
 	public static Block oreLead;
+	public static Block oreCopper;
 	
 	public static CraftingHandler craftingHandler;
 	
@@ -79,6 +83,9 @@ public class ModMain {
 		 oreLead = new Block(602, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:leadore");
 
+		 oreCopper = new Block(603, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:copperore");
+
 	 }
 	 private void setupBlocks()
 	 {
@@ -87,6 +94,9 @@ public class ModMain {
 
 		 GameRegistry.registerBlock(oreLead, "allomancy:oreLead");
 		 LanguageRegistry.addName(oreLead, "Lead Ore");
+
+		 GameRegistry.registerBlock(oreLead, "allomancy:orecopper");
+		 LanguageRegistry.addName(oreLead, "Copper Ore");
 
 	 }
 	 
@@ -98,6 +108,8 @@ public class ModMain {
 		itemTinFlakes = new Item(502).setUnlocalizedName("allomancy:tinflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		itemLeadIngot = new Item(503).setUnlocalizedName("allomancy:leadingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemLeadFlakes = new Item(504).setUnlocalizedName("allomancy:Leadflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemCopperIngot = new Item(505).setUnlocalizedName("allomancy:copperingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemCopperFlakes = new Item(506).setUnlocalizedName("allomancy:copperflakes").setCreativeTab(CreativeTabs.tabMaterials);
 
 	 }
 	 
@@ -119,10 +131,18 @@ public class ModMain {
 		 LanguageRegistry.addName(itemLeadIngot, "Lead Ingot");
 		 itemLeadIngot.setTextureName("allomancy:leadingot");
 		 
-		 GameRegistry.registerItem(itemTinFlakes, "allomancy:leadflakes");
-		 LanguageRegistry.addName(itemTinFlakes, "Lead Flakes");
+		 GameRegistry.registerItem(itemLeadFlakes, "allomancy:leadflakes");
+		 LanguageRegistry.addName(itemLeadFlakes, "Lead Flakes");
 		 itemLeadFlakes.setTextureName("allomancy:leadflakes");
 
+		 GameRegistry.registerItem(itemCopperIngot, "allomancy:copperingot");
+		 LanguageRegistry.addName(itemCopperIngot, "Copper Ingot");
+		 itemCopperIngot.setTextureName("allomancy:copperingot");
+		 
+		 GameRegistry.registerItem(itemCopperFlakes, "allomancy:copperflakes");
+		 LanguageRegistry.addName(itemCopperFlakes, "Copper Flakes");
+		 itemLeadFlakes.setTextureName("allomancy:copperflakes");
+		 
 
 	 }
 	 
