@@ -47,7 +47,7 @@ public class OreGenerator implements IWorldGenerator {
 		oreList.add(data);
 		data = new OreData(40, 20,8,4,3,ModMain.oreLead.blockID);
 		oreList.add(data);
-		data = new OreData(40, 20,8,4,3,ModMain.oreTin.blockID);
+		data = new OreData(40, 20,8,4,3,ModMain.oreZinc.blockID);
 		oreList.add(data);
 		
 	}

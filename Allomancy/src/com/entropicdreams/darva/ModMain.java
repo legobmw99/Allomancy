@@ -71,7 +71,7 @@ public class ModMain {
 		GameRegistry.registerCraftingHandler(craftingHandler);
 		
 		//oreGenerator = new OreGenerator();
-		//GameRegistry.registerWorldGenerator(new OreGenerator());
+		GameRegistry.registerWorldGenerator(new OreGenerator());
 		
 	}
 	
