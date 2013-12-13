@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -95,9 +96,9 @@ public class ModMain {
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes,1), new ItemStack(itemPewterFlakes), new ItemStack(itemLeadFlakes));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes,1), new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
 
-		 GameRegistry.addShapelessRecipe(new ItemStack(itemVial,1, 0), new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
+		 //GameRegistry.addShapelessRecipe(new ItemStack(itemVial,1, 0), new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
 
-		 
+		 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemVial,1,0), " x ", "y y", " y ", 'x', "slabWood", 'y', Block.glass));
 		 
 	 }
 	 
