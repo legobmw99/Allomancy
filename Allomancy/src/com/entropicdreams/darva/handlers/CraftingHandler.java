@@ -21,10 +21,6 @@ public class CraftingHandler implements ICraftingHandler {
 			if (cur.itemID == ModMain.itemGrinder.itemID)
 			{
 				cur.damageItem(1, player);
-				if (player.inventory.addItemStackToInventory(cur) == false)
-				{
-					player.dropPlayerItem(cur);
-				}
 			}
 			
 		}

@@ -1,12 +1,14 @@
 package com.entropicdreams.darva;
 
 import com.entropicdreams.darva.handlers.CraftingHandler;
+import com.entropicdreams.darva.items.ItemGrinder;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -21,7 +23,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 @Mod(modid ="allomancyMod", name = "Allomancy", version = "0.0.1" )
 public class ModMain {
 
-	public static Item itemGrinder;
+	public static ItemGrinder itemGrinder;
 	public static Item itemTinIngot;
 	public static Item itemTinFlakes;
 	
@@ -62,8 +64,8 @@ public class ModMain {
 	 {
 		 
 		 GameRegistry.addSmelting(oreTin.blockID, new ItemStack(itemTinIngot,1), 5);
-		 
-		 GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes,1), new ItemStack(itemTinIngot), new ItemStack(itemGrinder));
+		 GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes,1), new ItemStack(itemTinIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));			 
+
 	 }
 	 
 	 private void initBlocks()
@@ -79,7 +81,8 @@ public class ModMain {
 	 
 	 private void initItems()
 	 {
-		itemGrinder = new Item(500).setUnlocalizedName("allomancy:Grinder").setCreativeTab(CreativeTabs.tabMisc).setMaxDamage(32);
+		itemGrinder = new ItemGrinder(500);
+		
 		itemTinIngot = new Item(501).setUnlocalizedName("allomancy:tiningot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemTinFlakes = new Item(502).setUnlocalizedName("allomancy:tinflakes").setCreativeTab(CreativeTabs.tabMaterials);
 	 }
