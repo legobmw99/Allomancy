@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.renderer.texture.TextureObject;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import cpw.mods.fml.common.ITickHandler;
@@ -22,7 +23,7 @@ private ResourceLocation meterLoc;
 	public renderHandler()
 	{
 		mc = Minecraft.getMinecraft();
-		meterLoc = new ResourceLocation("allomancy:textures/overlay/meter.png");
+		meterLoc = new ResourceLocation("allomancy", "textures/overlay/meter.png");
 		
 		
 		
@@ -37,8 +38,11 @@ private ResourceLocation meterLoc;
 		
 		GuiIngame gig = new GuiIngame(Minecraft.getMinecraft());
 		Minecraft.getMinecraft().renderEngine.bindTexture(meterLoc);
+		TextureObject obj;
+		obj = Minecraft.getMinecraft().renderEngine.getTexture(meterLoc);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 		gig.drawTexturedModalRect(5, 5, 0, 0, 16, 120);
-		System.out.println("tick");
+		
 	}
 
 	@Override
