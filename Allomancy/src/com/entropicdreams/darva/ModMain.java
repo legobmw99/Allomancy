@@ -26,6 +26,8 @@ public class ModMain {
 	public static ItemGrinder itemGrinder;
 	public static Item itemTinIngot;
 	public static Item itemTinFlakes;
+	public static Item itemLeadIngot;
+	public static Item itemLeadFlakes;
 	
 	public static Block oreTin;
 	public static Block oreLead;
@@ -66,6 +68,7 @@ public class ModMain {
 		 
 		 GameRegistry.addSmelting(oreTin.blockID, new ItemStack(itemTinIngot,1), 5);
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes,1), new ItemStack(itemTinIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));			 
+		 GameRegistry.addShapelessRecipe(new ItemStack(itemLeadFlakes,1), new ItemStack(itemLeadIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));			 
 
 	 }
 	 
@@ -93,6 +96,9 @@ public class ModMain {
 		
 		itemTinIngot = new Item(501).setUnlocalizedName("allomancy:tiningot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemTinFlakes = new Item(502).setUnlocalizedName("allomancy:tinflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemLeadIngot = new Item(503).setUnlocalizedName("allomancy:leadingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemLeadFlakes = new Item(504).setUnlocalizedName("allomancy:Leadflakes").setCreativeTab(CreativeTabs.tabMaterials);
+
 	 }
 	 
 	 private void setupItems()
@@ -108,6 +114,16 @@ public class ModMain {
 		 GameRegistry.registerItem(itemTinFlakes, "allomancy:tinflakes");
 		 LanguageRegistry.addName(itemTinFlakes, "Tin Flakes");
 		 itemTinFlakes.setTextureName("allomancy:tinflakes");
+
+		 GameRegistry.registerItem(itemLeadIngot, "allomancy:leadingot");
+		 LanguageRegistry.addName(itemLeadIngot, "Lead Ingot");
+		 itemLeadIngot.setTextureName("allomancy:leadingot");
+		 
+		 GameRegistry.registerItem(itemTinFlakes, "allomancy:leadflakes");
+		 LanguageRegistry.addName(itemTinFlakes, "Lead Flakes");
+		 itemLeadFlakes.setTextureName("allomancy:leadflakes");
+
+
 	 }
 	 
 }
