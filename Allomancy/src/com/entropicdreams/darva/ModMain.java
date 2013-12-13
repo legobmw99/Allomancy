@@ -31,11 +31,14 @@ public class ModMain {
 	public static Item itemLeadFlakes;
 	public static Item itemCopperIngot;
 	public static Item itemCopperFlakes;
+	public static Item itemZincIngot;
+	public static Item itemZincFlakes;
 	
 	
 	public static Block oreTin;
 	public static Block oreLead;
 	public static Block oreCopper;
+	public static Block oreZinc;
 	
 	public static CraftingHandler craftingHandler;
 	
@@ -73,7 +76,10 @@ public class ModMain {
 		 
 		 GameRegistry.addSmelting(oreTin.blockID, new ItemStack(itemTinIngot,1), 5);
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes,1), new ItemStack(itemTinIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));			 
-		 GameRegistry.addShapelessRecipe(new ItemStack(itemLeadFlakes,1), new ItemStack(itemLeadIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));			 
+		 GameRegistry.addShapelessRecipe(new ItemStack(itemLeadFlakes,1), new ItemStack(itemLeadIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
+		 GameRegistry.addShapelessRecipe(new ItemStack(itemCopperFlakes,1), new ItemStack(itemCopperIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
+		 GameRegistry.addShapelessRecipe(new ItemStack(itemZincFlakes,1), new ItemStack(itemZincIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
+		 
 
 	 }
 	 
@@ -86,6 +92,9 @@ public class ModMain {
 
 		 oreCopper = new Block(603, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:copperore").setUnlocalizedName("allomancy:copperore")				 ;
+
+		 oreZinc = new Block(604, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:zincore").setUnlocalizedName("allomancy:zincore")				 ;
 
 	 }
 	 private void setupBlocks()
@@ -102,6 +111,10 @@ public class ModMain {
 		 LanguageRegistry.addName(oreCopper, "Copper Ore");
 		 MinecraftForge.setBlockHarvestLevel(oreCopper, "pick", 1);
 
+		 GameRegistry.registerBlock(oreZinc, "allomancy:zincore");
+		 LanguageRegistry.addName(oreZinc, "Zinc Ore");
+		 MinecraftForge.setBlockHarvestLevel(oreZinc, "pick", 1);
+
 
 	 }
 	 
@@ -115,6 +128,8 @@ public class ModMain {
 		itemLeadFlakes = new Item(504).setUnlocalizedName("allomancy:leadflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		itemCopperIngot = new Item(505).setUnlocalizedName("allomancy:copperingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemCopperFlakes = new Item(506).setUnlocalizedName("allomancy:copperflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemZincIngot = new Item(507).setUnlocalizedName("allomancy:zincingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemZincFlakes = new Item(508).setUnlocalizedName("allomancy:zincflakes").setCreativeTab(CreativeTabs.tabMaterials);
 
 	 }
 	 
@@ -148,6 +163,13 @@ public class ModMain {
 		 LanguageRegistry.addName(itemCopperFlakes, "Copper Flakes");
 		 itemCopperFlakes.setTextureName("allomancy:copperflakes");
 		 
+		 GameRegistry.registerItem(itemZincIngot, "allomancy:zincingot");
+		 LanguageRegistry.addName(itemZincIngot, "Zinc Ingot");
+		 itemZincIngot.setTextureName("allomancy:zincingot");
+		 
+		 GameRegistry.registerItem(itemZincFlakes, "allomancy:zincflakes");
+		 LanguageRegistry.addName(itemZincFlakes, "Zinc Flakes");
+		 itemCopperFlakes.setTextureName("allomancy:zincflakes");
 
 	 }
 	 
