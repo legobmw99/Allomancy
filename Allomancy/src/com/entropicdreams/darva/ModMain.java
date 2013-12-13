@@ -86,6 +86,8 @@ public class ModMain {
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemZincFlakes,1), new ItemStack(itemZincIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes,1), new ItemStack(Item.ingotIron), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
 		 
+		 GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes,1), new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
+		 
 
 	 }
 	 
