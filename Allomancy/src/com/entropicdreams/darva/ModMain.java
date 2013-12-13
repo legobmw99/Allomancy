@@ -34,6 +34,11 @@ public class ModMain {
 	public static Item itemZincIngot;
 	public static Item itemZincFlakes;
 	
+	public static Item itemBrassFlakes;
+	public static Item itemSteelFlakes;
+	public static Item itemPewterFlakes;
+	public static Item itemIronFlakes;
+	
 	
 	public static Block oreTin;
 	public static Block oreLead;
@@ -79,6 +84,7 @@ public class ModMain {
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemLeadFlakes,1), new ItemStack(itemLeadIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemCopperFlakes,1), new ItemStack(itemCopperIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemZincFlakes,1), new ItemStack(itemZincIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
+		 GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes,1), new ItemStack(Item.ingotIron), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
 		 
 
 	 }
@@ -131,6 +137,9 @@ public class ModMain {
 		itemZincIngot = new Item(507).setUnlocalizedName("allomancy:zincingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemZincFlakes = new Item(508).setUnlocalizedName("allomancy:zincflakes").setCreativeTab(CreativeTabs.tabMaterials);
 
+		itemIronFlakes = new Item(509).setUnlocalizedName("allomancy:ironflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemSteelFlakes = new Item(510).setUnlocalizedName("allomancy:steelflakes").setCreativeTab(CreativeTabs.tabMaterials);
+
 	 }
 	 
 	 private void setupItems()
@@ -169,7 +178,15 @@ public class ModMain {
 		 
 		 GameRegistry.registerItem(itemZincFlakes, "allomancy:zincflakes");
 		 LanguageRegistry.addName(itemZincFlakes, "Zinc Flakes");
-		 itemCopperFlakes.setTextureName("allomancy:zincflakes");
+		 itemZincFlakes.setTextureName("allomancy:zincflakes");
+
+		 GameRegistry.registerItem(itemIronFlakes, "allomancy:ironflakes");
+		 LanguageRegistry.addName(itemIronFlakes, "Iron Flakes");
+		 itemIronFlakes.setTextureName("allomancy:ironflakes");
+
+		 GameRegistry.registerItem(itemSteelFlakes, "allomancy:steelflakes");
+		 LanguageRegistry.addName(itemSteelFlakes, "Steel Flakes");
+		 itemSteelFlakes.setTextureName("allomancy:steelflakes");
 
 	 }
 	 
