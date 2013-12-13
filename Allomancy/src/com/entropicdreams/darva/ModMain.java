@@ -70,6 +70,8 @@ public class ModMain {
 		craftingHandler = new CraftingHandler();
 		GameRegistry.registerCraftingHandler(craftingHandler);
 		
+		//oreGenerator = new OreGenerator();
+		GameRegistry.registerWorldGenerator(new OreGenerator());
 	}
 	
 	@EventHandler 
@@ -78,8 +80,7 @@ public class ModMain {
 		setupBlocks();
 		setupRecipies();
 		
-		oreGenerator = new OreGenerator();
-		GameRegistry.registerWorldGenerator(oreGenerator);
+		
 		
 	}
 	 @EventHandler

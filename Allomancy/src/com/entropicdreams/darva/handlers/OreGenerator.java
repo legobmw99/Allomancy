@@ -38,11 +38,12 @@ public class OreGenerator implements IWorldGenerator {
 	
 	public OreGenerator()
 	{
-		OreData data;
+		oreList = new LinkedList<OreData>();
+		OreData data ;
 		
 		data = new OreData(50, 25,6,2,2,ModMain.oreCopper.blockID);
 		
-		
+		oreList.add(data);
 		
 	}
 	
