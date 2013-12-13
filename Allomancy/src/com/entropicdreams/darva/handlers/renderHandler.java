@@ -41,7 +41,11 @@ private ResourceLocation meterLoc;
 		TextureObject obj;
 		obj = Minecraft.getMinecraft().renderEngine.getTexture(meterLoc);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
-		gig.drawTexturedModalRect(5, 5, 0, 0, 16, 120);
+		gig.drawTexturedModalRect(5, 215, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(12, 215, 0, 0, 5, 20);
+		
+		gig.drawTexturedModalRect(30, 215, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(37, 215, 0, 0, 5, 20);
 		
 	}
 
