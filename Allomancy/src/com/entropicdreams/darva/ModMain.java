@@ -89,6 +89,8 @@ public class ModMain {
 		 
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes,1), new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes,1), new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
+		 GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes,1), new ItemStack(itemPewterFlakes), new ItemStack(itemLeadFlakes));
+		 GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes,1), new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
 
 	 }
 	 
@@ -144,7 +146,7 @@ public class ModMain {
 		itemSteelFlakes = new Item(510).setUnlocalizedName("allomancy:steelflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		itemBrassFlakes = new Item(511).setUnlocalizedName("allomancy:brassflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		itemPewterFlakes = new Item(512).setUnlocalizedName("allomancy:pewterflakes").setCreativeTab(CreativeTabs.tabMaterials);
-
+		itemBronzeFlakes = new Item(513).setUnlocalizedName("allomancy:bronzeflakes").setCreativeTab(CreativeTabs.tabMaterials);
 	 }
 	 
 	 private void setupItems()
@@ -200,6 +202,10 @@ public class ModMain {
 		 GameRegistry.registerItem(itemPewterFlakes, "allomancy:pewterflakes");
 		 LanguageRegistry.addName(itemPewterFlakes, "Pewter Flakes");
 		 itemPewterFlakes.setTextureName("allomancy:pewterflakes");
+
+		 GameRegistry.registerItem(itemBronzeFlakes, "allomancy:bronzeflakes");
+		 LanguageRegistry.addName(itemBronzeFlakes, "Bronze Flakes");
+		 itemBronzeFlakes.setTextureName("allomancy:bronzeflakes");
 
 	 }
 	 
