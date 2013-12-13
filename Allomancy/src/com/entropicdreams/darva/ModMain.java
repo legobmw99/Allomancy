@@ -86,7 +86,7 @@ public class ModMain {
 	}
 	 @EventHandler
 	    public void postInit(FMLPostInitializationEvent event) {
-		 
+		proxy.RegisterTickHandlers();
 	 }
 	 
 	 
