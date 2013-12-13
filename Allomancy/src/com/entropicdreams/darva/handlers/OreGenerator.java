@@ -41,13 +41,13 @@ public class OreGenerator implements IWorldGenerator {
 		oreList = new LinkedList<OreData>();
 		OreData data ;
 		
-		data = new OreData(50, 30,4,2,3,ModMain.oreCopper.blockID);
+		data = new OreData(50, 30,8,4,3,ModMain.oreCopper.blockID);
 		oreList.add(data);
-		data = new OreData(64, 40,4,2,3,ModMain.oreTin.blockID);
+		data = new OreData(64, 40,8,4,3,ModMain.oreTin.blockID);
 		oreList.add(data);
-		data = new OreData(40, 20,4,2,3,ModMain.oreLead.blockID);
+		data = new OreData(40, 20,8,4,3,ModMain.oreLead.blockID);
 		oreList.add(data);
-		data = new OreData(40, 20,4,2,3,ModMain.oreTin.blockID);
+		data = new OreData(40, 20,8,4,3,ModMain.oreTin.blockID);
 		oreList.add(data);
 		
 	}
@@ -81,8 +81,8 @@ public class OreGenerator implements IWorldGenerator {
 				numOre = MathHelper.clamp_int(random.nextInt(data.maxCluster), data.minCluster, data.maxCluster);
 				min = new  WorldGenMinable(data.oreType, numOre, Block.stone.blockID); 
 				
-				//generateOre(world, random, x,80,z,data.oreType);
-				min.generate(world, random, x, y, z);
+				generateOre(world, random, x,80,z,data.oreType, numOre);
+				//min.generate(world, random, x, y, z);
 					//System.out.println("generated at" +x +" " + 60 + " " +z);
 
 			}
@@ -90,9 +90,26 @@ public class OreGenerator implements IWorldGenerator {
 		}
 		
 	}
-	private void generateOre(World world, Random random, int x, int y, int z, int blockID)
+	private void generateOre(World world, Random random, int x, int y, int z, int blockID, int ntg)
 	{
-		world.setBlock(x, y, z, blockID);
+		int lx,ly,lz;
+		lx = x;
+		ly = y;
+		lz = z;
+		System.out.println("numOre " + ntg);
+		for (int i = 0; i < ntg; i++)
+		{
+			
+			world.setBlock(lx, ly, lz, blockID);
+			
+			System.out.println("generated at" +lx +" " + 60 + " " +lz);
+			
+			lx = lx + (random.nextInt(3) -2);
+			ly = ly + (random.nextInt(3) -2);
+			lz = lz + (random.nextInt(3) -2);
+			
+		}
+		
 	}
 
 }
