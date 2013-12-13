@@ -95,6 +95,10 @@ public class ModMain {
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes,1), new ItemStack(itemPewterFlakes), new ItemStack(itemLeadFlakes));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes,1), new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
 
+		 GameRegistry.addShapelessRecipe(new ItemStack(itemVial,1, 0), new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
+
+		 
+		 
 	 }
 	 
 	 private void initBlocks()
