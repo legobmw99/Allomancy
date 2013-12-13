@@ -28,6 +28,7 @@ public class ModMain {
 	public static Item itemTinFlakes;
 	
 	public static Block oreTin;
+	public static Block oreLead;
 	
 	public static CraftingHandler craftingHandler;
 	
@@ -72,11 +73,18 @@ public class ModMain {
 	 {
 		 oreTin = new Block(601, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:tinore");
+		 oreLead = new Block(602, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:leadore");
+
 	 }
 	 private void setupBlocks()
 	 {
 		 GameRegistry.registerBlock(oreTin, "allomancy:oreTin");
 		 LanguageRegistry.addName(oreTin, "Tin Ore");
+
+		 GameRegistry.registerBlock(oreLead, "allomancy:oreLead");
+		 LanguageRegistry.addName(oreLead, "Lead Ore");
+
 	 }
 	 
 	 private void initItems()

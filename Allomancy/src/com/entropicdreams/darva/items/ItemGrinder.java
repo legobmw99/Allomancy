@@ -1,5 +1,7 @@
 package com.entropicdreams.darva.items;
 
+import com.entropicdreams.darva.ModMain;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,7 +13,8 @@ public class ItemGrinder extends Item {
 		// TODO Auto-generated constructor stub
 		setUnlocalizedName("allomancy:Grinder");
 		setCreativeTab(CreativeTabs.tabMisc);
-		setMaxDamage(32);
+		setMaxDamage(31);
+		this.maxStackSize = 1;
 	}
 
 	@Override
@@ -24,6 +27,12 @@ public class ItemGrinder extends Item {
 	public boolean hasContainerItem() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public ItemStack getContainerItemStack(ItemStack itemStack) {
+		// TODO Auto-generated method stub
+		return new ItemStack(ModMain.itemGrinder, 1, this.getDamage(itemStack) +1 );
 	}
 	
 
