@@ -1,6 +1,7 @@
 package com.entropicdreams.darva;
 
 import com.entropicdreams.darva.handlers.CraftingHandler;
+import com.entropicdreams.darva.handlers.OreGenerator;
 import com.entropicdreams.darva.items.ItemGrinder;
 import com.entropicdreams.darva.items.ItemVial;
 
@@ -52,6 +53,8 @@ public class ModMain {
 	
 	public static CraftingHandler craftingHandler;
 	
+	public static OreGenerator oreGenerator;
+	
 	
 	@Instance(value = "allomancyMod")
 	public static ModMain instance;
@@ -74,6 +77,10 @@ public class ModMain {
 		setupItems();
 		setupBlocks();
 		setupRecipies();
+		
+		oreGenerator = new OreGenerator();
+		GameRegistry.registerWorldGenerator(oreGenerator);
+		
 	}
 	 @EventHandler
 	    public void postInit(FMLPostInitializationEvent event) {
