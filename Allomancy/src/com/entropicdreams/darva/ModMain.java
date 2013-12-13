@@ -2,6 +2,7 @@ package com.entropicdreams.darva;
 
 import com.entropicdreams.darva.handlers.CraftingHandler;
 import com.entropicdreams.darva.items.ItemGrinder;
+import com.entropicdreams.darva.items.ItemVial;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -45,6 +46,8 @@ public class ModMain {
 	public static Block oreLead;
 	public static Block oreCopper;
 	public static Block oreZinc;
+	
+	public static ItemVial itemVial;
 	
 	public static CraftingHandler craftingHandler;
 	
@@ -147,6 +150,8 @@ public class ModMain {
 		itemBrassFlakes = new Item(511).setUnlocalizedName("allomancy:brassflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		itemPewterFlakes = new Item(512).setUnlocalizedName("allomancy:pewterflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		itemBronzeFlakes = new Item(513).setUnlocalizedName("allomancy:bronzeflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		
+		itemVial = new ItemVial(514);
 	 }
 	 
 	 private void setupItems()
@@ -207,6 +212,13 @@ public class ModMain {
 		 LanguageRegistry.addName(itemBronzeFlakes, "Bronze Flakes");
 		 itemBronzeFlakes.setTextureName("allomancy:bronzeflakes");
 
+		 ItemStack item;
+		 
+			for(int i = 0; i < ItemVial.localName.length; i++) {
+					ItemStack Item;
+					Item = new ItemStack(itemVial,1,i);
+					LanguageRegistry.addName(Item, ItemVial.localName[i]);
+				}
 	 }
 	 
 }
