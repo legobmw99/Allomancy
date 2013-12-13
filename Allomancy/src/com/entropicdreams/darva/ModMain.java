@@ -21,6 +21,7 @@ public class ModMain {
 
 	private Item itemGrinder;
 	private Item itemTinIngot;
+	private Item itemTinFlakes;
 	
 	private Block oreTin;
 	
@@ -42,12 +43,19 @@ public class ModMain {
     public void load(FMLInitializationEvent event) {
 		setupItems();
 		setupBlocks();
+		setupRecipies();
 	}
 	 @EventHandler
 	    public void postInit(FMLPostInitializationEvent event) {
 		 
 	 }
 	 
+	 
+	 private void setupRecipies()
+	 {
+		 
+		 GameRegistry.addSmelting(oreTin.blockID, new ItemStack(itemTinIngot,1), 5);
+	 }
 	 
 	 private void initBlocks()
 	 {
@@ -64,6 +72,7 @@ public class ModMain {
 	 {
 		itemGrinder = new Item(500).setUnlocalizedName("allomancy:Grinder").setCreativeTab(CreativeTabs.tabMisc).setMaxDamage(32);
 		itemTinIngot = new Item(501).setUnlocalizedName("allomancy:tiningot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemTinFlakes = new Item(502).setUnlocalizedName("allomancy:tinFlakes").setCreativeTab(CreativeTabs.tabMaterials);
 	 }
 	 
 	 private void setupItems()
@@ -74,7 +83,11 @@ public class ModMain {
 		 
 		 GameRegistry.registerItem(itemTinIngot, "allomancy:tiningot");
 		 LanguageRegistry.addName(itemTinIngot, "Tin Ingot");
-		 itemTinIngot.setTextureName("allomancy:tin_ingot");
+		 itemTinIngot.setTextureName("allomancy:tiningot");
+		 
+		 GameRegistry.registerItem(itemTinFlakes, "allomancy:tinflakes");
+		 LanguageRegistry.addName(itemTinFlakes, "Tin Flakes");
+		 itemTinIngot.setTextureName("allomancy:tinflakes");
 	 }
 	 
 }
