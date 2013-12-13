@@ -38,6 +38,7 @@ public class ModMain {
 	public static Item itemSteelFlakes;
 	public static Item itemPewterFlakes;
 	public static Item itemIronFlakes;
+	public static Item itemBronzeFlakes;
 	
 	
 	public static Block oreTin;
