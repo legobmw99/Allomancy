@@ -108,10 +108,20 @@ public class OreGenerator implements IWorldGenerator {
 			
 				world.setBlock(lx, ly, lz, blockID);
 				System.out.println("Block ID: " + blockID );
-			lx = lx + (random.nextInt(4) -2);
-			System.out.println(random.nextInt(4)-2);
-			ly = ly + (random.nextInt(4) -2);
-			lz = lz + (random.nextInt(4) -2);
+			switch (random.nextInt(3))
+			{
+			case 0:
+				lx = lx + (random.nextInt(4) -2);
+				break;
+			case 1:
+				ly = ly + (random.nextInt(4) -2);
+				break;
+			case 2:
+				lz = lz + (random.nextInt(4) -2);
+				break;
+			}
+			
+			
 			
 		}
 		
