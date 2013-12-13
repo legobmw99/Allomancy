@@ -41,7 +41,12 @@ public class OreGenerator implements IWorldGenerator {
 		oreList = new LinkedList<OreData>();
 		OreData data ;
 		
-		data = new OreData(50, 25,6,2,2,ModMain.oreCopper.blockID);
+		data = new OreData(50, 30,6,2,3,ModMain.oreCopper.blockID);
+		data = new OreData(64, 40,6,2,3,ModMain.oreTin.blockID);
+		data = new OreData(40, 20,6,2,3,ModMain.oreLead.blockID);
+		data = new OreData(40, 20,6,2,3,ModMain.oreTin.blockID);
+		
+
 		
 		oreList.add(data);
 		
@@ -55,13 +60,14 @@ public class OreGenerator implements IWorldGenerator {
 		int x,y,z;
 		int numOre;
 		int numCluster;
-		if (world.provider.dimensionId != 1) //Only generate in the main world.
+		if (world.provider.dimensionId != 0) //Only generate in the main world.
 			return;
-		System.out.println("Entering Generator");
+		
 		for(OreData data : oreList)
 		{
-			System.out.println("Generating Block ID" + data.oreType );
 			numCluster = random.nextInt(data.maxCluster);
+			if (numCluster == 0 && data.maxCluster !=0)
+				numCluster  = 1;
 			for(int count = 0; count < numCluster; count++)
 			{
 				x = random.nextInt(16);

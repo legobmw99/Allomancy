@@ -53,7 +53,7 @@ public class ModMain {
 	
 	public static CraftingHandler craftingHandler;
 	
-	public static OreGenerator oreGenerator;
+	//public static OreGenerator oreGenerator;
 	
 	
 	@Instance(value = "allomancyMod")
@@ -72,6 +72,7 @@ public class ModMain {
 		
 		//oreGenerator = new OreGenerator();
 		GameRegistry.registerWorldGenerator(new OreGenerator());
+		
 	}
 	
 	@EventHandler 
@@ -121,15 +122,15 @@ public class ModMain {
 	 
 	 private void initBlocks()
 	 {
-		 oreTin = new Block(601, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreTin = new Block(901, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:tinore").setUnlocalizedName("allomancy:tinore");
-		 oreLead = new Block(602, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreLead = new Block(902, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:leadore").setUnlocalizedName("allomancy:leadore");
 
-		 oreCopper = new Block(603, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreCopper = new Block(903, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:copperore").setUnlocalizedName("allomancy:copperore")				 ;
 
-		 oreZinc = new Block(604, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreZinc = new Block(904, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:zincore").setUnlocalizedName("allomancy:zincore")				 ;
 
 	 }
@@ -158,22 +159,22 @@ public class ModMain {
 	 {
 		itemGrinder = new ItemGrinder(500);
 		
-		itemTinIngot = new Item(501).setUnlocalizedName("allomancy:tiningot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		itemTinFlakes = new Item(502).setUnlocalizedName("allomancy:tinflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemLeadIngot = new Item(503).setUnlocalizedName("allomancy:leadingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		itemLeadFlakes = new Item(504).setUnlocalizedName("allomancy:leadflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemCopperIngot = new Item(505).setUnlocalizedName("allomancy:copperingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		itemCopperFlakes = new Item(506).setUnlocalizedName("allomancy:copperflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemZincIngot = new Item(507).setUnlocalizedName("allomancy:zincingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		itemZincFlakes = new Item(508).setUnlocalizedName("allomancy:zincflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemTinIngot = new Item(801).setUnlocalizedName("allomancy:tiningot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemTinFlakes = new Item(802).setUnlocalizedName("allomancy:tinflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemLeadIngot = new Item(803).setUnlocalizedName("allomancy:leadingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemLeadFlakes = new Item(804).setUnlocalizedName("allomancy:leadflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemCopperIngot = new Item(805).setUnlocalizedName("allomancy:copperingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemCopperFlakes = new Item(806).setUnlocalizedName("allomancy:copperflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemZincIngot = new Item(807).setUnlocalizedName("allomancy:zincingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemZincFlakes = new Item(808).setUnlocalizedName("allomancy:zincflakes").setCreativeTab(CreativeTabs.tabMaterials);
 
-		itemIronFlakes = new Item(509).setUnlocalizedName("allomancy:ironflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemSteelFlakes = new Item(510).setUnlocalizedName("allomancy:steelflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemBrassFlakes = new Item(511).setUnlocalizedName("allomancy:brassflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemPewterFlakes = new Item(512).setUnlocalizedName("allomancy:pewterflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemBronzeFlakes = new Item(513).setUnlocalizedName("allomancy:bronzeflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemIronFlakes = new Item(809).setUnlocalizedName("allomancy:ironflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemSteelFlakes = new Item(810).setUnlocalizedName("allomancy:steelflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemBrassFlakes = new Item(811).setUnlocalizedName("allomancy:brassflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemPewterFlakes = new Item(812).setUnlocalizedName("allomancy:pewterflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemBronzeFlakes = new Item(813).setUnlocalizedName("allomancy:bronzeflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		
-		itemVial = new ItemVial(514);
+		itemVial = new ItemVial(814);
 	 }
 	 
 	 private void setupItems()
