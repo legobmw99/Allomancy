@@ -73,6 +73,10 @@ public class OreGenerator implements IWorldGenerator {
 				x = random.nextInt(16);
 				z = random.nextInt(16);
 				y = random.nextInt(70);
+				x = x + (16 * chunkX);
+				z = z + (16 * chunkZ);
+				y = MathHelper.clamp_int(y, data.minHeight, data.maxHeight);
+				System.out.println("generated at" +x +" " + y + " " +z);
 				numOre = MathHelper.clamp_int(random.nextInt(data.maxCluster), data.minCluster, data.maxCluster);
 				new WorldGenMinable(data.oreType, numOre, Block.stone.blockID).generate(world, random, x, y, z);
 			}
