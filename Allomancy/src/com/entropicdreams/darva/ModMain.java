@@ -1,5 +1,7 @@
 package com.entropicdreams.darva;
 
+import com.entropicdreams.darva.handlers.CraftingHandler;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,11 +21,13 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 @Mod(modid ="allomancyMod", name = "Allomancy", version = "0.0.1" )
 public class ModMain {
 
-	private Item itemGrinder;
-	private Item itemTinIngot;
-	private Item itemTinFlakes;
+	public static Item itemGrinder;
+	public static Item itemTinIngot;
+	public static Item itemTinFlakes;
 	
-	private Block oreTin;
+	public static Block oreTin;
+	
+	public static CraftingHandler craftingHandler;
 	
 	
 	@Instance(value = "allomancyMod")
@@ -37,6 +41,9 @@ public class ModMain {
 		
 		initItems();
 		initBlocks();
+		craftingHandler = new CraftingHandler();
+		GameRegistry.registerCraftingHandler(craftingHandler);
+		
 	}
 	
 	@EventHandler 
