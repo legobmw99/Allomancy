@@ -56,15 +56,17 @@ public class OreGenerator implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world,
 			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-		WorldGenMinable min;
 		int x,y,z;
 		int numOre;
 		int numCluster;
+		int tcount = 0;
 		if (world.provider.dimensionId != 0) //Only generate in the main world.
 			return;
 		
 		for(OreData data : oreList)
 		{
+			System.out.println("count " + tcount);
+			tcount++;
 			numCluster = random.nextInt(data.clusterPerChunk);
 			if (numCluster == 0 && data.clusterPerChunk !=0)
 				numCluster  = 1;
@@ -79,11 +81,8 @@ public class OreGenerator implements IWorldGenerator {
 				z = z + (16 * chunkZ);
 				y = y + data.minHeight;
 				numOre = MathHelper.clamp_int(random.nextInt(data.maxCluster), data.minCluster, data.maxCluster);
-				min = new  WorldGenMinable(data.oreType, numOre, Block.stone.blockID); 
 				
-				generateOre(world, random, x,80,z,data.oreType, numOre);
-				//min.generate(world, random, x, y, z);
-					//System.out.println("generated at" +x +" " + 60 + " " +z);
+				generateOre(world, random, x,y ,z,data.oreType, numOre);
 
 			}
 			
@@ -96,18 +95,19 @@ public class OreGenerator implements IWorldGenerator {
 		lx = x;
 		ly = y;
 		lz = z;
-		System.out.println("numOre " + ntg);
+		int id;
 		for (int i = 0; i < ntg; i++)
 		{
 			
-			world.setBlock(lx, ly, lz, blockID);
+			id = world.getBlockId(lx, ly, lz);
 			
-			System.out.println("generated at" +lx +" " + 60 + " " +lz);
-			
+			if (id == Block.stone.blockID || id == Block.dirt.blockID)
+			{
+				world.setBlock(lx, ly, lz, blockID);
+			}
 			lx = lx + (random.nextInt(3) -2);
 			ly = ly + (random.nextInt(3) -2);
 			lz = lz + (random.nextInt(3) -2);
-			
 		}
 		
 	}
