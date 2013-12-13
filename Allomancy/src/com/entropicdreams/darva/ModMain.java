@@ -122,15 +122,15 @@ public class ModMain {
 	 
 	 private void initBlocks()
 	 {
-		 oreTin = new Block(901, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreTin = new Block(240, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:tinore").setUnlocalizedName("allomancy:tinore");
-		 oreLead = new Block(902, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreLead = new Block(241, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:leadore").setUnlocalizedName("allomancy:leadore");
 
-		 oreCopper = new Block(903, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreCopper = new Block(242, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:copperore").setUnlocalizedName("allomancy:copperore")				 ;
 
-		 oreZinc = new Block(904, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreZinc = new Block(243, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:zincore").setUnlocalizedName("allomancy:zincore")				 ;
 
 	 }

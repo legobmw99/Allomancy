@@ -81,12 +81,17 @@ public class OreGenerator implements IWorldGenerator {
 				numOre = MathHelper.clamp_int(random.nextInt(data.maxCluster), data.minCluster, data.maxCluster);
 				min = new  WorldGenMinable(data.oreType, numOre, Block.stone.blockID); 
 				
-				if (min.generate(world, random, x, 80, z) == true)
-					System.out.println("generated at" +x +" " + y + " " +z);
+				generateOre(world, random, x,80,z,data.oreType);
+					System.out.println("generated at" +x +" " + 60 + " " +z);
 
 			}
+			
 		}
 		
+	}
+	private void generateOre(World world, Random random, int x, int y, int z, int blockID)
+	{
+		world.setBlock(x, y, z, blockID);
 	}
 
 }
