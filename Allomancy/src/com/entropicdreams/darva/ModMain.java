@@ -55,6 +55,8 @@ public class ModMain {
 	 {
 		 
 		 GameRegistry.addSmelting(oreTin.blockID, new ItemStack(itemTinIngot,1), 5);
+		 
+		 GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes,1), new ItemStack(itemTinIngot), new ItemStack(itemGrinder));
 	 }
 	 
 	 private void initBlocks()
@@ -72,7 +74,7 @@ public class ModMain {
 	 {
 		itemGrinder = new Item(500).setUnlocalizedName("allomancy:Grinder").setCreativeTab(CreativeTabs.tabMisc).setMaxDamage(32);
 		itemTinIngot = new Item(501).setUnlocalizedName("allomancy:tiningot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		itemTinFlakes = new Item(502).setUnlocalizedName("allomancy:tinFlakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemTinFlakes = new Item(502).setUnlocalizedName("allomancy:tinflakes").setCreativeTab(CreativeTabs.tabMaterials);
 	 }
 	 
 	 private void setupItems()
@@ -87,7 +89,7 @@ public class ModMain {
 		 
 		 GameRegistry.registerItem(itemTinFlakes, "allomancy:tinflakes");
 		 LanguageRegistry.addName(itemTinFlakes, "Tin Flakes");
-		 itemTinIngot.setTextureName("allomancy:tinflakes");
+		 itemTinFlakes.setTextureName("allomancy:tinflakes");
 	 }
 	 
 }
