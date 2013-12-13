@@ -47,6 +47,15 @@ private ResourceLocation meterLoc;
 		gig.drawTexturedModalRect(30, 215, 0, 0, 5, 20);
 		gig.drawTexturedModalRect(37, 215, 0, 0, 5, 20);
 		
+		gig.drawTexturedModalRect(380, 215, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(387, 215, 0, 0, 5, 20);
+		
+		gig.drawTexturedModalRect(405, 215, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(412, 215, 0, 0, 5, 20);
+
+		
+		
+		
 	}
 
 	@Override
