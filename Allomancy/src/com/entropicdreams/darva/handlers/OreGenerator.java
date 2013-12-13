@@ -56,7 +56,7 @@ public class OreGenerator implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world,
 			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-
+		WorldGenMinable min;
 		int x,y,z;
 		int numOre;
 		int numCluster;
@@ -69,6 +69,7 @@ public class OreGenerator implements IWorldGenerator {
 			if (numCluster == 0 && data.maxCluster !=0)
 				numCluster  = 1;
 			System.out.println(numCluster + "Clusters Generated");
+			
 			for(int count = 0; count < numCluster; count++)
 			{
 				x = random.nextInt(16);
@@ -77,9 +78,12 @@ public class OreGenerator implements IWorldGenerator {
 				x = x + (16 * chunkX);
 				z = z + (16 * chunkZ);
 				y = y + data.minHeight;
-				System.out.println("generated at" +x +" " + y + " " +z);
 				numOre = MathHelper.clamp_int(random.nextInt(data.maxCluster), data.minCluster, data.maxCluster);
-				new WorldGenMinable(data.oreType, numOre, Block.stone.blockID).generate(world, random, x, y, z);
+				min = new  WorldGenMinable(data.oreType, numOre, Block.stone.blockID); 
+				
+				if (min.generate(world, random, x, 80, z) == true)
+					System.out.println("generated at" +x +" " + y + " " +z);
+
 			}
 		}
 		
