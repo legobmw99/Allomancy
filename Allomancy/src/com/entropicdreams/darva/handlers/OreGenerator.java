@@ -96,18 +96,23 @@ public class OreGenerator implements IWorldGenerator {
 		ly = y;
 		lz = z;
 		int id;
+		id = world.getBlockId(lx, ly, lz);
+		if (id != Block.stone.blockID && id != Block.dirt.blockID )
+		{
+			return;
+		}
 		for (int i = 0; i < ntg; i++)
 		{
 			
 			id = world.getBlockId(lx, ly, lz);
 			
-			if (id == Block.stone.blockID || id == Block.dirt.blockID)
-			{
 				world.setBlock(lx, ly, lz, blockID);
-			}
-			lx = lx + (random.nextInt(3) -2);
-			ly = ly + (random.nextInt(3) -2);
-			lz = lz + (random.nextInt(3) -2);
+				System.out.println("Block ID: " + blockID );
+			lx = lx + (random.nextInt(4) -2);
+			System.out.println(random.nextInt(4)-2);
+			ly = ly + (random.nextInt(4) -2);
+			lz = lz + (random.nextInt(4) -2);
+			
 		}
 		
 	}
