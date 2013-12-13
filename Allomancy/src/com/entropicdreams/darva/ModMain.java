@@ -20,6 +20,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class ModMain {
 
 	private Item itemGrinder;
+	private Item itemTinIngot;
 	
 	private Block oreTin;
 	
@@ -50,7 +51,7 @@ public class ModMain {
 	 
 	 private void initBlocks()
 	 {
-		 oreTin = new Block(501, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreTin = new Block(601, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:tinore");
 	 }
 	 private void setupBlocks()
@@ -62,6 +63,7 @@ public class ModMain {
 	 private void initItems()
 	 {
 		itemGrinder = new Item(500).setUnlocalizedName("allomancy:Grinder").setCreativeTab(CreativeTabs.tabMisc).setMaxDamage(32);
+		itemTinIngot = new Item(501).setUnlocalizedName("allomancy:tiningot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 	 }
 	 
 	 private void setupItems()
@@ -69,6 +71,10 @@ public class ModMain {
 		 GameRegistry.registerItem(itemGrinder, "allomancy:Grinder");
 		 LanguageRegistry.addName(itemGrinder, "Hand Grinder");
 		 itemGrinder.setTextureName("allomancy:handgrinder");
+		 
+		 GameRegistry.registerItem(itemTinIngot, "allomancy:tiningot");
+		 LanguageRegistry.addName(itemTinIngot, "Tin Ingot");
+		 itemTinIngot.setTextureName("allomancy:tin_ingot");
 	 }
 	 
 }
