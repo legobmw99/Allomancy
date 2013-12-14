@@ -2,11 +2,13 @@ package com.entropicdreams.darva;
 
 import com.entropicdreams.darva.handlers.CraftingHandler;
 import com.entropicdreams.darva.handlers.OreGenerator;
+import com.entropicdreams.darva.handlers.PlayerTracker;
 import com.entropicdreams.darva.items.ItemGrinder;
 import com.entropicdreams.darva.items.ItemVial;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -87,6 +89,7 @@ public class ModMain {
 	 @EventHandler
 	    public void postInit(FMLPostInitializationEvent event) {
 		proxy.RegisterTickHandlers();
+		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
 	 }
 	 
 	 

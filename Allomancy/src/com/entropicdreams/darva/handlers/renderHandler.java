@@ -4,6 +4,8 @@ import java.util.EnumSet;
 
 import org.lwjgl.opengl.GL11;
 
+import com.entropicdreams.darva.AllomancyData;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiIngame;
@@ -21,6 +23,7 @@ public class renderHandler implements ITickHandler {
 private final Minecraft mc;
 private SimpleTexture meter;
 private ResourceLocation meterLoc;
+private AllomancyData data;
 
 
 	public renderHandler()
@@ -33,36 +36,6 @@ private ResourceLocation meterLoc;
 	}
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
-		EntityClientPlayerMP player;
-		player = mc.thePlayer;
-		NBTTagCompound base;
-		NBTTagCompound allomancy = null;
-		
-		if (player == null)
-			return;
-
-		base = player.getEntityData();
-		if (base == null)
-		{
-		return;
-		}
-
-		if (!base.hasKey("allomancy"))
-		{
-			allomancy = new NBTTagCompound();
-			allomancy.setName("allomancy");
-			allomancy.setInteger("iron", 0);
-			allomancy.setInteger("steel",0);
-			allomancy.setInteger("zinc",0);
-			allomancy.setInteger("pewter",0);
-			allomancy.setInteger("tin",0);
-			allomancy.setInteger("copper",0);
-			allomancy.setInteger("bronze", 0);
-			allomancy.setInteger("brass", 0);
-			allomancy.setInteger("selected", 1);
-			base.setCompoundTag("allomancy", allomancy);
-			//player.getEntityData().setCompoundTag("allomancy", allomancy);
-		}
 				
 		
 	}
@@ -72,20 +45,9 @@ private ResourceLocation meterLoc;
 
 		EntityClientPlayerMP player;
 		player = mc.thePlayer;
-		NBTTagCompound base;
-		NBTTagCompound allomancy;
 		if (player == null)
 			return;
-		if (player.getEntityData() == null)
-		{
-			return;
-		}
-		allomancy = player.getEntityData().getCompoundTag("allomancy");
-		if (allomancy == null)
-		{
-			return;
-		}
-		
+		data = data.forPlayer(player);
 		//left hand side.
 		int ironY, steelY, tinY, pewterY;
 		//right hand side
@@ -97,7 +59,7 @@ private ResourceLocation meterLoc;
 		obj = Minecraft.getMinecraft().renderEngine.getTexture(meterLoc);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
-		switch (allomancy.getInteger("selected"))
+		switch (data.getSelected())
 		{
 		case 0:
 			break;
@@ -116,29 +78,29 @@ private ResourceLocation meterLoc;
 		
 		
 		
-		ironY = 10 - allomancy.getInteger("iron") ; //This will be replaced with a call to get the actual value of a players iron
+		ironY = 10 - data.getIron() ; //This will be replaced with a call to get the actual value of a players iron
 				   //reserves eventually.
 		gig.drawTexturedModalRect(6, 220+ironY, 7, 1+ironY, 3, 10-ironY);
 		
-		steelY = 10 - allomancy.getInteger("steel");
+		steelY = 10 - data.getSteel();
 		gig.drawTexturedModalRect(13, 220+steelY, 13, 1+steelY,3,10-steelY );
 		
-		tinY = 10 - allomancy.getInteger("tin");
+		tinY = 10 - data.getTin();
 		gig.drawTexturedModalRect(31, 220+tinY, 19, 1+tinY,3,10-tinY );
 
-		pewterY = 10 - allomancy.getInteger("pewter");
+		pewterY = 10 - data.getPewter();
 		gig.drawTexturedModalRect(38, 220+pewterY, 25, 1+pewterY,3,10-pewterY );
 
-		copperY = 10 - allomancy.getInteger("copper");
+		copperY = 10 - data.getCopper();
 		gig.drawTexturedModalRect(381, 220+copperY, 31, 1+copperY,3,10-copperY );
 		
-		bronzeY = 10 -allomancy.getInteger("bronze");
+		bronzeY = 10 -data.getBronze();
 		gig.drawTexturedModalRect(388, 220+bronzeY, 37, 1+bronzeY,3,10-bronzeY );
 
-		zincY = 10 - allomancy.getInteger("zinc");
+		zincY = 10 - data.getZinc();;
 		gig.drawTexturedModalRect(406, 220+zincY, 43, 1+zincY,3,10-zincY );
 
-		brassY = 10 - allomancy.getInteger("brass");
+		brassY = 10 - data.getBrass();
 		gig.drawTexturedModalRect(413, 220+brassY, 49, 1+brassY,3,10-brassY );
 
 
