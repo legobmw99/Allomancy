@@ -38,7 +38,15 @@ private ResourceLocation meterLoc;
 		NBTTagCompound base;
 		NBTTagCompound allomancy;
 		
+		if (player == null)
+			return;
+
 		base = player.getEntityData();
+		if (base == null)
+		{
+		return;
+		}
+
 		if (!base.hasKey("allomancy"))
 		{
 			allomancy = new NBTTagCompound();
@@ -59,6 +67,22 @@ private ResourceLocation meterLoc;
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+
+		EntityClientPlayerMP player;
+		player = mc.thePlayer;
+		NBTTagCompound base;
+		NBTTagCompound allomancy;
+		if (player == null)
+			return;
+		if (player.getEntityData() == null)
+		{
+			return;
+		}
+		allomancy = player.getEntityData().getCompoundTag("allomancy");
+		if (allomancy == null)
+		{
+			return;
+		}
 		
 		//left hand side.
 		int ironY, steelY, tinY, pewterY;
@@ -72,29 +96,29 @@ private ResourceLocation meterLoc;
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
 		
-		ironY = 5; //This will be replaced with a call to get the actual value of a players iron
+		ironY = allomancy.getInteger("iron") ; //This will be replaced with a call to get the actual value of a players iron
 				   //reserves eventually.
 		gig.drawTexturedModalRect(6, 220+ironY, 7, 1+ironY, 3, 10-ironY);
 		
-		steelY = 1;
+		steelY = 10 - allomancy.getInteger("steel");
 		gig.drawTexturedModalRect(13, 220+steelY, 13, 1+steelY,3,10-steelY );
 		
-		tinY = 3;
+		tinY = 10 - allomancy.getInteger("tin");
 		gig.drawTexturedModalRect(31, 220+tinY, 19, 1+tinY,3,10-tinY );
 
-		pewterY = 8;
+		pewterY = 10 - allomancy.getInteger("pewter");
 		gig.drawTexturedModalRect(38, 220+pewterY, 25, 1+pewterY,3,10-pewterY );
 
-		copperY = 4;
+		copperY = 10 - allomancy.getInteger("copper");
 		gig.drawTexturedModalRect(381, 220+copperY, 31, 1+copperY,3,10-copperY );
 		
-		bronzeY = 7;
+		bronzeY = 10 -allomancy.getInteger("bronze");
 		gig.drawTexturedModalRect(388, 220+bronzeY, 37, 1+bronzeY,3,10-bronzeY );
 
-		zincY = 2;
+		zincY = 10 - allomancy.getInteger("zinc");
 		gig.drawTexturedModalRect(406, 220+zincY, 43, 1+zincY,3,10-zincY );
 
-		brassY = 5;
+		brassY = 10 - allomancy.getInteger("brass");
 		gig.drawTexturedModalRect(413, 220+brassY, 49, 1+brassY,3,10-brassY );
 
 
