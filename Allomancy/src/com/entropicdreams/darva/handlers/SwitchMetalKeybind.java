@@ -2,9 +2,14 @@ package com.entropicdreams.darva.handlers;
 
 import java.util.EnumSet;
 
+import com.entropicdreams.darva.AllomancyData;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.settings.KeyBinding;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class SwitchMetalKeybind extends KeyHandler {
 	private EnumSet tickTypes = EnumSet.of(TickType.CLIENT);
@@ -23,11 +28,17 @@ public class SwitchMetalKeybind extends KeyHandler {
 	@Override
 	public void keyDown(EnumSet<TickType> types, KeyBinding kb,
 			boolean tickEnd, boolean isRepeat) {
-			PlayerClientEntityMP player;
+			EntityClientPlayerMP player;
+			player = Minecraft.getMinecraft().thePlayer;
+			if (player == null || !Minecraft.getMinecraft().inGameHasFocus)
+				return;
 			if (keyDown == false)
 			{
 				keyDown = true;
-				
+				AllomancyData data = AllomancyData.forPlayer(player);
+				data.setSelected(data.getSelected()+1);
+				player.sendQueue.addToSendQueue(PacketHandler.updateSelectedMetal(data.getSelected()));
+				System.out.println(data.getSelected());
 			}
 
 	}
@@ -35,7 +46,8 @@ public class SwitchMetalKeybind extends KeyHandler {
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
 		// TODO Auto-generated method stub
-
+		if (keyDown == true)
+			keyDown = false;
 	}
 
 	@Override

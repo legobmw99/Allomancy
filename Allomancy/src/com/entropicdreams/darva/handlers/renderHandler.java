@@ -43,6 +43,9 @@ private AllomancyData data;
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 
+		if (!Minecraft.getMinecraft().inGameHasFocus)
+			return;
+		
 		EntityClientPlayerMP player;
 		player = mc.thePlayer;
 		if (player == null)
@@ -70,9 +73,11 @@ private AllomancyData data;
 			gig.drawTexturedModalRect(28, 213, 54, 0, 15, 24);
 			break;
 		case 3:
-			gig.drawTexturedModalRect(377, 213, 54, 0, 15, 24);
+			gig.drawTexturedModalRect(378, 213, 54, 0, 15, 24);
+			break;
 		case 4:
-			gig.drawTexturedModalRect(402, 213, 54, 0, 15, 24);
+			gig.drawTexturedModalRect(403, 213, 54, 0, 15, 24);
+			break;
 
 		}
 		

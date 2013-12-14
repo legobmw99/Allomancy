@@ -216,9 +216,9 @@ public class AllomancyData implements IExtendedEntityProperties {
 
 	public void setSelected(int selected) {
 		this.selected = selected;
-		if (selected > 4 || selected < 0) 
+		if (this.selected > 4 || this.selected < 0) 
 		{
-			selected = 0;
+			this.selected = 0;
 		}
 		Dirty = true;
 	}

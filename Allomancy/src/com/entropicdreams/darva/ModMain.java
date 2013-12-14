@@ -85,7 +85,7 @@ public class ModMain {
 		//oreGenerator = new OreGenerator();
 		GameRegistry.registerWorldGenerator(new OreGenerator());
 		
-		KeyBinding[] key = {new KeyBinding("Name of Button", Keyboard.KEY_F)};
+		KeyBinding[] key = {new KeyBinding("Select Metal", Keyboard.KEY_F)};
         boolean[] repeat = {false};
         KeyBindingRegistry.registerKeyBinding(new SwitchMetalKeybind(key, repeat));
 	}
