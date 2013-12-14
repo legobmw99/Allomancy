@@ -54,7 +54,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public int[] BurnTime =  { 600, 600, 1200, 400, 600, 600, 800, 800 };
 	public int[] MaxBurnTime = { 600, 600, 1200, 400, 600, 600, 800, 800 };
 	
-	
+	 
 	private final EntityPlayer player;
 	
 	public AllomancyData(EntityPlayer Player)
@@ -168,7 +168,6 @@ public class AllomancyData implements IExtendedEntityProperties {
 		Copper = nbt.getInteger("copper");
 		Brass = nbt.getInteger("brass");
 		selected = nbt.getInteger("selected");		
-		
 	}
 
 	@Override
