@@ -36,8 +36,10 @@ private ResourceLocation meterLoc;
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 		
-		
+		//left hand side.
 		int ironY, steelY, tinY, pewterY;
+		//right hand side
+		int copperY, bronzeY, zincY, brassY;
 		
 		GuiIngame gig = new GuiIngame(Minecraft.getMinecraft());
 		Minecraft.getMinecraft().renderEngine.bindTexture(meterLoc);
@@ -46,14 +48,31 @@ private ResourceLocation meterLoc;
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
 		
-		ironY = 0; //This will be replaced with a call to get the actual value of a players iron
+		ironY = 5; //This will be replaced with a call to get the actual value of a players iron
 				   //reserves eventually.
-		gig.drawTexturedModalRect(6, 220, 7+ironY, 1+ironY, 3, 20-ironY);
+		gig.drawTexturedModalRect(6, 220+ironY, 7, 1+ironY, 3, 10-ironY);
 		
-		steelY = 0;
+		steelY = 1;
+		gig.drawTexturedModalRect(13, 220+steelY, 13, 1+steelY,3,10-steelY );
 		
-		gig.drawTexturedModalRect(13, 220, 13+steelY, 1+steelY,3,20-steelY );
+		tinY = 3;
+		gig.drawTexturedModalRect(31, 220+tinY, 19, 1+tinY,3,10-tinY );
+
+		pewterY = 8;
+		gig.drawTexturedModalRect(38, 220+pewterY, 25, 1+pewterY,3,10-pewterY );
+
+		copperY = 4;
+		gig.drawTexturedModalRect(381, 220+copperY, 31, 1+copperY,3,10-copperY );
 		
+		bronzeY = 7;
+		gig.drawTexturedModalRect(388, 220+bronzeY, 37, 1+bronzeY,3,10-bronzeY );
+
+		zincY = 2;
+		gig.drawTexturedModalRect(406, 220+zincY, 43, 1+zincY,3,10-zincY );
+
+		brassY = 5;
+		gig.drawTexturedModalRect(413, 220+brassY, 49, 1+brassY,3,10-brassY );
+
 
 		//Draw the gauges second, so that highlights and decorations show over the bar.
 		gig.drawTexturedModalRect(5, 215, 0, 0, 5, 20);
