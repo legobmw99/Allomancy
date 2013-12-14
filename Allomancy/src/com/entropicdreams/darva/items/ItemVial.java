@@ -79,6 +79,55 @@ public class ItemVial extends ItemFood {
 				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 			}
 			return par1ItemStack;
+		case 2:
+			if (allomancy.getInteger("iron") < 10)
+			{
+				allomancy.setInteger("iron", allomancy.getInteger("iron")+1);
+				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
+			}
+			return par1ItemStack;
+		case 3:
+			if (allomancy.getInteger("tin") < 10)
+			{
+				allomancy.setInteger("tin", allomancy.getInteger("copper")+1);
+				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
+			}
+			return par1ItemStack;
+		case 4:
+			if (allomancy.getInteger("zinc") < 10)
+			{
+				allomancy.setInteger("zinc", allomancy.getInteger("copper")+1);
+				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
+			}
+			return par1ItemStack;
+		case 5:
+			if (allomancy.getInteger("brass") < 10)
+			{
+				allomancy.setInteger("brass", allomancy.getInteger("brass")+1);
+				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
+			}
+			return par1ItemStack;
+		case 6:
+			if (allomancy.getInteger("steel") < 10)
+			{
+				allomancy.setInteger("steel", allomancy.getInteger("steel")+1);
+				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
+			}
+			return par1ItemStack;
+		case 7:
+			if (allomancy.getInteger("pewter") < 10)
+			{
+				allomancy.setInteger("pewter", allomancy.getInteger("pewter")+1);
+				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
+			}
+			return par1ItemStack;
+		case 8:
+			if (allomancy.getInteger("bronze") < 10)
+			{
+				allomancy.setInteger("bronze", allomancy.getInteger("bronze")+1);
+				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
+			}
+			return par1ItemStack;
 		}
 		return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 	}
