@@ -31,7 +31,7 @@ public class BurnSecondKeyBind extends KeyHandler {
 		EntityClientPlayerMP player;
 		player = Minecraft.getMinecraft().thePlayer;
 		AllomancyData data;
-		System.out.println("burned!");
+		
 		if (player == null)
 			return;
 		if (keyDown == false)
@@ -42,19 +42,23 @@ public class BurnSecondKeyBind extends KeyHandler {
 			{
 			case 1:
 				//toggle Steel.
-				data.setbSteel(!data.isbSteel());
+				if (data.getSteel() > 0)
+					data.setbSteel(!data.isbSteel());
 				break;
 			case 2:
 				//toggle Pewter.
-				data.setbPewter(!data.isbPewter());
+				if (data.getPewter() > 0)
+					data.setbPewter(!data.isbPewter());
 				break;
 			case 3:
 				//toggle Bronze.
-				data.setbBronze(!data.isbBronze());
+				if (data.getBronze() > 0)
+					data.setbBronze(!data.isbBronze());
 				break;
 			case 4:
 				//toggle Brass.
-				data.setbBrass(!data.isbBrass());
+				if (data.getBrass() > 0)
+					data.setbBrass(!data.isbBrass());
 				break;
 			default:
 				break;

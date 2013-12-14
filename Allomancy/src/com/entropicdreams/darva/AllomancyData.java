@@ -72,28 +72,36 @@ public class AllomancyData implements IExtendedEntityProperties {
 			switch (Material)
 			{
 			case matIron:
-				bIron = value;
+				if ((value == true && Iron > 0) || value == false)
+					bIron = value;
 				break;
 			case matSteel:
+				if ((value == true && Steel > 0) || value == false)
 				bSteel = value;
 				break;
 			case matTin:
-				bTin = value;
+				if ((value == true && Tin > 0) || value == false)
+					bTin = value;
 				break;
 			case matPewter:
-				bPewter = value;
+				if ((value == true && Pewter > 0) || value == false)
+					bPewter = value;
 				break;
 			case matZinc:
-				bZinc = value;
+				if ((value == true && Zinc > 0) || value == false)
+					bZinc = value;
 				break;
 			case matBronze:
-				bBronze = value;
+				if ((value == true && Bronze > 0) || value == false)
+					bBronze = value;
 				break;
 			case matCopper:
-				bCopper = value;
+				if ((value == true && Copper > 0) || value == false)
+					bCopper = value;
 				break;
 			case matBrass:
-				bBrass = value;
+				if ((value == true && Brass > 0) || value == false)
+					bBrass = value;
 				break;
 			}
 					

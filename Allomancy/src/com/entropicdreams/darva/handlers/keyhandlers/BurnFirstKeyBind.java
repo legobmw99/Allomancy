@@ -3,6 +3,7 @@ package com.entropicdreams.darva.handlers.keyhandlers;
 import java.util.EnumSet;
 
 import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.handlers.PacketHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -38,19 +39,27 @@ public class BurnFirstKeyBind extends KeyHandler {
 			{
 			case 1:
 				//toggle iron.
-				data.setbIron(!data.isbIron());
+				if (data.getIron() > 0)
+					data.setbIron(!data.isbIron());
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matIron, data.isbIron()));
 				break;
 			case 2:
 				//toggle Tin.
-				data.setbTin(!data.isbTin());
+				if (data.getTin() > 0)
+					data.setbTin(!data.isbTin());
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matTin, data.isbTin()));
 				break;
 			case 3:
 				//toggle Copper.
-				data.setbCopper(!data.isbCopper());
+				if (data.getCopper() > 0)
+					data.setbCopper(!data.isbCopper());
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matCopper, data.isbCopper()));
 				break;
 			case 4:
 				//toggle Zinc.
-				data.setbZinc(!data.isbZinc());
+				if (data.getZinc() > 0)
+					data.setbZinc(!data.isbZinc());
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matZinc, data.isbZinc()));
 				break;
 			default:
 				break;
