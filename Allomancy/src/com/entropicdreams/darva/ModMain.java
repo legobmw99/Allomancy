@@ -1,20 +1,27 @@
 package com.entropicdreams.darva;
 
+
+
+import org.lwjgl.input.Keyboard;
+
 import com.entropicdreams.darva.handlers.CraftingHandler;
 import com.entropicdreams.darva.handlers.OreGenerator;
 import com.entropicdreams.darva.handlers.PlayerTracker;
+import com.entropicdreams.darva.handlers.SwitchMetalKeybind;
 import com.entropicdreams.darva.items.ItemGrinder;
 import com.entropicdreams.darva.items.ItemVial;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -25,6 +32,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+
 import com.entropicdreams.darva.handlers.PacketHandler;
  
 @NetworkMod(clientSideRequired=true, channels={"Allomancy_Data"}, packetHandler = PacketHandler.class)
@@ -77,6 +85,9 @@ public class ModMain {
 		//oreGenerator = new OreGenerator();
 		GameRegistry.registerWorldGenerator(new OreGenerator());
 		
+		KeyBinding[] key = {new KeyBinding("Name of Button", Keyboard.KEY_F)};
+        boolean[] repeat = {false};
+        KeyBindingRegistry.registerKeyBinding(new SwitchMetalKeybind(key, repeat));
 	}
 	
 	@EventHandler 
@@ -92,6 +103,7 @@ public class ModMain {
 	    public void postInit(FMLPostInitializationEvent event) {
 		proxy.RegisterTickHandlers();
 		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
+		
 	 }
 	 
 	 

@@ -20,6 +20,7 @@ import cpw.mods.fml.relauncher.Side;
 public class PacketHandler implements IPacketHandler {
 
 	public final static int Packet_Allomancy_Data = 0;
+	public final static int Packet_Allomancy_Select_Metal = 1;
 	@Override
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
@@ -44,6 +45,7 @@ public class PacketHandler implements IPacketHandler {
 	private void serverRec(EntityPlayerMP player, Packet250CustomPayload packet)
 	{
 		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+		AllomancyData data;
 		int Type = -1;
 		
 		try {
@@ -56,8 +58,17 @@ public class PacketHandler implements IPacketHandler {
 		switch (Type)
 		{
 		case PacketHandler.Packet_Allomancy_Data:
-			AllomancyData data = AllomancyData.forPlayer(player);
+			 data = AllomancyData.forPlayer(player);
 			data.updateData(packet);
+			break;
+		case PacketHandler.Packet_Allomancy_Select_Metal:
+			data = AllomancyData.forPlayer(player);
+			try {
+				data.setSelected(inputStream.readInt());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		default:
 			return;
 		}
@@ -84,6 +95,27 @@ public class PacketHandler implements IPacketHandler {
 			return;
 		}
 
+	}
+	
+	
+	public static Packet250CustomPayload updateSelectedMetal(int newValue)
+	{
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
+		DataOutputStream outputStream = new DataOutputStream(bos);
+		try {
+			outputStream.writeInt(PacketHandler.Packet_Allomancy_Select_Metal);
+			outputStream.writeInt(newValue);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Allomancy_Data";
+		packet.data = bos.toByteArray();
+		packet.length = bos.size();
+		return packet;
+
+		
 	}
 	public static Packet250CustomPayload updateAllomancyData(AllomancyData data)
 	{
