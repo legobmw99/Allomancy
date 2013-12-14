@@ -3,6 +3,7 @@ package com.entropicdreams.darva.handlers;
 import java.util.EnumSet;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Point;
 
 import com.entropicdreams.darva.AllomancyData;
 
@@ -24,7 +25,10 @@ private final Minecraft mc;
 private SimpleTexture meter;
 private ResourceLocation meterLoc;
 private AllomancyData data;
+private int animationCounter = 0;
+private int currentFrame = 0;
 
+private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), new Point(72,12) };
 
 	public renderHandler()
 	{
@@ -50,6 +54,9 @@ private AllomancyData data;
 		player = mc.thePlayer;
 		if (player == null)
 			return;
+		
+		animationCounter++;
+		
 		data = data.forPlayer(player);
 		//left hand side.
 		int ironY, steelY, tinY, pewterY;
@@ -67,16 +74,16 @@ private AllomancyData data;
 		case 0:
 			break;
 		case 1:
-			gig.drawTexturedModalRect(3, 213, 54, 0, 15, 24);
+			gig.drawTexturedModalRect(3, 213, 54, 0, 16, 24);
 			break;
 		case 2:
-			gig.drawTexturedModalRect(28, 213, 54, 0, 15, 24);
+			gig.drawTexturedModalRect(28, 213, 54, 0, 16, 24);
 			break;
 		case 3:
-			gig.drawTexturedModalRect(378, 213, 54, 0, 15, 24);
+			gig.drawTexturedModalRect(378, 213, 54, 0, 16, 24);
 			break;
 		case 4:
-			gig.drawTexturedModalRect(403, 213, 54, 0, 15, 24);
+			gig.drawTexturedModalRect(403, 213, 54, 0, 16, 24);
 			break;
 
 		}
@@ -122,6 +129,14 @@ private AllomancyData data;
 		gig.drawTexturedModalRect(405, 215, 0, 0, 5, 20);
 		gig.drawTexturedModalRect(412, 215, 0, 0, 5, 20);
 
+			gig.drawTexturedModalRect(5, 220+ironY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+			if (animationCounter > 6) //Draw the burning symbols...
+			{			
+			animationCounter = 0;
+			currentFrame++;
+			if (currentFrame > 3)
+				currentFrame = 0;
+		}
 		
 	}
 
