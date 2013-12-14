@@ -6,22 +6,29 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
-public class PlayerTracker  {
+public class PlayerTracker {
 
-	public void onPlayerLogin(EntityPlayer player) {
+	@ForgeSubscribe
+	public void onPlayerLogin(EntityJoinWorldEvent event) {
 		// TODO Auto-generated method stub
-		if (player instanceof EntityPlayerMP)
+		if (event.entity instanceof EntityPlayerMP)
 		{
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(AllomancyData.forPlayer(player)), (Player) player);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(AllomancyData.forPlayer(event.entity)), (Player) event.entity);
 			System.out.println("sent");
 		}
-
-		
 	}
+	@ForgeSubscribe
+	 public void onEntityConstruct(EntityEvent.EntityConstructing event) {
+        if (event.entity instanceof EntityPlayer) {
+        	event.entity.registerExtendedProperties(AllomancyData.IDENTIFIER, new AllomancyData((EntityPlayer) event.entity));
+        }
+    }
 
 
 }
