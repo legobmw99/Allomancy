@@ -12,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
@@ -82,6 +84,18 @@ public class AllomancyData implements IExtendedEntityProperties {
 			case matTin:
 				if ((value == true && Tin > 0) || value == false)
 					bTin = value;
+				if (this.player instanceof EntityPlayerMP)
+				{
+					//Serverside... Decide on what to do with nightvision.
+					if (bTin == true)
+					{
+						player.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 200, 0));
+					}
+					else
+					{
+						//player.removePotionEffect(Potion.nightVision.getId());
+					}
+				}
 				break;
 			case matPewter:
 				if ((value == true && Pewter > 0) || value == false)

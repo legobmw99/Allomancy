@@ -3,6 +3,7 @@ package com.entropicdreams.darva.handlers.keyhandlers;
 import java.util.EnumSet;
 
 import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.handlers.PacketHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -44,21 +45,25 @@ public class BurnSecondKeyBind extends KeyHandler {
 				//toggle Steel.
 				if (data.getSteel() > 0)
 					data.setbSteel(!data.isbSteel());
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matSteel, data.isbSteel()));
 				break;
 			case 2:
 				//toggle Pewter.
 				if (data.getPewter() > 0)
 					data.setbPewter(!data.isbPewter());
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matPewter, data.isbPewter()));
 				break;
 			case 3:
 				//toggle Bronze.
 				if (data.getBronze() > 0)
 					data.setbBronze(!data.isbBronze());
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matBronze, data.isbBronze()));
 				break;
 			case 4:
 				//toggle Brass.
 				if (data.getBrass() > 0)
 					data.setbBrass(!data.isbBrass());
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matBrass, data.isbBrass()));
 				break;
 			default:
 				break;
