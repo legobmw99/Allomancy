@@ -36,11 +36,26 @@ private ResourceLocation meterLoc;
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 		
+		
+		int ironY, steelY, tinY, pewterY;
+		
 		GuiIngame gig = new GuiIngame(Minecraft.getMinecraft());
 		Minecraft.getMinecraft().renderEngine.bindTexture(meterLoc);
 		TextureObject obj;
 		obj = Minecraft.getMinecraft().renderEngine.getTexture(meterLoc);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
+
+		
+		ironY = 0; //This will be replaced with a call to get the actual value of a players iron
+				   //reserves eventually.
+		gig.drawTexturedModalRect(6, 220, 7+ironY, 1+ironY, 3, 20-ironY);
+		
+		steelY = 0;
+		
+		gig.drawTexturedModalRect(13, 220, 13+steelY, 1+steelY,3,20-steelY );
+		
+
+		//Draw the gauges second, so that highlights and decorations show over the bar.
 		gig.drawTexturedModalRect(5, 215, 0, 0, 5, 20);
 		gig.drawTexturedModalRect(12, 215, 0, 0, 5, 20);
 		
@@ -53,9 +68,6 @@ private ResourceLocation meterLoc;
 		gig.drawTexturedModalRect(405, 215, 0, 0, 5, 20);
 		gig.drawTexturedModalRect(412, 215, 0, 0, 5, 20);
 
-		
-		
-		
 		
 	}
 
