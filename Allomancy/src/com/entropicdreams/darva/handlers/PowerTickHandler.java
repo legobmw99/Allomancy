@@ -44,6 +44,9 @@ public class PowerTickHandler implements ITickHandler {
 			{
 				data = AllomancyData.forPlayer(curPlayer);
 				
+				updateBurnTime(data,curPlayer);
+				
+				
 				if (data.isbTin())
 				{
 					if( !curPlayer.isPotionActive(Potion.nightVision.getId()))
@@ -81,4 +84,45 @@ public class PowerTickHandler implements ITickHandler {
 		return "Power Handler";
 	}
 
+	private void updateBurnTime(AllomancyData data, EntityPlayerMP player)
+	{
+		data = AllomancyData.forPlayer(player);
+		
+		for (int i = 0; i < 8; i++)
+		{
+			data.BurnTime[i]--;
+			if (data.BurnTime[i] == 0)
+			{
+				data.BurnTime[i] = data.MaxBurnTime[i];
+				switch (i)
+				{
+				case AllomancyData.matIron:
+					data.setIron(data.getIron()-1);
+					break;
+				case AllomancyData.matSteel:
+					data.setSteel(data.getSteel()-1);
+					break;
+				case AllomancyData.matTin:
+					data.setTin(data.getTin()-1);
+					break;
+				case AllomancyData.matPewter:
+					data.setPewter(data.getPewter()-1);
+					break;
+				case AllomancyData.matZinc:
+					data.setZinc(data.getZinc()-1);
+					break;
+				case AllomancyData.matBronze:
+					data.setBronze(data.getBronze()-1);
+					break;
+				case AllomancyData.matCopper:
+					data.setCopper(data.getCopper()-1);
+					break;
+				case AllomancyData.matBrass:
+					data.setBrass(data.getBrass()-1);
+					break;
+				}
+			}
+		}
+		
+	}
 }

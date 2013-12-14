@@ -51,6 +51,10 @@ public class AllomancyData implements IExtendedEntityProperties {
 	private boolean bCopper = false;
 	private boolean bBrass = false;
 	
+	public int[] BurnTime =  { 600, 600, 1200, 400, 600, 600, 800, 800 };
+	public int[] MaxBurnTime = { 600, 600, 1200, 400, 600, 600, 800, 800 };
+	
+	
 	private final EntityPlayer player;
 	
 	public AllomancyData(EntityPlayer Player)
@@ -92,8 +96,6 @@ public class AllomancyData implements IExtendedEntityProperties {
 			case matZinc:
 				if ((value == true && Zinc > 0) || value == false)
 					bZinc = value;
-				if (value == false)
-					player.removePotionEffect(Potion.nightVision.getId());
 				break;
 			case matBronze:
 				if ((value == true && Bronze > 0) || value == false)
