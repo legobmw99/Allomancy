@@ -5,10 +5,13 @@ import java.util.EnumSet;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureObject;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import cpw.mods.fml.common.ITickHandler;
@@ -30,7 +33,28 @@ private ResourceLocation meterLoc;
 	}
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
-
+		EntityClientPlayerMP player;
+		player = mc.thePlayer;
+		NBTTagCompound base;
+		NBTTagCompound allomancy;
+		
+		base = player.getEntityData();
+		if (!base.hasKey("allomancy"))
+		{
+			allomancy = new NBTTagCompound();
+			allomancy.setName("allomancy");
+			allomancy.setInteger("iron", 0);
+			allomancy.setInteger("steel",0);
+			allomancy.setInteger("zinc",0);
+			allomancy.setInteger("pewter",0);
+			allomancy.setInteger("tin",0);
+			allomancy.setInteger("copper",0);
+			allomancy.setInteger("bronze", 0);
+			allomancy.setInteger("brass", 0);
+			base.setCompoundTag("allomancy", base);
+		}
+				
+		
 	}
 
 	@Override
