@@ -7,7 +7,6 @@ import org.lwjgl.input.Keyboard;
 import com.entropicdreams.darva.handlers.CraftingHandler;
 import com.entropicdreams.darva.handlers.OreGenerator;
 import com.entropicdreams.darva.handlers.PlayerTracker;
-import com.entropicdreams.darva.handlers.SwitchMetalKeybind;
 import com.entropicdreams.darva.items.ItemGrinder;
 import com.entropicdreams.darva.items.ItemVial;
 
@@ -34,6 +33,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 import com.entropicdreams.darva.handlers.PacketHandler;
+import com.entropicdreams.darva.handlers.keyhandlers.BurnFirstKeyBind;
+import com.entropicdreams.darva.handlers.keyhandlers.SwitchMetalKeybind;
  
 @NetworkMod(clientSideRequired=true, channels={"Allomancy_Data"}, packetHandler = PacketHandler.class)
 @Mod(modid ="allomancyMod", name = "Allomancy", version = "0.0.1" )
@@ -109,6 +110,9 @@ public class ModMain {
 			KeyBinding[] key = {new KeyBinding("Select Metal", Keyboard.KEY_TAB)};
 	        boolean[] repeat = {false};
 	        KeyBindingRegistry.registerKeyBinding(new SwitchMetalKeybind(key, repeat));		 
+	        
+			KeyBinding[] key2 = {new KeyBinding("Burn First", Keyboard.KEY_F)};
+	        KeyBindingRegistry.registerKeyBinding(new BurnFirstKeyBind(key2, repeat));
 	 }
 	 
 	 

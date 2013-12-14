@@ -129,7 +129,9 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 		gig.drawTexturedModalRect(405, 215, 0, 0, 5, 20);
 		gig.drawTexturedModalRect(412, 215, 0, 0, 5, 20);
 
+		if (data.isbIron())
 			gig.drawTexturedModalRect(5, 220+ironY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+		
 			if (animationCounter > 6) //Draw the burning symbols...
 			{			
 			animationCounter = 0;

@@ -1,8 +1,9 @@
-package com.entropicdreams.darva.handlers;
+package com.entropicdreams.darva.handlers.keyhandlers;
 
 import java.util.EnumSet;
 
 import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.handlers.PacketHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
