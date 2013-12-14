@@ -10,24 +10,28 @@ import net.minecraft.client.settings.KeyBinding;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
 
-public class BurnFirstKeyBind extends KeyHandler {
+public class BurnSecondKeyBind extends KeyHandler {
 
-	private boolean keyDown = false;
-	public BurnFirstKeyBind(KeyBinding[] keyBindings, boolean[] repeatings) {
+	public BurnSecondKeyBind(KeyBinding[] keyBindings, boolean[] repeatings) {
 		super(keyBindings, repeatings);
+		// TODO Auto-generated constructor stub
 	}
 
+	private boolean keyDown;
 	@Override
 	public String getLabel() {
-		return "Burn First";
+		// TODO Auto-generated method stub
+		return "Burn Second";
 	}
 
 	@Override
 	public void keyDown(EnumSet<TickType> types, KeyBinding kb,
 			boolean tickEnd, boolean isRepeat) {
+		// TODO Auto-generated method stub
 		EntityClientPlayerMP player;
 		player = Minecraft.getMinecraft().thePlayer;
 		AllomancyData data;
+		System.out.println("burned!");
 		if (player == null)
 			return;
 		if (keyDown == false)
@@ -37,20 +41,20 @@ public class BurnFirstKeyBind extends KeyHandler {
 			switch (data.getSelected())
 			{
 			case 1:
-				//toggle iron.
-				data.setbIron(!data.isbIron());
+				//toggle Steel.
+				data.setbSteel(!data.isbSteel());
 				break;
 			case 2:
-				//toggle Tin.
-				data.setbTin(!data.isbTin());
+				//toggle Pewter.
+				data.setbPewter(!data.isbPewter());
 				break;
 			case 3:
-				//toggle Copper.
-				data.setbCopper(!data.isbCopper());
+				//toggle Bronze.
+				data.setbBronze(!data.isbBronze());
 				break;
 			case 4:
-				//toggle Zinc.
-				data.setbZinc(!data.isbZinc());
+				//toggle Brass.
+				data.setbBrass(!data.isbBrass());
 				break;
 			default:
 				break;
@@ -60,16 +64,17 @@ public class BurnFirstKeyBind extends KeyHandler {
 
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
-		if (keyDown == true)
+		// TODO Auto-generated method stub
+		if (keyDown)
 		{
 			keyDown = false;
 		}
-				
 	}
 
 	@Override
 	public EnumSet<TickType> ticks() {
-		return  EnumSet.of(TickType.CLIENT);
+		// TODO Auto-generated method stub
+		return EnumSet.of(TickType.CLIENT);
 	}
 
 }

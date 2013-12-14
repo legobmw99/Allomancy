@@ -131,7 +131,22 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 
 		if (data.isbIron())
 			gig.drawTexturedModalRect(5, 220+ironY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
-		
+		if (data.isbSteel())
+			gig.drawTexturedModalRect(12, 220+steelY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+		if (data.isbTin())
+			gig.drawTexturedModalRect(30, 220+tinY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+		if (data.isbPewter())
+			gig.drawTexturedModalRect(37, 220+pewterY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+		if (data.isbCopper())
+			gig.drawTexturedModalRect(380, 220+copperY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+		if (data.isbBronze())
+			gig.drawTexturedModalRect(387, 220+bronzeY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+		if (data.isbZinc())
+			gig.drawTexturedModalRect(405, 220+zincY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+		if (data.isbBrass())
+			gig.drawTexturedModalRect(412, 220+brassY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+
+
 			if (animationCounter > 6) //Draw the burning symbols...
 			{			
 			animationCounter = 0;

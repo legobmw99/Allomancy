@@ -34,6 +34,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 import com.entropicdreams.darva.handlers.PacketHandler;
 import com.entropicdreams.darva.handlers.keyhandlers.BurnFirstKeyBind;
+import com.entropicdreams.darva.handlers.keyhandlers.BurnSecondKeyBind;
 import com.entropicdreams.darva.handlers.keyhandlers.SwitchMetalKeybind;
  
 @NetworkMod(clientSideRequired=true, channels={"Allomancy_Data"}, packetHandler = PacketHandler.class)
@@ -113,6 +114,8 @@ public class ModMain {
 	        
 			KeyBinding[] key2 = {new KeyBinding("Burn First", Keyboard.KEY_F)};
 	        KeyBindingRegistry.registerKeyBinding(new BurnFirstKeyBind(key2, repeat));
+	        KeyBinding[] key3 = {new KeyBinding("Burn Second", Keyboard.KEY_G)};
+	        KeyBindingRegistry.registerKeyBinding(new BurnSecondKeyBind(key3, repeat));
 	 }
 	 
 	 
