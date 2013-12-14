@@ -84,18 +84,6 @@ public class AllomancyData implements IExtendedEntityProperties {
 			case matTin:
 				if ((value == true && Tin > 0) || value == false)
 					bTin = value;
-				if (this.player instanceof EntityPlayerMP)
-				{
-					//Serverside... Decide on what to do with nightvision.
-					if (bTin == true)
-					{
-						player.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 200, 0));
-					}
-					else
-					{
-						//player.removePotionEffect(Potion.nightVision.getId());
-					}
-				}
 				break;
 			case matPewter:
 				if ((value == true && Pewter > 0) || value == false)

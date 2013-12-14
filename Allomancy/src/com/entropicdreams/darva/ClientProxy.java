@@ -10,7 +10,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void RegisterTickHandlers() {
 		// TODO Auto-generated method stub
-		super.RegisterTickHandlers();
+		
 		renderHandler rh = new renderHandler();
 		TickRegistry.registerTickHandler(rh, Side.CLIENT);
 	}
