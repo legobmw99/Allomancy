@@ -134,7 +134,7 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 			{			
 			animationCounter = 0;
 			currentFrame++;
-			if (currentFrame > 3)
+			if (currentFrame > 3 )
 				currentFrame = 0;
 		}
 		
