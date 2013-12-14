@@ -30,6 +30,15 @@ public class AllomancyData implements IExtendedEntityProperties {
 	private int Copper= 0;
 	private int Brass= 0;
 	private int selected = 0;
+	private boolean bIron = false;
+	private boolean bSteel = false;
+	private boolean bTin = false;
+	private boolean bPewter = false;
+	private boolean bZinc = false;
+	private boolean bBronze = false;
+	private boolean bCopper = false;
+	private boolean bBrass = false;
+	
 	private final EntityPlayer player;
 	
 	public AllomancyData(EntityPlayer Player)
