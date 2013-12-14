@@ -96,7 +96,7 @@ private ResourceLocation meterLoc;
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
 		
-		ironY = allomancy.getInteger("iron") ; //This will be replaced with a call to get the actual value of a players iron
+		ironY = 10 - allomancy.getInteger("iron") ; //This will be replaced with a call to get the actual value of a players iron
 				   //reserves eventually.
 		gig.drawTexturedModalRect(6, 220+ironY, 7, 1+ironY, 3, 10-ironY);
 		
