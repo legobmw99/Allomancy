@@ -59,6 +59,7 @@ private ResourceLocation meterLoc;
 			allomancy.setInteger("copper",0);
 			allomancy.setInteger("bronze", 0);
 			allomancy.setInteger("brass", 0);
+			allomancy.setInteger("selected", 1);
 			base.setCompoundTag("allomancy", base);
 		}
 				
@@ -95,6 +96,18 @@ private ResourceLocation meterLoc;
 		obj = Minecraft.getMinecraft().renderEngine.getTexture(meterLoc);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
+		
+		switch (allomancy.getInteger("selected"))
+		{
+		case 0:
+			break;
+		case 1:
+			gig.drawTexturedModalRect(3, 213, 54, 0, 15, 24);
+		case 2:
+			gig.drawTexturedModalRect(28, 213, 54, 0, 15, 24);
+		}
+		
+		
 		
 		ironY = 10 - allomancy.getInteger("iron") ; //This will be replaced with a call to get the actual value of a players iron
 				   //reserves eventually.
