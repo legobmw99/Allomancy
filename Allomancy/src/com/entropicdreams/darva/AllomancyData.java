@@ -18,18 +18,15 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 
 public class AllomancyData implements IExtendedEntityProperties {
 
-	public enum Allomantic_Material
-	{
-		iron,
-		steel,
-		tin,
-		pewter,
-		zinc,
-		bronze,
-		copper,
-		brass,
-		
-	}
+	public static final int matIron = 0;
+	public static final int matSteel =1;
+	public static final int matTin = 2;
+	public static final int matPewter =3;
+	public static final int matZinc = 4;
+	public static final int matBronze = 5;
+	public static final int matCopper = 6;
+	public static final int matBrass = 7;
+
 	
 	public static final String IDENTIFIER = "Allomancy_Data";
 	public boolean Dirty = true;
@@ -62,6 +59,50 @@ public class AllomancyData implements IExtendedEntityProperties {
     {
         return (AllomancyData)player.getExtendedProperties(IDENTIFIER);
     }
+	public void updateBurn(Packet250CustomPayload packet)
+	{	
+		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+		int Material = -1;
+		boolean value;
+		try {
+			inputStream.readInt(); //Throw away packet type info.
+			Material = inputStream.readInt();
+			value = inputStream.readBoolean();
+			
+			switch (Material)
+			{
+			case matIron:
+				bIron = value;
+				break;
+			case matSteel:
+				bSteel = value;
+				break;
+			case matTin:
+				bTin = value;
+				break;
+			case matPewter:
+				bPewter = value;
+				break;
+			case matZinc:
+				bZinc = value;
+				break;
+			case matBronze:
+				bBronze = value;
+				break;
+			case matCopper:
+				bCopper = value;
+				break;
+			case matBrass:
+				bBrass = value;
+				break;
+			}
+					
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
     
 	public void updateData(Packet250CustomPayload packet)
 	{

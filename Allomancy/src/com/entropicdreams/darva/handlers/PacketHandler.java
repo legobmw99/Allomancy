@@ -21,6 +21,7 @@ public class PacketHandler implements IPacketHandler {
 
 	public final static int Packet_Allomancy_Data = 0;
 	public final static int Packet_Allomancy_Select_Metal = 1;
+	public final static int Packet_Allomancy_Update_Burn = 2;
 	@Override
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
@@ -69,6 +70,11 @@ public class PacketHandler implements IPacketHandler {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			break;
+		case PacketHandler.Packet_Allomancy_Update_Burn:
+			data= AllomancyData.forPlayer(player);
+			data.updateBurn(packet);
+			break;
 		default:
 			return;
 		}
@@ -97,18 +103,33 @@ public class PacketHandler implements IPacketHandler {
 
 	}
 	
-	public static Packet250CustomPayload changeBurn(Allomantic_Material mat, boolean value )
+	public static Packet250CustomPayload changeBurn(int mat, boolean value )
 	{
-		
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(9);
+		DataOutputStream outputStream = new DataOutputStream(bos);
+		try {
+			outputStream.writeInt(PacketHandler.Packet_Allomancy_Update_Burn);
+			outputStream.writeInt(mat);
+			outputStream.writeBoolean(value);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Allomancy_Data";
+		packet.data = bos.toByteArray();
+		packet.length = bos.size();
+		return packet;
+
 	}
 	
-	public static Packet250CustomPayload updateSelectedMetal(int newValue)
+	public static Packet250CustomPayload updateSelectedMetal(int metal)
 	{
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			outputStream.writeInt(PacketHandler.Packet_Allomancy_Select_Metal);
-			outputStream.writeInt(newValue);
+			outputStream.writeInt(metal);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
