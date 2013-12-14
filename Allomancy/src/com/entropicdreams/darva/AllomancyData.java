@@ -153,12 +153,10 @@ public class AllomancyData implements IExtendedEntityProperties {
 		nbt.setInteger("brass",Brass);
 		nbt.setInteger("selected",selected);
 		compound.setCompoundTag(IDENTIFIER, nbt);
-		System.out.println("wrote");
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
-		System.out.println("read");
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt = compound.getCompoundTag(IDENTIFIER);
 		Iron = nbt.getInteger("iron");

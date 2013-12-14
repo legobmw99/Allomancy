@@ -65,12 +65,10 @@ public class OreGenerator implements IWorldGenerator {
 		
 		for(OreData data : oreList)
 		{
-			System.out.println("count " + tcount);
 			tcount++;
 			numCluster = random.nextInt(data.clusterPerChunk);
 			if (numCluster == 0 && data.clusterPerChunk !=0)
 				numCluster  = 1;
-			//System.out.println(numCluster + "Clusters Generated");
 			
 			for(int count = 0; count < numCluster; count++)
 			{
@@ -107,7 +105,6 @@ public class OreGenerator implements IWorldGenerator {
 			id = world.getBlockId(lx, ly, lz);
 			
 				world.setBlock(lx, ly, lz, blockID);
-				System.out.println("Block ID: " + blockID );
 			switch (random.nextInt(3))
 			{
 			case 0:

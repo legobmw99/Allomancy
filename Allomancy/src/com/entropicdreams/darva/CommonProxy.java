@@ -12,6 +12,5 @@ public class CommonProxy {
 	{
 		//derp
 		TickRegistry.registerTickHandler(new PowerTickHandler(), Side.SERVER);
-		System.out.println("Derp!");
 	}
 }

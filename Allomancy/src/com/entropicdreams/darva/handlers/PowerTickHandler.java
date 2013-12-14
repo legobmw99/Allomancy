@@ -16,6 +16,8 @@ import com.entropicdreams.darva.AllomancyData;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public class PowerTickHandler implements ITickHandler {
 
@@ -91,8 +93,10 @@ public class PowerTickHandler implements ITickHandler {
 		for (int i = 0; i < 8; i++)
 		{
 			data.BurnTime[i]--;
+			System.out.println("Burned Time");
 			if (data.BurnTime[i] == 0)
 			{
+				System.out.println("Burned one");
 				data.BurnTime[i] = data.MaxBurnTime[i];
 				switch (i)
 				{
@@ -121,6 +125,7 @@ public class PowerTickHandler implements ITickHandler {
 					data.setBrass(data.getBrass()-1);
 					break;
 				}
+				PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(data), (Player)player);
 			}
 		}
 		

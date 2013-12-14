@@ -39,7 +39,6 @@ public class SwitchMetalKeybind extends KeyHandler {
 				AllomancyData data = AllomancyData.forPlayer(player);
 				data.setSelected(data.getSelected()+1);
 				player.sendQueue.addToSendQueue(PacketHandler.updateSelectedMetal(data.getSelected()));
-				System.out.println(data.getSelected());
 			}
 
 	}
