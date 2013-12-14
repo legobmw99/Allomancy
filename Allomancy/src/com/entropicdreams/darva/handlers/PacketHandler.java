@@ -1,7 +1,10 @@
 package com.entropicdreams.darva.handlers;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 import com.entropicdreams.darva.AllomancyData;
 
@@ -16,28 +19,72 @@ import cpw.mods.fml.relauncher.Side;
 
 public class PacketHandler implements IPacketHandler {
 
-	public static int Packet_Allomancy_Data = 0;
+	public final static int Packet_Allomancy_Data = 0;
 	@Override
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
 		// TODO Auto-generated method stub
-		Side side = FMLCommonHandler.instance().getEffectiveSide();
 		
+		Side side = FMLCommonHandler.instance().getEffectiveSide();
 		if (side == Side.SERVER) {
 			EntityPlayerMP mpPlr;
 			mpPlr = (EntityPlayerMP) player;
-		
+			serverRec(mpPlr, packet);
 		
 		} else if (side == Side.CLIENT) {
 			EntityClientPlayerMP mpPlr;
 			mpPlr = (EntityClientPlayerMP) player;
+			clientRec(mpPlr, packet);
 		
 		} else {
 		        // We have an errornous state! 
 		}		
 		
 	}
-	
+	private void serverRec(EntityPlayerMP player, Packet250CustomPayload packet)
+	{
+		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+		int Type = -1;
+		
+		try {
+			Type = inputStream.readInt();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		switch (Type)
+		{
+		case PacketHandler.Packet_Allomancy_Data:
+			AllomancyData data = AllomancyData.forPlayer(player);
+			data.updateData(packet);
+		default:
+			return;
+		}
+
+	}
+	private void clientRec(EntityClientPlayerMP player, Packet250CustomPayload packet)
+	{
+		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+		int Type = -1;
+		
+		try {
+			Type = inputStream.readInt();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		switch (Type)
+		{
+		case PacketHandler.Packet_Allomancy_Data:
+			AllomancyData data = AllomancyData.forPlayer(player);
+			data.updateData(packet);
+		default:
+			return;
+		}
+
+	}
 	public static Packet250CustomPayload updateAllomancyData(AllomancyData data)
 	{
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(40);

@@ -1,6 +1,17 @@
 package com.entropicdreams.darva;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+
+import com.entropicdreams.darva.handlers.PacketHandler;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
@@ -19,13 +30,37 @@ public class AllomancyData implements IExtendedEntityProperties {
 	private int Copper= 0;
 	private int Brass= 0;
 	private int selected = 0;
+	private final EntityPlayer player;
 	
+	public AllomancyData(EntityPlayer Player)
+	{
+		player = Player;
+	}
 	public static AllomancyData forPlayer(Entity player)
     {
         return (AllomancyData)player.getExtendedProperties(IDENTIFIER);
     }
     
-	
+	public void updateData(Packet250CustomPayload packet)
+	{
+		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+		try {
+			inputStream.readInt();
+			Brass = inputStream.readInt();
+			Bronze = inputStream.readInt();
+			Copper = inputStream.readInt();
+			Iron = inputStream.readInt();
+			Pewter = inputStream.readInt();
+			selected = inputStream.readInt();
+			Steel = inputStream.readInt();
+			Tin = inputStream.readInt();
+			Zinc = inputStream.readInt();
+			Dirty = false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //Clear the type byte.
+	}
 	
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
@@ -59,6 +94,10 @@ public class AllomancyData implements IExtendedEntityProperties {
 		Brass = nbt.getInteger("brass");
 		selected = nbt.getInteger("selected");		
 		
+		if (player instanceof EntityPlayerMP)
+		{
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(this), (Player) player);
+		}
 	}
 
 	@Override

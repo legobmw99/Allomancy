@@ -126,6 +126,7 @@ public class ItemVial extends ItemFood {
 			}
 			return par1ItemStack;
 		}
+		
 		return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 	}
 	@Override
