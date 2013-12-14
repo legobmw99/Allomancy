@@ -30,28 +30,34 @@ public class AllomancyData implements IExtendedEntityProperties {
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
 		// TODO Auto-generated method stub
-		compound.setInteger("iron", Iron);
-		compound.setInteger("steel", Steel);
-		compound.setInteger("tin",Tin);
-		compound.setInteger("pewter",Pewter);
-		compound.setInteger("zinc",Zinc);
-		compound.setInteger("bronze",Bronze);
-		compound.setInteger("copper",Copper);
-		compound.setInteger("brass",Brass);
-		compound.setInteger("selected",selected);
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setInteger("iron", Iron);
+		nbt.setInteger("steel", Steel);
+		nbt.setInteger("tin",Tin);
+		nbt.setInteger("pewter",Pewter);
+		nbt.setInteger("zinc",Zinc);
+		nbt.setInteger("bronze",Bronze);
+		nbt.setInteger("copper",Copper);
+		nbt.setInteger("brass",Brass);
+		nbt.setInteger("selected",selected);
+		compound.setCompoundTag(IDENTIFIER, nbt);
+		System.out.println("wrote");
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
-		Iron = compound.getInteger("iron");
-		Steel= compound.getInteger("steel");
-		Tin= compound.getInteger("tin");
-		Pewter = compound.getInteger("pewter");
-		Zinc = compound.getInteger("zinc");
-		Bronze = compound.getInteger("bronze");
-		Copper = compound.getInteger("copper");
-		Brass = compound.getInteger("brass");
-		selected = compound.getInteger("selected");		
+		System.out.println("read");
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt = compound.getCompoundTag(IDENTIFIER);
+		Iron = nbt.getInteger("iron");
+		Steel= nbt.getInteger("steel");
+		Tin= nbt.getInteger("tin");
+		Pewter = nbt.getInteger("pewter");
+		Zinc = nbt.getInteger("zinc");
+		Bronze = nbt.getInteger("bronze");
+		Copper = nbt.getInteger("copper");
+		Brass = nbt.getInteger("brass");
+		selected = nbt.getInteger("selected");		
 		
 	}
 

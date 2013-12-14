@@ -4,6 +4,8 @@ package com.entropicdreams.darva.items;
 
 import java.util.List;
 
+import com.entropicdreams.darva.AllomancyData;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -56,14 +58,9 @@ public class ItemVial extends ItemFood {
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
 		// TODO Auto-generated method stub
-		NBTTagCompound allomancy;
-		
-		if( par3EntityPlayer.getEntityData() == null)
-		{
-			return par1ItemStack;
-		}
-		allomancy = par3EntityPlayer.getEntityData().getCompoundTag("allomancy");
-		if (allomancy == null)
+		AllomancyData data;
+		data = AllomancyData.forPlayer(par3EntityPlayer);
+		if (data == null)
 		{
 			return par1ItemStack;
 		}
@@ -73,58 +70,58 @@ public class ItemVial extends ItemFood {
 		case 0:
 			return par1ItemStack;
 		case 1:
-			if (allomancy.getInteger("copper") < 10)
+			if (data.getCopper() < 10)
 			{
-				allomancy.setInteger("copper", allomancy.getInteger("copper")+1);
+				data.setCopper(data.getCopper() +1);
 				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 			}
 			return par1ItemStack;
 		case 2:
-			if (allomancy.getInteger("iron") < 10)
+			if (data.getIron() < 10)
 			{
-				allomancy.setInteger("iron", allomancy.getInteger("iron")+1);
+				data.setIron(data.getIron() +1 );
 				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 			}
 			return par1ItemStack;
 		case 3:
-			if (allomancy.getInteger("tin") < 10)
+			if (data.getTin() < 10)
 			{
-				allomancy.setInteger("tin", allomancy.getInteger("copper")+1);
+				data.setTin(data.getTin()+1);
 				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 			}
 			return par1ItemStack;
 		case 4:
-			if (allomancy.getInteger("zinc") < 10)
+			if (data.getZinc() < 10)
 			{
-				allomancy.setInteger("zinc", allomancy.getInteger("copper")+1);
+				data.setZinc(data.getZinc() +1);
 				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 			}
 			return par1ItemStack;
 		case 5:
-			if (allomancy.getInteger("brass") < 10)
+			if (data.getBrass() < 10 )
 			{
-				allomancy.setInteger("brass", allomancy.getInteger("brass")+1);
+				data.setBrass(data.getBrass()+1);
 				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 			}
 			return par1ItemStack;
 		case 6:
-			if (allomancy.getInteger("steel") < 10)
+			if (data.getSteel() < 10)
 			{
-				allomancy.setInteger("steel", allomancy.getInteger("steel")+1);
+				data.setSteel(data.getSteel()+1);
 				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 			}
 			return par1ItemStack;
 		case 7:
-			if (allomancy.getInteger("pewter") < 10)
+			if (data.getPewter()< 10)
 			{
-				allomancy.setInteger("pewter", allomancy.getInteger("pewter")+1);
+				data.setPewter(data.getPewter()+1);;
 				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 			}
 			return par1ItemStack;
 		case 8:
-			if (allomancy.getInteger("bronze") < 10)
+			if (data.getBronze() < 10)
 			{
-				allomancy.setInteger("bronze", allomancy.getInteger("bronze")+1);
+				data.setBronze(data.getBronze()+1);
 				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 			}
 			return par1ItemStack;
