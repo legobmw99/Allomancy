@@ -138,7 +138,6 @@ public class ItemVial extends ItemFood {
 			EntityPlayer par2EntityPlayer, World par3World, int par4, int par5,
 			int par6, int par7, float par8, float par9, float par10) {
 		// TODO Auto-generated method stub
-		System.out.println("onItemUse");
 
 		
 		

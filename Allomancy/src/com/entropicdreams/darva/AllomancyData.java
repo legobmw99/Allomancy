@@ -94,10 +94,6 @@ public class AllomancyData implements IExtendedEntityProperties {
 		Brass = nbt.getInteger("brass");
 		selected = nbt.getInteger("selected");		
 		
-		if (player instanceof EntityPlayerMP)
-		{
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(this), (Player) player);
-		}
 	}
 
 	@Override
