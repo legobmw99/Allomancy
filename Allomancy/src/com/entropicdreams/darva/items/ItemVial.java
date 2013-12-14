@@ -104,7 +104,7 @@ public class ItemVial extends ItemFood {
 	public ItemVial(int par1) {
 		super(par1,0, false);
 		this.setAlwaysEdible();
-		
+		 
 		// TODO Auto-generated constructor stub
 		setHasSubtypes(true);
 		this.setCreativeTab(CreativeTabs.tabMisc);
