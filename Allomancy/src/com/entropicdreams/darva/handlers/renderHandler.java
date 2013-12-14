@@ -36,7 +36,7 @@ private ResourceLocation meterLoc;
 		EntityClientPlayerMP player;
 		player = mc.thePlayer;
 		NBTTagCompound base;
-		NBTTagCompound allomancy;
+		NBTTagCompound allomancy = null;
 		
 		if (player == null)
 			return;
@@ -60,7 +60,8 @@ private ResourceLocation meterLoc;
 			allomancy.setInteger("bronze", 0);
 			allomancy.setInteger("brass", 0);
 			allomancy.setInteger("selected", 1);
-			base.setCompoundTag("allomancy", base);
+			base.setCompoundTag("allomancy", allomancy);
+			//player.getEntityData().setCompoundTag("allomancy", allomancy);
 		}
 				
 		
@@ -96,15 +97,21 @@ private ResourceLocation meterLoc;
 		obj = Minecraft.getMinecraft().renderEngine.getTexture(meterLoc);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
-		
 		switch (allomancy.getInteger("selected"))
 		{
 		case 0:
 			break;
 		case 1:
 			gig.drawTexturedModalRect(3, 213, 54, 0, 15, 24);
+			break;
 		case 2:
 			gig.drawTexturedModalRect(28, 213, 54, 0, 15, 24);
+			break;
+		case 3:
+			gig.drawTexturedModalRect(377, 213, 54, 0, 15, 24);
+		case 4:
+			gig.drawTexturedModalRect(402, 213, 54, 0, 15, 24);
+
 		}
 		
 		
