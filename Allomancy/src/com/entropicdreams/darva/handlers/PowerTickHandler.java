@@ -46,8 +46,12 @@ public class PowerTickHandler implements ITickHandler {
 				
 				if (data.isbTin() && !curPlayer.isPotionActive(Potion.nightVision.getId()))
 				{
-					curPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 10));
+					curPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 1000));
 					System.out.println("added");
+				}
+				if (data.isbTin() == false && curPlayer.isPotionActive(Potion.nightVision.getId()))
+				{
+					curPlayer.removePotionEffect(Potion.nightVision.getId());
 				}
 				
 			}

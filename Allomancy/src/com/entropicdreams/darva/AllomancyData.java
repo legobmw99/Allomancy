@@ -92,6 +92,8 @@ public class AllomancyData implements IExtendedEntityProperties {
 			case matZinc:
 				if ((value == true && Zinc > 0) || value == false)
 					bZinc = value;
+				if (value == false)
+					player.removePotionEffect(Potion.nightVision.getId());
 				break;
 			case matBronze:
 				if ((value == true && Bronze > 0) || value == false)
