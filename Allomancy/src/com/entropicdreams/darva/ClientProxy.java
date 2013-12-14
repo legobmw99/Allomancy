@@ -1,5 +1,6 @@
 package com.entropicdreams.darva;
 
+import com.entropicdreams.darva.handlers.PowerTickHandler;
 import com.entropicdreams.darva.handlers.renderHandler;
 
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -13,6 +14,8 @@ public class ClientProxy extends CommonProxy {
 		
 		renderHandler rh = new renderHandler();
 		TickRegistry.registerTickHandler(rh, Side.CLIENT);
+		TickRegistry.registerTickHandler(new PowerTickHandler(), Side.SERVER);
+		
 	}
 
 }
