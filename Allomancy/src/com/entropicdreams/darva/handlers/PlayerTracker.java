@@ -20,7 +20,6 @@ public class PlayerTracker {
 		if (event.entity instanceof EntityPlayerMP)
 		{
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(AllomancyData.forPlayer(event.entity)), (Player) event.entity);
-			System.out.println("sent");
 		}
 	}
 	@ForgeSubscribe

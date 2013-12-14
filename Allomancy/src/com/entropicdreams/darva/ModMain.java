@@ -85,9 +85,7 @@ public class ModMain {
 		//oreGenerator = new OreGenerator();
 		GameRegistry.registerWorldGenerator(new OreGenerator());
 		
-		KeyBinding[] key = {new KeyBinding("Select Metal", Keyboard.KEY_F)};
-        boolean[] repeat = {false};
-        KeyBindingRegistry.registerKeyBinding(new SwitchMetalKeybind(key, repeat));
+		setupKeybinds();
 	}
 	
 	@EventHandler 
@@ -104,6 +102,13 @@ public class ModMain {
 		proxy.RegisterTickHandlers();
 		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
 		
+	 }
+	 
+	 private void setupKeybinds()
+	 {
+			KeyBinding[] key = {new KeyBinding("Select Metal", Keyboard.KEY_TAB)};
+	        boolean[] repeat = {false};
+	        KeyBindingRegistry.registerKeyBinding(new SwitchMetalKeybind(key, repeat));		 
 	 }
 	 
 	 

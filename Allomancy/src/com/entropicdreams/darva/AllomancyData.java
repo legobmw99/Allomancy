@@ -18,6 +18,19 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 
 public class AllomancyData implements IExtendedEntityProperties {
 
+	public enum Allomantic_Material
+	{
+		iron,
+		steel,
+		tin,
+		pewter,
+		zinc,
+		bronze,
+		copper,
+		brass,
+		
+	}
+	
 	public static final String IDENTIFIER = "Allomancy_Data";
 	public boolean Dirty = true;
 	
@@ -113,6 +126,57 @@ public class AllomancyData implements IExtendedEntityProperties {
 
 
 
+	public boolean isbIron() {
+		return bIron;
+	}
+	public void setbIron(boolean bIron) {
+		this.bIron = bIron;
+	}
+	public boolean isbSteel() {
+		return bSteel;
+	}
+	public void setbSteel(boolean bSteel) {
+		this.bSteel = bSteel;
+	}
+	public boolean isbTin() {
+		return bTin;
+	}
+	public void setbTin(boolean bTin) {
+		this.bTin = bTin;
+	}
+	public boolean isbPewter() {
+		return bPewter;
+	}
+	public void setbPewter(boolean bPewter) {
+		this.bPewter = bPewter;
+	}
+	public boolean isbZinc() {
+		return bZinc;
+	}
+	public void setbZinc(boolean bZinc) {
+		this.bZinc = bZinc;
+	}
+	public boolean isbBronze() {
+		return bBronze;
+	}
+	public void setbBronze(boolean bBronze) {
+		this.bBronze = bBronze;
+	}
+	public boolean isbCopper() {
+		return bCopper;
+	}
+	public void setbCopper(boolean bCopper) {
+		this.bCopper = bCopper;
+	}
+	public boolean isbBrass() {
+		return bBrass;
+	}
+	public void setbBrass(boolean bBrass) {
+		this.bBrass = bBrass;
+	}
+	public EntityPlayer getPlayer() {
+		return player;
+	}
 	public int getIron() {
 		return Iron;
 	}

@@ -97,6 +97,10 @@ public class PacketHandler implements IPacketHandler {
 
 	}
 	
+	public static Packet250CustomPayload changeBurn(Allomantic_Material mat, boolean value )
+	{
+		
+	}
 	
 	public static Packet250CustomPayload updateSelectedMetal(int newValue)
 	{
