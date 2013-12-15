@@ -24,8 +24,8 @@ public class particleSound extends EntityFX {
 		this.motionX *= 0.009999999776482582D;
         this.motionY *= 0.009999999776482582D;
         this.motionZ *= 0.009999999776482582D;
-        this.motionY += 0.1D;
-        this.particleScale *= 0.75F;
+        this.motionY += 0.009D;
+        this.particleScale *= 1F;
         this.particleMaxAge = 16;
         this.noClip = true;
         
