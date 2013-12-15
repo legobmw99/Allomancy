@@ -33,6 +33,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.entropicdreams.darva.handlers.PacketHandler;
 import com.entropicdreams.darva.handlers.keyhandlers.BurnFirstKeyBind;
@@ -111,14 +113,7 @@ public class ModMain {
 	 
 	 private void setupKeybinds()
 	 {
-			KeyBinding[] key = {new KeyBinding("Select Metal", Keyboard.KEY_TAB)};
-	        boolean[] repeat = {false};
-	        KeyBindingRegistry.registerKeyBinding(new SwitchMetalKeybind(key, repeat));		 
-	        
-			KeyBinding[] key2 = {new KeyBinding("Burn First", Keyboard.KEY_F)};
-	        KeyBindingRegistry.registerKeyBinding(new BurnFirstKeyBind(key2, repeat));
-	        KeyBinding[] key3 = {new KeyBinding("Burn Second", Keyboard.KEY_G)};
-	        KeyBindingRegistry.registerKeyBinding(new BurnSecondKeyBind(key3, repeat));
+	
 	 }
 	 
 	 

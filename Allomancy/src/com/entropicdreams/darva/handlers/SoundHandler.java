@@ -3,6 +3,8 @@ package com.entropicdreams.darva.handlers;
 import com.entropicdreams.darva.AllomancyData;
 import com.entropicdreams.darva.particleSound;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.particle.EntityFX;
@@ -14,6 +16,7 @@ import net.minecraftforge.client.event.sound.SoundResultEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 
+@SideOnly(Side.CLIENT)
 public class SoundHandler {
 
 	@ForgeSubscribe

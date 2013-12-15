@@ -39,6 +39,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketHandler implements IPacketHandler {
 
@@ -59,8 +60,8 @@ public class PacketHandler implements IPacketHandler {
 		
 		} else if (side == Side.CLIENT) {
 			EntityClientPlayerMP mpPlr;
-			mpPlr = (EntityClientPlayerMP) player;
-			clientRec(mpPlr, packet);
+			
+			clientRec((EntityPlayer) player, packet);
 		
 		} else {
 		        // We have an errornous state! 
@@ -107,7 +108,8 @@ public class PacketHandler implements IPacketHandler {
 		}
 
 	}
-	private void clientRec(EntityClientPlayerMP player, Packet250CustomPayload packet)
+	@SideOnly(Side.CLIENT)
+	private void clientRec(EntityPlayer player, Packet250CustomPayload packet)
 	{
 		AllomancyData data;
 		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));

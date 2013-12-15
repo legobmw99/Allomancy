@@ -11,7 +11,9 @@ import net.minecraft.client.settings.KeyBinding;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+@SideOnly(Side.CLIENT)
 public class SwitchMetalKeybind extends KeyHandler {
 	private EnumSet tickTypes = EnumSet.of(TickType.CLIENT);
 	private boolean keyDown = false;
