@@ -43,10 +43,15 @@ public class PowerTickHandler implements ITickHandler {
 			{
 				if (player.onGround == true)
 				{
-					player.motionX *=1.1;
-					player.motionZ *=1.1;
-					System.out.println("Boost!");
+					player.motionX *=1.4;
+					player.motionZ *=1.4;
+					
 				}
+				if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
+				{
+					player.motionY *=1.6;
+				}
+				
 			}
 		}
 		else

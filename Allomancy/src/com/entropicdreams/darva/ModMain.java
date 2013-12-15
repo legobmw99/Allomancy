@@ -5,6 +5,7 @@ package com.entropicdreams.darva;
 import org.lwjgl.input.Keyboard;
 
 import com.entropicdreams.darva.handlers.CraftingHandler;
+import com.entropicdreams.darva.handlers.DamageHandler;
 import com.entropicdreams.darva.handlers.OreGenerator;
 import com.entropicdreams.darva.handlers.PlayerTracker;
 import com.entropicdreams.darva.items.ItemGrinder;
@@ -103,6 +104,7 @@ public class ModMain {
 	    public void postInit(FMLPostInitializationEvent event) {
 		proxy.RegisterTickHandlers();
 		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
+		MinecraftForge.EVENT_BUS.register(new DamageHandler());
 		
 	 }
 	 
