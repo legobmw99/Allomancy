@@ -105,6 +105,7 @@ public class OreGenerator implements IWorldGenerator {
 			id = world.getBlockId(lx, ly, lz);
 			
 				world.setBlock(lx, ly, lz, blockID);
+				
 			switch (random.nextInt(3))
 			{
 			case 0:

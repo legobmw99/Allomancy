@@ -31,28 +31,36 @@ public class PowerTickHandler implements ITickHandler {
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 		AllomancyData data;
-		World world;
-		world = (World) tickData[0];
 		
-		if (world.isRemote)
+		
+		
+		if (type.contains(TickType.PLAYER))
 		{
 			EntityClientPlayerMP player;
 			player = Minecraft.getMinecraft().thePlayer;
 			data = AllomancyData.forPlayer(player);
 			if (data.MetalBurning[data.matPewter])
 			{
-				
+				if (player.onGround == true)
+				{
+					player.motionX *=1.1;
+					player.motionZ *=1.1;
+					System.out.println("Boost!");
+				}
 			}
-			
 		}
 		else
 		{
+			World world;
+			world = (World) tickData[0];
+
 		
-			List <EntityPlayerMP> list = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+			List <EntityPlayerMP> list = world.playerEntities;
 
 			
 			for(EntityPlayerMP curPlayer : list )
 			{
+				
 				data = AllomancyData.forPlayer(curPlayer);
 				
 				updateBurnTime(data,curPlayer);
@@ -86,7 +94,7 @@ public class PowerTickHandler implements ITickHandler {
 	@Override
 	public EnumSet<TickType> ticks() {
 		// TODO Auto-generated method stub
-		return EnumSet.of(TickType.WORLD);
+		return EnumSet.of(TickType.WORLD, TickType.PLAYER);
 	}
 
 	@Override
