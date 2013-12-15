@@ -54,15 +54,15 @@ public class PowerTickHandler implements ITickHandler {
 				Entity entity;
 				MovingObjectPosition mop;
 				mop = Minecraft.getMinecraft().objectMouseOver;
-				if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityLiving && !(mop.entityHit instanceof EntityPlayer) )
+				if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityCreature && !(mop.entityHit instanceof EntityPlayer) )
 				{
-					entity = (EntityCreature) mop.entityHit;
+					entity = (EntityLiving) mop.entityHit;
 					
 					player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, true));
 					
 				}
 			}
-			if (data.MetalBurning[data.matBronze])
+			if (data.MetalBurning[data.matBrass])
 			{
 				Entity entity;
 				MovingObjectPosition mop;
@@ -70,9 +70,9 @@ public class PowerTickHandler implements ITickHandler {
 				if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityLiving && !(mop.entityHit instanceof EntityPlayer) )
 				{
 					System.out.println("here...");
-					entity = (EntityCreature) mop.entityHit;
+					entity = (EntityLiving) mop.entityHit;
 					
-					player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, true));
+					player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, false));
 					
 				}
 			}

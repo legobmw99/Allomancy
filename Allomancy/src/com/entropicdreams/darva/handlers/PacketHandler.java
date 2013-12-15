@@ -14,6 +14,7 @@ import com.entropicdreams.darva.ai.AIAttackOnCollideExtended;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -242,6 +243,7 @@ public class PacketHandler implements IPacketHandler {
 			}
 			if (target !=null && !makeAggro)
 			{
+				System.out.println("peaceful");
 				 target.tasks.addTask(0, new EntityAISwimming(target));
 			        target.tasks.addTask(1, new EntityAIPanic(target, 2.0D));
 			        target.tasks.addTask(5, new EntityAIWander(target, 1.0D));
