@@ -39,7 +39,7 @@ public class ItemVial extends ItemFood {
 		"zincelixer",
 		"bronzeelixer",
 		"copperelixer",
-		"brasseelixer",
+		"brasselixer",
 	};
 	
 	public static String[] unlocalName = {
@@ -51,7 +51,7 @@ public class ItemVial extends ItemFood {
 		"zincdrink",
 		"bronzedrink",
 		"copperdrink",
-		"brassedrink"
+		"brassdrink"
 	};
 	
 	@Override
