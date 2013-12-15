@@ -30,7 +30,12 @@ public class particleSound extends EntityFX {
         this.particleScale *= 1F;
         this.particleMaxAge = 16;
         this.noClip = true;
+        this.particleTextureIndexX =0;
+        this.particleTextureIndexY = 0;
+        this.particleTextureJitterX =0;
+        this.particleTextureJitterY = 0;
         
+        this.setParticleTextureIndex(0);
         
 		switch (soundType)
 		{
@@ -46,7 +51,7 @@ public class particleSound extends EntityFX {
 	@Override
 	public int getFXLayer() {
 		// TODO Auto-generated method stub
-		return 3;
+		return 0;
 	}
 	@Override
 	public void renderParticle(Tessellator par1Tessellator, float par2,
@@ -54,18 +59,7 @@ public class particleSound extends EntityFX {
 		// TODO Auto-generated method stub
 		
 		Minecraft.getMinecraft().renderEngine.bindTexture(loc);
-		System.out.println("called");
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glDepthMask(false);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
-        par1Tessellator.startDrawingQuads();
         super.renderParticle(par1Tessellator, par2, par3, par4, par5, par6, par7);
-        par1Tessellator.draw();
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDepthMask(true);
-        GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 	}
 
 
