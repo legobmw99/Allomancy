@@ -3,6 +3,7 @@ package com.entropicdreams.darva;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +15,7 @@ public class particleSound extends EntityFX {
 			double z, double par8, double par10, double par12,
 			String soundType) {
 		super(world, x, y, z, par8, par10, par12);
-		TextureMap map = null;
+		SimpleTexture map = null;
 		
 		this.motionX *= 0.009999999776482582D;
         this.motionY *= 0.009999999776482582D;
@@ -26,7 +27,7 @@ public class particleSound extends EntityFX {
 		switch (soundType)
 		{
 		case "mob.pig.step":
-				if (Minecraft.getMinecraft().renderEngine.loadTextureMap(new ResourceLocation("allomancy:textures/soundicons/" + soundType +".png" ), map))
+				if (Minecraft.getMinecraft().renderEngine.loadTexture(new ResourceLocation("allomancy", "pigstep.png" ), map))
 				this.setParticleIcon((Icon) map); 
 		break;
 		default:
