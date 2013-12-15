@@ -26,7 +26,7 @@ public class SoundHandler {
 		case "step.grass":
 			break;
 		case "mob.pig.step":
-			EntityFX particle = new particleSound(player.worldObj, player.posX + -(Math.sin(Math.toRadians(player.getRotationYawHead())) * .08d), player.posY, player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .08d), 0, 0, 0, event.name);
+			EntityFX particle = new particleSound(player.worldObj, player.posX + -(Math.sin(Math.toRadians(player.getRotationYawHead())) * .5d), player.posY -.5, player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .5d), 0, 0, 0, event.name, event.x,event.y,event.z);
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			
 		break;

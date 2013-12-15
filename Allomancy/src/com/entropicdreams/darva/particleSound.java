@@ -18,17 +18,17 @@ public class particleSound extends EntityFX {
 	private ResourceLocation loc;
 	public particleSound(World world, double x, double y,
 			double z, double par8, double par10, double par12,
-			String soundType) {
+			String soundType, double toX, double toY, double toZ) {
 		super(world, x, y, z, par8, par10, par12);
 		TextureObject map = null;
 		
 		
-		this.motionX *= 0.009999999776482582D;
-        this.motionY *= 0.009999999776482582D;
-        this.motionZ *= 0.009999999776482582D;
+		this.motionX = (x - toX) *.02;
+        this.motionY = (y - toY) *.002;
+        this.motionZ *= (z - toZ) *.02;
         this.motionY += 0.009D;
         this.particleScale *= 1F;
-        this.particleMaxAge = 16;
+        this.particleMaxAge = 25;
         this.noClip = true;
         this.particleTextureIndexX =0;
         this.particleTextureIndexY = 0;
