@@ -7,10 +7,20 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAITaskEntry;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import com.entropicdreams.darva.AllomancyData;
@@ -39,6 +49,34 @@ public class PowerTickHandler implements ITickHandler {
 			EntityClientPlayerMP player;
 			player = Minecraft.getMinecraft().thePlayer;
 			data = AllomancyData.forPlayer(player);
+			if (data.MetalBurning[data.matZinc])
+			{
+				Entity entity;
+				MovingObjectPosition mop;
+				mop = Minecraft.getMinecraft().objectMouseOver;
+				if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityLiving && !(mop.entityHit instanceof EntityPlayer) )
+				{
+					entity = (EntityCreature) mop.entityHit;
+					
+					player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, true));
+					
+				}
+			}
+			if (data.MetalBurning[data.matBronze])
+			{
+				Entity entity;
+				MovingObjectPosition mop;
+				mop = Minecraft.getMinecraft().objectMouseOver;
+				if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityLiving && !(mop.entityHit instanceof EntityPlayer) )
+				{
+					System.out.println("here...");
+					entity = (EntityCreature) mop.entityHit;
+					
+					player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, true));
+					
+				}
+			}
+
 			if (data.MetalBurning[data.matPewter])
 			{
 				if (player.onGround == true)
