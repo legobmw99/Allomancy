@@ -108,7 +108,6 @@ public class ModMain {
 		proxy.RegisterTickHandlers();
 		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
 		MinecraftForge.EVENT_BUS.register(new DamageHandler());
-		MinecraftForge.EVENT_BUS.register(new SoundHandler());
 	 }
 	 
 	 private void setupKeybinds()

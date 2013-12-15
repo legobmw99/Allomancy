@@ -1,10 +1,12 @@
 package com.entropicdreams.darva;
 
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
 import com.entropicdreams.darva.handlers.PowerTickHandler;
+import com.entropicdreams.darva.handlers.SoundHandler;
 import com.entropicdreams.darva.handlers.renderHandler;
 import com.entropicdreams.darva.handlers.keyhandlers.BurnFirstKeyBind;
 import com.entropicdreams.darva.handlers.keyhandlers.BurnSecondKeyBind;
@@ -33,6 +35,9 @@ public class ClientProxy extends CommonProxy {
         KeyBindingRegistry.registerKeyBinding(new BurnFirstKeyBind(key2, repeat));
         KeyBinding[] key3 = {new KeyBinding("Burn Second", Keyboard.KEY_G)};
         KeyBindingRegistry.registerKeyBinding(new BurnSecondKeyBind(key3, repeat));
+        
+		MinecraftForge.EVENT_BUS.register(new SoundHandler());
+
 		
 	}
 

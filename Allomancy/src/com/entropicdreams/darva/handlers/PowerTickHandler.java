@@ -24,7 +24,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import com.entropicdreams.darva.AllomancyData;
-
+import cpw.mods.fml.common.FMLCommonHandler;  
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -100,6 +100,8 @@ public class PowerTickHandler implements ITickHandler {
 		
 		if (type.contains(TickType.PLAYER))
 		{
+			Side side = FMLCommonHandler.instance().getEffectiveSide();
+			if(side == Side.CLIENT)
 			clientTick();
 		}
 		else
