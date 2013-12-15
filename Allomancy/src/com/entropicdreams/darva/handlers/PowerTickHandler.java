@@ -29,6 +29,8 @@ import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PowerTickHandler implements ITickHandler {
 
@@ -38,6 +40,58 @@ public class PowerTickHandler implements ITickHandler {
 
 	}
 
+	@SideOnly(Side.CLIENT)
+	private void clientTick()
+	{
+		AllomancyData data;
+		EntityClientPlayerMP player;
+		player = Minecraft.getMinecraft().thePlayer;
+		data = AllomancyData.forPlayer(player);
+		if (data.MetalBurning[data.matZinc])
+		{
+			Entity entity;
+			MovingObjectPosition mop;
+			mop = Minecraft.getMinecraft().objectMouseOver;
+			if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityCreature && !(mop.entityHit instanceof EntityPlayer) )
+			{
+				entity = (EntityLiving) mop.entityHit;
+				
+				player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, true));
+				
+			}
+		}
+		if (data.MetalBurning[data.matBrass])
+		{
+			Entity entity;
+			MovingObjectPosition mop;
+			mop = Minecraft.getMinecraft().objectMouseOver;
+			if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityLiving && !(mop.entityHit instanceof EntityPlayer) )
+			{
+				System.out.println("here...");
+				entity = (EntityLiving) mop.entityHit;
+				
+				player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, false));
+				
+			}
+		}
+
+		if (data.MetalBurning[data.matPewter])
+		{
+			if (player.onGround == true)
+			{
+				player.motionX *=1.4;
+				player.motionZ *=1.4;
+				
+			}
+			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
+			{
+				player.motionY *=1.6;
+			}
+			
+		}
+
+	}
+	
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 		AllomancyData data;
@@ -46,51 +100,7 @@ public class PowerTickHandler implements ITickHandler {
 		
 		if (type.contains(TickType.PLAYER))
 		{
-			EntityClientPlayerMP player;
-			player = Minecraft.getMinecraft().thePlayer;
-			data = AllomancyData.forPlayer(player);
-			if (data.MetalBurning[data.matZinc])
-			{
-				Entity entity;
-				MovingObjectPosition mop;
-				mop = Minecraft.getMinecraft().objectMouseOver;
-				if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityCreature && !(mop.entityHit instanceof EntityPlayer) )
-				{
-					entity = (EntityLiving) mop.entityHit;
-					
-					player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, true));
-					
-				}
-			}
-			if (data.MetalBurning[data.matBrass])
-			{
-				Entity entity;
-				MovingObjectPosition mop;
-				mop = Minecraft.getMinecraft().objectMouseOver;
-				if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityLiving && !(mop.entityHit instanceof EntityPlayer) )
-				{
-					System.out.println("here...");
-					entity = (EntityLiving) mop.entityHit;
-					
-					player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, false));
-					
-				}
-			}
-
-			if (data.MetalBurning[data.matPewter])
-			{
-				if (player.onGround == true)
-				{
-					player.motionX *=1.4;
-					player.motionZ *=1.4;
-					
-				}
-				if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
-				{
-					player.motionY *=1.6;
-				}
-				
-			}
+			clientTick();
 		}
 		else
 		{

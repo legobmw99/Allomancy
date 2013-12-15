@@ -11,7 +11,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void RegisterTickHandlers() {
 		// TODO Auto-generated method stub
-		
+		System.out.println("here1.");
 		renderHandler rh = new renderHandler();
 		TickRegistry.registerTickHandler(rh, Side.CLIENT);
 		TickRegistry.registerTickHandler(new PowerTickHandler(), Side.SERVER);
