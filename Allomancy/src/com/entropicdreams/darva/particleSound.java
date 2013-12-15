@@ -21,7 +21,7 @@ public class particleSound extends EntityFX {
 		{
 		case "mob.pig.step":
 				/*if (Minecraft.getMinecraft().renderEngine.loadTextureMap(new ResourceLocation("allomancy:textures/soundicons/" + soundType + ".png" ), map))
-				this.setParticleIcon((Icon) map);*/
+				this.setParticleIcon((Icon) map);*/ 
 		break;
 		default:
 		}
