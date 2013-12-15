@@ -47,7 +47,10 @@ public class particleSound extends EntityFX {
 		case "mob.villager.step":
 		
 				loc = new ResourceLocation("allomancy","textures/soundicons/passivestep.png");
-				
+				break;
+		case "mob.skeleton.step":
+		case "mob.zombie.step":
+				loc = new ResourceLocation("allomancy","textures/soundicons/aggiestep.png");
 		break;
 		default:
 		}
