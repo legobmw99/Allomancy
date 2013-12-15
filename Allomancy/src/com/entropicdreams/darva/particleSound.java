@@ -2,6 +2,7 @@ package com.entropicdreams.darva;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -12,11 +13,13 @@ import net.minecraft.world.World;
 
 public class particleSound extends EntityFX {
 
+	private ResourceLocation loc;
 	public particleSound(World world, double x, double y,
 			double z, double par8, double par10, double par12,
 			String soundType) {
 		super(world, x, y, z, par8, par10, par12);
 		TextureObject map = null;
+		
 		
 		this.motionX *= 0.009999999776482582D;
         this.motionY *= 0.009999999776482582D;
@@ -30,19 +33,22 @@ public class particleSound extends EntityFX {
 		{
 		case "mob.pig.step":
 				
-				map = Minecraft.getMinecraft().renderEngine.getTexture(new ResourceLocation("allomancy","/soundicons/pigstep.png"));
+				loc = new ResourceLocation("allomancy","textures/soundicons/pigstep.png");
 				
-				this.setParticleIcon((Icon) map); 
 		break;
 		default:
 		}
 
 	}
-
 	@Override
-	public int getFXLayer() {
+	public void renderParticle(Tessellator par1Tessellator, float par2,
+			float par3, float par4, float par5, float par6, float par7) {
 		// TODO Auto-generated method stub
-		return 2;
+		
+		Minecraft.getMinecraft().renderEngine.bindTexture(loc);
+		
+		super.renderParticle(par1Tessellator, par2, par3, par4, par5, par6, par7);
 	}
+
 
 }
