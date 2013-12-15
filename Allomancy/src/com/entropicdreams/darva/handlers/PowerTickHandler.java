@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
@@ -35,6 +36,14 @@ public class PowerTickHandler implements ITickHandler {
 		
 		if (world.isRemote)
 		{
+			EntityClientPlayerMP player;
+			player = Minecraft.getMinecraft().thePlayer;
+			data = AllomancyData.forPlayer(player);
+			if (data.MetalBurning[data.matPewter])
+			{
+				
+			}
+			
 		}
 		else
 		{
@@ -102,7 +111,10 @@ public class PowerTickHandler implements ITickHandler {
 					data.MetalAmounts[i]--;
 					PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(data), (Player)player);
 					if (data.MetalAmounts[i] == 0)
+					{
+						data.MetalBurning[i] = false;
 						PacketDispatcher.sendPacketToPlayer(PacketHandler.changeBurn(i, false), (Player)player);
+					}
 				}
 
 			}

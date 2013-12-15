@@ -82,6 +82,7 @@ public class PacketHandler implements IPacketHandler {
 	}
 	private void clientRec(EntityClientPlayerMP player, Packet250CustomPayload packet)
 	{
+		AllomancyData data;
 		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
 		int Type = -1;
 		
@@ -95,10 +96,13 @@ public class PacketHandler implements IPacketHandler {
 		switch (Type)
 		{
 		case PacketHandler.Packet_Allomancy_Data:
-			AllomancyData data = AllomancyData.forPlayer(player);
+			data = AllomancyData.forPlayer(player);
 			data.updateData(packet);
 		default:
 			return;
+		case PacketHandler.Packet_Allomancy_Update_Burn:
+			data = AllomancyData.forPlayer(player);
+			data.updateBurn(packet); 
 		}
 
 	}
