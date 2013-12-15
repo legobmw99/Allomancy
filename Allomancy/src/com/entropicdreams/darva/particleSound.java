@@ -59,7 +59,30 @@ public class particleSound extends EntityFX {
 		// TODO Auto-generated method stub
 		
 		Minecraft.getMinecraft().renderEngine.bindTexture(loc);
-        super.renderParticle(par1Tessellator, par2, par3, par4, par5, par6, par7);
+        
+		float f6 = 0f;
+        float f7 = 1;
+        float f8 = 0f;
+        float f9 = 1;
+        float f10 = 0.1F * this.particleScale;
+
+        if (this.particleIcon != null)
+        {
+            f6 = this.particleIcon.getMinU();
+            f7 = this.particleIcon.getMaxU();
+            f8 = this.particleIcon.getMinV();
+            f9 = this.particleIcon.getMaxV();
+        }
+
+        float f11 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)par2 - interpPosX);
+        float f12 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)par2 - interpPosY);
+        float f13 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)par2 - interpPosZ);
+        float f14 = 1.0F;
+        par1Tessellator.setColorRGBA_F(this.particleRed * f14, this.particleGreen * f14, this.particleBlue * f14, this.particleAlpha);
+        par1Tessellator.addVertexWithUV((double)(f11 - par3 * f10 - par6 * f10), (double)(f12 - par4 * f10), (double)(f13 - par5 * f10 - par7 * f10), (double)f7, (double)f9);
+        par1Tessellator.addVertexWithUV((double)(f11 - par3 * f10 + par6 * f10), (double)(f12 + par4 * f10), (double)(f13 - par5 * f10 + par7 * f10), (double)f7, (double)f8);
+        par1Tessellator.addVertexWithUV((double)(f11 + par3 * f10 + par6 * f10), (double)(f12 + par4 * f10), (double)(f13 + par5 * f10 + par7 * f10), (double)f6, (double)f8);
+        par1Tessellator.addVertexWithUV((double)(f11 + par3 * f10 - par6 * f10), (double)(f12 - par4 * f10), (double)(f13 + par5 * f10 - par7 * f10), (double)f6, (double)f9);
         
 	}
 
