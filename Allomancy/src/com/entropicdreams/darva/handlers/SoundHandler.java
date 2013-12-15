@@ -22,8 +22,10 @@ public class SoundHandler {
 		{
 		case "step.stone":
 		case "step.grass":
-			EntityFX particle = new EntityFlameFX(null, player.posX, player.posY, player.posZ, 0, 0, 0);
+			EntityFX particle = new EntityFlameFX(player.worldObj, player.posX, player.posY, player.posZ, 0, 0, 0);
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+		case "mob.pig.step":
+			
 		break;
 		default:
 			System.out.println(event.name);
