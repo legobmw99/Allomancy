@@ -32,29 +32,13 @@ public class AllomancyData implements IExtendedEntityProperties {
 	
 	public static final String IDENTIFIER = "Allomancy_Data";
 	public boolean Dirty = true;
+	public int selected = 0;
 	
-	private int Iron = 0;
-	private int Steel= 0;
-	private int Tin= 0;
-	private int Pewter= 0;
-	private int Zinc= 0;
-	private int Bronze= 0;
-	private int Copper= 0;
-	private int Brass= 0;
-	private int selected = 0;
-	private boolean bIron = false;
-	private boolean bSteel = false;
-	private boolean bTin = false;
-	private boolean bPewter = false;
-	private boolean bZinc = false;
-	private boolean bBronze = false;
-	private boolean bCopper = false;
-	private boolean bBrass = false;
 	
 	public int[] BurnTime =  { 600, 600, 1200, 400, 600, 600, 800, 800 };
 	public int[] MaxBurnTime = { 600, 600, 1200, 400, 600, 600, 800, 800 };
-	
-	 
+	public int[] MetalAmounts = {0,0,0,0,0,0,0,0};
+	public boolean[] MetalBurning = {false,false,false,false,false,false,false,false}; 
 	private final EntityPlayer player;
 	
 	public AllomancyData(EntityPlayer Player)
@@ -75,42 +59,12 @@ public class AllomancyData implements IExtendedEntityProperties {
 			Material = inputStream.readInt();
 			value = inputStream.readBoolean();
 			
-			switch (Material)
+			if (MetalAmounts[Material]!=0)
 			{
-			case matIron:
-				if ((value == true && Iron > 0) || value == false)
-					bIron = value;
-				break;
-			case matSteel:
-				if ((value == true && Steel > 0) || value == false)
-				bSteel = value;
-				break;
-			case matTin:
-				if ((value == true && Tin > 0) || value == false)
-					bTin = value;
-				break;
-			case matPewter:
-				if ((value == true && Pewter > 0) || value == false)
-					bPewter = value;
-				break;
-			case matZinc:
-				if ((value == true && Zinc > 0) || value == false)
-					bZinc = value;
-				break;
-			case matBronze:
-				if ((value == true && Bronze > 0) || value == false)
-					bBronze = value;
-				break;
-			case matCopper:
-				if ((value == true && Copper > 0) || value == false)
-					bCopper = value;
-				break;
-			case matBrass:
-				if ((value == true && Brass > 0) || value == false)
-					bBrass = value;
-				break;
+				MetalBurning[Material] = value;
 			}
-					
+			else
+				MetalBurning[Material] = false;
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -123,15 +77,8 @@ public class AllomancyData implements IExtendedEntityProperties {
 		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
 		try {
 			inputStream.readInt();
-			Brass = inputStream.readInt();
-			Bronze = inputStream.readInt();
-			Copper = inputStream.readInt();
-			Iron = inputStream.readInt();
-			Pewter = inputStream.readInt();
-			selected = inputStream.readInt();
-			Steel = inputStream.readInt();
-			Tin = inputStream.readInt();
-			Zinc = inputStream.readInt();
+			for (int i = 0; i < MetalAmounts.length; i++)
+				MetalAmounts[i] = inputStream.readInt();
 			Dirty = false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -143,14 +90,14 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public void saveNBTData(NBTTagCompound compound) {
 		// TODO Auto-generated method stub
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("iron", Iron);
-		nbt.setInteger("steel", Steel);
-		nbt.setInteger("tin",Tin);
-		nbt.setInteger("pewter",Pewter);
-		nbt.setInteger("zinc",Zinc);
-		nbt.setInteger("bronze",Bronze);
-		nbt.setInteger("copper",Copper);
-		nbt.setInteger("brass",Brass);
+		nbt.setInteger("iron", MetalAmounts[0]);
+		nbt.setInteger("steel", MetalAmounts[1]);
+		nbt.setInteger("tin",MetalAmounts[2]);
+		nbt.setInteger("pewter",MetalAmounts[3]);
+		nbt.setInteger("zinc",MetalAmounts[4]);
+		nbt.setInteger("bronze",MetalAmounts[5]);
+		nbt.setInteger("copper",MetalAmounts[6]);
+		nbt.setInteger("brass",MetalAmounts[7]);
 		nbt.setInteger("selected",selected);
 		compound.setCompoundTag(IDENTIFIER, nbt);
 	}
@@ -159,14 +106,14 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public void loadNBTData(NBTTagCompound compound) {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt = compound.getCompoundTag(IDENTIFIER);
-		Iron = nbt.getInteger("iron");
-		Steel= nbt.getInteger("steel");
-		Tin= nbt.getInteger("tin");
-		Pewter = nbt.getInteger("pewter");
-		Zinc = nbt.getInteger("zinc");
-		Bronze = nbt.getInteger("bronze");
-		Copper = nbt.getInteger("copper");
-		Brass = nbt.getInteger("brass");
+		MetalAmounts[0] = nbt.getInteger("iron");
+		MetalAmounts[1]= nbt.getInteger("steel");
+		MetalAmounts[2] = nbt.getInteger("tin");
+		MetalAmounts[3] = nbt.getInteger("pewter");
+		MetalAmounts[4] = nbt.getInteger("zinc");
+		MetalAmounts[5] = nbt.getInteger("bronze");
+		MetalAmounts[6] = nbt.getInteger("copper");
+		MetalAmounts[7] = nbt.getInteger("brass");
 		selected = nbt.getInteger("selected");		
 	}
 
@@ -174,161 +121,6 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public void init(Entity entity, World world) {
 		// TODO Auto-generated method stub
 
-	}
-
-
-
-	public boolean isbIron() {
-		return bIron;
-	}
-	public void setbIron(boolean bIron) {
-		this.bIron = bIron;
-	}
-	public boolean isbSteel() {
-		return bSteel;
-	}
-	public void setbSteel(boolean bSteel) {
-		this.bSteel = bSteel;
-	}
-	public boolean isbTin() {
-		return bTin;
-	}
-	public void setbTin(boolean bTin) {
-		this.bTin = bTin;
-	}
-	public boolean isbPewter() {
-		return bPewter;
-	}
-	public void setbPewter(boolean bPewter) {
-		this.bPewter = bPewter;
-	}
-	public boolean isbZinc() {
-		return bZinc;
-	}
-	public void setbZinc(boolean bZinc) {
-		this.bZinc = bZinc;
-	}
-	public boolean isbBronze() {
-		return bBronze;
-	}
-	public void setbBronze(boolean bBronze) {
-		this.bBronze = bBronze;
-	}
-	public boolean isbCopper() {
-		return bCopper;
-	}
-	public void setbCopper(boolean bCopper) {
-		this.bCopper = bCopper;
-	}
-	public boolean isbBrass() {
-		return bBrass;
-	}
-	public void setbBrass(boolean bBrass) {
-		this.bBrass = bBrass;
-	}
-	public EntityPlayer getPlayer() {
-		return player;
-	}
-	public int getIron() {
-		return Iron;
-	}
-
-
-
-	public void setIron(int iron) {
-		Iron = iron;
-		Dirty = true;
-	}
-
-
-
-	public int getSteel() {
-		return Steel;
-	}
-
-
-
-	public void setSteel(int steel) {
-		Steel = steel;
-		Dirty = true;
-	}
-
-
-
-	public int getTin() {
-		return Tin;
-	}
-
-
-
-	public void setTin(int tin) {
-		Tin = tin;
-		Dirty = true;
-	}
-
-
-
-	public int getPewter() {
-		return Pewter;
-	}
-
-
-
-	public void setPewter(int pewter) {
-		Pewter = pewter;
-		Dirty = true;
-	}
-
-
-
-	public int getZinc() {
-		return Zinc;
-	}
-
-
-
-	public void setZinc(int zinc) {
-		Zinc = zinc;
-		Dirty = true;
-	}
-
-
-
-	public int getBronze() {
-		return Bronze;
-	}
-
-
-
-	public void setBronze(int bronze) {
-		Bronze = bronze;
-		Dirty = true;
-	}
-
-
-
-	public int getCopper() {
-		return Copper;
-	}
-
-
-
-	public void setCopper(int copper) {
-		Copper = copper;
-		Dirty = true;
-	}
-
-
-
-	public int getBrass() {
-		return Brass;
-	}
-
-
-
-	public void setBrass(int brass) {
-		Brass = brass;
-		Dirty = true;
 	}
 
 

@@ -49,7 +49,7 @@ public class PowerTickHandler implements ITickHandler {
 				updateBurnTime(data,curPlayer);
 				
 				
-				if (data.isbTin())
+				if (data.MetalBurning[data.matTin])
 				{
 					if( !curPlayer.isPotionActive(Potion.nightVision.getId()))
 						curPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 1000));
@@ -64,7 +64,7 @@ public class PowerTickHandler implements ITickHandler {
 					}
 					
 				}
-				if (data.isbTin() == false && curPlayer.isPotionActive(Potion.nightVision.getId()))
+				if (data.MetalBurning[data.matTin] == false && curPlayer.isPotionActive(Potion.nightVision.getId()))
 				{
 					curPlayer.removePotionEffect(Potion.nightVision.getId());
 				}
@@ -92,40 +92,17 @@ public class PowerTickHandler implements ITickHandler {
 		
 		for (int i = 0; i < 8; i++)
 		{
-			data.BurnTime[i]--;
-			System.out.println("Burned Time");
-			if (data.BurnTime[i] == 0)
+			if (data.MetalBurning[i])
 			{
-				System.out.println("Burned one");
-				data.BurnTime[i] = data.MaxBurnTime[i];
-				switch (i)
+				data.BurnTime[i]--;
+				System.out.println("Burned Time");
+				if (data.BurnTime[i] == 0)
 				{
-				case AllomancyData.matIron:
-					data.setIron(data.getIron()-1);
-					break;
-				case AllomancyData.matSteel:
-					data.setSteel(data.getSteel()-1);
-					break;
-				case AllomancyData.matTin:
-					data.setTin(data.getTin()-1);
-					break;
-				case AllomancyData.matPewter:
-					data.setPewter(data.getPewter()-1);
-					break;
-				case AllomancyData.matZinc:
-					data.setZinc(data.getZinc()-1);
-					break;
-				case AllomancyData.matBronze:
-					data.setBronze(data.getBronze()-1);
-					break;
-				case AllomancyData.matCopper:
-					data.setCopper(data.getCopper()-1);
-					break;
-				case AllomancyData.matBrass:
-					data.setBrass(data.getBrass()-1);
-					break;
+					System.out.println("Burned one");
+					data.BurnTime[i] = data.MaxBurnTime[i];
+					PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(data), (Player)player);
 				}
-				PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(data), (Player)player);
+
 			}
 		}
 		

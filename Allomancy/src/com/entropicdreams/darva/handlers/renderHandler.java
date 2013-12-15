@@ -90,29 +90,29 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 		
 		
 		
-		ironY = 10 - data.getIron() ; //This will be replaced with a call to get the actual value of a players iron
+		ironY = 10 - data.MetalAmounts[data.matIron] ; //This will be replaced with a call to get the actual value of a players iron
 				   //reserves eventually.
 		gig.drawTexturedModalRect(6, 220+ironY, 7, 1+ironY, 3, 10-ironY);
 		
-		steelY = 10 - data.getSteel();
+		steelY = 10 - data.MetalAmounts[data.matSteel];
 		gig.drawTexturedModalRect(13, 220+steelY, 13, 1+steelY,3,10-steelY );
 		
-		tinY = 10 - data.getTin();
+		tinY = 10 - data.MetalAmounts[data.matTin];
 		gig.drawTexturedModalRect(31, 220+tinY, 19, 1+tinY,3,10-tinY );
 
-		pewterY = 10 - data.getPewter();
+		pewterY = 10 - data.MetalAmounts[data.matPewter];
 		gig.drawTexturedModalRect(38, 220+pewterY, 25, 1+pewterY,3,10-pewterY );
 
-		copperY = 10 - data.getCopper();
+		copperY = 10 - data.MetalAmounts[data.matCopper];
 		gig.drawTexturedModalRect(381, 220+copperY, 31, 1+copperY,3,10-copperY );
 		
-		bronzeY = 10 -data.getBronze();
+		bronzeY = 10 -data.MetalAmounts[data.matBronze];
 		gig.drawTexturedModalRect(388, 220+bronzeY, 37, 1+bronzeY,3,10-bronzeY );
 
-		zincY = 10 - data.getZinc();;
+		zincY = 10 - data.MetalAmounts[data.matZinc];
 		gig.drawTexturedModalRect(406, 220+zincY, 43, 1+zincY,3,10-zincY );
 
-		brassY = 10 - data.getBrass();
+		brassY = 10 - data.MetalAmounts[data.matBrass];
 		gig.drawTexturedModalRect(413, 220+brassY, 49, 1+brassY,3,10-brassY );
 
 
@@ -129,21 +129,21 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 		gig.drawTexturedModalRect(405, 215, 0, 0, 5, 20);
 		gig.drawTexturedModalRect(412, 215, 0, 0, 5, 20);
 
-		if (data.isbIron())
+		if (data.MetalBurning[data.matIron])
 			gig.drawTexturedModalRect(5, 220+ironY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
-		if (data.isbSteel())
+		if (data.MetalBurning[data.matSteel])
 			gig.drawTexturedModalRect(12, 220+steelY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
-		if (data.isbTin())
+		if (data.MetalBurning[data.matTin])
 			gig.drawTexturedModalRect(30, 220+tinY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
-		if (data.isbPewter())
+		if (data.MetalBurning[data.matPewter])
 			gig.drawTexturedModalRect(37, 220+pewterY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
-		if (data.isbCopper())
+		if (data.MetalBurning[data.matCopper])
 			gig.drawTexturedModalRect(380, 220+copperY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
-		if (data.isbBronze())
+		if (data.MetalBurning[data.matBronze])
 			gig.drawTexturedModalRect(387, 220+bronzeY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
-		if (data.isbZinc())
+		if (data.MetalBurning[data.matZinc])
 			gig.drawTexturedModalRect(405, 220+zincY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
-		if (data.isbBrass())
+		if (data.MetalBurning[data.matBrass])
 			gig.drawTexturedModalRect(412, 220+brassY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
 
 

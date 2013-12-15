@@ -148,15 +148,10 @@ public class PacketHandler implements IPacketHandler {
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 				outputStream.writeInt(PacketHandler.Packet_Allomancy_Data);
-		        outputStream.writeInt(data.getBrass());
-		        outputStream.writeInt(data.getBronze());
-		        outputStream.writeInt(data.getCopper());
-		        outputStream.writeInt(data.getIron());
-		        outputStream.writeInt(data.getPewter());
-		        outputStream.writeInt(data.getSelected());
-		        outputStream.writeInt(data.getSteel());
-		        outputStream.writeInt(data.getTin());
-		        outputStream.writeInt(data.getZinc());
+				for(int i = 0; i< data.MetalAmounts.length; i++)
+				{
+					outputStream.writeInt(data.MetalAmounts[i]);
+				}
 		        
 		} catch (Exception ex) {
 		        ex.printStackTrace();

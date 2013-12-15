@@ -39,27 +39,27 @@ public class BurnFirstKeyBind extends KeyHandler {
 			{
 			case 1:
 				//toggle iron.
-				if (data.getIron() > 0)
-					data.setbIron(!data.isbIron());
-				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matIron, data.isbIron()));
+				if (data.MetalAmounts[data.matIron] > 0)
+					data.MetalBurning[data.matIron] = !data.MetalBurning[data.matIron];
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matIron, data.MetalBurning[data.matIron]));
 				break;
 			case 2:
 				//toggle Tin.
-				if (data.getTin() > 0)
-					data.setbTin(!data.isbTin());
-				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matTin, data.isbTin()));
+				if (data.MetalAmounts[data.matTin] > 0)
+					data.MetalBurning[data.matTin] = !data.MetalBurning[data.matTin];
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matTin, data.MetalBurning[data.matIron]));
 				break;
 			case 3:
 				//toggle Copper.
-				if (data.getCopper() > 0)
-					data.setbCopper(!data.isbCopper());
-				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matCopper, data.isbCopper()));
+				if (data.MetalAmounts[data.matCopper] > 0)
+					data.MetalBurning[data.matCopper] = !data.MetalBurning[data.matCopper];
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matCopper, data.MetalBurning[data.matIron]));
 				break;
 			case 4:
 				//toggle Zinc.
-				if (data.getZinc() > 0)
-					data.setbZinc(!data.isbZinc());
-				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matZinc, data.isbZinc()));
+				if (data.MetalAmounts[data.matZinc] > 0)
+					data.MetalBurning[data.matZinc] = !data.MetalBurning[data.matZinc];
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matZinc, data.MetalBurning[data.matIron]));
 				break;
 			default:
 				break;

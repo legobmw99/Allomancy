@@ -65,67 +65,11 @@ public class ItemVial extends ItemFood {
 			return par1ItemStack;
 		}
 		
-		switch (par1ItemStack.getItemDamage())
-		{
-		case 0:
+		if (par1ItemStack.getItemDamage() == 0)
 			return par1ItemStack;
-		case 1:
-			if (data.getCopper() < 10)
-			{
-				data.setCopper(data.getCopper() +1);
-				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
-			}
-			return par1ItemStack;
-		case 2:
-			if (data.getIron() < 10)
-			{
-				data.setIron(data.getIron() +1 );
-				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
-			}
-			return par1ItemStack;
-		case 3:
-			if (data.getTin() < 10)
-			{
-				data.setTin(data.getTin()+1);
-				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
-			}
-			return par1ItemStack;
-		case 4:
-			if (data.getZinc() < 10)
-			{
-				data.setZinc(data.getZinc() +1);
-				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
-			}
-			return par1ItemStack;
-		case 5:
-			if (data.getBrass() < 10 )
-			{
-				data.setBrass(data.getBrass()+1);
-				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
-			}
-			return par1ItemStack;
-		case 6:
-			if (data.getSteel() < 10)
-			{
-				data.setSteel(data.getSteel()+1);
-				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
-			}
-			return par1ItemStack;
-		case 7:
-			if (data.getPewter()< 10)
-			{
-				data.setPewter(data.getPewter()+1);;
-				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
-			}
-			return par1ItemStack;
-		case 8:
-			if (data.getBronze() < 10)
-			{
-				data.setBronze(data.getBronze()+1);
-				return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
-			}
-			return par1ItemStack;
-		}
+		
+		if (data.MetalAmounts[par1ItemStack.getItemDamage()-1] <10)
+			data.MetalAmounts[par1ItemStack.getItemDamage() -1 ]++;
 		
 		return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
 	}
