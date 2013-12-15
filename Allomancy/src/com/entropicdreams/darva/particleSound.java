@@ -16,12 +16,18 @@ public class particleSound extends EntityFX {
 		super(world, x, y, z, par8, par10, par12);
 		TextureMap map = null;
 		
-		
+		this.motionX *= 0.009999999776482582D;
+        this.motionY *= 0.009999999776482582D;
+        this.motionZ *= 0.009999999776482582D;
+        this.motionY += 0.1D;
+        this.particleScale *= 0.75F;
+        this.particleMaxAge = 16;
+        this.noClip = true;
 		switch (soundType)
 		{
 		case "mob.pig.step":
-				/*if (Minecraft.getMinecraft().renderEngine.loadTextureMap(new ResourceLocation("allomancy:textures/soundicons/" + soundType + ".png" ), map))
-				this.setParticleIcon((Icon) map);*/ 
+				if (Minecraft.getMinecraft().renderEngine.loadTextureMap(new ResourceLocation("allomancy:textures/soundicons/" + soundType +".png" ), map))
+				this.setParticleIcon((Icon) map); 
 		break;
 		default:
 		}
