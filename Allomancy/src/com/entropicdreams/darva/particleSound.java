@@ -63,7 +63,7 @@ public class particleSound extends EntityFX {
 		float f6 = 0f;
         float f7 = 1;
         float f8 = 0f;
-        float f9 = 1;
+        float f9 = 1 ;
         float f10 = 0.1F * this.particleScale;
 
         if (this.particleIcon != null)
