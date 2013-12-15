@@ -23,9 +23,9 @@ public class particleSound extends EntityFX {
 		TextureObject map = null;
 		
 		
-		this.motionX = (x - toX) *.02;
-        this.motionY = (y - toY) *.002;
-        this.motionZ *= (z - toZ) *.02;
+		this.motionX = ((x - toX)*-1) *.02;
+        this.motionY = ((y - toY)*-1) *.002;
+        this.motionZ = ((z - toZ)*-1) *.02;
         this.motionY += 0.009D;
         this.particleScale *= 1F;
         this.particleMaxAge = 25;
@@ -40,8 +40,13 @@ public class particleSound extends EntityFX {
 		switch (soundType)
 		{
 		case "mob.pig.step":
-				
-				loc = new ResourceLocation("allomancy","textures/soundicons/pigstep.png");
+		case "mob.sheep.step":
+		case "mob.cow.step":
+		case "mob.horse.step":
+		case "mob.mooshroom.step":
+		case "mob.villager.step":
+		
+				loc = new ResourceLocation("allomancy","textures/soundicons/passivestep.png");
 				
 		break;
 		default:
