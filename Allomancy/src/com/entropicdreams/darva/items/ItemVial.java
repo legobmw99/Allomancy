@@ -80,17 +80,8 @@ public class ItemVial extends ItemFood {
 	public int getHealAmount() {
 		return 0;
 	}
-	@Override
-	public boolean onItemUse(ItemStack ItemStack,
-			EntityPlayer par2EntityPlayer, World par3World, int par4, int par5,
-			int par6, int par7, float par8, float par9, float par10) {
-		// TODO Auto-generated method stub
 
-		
-		
-		return super.onItemUse(ItemStack, par2EntityPlayer, par3World, par4, par5,
-				par6, par7, par8, par9, par10);
-	}
+	
 
 	@SideOnly(Side.CLIENT)
 	private Icon[] icons;
