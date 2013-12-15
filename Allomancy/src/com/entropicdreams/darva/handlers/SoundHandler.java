@@ -1,5 +1,7 @@
 package com.entropicdreams.darva.handlers;
 
+import com.entropicdreams.darva.particleSound;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.particle.EntityFX;
@@ -22,9 +24,10 @@ public class SoundHandler {
 		{
 		case "step.stone":
 		case "step.grass":
-			EntityFX particle = new EntityFlameFX(player.worldObj, player.posX, player.posY, player.posZ, 0, 0, 0);
-			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+			break;
 		case "mob.pig.step":
+			EntityFX particle = new particleSound(player.worldObj, player.posX, player.posY, player.posZ, 0, 0, 0, event.name);
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			
 		break;
 		default:
