@@ -99,7 +99,10 @@ public class PowerTickHandler implements ITickHandler {
 				{
 					System.out.println("Burned one");
 					data.BurnTime[i] = data.MaxBurnTime[i];
+					data.MetalAmounts[i]--;
 					PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(data), (Player)player);
+					if (data.MetalAmounts[i] == 0)
+						PacketDispatcher.sendPacketToPlayer(PacketHandler.changeBurn(i, false), (Player)player);
 				}
 
 			}

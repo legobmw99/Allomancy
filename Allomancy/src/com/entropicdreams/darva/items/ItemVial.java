@@ -21,37 +21,37 @@ import net.minecraft.world.World;
 public class ItemVial extends ItemFood {
 	public static String[] localName = {
 		"Empty Vial",
-		"Copper Elixer",
 		"Iron Elixer",
-		"Tin Elixer",
-		"Zinc Elixer",
-		"Brass Elixer",
 		"Steel Elixer",
+		"Tin Elixer",
 		"Pewter Elixer",
+		"Zinc Elixer",
 		"Bronze Elixer",
+		"Copper Elixer",
+		"Brass Elixer",
 	};
 	public static String[] textureName = {
 		"emptyvial",
-		"copperelixer",
 		"ironelixer",
-		"tinelixer",
-		"zincelixer",
-		"brasselixer",
 		"steelelixer",
+		"tinelixer",
 		"pewterelixer",
+		"zincelixer",
 		"bronzeelixer",
+		"copperelixer",
+		"brasseelixer",
 	};
 	
 	public static String[] unlocalName = {
 		"empty",
-		"copperdrink",
 		"irondrink",
-		"tindrink",
-		"zincdrink",
-		"brassdrink",
 		"steeldrink",
+		"tindrink",
 		"pewterdrink",
-		"bronzedrink"
+		"zincdrink",
+		"bronzedrink",
+		"copperdrink",
+		"brassedrink"
 	};
 	
 	@Override

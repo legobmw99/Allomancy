@@ -106,14 +106,14 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public void loadNBTData(NBTTagCompound compound) {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt = compound.getCompoundTag(IDENTIFIER);
-		MetalAmounts[0] = nbt.getInteger("iron");
-		MetalAmounts[1]= nbt.getInteger("steel");
-		MetalAmounts[2] = nbt.getInteger("tin");
-		MetalAmounts[3] = nbt.getInteger("pewter");
-		MetalAmounts[4] = nbt.getInteger("zinc");
-		MetalAmounts[5] = nbt.getInteger("bronze");
-		MetalAmounts[6] = nbt.getInteger("copper");
-		MetalAmounts[7] = nbt.getInteger("brass");
+		MetalAmounts[0] =0;//= nbt.getInteger("iron");
+		MetalAmounts[1] =0;//= nbt.getInteger("steel");
+		MetalAmounts[2] =0;//= nbt.getInteger("tin");
+		MetalAmounts[3] =0;//= nbt.getInteger("pewter");
+		MetalAmounts[4] =0;//= nbt.getInteger("zinc");
+		MetalAmounts[5] =0;//= nbt.getInteger("bronze");
+		MetalAmounts[6] =0;//= nbt.getInteger("copper");
+		MetalAmounts[7] =0;//= nbt.getInteger("brass");
 		selected = nbt.getInteger("selected");		
 	}
 
