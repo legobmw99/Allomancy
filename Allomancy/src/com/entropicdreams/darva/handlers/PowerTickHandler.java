@@ -48,9 +48,9 @@ public class PowerTickHandler implements ITickHandler {
 				
 				updateBurnTime(data,curPlayer);
 				
-				
 				if (data.MetalBurning[data.matTin])
 				{
+					
 					if( !curPlayer.isPotionActive(Potion.nightVision.getId()))
 						curPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 1000));
 					else
@@ -95,7 +95,6 @@ public class PowerTickHandler implements ITickHandler {
 			if (data.MetalBurning[i])
 			{
 				data.BurnTime[i]--;
-				System.out.println("Burned Time");
 				if (data.BurnTime[i] == 0)
 				{
 					System.out.println("Burned one");

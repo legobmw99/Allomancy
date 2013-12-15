@@ -47,19 +47,19 @@ public class BurnFirstKeyBind extends KeyHandler {
 				//toggle Tin.
 				if (data.MetalAmounts[data.matTin] > 0)
 					data.MetalBurning[data.matTin] = !data.MetalBurning[data.matTin];
-				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matTin, data.MetalBurning[data.matIron]));
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matTin, data.MetalBurning[data.matTin]));
 				break;
 			case 3:
 				//toggle Copper.
 				if (data.MetalAmounts[data.matCopper] > 0)
 					data.MetalBurning[data.matCopper] = !data.MetalBurning[data.matCopper];
-				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matCopper, data.MetalBurning[data.matIron]));
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matCopper, data.MetalBurning[data.matCopper]));
 				break;
 			case 4:
 				//toggle Zinc.
 				if (data.MetalAmounts[data.matZinc] > 0)
 					data.MetalBurning[data.matZinc] = !data.MetalBurning[data.matZinc];
-				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matZinc, data.MetalBurning[data.matIron]));
+				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matZinc, data.MetalBurning[data.matZinc]));
 				break;
 			default:
 				break;
