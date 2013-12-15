@@ -60,6 +60,7 @@ public class particleSound extends EntityFX {
 		
 		Minecraft.getMinecraft().renderEngine.bindTexture(loc);
         super.renderParticle(par1Tessellator, par2, par3, par4, par5, par6, par7);
+        
 	}
 
 
