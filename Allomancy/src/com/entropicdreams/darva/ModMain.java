@@ -8,6 +8,7 @@ import com.entropicdreams.darva.handlers.CraftingHandler;
 import com.entropicdreams.darva.handlers.DamageHandler;
 import com.entropicdreams.darva.handlers.OreGenerator;
 import com.entropicdreams.darva.handlers.PlayerTracker;
+import com.entropicdreams.darva.handlers.SoundHandler;
 import com.entropicdreams.darva.items.ItemGrinder;
 import com.entropicdreams.darva.items.ItemVial;
 
@@ -105,7 +106,7 @@ public class ModMain {
 		proxy.RegisterTickHandlers();
 		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
 		MinecraftForge.EVENT_BUS.register(new DamageHandler());
-		
+		MinecraftForge.EVENT_BUS.register(new SoundHandler());
 	 }
 	 
 	 private void setupKeybinds()
