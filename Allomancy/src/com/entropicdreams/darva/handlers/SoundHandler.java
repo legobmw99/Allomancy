@@ -41,9 +41,10 @@ public class SoundHandler {
 		case "mob.witch.idle":
 		case "mob.endermen.portal":
 		case "mob.enderman.scream":
-		case "mob.ghast.moan":			
-		
-			EntityFX particle = new particleSound(player.worldObj, player.posX + -(Math.sin(Math.toRadians(player.getRotationYawHead())) * .5d), player.posY -.5, player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .5d), 0, 0, 0, event.name, event.x,event.y,event.z);
+		case "mob.ghast.moan":	
+		case "mob.chicken.step":	
+		case "random.bow":
+			EntityFX particle = new particleSound(player.worldObj, player.posX + -(Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d), player.posY -.2, player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), 0, 0, 0, event.name, event.x,event.y,event.z);
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			
 		break;

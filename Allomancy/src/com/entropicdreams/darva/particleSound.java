@@ -24,7 +24,7 @@ public class particleSound extends EntityFX {
 		
 		
 		this.motionX = ((x - toX)*-1) *.02;
-        this.motionY = ((y - toY)*-1) *.002;
+        this.motionY = ((y - toY)*-1) *.02;
         this.motionZ = ((z - toZ)*-1) *.02;
         this.motionY += 0.009D;
         this.particleScale *= 1F;
@@ -46,6 +46,7 @@ public class particleSound extends EntityFX {
 		case "mob.mooshroom.step":
 		case "mob.villager.step":
 		case "mob.golem.walk":
+		case "mob.chicken.step":
 		
 				loc = new ResourceLocation("allomancy","textures/soundicons/passivestep.png");
 				break;
@@ -61,10 +62,10 @@ public class particleSound extends EntityFX {
 		case "mob.ghast.moan":			
 				loc = new ResourceLocation("allomancy","textures/soundicons/aggiestep.png");
 				break;
-		case "bow.random":
+		case "random.bow":
 				loc = new ResourceLocation("allomancy","textures/soundicons/bowshot.png");
 				break;
-		break;
+
 		default:
 		}
 
