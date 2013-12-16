@@ -51,43 +51,39 @@ public class MetalParticleController implements ITickHandler {
 	}
 	public void tryPushEntity(Entity entity)
 	{
-		if (entity instanceof EntityItem)
-		{
-			tryPushItem((EntityItem) entity);
-		}
-	}
-	private void tryPushItem(EntityItem item)
-	{
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		motionX = ((player.posX - item.posX) * .03)*-1;
-        motionY = ((player.posY - item.posY) *.03);
-        motionZ = ((player.posZ - item.posZ) *.03)*-1;
-        item.motionX = motionX;
-        item.motionY = motionY;
-        item.motionZ = motionZ;
-		PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, item.entityId));
-		
+
+		if (entity instanceof EntityItem)
+		{
+			motionX = ((player.posX - entity.posX) * .1)*-1;
+	        motionY = ((player.posY - entity.posY) *.1);
+	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
+	        entity.motionX = motionX;
+	        entity.motionY = motionY;
+	        entity.motionZ = motionZ;
+	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
+		}
 	}
 	
 	public void tryPullEntity(Entity entity)
 	{
-		if (entity instanceof EntityItem)
-		{
-			tryPullItem((EntityItem) entity);
-		}
-	}
-	
-	private void tryPullItem(EntityItem item)
-	{
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		motionX = (player.posX - item.posX) * .03;
-        motionY = (player.posY - item.posY) *.03;
-        motionZ = (player.posZ - item.posZ) *.03;
-        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, item.entityId));
 
-	}
+		if (entity instanceof EntityItem)
+		{
+			motionX = (player.posX - entity.posX) * .1;
+	        motionY = (player.posY - entity.posY) *.1;
+	        motionZ = (player.posZ - entity.posZ) *.1;
+	        entity.motionX = motionX;
+	        entity.motionY = motionY;
+	        entity.motionZ = motionZ;
+	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
+
+		}
+
+	}		
 	
 
 	@Override

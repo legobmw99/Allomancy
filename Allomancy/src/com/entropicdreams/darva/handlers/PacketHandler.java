@@ -274,6 +274,8 @@ public class PacketHandler implements IPacketHandler {
 			{
 				return;
 			}
+			/*  //Commented out because i don't think i'll get this working in time for modjam's conclusion. *sigh*
+			 * 
 			if (target instanceof EntityItem)
 			{
 				EntityItem item = (EntityItem) target;
@@ -288,11 +290,11 @@ public class PacketHandler implements IPacketHandler {
 				
 			}
 			else
-			{
+			{*/
 			target.motionX = motionX;
 			target.motionY = motionY;
 			target.motionZ = motionZ;
-			}
+			//}
 			
 			
 		} catch (IOException e) {

@@ -40,8 +40,8 @@ public class FlyingItem extends EntityThrowable {
 
 	@Override
 	public void onUpdate() {
+		//PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(this.stack.itemID, this.entityId, motionX, motionY, motionZ),this.dimension);
 		// TODO Auto-generated method stub
-		PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(this.stack.itemID, this.entityId, motionX, motionY, motionZ),this.dimension);
 	}
 
 
