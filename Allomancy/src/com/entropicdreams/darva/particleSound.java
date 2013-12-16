@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 public class particleSound extends EntityFX {
 
 	private ResourceLocation loc;
+	private ResourceLocation oldLoc = new ResourceLocation("textures/particle/particles.png");
 	public particleSound(World world, double x, double y,
 			double z, double par8, double par10, double par12,
 			String soundType, double toX, double toY, double toZ) {
@@ -73,7 +74,7 @@ public class particleSound extends EntityFX {
 	@Override
 	public int getFXLayer() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 3;
 	}
 	@Override
 	public void renderParticle(Tessellator par1Tessellator, float par2,
@@ -106,6 +107,7 @@ public class particleSound extends EntityFX {
         par1Tessellator.addVertexWithUV((double)(f11 + par3 * f10 + par6 * f10), (double)(f12 + par4 * f10), (double)(f13 + par5 * f10 + par7 * f10), (double)f6, (double)f8);
         par1Tessellator.addVertexWithUV((double)(f11 + par3 * f10 - par6 * f10), (double)(f12 - par4 * f10), (double)(f13 + par5 * f10 - par7 * f10), (double)f6, (double)f9);
         
+        //Minecraft.getMinecraft().renderEngine.bindTexture(oldLoc);
 	}
 
 	
