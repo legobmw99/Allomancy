@@ -31,12 +31,7 @@ public class particleSound extends EntityFX {
         this.particleScale *= 1F;
         this.particleMaxAge = 25;
         this.noClip = true;
-        this.particleTextureIndexX =0;
-        this.particleTextureIndexY = 0;
-        this.particleTextureJitterX =0;
-        this.particleTextureJitterY = 0;
-        
-        this.setParticleTextureIndex(0);
+
         
 		switch (soundType)
 		{
@@ -81,6 +76,14 @@ public class particleSound extends EntityFX {
 			float par3, float par4, float par5, float par6, float par7) {
 		// TODO Auto-generated method stub
 		
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glDepthMask(false);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
+        par1Tessellator.startDrawingQuads();
+		
+		
 		Minecraft.getMinecraft().renderEngine.bindTexture(loc);
         
 		float f6 = 0f;
@@ -106,6 +109,12 @@ public class particleSound extends EntityFX {
         par1Tessellator.addVertexWithUV((double)(f11 - par3 * f10 + par6 * f10), (double)(f12 + par4 * f10), (double)(f13 - par5 * f10 + par7 * f10), (double)f7, (double)f8);
         par1Tessellator.addVertexWithUV((double)(f11 + par3 * f10 + par6 * f10), (double)(f12 + par4 * f10), (double)(f13 + par5 * f10 + par7 * f10), (double)f6, (double)f8);
         par1Tessellator.addVertexWithUV((double)(f11 + par3 * f10 - par6 * f10), (double)(f12 - par4 * f10), (double)(f13 + par5 * f10 - par7 * f10), (double)f6, (double)f9);
+        
+        par1Tessellator.draw();
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glDepthMask(true);
+        GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+        
         
         //Minecraft.getMinecraft().renderEngine.bindTexture(oldLoc);
 	}

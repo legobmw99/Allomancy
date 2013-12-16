@@ -19,11 +19,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import com.entropicdreams.darva.AllomancyData;
+
 import cpw.mods.fml.common.FMLCommonHandler;  
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -88,6 +90,13 @@ public class PowerTickHandler implements ITickHandler {
 				player.motionY *=1.6;
 			}
 			
+		}
+		
+		if(data.MetalBurning[data.matIron] || data.MetalBurning[data.matSteel] )
+		{
+			AxisAlignedBB box;
+			box = AxisAlignedBB.getBoundingBox(player.posX-10, player.posY-10, player.posZ-10,player.posX+10 , player.posY+10, player.posZ+10);
+			player.worldObj.getEntitiesWithinAABB(EntityLiving.class, box );
 		}
 
 	}
