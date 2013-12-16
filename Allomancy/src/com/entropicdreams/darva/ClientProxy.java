@@ -25,6 +25,8 @@ public class ClientProxy extends CommonProxy {
 		renderHandler rh = new renderHandler();
 		TickRegistry.registerTickHandler(rh, Side.CLIENT);
 		TickRegistry.registerTickHandler(new PowerTickHandler(), Side.SERVER);
+		ModMain.instance.MPC = new MetalParticleController();
+		TickRegistry.registerTickHandler(ModMain.instance.MPC, Side.CLIENT);
 		
 		
 		KeyBinding[] key = {new KeyBinding("Select Metal", Keyboard.KEY_TAB)};

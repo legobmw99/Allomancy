@@ -71,6 +71,8 @@ public class ModMain {
 	
 	public static CraftingHandler craftingHandler;
 	
+	public static MetalParticleController MPC;
+	
 	//public static OreGenerator oreGenerator;
 	
 	

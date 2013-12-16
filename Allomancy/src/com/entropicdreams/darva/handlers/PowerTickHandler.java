@@ -25,6 +25,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.ModMain;
 
 import cpw.mods.fml.common.FMLCommonHandler;  
 import cpw.mods.fml.common.ITickHandler;
@@ -94,9 +95,16 @@ public class PowerTickHandler implements ITickHandler {
 		
 		if(data.MetalBurning[data.matIron] || data.MetalBurning[data.matSteel] )
 		{
+			List<Entity> eList;
 			AxisAlignedBB box;
 			box = AxisAlignedBB.getBoundingBox(player.posX-10, player.posY-10, player.posZ-10,player.posX+10 , player.posY+10, player.posZ+10);
-			player.worldObj.getEntitiesWithinAABB(EntityLiving.class, box );
+			eList = player.worldObj.getEntitiesWithinAABB(Entity.class, box );
+			
+			for (Entity curEntity : eList)
+			{
+				ModMain.MPC.tryAdd(curEntity);
+			}
+			
 		}
 
 	}
