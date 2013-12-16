@@ -273,7 +273,6 @@ public class PowerTickHandler implements ITickHandler {
 
 	                for (int i = 0; i < list.size(); ++i)
 	                {
-	                	System.out.println("Entity");
 	                    Entity entity = (Entity)list.get(i);
 
 	                    if (true)

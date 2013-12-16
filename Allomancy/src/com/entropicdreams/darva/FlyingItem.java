@@ -24,15 +24,15 @@ public class FlyingItem extends EntityThrowable {
 		// TODO Auto-generated constructor stub
 		stack = carried.getEntityItem();
 		carriedIcon = stack.getItem().getIconFromDamage(stack.getItemDamage());
-			System.out.println("WTF??");
+			
 	}
 
 
 
 	@Override
-	protected void onImpact(MovingObjectPosition movingobjectposition) {
+	protected void onImpact(MovingObjectPosition mop) {
 		// TODO Auto-generated method stub
-
+		this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, mop.blockX,mop.blockY,mop.blockZ));
 	}
 
 }

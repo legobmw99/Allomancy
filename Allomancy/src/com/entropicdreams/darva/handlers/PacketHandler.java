@@ -246,7 +246,7 @@ public class PacketHandler implements IPacketHandler {
 			if (target instanceof EntityItem)
 			{
 				FlyingItem fi = new FlyingItem(player.worldObj,player,(EntityItem) target);
-				fi.setThrowableHeading(motionX, motionY, motionZ, 2, 1.0f);
+				fi.setThrowableHeading(motionX, motionY, motionZ, 1, 1.0f);
 				player.worldObj.spawnEntityInWorld(fi);
 			}
 			else

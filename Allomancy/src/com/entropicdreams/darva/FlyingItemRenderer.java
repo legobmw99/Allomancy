@@ -39,6 +39,7 @@ public class FlyingItemRenderer extends Render {
             this.buildModel(tessellator, icon);
             GL11.glDisable(GL12.GL_RESCALE_NORMAL);
             GL11.glPopMatrix();
+            System.out.println("Drawn");
         }
         
         
