@@ -274,7 +274,7 @@ public class PacketHandler implements IPacketHandler {
 			{
 				EntityItem item = (EntityItem) target;
 				FlyingItem fi = new FlyingItem(player.worldObj,player,(EntityItem) target);
-				fi.setThrowableHeading(motionX, motionY, motionZ, 1, 1.0f);
+				fi.setThrowableHeading(motionX, motionY, motionZ, .05f, 1.0f);
 				player.worldObj.spawnEntityInWorld(fi);
 				PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(item.getEntityItem().itemID, fi.entityId),player.dimension);
 				item.setDead();
