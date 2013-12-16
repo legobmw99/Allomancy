@@ -151,14 +151,23 @@ public class PacketHandler implements IPacketHandler {
 		int entityId;
 		int itemId;
 		Item targItem;
+		double motionX;
+		double motionY;
+		double motionZ;
 		try {
 			inputStream.readInt();
 			
 			itemId = inputStream.readInt();
 			entityId = inputStream.readInt(); 
 			targItem = Item.itemsList[itemId];
+			motionX = inputStream.readDouble();
+			motionY = inputStream.readDouble();
+			motionZ = inputStream.readDouble();
 			FlyingItem fi = (FlyingItem) player.worldObj.getEntityByID(entityId);
 			fi.carriedIcon= targItem.getIconFromDamage(0);
+			fi.motionX = motionX;
+			fi.motionY = motionY;
+			fi.motionZ = motionZ;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -274,9 +283,12 @@ public class PacketHandler implements IPacketHandler {
 			{
 				EntityItem item = (EntityItem) target;
 				FlyingItem fi = new FlyingItem(player.worldObj,player,(EntityItem) target);
-				fi.setThrowableHeading(motionX, motionY, motionZ, .05f, 1.0f);
+				//fi.setThrowableHeading(motionX, motionY, motionZ, .5f, 1.0f);
+				fi.motionX = motionX;
+				fi.motionY = motionY;
+				fi.motionZ = motionZ;
 				player.worldObj.spawnEntityInWorld(fi);
-				PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(item.getEntityItem().itemID, fi.entityId),player.dimension);
+				PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(item.getEntityItem().itemID, fi.entityId, motionX, motionY, motionZ),player.dimension);
 				item.setDead();
 			}
 			else
@@ -359,7 +371,7 @@ public class PacketHandler implements IPacketHandler {
 		packet.length = bos.size();
 		return packet;		
 	}
-	public static Packet250CustomPayload updateIcon(int itemID, int entityID)
+	public static Packet250CustomPayload updateIcon(int itemID, int entityID, double motionX, double motionY, double motionZ)
 	{
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);
 		DataOutputStream outputStream = new DataOutputStream(bos);
@@ -368,6 +380,9 @@ public class PacketHandler implements IPacketHandler {
 			outputStream.writeInt(PacketHandler.Packet_Allomancy_Update_Texture);
 			outputStream.writeInt(itemID);
 			outputStream.writeInt(entityID);
+			outputStream.writeDouble(motionX);
+			outputStream.writeDouble(motionY);
+			outputStream.writeDouble(motionZ);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
