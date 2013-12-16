@@ -11,10 +11,13 @@ import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 
 public class MetalParticleController implements ITickHandler {
 	public LinkedList<Entity> particleTargets;
@@ -89,11 +92,11 @@ public class MetalParticleController implements ITickHandler {
 		}
 
 	}		
-	private void tryPushEntity(EntityLiving entity)
+	private void tryPushEntity(EntityCreature entity)
 	{
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-
+		System.out.println("Entity");
 		if (entity instanceof EntityIronGolem)
 		{
 			motionX = ((player.posX - entity.posX) * .1)*-1;
@@ -104,6 +107,19 @@ public class MetalParticleController implements ITickHandler {
 	        player.motionZ *= motionZ;
 			//waaaaay too damn heavy to push... you get moved.
 		}
+		
+		if (entity.getHeldItem().itemID == Item.swordIron.itemID || entity.getHeldItem().itemID == Item.swordGold.itemID)
+		{
+			//Pull em towards you.
+			motionX = (player.posX - entity.posX) * .1;
+	        motionY = (player.posY - entity.posY) *.1;
+	        motionZ = (player.posZ - entity.posZ) *.1;
+	        entity.motionX = motionX;
+	        entity.motionY = motionY;
+	        entity.motionZ = motionZ;
+	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
+		}
+		
 	}
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {

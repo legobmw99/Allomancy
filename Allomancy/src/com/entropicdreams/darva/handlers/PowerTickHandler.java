@@ -79,9 +79,21 @@ public class PowerTickHandler implements ITickHandler {
 					getMouseOver();
 					if (this.pointedEntity != null )
 					{
+						if (this.pointedEntity instanceof EntityLiving)
+						{
+							System.out.print("Living");
+						}
 						target = this.pointedEntity;
 						ModMain.MPC.tryPullEntity(target);
 					}
+					if (Minecraft.getMinecraft().objectMouseOver != null)
+					{
+						if (Minecraft.getMinecraft().objectMouseOver.entityHit != null)
+							{
+							ModMain.MPC.tryPushEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
+							}
+					}
+
 				}
 					
 			}
@@ -94,9 +106,16 @@ public class PowerTickHandler implements ITickHandler {
 					{
 						target = this.pointedEntity;
 						ModMain.MPC.tryPushEntity(target);
-
-						
 					}
+					
+					if (Minecraft.getMinecraft().objectMouseOver != null)
+					{
+						if (Minecraft.getMinecraft().objectMouseOver.entityHit != null)
+							{
+							ModMain.MPC.tryPushEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
+							}
+					}
+						
 				}
 					
 			}
