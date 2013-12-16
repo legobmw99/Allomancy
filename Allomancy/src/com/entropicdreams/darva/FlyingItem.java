@@ -24,10 +24,7 @@ public class FlyingItem extends EntityThrowable {
 		// TODO Auto-generated constructor stub
 		stack = carried.getEntityItem();
 		carriedIcon = stack.getItem().getIconFromDamage(stack.getItemDamage());
-		if (carriedIcon == null)
-		{
 			System.out.println("WTF??");
-		}
 	}
 
 

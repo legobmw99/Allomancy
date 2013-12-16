@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.FlyingItem;
 import com.entropicdreams.darva.ai.AIAttackOnCollideExtended;
 
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -30,6 +31,7 @@ import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -241,10 +243,19 @@ public class PacketHandler implements IPacketHandler {
 			{
 				return;
 			}
+			if (target instanceof EntityItem)
+			{
+				FlyingItem fi = new FlyingItem(player.worldObj,player,(EntityItem) target);
+				fi.setThrowableHeading(motionX, motionY, motionZ, 2, 1.0f);
+				player.worldObj.spawnEntityInWorld(fi);
+			}
+			else
+			{
 			target.motionX = motionX;
 			target.motionY = motionY;
 			target.motionZ = motionZ;
-
+			}
+			
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

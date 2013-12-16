@@ -94,6 +94,7 @@ public class PowerTickHandler implements ITickHandler {
 					{
 						target = this.pointedEntity;
 						ModMain.MPC.tryPushEntity(target);
+
 						
 					}
 				}
