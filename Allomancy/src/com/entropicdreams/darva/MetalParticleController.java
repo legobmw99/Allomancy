@@ -9,6 +9,7 @@ import com.entropicdreams.darva.handlers.PacketHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -79,12 +80,43 @@ public class MetalParticleController implements ITickHandler {
 		metallist.add(ModMain.itemSteelFlakes.itemID);
 		metallist.add(ModMain.itemTinFlakes.itemID);
 		metallist.add(ModMain.itemTinIngot.itemID);
+		metallist.add(Block.anvil.blockID);
+		metallist.add(Block.blockGold.blockID);
+		metallist.add(Block.fenceIron.blockID);
+		metallist.add(Block.hopperBlock.blockID);
+		metallist.add(Block.oreGold.blockID);
+		metallist.add(Block.oreIron.blockID);
+		metallist.add(Block.pistonBase.blockID);
+		metallist.add(Block.pistonExtension.blockID);
+		metallist.add(Block.pistonMoving.blockID);
+		metallist.add(Block.pistonStickyBase.blockID);
+		metallist.add(Block.pressurePlateGold.blockID);
+		metallist.add(Block.pressurePlateIron.blockID);
+		metallist.add(Block.rail.blockID);
+		metallist.add(Block.railActivator.blockID);
+		metallist.add(Block.railDetector.blockID);
+		metallist.add(Block.railPowered.blockID);
 	}
 	
+	public boolean isItemMetal(ItemStack item)
+	{
+		if (metallist.contains(item.itemID))
+			return true;
+		else return false;
+	}
+
+	public boolean isBlockMetal(int blockID)
+	{
+		if (metallist.contains(blockID))
+			return true;
+		else return false;
+	}
+
 	
 	public MetalParticleController()
 	{
 		particleTargets = new LinkedList<Entity>();
+		BuildMetalList();
 	}
 	
 	public void tryAdd(Entity entity)
@@ -116,7 +148,10 @@ public class MetalParticleController implements ITickHandler {
 	
 	private void tryAddItem(EntityItem entity)
 	{
-		particleTargets.add(entity);
+		if (isItemMetal(entity.getEntityItem()))
+		{
+			particleTargets.add(entity);
+		}
 	}
 	public void tryPushEntity(Entity entity)
 	{
