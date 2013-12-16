@@ -96,6 +96,9 @@ public class MetalParticleController implements ITickHandler {
 		metallist.add(Block.railActivator.blockID);
 		metallist.add(Block.railDetector.blockID);
 		metallist.add(Block.railPowered.blockID);
+		metallist.add(ModMain.itemVial.itemID);
+		metallist.add(ModMain.itemZincFlakes.itemID);
+		metallist.add(ModMain.itemZincIngot.itemID);
 	}
 	
 	public boolean isItemMetal(ItemStack item)
