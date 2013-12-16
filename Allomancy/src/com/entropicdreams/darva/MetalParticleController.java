@@ -18,9 +18,68 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class MetalParticleController implements ITickHandler {
 	public LinkedList<Entity> particleTargets;
+	private LinkedList<Integer> metallist;
+	
+	public void BuildMetalList()
+	{
+		metallist = new LinkedList<Integer>();
+		metallist.add(Item.ingotGold.itemID);
+		metallist.add(Item.ingotIron.itemID);
+		metallist.add(Item.axeIron.itemID);
+		metallist.add(Item.axeGold.itemID);
+		metallist.add(Item.bootsChain.itemID);
+		metallist.add(Item.bootsGold.itemID);
+		metallist.add(Item.bootsIron.itemID);
+		metallist.add(Item.bucketEmpty.itemID);
+		metallist.add(Item.bucketLava.itemID);
+		metallist.add(Item.bucketMilk.itemID);
+		metallist.add(Item.bucketWater.itemID);
+		metallist.add(Item.cauldron.itemID);
+		metallist.add(Item.compass.itemID);
+		metallist.add(Item.doorIron.itemID);
+		metallist.add(Item.flintAndSteel.itemID);
+		metallist.add(Item.goldNugget.itemID);
+		metallist.add(Item.helmetChain.itemID);
+		metallist.add(Item.helmetGold.itemID);
+		metallist.add(Item.helmetIron.itemID);
+		metallist.add(Item.hoeGold.itemID);
+		metallist.add(Item.hoeIron.itemID);
+		metallist.add(Item.horseArmorGold.itemID);
+		metallist.add(Item.horseArmorIron.itemID);
+		metallist.add(Item.legsChain.itemID);
+		metallist.add(Item.legsGold.itemID);
+		metallist.add(Item.legsIron.itemID);
+		metallist.add(Item.minecartCrate.itemID);
+		metallist.add(Item.minecartEmpty.itemID);
+		metallist.add(Item.minecartHopper.itemID);
+		metallist.add(Item.minecartPowered.itemID);
+		metallist.add(Item.minecartTnt.itemID);
+		metallist.add(Item.pickaxeIron.itemID);
+		metallist.add(Item.pickaxeGold.itemID);
+		metallist.add(Item.plateIron.itemID);
+		metallist.add(Item.pocketSundial.itemID);
+		metallist.add(Item.shovelGold.itemID);
+		metallist.add(Item.shovelIron.itemID);
+		metallist.add(Item.shears.itemID);
+		metallist.add(Item.appleGold.itemID);
+		metallist.add(Item.swordGold.itemID);
+		metallist.add(Item.swordIron.itemID);
+		metallist.add(ModMain.itemBrassFlakes.itemID);
+		metallist.add(ModMain.itemBronzeFlakes.itemID);
+		metallist.add(ModMain.itemCopperFlakes.itemID);
+		metallist.add(ModMain.itemCopperIngot.itemID);
+		metallist.add(ModMain.itemIronFlakes.itemID);
+		metallist.add(ModMain.itemLeadFlakes.itemID);
+		metallist.add(ModMain.itemLeadIngot.itemID);
+		metallist.add(ModMain.itemPewterFlakes.itemID);
+		metallist.add(ModMain.itemSteelFlakes.itemID);
+		metallist.add(ModMain.itemTinFlakes.itemID);
+		metallist.add(ModMain.itemTinIngot.itemID);
+	}
 	
 	
 	public MetalParticleController()
