@@ -85,12 +85,8 @@ public class MetalParticleController implements ITickHandler {
 		motionX = (player.posX - item.posX) * .03;
         motionY = (player.posY - item.posY) *.03;
         motionZ = (player.posZ - item.posZ) *.03;
-        item.motionX = motionX;
-        item.motionY = motionY;
-        item.motionZ = motionZ;
-		PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, item.entityId));
-		
-        
+        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, item.entityId));
+
 	}
 	
 
