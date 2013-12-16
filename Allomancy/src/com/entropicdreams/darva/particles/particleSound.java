@@ -1,4 +1,4 @@
-package com.entropicdreams.darva;
+package com.entropicdreams.darva.particles;
 
 import org.lwjgl.opengl.GL11;
 

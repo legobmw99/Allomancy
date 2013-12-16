@@ -1,7 +1,7 @@
 package com.entropicdreams.darva.handlers;
 
 import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.particleSound;
+import com.entropicdreams.darva.particles.particleSound;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

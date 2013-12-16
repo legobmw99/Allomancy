@@ -7,6 +7,7 @@ import org.lwjgl.util.Point;
 
 import com.entropicdreams.darva.AllomancyData;
 import com.entropicdreams.darva.ModMain;
+import com.entropicdreams.darva.particles.ParticleMetal;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -52,7 +53,7 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		EntityPortalFX particle;
+		ParticleMetal particle;
 		if (!Minecraft.getMinecraft().inGameHasFocus)
 			return;
 		
@@ -164,9 +165,10 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 			for (Entity entity : ModMain.instance.MPC.particleTargets)
 			{
 				motionX = ((player.posX - entity.posX)*-1) *.02;
-		        motionY = ((player.posY - entity.posY)*-1) *.02;
+		        motionY =0;// ((player.posY - entity.posY)*-1) *.02;
 		        motionZ = ((player.posZ - entity.posZ)*-1) *.02;
-				particle = new EntityPortalFX(player.worldObj, player.posX-(Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d) ,player.posY -.2,player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),motionX,motionY,motionZ );
+				particle = new ParticleMetal(player.worldObj, player.posX-(Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d) ,player.posY -.2,player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),motionX,motionY,motionZ );
+				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			}
 	}
 

@@ -45,6 +45,7 @@ public class MetalParticleController implements ITickHandler {
 	private void tryAddItem(EntityItem entity)
 	{
 		particleTargets.add(entity);
+		System.out.println("Added item");
 	}
 
 	@Override
@@ -58,6 +59,9 @@ public class MetalParticleController implements ITickHandler {
 		// TODO Auto-generated method stub
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		LinkedList<Entity> toRemove = new LinkedList<Entity>(); 
+		
+		if (player == null)
+				return;
 		
 		for(Entity entity : particleTargets)
 		{

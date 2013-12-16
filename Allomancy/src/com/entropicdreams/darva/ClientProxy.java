@@ -20,11 +20,14 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void RegisterTickHandlers() {
+		PowerTickHandler pth;
+		pth = new PowerTickHandler();
 		// TODO Auto-generated method stub
 		System.out.println("here1.");
 		renderHandler rh = new renderHandler();
 		TickRegistry.registerTickHandler(rh, Side.CLIENT);
-		TickRegistry.registerTickHandler(new PowerTickHandler(), Side.SERVER);
+		TickRegistry.registerTickHandler(pth, Side.SERVER);
+		TickRegistry.registerTickHandler(pth, Side.CLIENT);
 		ModMain.instance.MPC = new MetalParticleController();
 		TickRegistry.registerTickHandler(ModMain.instance.MPC, Side.CLIENT);
 		
