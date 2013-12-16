@@ -89,7 +89,8 @@ public class MetalParticleController implements ITickHandler {
         item.motionY = motionY;
         item.motionZ = motionZ;
 		PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, item.entityId));
-
+		FlyingItem fi = new FlyingItem(player.worldObj,player,item);
+		player.worldObj.spawnEntityInWorld(fi);
         
 	}
 	

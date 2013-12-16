@@ -27,6 +27,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.FlyingItem;
 import com.entropicdreams.darva.ModMain;
 
 import cpw.mods.fml.common.FMLCommonHandler;  
@@ -93,6 +94,7 @@ public class PowerTickHandler implements ITickHandler {
 					{
 						target = this.pointedEntity;
 						ModMain.MPC.tryPushEntity(target);
+						
 					}
 				}
 					

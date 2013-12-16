@@ -1,5 +1,6 @@
 package com.entropicdreams.darva;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
@@ -12,12 +13,24 @@ public class FlyingItem extends EntityThrowable {
 	public Icon carriedIcon;
 	private ItemStack stack;
 	
-	public FlyingItem(World par1World, double par2, double par4, double par6, EntityItem carried) {
-		super(par1World, par2, par4, par6);
+	public FlyingItem(World par1World)
+    {
+        super(par1World);
+    }
+
+	
+	public FlyingItem(World par1World, EntityLivingBase par2EntityLivingBase, EntityItem carried) {
+		super(par1World, par2EntityLivingBase);
 		// TODO Auto-generated constructor stub
 		stack = carried.getEntityItem();
 		carriedIcon = stack.getItem().getIconFromDamage(stack.getItemDamage());
+		if (carriedIcon == null)
+		{
+			System.out.println("WTF??");
+		}
 	}
+
+
 
 	@Override
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
