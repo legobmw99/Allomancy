@@ -49,6 +49,26 @@ public class MetalParticleController implements ITickHandler {
 	{
 		particleTargets.add(entity);
 	}
+	public void tryPushEntity(Entity entity)
+	{
+		if (entity instanceof EntityItem)
+		{
+			tryPushItem((EntityItem) entity);
+		}
+	}
+	private void tryPushItem(EntityItem item)
+	{
+		double motionX, motionY, motionZ;
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		motionX = ((player.posX - item.posX) * .03)*-1;
+        motionY = ((player.posY - item.posY) *.03)*-1;
+        motionZ = ((player.posZ - item.posZ) *.03)*-1;
+        item.motionX = motionX;
+        item.motionY = motionY;
+        item.motionZ = motionZ;
+		PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, item.entityId));
+		
+	}
 	
 	public void tryPullEntity(Entity entity)
 	{
