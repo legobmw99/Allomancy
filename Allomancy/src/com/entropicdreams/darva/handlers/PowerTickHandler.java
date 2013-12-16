@@ -10,6 +10,7 @@ import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -22,6 +23,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import com.entropicdreams.darva.AllomancyData;
@@ -37,6 +39,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class PowerTickHandler implements ITickHandler {
 
+	private Entity pointedEntity;
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		// TODO Auto-generated method stub
@@ -71,12 +74,12 @@ public class PowerTickHandler implements ITickHandler {
 				
 				if (data.MetalBurning[data.matIron])
 				{
-					mop = Minecraft.getMinecraft().objectMouseOver;
 					
-					if (mop != null && mop.entityHit != null)
+					getMouseOver();
+					if (this.pointedEntity != null )
 					{
 						System.out.println("Trypull");
-						target = mop.entityHit;
+						target = this.pointedEntity;
 						ModMain.MPC.tryPullEntity(target);
 					}
 				}
@@ -226,4 +229,9 @@ public class PowerTickHandler implements ITickHandler {
 		}
 		
 	}
+	
+	
+    
+	
+	
 }
