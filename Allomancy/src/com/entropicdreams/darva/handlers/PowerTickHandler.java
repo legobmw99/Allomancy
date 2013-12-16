@@ -65,15 +65,17 @@ public class PowerTickHandler implements ITickHandler {
 				ModMain.MPC.tryAdd(curEntity);
 			}
 			
-			if (player.getCurrentEquippedItem() == null &&  Minecraft.getMinecraft().gameSettings.keyBindAttack.isPressed())
+			if (player.getCurrentEquippedItem() == null &&  Minecraft.getMinecraft().gameSettings.keyBindAttack.pressed == true)
 			{
+				
+				
 				if (data.MetalBurning[data.matIron])
 				{
-					System.out.println("Trypull");
 					mop = Minecraft.getMinecraft().objectMouseOver;
-					if (mop.entityHit != null)
+					
+					if (mop != null && mop.entityHit != null)
 					{
-						
+						System.out.println("Trypull");
 						target = mop.entityHit;
 						ModMain.MPC.tryPullEntity(target);
 					}
