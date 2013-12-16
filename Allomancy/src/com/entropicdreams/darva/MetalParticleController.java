@@ -100,10 +100,44 @@ public class MetalParticleController implements ITickHandler {
 		}
 		if (entity instanceof EntityLiving)
 		{
-			tryPushEntity(entity);
-		}
+			tryPullMob((EntityCreature) entity);
+	 	}
 
-	}		
+	}
+	private void tryPullMob(EntityCreature entity)
+	{
+		
+		double motionX, motionY, motionZ;
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if (entity instanceof EntityIronGolem)
+		{
+			System.out.println("push entity");
+			motionX = ((player.posX - entity.posX) * .1) *-1;
+	        motionY = ((player.posY - entity.posY) *.1);
+	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
+	        player.motionX = motionX;
+	        player.motionY = motionY;
+	        player.motionZ = motionZ;
+			//waaaaay too damn heavy to push... you get moved.
+		}
+		
+		if (entity.getHeldItem() == null)
+		{
+			return;
+		}
+		
+		if (entity.getHeldItem().itemID == Item.swordIron.itemID || entity.getHeldItem().itemID == Item.swordGold.itemID)
+		{
+			//Pull em towards you.
+			motionX = ((player.posX - entity.posX) * .1)*-1;
+	        motionY = ((player.posY - entity.posY) *.1);
+	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
+	        entity.motionX = motionX;
+	        entity.motionY = motionY;
+	        entity.motionZ = motionZ;
+	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
+		}
+	}
 	private void tryPushMob(EntityCreature entity)
 	{
 		
@@ -112,9 +146,9 @@ public class MetalParticleController implements ITickHandler {
 		if (entity instanceof EntityIronGolem)
 		{
 			System.out.println("push entity");
-			motionX = ((player.posX - entity.posX) * .1)*-1;
+			motionX = ((player.posX - entity.posX) * .1);
 	        motionY = ((player.posY - entity.posY) *.1);
-	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
+	        motionZ = ((player.posZ - entity.posZ) *.1);
 	        player.motionX = motionX;
 	        player.motionY = motionY;
 	        player.motionZ = motionZ;
@@ -137,9 +171,9 @@ public class MetalParticleController implements ITickHandler {
 	        entity.motionZ = motionZ;
 	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
 		}
-		
 	}
-	@Override
+		
+		@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		// TODO Auto-generated method stub
 	}
