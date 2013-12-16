@@ -167,7 +167,7 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 				motionX = ((player.posX - entity.posX)*-1) *.03;
 		        motionY = ((player.posY - entity.posY)*-1) *.03;
 		        motionZ = ((player.posZ - entity.posZ)*-1) *.03;
-				particle = new ParticleMetal(player.worldObj, player.posX-(Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d) ,player.posY -.2,player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),motionX,motionY,motionZ );
+				particle = new ParticleMetal(player.worldObj, player.posX-(Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d) ,player.posY -.7,player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),motionX,motionY,motionZ );
 				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			}
 	}

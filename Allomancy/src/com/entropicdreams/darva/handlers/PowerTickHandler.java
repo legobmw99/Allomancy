@@ -50,10 +50,12 @@ public class PowerTickHandler implements ITickHandler {
 		EntityClientPlayerMP player;
 		player = Minecraft.getMinecraft().thePlayer;
 		data = AllomancyData.forPlayer(player);
+		MovingObjectPosition mop;
 		
 		if(data.MetalBurning[data.matIron] || data.MetalBurning[data.matSteel] )
 		{
 			List<Entity> eList;
+			Entity target;
 			AxisAlignedBB box;
 			box = AxisAlignedBB.getBoundingBox(player.posX-10, player.posY-10, player.posZ-10,player.posX+10 , player.posY+10, player.posZ+10);
 			eList = player.worldObj.getEntitiesWithinAABB(Entity.class, box );
@@ -61,6 +63,22 @@ public class PowerTickHandler implements ITickHandler {
 			{
 				
 				ModMain.MPC.tryAdd(curEntity);
+			}
+			
+			if (player.getCurrentEquippedItem() == null &&  Minecraft.getMinecraft().gameSettings.keyBindAttack.isPressed())
+			{
+				if (data.MetalBurning[data.matIron])
+				{
+					System.out.println("Trypull");
+					mop = Minecraft.getMinecraft().objectMouseOver;
+					if (mop.entityHit != null)
+					{
+						
+						target = mop.entityHit;
+						ModMain.MPC.tryPullEntity(target);
+					}
+				}
+					
 			}
 			
 		}
@@ -72,7 +90,6 @@ public class PowerTickHandler implements ITickHandler {
 		if (data.MetalBurning[data.matZinc])
 		{
 			Entity entity;
-			MovingObjectPosition mop;
 			mop = Minecraft.getMinecraft().objectMouseOver;
 			if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityCreature && !(mop.entityHit instanceof EntityPlayer) )
 			{
@@ -85,7 +102,6 @@ public class PowerTickHandler implements ITickHandler {
 		if (data.MetalBurning[data.matBrass])
 		{
 			Entity entity;
-			MovingObjectPosition mop;
 			mop = Minecraft.getMinecraft().objectMouseOver;
 			if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityLiving && !(mop.entityHit instanceof EntityPlayer) )
 			{

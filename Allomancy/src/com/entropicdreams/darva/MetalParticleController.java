@@ -47,6 +47,23 @@ public class MetalParticleController implements ITickHandler {
 		particleTargets.add(entity);
 		System.out.println("Added item");
 	}
+	
+	public void tryPullEntity(Entity entity)
+	{
+		if (entity instanceof EntityItem)
+		{
+			tryPullItem((EntityItem) entity);
+		}
+	}
+	
+	private void tryPullItem(EntityItem item)
+	{
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		item.motionX = (player.posX - item.posX) * .03;
+        item.motionY = (player.posY - item.posY) *.03;
+        item.motionZ = (player.posZ - item.posZ) *.03;
+	}
+	
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
