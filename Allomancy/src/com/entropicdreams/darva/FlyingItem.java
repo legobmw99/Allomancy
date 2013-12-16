@@ -27,7 +27,7 @@ public class FlyingItem extends EntityThrowable {
 		// TODO Auto-generated constructor stub
 		stack = carried.getEntityItem().copy();
 		carriedIcon = stack.getItem().getIconFromDamage(0);
-		this.setPosition(carried.posX, carried.posY, carried.posZ);
+		this.setPosition(carried.posX, carried.posX, carried.posX);
 		thrower = (EntityPlayer) par2EntityLivingBase;
 	}
 
@@ -36,7 +36,7 @@ public class FlyingItem extends EntityThrowable {
 	@Override
 	protected float getGravityVelocity() {
 		// TODO Auto-generated method stub
-		return super.getGravityVelocity();
+		return 0;
 		
 	}
 

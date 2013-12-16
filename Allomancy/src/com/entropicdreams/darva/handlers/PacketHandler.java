@@ -164,10 +164,12 @@ public class PacketHandler implements IPacketHandler {
 			motionY = inputStream.readDouble();
 			motionZ = inputStream.readDouble();
 			FlyingItem fi = (FlyingItem) player.worldObj.getEntityByID(entityId);
+			if (fi == null)
+			{
+				System.out.println("null");
+			}
 			fi.carriedIcon= targItem.getIconFromDamage(0);
-			fi.motionX = motionX;
-			fi.motionY = motionY;
-			fi.motionZ = motionZ;
+			fi.setVelocity(motionX, motionY, motionZ);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -288,8 +290,8 @@ public class PacketHandler implements IPacketHandler {
 				fi.motionY = motionY;
 				fi.motionZ = motionZ;
 				player.worldObj.spawnEntityInWorld(fi);
-				PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(item.getEntityItem().itemID, fi.entityId, motionX, motionY, motionZ),player.dimension);
 				item.setDead();
+				PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(item.getEntityItem().itemID, fi.entityId, motionX, motionY, motionZ),player.dimension);
 			}
 			else
 			{
@@ -373,7 +375,7 @@ public class PacketHandler implements IPacketHandler {
 	}
 	public static Packet250CustomPayload updateIcon(int itemID, int entityID, double motionX, double motionY, double motionZ)
 	{
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(56);
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		
 		try {
