@@ -103,7 +103,7 @@ public class ModMain {
 		setupBlocks();
 		setupRecipies();
 		
-		EntityRegistry.registerModEntity(FlyingItem.class, "FlyingItem", 350, this.instance, 120, 3, true );
+		EntityRegistry.registerModEntity(FlyingItem.class, "Flying Item", 350, this.instance, 120, 3, true );
 		
 	}
 	 @EventHandler

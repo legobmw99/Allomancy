@@ -41,6 +41,10 @@ public class FlyingItemRenderer extends Render {
             GL11.glPopMatrix();
             System.out.println("Drawn");
         }
+        else
+        {
+        	System.out.println("null");
+        }
         
         
 

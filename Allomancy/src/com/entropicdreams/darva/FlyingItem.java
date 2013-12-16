@@ -17,22 +17,31 @@ public class FlyingItem extends EntityThrowable {
     {
         super(par1World);
     }
-
+	
 	
 	public FlyingItem(World par1World, EntityLivingBase par2EntityLivingBase, EntityItem carried) {
 		super(par1World, par2EntityLivingBase);
 		// TODO Auto-generated constructor stub
 		stack = carried.getEntityItem();
-		carriedIcon = stack.getItem().getIconFromDamage(stack.getItemDamage());
-			
+		carriedIcon = stack.getItem().getIconFromDamage(0);
+		
 	}
 
+
+
+	@Override
+	protected float getGravityVelocity() {
+		// TODO Auto-generated method stub
+		return super.getGravityVelocity();
+		
+	}
 
 
 	@Override
 	protected void onImpact(MovingObjectPosition mop) {
 		// TODO Auto-generated method stub
 		this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, mop.blockX,mop.blockY,mop.blockZ));
+		this.setDead();
 	}
 
 }
