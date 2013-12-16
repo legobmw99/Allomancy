@@ -45,7 +45,6 @@ public class MetalParticleController implements ITickHandler {
 	private void tryAddItem(EntityItem entity)
 	{
 		particleTargets.add(entity);
-		System.out.println("Added item");
 	}
 	
 	public void tryPullEntity(Entity entity)
