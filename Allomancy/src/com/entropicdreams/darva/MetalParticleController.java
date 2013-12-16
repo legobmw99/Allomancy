@@ -48,7 +48,7 @@ public class MetalParticleController implements ITickHandler {
 	{
 		if (entity == null)
 			return;
-		if (entity instanceof EntityIronGolem ||  entity.getHeldItem().itemID == Item.swordIron.itemID || entity.getHeldItem().itemID == Item.swordGold.itemID )
+		if (entity instanceof EntityIronGolem || (entity.getHeldItem() != null &&( entity.getHeldItem().itemID == Item.swordIron.itemID || entity.getHeldItem().itemID == Item.swordGold.itemID) ))
 		{
 			particleTargets.add(entity);
 		}
@@ -74,6 +74,12 @@ public class MetalParticleController implements ITickHandler {
 	        entity.motionZ = motionZ;
 	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
 		}
+		
+		if (entity instanceof EntityLiving)
+		{
+			tryPushMob((EntityCreature) entity);
+		}
+		
 	}
 	
 	public void tryPullEntity(Entity entity)
@@ -98,20 +104,26 @@ public class MetalParticleController implements ITickHandler {
 		}
 
 	}		
-	private void tryPushEntity(EntityCreature entity)
+	private void tryPushMob(EntityCreature entity)
 	{
-		System.out.println("push entity");
+		
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (entity instanceof EntityIronGolem)
 		{
+			System.out.println("push entity");
 			motionX = ((player.posX - entity.posX) * .1)*-1;
 	        motionY = ((player.posY - entity.posY) *.1);
 	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
-	        player.motionX *= motionX;
-	        player.motionY *= motionY;
-	        player.motionZ *= motionZ;
+	        player.motionX = motionX;
+	        player.motionY = motionY;
+	        player.motionZ = motionZ;
 			//waaaaay too damn heavy to push... you get moved.
+		}
+		
+		if (entity.getHeldItem() == null)
+		{
+			return;
 		}
 		
 		if (entity.getHeldItem().itemID == Item.swordIron.itemID || entity.getHeldItem().itemID == Item.swordGold.itemID)

@@ -85,7 +85,7 @@ public class PowerTickHandler implements ITickHandler {
 					{
 						if (Minecraft.getMinecraft().objectMouseOver.entityHit != null)
 							{
-							ModMain.MPC.tryPushEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
+							ModMain.MPC.tryPullEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
 							}
 					}
 
@@ -125,7 +125,7 @@ public class PowerTickHandler implements ITickHandler {
 		{
 			Entity entity;
 			mop = Minecraft.getMinecraft().objectMouseOver;
-			if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityCreature && !(mop.entityHit instanceof EntityPlayer) )
+			if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityCreature && !(mop.entityHit instanceof EntityPlayer) && Minecraft.getMinecraft().gameSettings.keyBindAttack.pressed )
 			{
 				entity = (EntityLiving) mop.entityHit;
 				
@@ -137,7 +137,7 @@ public class PowerTickHandler implements ITickHandler {
 		{
 			Entity entity;
 			mop = Minecraft.getMinecraft().objectMouseOver;
-			if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityLiving && !(mop.entityHit instanceof EntityPlayer) )
+			if (mop != null && mop.typeOfHit == EnumMovingObjectType.ENTITY && mop.entityHit instanceof EntityLiving && !(mop.entityHit instanceof EntityPlayer) && Minecraft.getMinecraft().gameSettings.keyBindUseItem.pressed )
 			{
 				entity = (EntityLiving) mop.entityHit;
 				
@@ -301,6 +301,7 @@ public class PowerTickHandler implements ITickHandler {
 	                            {
 	                                this.pointedEntity = entity;
 	                                d2 = 0.0D;
+	                                return;
 	                            }
 	                        }
 	                        else if (movingobjectposition != null)
@@ -314,12 +315,14 @@ public class PowerTickHandler implements ITickHandler {
 	                                    if (d2 == 0.0D)
 	                                    {
 	                                        this.pointedEntity = entity;
+	                                        return;
 	                                    }
 	                                }
 	                                else
 	                                {
 	                                    this.pointedEntity = entity;
 	                                    d2 = d3;
+	                                    return;
 	                                }
 	                            }
 	                        }
