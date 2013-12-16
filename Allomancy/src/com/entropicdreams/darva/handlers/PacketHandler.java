@@ -15,6 +15,7 @@ import com.entropicdreams.darva.ai.AIAttackOnCollideExtended;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
@@ -50,6 +51,7 @@ public class PacketHandler implements IPacketHandler {
 	public final static int Packet_Allomancy_Update_Burn = 2;
 	public final static int Packet_Allomancy_Change_Emotion = 3;
 	public final static int Packet_Allomancy_Move_Entity = 4;
+	public final static int Packet_Allomancy_Update_Texture = 5;
 	@Override
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
@@ -136,9 +138,33 @@ public class PacketHandler implements IPacketHandler {
 			return;
 		case PacketHandler.Packet_Allomancy_Update_Burn:
 			data = AllomancyData.forPlayer(player);
-			data.updateBurn(packet); 
+			data.updateBurn(packet);
+		case PacketHandler.Packet_Allomancy_Update_Texture:
+			updateTexture(player, packet);
 		}
 
+	}
+	private void updateTexture(EntityPlayer player, Packet250CustomPayload packet)
+	{
+		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+		int entityId;
+		int itemId;
+		Item targItem;
+		try {
+			inputStream.readInt();
+			
+			itemId = inputStream.readInt();
+			entityId = inputStream.readInt(); 
+			targItem = Item.itemsList[itemId];
+			FlyingItem fi = (FlyingItem) player.worldObj.getEntityByID(entityId);
+			fi.carriedIcon= targItem.getIconFromDamage(0);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}//Throw away packet type info.
+		
+		
+		
 	}
 	
 	public static Packet250CustomPayload changeBurn(int mat, boolean value )
@@ -327,8 +353,26 @@ public class PacketHandler implements IPacketHandler {
 		packet.channel = "Allomancy_Data";
 		packet.data = bos.toByteArray();
 		packet.length = bos.size();
-		return packet;
+		return packet;		
+	}
+	public static Packet250CustomPayload updateIcon(int itemID, int entityID)
+	{
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);
+		DataOutputStream outputStream = new DataOutputStream(bos);
 		
+		try {
+			outputStream.writeInt(PacketHandler.Packet_Allomancy_Update_Texture);
+			outputStream.writeInt(itemID);
+			outputStream.writeInt(entityID);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Allomancy_Data";
+		packet.data = bos.toByteArray();
+		packet.length = bos.size();
+		return packet;		
 		
 	}
 }
