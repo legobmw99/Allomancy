@@ -64,6 +64,10 @@ public class PowerTickHandler implements ITickHandler {
 			}
 			
 		}
+		else
+		{
+			ModMain.MPC.particleTargets.clear();
+		}
 		
 		if (data.MetalBurning[data.matZinc])
 		{
