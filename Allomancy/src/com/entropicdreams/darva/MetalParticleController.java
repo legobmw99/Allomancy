@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class MetalParticleController implements ITickHandler {
@@ -82,10 +83,28 @@ public class MetalParticleController implements ITickHandler {
 	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
 
 		}
+		if (entity instanceof EntityLiving)
+		{
+			tryPushEntity(entity);
+		}
 
 	}		
-	
+	private void tryPushEntity(EntityLiving entity)
+	{
+		double motionX, motionY, motionZ;
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
+		if (entity instanceof EntityIronGolem)
+		{
+			motionX = ((player.posX - entity.posX) * .1)*-1;
+	        motionY = ((player.posY - entity.posY) *.1);
+	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
+	        player.motionX *= motionX;
+	        player.motionY *= motionY;
+	        player.motionZ *= motionZ;
+			//waaaaay too damn heavy to push... you get moved.
+		}
+	}
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		// TODO Auto-generated method stub
