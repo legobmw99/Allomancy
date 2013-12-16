@@ -47,6 +47,7 @@ public class PacketHandler implements IPacketHandler {
 	public final static int Packet_Allomancy_Select_Metal = 1;
 	public final static int Packet_Allomancy_Update_Burn = 2;
 	public final static int Packet_Allomancy_Change_Emotion = 3;
+	public final static int Packet_Allomancy_Move_Entity = 4;
 	@Override
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
@@ -103,6 +104,8 @@ public class PacketHandler implements IPacketHandler {
 		case PacketHandler.Packet_Allomancy_Change_Emotion:
 			changeEmotions(packet, player);
 			break;
+		case PacketHandler.Packet_Allomancy_Move_Entity:
+			moveEntity(packet,player);
 		default:
 			return;
 		}
@@ -218,6 +221,39 @@ public class PacketHandler implements IPacketHandler {
 		return packet;
 	}
 
+	
+	private void moveEntity(Packet250CustomPayload packet, EntityPlayerMP player)
+	{
+		int targetID;
+		Entity target;
+		double motionX, motionY, motionZ;
+		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+		
+		try {
+			inputStream.readInt();
+			motionX = inputStream.readDouble();
+			motionY = inputStream.readDouble();
+			motionZ = inputStream.readDouble();
+			targetID = inputStream.readInt();
+			
+			target = player.worldObj.getEntityByID(targetID);
+			if (target == null)
+			{
+				return;
+			}
+			target.motionX = motionX;
+			target.motionY = motionY;
+			target.motionZ = motionZ;
+
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //Throw away packet type data.
+		
+		
+	}
+	
 	private void changeEmotions(Packet250CustomPayload packet, EntityPlayerMP player) //Nowhere better to stick this. *sigh*
 	{
 		int targetID;
@@ -259,5 +295,29 @@ public class PacketHandler implements IPacketHandler {
 		} //Throw away packet type info.
 		
 	}
+	public static Packet250CustomPayload moveEntity(double motionX, double motionY, double motionZ, int entityID)
+	{
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);
+		DataOutputStream outputStream = new DataOutputStream(bos);
+		
+		try {
+			outputStream.writeInt(PacketHandler.Packet_Allomancy_Move_Entity);
+			outputStream.writeDouble(motionX);
+			outputStream.writeDouble(motionY);
+			outputStream.writeDouble(motionZ);
+			outputStream.writeInt(entityID);
 
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Allomancy_Data";
+		packet.data = bos.toByteArray();
+		packet.length = bos.size();
+		return packet;
+		
+		
+	}
 }

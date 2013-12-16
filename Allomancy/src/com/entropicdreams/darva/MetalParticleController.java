@@ -4,8 +4,11 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.entropicdreams.darva.handlers.PacketHandler;
+
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -57,17 +60,23 @@ public class MetalParticleController implements ITickHandler {
 	
 	private void tryPullItem(EntityItem item)
 	{
+		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		item.motionX = (player.posX - item.posX) * .03;
-        item.motionY = (player.posY - item.posY) *.03;
-        item.motionZ = (player.posZ - item.posZ) *.03;
+		motionX = (player.posX - item.posX) * .03;
+        motionY = (player.posY - item.posY) *.03;
+        motionZ = (player.posZ - item.posZ) *.03;
+        item.motionX = motionX;
+        item.motionY = motionY;
+        item.motionZ = motionZ;
+		PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, item.entityId));
+
+        
 	}
 	
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

@@ -78,7 +78,6 @@ public class PowerTickHandler implements ITickHandler {
 					getMouseOver();
 					if (this.pointedEntity != null )
 					{
-						System.out.println("Trypull");
 						target = this.pointedEntity;
 						ModMain.MPC.tryPullEntity(target);
 					}
@@ -228,6 +227,8 @@ public class PowerTickHandler implements ITickHandler {
 		
 	}
 	
+	
+	/*Ugly below.  Sorry*/
 	 public void getMouseOver()
 	    {
 		 float par1 =0;
