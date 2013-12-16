@@ -6,13 +6,16 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
 import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.ModMain;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.particle.EntityPortalFX;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureObject;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
@@ -49,7 +52,7 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-
+		EntityPortalFX particle;
 		if (!Minecraft.getMinecraft().inGameHasFocus)
 			return;
 		
@@ -157,7 +160,14 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 			if (currentFrame > 3 )
 				currentFrame = 0;
 		}
-		
+			double motionX, motionY, motionZ;
+			for (Entity entity : ModMain.instance.MPC.particleTargets)
+			{
+				motionX = ((player.posX - entity.posX)*-1) *.02;
+		        motionY = ((player.posY - entity.posY)*-1) *.02;
+		        motionZ = ((player.posZ - entity.posZ)*-1) *.02;
+				particle = new EntityPortalFX(player.worldObj, player.posX-(Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d) ,player.posY -.2,player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),motionX,motionY,motionZ );
+			}
 	}
 
 	@Override

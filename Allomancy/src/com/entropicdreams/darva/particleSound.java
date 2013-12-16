@@ -21,8 +21,6 @@ public class particleSound extends EntityFX {
 			double z, double par8, double par10, double par12,
 			String soundType, double toX, double toY, double toZ) {
 		super(world, x, y, z, par8, par10, par12);
-		TextureObject map = null;
-		
 		
 		this.motionX = ((x - toX)*-1) *.02;
         this.motionY = ((y - toY)*-1) *.02;

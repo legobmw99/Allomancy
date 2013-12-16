@@ -50,6 +50,22 @@ public class PowerTickHandler implements ITickHandler {
 		EntityClientPlayerMP player;
 		player = Minecraft.getMinecraft().thePlayer;
 		data = AllomancyData.forPlayer(player);
+		
+		if(data.MetalBurning[data.matIron] || data.MetalBurning[data.matSteel] )
+		{
+			List<Entity> eList;
+			AxisAlignedBB box;
+			box = AxisAlignedBB.getBoundingBox(player.posX-10, player.posY-10, player.posZ-10,player.posX+10 , player.posY+10, player.posZ+10);
+			eList = player.worldObj.getEntitiesWithinAABB(Entity.class, box );
+			System.out.println("Trying to add");
+			for (Entity curEntity : eList)
+			{
+				System.out.println("adding");
+				ModMain.MPC.tryAdd(curEntity);
+			}
+			
+		}
+		
 		if (data.MetalBurning[data.matZinc])
 		{
 			Entity entity;
@@ -93,19 +109,7 @@ public class PowerTickHandler implements ITickHandler {
 			
 		}
 		
-		if(data.MetalBurning[data.matIron] || data.MetalBurning[data.matSteel] )
-		{
-			List<Entity> eList;
-			AxisAlignedBB box;
-			box = AxisAlignedBB.getBoundingBox(player.posX-10, player.posY-10, player.posZ-10,player.posX+10 , player.posY+10, player.posZ+10);
-			eList = player.worldObj.getEntitiesWithinAABB(Entity.class, box );
-			
-			for (Entity curEntity : eList)
-			{
-				ModMain.MPC.tryAdd(curEntity);
-			}
-			
-		}
+		
 
 	}
 	
