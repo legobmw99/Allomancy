@@ -84,6 +84,19 @@ public class PowerTickHandler implements ITickHandler {
 				}
 					
 			}
+			if (player.getCurrentEquippedItem() == null &&  Minecraft.getMinecraft().gameSettings.keyBindUseItem.pressed == true)
+			{
+				if (data.MetalBurning[data.matSteel])
+				{
+					getMouseOver();
+					if (this.pointedEntity != null )
+					{
+						target = this.pointedEntity;
+						ModMain.MPC.tryPushEntity(target);
+					}
+				}
+					
+			}
 			
 		}
 		else
