@@ -1,5 +1,8 @@
 package com.entropicdreams.darva;
 
+import com.entropicdreams.darva.handlers.PacketHandler;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +22,7 @@ public class FlyingItem extends EntityThrowable {
 	public FlyingItem(World par1World)
     {
         super(par1World);
+        System.out.println("Created 2");
     }
 	
 	
@@ -29,8 +33,16 @@ public class FlyingItem extends EntityThrowable {
 		carriedIcon = stack.getItem().getIconFromDamage(0);
 		this.setPosition(carried.posX, carried.posX, carried.posX);
 		thrower = (EntityPlayer) par2EntityLivingBase;
+		System.out.println("Created");
 	}
 
+
+
+	@Override
+	public void onUpdate() {
+		// TODO Auto-generated method stub
+		PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(this.stack.itemID, this.entityId, motionX, motionY, motionZ),this.dimension);
+	}
 
 
 	@Override
