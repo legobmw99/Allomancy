@@ -46,7 +46,13 @@ public class MetalParticleController implements ITickHandler {
 	
 	private void tryAddLiving(EntityLiving entity)
 	{
-		//We'll do this last... Most complicated.
+		if (entity == null)
+			return;
+		if (entity instanceof EntityIronGolem ||  entity.getHeldItem().itemID == Item.swordIron.itemID || entity.getHeldItem().itemID == Item.swordGold.itemID )
+		{
+			particleTargets.add(entity);
+		}
+		
 	}
 	
 	private void tryAddItem(EntityItem entity)
@@ -94,9 +100,9 @@ public class MetalParticleController implements ITickHandler {
 	}		
 	private void tryPushEntity(EntityCreature entity)
 	{
+		System.out.println("push entity");
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		System.out.println("Entity");
 		if (entity instanceof EntityIronGolem)
 		{
 			motionX = ((player.posX - entity.posX) * .1)*-1;

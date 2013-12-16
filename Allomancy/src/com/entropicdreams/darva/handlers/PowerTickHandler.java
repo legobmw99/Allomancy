@@ -65,8 +65,7 @@ public class PowerTickHandler implements ITickHandler {
 			box = AxisAlignedBB.getBoundingBox(player.posX-10, player.posY-10, player.posZ-10,player.posX+10 , player.posY+10, player.posZ+10);
 			eList = player.worldObj.getEntitiesWithinAABB(Entity.class, box );
 			for (Entity curEntity : eList)
-			{
-				
+			{				
 				ModMain.MPC.tryAdd(curEntity);
 			}
 			
@@ -79,10 +78,6 @@ public class PowerTickHandler implements ITickHandler {
 					getMouseOver();
 					if (this.pointedEntity != null )
 					{
-						if (this.pointedEntity instanceof EntityLiving)
-						{
-							System.out.print("Living");
-						}
 						target = this.pointedEntity;
 						ModMain.MPC.tryPullEntity(target);
 					}
