@@ -49,7 +49,7 @@ public class FlyingItem extends EntityThrowable {
 		{
 			if (mop.entityHit == null)
 			{
-				this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, mop.blockX,mop.blockY,mop.blockZ));
+				this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, mop.blockX,mop.blockY,mop.blockZ, this.stack));
 			}
 			else
 			{
