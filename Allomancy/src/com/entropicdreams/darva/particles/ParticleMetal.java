@@ -10,7 +10,8 @@ public class ParticleMetal extends EntityFX {
 		super(par1World, par2, par4, par6, par8, par10, par12);
 		// TODO Auto-generated constructor stub
 	
-		this.setParticleTextureIndex(80);
+		this.particleScale = .5f;
+		this.setParticleTextureIndex(97);
 		this.motionX = par8;
 		this.motionY = par10;
 		this.motionZ = par12;
