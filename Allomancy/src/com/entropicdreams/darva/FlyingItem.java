@@ -24,7 +24,7 @@ public class FlyingItem extends EntityThrowable {
 		// TODO Auto-generated constructor stub
 		stack = carried.getEntityItem();
 		carriedIcon = stack.getItem().getIconFromDamage(0);
-		
+		this.setPosition(carried.posX, carried.posY, carried.posZ);
 	}
 
 
@@ -40,7 +40,8 @@ public class FlyingItem extends EntityThrowable {
 	@Override
 	protected void onImpact(MovingObjectPosition mop) {
 		// TODO Auto-generated method stub
-		this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, mop.blockX,mop.blockY,mop.blockZ));
+
+		//this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, mop.blockX,mop.blockY,mop.blockZ));
 		this.setDead();
 	}
 

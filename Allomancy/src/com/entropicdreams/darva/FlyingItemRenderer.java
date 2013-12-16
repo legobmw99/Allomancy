@@ -25,7 +25,7 @@ public class FlyingItemRenderer extends Render {
 		FlyingItem item;
 		item = (FlyingItem) entity;
 		icon = item.carriedIcon;
-
+		
         if (icon != null)
         {
             GL11.glPushMatrix();

@@ -40,6 +40,7 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -271,9 +272,12 @@ public class PacketHandler implements IPacketHandler {
 			}
 			if (target instanceof EntityItem)
 			{
+				EntityItem item = (EntityItem) target;
 				FlyingItem fi = new FlyingItem(player.worldObj,player,(EntityItem) target);
 				fi.setThrowableHeading(motionX, motionY, motionZ, 1, 1.0f);
 				player.worldObj.spawnEntityInWorld(fi);
+				PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(item.getEntityItem().itemID, fi.entityId),player.dimension);
+				item.setDead();
 			}
 			else
 			{
