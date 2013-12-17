@@ -31,38 +31,23 @@ public class particleSound extends EntityFX {
         this.noClip = true;
 
         
-		switch (soundType)
-		{
-		case "mob.pig.step":
-		case "mob.sheep.step":
-		case "mob.cow.step":
-		case "mob.horse.step":
-		case "mob.mooshroom.step":
-		case "mob.villager.step":
-		case "mob.golem.walk":
-		case "mob.chicken.step":
+        if (soundType.contains("pig") || soundType.contains("sheep") || soundType.contains("cow")
+        		|| soundType.contains("horse") || soundType.contains("mooshroom") || soundType.contains("villager")
+        		|| soundType.contains("golem") || soundType.contains("chicken" ))
+        				loc = new ResourceLocation("allomancy","textures/soundicons/passivestep.png");
+        
 		
-				loc = new ResourceLocation("allomancy","textures/soundicons/passivestep.png");
-				break;
-		case "mob.skeleton.step":
-		case "mob.zombie.step":
-		case "mob.slime.small":
-		case "mob.slime.big":
-		case "mob.silverfish.step":
-		case "mob.spider.step":
-		case "mob.witch.idle":
-		case "mob.endermen.portal":
-		case "mob.enderman.scream":
-		case "mob.ghast.moan":			
+		
+		if (soundType.contains("skeleton") || soundType.contains("zombie") || soundType.contains("slime") || soundType.contains("silverfish")
+				|| soundType.contains("spider") || soundType.contains("witch") || soundType.contains("enderman")
+				|| soundType.contains("ghast")	) 			
 				loc = new ResourceLocation("allomancy","textures/soundicons/aggiestep.png");
-				break;
-		case "random.bow":
-				loc = new ResourceLocation("allomancy","textures/soundicons/bowshot.png");
-				break;
-
-		default:
-		}
-
+				
+		if (soundType.contains( "random.bow"))
+			loc = new ResourceLocation("allomancy","textures/soundicons/bowshot.png");
+		
+		if (loc == null)
+			loc = new ResourceLocation("allomancy","textures/soundicons/passivestep.png");
 	}
 	@Override
 	public int getFXLayer() {
