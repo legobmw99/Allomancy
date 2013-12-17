@@ -35,7 +35,7 @@ public class ClientProxy extends CommonProxy {
 		TickRegistry.registerTickHandler(ModMain.instance.MPC, Side.CLIENT);
 		
 		
-		KeyBinding[] key = {new KeyBinding("Select Metal", Keyboard.KEY_TAB)};
+		KeyBinding[] key = {new KeyBinding("Select Metal", Keyboard.KEY_Q)};
         boolean[] repeat = {false};
         KeyBindingRegistry.registerKeyBinding(new SwitchMetalKeybind(key, repeat));		 
         

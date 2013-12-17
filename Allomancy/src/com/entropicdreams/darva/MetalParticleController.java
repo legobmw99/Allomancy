@@ -187,6 +187,32 @@ public class MetalParticleController implements ITickHandler {
 		}
 		
 	}
+
+	
+	public void tryPushBlock(vector3 vec)
+	{
+		double motionX, motionY, motionZ;
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		motionX = ((player.posX - vec.X) * .1);
+        motionY = ((player.posY - vec.Y) *.1);
+        motionZ = ((player.posZ - vec.Z) *.1);
+        player.motionX = motionX;
+        player.motionY = motionY;
+        player.motionZ = motionZ;
+		
+	}
+	
+	public void tryPullBlock(vector3 vec)
+	{
+		double motionX, motionY, motionZ;
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		motionX = ((player.posX - vec.X) * .1) *-1;
+        motionY = ((player.posY - vec.Y) *.1);
+        motionZ = ((player.posZ - vec.Z) *.1)*-1;
+        player.motionX = motionX;
+        player.motionY = motionY;
+        player.motionZ = motionZ;
+	}
 	
 	public void tryPullEntity(Entity entity)
 	{
@@ -217,7 +243,6 @@ public class MetalParticleController implements ITickHandler {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (entity instanceof EntityIronGolem)
 		{
-			System.out.println("push entity");
 			motionX = ((player.posX - entity.posX) * .1) *-1;
 	        motionY = ((player.posY - entity.posY) *.1);
 	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
@@ -235,9 +260,9 @@ public class MetalParticleController implements ITickHandler {
 		if (entity.getHeldItem().itemID == Item.swordIron.itemID || entity.getHeldItem().itemID == Item.swordGold.itemID)
 		{
 			//Pull em towards you.
-			motionX = ((player.posX - entity.posX) * .1)*-1;
+			motionX = ((player.posX - entity.posX) * .1);
 	        motionY = ((player.posY - entity.posY) *.1);
-	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
+	        motionZ = ((player.posZ - entity.posZ) *.1);
 	        entity.motionX = motionX;
 	        entity.motionY = motionY;
 	        entity.motionZ = motionZ;
@@ -251,7 +276,6 @@ public class MetalParticleController implements ITickHandler {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (entity instanceof EntityIronGolem)
 		{
-			System.out.println("push entity");
 			motionX = ((player.posX - entity.posX) * .1);
 	        motionY = ((player.posY - entity.posY) *.1);
 	        motionZ = ((player.posZ - entity.posZ) *.1);
@@ -269,9 +293,9 @@ public class MetalParticleController implements ITickHandler {
 		if (entity.getHeldItem().itemID == Item.swordIron.itemID || entity.getHeldItem().itemID == Item.swordGold.itemID)
 		{
 			//Pull em towards you.
-			motionX = (player.posX - entity.posX) * .1;
+			motionX = ((player.posX - entity.posX) * .1)*-1 ;
 	        motionY = (player.posY - entity.posY) *.1;
-	        motionZ = (player.posZ - entity.posZ) *.1;
+	        motionZ = ((player.posZ - entity.posZ) *.1)-1;
 	        entity.motionX = motionX;
 	        entity.motionY = motionY;
 	        entity.motionZ = motionZ;

@@ -117,7 +117,13 @@ public class PowerTickHandler implements ITickHandler {
 							{
 							ModMain.MPC.tryPullEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
 							}
+						if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == EnumMovingObjectType.TILE)
+						{
+							mop = Minecraft.getMinecraft().objectMouseOver;
+							ModMain.instance.MPC.tryPushBlock(new vector3(mop.blockX,mop.blockY,mop.blockZ));
+						}
 					}
+					
 
 				}
 					
@@ -139,6 +145,12 @@ public class PowerTickHandler implements ITickHandler {
 							{
 							ModMain.MPC.tryPushEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
 							}
+						if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == EnumMovingObjectType.TILE)
+						{
+							mop = Minecraft.getMinecraft().objectMouseOver;
+							ModMain.instance.MPC.tryPullBlock(new vector3(mop.blockX,mop.blockY,mop.blockZ));
+						}
+
 					}
 						
 				}
