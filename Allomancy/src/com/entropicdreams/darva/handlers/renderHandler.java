@@ -7,6 +7,7 @@ import org.lwjgl.util.Point;
 
 import com.entropicdreams.darva.AllomancyData;
 import com.entropicdreams.darva.ModMain;
+import com.entropicdreams.darva.vector3;
 import com.entropicdreams.darva.particles.ParticleMetal;
 
 import net.minecraft.client.Minecraft;
@@ -167,6 +168,14 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 				motionX = ((player.posX - entity.posX)*-1) *.03;
 		        motionY = ((player.posY - entity.posY)*-1) *.03;
 		        motionZ = ((player.posZ - entity.posZ)*-1) *.03;
+				particle = new ParticleMetal(player.worldObj, player.posX-(Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d) ,player.posY -.7,player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),motionX,motionY,motionZ );
+				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+			}
+			for (vector3 v : ModMain.instance.MPC.particleBlockTargets)
+			{
+				motionX = ((player.posX - v.X)*-1) *.03;
+		        motionY = ((player.posY - v.Y)*-1) *.03;
+		        motionZ = ((player.posZ - v.Z)*-1) *.03;
 				particle = new ParticleMetal(player.worldObj, player.posX-(Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d) ,player.posY -.7,player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),motionX,motionY,motionZ );
 				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			}

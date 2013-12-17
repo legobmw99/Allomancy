@@ -21,12 +21,26 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 public class MetalParticleController implements ITickHandler {
 	public LinkedList<Entity> particleTargets;
 	public LinkedList<vector3> particleBlockTargets;
 	private LinkedList<Integer> metallist;
 	
+	
+	@ForgeSubscribe
+	public void onBlockBreak(BreakEvent event)
+	{
+		if (ModMain.MPC.particleBlockTargets.contains(new vector3(event.x,event.y,event.z)))
+				{
+					ModMain.MPC.particleBlockTargets.remove(new vector3(event.x,event.y,event.z));
+				}
+	}
+	
+	
+
 	public void BuildMetalList()
 	{
 		metallist = new LinkedList<Integer>();
@@ -311,7 +325,7 @@ public class MetalParticleController implements ITickHandler {
 		}
 		for (vector3 v : toRemove2)
 		{
-			particleBlockTargets.remove();
+			particleBlockTargets.remove(v);
 		}
 		toRemove2.clear();
 	}

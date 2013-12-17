@@ -12,4 +12,14 @@ public class vector3 {
 		Y = y;
 		Z = z;
 	}
+	
+	@Override
+	public boolean equals(Object paramObject) {
+		// TODO Auto-generated method stub
+		
+		vector3 vec = (vector3) paramObject;
+		if (vec.X == this.X && vec.Y == this.Y && vec.Z == this.Z)
+			return true;
+		return false;
+	}
 }
