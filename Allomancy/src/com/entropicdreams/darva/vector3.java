@@ -1,4 +1,9 @@
 package com.entropicdreams.darva;
+
+import net.minecraftforge.common.MinecraftForge;
+
+import com.entropicdreams.darva.handlers.DamageHandler;
+
 //Fucking seriously?!?
 public class vector3 {
 
@@ -19,7 +24,11 @@ public class vector3 {
 		
 		vector3 vec = (vector3) paramObject;
 		if (vec.X == this.X && vec.Y == this.Y && vec.Z == this.Z)
+		{
+			System.out.println("True");
 			return true;
+		}
+			System.out.println("False");
 		return false;
 	}
 }

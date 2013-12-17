@@ -10,9 +10,9 @@ public class CommonProxy {
 	
 	public void RegisterTickHandlers()
 	{
-		System.out.println("here2.");
+		
 		//derp
 		TickRegistry.registerTickHandler(new PowerTickHandler(), Side.SERVER);
-		System.out.println("here3.");
+		
 	}
 }

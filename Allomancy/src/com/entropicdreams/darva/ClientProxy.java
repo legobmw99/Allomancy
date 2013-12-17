@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
+import com.entropicdreams.darva.handlers.DamageHandler;
 import com.entropicdreams.darva.handlers.PowerTickHandler;
 import com.entropicdreams.darva.handlers.SoundHandler;
 import com.entropicdreams.darva.handlers.renderHandler;
@@ -23,6 +24,7 @@ public class ClientProxy extends CommonProxy {
 	public void RegisterTickHandlers() {
 		PowerTickHandler pth;
 		pth = new PowerTickHandler();
+		MinecraftForge.EVENT_BUS.register(pth);
 		// TODO Auto-generated method stub
 		System.out.println("here1.");
 		renderHandler rh = new renderHandler();

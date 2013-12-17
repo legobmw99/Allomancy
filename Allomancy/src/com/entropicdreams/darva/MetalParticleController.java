@@ -30,14 +30,6 @@ public class MetalParticleController implements ITickHandler {
 	private LinkedList<Integer> metallist;
 	
 	
-	@ForgeSubscribe
-	public void onBlockBreak(BreakEvent event)
-	{
-		if (ModMain.MPC.particleBlockTargets.contains(new vector3(event.x,event.y,event.z)))
-				{
-					ModMain.MPC.particleBlockTargets.remove(new vector3(event.x,event.y,event.z));
-				}
-	}
 	
 	
 

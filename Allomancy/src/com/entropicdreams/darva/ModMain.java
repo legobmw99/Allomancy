@@ -112,6 +112,7 @@ public class ModMain {
 		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
 		MinecraftForge.EVENT_BUS.register(new DamageHandler());
 		
+		
 	 }
 	 
 	 private void setupKeybinds()

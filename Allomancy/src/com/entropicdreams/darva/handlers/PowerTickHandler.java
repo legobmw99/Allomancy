@@ -25,6 +25,8 @@ import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 import com.entropicdreams.darva.AllomancyData;
 import com.entropicdreams.darva.FlyingItem;
@@ -47,6 +49,16 @@ public class PowerTickHandler implements ITickHandler {
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		// TODO Auto-generated method stub
 
+	}
+	@ForgeSubscribe
+	public void onBlockBreak(BreakEvent event)
+	{
+		System.out.println("test");
+		if (ModMain.MPC.particleBlockTargets.contains(new vector3(event.x,event.y,event.z)))
+				{
+					
+				ModMain.MPC.particleBlockTargets.remove(new vector3(event.x,event.y,event.z));
+				}
 	}
 
 	@SideOnly(Side.CLIENT)
