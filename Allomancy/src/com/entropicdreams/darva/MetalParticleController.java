@@ -3,6 +3,7 @@ package com.entropicdreams.darva;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import com.entropicdreams.darva.handlers.PacketHandler;
 
@@ -23,6 +24,7 @@ import net.minecraft.item.ItemStack;
 
 public class MetalParticleController implements ITickHandler {
 	public LinkedList<Entity> particleTargets;
+	public LinkedList<vector3> particleBlockTargets;
 	private LinkedList<Integer> metallist;
 	
 	public void BuildMetalList()
@@ -120,6 +122,7 @@ public class MetalParticleController implements ITickHandler {
 	{
 		particleTargets = new LinkedList<Entity>();
 		BuildMetalList();
+		particleBlockTargets = new LinkedList<vector3>();
 	}
 	
 	public void tryAdd(Entity entity)
@@ -280,7 +283,7 @@ public class MetalParticleController implements ITickHandler {
 		// TODO Auto-generated method stub
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		LinkedList<Entity> toRemove = new LinkedList<Entity>(); 
-		
+		LinkedList<vector3> toRemove2 = new LinkedList<vector3>();
 		if (player == null)
 				return;
 		
@@ -293,11 +296,24 @@ public class MetalParticleController implements ITickHandler {
 			if (player.getDistanceToEntity(entity) > 10)
 				toRemove.add(entity);
 		}
-		
+		toRemove.clear();
 		for(Entity entity : toRemove)
 		{
 			particleTargets.remove(entity);
 		}
+		
+		for (vector3 v : particleBlockTargets)
+		{
+			if (player.getDistance(v.X, v.Y, v.Z) > 10)
+			{
+				toRemove2.add(v);
+			}
+		}
+		for (vector3 v : toRemove2)
+		{
+			particleBlockTargets.remove();
+		}
+		toRemove2.clear();
 	}
 
 	@Override

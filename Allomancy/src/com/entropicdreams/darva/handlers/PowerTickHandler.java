@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 import com.entropicdreams.darva.AllomancyData;
 import com.entropicdreams.darva.FlyingItem;
 import com.entropicdreams.darva.ModMain;
+import com.entropicdreams.darva.vector3;
 
 import cpw.mods.fml.common.FMLCommonHandler;  
 import cpw.mods.fml.common.ITickHandler;
@@ -67,6 +68,25 @@ public class PowerTickHandler implements ITickHandler {
 			for (Entity curEntity : eList)
 			{				
 				ModMain.MPC.tryAdd(curEntity);
+			}
+			
+			int xLoc,zLoc, yLoc;
+			xLoc= (int) player.posX;
+			zLoc = (int) player.posZ;
+			yLoc = (int) player.posY;
+			
+			for(int x = xLoc-5; x<xLoc+5;x++)
+			{
+				for (int z = zLoc-5; z <zLoc +5; z++)
+				{
+					for (int y = yLoc -5; y < yLoc+5; y++)
+					{
+						if  (ModMain.MPC.isBlockMetal(player.worldObj.getBlockId(x, y, z)))
+								{
+									ModMain.MPC.particleBlockTargets.add(new vector3(x,y,z));
+								}
+					}
+				}
 			}
 			
 			if (player.getCurrentEquippedItem() == null &&  Minecraft.getMinecraft().gameSettings.keyBindAttack.pressed == true)
