@@ -207,7 +207,7 @@ public class MetalParticleController implements ITickHandler {
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		motionX = ((player.posX - vec.X) * .1) *-1;
-        motionY = ((player.posY - vec.Y) *.1);
+        motionY = ((player.posY - vec.Y) *.1) *-1;
         motionZ = ((player.posZ - vec.Z) *.1)*-1;
         player.motionX = motionX;
         player.motionY = motionY;

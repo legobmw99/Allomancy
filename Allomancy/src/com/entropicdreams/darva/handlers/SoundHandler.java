@@ -27,37 +27,13 @@ public class SoundHandler {
 		AllomancyData data = AllomancyData.forPlayer(player);
 		if (data.MetalBurning[data.matTin])
 		{
-			switch (event.name)
+	
+			if (event.name.contains("step") || event.name.contains(".big") || event.name.contains("scream") || event.name.contains("random.bow"))
 			{
-			case "step.stone":
-			case "step.grass":
-				break;
-			case "mob.pig.step":
-			case "mob.sheep.step":
-			case "mob.cow.step":
-			case "mob.horse.step":
-			case "mob.mooshroom.step":
-			case "mob.villager.step":
-			case "mob.skeleton.step":
-			case "mob.zombie.step":
-			case "mob.irongolem.walk":
-			case "mob.slime.small":
-			case "mob.slime.big":
-			case "mob.silverfish.step":
-			case "mob.spider.step":
-			case "mob.witch.idle":
-			case "mob.endermen.portal":
-			case "mob.enderman.scream":
-			case "mob.ghast.moan":	
-			case "mob.chicken.step":	
-			case "random.bow":
 				EntityFX particle = new particleSound(player.worldObj, player.posX + -(Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d), player.posY -.2, player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), 0, 0, 0, event.name, event.x,event.y,event.z);
 				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
-				
-			break;
-			default:
-			
 			}
+				
 		}
 	}
 }

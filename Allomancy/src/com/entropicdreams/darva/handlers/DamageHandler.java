@@ -25,8 +25,9 @@ public class DamageHandler {
 		if (event.entityLiving instanceof EntityPlayerMP)
 		{
 			AllomancyData data = AllomancyData.forPlayer(event.entityLiving);
-			if (data.MetalBurning[data.matPewter] = true)
+			if (data.MetalBurning[data.matPewter])
 			{
+				System.out.println("Damage prevented");
 				event.ammount-=2;
 				data.damageStored++;
 			}

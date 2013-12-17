@@ -66,6 +66,7 @@ public class PowerTickHandler implements ITickHandler {
 		player = Minecraft.getMinecraft().thePlayer;
 		data = AllomancyData.forPlayer(player);
 		MovingObjectPosition mop;
+		vector3 vec;
 		
 		
 		if(data.MetalBurning[data.matIron] || data.MetalBurning[data.matSteel] )
@@ -120,7 +121,9 @@ public class PowerTickHandler implements ITickHandler {
 						if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == EnumMovingObjectType.TILE)
 						{
 							mop = Minecraft.getMinecraft().objectMouseOver;
-							ModMain.instance.MPC.tryPushBlock(new vector3(mop.blockX,mop.blockY,mop.blockZ));
+							vec = new vector3(mop.blockX,mop.blockY,mop.blockZ);
+							if (ModMain.instance.MPC.isBlockMetal(player.worldObj.getBlockId(vec.X, vec.Y, vec.Z)))
+								ModMain.instance.MPC.tryPushBlock(vec);
 						}
 					}
 					
@@ -148,7 +151,9 @@ public class PowerTickHandler implements ITickHandler {
 						if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == EnumMovingObjectType.TILE)
 						{
 							mop = Minecraft.getMinecraft().objectMouseOver;
-							ModMain.instance.MPC.tryPullBlock(new vector3(mop.blockX,mop.blockY,mop.blockZ));
+							vec = new vector3(mop.blockX,mop.blockY,mop.blockZ);
+							if (ModMain.instance.MPC.isBlockMetal(player.worldObj.getBlockId(vec.X, vec.Y, vec.Z)))
+								ModMain.instance.MPC.tryPullBlock(vec);
 						}
 
 					}
