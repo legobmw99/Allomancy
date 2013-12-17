@@ -53,13 +53,8 @@ public class PowerTickHandler implements ITickHandler {
 	@ForgeSubscribe
 	public void onBlockBreak(BreakEvent event)
 	{
-		System.out.println("test");
-		if (ModMain.MPC.particleBlockTargets.contains(new vector3(event.x,event.y,event.z)))
-				{
-					
-				ModMain.MPC.particleBlockTargets.remove(new vector3(event.x,event.y,event.z));
-				}
-	}
+				ModMain.MPC.particleBlockTargets.clear();
+	}	
 
 	@SideOnly(Side.CLIENT)
 	private void clientTick()

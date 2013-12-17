@@ -302,24 +302,12 @@ public class MetalParticleController implements ITickHandler {
 			if (player.getDistanceToEntity(entity) > 10)
 				toRemove.add(entity);
 		}
-		toRemove.clear();
 		for(Entity entity : toRemove)
 		{
 			particleTargets.remove(entity);
 		}
-		
-		for (vector3 v : particleBlockTargets)
-		{
-			if (player.getDistance(v.X, v.Y, v.Z) > 10)
-			{
-				toRemove2.add(v);
-			}
-		}
-		for (vector3 v : toRemove2)
-		{
-			particleBlockTargets.remove(v);
-		}
-		toRemove2.clear();
+		particleBlockTargets.clear();
+		toRemove.clear();
 	}
 
 	@Override

@@ -179,6 +179,7 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 				particle = new ParticleMetal(player.worldObj, player.posX-(Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d) ,player.posY -.7,player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),motionX,motionY,motionZ );
 				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			}
+			ModMain.instance.MPC.particleBlockTargets.clear();
 	}
 
 	@Override
