@@ -21,7 +21,9 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -64,6 +66,7 @@ public class PowerTickHandler implements ITickHandler {
 		player = Minecraft.getMinecraft().thePlayer;
 		data = AllomancyData.forPlayer(player);
 		MovingObjectPosition mop;
+		
 		
 		if(data.MetalBurning[data.matIron] || data.MetalBurning[data.matSteel] )
 		{
@@ -180,6 +183,8 @@ public class PowerTickHandler implements ITickHandler {
 				player.motionX *=1.4;
 				player.motionZ *=1.4;
 				
+				player.motionX = MathHelper.clamp_float((float) player.motionX, -2, 2);
+				player.motionZ = MathHelper.clamp_float((float) player.motionZ, -2,2);
 			}
 			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
 			{
@@ -217,6 +222,14 @@ public class PowerTickHandler implements ITickHandler {
 			{
 				
 				data = AllomancyData.forPlayer(curPlayer);
+				
+				
+				if (!data.MetalBurning[data.matPewter] && data.damageStored  >0)
+				{
+					data.damageStored--;
+					curPlayer.attackEntityFrom(DamageSource.generic, 1);
+				}
+
 				
 				updateBurnTime(data,curPlayer);
 				

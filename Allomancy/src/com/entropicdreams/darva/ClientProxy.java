@@ -26,7 +26,7 @@ public class ClientProxy extends CommonProxy {
 		pth = new PowerTickHandler();
 		MinecraftForge.EVENT_BUS.register(pth);
 		// TODO Auto-generated method stub
-		System.out.println("here1.");
+
 		renderHandler rh = new renderHandler();
 		TickRegistry.registerTickHandler(rh, Side.CLIENT);
 		TickRegistry.registerTickHandler(pth, Side.SERVER);

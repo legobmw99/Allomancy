@@ -22,5 +22,14 @@ public class DamageHandler {
 				event.ammount +=2;
 			}
 		}
+		if (event.entityLiving instanceof EntityPlayerMP)
+		{
+			AllomancyData data = AllomancyData.forPlayer(event.entityLiving);
+			if (data.MetalBurning[data.matPewter] = true)
+			{
+				event.ammount-=2;
+				data.damageStored++;
+			}
+		}
 	}
 }
