@@ -11,6 +11,7 @@ import com.entropicdreams.darva.handlers.OreGenerator;
 import com.entropicdreams.darva.handlers.PlayerTracker;
 import com.entropicdreams.darva.items.ItemGrinder;
 import com.entropicdreams.darva.items.ItemVial;
+import com.entropicdreams.darva.util.AllomancyConfig;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -77,15 +78,12 @@ public class ModMain {
 	
 	@EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-		
+		AllomancyConfig.initProps(event.getSuggestedConfigurationFile());
 		initItems();
 		initBlocks();
 		craftingHandler = new CraftingHandler();
 		GameRegistry.registerCraftingHandler(craftingHandler);
-		
-		//oreGenerator = new OreGenerator();
 		GameRegistry.registerWorldGenerator(new OreGenerator());
-		
 		setupKeybinds();
 	}
 	

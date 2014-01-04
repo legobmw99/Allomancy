@@ -17,7 +17,6 @@ public class FallHandler {
 		data = AllomancyData.forPlayer(player);
 		if (data.MetalBurning[data.matIron] || data.MetalBurning[data.matSteel])	
 			event.setCanceled(true);
-			System.out.println("Damage Negated");
 		}
 	}
 }
