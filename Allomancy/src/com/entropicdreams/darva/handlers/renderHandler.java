@@ -13,14 +13,9 @@ import com.entropicdreams.darva.particles.ParticleMetal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.particle.EntityPortalFX;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureObject;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -82,16 +77,16 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 		case 0:
 			break;
 		case 1:
-			gig.drawTexturedModalRect(3, 213, 54, 0, 16, 24);
+			gig.drawTexturedModalRect(3, 13, 54, 0, 16, 24);
 			break;
 		case 2:
-			gig.drawTexturedModalRect(28, 213, 54, 0, 16, 24);
+			gig.drawTexturedModalRect(28, 13, 54, 0, 16, 24);
 			break;
 		case 3:
-			gig.drawTexturedModalRect(378, 213, 54, 0, 16, 24);
+			gig.drawTexturedModalRect(53, 13, 54, 0, 16, 24);
 			break;
 		case 4:
-			gig.drawTexturedModalRect(403, 213, 54, 0, 16, 24);
+			gig.drawTexturedModalRect(78, 13, 54, 0, 16, 24);
 			break;
 
 		}
@@ -100,59 +95,59 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 		
 		ironY = 10 - data.MetalAmounts[data.matIron] ; //This will be replaced with a call to get the actual value of a players iron
 				   //reserves eventually.
-		gig.drawTexturedModalRect(6, 220+ironY, 7, 1+ironY, 3, 10-ironY);
+		gig.drawTexturedModalRect(6, 20+ironY, 7, 1+ironY, 3, 10-ironY);
 		
 		steelY = 10 - data.MetalAmounts[data.matSteel];
-		gig.drawTexturedModalRect(13, 220+steelY, 13, 1+steelY,3,10-steelY );
+		gig.drawTexturedModalRect(13, 20+steelY, 13, 1+steelY,3,10-steelY );
 		
 		tinY = 10 - data.MetalAmounts[data.matTin];
-		gig.drawTexturedModalRect(31, 220+tinY, 19, 1+tinY,3,10-tinY );
+		gig.drawTexturedModalRect(31, 20+tinY, 19, 1+tinY,3,10-tinY );
 
 		pewterY = 10 - data.MetalAmounts[data.matPewter];
-		gig.drawTexturedModalRect(38, 220+pewterY, 25, 1+pewterY,3,10-pewterY );
+		gig.drawTexturedModalRect(38, 20+pewterY, 25, 1+pewterY,3,10-pewterY );
 
 		copperY = 10 - data.MetalAmounts[data.matCopper];
-		gig.drawTexturedModalRect(381, 220+copperY, 31, 1+copperY,3,10-copperY );
+		gig.drawTexturedModalRect(56, 20+copperY, 31, 1+copperY,3,10-copperY );
 		
 		bronzeY = 10 -data.MetalAmounts[data.matBronze];
-		gig.drawTexturedModalRect(388, 220+bronzeY, 37, 1+bronzeY,3,10-bronzeY );
+		gig.drawTexturedModalRect(63, 20+bronzeY, 37, 1+bronzeY,3,10-bronzeY );
 
 		zincY = 10 - data.MetalAmounts[data.matZinc];
-		gig.drawTexturedModalRect(406, 220+zincY, 43, 1+zincY,3,10-zincY );
+		gig.drawTexturedModalRect(81, 20+zincY, 43, 1+zincY,3,10-zincY );
 
 		brassY = 10 - data.MetalAmounts[data.matBrass];
-		gig.drawTexturedModalRect(413, 220+brassY, 49, 1+brassY,3,10-brassY );
+		gig.drawTexturedModalRect(88, 20+brassY, 49, 1+brassY,3,10-brassY );
 
 
 		//Draw the gauges second, so that highlights and decorations show over the bar.
-		gig.drawTexturedModalRect(5, 215, 0, 0, 5, 20);
-		gig.drawTexturedModalRect(12, 215, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(5, 15, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(12, 15, 0, 0, 5, 20);
 		
-		gig.drawTexturedModalRect(30, 215, 0, 0, 5, 20);
-		gig.drawTexturedModalRect(37, 215, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(30, 15, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(37, 15, 0, 0, 5, 20);
 		
-		gig.drawTexturedModalRect(380, 215, 0, 0, 5, 20);
-		gig.drawTexturedModalRect(387, 215, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(55, 15, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(62, 15, 0, 0, 5, 20);
 		
-		gig.drawTexturedModalRect(405, 215, 0, 0, 5, 20);
-		gig.drawTexturedModalRect(412, 215, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(80, 15, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(87, 15, 0, 0, 5, 20);
 
 		if (data.MetalBurning[data.matIron])
-			gig.drawTexturedModalRect(5, 220+ironY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+			gig.drawTexturedModalRect(5, 20+ironY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
 		if (data.MetalBurning[data.matSteel])
-			gig.drawTexturedModalRect(12, 220+steelY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+			gig.drawTexturedModalRect(12, 20+steelY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
 		if (data.MetalBurning[data.matTin])
-			gig.drawTexturedModalRect(30, 220+tinY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+			gig.drawTexturedModalRect(30, 20+tinY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
 		if (data.MetalBurning[data.matPewter])
-			gig.drawTexturedModalRect(37, 220+pewterY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+			gig.drawTexturedModalRect(37, 20+pewterY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
 		if (data.MetalBurning[data.matCopper])
-			gig.drawTexturedModalRect(380, 220+copperY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+			gig.drawTexturedModalRect(55, 20+copperY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
 		if (data.MetalBurning[data.matBronze])
-			gig.drawTexturedModalRect(387, 220+bronzeY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+			gig.drawTexturedModalRect(62, 20+bronzeY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
 		if (data.MetalBurning[data.matZinc])
-			gig.drawTexturedModalRect(405, 220+zincY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+			gig.drawTexturedModalRect(80, 20+zincY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
 		if (data.MetalBurning[data.matBrass])
-			gig.drawTexturedModalRect(412, 220+brassY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
+			gig.drawTexturedModalRect(87, 20+brassY, Frames[currentFrame].getX() , Frames[currentFrame].getY(), 5, 3);
 
 
 			if (animationCounter > 6) //Draw the burning symbols...

@@ -6,23 +6,20 @@ import org.lwjgl.input.Keyboard;
 
 import com.entropicdreams.darva.handlers.CraftingHandler;
 import com.entropicdreams.darva.handlers.DamageHandler;
+import com.entropicdreams.darva.handlers.FallHandler;
 import com.entropicdreams.darva.handlers.OreGenerator;
 import com.entropicdreams.darva.handlers.PlayerTracker;
-import com.entropicdreams.darva.handlers.SoundHandler;
 import com.entropicdreams.darva.items.ItemGrinder;
 import com.entropicdreams.darva.items.ItemVial;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -34,13 +31,8 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import com.entropicdreams.darva.handlers.PacketHandler;
-import com.entropicdreams.darva.handlers.keyhandlers.BurnFirstKeyBind;
-import com.entropicdreams.darva.handlers.keyhandlers.BurnSecondKeyBind;
-import com.entropicdreams.darva.handlers.keyhandlers.SwitchMetalKeybind;
  
 @NetworkMod(clientSideRequired=true, channels={"Allomancy_Data"}, packetHandler = PacketHandler.class)
 @Mod(modid ="allomancyMod", name = "Allomancy", version = "0.0.1" )
@@ -102,15 +94,15 @@ public class ModMain {
 		setupItems();
 		setupBlocks();
 		setupRecipies();
-		
+		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
+		MinecraftForge.EVENT_BUS.register(new DamageHandler());
+		MinecraftForge.EVENT_BUS.register(new FallHandler());
 		EntityRegistry.registerModEntity(FlyingItem.class, "Flying Item", 350, this.instance, 120, 3, true );
 		
 	}
 	 @EventHandler
 	    public void postInit(FMLPostInitializationEvent event) {
 		proxy.RegisterTickHandlers();
-		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
-		MinecraftForge.EVENT_BUS.register(new DamageHandler());
 		
 		
 	 }

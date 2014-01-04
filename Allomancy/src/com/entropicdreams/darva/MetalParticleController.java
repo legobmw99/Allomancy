@@ -90,6 +90,7 @@ public class MetalParticleController implements ITickHandler {
 		metallist.add(ModMain.itemTinIngot.itemID);
 		metallist.add(Block.anvil.blockID);
 		metallist.add(Block.blockGold.blockID);
+		metallist.add(Block.blockIron.blockID);
 		metallist.add(Block.fenceIron.blockID);
 		metallist.add(Block.hopperBlock.blockID);
 		metallist.add(Block.oreGold.blockID);
@@ -199,7 +200,6 @@ public class MetalParticleController implements ITickHandler {
         player.motionX = motionX;
         player.motionY = motionY;
         player.motionZ = motionZ;
-		
 	}
 	
 	public void tryPullBlock(vector3 vec)
