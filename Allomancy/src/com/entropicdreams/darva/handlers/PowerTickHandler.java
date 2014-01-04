@@ -123,7 +123,7 @@ public class PowerTickHandler implements ITickHandler {
 							mop = Minecraft.getMinecraft().objectMouseOver;
 							vec = new vector3(mop.blockX,mop.blockY,mop.blockZ);
 							if (ModMain.instance.MPC.isBlockMetal(player.worldObj.getBlockId(vec.X, vec.Y, vec.Z)))
-								ModMain.instance.MPC.tryPushBlock(vec);
+								ModMain.instance.MPC.tryPullBlock(vec);
 						}
 					}
 					
@@ -153,7 +153,7 @@ public class PowerTickHandler implements ITickHandler {
 							mop = Minecraft.getMinecraft().objectMouseOver;
 							vec = new vector3(mop.blockX,mop.blockY,mop.blockZ);
 							if (ModMain.instance.MPC.isBlockMetal(player.worldObj.getBlockId(vec.X, vec.Y, vec.Z)))
-								ModMain.instance.MPC.tryPullBlock(vec);
+								ModMain.instance.MPC.tryPushBlock(vec);
 						}
 
 					}
