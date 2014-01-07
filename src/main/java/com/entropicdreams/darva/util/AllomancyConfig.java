@@ -23,6 +23,11 @@ public class AllomancyConfig {
 	        leadDensity = config.get("Worldgen", "Lead Density", 2).getInt(2);
 	        zincDensity = config.get("Worldgen", "Zinc Density", 2).getInt(2);
 	        
+	        oreCopper = config.getBlock("Copper Ore", 242).getInt(242);
+	        oreTin = config.getBlock("Tin Ore", 240).getInt(240);
+	        oreLead = config.getBlock("Lead Ore", 241).getInt(241);
+	        oreZinc = config.getBlock("Zinc Lead", 243).getInt(243);
+	        
 			copperMinY = config.get("Worldgen", "Copper Min Y", 30).getInt(30);
 			copperMaxY = config.get("Worldgen", "Copper Max Y", 50).getInt(50);
 		    tinMinY = config.get("Worldgen", "Tin Min Y", 40).getInt(40);
@@ -42,6 +47,11 @@ public class AllomancyConfig {
 	    public static int tinDensity;
 	    public static int leadDensity;
 	    public static int zincDensity;
+	    
+	    public static int oreCopper; 
+	    public static int oreTin;
+	    public static int oreLead;
+	    public static int oreZinc;
 	    
 	    public static int copperMinY;
 	    public static int copperMaxY;

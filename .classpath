@@ -31,20 +31,20 @@
 	<classpathentry sourcepath="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/com.paulscode/libraryjavasound/20101123/source/945ff5711de27751cf699641d1ea316ba6cf7589/libraryjavasound-20101123-sources.jar" kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/com.paulscode/libraryjavasound/20101123/jar/5c5e304366f75f9eaa2e8cca546a1fb6109348b3/libraryjavasound-20101123.jar" exported="true"/>
 	<classpathentry sourcepath="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/com.paulscode/librarylwjglopenal/20100824/source/ecfc8dac1d41bef748997e4edf563d486923ee1e/librarylwjglopenal-20100824-sources.jar" kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/com.paulscode/librarylwjglopenal/20100824/jar/73e80d0794c39665aec3f62eee88ca91676674ef/librarylwjglopenal-20100824.jar" exported="true">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Dev/build/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Allomancy/build/natives"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/com.paulscode/soundsystem/20120107/source/1b9f4eb11ef11fede7fd76a2e5e8203c2a8adcd/soundsystem-20120107-sources.jar" kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/com.paulscode/soundsystem/20120107/jar/419c05fe9be71f792b2d76cfc9b67f1ed0fec7f6/soundsystem-20120107.jar" exported="true"/>
 	<classpathentry sourcepath="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/org.lwjgl.lwjgl/lwjgl/2.9.0/source/c93326bd0f3a21f3b2c8c22b6f345ab6ca1dd683/lwjgl-2.9.0-sources.jar" kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/org.lwjgl.lwjgl/lwjgl/2.9.0/jar/5654d06e61a1bba7ae1e7f5233e1106be64c91cd/lwjgl-2.9.0.jar" exported="true">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Brian/.gradle/caches/artifacts-26/filestore/org.lwjgl.lwjgl/lwjgl/2.9.0/javadoc/8831fc346adadcef83b54b42f1d83ed158e2a647/lwjgl-2.9.0-javadoc.jar!/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Dev/build/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Allomancy/build/natives"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/org.lwjgl.lwjgl/lwjgl_util/2.9.0/source/a7449c197615515f4f9cbf03e6a185ca5bf946e3/lwjgl_util-2.9.0-sources.jar" kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/org.lwjgl.lwjgl/lwjgl_util/2.9.0/jar/a778846b64008fc7f48ead2377f034e547991699/lwjgl_util-2.9.0.jar" exported="true">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Brian/.gradle/caches/artifacts-26/filestore/org.lwjgl.lwjgl/lwjgl_util/2.9.0/javadoc/fc71e9e1ccd22dadeba9a7f86d8ab857331e8348/lwjgl_util-2.9.0-javadoc.jar!/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Dev/build/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Allomancy/build/natives"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/argo/argo/2.25_fixed/jar/751761ce15a3e3aaf3fc75b9f013ff8f7b88a585/argo-2.25_fixed.jar" exported="true"/>
@@ -76,7 +76,7 @@
 	<classpathentry sourcepath="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/net.java.jinput/jinput/2.0.5/source/82604cfeb87b9ab70ed70aa19a137de8ceb21504/jinput-2.0.5-sources.jar" kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/net.java.jinput/jinput/2.0.5/jar/39c7796b469a600f72380316f6b1f11db6c2c7c4/jinput-2.0.5.jar" exported="true">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Brian/.gradle/caches/artifacts-26/filestore/net.java.jinput/jinput/2.0.5/javadoc/695a26a9a58e8495c1e3ce7b7f3bec23ecf2ef16/jinput-2.0.5-javadoc.jar!/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Dev/build/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Allomancy/build/natives"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/net.java.jutils/jutils/1.0.0/source/d18678a00b216863206a1bb6190507e02a32971b/jutils-1.0.0-sources.jar" kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/net.java.jutils/jutils/1.0.0/jar/e12fe1fda814bd348c1579329c86943d2cd3c6a6/jutils-1.0.0.jar" exported="true">
@@ -91,32 +91,32 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/org.lwjgl.lwjgl/lwjgl-platform/2.9.0/jar/2ba5dcb11048147f1a74eff2deb192c001321f77/lwjgl-platform-2.9.0-natives-linux.jar" exported="true">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Dev/build/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Allomancy/build/natives"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/org.lwjgl.lwjgl/lwjgl-platform/2.9.0/jar/6621b382cb14cc409b041d8d72829156a87c31aa/lwjgl-platform-2.9.0-natives-osx.jar" exported="true">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Dev/build/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Allomancy/build/natives"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/org.lwjgl.lwjgl/lwjgl-platform/2.9.0/jar/3f11873dc8e84c854ec7c5a8fd2e869f8aaef764/lwjgl-platform-2.9.0-natives-windows.jar" exported="true">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Dev/build/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Allomancy/build/natives"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/net.java.jinput/jinput-platform/2.0.5/jar/7ff832a6eb9ab6a767f1ade2b548092d0fa64795/jinput-platform-2.0.5-natives-linux.jar" exported="true">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Dev/build/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Allomancy/build/natives"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/net.java.jinput/jinput-platform/2.0.5/jar/53f9c919f34d2ca9de8c51fc4e1e8282029a9232/jinput-platform-2.0.5-natives-osx.jar" exported="true">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Dev/build/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Allomancy/build/natives"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/net.java.jinput/jinput-platform/2.0.5/jar/385ee093e01f587f30ee1c8a2ee7d408fd732e16/jinput-platform-2.0.5-natives-windows.jar" exported="true">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Dev/build/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Allomancy/build/natives"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/org.scala-lang/scala-reflect/2.10.2/source/ffa6bfd77b52043f4ffc8d9c7f7de086e1e839e7/scala-reflect-2.10.2-sources.jar" kind="lib" path="C:/Users/Brian/.gradle/caches/artifacts-26/filestore/org.scala-lang/scala-reflect/2.10.2/jar/444ff8e89a81697997ed8a98a4642ba283130249/scala-reflect-2.10.2.jar" exported="true">

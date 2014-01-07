@@ -36,7 +36,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import com.entropicdreams.darva.handlers.PacketHandler;
  
 @NetworkMod(clientSideRequired=true, channels={"Allomancy_Data"}, packetHandler = PacketHandler.class)
-@Mod(modid ="allomancyMod", name = "Allomancy", version = "0.0.1" )
+@Mod(modid ="allomancy", name = "Allomancy", version = "1.1.0" )
 public class ModMain {
 
 	public static ItemGrinder itemGrinder;
@@ -95,7 +95,7 @@ public class ModMain {
 		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
 		MinecraftForge.EVENT_BUS.register(new DamageHandler());
 		MinecraftForge.EVENT_BUS.register(new FallHandler());
-		EntityRegistry.registerModEntity(FlyingItem.class, "Flying Item", 350, this.instance, 120, 3, true );
+		EntityRegistry.registerModEntity(FlyingItem.class, "Flying Item", 400, this.instance, 120, 3, true );
 		
 	}
 	 @EventHandler
@@ -143,15 +143,16 @@ public class ModMain {
 	 
 	 private void initBlocks()
 	 {
-		 oreTin = new Block(240, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreTin = new Block(AllomancyConfig.oreTin, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:tinore").setUnlocalizedName("allomancy:tinore");
-		 oreLead = new Block(241, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 
+		 oreLead = new Block(AllomancyConfig.oreLead, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:leadore").setUnlocalizedName("allomancy:leadore");
 
-		 oreCopper = new Block(242, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreCopper = new Block(AllomancyConfig.oreCopper, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:copperore").setUnlocalizedName("allomancy:copperore")				 ;
 
-		 oreZinc = new Block(243, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
+		 oreZinc = new Block(AllomancyConfig.oreZinc, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
 				 .setCreativeTab(CreativeTabs.tabBlock).setTextureName("allomancy:zincore").setUnlocalizedName("allomancy:zincore")				 ;
 
 	 }
