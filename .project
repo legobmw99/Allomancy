@@ -12,16 +12,5 @@
 			<arguments/>
 		</buildCommand>
 	</buildSpec>
-	<linkedResources>
-		<link>
-			<name>assets</name>
-			<type>2</type>
-			<location>E:/Development/source/Allomancy/Allomancy/assets</location>
-		</link>
-		<link>
-			<name>src</name>
-			<type>2</type>
-			<location>E:/Development/source/Allomancy/Allomancy/src</location>
-		</link>
-	</linkedResources>
+	<linkedResources/>
 </projectDescription>
