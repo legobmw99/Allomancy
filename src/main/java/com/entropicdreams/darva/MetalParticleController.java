@@ -166,30 +166,7 @@ public class MetalParticleController implements ITickHandler {
 			particleTargets.add(entity);
 		}
 	}
-	public void tryPushEntity(Entity entity)
-	{
-		double motionX, motionY, motionZ;
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
-		if (entity instanceof EntityItem)
-		{
-			motionX = ((player.posX - entity.posX) * .1)*-1;
-	        motionY = ((player.posY - entity.posY) *.1);
-	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
-	        entity.motionX = motionX;
-	        entity.motionY = motionY;
-	        entity.motionZ = motionZ;
-	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
-		}
-		
-		if (entity instanceof EntityLiving)
-		{
-			tryPushMob((EntityCreature) entity);
-		}
-		
-	}
-
-	
 	public void tryPushBlock(vector3 vec)
 	{
 		double motionX, motionY, motionZ;
@@ -213,13 +190,37 @@ public class MetalParticleController implements ITickHandler {
         player.motionY = motionY;
         player.motionZ = motionZ;
 	}
-	
+	public void tryPushEntity(Entity entity)
+	{
+		
+		if (entity instanceof EntityItem)
+		{ 
+			tryPushItem((EntityItem) entity);
+		}
+		
+		if (entity instanceof EntityLiving)
+		{
+			tryPushMob((EntityCreature) entity);
+		}
+		
+	}
 	public void tryPullEntity(Entity entity)
+	{
+		if (entity instanceof EntityItem)
+		{
+			tryPullItem((EntityItem) entity);
+		}
+		if (entity instanceof EntityLiving)
+		{
+			tryPullMob((EntityCreature) entity);
+	 	}
+
+	}
+	private void tryPullItem(EntityItem entity)
 	{
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-
-		if (entity instanceof EntityItem)
+		if (isItemMetal(entity.getEntityItem()));
 		{
 			motionX = (player.posX - entity.posX) * .1;
 	        motionY = (player.posY - entity.posY) *.1;
@@ -228,13 +229,23 @@ public class MetalParticleController implements ITickHandler {
 	        entity.motionY = motionY;
 	        entity.motionZ = motionZ;
 	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
-
 		}
-		if (entity instanceof EntityLiving)
+		
+	}
+	private void tryPushItem(EntityItem entity)
+	{
+		double motionX, motionY, motionZ;
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if (isItemMetal(entity.getEntityItem()));
 		{
-			tryPullMob((EntityCreature) entity);
-	 	}
-
+			motionX = ((player.posX - entity.posX) * .1)*-1;
+	        motionY = ((player.posY - entity.posY) *.1);
+	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
+	        entity.motionX = motionX;
+	        entity.motionY = motionY;
+	        entity.motionZ = motionZ;
+	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
+		}
 	}
 	private void tryPullMob(EntityCreature entity)
 	{
@@ -257,7 +268,7 @@ public class MetalParticleController implements ITickHandler {
 			return;
 		}
 		
-		if (entity.getHeldItem().itemID == Item.swordIron.itemID || entity.getHeldItem().itemID == Item.swordGold.itemID)
+		if (isItemMetal(entity.getHeldItem()))
 		{
 			//Pull em towards you.
 			motionX = ((player.posX - entity.posX) * .1);
@@ -290,7 +301,7 @@ public class MetalParticleController implements ITickHandler {
 			return;
 		}
 		
-		if (entity.getHeldItem().itemID == Item.swordIron.itemID || entity.getHeldItem().itemID == Item.swordGold.itemID)
+		if (isItemMetal(entity.getHeldItem()))
 		{
 			//Pull em towards you.
 			motionX = ((player.posX - entity.posX) * .1)*-1 ;

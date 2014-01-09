@@ -70,7 +70,7 @@ public class ModMain {
 	//public static OreGenerator oreGenerator;
 	
 	
-	@Instance(value = "allomancyMod")
+	@Instance(value = "allomancy")
 	public static ModMain instance;
 	
 	@SidedProxy(clientSide="com.entropicdreams.darva.ClientProxy", serverSide="com.entropicdreams.darva.CommonProxy")
