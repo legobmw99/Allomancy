@@ -11,16 +11,24 @@ buildscript {
     }
 }
 
+ext.configFile = file "build.properties"
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    ext.config = new ConfigSlurper().parse prop
+}
+
 apply plugin: 'forge'
 
-version = "1.6.4-1.1"
-group= "com.entropicdreams.darva.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+
+group= "com.entropicdreams.darva.allomancy"
+version = config.mod_version
 archivesBaseName = "allomancy"
 
 minecraft {
-	version = "1.6.4-9.11.1.964"
+	version = config.minecraft_version + "-" + config.forge_version
 }
-
+version = "${config.minecraft_version}-${config.mod_version}"
 processResources
 {
     // replace stuff in mcmod.info, nothing else
