@@ -11,6 +11,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -54,11 +55,14 @@ public class ItemVial extends ItemFood {
 		"brassdrink"
 	};
 	@Override
-	public ItemStack onEaten(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
+	public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
 		// TODO Auto-generated method stub
 		AllomancyData data;
 		data = AllomancyData.forPlayer(par3EntityPlayer);
+		if (!par3EntityPlayer.capabilities.isCreativeMode)
+        {
+            --par1ItemStack.stackSize;
+        }
 		if (data == null)
 		{
 			return par1ItemStack;
@@ -79,11 +83,20 @@ public class ItemVial extends ItemFood {
 		return 0;
 	}
 	@Override
+	public EnumAction getItemUseAction(ItemStack par1ItemStack)
+	    {
+	        return EnumAction.drink;
+	    }
+	@Override
 	 public int getMaxItemUseDuration(ItemStack par1ItemStack){
         return 8;
     }
-	
-
+	@Override
+    public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+    {
+        par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
+        return par1ItemStack;
+    }
 	@SideOnly(Side.CLIENT)
 	private Icon[] icons;
 	public ItemVial(int par1) {
