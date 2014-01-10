@@ -53,7 +53,6 @@ public class ItemVial extends ItemFood {
 		"copperdrink",
 		"brassdrink"
 	};
-	
 	@Override
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
@@ -71,7 +70,6 @@ public class ItemVial extends ItemFood {
 		if (data.MetalAmounts[par1ItemStack.getItemDamage()-1] <10)
 		{
 			data.MetalAmounts[par1ItemStack.getItemDamage() -1 ]++;
-			System.out.println(data.MetalAmounts[par1ItemStack.getItemDamage()-1]);
 		}
 		
 		return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
@@ -80,7 +78,10 @@ public class ItemVial extends ItemFood {
 	public int getHealAmount() {
 		return 0;
 	}
-
+	@Override
+	 public int getMaxItemUseDuration(ItemStack par1ItemStack){
+        return 8;
+    }
 	
 
 	@SideOnly(Side.CLIENT)
