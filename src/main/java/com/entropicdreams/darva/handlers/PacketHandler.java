@@ -5,31 +5,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
-import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.FlyingItem;
-import com.entropicdreams.darva.ai.AIAttackOnCollideExtended;
 
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityFlying;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITaskEntry;
-import net.minecraft.entity.ai.EntityAITasks;
-import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.item.EntityItem;
@@ -38,6 +22,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
+
+import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.FlyingItem;
+import com.entropicdreams.darva.ai.AIAttackOnCollideExtended;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -166,7 +155,7 @@ public class PacketHandler implements IPacketHandler {
 			{
 				System.out.println("null");
 			}
-			fi.carriedIcon= targItem.getIconFromDamage(0);
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -278,27 +267,27 @@ public class PacketHandler implements IPacketHandler {
 			{
 				return;
 			}
-			/*  //Commented out because i don't think i'll get this working in time for modjam's conclusion. *sigh*
-			 * 
+		
+			 
 			if (target instanceof EntityItem)
 			{
 				EntityItem item = (EntityItem) target;
 				FlyingItem fi = new FlyingItem(player.worldObj,player,(EntityItem) target);
-				//fi.setThrowableHeading(motionX, motionY, motionZ, .5f, 1.0f);
+				fi.setThrowableHeading(motionX, motionY, motionZ, .5f, 1.0f);
 				fi.motionX = motionX;
 				fi.motionY = motionY;
 				fi.motionZ = motionZ;
 				player.worldObj.spawnEntityInWorld(fi);
 				
-				//PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(item.getEntityItem().itemID, fi.entityId, motionX, motionY, motionZ),player.dimension);
+				PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(item.getEntityItem().itemID, fi.entityId, motionX, motionY, motionZ),player.dimension);
 				
 			}
 			else
-			{*/
+			{
 			target.motionX = motionX;
 			target.motionY = motionY;
 			target.motionZ = motionZ;
-			//}
+			}
 			
 			
 		} catch (IOException e) {
@@ -307,6 +296,29 @@ public class PacketHandler implements IPacketHandler {
 		} //Throw away packet type data.
 		
 		
+	}
+	public static Packet250CustomPayload moveEntity(double motionX, double motionY, double motionZ, int entityID)
+	{
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);
+		DataOutputStream outputStream = new DataOutputStream(bos);
+		
+		try {
+			outputStream.writeInt(PacketHandler.Packet_Allomancy_Move_Entity);
+			outputStream.writeDouble(motionX);
+			outputStream.writeDouble(motionY);
+			outputStream.writeDouble(motionZ);
+			outputStream.writeInt(entityID);
+
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Allomancy_Data";
+		packet.data = bos.toByteArray();
+		packet.length = bos.size();
+		return packet;		
 	}
 	private void stopFall(Packet250CustomPayload packet, EntityPlayerMP player) {
 		player.fallDistance = 0;
@@ -371,29 +383,7 @@ public class PacketHandler implements IPacketHandler {
 		} //Throw away packet type info.
 		
 	}
-	public static Packet250CustomPayload moveEntity(double motionX, double motionY, double motionZ, int entityID)
-	{
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);
-		DataOutputStream outputStream = new DataOutputStream(bos);
-		
-		try {
-			outputStream.writeInt(PacketHandler.Packet_Allomancy_Move_Entity);
-			outputStream.writeDouble(motionX);
-			outputStream.writeDouble(motionY);
-			outputStream.writeDouble(motionZ);
-			outputStream.writeInt(entityID);
-
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Allomancy_Data";
-		packet.data = bos.toByteArray();
-		packet.length = bos.size();
-		return packet;		
-	}
+	
 	public static Packet250CustomPayload updateIcon(int itemID, int entityID, double motionX, double motionY, double motionZ)
 	{
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);

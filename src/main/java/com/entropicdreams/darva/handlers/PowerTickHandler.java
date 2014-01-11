@@ -391,7 +391,4 @@ public class PowerTickHandler implements ITickHandler {
 	            }
 	        }
 	    }	
-    
-	
-	
 }
