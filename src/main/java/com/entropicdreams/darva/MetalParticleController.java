@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+import com.entropicdreams.darva.common.ModRegistry;
 import com.entropicdreams.darva.handlers.PacketHandler;
 
 import cpw.mods.fml.common.ITickHandler;
@@ -77,17 +78,17 @@ public class MetalParticleController implements ITickHandler {
 		metallist.add(Item.appleGold.itemID);
 		metallist.add(Item.swordGold.itemID);
 		metallist.add(Item.swordIron.itemID);
-		metallist.add(ModMain.itemBrassFlakes.itemID);
-		metallist.add(ModMain.itemBronzeFlakes.itemID);
-		metallist.add(ModMain.itemCopperFlakes.itemID);
-		metallist.add(ModMain.itemCopperIngot.itemID);
-		metallist.add(ModMain.itemIronFlakes.itemID);
-		metallist.add(ModMain.itemLeadFlakes.itemID);
-		metallist.add(ModMain.itemLeadIngot.itemID);
-		metallist.add(ModMain.itemPewterFlakes.itemID);
-		metallist.add(ModMain.itemSteelFlakes.itemID);
-		metallist.add(ModMain.itemTinFlakes.itemID);
-		metallist.add(ModMain.itemTinIngot.itemID);
+		metallist.add(ModRegistry.itemBrassFlakes.itemID);
+		metallist.add(ModRegistry.itemBronzeFlakes.itemID);
+		metallist.add(ModRegistry.itemCopperFlakes.itemID);
+		metallist.add(ModRegistry.itemCopperIngot.itemID);
+		metallist.add(ModRegistry.itemIronFlakes.itemID);
+		metallist.add(ModRegistry.itemLeadFlakes.itemID);
+		metallist.add(ModRegistry.itemLeadIngot.itemID);
+		metallist.add(ModRegistry.itemPewterFlakes.itemID);
+		metallist.add(ModRegistry.itemSteelFlakes.itemID);
+		metallist.add(ModRegistry.itemTinFlakes.itemID);
+		metallist.add(ModRegistry.itemTinIngot.itemID);
 		metallist.add(Block.anvil.blockID);
 		metallist.add(Block.blockGold.blockID);
 		metallist.add(Block.blockIron.blockID);
@@ -105,9 +106,9 @@ public class MetalParticleController implements ITickHandler {
 		metallist.add(Block.railActivator.blockID);
 		metallist.add(Block.railDetector.blockID);
 		metallist.add(Block.railPowered.blockID);
-		metallist.add(ModMain.itemVial.itemID);
-		metallist.add(ModMain.itemZincFlakes.itemID);
-		metallist.add(ModMain.itemZincIngot.itemID);
+		metallist.add(ModRegistry.itemVial.itemID);
+		metallist.add(ModRegistry.itemZincFlakes.itemID);
+		metallist.add(ModRegistry.itemZincIngot.itemID);
 	}
 	
 	public boolean isItemMetal(ItemStack item)

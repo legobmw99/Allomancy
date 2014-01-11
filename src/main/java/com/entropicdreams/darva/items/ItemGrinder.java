@@ -1,6 +1,7 @@
 package com.entropicdreams.darva.items;
 
 import com.entropicdreams.darva.ModMain;
+import com.entropicdreams.darva.common.ModRegistry;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -32,7 +33,7 @@ public class ItemGrinder extends Item {
 	@Override
 	public ItemStack getContainerItemStack(ItemStack itemStack) {
 		// TODO Auto-generated method stub
-		return new ItemStack(ModMain.itemGrinder, 1, this.getDamage(itemStack) +1 );
+		return new ItemStack(ModRegistry.itemGrinder, 1, this.getDamage(itemStack) +1 );
 	}
 	
 

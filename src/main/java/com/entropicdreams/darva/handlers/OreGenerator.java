@@ -3,14 +3,14 @@ package com.entropicdreams.darva.handlers;
 import java.util.LinkedList;
 import java.util.Random;
 
-import com.entropicdreams.darva.ModMain;
-import com.entropicdreams.darva.util.AllomancyConfig;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.feature.WorldGenMinable;
+
+import com.entropicdreams.darva.common.ModRegistry;
+import com.entropicdreams.darva.util.AllomancyConfig;
+
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class OreGenerator implements IWorldGenerator {
@@ -44,13 +44,13 @@ public class OreGenerator implements IWorldGenerator {
                 oreList = new LinkedList<OreData>();
                 OreData data ;
                 
-                data = new OreData(AllomancyConfig.copperMaxY, AllomancyConfig.copperMinY,8,4,AllomancyConfig.copperDensity,ModMain.oreCopper.blockID, AllomancyConfig.generateCopper);
+                data = new OreData(AllomancyConfig.copperMaxY, AllomancyConfig.copperMinY,8,4,AllomancyConfig.copperDensity,ModRegistry.oreCopper.blockID, AllomancyConfig.generateCopper);
                 oreList.add(data);
-                data = new OreData(AllomancyConfig.tinMaxY, AllomancyConfig.tinMinY,8,4,AllomancyConfig.tinDensity,ModMain.oreTin.blockID, AllomancyConfig.generateTin);
+                data = new OreData(AllomancyConfig.tinMaxY, AllomancyConfig.tinMinY,8,4,AllomancyConfig.tinDensity,ModRegistry.oreTin.blockID, AllomancyConfig.generateTin);
                 oreList.add(data);
-                data = new OreData(AllomancyConfig.leadMaxY, AllomancyConfig.leadMinY,8,4,AllomancyConfig.leadDensity,ModMain.oreLead.blockID, AllomancyConfig.generateLead);
+                data = new OreData(AllomancyConfig.leadMaxY, AllomancyConfig.leadMinY,8,4,AllomancyConfig.leadDensity,ModRegistry.oreLead.blockID, AllomancyConfig.generateLead);
                 oreList.add(data);
-                data = new OreData(AllomancyConfig.zincMaxY, AllomancyConfig.zincMinY,8,4,AllomancyConfig.zincDensity,ModMain.oreZinc.blockID, AllomancyConfig.generateZinc);
+                data = new OreData(AllomancyConfig.zincMaxY, AllomancyConfig.zincMinY,8,4,AllomancyConfig.zincDensity,ModRegistry.oreZinc.blockID, AllomancyConfig.generateZinc);
                 oreList.add(data);
                 
         }

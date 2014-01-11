@@ -1,6 +1,7 @@
 package com.entropicdreams.darva.handlers;
 
 import com.entropicdreams.darva.ModMain;
+import com.entropicdreams.darva.common.ModRegistry;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -18,7 +19,7 @@ public class CraftingHandler implements ICraftingHandler {
 			cur = craftMatrix.getStackInSlot(x);
 			if (cur == null)
 				continue;
-			if (cur.itemID == ModMain.itemGrinder.itemID)
+			if (cur.itemID == ModRegistry.itemGrinder.itemID)
 			{
 				cur.damageItem(1, player);
 			}

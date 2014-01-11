@@ -24,22 +24,22 @@ apply plugin: 'forge'
 ENV = System.getenv()
 
 if(ENV.DRONE_BUILD_NUMBER)
-buildNum = "Build" +ENV.DRONE_BUILD_NUMBER
+buildNum = "-Build " +ENV.DRONE_BUILD_NUMBER
 
 else if (ENV.BUILD_NUMBER)
-buildNum = "Build" +ENV.BUILD_NUMBER
+buildNum = "-Build " +ENV.BUILD_NUMBER
 
 else
-buildNum = "Build +null"
+buildNum = ""
 
 group= "com.entropicdreams.darva.allomancy"
-version = config.mod_version +"-" + buildNum
+version = config.mod_version + buildNum
 archivesBaseName = "allomancy"
 
 minecraft {
 	version = config.minecraft_version + "-" + config.forge_version
 }
-version = "${config.minecraft_version}-${config.mod_version}-${buildNum}"
+version = "${config.minecraft_version}-${config.mod_version}${buildNum}"
 processResources
 {
     // replace stuff in mcmod.info, nothing else
