@@ -33,7 +33,7 @@ else
 buildNum = "null"
 
 group= "com.entropicdreams.darva.allomancy"
-version = config.mod_version
+version = config.mod_version +"." + buildNum
 archivesBaseName = "allomancy"
 
 minecraft {
