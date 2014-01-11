@@ -33,13 +33,13 @@ else
 buildNum = "null"
 
 group= "com.entropicdreams.darva.allomancy"
-version = config.mod_version +"." + buildNum
+version = config.mod_version +"- Build " + buildNum
 archivesBaseName = "allomancy"
 
 minecraft {
 	version = config.minecraft_version + "-" + config.forge_version
 }
-version = "${config.minecraft_version}-${config.mod_version}.${buildNum}"
+version = "${config.minecraft_version}-${config.mod_version}- Build ${buildNum}"
 processResources
 {
     // replace stuff in mcmod.info, nothing else
