@@ -358,12 +358,11 @@ public class PacketHandler implements IPacketHandler {
 			}
 			if (target !=null && !makeAggro)
 			{
-				System.out.println("peaceful");
 				 target.tasks.addTask(0, new EntityAISwimming(target));
-			        target.tasks.addTask(1, new EntityAIPanic(target, 2.0D));
-			        target.tasks.addTask(5, new EntityAIWander(target, 1.0D));
-			        target.tasks.addTask(6, new EntityAIWatchClosest(target, EntityPlayer.class, 6.0F));
-			        target.tasks.addTask(7, new EntityAILookIdle(target));
+			     target.tasks.addTask(1, new EntityAIPanic(target, 2.0D));
+			     target.tasks.addTask(5, new EntityAIWander(target, 1.0D));
+			     target.tasks.addTask(6, new EntityAIWatchClosest(target, EntityPlayer.class, 6.0F));
+			     target.tasks.addTask(7, new EntityAILookIdle(target));
 			}
 			
 		} catch (IOException e) {

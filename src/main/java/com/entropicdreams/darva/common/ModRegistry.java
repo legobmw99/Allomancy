@@ -21,36 +21,14 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ModRegistry {
-	public static ItemGrinder itemGrinder;
-	public static Item itemTinIngot;
-	public static Item itemTinFlakes;
-	public static Item itemLeadIngot;
-	public static Item itemLeadFlakes;
-	public static Item itemCopperIngot;
-	public static Item itemCopperFlakes;
-	public static Item itemZincIngot;
-	public static Item itemZincFlakes;
-	
-	public static Item itemBrassFlakes;
-	public static Item itemSteelFlakes;
-	public static Item itemPewterFlakes;
-	public static Item itemIronFlakes;
-	public static Item itemBronzeFlakes;
-	
-	public static Item Mistcloak;
-	
-	public static Block oreTin;
-	public static Block oreLead;
-	public static Block oreCopper;
-	public static Block oreZinc;
-	
-	public static ItemVial itemVial;
-	public static void ModContent(){
+	public static void ModContent()
+	{
 		initItems();
 		initBlocks();
 		setupItems();
 		setupBlocks();
 		setupRecipies();
+		setupKeybinds();
 	}
 	public static void setupRecipies()
 	 {
@@ -215,4 +193,28 @@ public class ModRegistry {
 					LanguageRegistry.addName(Item, ItemVial.localName[i]);
 				}
 	 }
+	 public static void setupKeybinds()
+	 {
+	
+	 }
+		public static ItemGrinder itemGrinder;
+		public static Item itemTinIngot;
+		public static Item itemTinFlakes;
+		public static Item itemLeadIngot;
+		public static Item itemLeadFlakes;
+		public static Item itemCopperIngot;
+		public static Item itemCopperFlakes;
+		public static Item itemZincIngot;
+		public static Item itemZincFlakes;
+		public static Item itemBrassFlakes;
+		public static Item itemSteelFlakes;
+		public static Item itemPewterFlakes;
+		public static Item itemIronFlakes;
+		public static Item itemBronzeFlakes;
+		public static Item Mistcloak;
+		public static Block oreTin;
+		public static Block oreLead;
+		public static Block oreCopper;
+		public static Block oreZinc;
+		public static ItemVial itemVial;
 }

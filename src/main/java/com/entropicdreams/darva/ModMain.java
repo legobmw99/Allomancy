@@ -45,11 +45,7 @@ public class ModMain {
 
 	
 	public static CraftingHandler craftingHandler;
-	
 	public static MetalParticleController MPC;
-	
-	//public static OreGenerator oreGenerator;
-	
 	
 	@Instance(value = "allomancy")
 	public static ModMain instance;
@@ -64,7 +60,6 @@ public class ModMain {
 		craftingHandler = new CraftingHandler();
 		GameRegistry.registerCraftingHandler(craftingHandler);
 		GameRegistry.registerWorldGenerator(new OreGenerator());
-		setupKeybinds();
 	}
 	
 	@EventHandler 
@@ -77,14 +72,5 @@ public class ModMain {
 	 @EventHandler
 	    public void postInit(FMLPostInitializationEvent event) {
 		proxy.RegisterTickHandlers();
-		
-		
-	 }
-	 
-	 private void setupKeybinds()
-	 {
-	
-	 }
-	
-	 
+	 }	 
 }
