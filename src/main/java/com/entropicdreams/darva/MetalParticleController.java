@@ -177,6 +177,7 @@ public class MetalParticleController implements ITickHandler {
         player.motionX = motionX;
         player.motionY = motionY;
         player.motionZ = motionZ;
+        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(player.entityId));
 	}
 	
 	public void tryPullBlock(vector3 vec)
@@ -189,6 +190,7 @@ public class MetalParticleController implements ITickHandler {
         player.motionX = motionX;
         player.motionY = motionY;
         player.motionZ = motionZ;
+        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(player.entityId));
 	}
 	public void tryPushEntity(Entity entity)
 	{
@@ -259,6 +261,7 @@ public class MetalParticleController implements ITickHandler {
 	        player.motionX = motionX;
 	        player.motionY = motionY;
 	        player.motionZ = motionZ;
+	        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(player.entityId));
 			//waaaaay too damn heavy to push... you get moved.
 		}
 		
@@ -292,6 +295,7 @@ public class MetalParticleController implements ITickHandler {
 	        player.motionX = motionX;
 	        player.motionY = motionY;
 	        player.motionZ = motionZ;
+	        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(player.entityId));
 			//waaaaay too damn heavy to push... you get moved.
 		}
 		

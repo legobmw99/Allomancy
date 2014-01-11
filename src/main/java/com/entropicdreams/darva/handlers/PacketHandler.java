@@ -53,6 +53,7 @@ public class PacketHandler implements IPacketHandler {
 	public final static int Packet_Allomancy_Change_Emotion = 3;
 	public final static int Packet_Allomancy_Move_Entity = 4;
 	public final static int Packet_Allomancy_Update_Texture = 5;
+	public final static int Packet_Allomancy_Stop_Fall = 6;
 	@Override
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
@@ -111,11 +112,14 @@ public class PacketHandler implements IPacketHandler {
 			break;
 		case PacketHandler.Packet_Allomancy_Move_Entity:
 			moveEntity(packet,player);
+		case PacketHandler.Packet_Allomancy_Stop_Fall:
+			stopFall(packet,player);
 		default:
 			return;
 		}
 
 	}
+
 	@SideOnly(Side.CLIENT)
 	private void clientRec(EntityPlayer player, Packet250CustomPayload packet)
 	{
@@ -304,7 +308,29 @@ public class PacketHandler implements IPacketHandler {
 		
 		
 	}
-	
+	private void stopFall(Packet250CustomPayload packet, EntityPlayerMP player) {
+		player.fallDistance = 0;
+	}
+	public static Packet250CustomPayload stopFall(int entityID)
+	{
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);
+		DataOutputStream outputStream = new DataOutputStream(bos);
+		
+		try {
+			outputStream.writeInt(PacketHandler.Packet_Allomancy_Stop_Fall);
+			outputStream.writeInt(entityID);
+
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Allomancy_Data";
+		packet.data = bos.toByteArray();
+		packet.length = bos.size();
+		return packet;		
+	}
 	private void changeEmotions(Packet250CustomPayload packet, EntityPlayerMP player) //Nowhere better to stick this. *sigh*
 	{
 		int targetID;

@@ -6,7 +6,6 @@ import org.lwjgl.input.Keyboard;
 
 import com.entropicdreams.darva.handlers.CraftingHandler;
 import com.entropicdreams.darva.handlers.DamageHandler;
-import com.entropicdreams.darva.handlers.FallHandler;
 import com.entropicdreams.darva.handlers.OreGenerator;
 import com.entropicdreams.darva.handlers.PlayerTracker;
 import com.entropicdreams.darva.items.ItemGrinder;
@@ -99,7 +98,6 @@ public class ModMain {
 		setupRecipies();
 		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
 		MinecraftForge.EVENT_BUS.register(new DamageHandler());
-		MinecraftForge.EVENT_BUS.register(new FallHandler());
 		EntityRegistry.registerModEntity(FlyingItem.class, "Flying Item", 400, this.instance, 120, 3, true );
 		
 	}
