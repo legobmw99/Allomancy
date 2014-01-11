@@ -10,6 +10,7 @@ import com.entropicdreams.darva.handlers.FallHandler;
 import com.entropicdreams.darva.handlers.OreGenerator;
 import com.entropicdreams.darva.handlers.PlayerTracker;
 import com.entropicdreams.darva.items.ItemGrinder;
+import com.entropicdreams.darva.items.ItemMistcloak;
 import com.entropicdreams.darva.items.ItemVial;
 import com.entropicdreams.darva.util.AllomancyConfig;
 
@@ -18,9 +19,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.EnumArmorMaterial;
+import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -55,6 +59,7 @@ public class ModMain {
 	public static Item itemIronFlakes;
 	public static Item itemBronzeFlakes;
 	
+	public static Item Mistcloak;
 	
 	public static Block oreTin;
 	public static Block oreLead;
@@ -135,12 +140,11 @@ public class ModMain {
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemVial,1,7),new ItemStack(itemPewterFlakes), new ItemStack(itemVial,1,0), new ItemStack(Item.bucketWater));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemVial,1,8),new ItemStack(itemBronzeFlakes), new ItemStack(itemVial,1,0), new ItemStack(Item.bucketWater));
 
-		 
-		 
+		 GameRegistry.addRecipe(new ItemStack(Mistcloak,1), new Object[]{"W W","WWW","WWW",'W', new ItemStack(Block.cloth, 1, 7)});
 		 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemVial,1,0), " x ", "y y", " y ", 'x', "slabWood", 'y', Block.glass));
 		 
 	 }
-	 
+
 	 private void initBlocks()
 	 {
 		 oreTin = new Block(AllomancyConfig.oreTin, Material.rock).setHardness(.5f).setStepSound(Block.soundStoneFootstep)
@@ -176,7 +180,7 @@ public class ModMain {
 
 
 	 }
-	 
+	 public static EnumArmorMaterial WoolArmor = EnumHelper.addArmorMaterial("Wool", 5, new int[] { 0, 4, 0, 0}, 15);
 	 private void initItems()
 	 {
 		itemGrinder = new ItemGrinder(500);
@@ -195,6 +199,8 @@ public class ModMain {
 		itemBrassFlakes = new Item(811).setUnlocalizedName("allomancy:brassflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		itemPewterFlakes = new Item(812).setUnlocalizedName("allomancy:pewterflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		itemBronzeFlakes = new Item(813).setUnlocalizedName("allomancy:bronzeflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		
+		Mistcloak = new ItemMistcloak(815, WoolArmor, 5, 1).setUnlocalizedName("allomancy:mistcloak").setCreativeTab(CreativeTabs.tabCombat);
 		
 		itemVial = new ItemVial(814);
 	 }
@@ -257,6 +263,12 @@ public class ModMain {
 		 LanguageRegistry.addName(itemBronzeFlakes, "Bronze Flakes");
 		 itemBronzeFlakes.setTextureName("allomancy:bronzeflakes");
 
+		 GameRegistry.registerItem(Mistcloak, "allomancy:mistcloak");
+		 LanguageRegistry.addName(Mistcloak, "Mistcloak");
+		 Mistcloak.setTextureName("allomancy:mistcloak");
+		 
+		 RenderingRegistry.addNewArmourRendererPrefix("Mistcloak");
+		 
 		 ItemStack item;
 		 
 			for(int i = 0; i < ItemVial.localName.length; i++) {

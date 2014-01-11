@@ -1,10 +1,12 @@
 package com.entropicdreams.darva.handlers;
 
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import com.entropicdreams.darva.AllomancyData;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
+
+import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.ModMain;
 
 public class FallHandler {
 	@ForgeSubscribe
@@ -15,8 +17,14 @@ public class FallHandler {
 		EntityPlayer player = (EntityPlayer)event.entity;
 		AllomancyData data;
 		data = AllomancyData.forPlayer(player);
-		if (data.MetalBurning[data.matIron] || data.MetalBurning[data.matSteel])	
-			event.setCanceled(true);
+		ItemStack itemstack = player.inventory.armorItemInSlot(2);
+		 	if (itemstack != null)
+		 	{
+		 		if (itemstack.itemID == ModMain.Mistcloak.itemID)
+		 		{
+		 			event.setCanceled(true);
+		 		}
+		 	}
 		}
 	}
 }
