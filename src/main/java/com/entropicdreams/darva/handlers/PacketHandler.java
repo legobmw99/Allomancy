@@ -269,7 +269,7 @@ public class PacketHandler implements IPacketHandler {
 			}
 		
 			 
-			if (target instanceof EntityItem)
+			/*if (target instanceof EntityItem)
 			{
 				EntityItem item = (EntityItem) target;
 				FlyingItem fi = new FlyingItem(player.worldObj,player,(EntityItem) target);
@@ -281,7 +281,7 @@ public class PacketHandler implements IPacketHandler {
 				
 				PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(item.getEntityItem().itemID, fi.entityId, motionX, motionY, motionZ),player.dimension);
 				
-			}
+			}*/
 			else
 			{
 			target.motionX = motionX;
