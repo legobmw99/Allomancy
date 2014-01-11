@@ -39,7 +39,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import com.entropicdreams.darva.handlers.PacketHandler;
  
 @NetworkMod(clientSideRequired=true, channels={"Allomancy_Data"}, packetHandler = PacketHandler.class)
-@Mod(modid ="allomancy", name = "Allomancy", version = "1.1.3" )
+@Mod(modid ="allomancy", name = "Allomancy", version = "1.1.4" )
 public class ModMain {
 
 	public static ItemGrinder itemGrinder;

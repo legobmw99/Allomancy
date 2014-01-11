@@ -93,29 +93,29 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 		
 		
 		
-		ironY = 10 - data.MetalAmounts[data.matIron] ; //This will be replaced with a call to get the actual value of a players iron
+		ironY = 9 - data.MetalAmounts[data.matIron] ; //This will be replaced with a call to get the actual value of a players iron
 				   //reserves eventually.
 		gig.drawTexturedModalRect(6, 20+ironY, 7, 1+ironY, 3, 10-ironY);
 		
-		steelY = 10 - data.MetalAmounts[data.matSteel];
+		steelY = 9 - data.MetalAmounts[data.matSteel];
 		gig.drawTexturedModalRect(13, 20+steelY, 13, 1+steelY,3,10-steelY );
 		
-		tinY = 10 - data.MetalAmounts[data.matTin];
+		tinY = 9 - data.MetalAmounts[data.matTin];
 		gig.drawTexturedModalRect(31, 20+tinY, 19, 1+tinY,3,10-tinY );
 
-		pewterY = 10 - data.MetalAmounts[data.matPewter];
+		pewterY = 9 - data.MetalAmounts[data.matPewter];
 		gig.drawTexturedModalRect(38, 20+pewterY, 25, 1+pewterY,3,10-pewterY );
 
-		copperY = 10 - data.MetalAmounts[data.matCopper];
+		copperY = 9 - data.MetalAmounts[data.matCopper];
 		gig.drawTexturedModalRect(56, 20+copperY, 31, 1+copperY,3,10-copperY );
 		
-		bronzeY = 10 -data.MetalAmounts[data.matBronze];
+		bronzeY = 9 -data.MetalAmounts[data.matBronze];
 		gig.drawTexturedModalRect(63, 20+bronzeY, 37, 1+bronzeY,3,10-bronzeY );
 
-		zincY = 10 - data.MetalAmounts[data.matZinc];
+		zincY = 9 - data.MetalAmounts[data.matZinc];
 		gig.drawTexturedModalRect(81, 20+zincY, 43, 1+zincY,3,10-zincY );
 
-		brassY = 10 - data.MetalAmounts[data.matBrass];
+		brassY = 9 - data.MetalAmounts[data.matBrass];
 		gig.drawTexturedModalRect(88, 20+brassY, 49, 1+brassY,3,10-brassY );
 
 

@@ -33,21 +33,21 @@ public class particleSound extends EntityFX {
         
         if (soundType.contains("pig") || soundType.contains("sheep") || soundType.contains("cow")
         		|| soundType.contains("horse") || soundType.contains("mooshroom") || soundType.contains("villager")
-        		|| soundType.contains("golem") || soundType.contains("chicken" ))
+        		|| soundType.contains("golem") || soundType.contains("chicken") || soundType.contains("step"))
         				loc = new ResourceLocation("allomancy","textures/soundicons/passivestep.png");
         
 		
 		
 		if (soundType.contains("skeleton") || soundType.contains("zombie") || soundType.contains("slime") || soundType.contains("silverfish")
 				|| soundType.contains("spider") || soundType.contains("witch") || soundType.contains("enderman")
-				|| soundType.contains("ghast")	) 			
+				|| soundType.contains("ghast")	|| soundType.contains("silverfish")) 			
 				loc = new ResourceLocation("allomancy","textures/soundicons/aggiestep.png");
 				
 		if (soundType.contains( "random.bow"))
 			loc = new ResourceLocation("allomancy","textures/soundicons/bowshot.png");
 		
 		if (loc == null)
-			loc = new ResourceLocation("allomancy","textures/soundicons/passivestep.png");
+			loc = new ResourceLocation("allomancy","textures/soundicons/unknown.png");
 	}
 	@Override
 	public int getFXLayer() {

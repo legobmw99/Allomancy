@@ -254,23 +254,26 @@ public class PowerTickHandler implements ITickHandler {
 				{
 					
 					if( !curPlayer.isPotionActive(Potion.nightVision.getId()))
-						curPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 1000));
+						curPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 300));
 					else
 					{
 						PotionEffect eff;
 						eff =  curPlayer.getActivePotionEffect(Potion.nightVision);
-						if (eff.getDuration() < 400)
+						if (eff.getDuration() < 201)
 						{
-							curPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 1000));
+							curPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 300));
 						}
 					}
 					
 				}
 				if (data.MetalBurning[data.matTin] == false && curPlayer.isPotionActive(Potion.nightVision.getId()))
 				{
-					curPlayer.removePotionEffect(Potion.nightVision.getId());
+					if(curPlayer.getActivePotionEffect(Potion.nightVision).getDuration() < 201)
+					{
+						curPlayer.removePotionEffect(Potion.nightVision.getId());	
+					}
 				}
-				
+
 			}
 		}
 		
