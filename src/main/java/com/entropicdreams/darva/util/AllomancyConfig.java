@@ -18,10 +18,10 @@ public class AllomancyConfig {
 			generateLead = config.get("Worldgen Disabler", "Generate Lead", true).getBoolean(true); 
 			generateZinc = config.get("Worldgen Disabler", "Generate Zinc", true).getBoolean(true); 
 			
-			copperDensity = config.get("Worldgen", "Copper Density", 2, "Density: Chances per chunk").getInt(2);
-	        tinDensity = config.get("Worldgen", "Tin Density", 2).getInt(2);
-	        leadDensity = config.get("Worldgen", "Lead Density", 2).getInt(2);
-	        zincDensity = config.get("Worldgen", "Zinc Density", 2).getInt(2);
+			copperDensity = config.get("Worldgen", "Copper Density", 5, "Density: Chances per chunk").getInt(5);
+	        tinDensity = config.get("Worldgen", "Tin Density", 5).getInt(5);
+	        leadDensity = config.get("Worldgen", "Lead Density", 5).getInt(5);
+	        zincDensity = config.get("Worldgen", "Zinc Density", 5).getInt(5);
 	        
 	        oreCopper = config.getBlock("Copper Ore", 242).getInt(242);
 	        oreTin = config.getBlock("Tin Ore", 240).getInt(240);
