@@ -106,6 +106,10 @@ public class MetalParticleController implements ITickHandler {
 		metallist.add(Block.railActivator.blockID);
 		metallist.add(Block.railDetector.blockID);
 		metallist.add(Block.railPowered.blockID);
+		metallist.add(ModRegistry.oreCopper.blockID);
+		metallist.add(ModRegistry.oreTin.blockID);
+		metallist.add(ModRegistry.oreZinc.blockID);
+		metallist.add(ModRegistry.oreLead.blockID);
 		metallist.add(ModRegistry.itemVial.itemID);
 		metallist.add(ModRegistry.itemZincFlakes.itemID);
 		metallist.add(ModRegistry.itemZincIngot.itemID);
