@@ -314,7 +314,7 @@ public class MetalParticleController implements ITickHandler {
 			//Pull em towards you.
 			motionX = ((player.posX - entity.posX) * .1)*-1 ;
 	        motionY = (player.posY - entity.posY) *.1;
-	        motionZ = ((player.posZ - entity.posZ) *.1)-1;
+	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
 	        entity.motionX = motionX;
 	        entity.motionY = motionY;
 	        entity.motionZ = motionZ;
