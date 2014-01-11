@@ -31,7 +31,7 @@ public class ItemMistcloak extends ItemArmor {
         multimap.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Speed modifier", 1.05, 2));
         return multimap;
     }
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer){
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type){
 		return "allomancy:textures/models/armor/mistcloak.png";
 	}
 }
