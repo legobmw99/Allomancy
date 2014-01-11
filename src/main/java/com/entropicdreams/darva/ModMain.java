@@ -39,7 +39,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import com.entropicdreams.darva.handlers.PacketHandler;
  
 @NetworkMod(clientSideRequired=true, channels={"Allomancy_Data"}, packetHandler = PacketHandler.class)
-@Mod(modid ="allomancy", name = "Allomancy", version = "1.1.2" )
+@Mod(modid ="allomancy", name = "Allomancy", version = "1.1.3" )
 public class ModMain {
 
 	public static ItemGrinder itemGrinder;
@@ -118,17 +118,20 @@ public class ModMain {
 	 {
 		 
 		 GameRegistry.addSmelting(oreTin.blockID, new ItemStack(itemTinIngot,1), 5);
+		 GameRegistry.addSmelting(oreCopper.blockID, new ItemStack(itemCopperIngot,1), 5);
+		 GameRegistry.addSmelting(oreLead.blockID, new ItemStack(itemLeadIngot,1), 5);
+		 GameRegistry.addSmelting(oreZinc.blockID, new ItemStack(itemZincIngot,1), 5);
+		 
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes,1), new ItemStack(itemTinIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));			 
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemLeadFlakes,1), new ItemStack(itemLeadIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemCopperFlakes,1), new ItemStack(itemCopperIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemZincFlakes,1), new ItemStack(itemZincIngot), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes,1), new ItemStack(Item.ingotIron), new ItemStack(itemGrinder,1,OreDictionary.WILDCARD_VALUE));
-		 
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes,1), new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes,1), new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes,1), new ItemStack(itemPewterFlakes), new ItemStack(itemLeadFlakes));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes,1), new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
-
+		 
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemVial,1,1),new ItemStack(itemCopperFlakes), new ItemStack(itemVial,1,0), new ItemStack(Item.bucketWater));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemVial,1,2),new ItemStack(itemIronFlakes), new ItemStack(itemVial,1,0), new ItemStack(Item.bucketWater));
 		 GameRegistry.addShapelessRecipe(new ItemStack(itemVial,1,3),new ItemStack(itemTinFlakes), new ItemStack(itemVial,1,0), new ItemStack(Item.bucketWater));
@@ -181,26 +184,25 @@ public class ModMain {
 	 public static EnumArmorMaterial WoolArmor = EnumHelper.addArmorMaterial("Wool", 5, new int[] { 0, 4, 0, 0}, 15);
 	 private void initItems()
 	 {
-		itemGrinder = new ItemGrinder(500);
+		itemGrinder = new ItemGrinder(AllomancyConfig.itemGrinder);
 		
-		itemTinIngot = new Item(801).setUnlocalizedName("allomancy:tiningot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		itemTinFlakes = new Item(802).setUnlocalizedName("allomancy:tinflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemLeadIngot = new Item(803).setUnlocalizedName("allomancy:leadingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		itemLeadFlakes = new Item(804).setUnlocalizedName("allomancy:leadflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemCopperIngot = new Item(805).setUnlocalizedName("allomancy:copperingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		itemCopperFlakes = new Item(806).setUnlocalizedName("allomancy:copperflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemZincIngot = new Item(807).setUnlocalizedName("allomancy:zincingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		itemZincFlakes = new Item(808).setUnlocalizedName("allomancy:zincflakes").setCreativeTab(CreativeTabs.tabMaterials);
-
-		itemIronFlakes = new Item(809).setUnlocalizedName("allomancy:ironflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemSteelFlakes = new Item(810).setUnlocalizedName("allomancy:steelflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemBrassFlakes = new Item(811).setUnlocalizedName("allomancy:brassflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemPewterFlakes = new Item(812).setUnlocalizedName("allomancy:pewterflakes").setCreativeTab(CreativeTabs.tabMaterials);
-		itemBronzeFlakes = new Item(813).setUnlocalizedName("allomancy:bronzeflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemTinIngot = new Item(AllomancyConfig.itemTinIngot).setUnlocalizedName("allomancy:tiningot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemTinFlakes = new Item(AllomancyConfig.itemTinFlakes).setUnlocalizedName("allomancy:tinflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemLeadIngot = new Item(AllomancyConfig.itemLeadIngot).setUnlocalizedName("allomancy:leadingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemLeadFlakes = new Item(AllomancyConfig.itemLeadFlakes).setUnlocalizedName("allomancy:leadflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemCopperIngot = new Item(AllomancyConfig.itemCopperIngot).setUnlocalizedName("allomancy:copperingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemCopperFlakes = new Item(AllomancyConfig.itemCopperFlakes).setUnlocalizedName("allomancy:copperflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemZincIngot = new Item(AllomancyConfig.itemZincIngot).setUnlocalizedName("allomancy:zincingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+		itemZincFlakes = new Item(AllomancyConfig.itemZincFlakes).setUnlocalizedName("allomancy:zincflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemIronFlakes = new Item(AllomancyConfig.itemIronFlakes).setUnlocalizedName("allomancy:ironflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemSteelFlakes = new Item(AllomancyConfig.itemSteelFlakes).setUnlocalizedName("allomancy:steelflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemBrassFlakes = new Item(AllomancyConfig.itemBrassFlakes).setUnlocalizedName("allomancy:brassflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemPewterFlakes = new Item(AllomancyConfig.itemPewterFlakes).setUnlocalizedName("allomancy:pewterflakes").setCreativeTab(CreativeTabs.tabMaterials);
+		itemBronzeFlakes = new Item(AllomancyConfig.itemBronzeFlakes).setUnlocalizedName("allomancy:bronzeflakes").setCreativeTab(CreativeTabs.tabMaterials);
 		
-		Mistcloak = new ItemMistcloak(815, WoolArmor, 5, 1).setUnlocalizedName("allomancy:mistcloak").setCreativeTab(CreativeTabs.tabCombat);
+		Mistcloak = new ItemMistcloak(AllomancyConfig.Mistcloak, WoolArmor, 5, 1).setUnlocalizedName("allomancy:mistcloak").setCreativeTab(CreativeTabs.tabCombat);
 		
-		itemVial = new ItemVial(814);
+		itemVial = new ItemVial(AllomancyConfig.itemVial);
 	 }
 	 
 	 private void setupItems()

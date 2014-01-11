@@ -2,7 +2,13 @@ package com.entropicdreams.darva.util;
 
 import java.io.File;
 
+import com.entropicdreams.darva.items.ItemGrinder;
+import com.entropicdreams.darva.items.ItemMistcloak;
+import com.entropicdreams.darva.items.ItemVial;
+
 import cpw.mods.fml.common.Loader;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 
@@ -36,6 +42,24 @@ public class AllomancyConfig {
 			leadMaxY = config.get("Worldgen", "Lead Max Y", 40).getInt(40);
 		    zincMinY = config.get("Worldgen", "Zinc Min Y", 20).getInt(20);
 		    zincMaxY = config.get("Worldgen", "Zinc Max Y", 40).getInt(40);
+		    
+		    itemGrinder = config.getItem("Item Grinder", 500).getInt(500);
+			itemTinIngot = config.getItem("Tin Ingot", 801).getInt(801);
+			itemTinFlakes = config.getItem("Tin Flakes", 802).getInt(802);
+			itemLeadIngot = config.getItem("Lead Ingot", 803).getInt(803);
+			itemLeadFlakes = config.getItem("Lead Flakes", 804).getInt(804);
+			itemCopperIngot = config.getItem("Copper Ingot", 805).getInt(805);
+			itemCopperFlakes = config.getItem("Copper Flakes", 806).getInt(806);
+			itemZincIngot = config.getItem("Zinc Ingot", 807).getInt(807);
+			itemZincFlakes = config.getItem("Zinc Flakes", 808).getInt(808);
+			itemIronFlakes = config.getItem("Iron Flakes", 809).getInt(809);
+			itemSteelFlakes = config.getItem("Steel Flakes", 810).getInt(810);
+			itemBrassFlakes = config.getItem("Brass Flakes", 811).getInt(811);
+			itemPewterFlakes =config.getItem("Pewter Flakes", 812).getInt(812);
+			itemBronzeFlakes = config.getItem("Bronze Flakes", 813).getInt(813);
+			Mistcloak = config.getItem("Mistcloak", 814).getInt(814);
+			itemVial = config.getItem("Vials", 815).getInt(815);
+		    
 			config.save();
 		}
 		public static boolean generateCopper;
@@ -61,4 +85,21 @@ public class AllomancyConfig {
 	    public static int leadMaxY;
 	    public static int zincMinY;
 	    public static int zincMaxY;    
+	    
+	    public static int itemGrinder;
+	    public static int itemTinIngot;
+	    public static int itemTinFlakes;
+	    public static int itemLeadIngot;
+	    public static int itemLeadFlakes;
+	    public static int itemCopperIngot;
+	    public static int itemCopperFlakes;
+	    public static int itemZincIngot;
+	    public static int itemZincFlakes;
+	    public static int itemIronFlakes;
+	    public static int itemSteelFlakes;
+	    public static int itemBrassFlakes;
+	    public static int itemPewterFlakes;
+	    public static int itemBronzeFlakes;
+	    public static int Mistcloak;
+	    public static int itemVial;
 }

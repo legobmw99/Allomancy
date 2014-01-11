@@ -28,7 +28,7 @@ public class ItemMistcloak extends ItemArmor {
     public Multimap getItemAttributeModifiers()
     {
         Multimap multimap = super.getItemAttributeModifiers();
-        multimap.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Speed modifier", 1.05, 2));
+        multimap.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Speed modifier", .40, 2));
         return multimap;
     }
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type){
