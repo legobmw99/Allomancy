@@ -11,6 +11,7 @@ buildscript {
     }
 }
 
+
 ext.configFile = file "build.properties"
 configFile.withReader {
     def prop = new Properties()
@@ -20,6 +21,16 @@ configFile.withReader {
 
 apply plugin: 'forge'
 
+ENV = System.getenv()
+
+if(ENV.DRONE_BUILD_NUMBER)
+buildNum = ENV.DRONE_BUILD_NUMBER
+
+else if (ENV.BUILD_NUMBER)
+buildNum = ENV.BUILD_NUMBER
+
+else
+buildNum = "null"
 
 group= "com.entropicdreams.darva.allomancy"
 version = config.mod_version
@@ -28,7 +39,7 @@ archivesBaseName = "allomancy"
 minecraft {
 	version = config.minecraft_version + "-" + config.forge_version
 }
-version = "${config.minecraft_version}-${config.mod_version}"
+version = "${config.minecraft_version}-${config.mod_version}.${buildNum}"
 processResources
 {
     // replace stuff in mcmod.info, nothing else
