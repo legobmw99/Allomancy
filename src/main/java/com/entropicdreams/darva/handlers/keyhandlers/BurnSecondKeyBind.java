@@ -8,6 +8,7 @@ import com.entropicdreams.darva.handlers.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.settings.KeyBinding;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.relauncher.Side;
@@ -34,7 +35,9 @@ public class BurnSecondKeyBind extends KeyHandler {
 		EntityClientPlayerMP player;
 		player = Minecraft.getMinecraft().thePlayer;
 		AllomancyData data;
-		
+		Minecraft mc = FMLClientHandler.instance().getClient();
+		if(mc.currentScreen == null)
+		{
 		if (player == null)
 			return;
 		if (keyDown == false)
@@ -70,6 +73,7 @@ public class BurnSecondKeyBind extends KeyHandler {
 			default:
 				break;
 			}
+		}
 		}
 	}
 
