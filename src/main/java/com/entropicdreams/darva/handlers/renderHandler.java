@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.relauncher.Side;
@@ -52,7 +53,10 @@ private Point[] Frames = { new Point(72,0), new Point (72, 4), new Point(72,8), 
 		ParticleMetal particle;
 		if (!Minecraft.getMinecraft().inGameHasFocus)
 			return;
-		
+		if(FMLClientHandler.instance().getClient().currentScreen != null)
+		{
+			return;
+		}
 		EntityClientPlayerMP player;
 		player = mc.thePlayer;
 		if (player == null)

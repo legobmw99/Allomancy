@@ -38,6 +38,8 @@ archivesBaseName = "allomancy"
 
 minecraft {
 	version = config.minecraft_version + "-" + config.forge_version
+	replaceIn "MainMod.java"
+    	replace "@VERSION@", version
 }
 version = "${config.minecraft_version}-${config.mod_version}${buildNum}"
 processResources

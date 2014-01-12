@@ -67,8 +67,6 @@ public class PowerTickHandler implements ITickHandler {
 		data = AllomancyData.forPlayer(player);
 		MovingObjectPosition mop;
 		vector3 vec;
-		
-		
 		if(data.MetalBurning[data.matIron] || data.MetalBurning[data.matSteel] )
 		{
 			List<Entity> eList;
@@ -202,16 +200,12 @@ public class PowerTickHandler implements ITickHandler {
 				
 				player.motionX = MathHelper.clamp_float((float) player.motionX, -2, 2);
 				player.motionZ = MathHelper.clamp_float((float) player.motionZ, -2,2);
-			}
-			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
-			{
-				player.motionY *=1.6;
-			}
-			
+			}			
 		}
-		
-		
-
+		if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
+		{
+			player.motionY *=1.6;
+		}
 	}
 	
 	@Override
