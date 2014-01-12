@@ -40,7 +40,7 @@ public class particleSound extends EntityFX {
 		
 		if (soundType.contains("skeleton") || soundType.contains("zombie") || soundType.contains("slime") || soundType.contains("silverfish")
 				|| soundType.contains("spider") || soundType.contains("witch") || soundType.contains("enderman")
-				|| soundType.contains("ghast")	|| soundType.contains("silverfish")) 			
+				|| soundType.contains("ghast")	|| soundType.contains("silverfish") || soundType.contains("creeper")) 			
 				loc = new ResourceLocation("allomancy","textures/soundicons/aggiestep.png");
 				
 		if (soundType.contains( "random.bow"))

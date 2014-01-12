@@ -207,7 +207,7 @@ public class MetalParticleController implements ITickHandler {
 		
 		if (entity instanceof EntityLiving)
 		{
-			tryPushMob((EntityCreature) entity);
+			tryPushMob((EntityLiving) entity);
 		}
 		
 	}
@@ -219,7 +219,7 @@ public class MetalParticleController implements ITickHandler {
 		}
 		if (entity instanceof EntityLiving)
 		{
-			tryPullMob((EntityCreature) entity);
+			tryPullMob((EntityLiving) entity);
 	 	}
 
 	}
@@ -253,7 +253,7 @@ public class MetalParticleController implements ITickHandler {
 	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
 		}
 	}
-	private void tryPullMob(EntityCreature entity)
+	private void tryPullMob(EntityLiving entity)
 	{
 		
 		double motionX, motionY, motionZ;
@@ -285,9 +285,10 @@ public class MetalParticleController implements ITickHandler {
 	        entity.motionY = motionY;
 	        entity.motionZ = motionZ;
 	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
+	        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(entity.entityId));
 		}
 	}
-	private void tryPushMob(EntityCreature entity)
+	private void tryPushMob(EntityLiving entity)
 	{
 		
 		double motionX, motionY, motionZ;
@@ -319,6 +320,7 @@ public class MetalParticleController implements ITickHandler {
 	        entity.motionY = motionY;
 	        entity.motionZ = motionZ;
 	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
+	        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(entity.entityId));
 		}
 	}
 		
