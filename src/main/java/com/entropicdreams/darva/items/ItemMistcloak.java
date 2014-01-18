@@ -20,18 +20,22 @@ public class ItemMistcloak extends ItemArmor {
 			int par3, int par4) {
 		super(par1, par2EnumArmorMaterial, par3, par4);
 	}
+
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1iconregister)
-	{
+	public void registerIcons(IconRegister par1iconregister) {
 		this.itemIcon = par1iconregister.registerIcon("allomancy:mistcloak");
 	}
-    public Multimap getItemAttributeModifiers()
-    {
-        Multimap multimap = super.getItemAttributeModifiers();
-        multimap.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Speed modifier", .40, 2));
-        return multimap;
-    }
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type){
+
+	public Multimap getItemAttributeModifiers() {
+		Multimap multimap = super.getItemAttributeModifiers();
+		multimap.put(SharedMonsterAttributes.movementSpeed
+				.getAttributeUnlocalizedName(), new AttributeModifier(
+				field_111210_e, "Speed modifier", .40, 2));
+		return multimap;
+	}
+
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot,
+			String type) {
 		return "allomancy:textures/models/armor/mistcloak.png";
 	}
 }

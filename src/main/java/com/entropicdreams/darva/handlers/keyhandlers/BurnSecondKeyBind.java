@@ -13,6 +13,7 @@ import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 @SideOnly(Side.CLIENT)
 public class BurnSecondKeyBind extends KeyHandler {
 
@@ -22,6 +23,7 @@ public class BurnSecondKeyBind extends KeyHandler {
 	}
 
 	private boolean keyDown;
+
 	@Override
 	public String getLabel() {
 		// TODO Auto-generated method stub
@@ -36,52 +38,56 @@ public class BurnSecondKeyBind extends KeyHandler {
 		player = Minecraft.getMinecraft().thePlayer;
 		AllomancyData data;
 		Minecraft mc = FMLClientHandler.instance().getClient();
-		if(mc.currentScreen == null)
-		{
-		if (player == null)
-			return;
-		if (keyDown == false)
-		{
-			keyDown = true;
-			data = AllomancyData.forPlayer(player);
-			switch (data.getSelected())
-			{
-			case 1:
-				//toggle Steel.
-				if (data.MetalAmounts[data.matSteel] > 0)
-					data.MetalBurning[data.matSteel] = !data.MetalBurning[data.matSteel];
-				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matSteel, data.MetalBurning[data.matSteel]));
-				break;
-			case 2:
-				//toggle Pewter.
-				if (data.MetalAmounts[data.matPewter] > 0)
-					data.MetalBurning[data.matPewter] = !data.MetalBurning[data.matPewter];
-				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matPewter, data.MetalBurning[data.matPewter]));
-				break;
-			case 3:
-				//toggle Bronze.
-				if (data.MetalAmounts[data.matBronze] > 0)
-					data.MetalBurning[data.matBronze] = !data.MetalBurning[data.matBronze];
-				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matBronze, data.MetalBurning[data.matBronze]));
-				break;
-			case 4:
-				//toggle Brass.
-				if (data.MetalAmounts[data.matBrass] > 0)
-					data.MetalBurning[data.matBrass] = !data.MetalBurning[data.matBrass];
-				player.sendQueue.addToSendQueue(PacketHandler.changeBurn(AllomancyData.matBrass, data.MetalBurning[data.matBrass]));
-				break;
-			default:
-				break;
+		if (mc.currentScreen == null) {
+			if (player == null)
+				return;
+			if (keyDown == false) {
+				keyDown = true;
+				data = AllomancyData.forPlayer(player);
+				switch (data.getSelected()) {
+				case 1:
+					// toggle Steel.
+					if (data.MetalAmounts[data.matSteel] > 0)
+						data.MetalBurning[data.matSteel] = !data.MetalBurning[data.matSteel];
+					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
+							AllomancyData.matSteel,
+							data.MetalBurning[data.matSteel]));
+					break;
+				case 2:
+					// toggle Pewter.
+					if (data.MetalAmounts[data.matPewter] > 0)
+						data.MetalBurning[data.matPewter] = !data.MetalBurning[data.matPewter];
+					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
+							AllomancyData.matPewter,
+							data.MetalBurning[data.matPewter]));
+					break;
+				case 3:
+					// toggle Bronze.
+					if (data.MetalAmounts[data.matBronze] > 0)
+						data.MetalBurning[data.matBronze] = !data.MetalBurning[data.matBronze];
+					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
+							AllomancyData.matBronze,
+							data.MetalBurning[data.matBronze]));
+					break;
+				case 4:
+					// toggle Brass.
+					if (data.MetalAmounts[data.matBrass] > 0)
+						data.MetalBurning[data.matBrass] = !data.MetalBurning[data.matBrass];
+					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
+							AllomancyData.matBrass,
+							data.MetalBurning[data.matBrass]));
+					break;
+				default:
+					break;
+				}
 			}
-		}
 		}
 	}
 
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
 		// TODO Auto-generated method stub
-		if (keyDown)
-		{
+		if (keyDown) {
 			keyDown = false;
 		}
 	}

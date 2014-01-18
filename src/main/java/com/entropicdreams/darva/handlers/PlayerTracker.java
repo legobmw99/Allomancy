@@ -17,17 +17,19 @@ public class PlayerTracker {
 	@ForgeSubscribe
 	public void onPlayerLogin(EntityJoinWorldEvent event) {
 		// TODO Auto-generated method stub
-		if (event.entity instanceof EntityPlayerMP)
-		{
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(AllomancyData.forPlayer(event.entity)), (Player) event.entity);
+		if (event.entity instanceof EntityPlayerMP) {
+			PacketDispatcher.sendPacketToPlayer(
+					PacketHandler.updateAllomancyData(AllomancyData
+							.forPlayer(event.entity)), (Player) event.entity);
 		}
 	}
-	@ForgeSubscribe
-	 public void onEntityConstruct(EntityEvent.EntityConstructing event) {
-        if (event.entity instanceof EntityPlayer) {
-        	event.entity.registerExtendedProperties(AllomancyData.IDENTIFIER, new AllomancyData((EntityPlayer) event.entity));
-        }
-    }
 
+	@ForgeSubscribe
+	public void onEntityConstruct(EntityEvent.EntityConstructing event) {
+		if (event.entity instanceof EntityPlayer) {
+			event.entity.registerExtendedProperties(AllomancyData.IDENTIFIER,
+					new AllomancyData((EntityPlayer) event.entity));
+		}
+	}
 
 }

@@ -14,18 +14,16 @@ public class CraftingHandler implements ICraftingHandler {
 	public void onCrafting(EntityPlayer player, ItemStack item,
 			IInventory craftMatrix) {
 		ItemStack cur;
-		for (int x = 0; x < craftMatrix.getSizeInventory(); x++)
-		{
+		for (int x = 0; x < craftMatrix.getSizeInventory(); x++) {
 			cur = craftMatrix.getStackInSlot(x);
 			if (cur == null)
 				continue;
-			if (cur.itemID == ModRegistry.itemGrinder.itemID)
-			{
+			if (cur.itemID == ModRegistry.itemGrinder.itemID) {
 				cur.damageItem(1, player);
 			}
-			
+
 		}
-		
+
 	}
 
 	@Override

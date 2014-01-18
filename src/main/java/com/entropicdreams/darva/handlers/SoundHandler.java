@@ -20,20 +20,26 @@ import net.minecraftforge.event.ForgeSubscribe;
 public class SoundHandler {
 
 	@ForgeSubscribe
-	public void onSound(PlaySoundEvent event)
-	{
+	public void onSound(PlaySoundEvent event) {
 		EntityClientPlayerMP player;
 		player = Minecraft.getMinecraft().thePlayer;
 		AllomancyData data = AllomancyData.forPlayer(player);
-		if (data.MetalBurning[data.matTin])
-		{
-	
-			if (event.name.contains("step") || event.name.contains(".big") || event.name.contains("scream") || event.name.contains("random.bow"))
-			{
-				EntityFX particle = new particleSound(player.worldObj, player.posX + -(Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d), player.posY -.2, player.posZ +(Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), 0, 0, 0, event.name, event.x,event.y,event.z);
+		if (data.MetalBurning[data.matTin]) {
+
+			if (event.name.contains("step") || event.name.contains(".big")
+					|| event.name.contains("scream")
+					|| event.name.contains("random.bow")) {
+				EntityFX particle = new particleSound(player.worldObj,
+						player.posX
+								+ -(Math.sin(Math.toRadians(player
+										.getRotationYawHead())) * .7d),
+						player.posY - .2, player.posZ
+								+ (Math.cos(Math.toRadians(player
+										.getRotationYawHead())) * .7d), 0, 0,
+						0, event.name, event.x, event.y, event.z);
 				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			}
-				
+
 		}
 	}
 }

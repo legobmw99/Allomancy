@@ -43,44 +43,45 @@ public class PacketHandler implements IPacketHandler {
 	public final static int Packet_Allomancy_Move_Entity = 4;
 	public final static int Packet_Allomancy_Update_Texture = 5;
 	public final static int Packet_Allomancy_Stop_Fall = 6;
+
 	@Override
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
 		// TODO Auto-generated method stub
-		
+
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
 		if (side == Side.SERVER) {
 			EntityPlayerMP mpPlr;
 			mpPlr = (EntityPlayerMP) player;
 			serverRec(mpPlr, packet);
-		
+
 		} else if (side == Side.CLIENT) {
 			EntityClientPlayerMP mpPlr;
-			
+
 			clientRec((EntityPlayer) player, packet);
-		
+
 		} else {
-		        // We have an errornous state! 
-		}		
-		
+			// We have an errornous state!
+		}
+
 	}
-	private void serverRec(EntityPlayerMP player, Packet250CustomPayload packet)
-	{
-		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+
+	private void serverRec(EntityPlayerMP player, Packet250CustomPayload packet) {
+		DataInputStream inputStream = new DataInputStream(
+				new ByteArrayInputStream(packet.data));
 		AllomancyData data;
 		int Type = -1;
-		
+
 		try {
 			Type = inputStream.readInt();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		switch (Type)
-		{
+
+		switch (Type) {
 		case PacketHandler.Packet_Allomancy_Data:
-			 data = AllomancyData.forPlayer(player);
+			data = AllomancyData.forPlayer(player);
 			data.updateData(packet);
 			break;
 		case PacketHandler.Packet_Allomancy_Select_Metal:
@@ -93,16 +94,16 @@ public class PacketHandler implements IPacketHandler {
 			}
 			break;
 		case PacketHandler.Packet_Allomancy_Update_Burn:
-			data= AllomancyData.forPlayer(player);
+			data = AllomancyData.forPlayer(player);
 			data.updateBurn(packet);
 			break;
 		case PacketHandler.Packet_Allomancy_Change_Emotion:
 			changeEmotions(packet, player);
 			break;
 		case PacketHandler.Packet_Allomancy_Move_Entity:
-			moveEntity(packet,player);
+			moveEntity(packet, player);
 		case PacketHandler.Packet_Allomancy_Stop_Fall:
-			stopFall(packet,player);
+			stopFall(packet, player);
 		default:
 			return;
 		}
@@ -110,21 +111,20 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private void clientRec(EntityPlayer player, Packet250CustomPayload packet)
-	{
+	private void clientRec(EntityPlayer player, Packet250CustomPayload packet) {
 		AllomancyData data;
-		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+		DataInputStream inputStream = new DataInputStream(
+				new ByteArrayInputStream(packet.data));
 		int Type = -1;
-		
+
 		try {
 			Type = inputStream.readInt();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		switch (Type)
-		{
+
+		switch (Type) {
 		case PacketHandler.Packet_Allomancy_Data:
 			data = AllomancyData.forPlayer(player);
 			data.updateData(packet);
@@ -138,35 +138,34 @@ public class PacketHandler implements IPacketHandler {
 		}
 
 	}
-	private void updateTexture(EntityPlayer player, Packet250CustomPayload packet)
-	{
-		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
+
+	private void updateTexture(EntityPlayer player,
+			Packet250CustomPayload packet) {
+		DataInputStream inputStream = new DataInputStream(
+				new ByteArrayInputStream(packet.data));
 		int entityId;
 		int itemId;
 		Item targItem;
 		try {
 			inputStream.readInt();
-			
+
 			itemId = inputStream.readInt();
-			entityId = inputStream.readInt(); 
+			entityId = inputStream.readInt();
 			targItem = Item.itemsList[itemId];
-			FlyingItem fi = (FlyingItem) player.worldObj.getEntityByID(entityId);
-			if (fi == null)
-			{
+			FlyingItem fi = (FlyingItem) player.worldObj
+					.getEntityByID(entityId);
+			if (fi == null) {
 				System.out.println("null");
 			}
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}//Throw away packet type info.
-		
-		
-		
+		}// Throw away packet type info.
+
 	}
-	
-	public static Packet250CustomPayload changeBurn(int mat, boolean value )
-	{
+
+	public static Packet250CustomPayload changeBurn(int mat, boolean value) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(9);
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
@@ -184,13 +183,15 @@ public class PacketHandler implements IPacketHandler {
 		return packet;
 
 	}
-	public static Packet250CustomPayload changeEmotions(int entityID, boolean makeAggro)
-	{
+
+	public static Packet250CustomPayload changeEmotions(int entityID,
+			boolean makeAggro) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(9);
 		DataOutputStream outputStream = new DataOutputStream(bos);
-		
+
 		try {
-			outputStream.writeInt(PacketHandler.Packet_Allomancy_Change_Emotion);
+			outputStream
+					.writeInt(PacketHandler.Packet_Allomancy_Change_Emotion);
 			outputStream.writeInt(entityID);
 			outputStream.writeBoolean(makeAggro);
 		} catch (IOException e) {
@@ -203,11 +204,9 @@ public class PacketHandler implements IPacketHandler {
 		packet.length = bos.size();
 		return packet;
 
-		
 	}
-	
-	public static Packet250CustomPayload updateSelectedMetal(int metal)
-	{
+
+	public static Packet250CustomPayload updateSelectedMetal(int metal) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
@@ -223,21 +222,19 @@ public class PacketHandler implements IPacketHandler {
 		packet.length = bos.size();
 		return packet;
 
-		
 	}
-	public static Packet250CustomPayload updateAllomancyData(AllomancyData data)
-	{
+
+	public static Packet250CustomPayload updateAllomancyData(AllomancyData data) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(40);
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
-				outputStream.writeInt(PacketHandler.Packet_Allomancy_Data);
-				for(int i = 0; i< data.MetalAmounts.length; i++)
-				{
-					outputStream.writeInt(data.MetalAmounts[i]);
-				}
-		        
+			outputStream.writeInt(PacketHandler.Packet_Allomancy_Data);
+			for (int i = 0; i < data.MetalAmounts.length; i++) {
+				outputStream.writeInt(data.MetalAmounts[i]);
+			}
+
 		} catch (Exception ex) {
-		        ex.printStackTrace();
+			ex.printStackTrace();
 		}
 
 		Packet250CustomPayload packet = new Packet250CustomPayload();
@@ -247,61 +244,57 @@ public class PacketHandler implements IPacketHandler {
 		return packet;
 	}
 
-	
-	private void moveEntity(Packet250CustomPayload packet, EntityPlayerMP player)
-	{
+	private void moveEntity(Packet250CustomPayload packet, EntityPlayerMP player) {
 		int targetID;
 		Entity target;
 		double motionX, motionY, motionZ;
-		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
-		
+		DataInputStream inputStream = new DataInputStream(
+				new ByteArrayInputStream(packet.data));
+
 		try {
 			inputStream.readInt();
 			motionX = inputStream.readDouble();
 			motionY = inputStream.readDouble();
 			motionZ = inputStream.readDouble();
 			targetID = inputStream.readInt();
-			
+
 			target = player.worldObj.getEntityByID(targetID);
-			if (target == null)
-			{
+			if (target == null) {
 				return;
 			}
-		
-			 
-			/*if (target instanceof EntityItem)
-			{
-				EntityItem item = (EntityItem) target;
-				FlyingItem fi = new FlyingItem(player.worldObj,player,(EntityItem) target);
-				fi.setThrowableHeading(motionX, motionY, motionZ, .5f, 1.0f);
-				fi.motionX = motionX;
-				fi.motionY = motionY;
-				fi.motionZ = motionZ;
-				player.worldObj.spawnEntityInWorld(fi);
-				
-				PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon(item.getEntityItem().itemID, fi.entityId, motionX, motionY, motionZ),player.dimension);
-				
-			}*/
-			else
-			{
-			target.motionX = motionX;
-			target.motionY = motionY;
-			target.motionZ = motionZ;
+
+			/*
+			 * if (target instanceof EntityItem) { EntityItem item =
+			 * (EntityItem) target; FlyingItem fi = new
+			 * FlyingItem(player.worldObj,player,(EntityItem) target);
+			 * fi.setThrowableHeading(motionX, motionY, motionZ, .5f, 1.0f);
+			 * fi.motionX = motionX; fi.motionY = motionY; fi.motionZ = motionZ;
+			 * player.worldObj.spawnEntityInWorld(fi);
+			 * 
+			 * PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon
+			 * (item.getEntityItem().itemID, fi.entityId, motionX, motionY,
+			 * motionZ),player.dimension);
+			 * 
+			 * }
+			 */
+			else {
+				target.motionX = motionX;
+				target.motionY = motionY;
+				target.motionZ = motionZ;
 			}
-			
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} //Throw away packet type data.
-		
-		
+		} // Throw away packet type data.
+
 	}
-	public static Packet250CustomPayload moveEntity(double motionX, double motionY, double motionZ, int entityID)
-	{
+
+	public static Packet250CustomPayload moveEntity(double motionX,
+			double motionY, double motionZ, int entityID) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);
 		DataOutputStream outputStream = new DataOutputStream(bos);
-		
+
 		try {
 			outputStream.writeInt(PacketHandler.Packet_Allomancy_Move_Entity);
 			outputStream.writeDouble(motionX);
@@ -309,7 +302,6 @@ public class PacketHandler implements IPacketHandler {
 			outputStream.writeDouble(motionZ);
 			outputStream.writeInt(entityID);
 
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -318,21 +310,21 @@ public class PacketHandler implements IPacketHandler {
 		packet.channel = "Allomancy_Data";
 		packet.data = bos.toByteArray();
 		packet.length = bos.size();
-		return packet;		
+		return packet;
 	}
+
 	private void stopFall(Packet250CustomPayload packet, EntityPlayerMP player) {
 		player.fallDistance = 0;
 	}
-	public static Packet250CustomPayload stopFall(int entityID)
-	{
+
+	public static Packet250CustomPayload stopFall(int entityID) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);
 		DataOutputStream outputStream = new DataOutputStream(bos);
-		
+
 		try {
 			outputStream.writeInt(PacketHandler.Packet_Allomancy_Stop_Fall);
 			outputStream.writeInt(entityID);
 
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -341,56 +333,64 @@ public class PacketHandler implements IPacketHandler {
 		packet.channel = "Allomancy_Data";
 		packet.data = bos.toByteArray();
 		packet.length = bos.size();
-		return packet;		
+		return packet;
 	}
-	private void changeEmotions(Packet250CustomPayload packet, EntityPlayerMP player) //Nowhere better to stick this. *sigh*
+
+	private void changeEmotions(Packet250CustomPayload packet,
+			EntityPlayerMP player) // Nowhere better to stick this. *sigh*
 	{
 		int targetID;
 		boolean makeAggro;
 		EntityCreature target;
-		
-		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
-		
+
+		DataInputStream inputStream = new DataInputStream(
+				new ByteArrayInputStream(packet.data));
+
 		try {
 			inputStream.readInt();
 			targetID = inputStream.readInt();
 			makeAggro = inputStream.readBoolean();
 			target = (EntityCreature) player.worldObj.getEntityByID(targetID);
-			
-			if (target != null  && makeAggro)
-			{
+
+			if (target != null && makeAggro) {
 				target.tasks.taskEntries.clear();
-		        target.tasks.addTask(1, new EntityAISwimming(target));
-				target.tasks.addTask(5, new AIAttackOnCollideExtended(target, 1d, false ));
-				target.targetTasks.addTask(5, new EntityAINearestAttackableTarget(target, EntityPlayer.class, 100, false));
-		        target.tasks.addTask(5, new EntityAIWander(target, 0.8D));
-		        target.tasks.addTask(6, new EntityAIWatchClosest(target, EntityPlayer.class, 8.0F));
-		        target.tasks.addTask(6, new EntityAILookIdle(target));
-		        target.targetTasks.addTask(2, new EntityAIHurtByTarget(target, false));
+				target.tasks.addTask(1, new EntityAISwimming(target));
+				target.tasks.addTask(5, new AIAttackOnCollideExtended(target,
+						1d, false));
+				target.targetTasks.addTask(5,
+						new EntityAINearestAttackableTarget(target,
+								EntityPlayer.class, 100, false));
+				target.tasks.addTask(5, new EntityAIWander(target, 0.8D));
+				target.tasks.addTask(6, new EntityAIWatchClosest(target,
+						EntityPlayer.class, 8.0F));
+				target.tasks.addTask(6, new EntityAILookIdle(target));
+				target.targetTasks.addTask(2, new EntityAIHurtByTarget(target,
+						false));
 			}
-			if (target !=null && !makeAggro)
-			{
-				 target.tasks.addTask(0, new EntityAISwimming(target));
-			     target.tasks.addTask(1, new EntityAIPanic(target, 2.0D));
-			     target.tasks.addTask(5, new EntityAIWander(target, 1.0D));
-			     target.tasks.addTask(6, new EntityAIWatchClosest(target, EntityPlayer.class, 6.0F));
-			     target.tasks.addTask(7, new EntityAILookIdle(target));
+			if (target != null && !makeAggro) {
+				target.tasks.addTask(0, new EntityAISwimming(target));
+				target.tasks.addTask(1, new EntityAIPanic(target, 2.0D));
+				target.tasks.addTask(5, new EntityAIWander(target, 1.0D));
+				target.tasks.addTask(6, new EntityAIWatchClosest(target,
+						EntityPlayer.class, 6.0F));
+				target.tasks.addTask(7, new EntityAILookIdle(target));
 			}
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} //Throw away packet type info.
-		
+		} // Throw away packet type info.
+
 	}
-	
-	public static Packet250CustomPayload updateIcon(int itemID, int entityID, double motionX, double motionY, double motionZ)
-	{
+
+	public static Packet250CustomPayload updateIcon(int itemID, int entityID,
+			double motionX, double motionY, double motionZ) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);
 		DataOutputStream outputStream = new DataOutputStream(bos);
-		
+
 		try {
-			outputStream.writeInt(PacketHandler.Packet_Allomancy_Update_Texture);
+			outputStream
+					.writeInt(PacketHandler.Packet_Allomancy_Update_Texture);
 			outputStream.writeInt(itemID);
 			outputStream.writeInt(entityID);
 		} catch (IOException e) {
@@ -401,7 +401,7 @@ public class PacketHandler implements IPacketHandler {
 		packet.channel = "Allomancy_Data";
 		packet.data = bos.toByteArray();
 		packet.length = bos.size();
-		return packet;		
-		
+		return packet;
+
 	}
 }

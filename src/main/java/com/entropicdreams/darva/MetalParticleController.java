@@ -29,13 +29,8 @@ public class MetalParticleController implements ITickHandler {
 	public LinkedList<Entity> particleTargets;
 	public LinkedList<vector3> particleBlockTargets;
 	private LinkedList<Integer> metallist;
-	
-	
-	
-	
 
-	public void BuildMetalList()
-	{
+	public void BuildMetalList() {
 		metallist = new LinkedList<Integer>();
 		metallist.add(Item.ingotGold.itemID);
 		metallist.add(Item.ingotIron.itemID);
@@ -114,217 +109,205 @@ public class MetalParticleController implements ITickHandler {
 		metallist.add(ModRegistry.itemZincFlakes.itemID);
 		metallist.add(ModRegistry.itemZincIngot.itemID);
 	}
-	
-	public boolean isItemMetal(ItemStack item)
-	{
+
+	public boolean isItemMetal(ItemStack item) {
 		if (metallist.contains(item.itemID))
 			return true;
-		else return false;
+		else
+			return false;
 	}
 
-	public boolean isBlockMetal(int blockID)
-	{
+	public boolean isBlockMetal(int blockID) {
 		if (metallist.contains(blockID))
 			return true;
-		else return false;
+		else
+			return false;
 	}
 
-	
-	public MetalParticleController()
-	{
+	public MetalParticleController() {
 		particleTargets = new LinkedList<Entity>();
 		BuildMetalList();
 		particleBlockTargets = new LinkedList<vector3>();
 	}
-	
-	public void tryAdd(Entity entity)
-	{
+
+	public void tryAdd(Entity entity) {
 		if (particleTargets.contains(entity))
 			return;
-		if (entity instanceof EntityLiving)
-		{
+		if (entity instanceof EntityLiving) {
 			tryAddLiving((EntityLiving) entity);
 			return;
 		}
-		if (entity instanceof EntityItem)
-		{
+		if (entity instanceof EntityItem) {
 			tryAddItem((EntityItem) entity);
 		}
 	}
-	
-	
-	private void tryAddLiving(EntityLiving entity)
-	{
+
+	private void tryAddLiving(EntityLiving entity) {
 		if (entity == null)
 			return;
-		if (entity instanceof EntityIronGolem || (entity.getHeldItem() != null && metallist.contains(entity.getHeldItem().itemID)))
-		{
+		if (entity instanceof EntityIronGolem
+				|| (entity.getHeldItem() != null && metallist.contains(entity
+						.getHeldItem().itemID))) {
 			particleTargets.add(entity);
 		}
-		
+
 	}
-	
-	private void tryAddItem(EntityItem entity)
-	{
-		if (isItemMetal(entity.getEntityItem()))
-		{
+
+	private void tryAddItem(EntityItem entity) {
+		if (isItemMetal(entity.getEntityItem())) {
 			particleTargets.add(entity);
 		}
 	}
 
-	public void tryPushBlock(vector3 vec)
-	{
+	public void tryPushBlock(vector3 vec) {
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		motionX = ((player.posX - vec.X) * .1);
-        motionY = ((player.posY - vec.Y) *.1);
-        motionZ = ((player.posZ - vec.Z) *.1);
-        player.motionX = motionX;
-        player.motionY = motionY;
-        player.motionZ = motionZ;
-        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(player.entityId));
+		motionY = ((player.posY - vec.Y) * .1);
+		motionZ = ((player.posZ - vec.Z) * .1);
+		player.motionX = motionX;
+		player.motionY = motionY;
+		player.motionZ = motionZ;
+		PacketDispatcher.sendPacketToServer(PacketHandler
+				.stopFall(player.entityId));
 	}
-	
-	public void tryPullBlock(vector3 vec)
-	{
+
+	public void tryPullBlock(vector3 vec) {
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		motionX = ((player.posX - vec.X) * .1) *-1;
-        motionY = ((player.posY - vec.Y) *.1) *-1;
-        motionZ = ((player.posZ - vec.Z) *.1)*-1;
-        player.motionX = motionX;
-        player.motionY = motionY;
-        player.motionZ = motionZ;
-        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(player.entityId));
+		motionX = ((player.posX - vec.X) * .1) * -1;
+		motionY = ((player.posY - vec.Y) * .1) * -1;
+		motionZ = ((player.posZ - vec.Z) * .1) * -1;
+		player.motionX = motionX;
+		player.motionY = motionY;
+		player.motionZ = motionZ;
+		PacketDispatcher.sendPacketToServer(PacketHandler
+				.stopFall(player.entityId));
 	}
-	public void tryPushEntity(Entity entity)
-	{
-		
-		if (entity instanceof EntityItem)
-		{ 
+
+	public void tryPushEntity(Entity entity) {
+
+		if (entity instanceof EntityItem) {
 			tryPushItem((EntityItem) entity);
 		}
-		
-		if (entity instanceof EntityLiving)
-		{
+
+		if (entity instanceof EntityLiving) {
 			tryPushMob((EntityLiving) entity);
 		}
-		
-	}
-	public void tryPullEntity(Entity entity)
-	{
-		if (entity instanceof EntityItem)
-		{
-			tryPullItem((EntityItem) entity);
-		}
-		if (entity instanceof EntityLiving)
-		{
-			tryPullMob((EntityLiving) entity);
-	 	}
 
 	}
-	private void tryPullItem(EntityItem entity)
-	{
+
+	public void tryPullEntity(Entity entity) {
+		if (entity instanceof EntityItem) {
+			tryPullItem((EntityItem) entity);
+		}
+		if (entity instanceof EntityLiving) {
+			tryPullMob((EntityLiving) entity);
+		}
+
+	}
+
+	private void tryPullItem(EntityItem entity) {
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if (metallist.contains(entity.getEntityItem().itemID))
-		{
+		if (metallist.contains(entity.getEntityItem().itemID)) {
 			motionX = (player.posX - entity.posX) * .1;
-	        motionY = (player.posY - entity.posY) *.1;
-	        motionZ = (player.posZ - entity.posZ) *.1;
-	        entity.motionX = motionX;
-	        entity.motionY = motionY;
-	        entity.motionZ = motionZ;
-	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
+			motionY = (player.posY - entity.posY) * .1;
+			motionZ = (player.posZ - entity.posZ) * .1;
+			entity.motionX = motionX;
+			entity.motionY = motionY;
+			entity.motionZ = motionZ;
+			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
+					motionX, motionY, motionZ, entity.entityId));
 		}
 	}
-	private void tryPushItem(EntityItem entity)
-	{
+
+	private void tryPushItem(EntityItem entity) {
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if (metallist.contains(entity.getEntityItem().itemID))
-		{
-			motionX = ((player.posX - entity.posX) * .1)*-1;
-	        motionY = ((player.posY - entity.posY) *.1);
-	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
-	        entity.motionX = motionX;
-	        entity.motionY = motionY;
-	        entity.motionZ = motionZ;
-	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
+		if (metallist.contains(entity.getEntityItem().itemID)) {
+			motionX = ((player.posX - entity.posX) * .1) * -1;
+			motionY = ((player.posY - entity.posY) * .1);
+			motionZ = ((player.posZ - entity.posZ) * .1) * -1;
+			entity.motionX = motionX;
+			entity.motionY = motionY;
+			entity.motionZ = motionZ;
+			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
+					motionX, motionY, motionZ, entity.entityId));
 		}
 	}
-	private void tryPullMob(EntityLiving entity)
-	{
-		
+
+	private void tryPullMob(EntityLiving entity) {
+
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if (entity instanceof EntityIronGolem)
-		{
-			motionX = ((player.posX - entity.posX) * .1) *-1;
-	        motionY = ((player.posY - entity.posY) *.1);
-	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
-	        player.motionX = motionX;
-	        player.motionY = motionY;
-	        player.motionZ = motionZ;
-	        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(player.entityId));
-			//waaaaay too damn heavy to push... you get moved.
+		if (entity instanceof EntityIronGolem) {
+			motionX = ((player.posX - entity.posX) * .1) * -1;
+			motionY = ((player.posY - entity.posY) * .1);
+			motionZ = ((player.posZ - entity.posZ) * .1) * -1;
+			player.motionX = motionX;
+			player.motionY = motionY;
+			player.motionZ = motionZ;
+			PacketDispatcher.sendPacketToServer(PacketHandler
+					.stopFall(player.entityId));
+			// waaaaay too damn heavy to push... you get moved.
 		}
-		
-		if (entity.getHeldItem() == null)
-		{
+
+		if (entity.getHeldItem() == null) {
 			return;
 		}
-		
-		if (isItemMetal(entity.getHeldItem()))
-		{
-			//Pull em towards you.
+
+		if (isItemMetal(entity.getHeldItem())) {
+			// Pull em towards you.
 			motionX = ((player.posX - entity.posX) * .1);
-	        motionY = ((player.posY - entity.posY) *.1);
-	        motionZ = ((player.posZ - entity.posZ) *.1);
-	        entity.motionX = motionX;
-	        entity.motionY = motionY;
-	        entity.motionZ = motionZ;
-	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
-	        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(entity.entityId));
+			motionY = ((player.posY - entity.posY) * .1);
+			motionZ = ((player.posZ - entity.posZ) * .1);
+			entity.motionX = motionX;
+			entity.motionY = motionY;
+			entity.motionZ = motionZ;
+			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
+					motionX, motionY, motionZ, entity.entityId));
+			PacketDispatcher.sendPacketToServer(PacketHandler
+					.stopFall(entity.entityId));
 		}
 	}
-	private void tryPushMob(EntityLiving entity)
-	{
-		
+
+	private void tryPushMob(EntityLiving entity) {
+
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if (entity instanceof EntityIronGolem)
-		{
+		if (entity instanceof EntityIronGolem) {
 			motionX = ((player.posX - entity.posX) * .1);
-	        motionY = ((player.posY - entity.posY) *.1);
-	        motionZ = ((player.posZ - entity.posZ) *.1);
-	        player.motionX = motionX;
-	        player.motionY = motionY;
-	        player.motionZ = motionZ;
-	        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(player.entityId));
-			//waaaaay too damn heavy to push... you get moved.
+			motionY = ((player.posY - entity.posY) * .1);
+			motionZ = ((player.posZ - entity.posZ) * .1);
+			player.motionX = motionX;
+			player.motionY = motionY;
+			player.motionZ = motionZ;
+			PacketDispatcher.sendPacketToServer(PacketHandler
+					.stopFall(player.entityId));
+			// waaaaay too damn heavy to push... you get moved.
 		}
-		
-		if (entity.getHeldItem() == null)
-		{
+
+		if (entity.getHeldItem() == null) {
 			return;
 		}
-		
-		if (isItemMetal(entity.getHeldItem()))
-		{
-			//Pull em towards you.
-			motionX = ((player.posX - entity.posX) * .1)*-1 ;
-	        motionY = (player.posY - entity.posY) *.1;
-	        motionZ = ((player.posZ - entity.posZ) *.1)*-1;
-	        entity.motionX = motionX;
-	        entity.motionY = motionY;
-	        entity.motionZ = motionZ;
-	        PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(motionX, motionY, motionZ, entity.entityId));
-	        PacketDispatcher.sendPacketToServer(PacketHandler.stopFall(entity.entityId));
+
+		if (isItemMetal(entity.getHeldItem())) {
+			// Pull em towards you.
+			motionX = ((player.posX - entity.posX) * .1) * -1;
+			motionY = (player.posY - entity.posY) * .1;
+			motionZ = ((player.posZ - entity.posZ) * .1) * -1;
+			entity.motionX = motionX;
+			entity.motionY = motionY;
+			entity.motionZ = motionZ;
+			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
+					motionX, motionY, motionZ, entity.entityId));
+			PacketDispatcher.sendPacketToServer(PacketHandler
+					.stopFall(entity.entityId));
 		}
 	}
-		
-		@Override
+
+	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		// TODO Auto-generated method stub
 	}
@@ -333,22 +316,20 @@ public class MetalParticleController implements ITickHandler {
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 		// TODO Auto-generated method stub
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		LinkedList<Entity> toRemove = new LinkedList<Entity>(); 
+		LinkedList<Entity> toRemove = new LinkedList<Entity>();
 		LinkedList<vector3> toRemove2 = new LinkedList<vector3>();
 		if (player == null)
-				return;
-		
-		for(Entity entity : particleTargets)
-		{
-			
+			return;
+
+		for (Entity entity : particleTargets) {
+
 			if (entity.isDead == true)
 				toRemove.add(entity);
-			
+
 			if (player.getDistanceToEntity(entity) > 10)
 				toRemove.add(entity);
 		}
-		for(Entity entity : toRemove)
-		{
+		for (Entity entity : toRemove) {
 			particleTargets.remove(entity);
 		}
 		particleBlockTargets.clear();

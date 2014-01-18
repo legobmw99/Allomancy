@@ -14,10 +14,12 @@ import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 @SideOnly(Side.CLIENT)
 public class SwitchMetalKeybind extends KeyHandler {
 	private EnumSet tickTypes = EnumSet.of(TickType.CLIENT);
 	private boolean keyDown = false;
+
 	public SwitchMetalKeybind(KeyBinding[] keyBindings, boolean[] repeatings) {
 		super(keyBindings, repeatings);
 		// TODO Auto-generated constructor stub
@@ -32,21 +34,20 @@ public class SwitchMetalKeybind extends KeyHandler {
 	@Override
 	public void keyDown(EnumSet<TickType> types, KeyBinding kb,
 			boolean tickEnd, boolean isRepeat) {
-			EntityClientPlayerMP player;
-			player = Minecraft.getMinecraft().thePlayer;
-			Minecraft mc = FMLClientHandler.instance().getClient();
-			if(mc.currentScreen == null)
-			{
-				if (player == null || !Minecraft.getMinecraft().inGameHasFocus)
-					return;
-				if (keyDown == false)
-				{
-					keyDown = true;
-					AllomancyData data = AllomancyData.forPlayer(player);
-					data.setSelected(data.getSelected()+1);
-					player.sendQueue.addToSendQueue(PacketHandler.updateSelectedMetal(data.getSelected()));
-				}
+		EntityClientPlayerMP player;
+		player = Minecraft.getMinecraft().thePlayer;
+		Minecraft mc = FMLClientHandler.instance().getClient();
+		if (mc.currentScreen == null) {
+			if (player == null || !Minecraft.getMinecraft().inGameHasFocus)
+				return;
+			if (keyDown == false) {
+				keyDown = true;
+				AllomancyData data = AllomancyData.forPlayer(player);
+				data.setSelected(data.getSelected() + 1);
+				player.sendQueue.addToSendQueue(PacketHandler
+						.updateSelectedMetal(data.getSelected()));
 			}
+		}
 	}
 
 	@Override

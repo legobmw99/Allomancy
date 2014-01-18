@@ -1,7 +1,5 @@
 package com.entropicdreams.darva;
 
-
-
 import org.lwjgl.input.Keyboard;
 
 import com.entropicdreams.darva.common.ModRegistry;
@@ -38,39 +36,40 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 import com.entropicdreams.darva.handlers.PacketHandler;
- 
-@NetworkMod(clientSideRequired=true, channels={"Allomancy_Data"}, packetHandler = PacketHandler.class)
-@Mod(modid ="allomancy", name = "Allomancy", version = "@VERSION@" )
+
+@NetworkMod(clientSideRequired = true, channels = { "Allomancy_Data" }, packetHandler = PacketHandler.class)
+@Mod(modid = "allomancy", name = "Allomancy", version = "@VERSION@")
 public class ModMain {
 
-	
 	public static CraftingHandler craftingHandler;
 	public static MetalParticleController MPC;
-	
+
 	@Instance(value = "allomancy")
 	public static ModMain instance;
-	
-	@SidedProxy(clientSide="com.entropicdreams.darva.ClientProxy", serverSide="com.entropicdreams.darva.CommonProxy")
+
+	@SidedProxy(clientSide = "com.entropicdreams.darva.ClientProxy", serverSide = "com.entropicdreams.darva.CommonProxy")
 	public static CommonProxy proxy;
-	
+
 	@EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
+	public void preInit(FMLPreInitializationEvent event) {
 		AllomancyConfig.initProps(event.getSuggestedConfigurationFile());
 		ModRegistry.ModContent();
 		craftingHandler = new CraftingHandler();
 		GameRegistry.registerCraftingHandler(craftingHandler);
 		GameRegistry.registerWorldGenerator(new OreGenerator());
 	}
-	
-	@EventHandler 
-    public void load(FMLInitializationEvent event) {
+
+	@EventHandler
+	public void load(FMLInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
 		MinecraftForge.EVENT_BUS.register(new DamageHandler());
-		EntityRegistry.registerModEntity(FlyingItem.class, "Flying Item", 400, this.instance, 120, 3, true );
-		
+		EntityRegistry.registerModEntity(FlyingItem.class, "Flying Item", 400,
+				this.instance, 120, 3, true);
+
 	}
-	 @EventHandler
-	    public void postInit(FMLPostInitializationEvent event) {
+
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
 		proxy.RegisterTickHandlers();
-	 }	 
+	}
 }

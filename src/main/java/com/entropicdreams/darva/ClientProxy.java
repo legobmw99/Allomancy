@@ -33,20 +33,23 @@ public class ClientProxy extends CommonProxy {
 		TickRegistry.registerTickHandler(pth, Side.CLIENT);
 		ModMain.instance.MPC = new MetalParticleController();
 		TickRegistry.registerTickHandler(ModMain.instance.MPC, Side.CLIENT);
-		
-		
-		KeyBinding[] key = {new KeyBinding("Select Metal", Keyboard.KEY_R)};
-        boolean[] repeat = {false};
-        KeyBindingRegistry.registerKeyBinding(new SwitchMetalKeybind(key, repeat));		 
-        
-		KeyBinding[] key2 = {new KeyBinding("Burn First", Keyboard.KEY_F)};
-        KeyBindingRegistry.registerKeyBinding(new BurnFirstKeyBind(key2, repeat));
-        KeyBinding[] key3 = {new KeyBinding("Burn Second", Keyboard.KEY_G)};
-        KeyBindingRegistry.registerKeyBinding(new BurnSecondKeyBind(key3, repeat));
-        
+
+		KeyBinding[] key = { new KeyBinding("Select Metal", Keyboard.KEY_R) };
+		boolean[] repeat = { false };
+		KeyBindingRegistry.registerKeyBinding(new SwitchMetalKeybind(key,
+				repeat));
+
+		KeyBinding[] key2 = { new KeyBinding("Burn First", Keyboard.KEY_F) };
+		KeyBindingRegistry
+				.registerKeyBinding(new BurnFirstKeyBind(key2, repeat));
+		KeyBinding[] key3 = { new KeyBinding("Burn Second", Keyboard.KEY_G) };
+		KeyBindingRegistry.registerKeyBinding(new BurnSecondKeyBind(key3,
+				repeat));
+
 		MinecraftForge.EVENT_BUS.register(new SoundHandler());
 
-		RenderingRegistry.registerEntityRenderingHandler(FlyingItem.class, new FlyingItemRenderer());
+		RenderingRegistry.registerEntityRenderingHandler(FlyingItem.class,
+				new FlyingItemRenderer());
 	}
 
 }

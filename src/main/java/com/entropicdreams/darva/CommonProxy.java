@@ -7,12 +7,10 @@ import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy {
 
-	
-	public void RegisterTickHandlers()
-	{
-		
-		//derp
+	public void RegisterTickHandlers() {
+
+		// derp
 		TickRegistry.registerTickHandler(new PowerTickHandler(), Side.SERVER);
-		
+
 	}
 }
