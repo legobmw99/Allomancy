@@ -1,8 +1,5 @@
 package com.entropicdreams.darva;
 
-import com.entropicdreams.darva.handlers.PacketHandler;
-
-import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +9,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
+import com.entropicdreams.darva.handlers.PacketHandler;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class FlyingItem extends EntityThrowable {
 

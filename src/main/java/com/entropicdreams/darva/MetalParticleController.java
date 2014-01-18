@@ -2,8 +2,16 @@ package com.entropicdreams.darva;
 
 import java.util.EnumSet;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import com.entropicdreams.darva.common.ModRegistry;
 import com.entropicdreams.darva.handlers.PacketHandler;
@@ -11,19 +19,6 @@ import com.entropicdreams.darva.handlers.PacketHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 public class MetalParticleController implements ITickHandler {
 	public LinkedList<Entity> particleTargets;

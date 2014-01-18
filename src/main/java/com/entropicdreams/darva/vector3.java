@@ -1,8 +1,5 @@
 package com.entropicdreams.darva;
 
-import net.minecraftforge.common.MinecraftForge;
-
-import com.entropicdreams.darva.handlers.DamageHandler;
 
 //Fucking seriously?!?
 public class vector3 {

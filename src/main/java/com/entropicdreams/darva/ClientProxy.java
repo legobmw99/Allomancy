@@ -5,7 +5,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
-import com.entropicdreams.darva.handlers.DamageHandler;
 import com.entropicdreams.darva.handlers.PowerTickHandler;
 import com.entropicdreams.darva.handlers.SoundHandler;
 import com.entropicdreams.darva.handlers.renderHandler;
