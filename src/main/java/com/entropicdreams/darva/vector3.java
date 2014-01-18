@@ -1,6 +1,5 @@
 package com.entropicdreams.darva;
 
-
 //Fucking seriously?!?
 public class vector3 {
 

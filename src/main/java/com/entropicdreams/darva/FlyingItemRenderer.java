@@ -50,14 +50,10 @@ public class FlyingItemRenderer extends Render {
 		GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		par1Tessellator.startDrawingQuads();
 		par1Tessellator.setNormal(0.0F, 1.0F, 0.0F);
-		par1Tessellator.addVertexWithUV((double) (0.0F - f5),
-				(double) (0.0F - f6), 0.0D, (double) f, (double) f3);
-		par1Tessellator.addVertexWithUV((double) (f4 - f5),
-				(double) (0.0F - f6), 0.0D, (double) f1, (double) f3);
-		par1Tessellator.addVertexWithUV((double) (f4 - f5), (double) (f4 - f6),
-				0.0D, (double) f1, (double) f2);
-		par1Tessellator.addVertexWithUV((double) (0.0F - f5),
-				(double) (f4 - f6), 0.0D, (double) f, (double) f2);
+		par1Tessellator.addVertexWithUV(0.0F - f5, 0.0F - f6, 0.0D, f, f3);
+		par1Tessellator.addVertexWithUV(f4 - f5, 0.0F - f6, 0.0D, f1, f3);
+		par1Tessellator.addVertexWithUV(f4 - f5, f4 - f6, 0.0D, f1, f2);
+		par1Tessellator.addVertexWithUV(0.0F - f5, f4 - f6, 0.0D, f, f2);
 		par1Tessellator.draw();
 	}
 
