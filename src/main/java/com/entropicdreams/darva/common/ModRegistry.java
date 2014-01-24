@@ -11,6 +11,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import com.entropicdreams.darva.CreativeTabAllomancy;
 import com.entropicdreams.darva.items.ItemGrinder;
 import com.entropicdreams.darva.items.ItemMistcloak;
 import com.entropicdreams.darva.items.ItemVial;
@@ -97,7 +98,9 @@ public class ModRegistry {
 				"slabWood", 'y', Block.glass));
 
 	}
-
+	public static CreativeTabs tabsAllomancy =
+	        new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
+	
 	public static void initBlocks() {
 		oreTin = new Block(AllomancyConfig.oreTin, Material.rock)
 				.setHardness(.5f).setStepSound(Block.soundStoneFootstep)
@@ -152,47 +155,47 @@ public class ModRegistry {
 
 		itemTinIngot = new Item(AllomancyConfig.itemTinIngot)
 				.setUnlocalizedName("allomancy:tiningot")
-				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+				.setCreativeTab(ModRegistry.tabsAllomancy).setMaxDamage(0);
 		itemTinFlakes = new Item(AllomancyConfig.itemTinFlakes)
 				.setUnlocalizedName("allomancy:tinflakes").setCreativeTab(
-						CreativeTabs.tabMaterials);
+						ModRegistry.tabsAllomancy);
 		itemLeadIngot = new Item(AllomancyConfig.itemLeadIngot)
 				.setUnlocalizedName("allomancy:leadingot")
-				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+				.setCreativeTab(ModRegistry.tabsAllomancy).setMaxDamage(0);
 		itemLeadFlakes = new Item(AllomancyConfig.itemLeadFlakes)
 				.setUnlocalizedName("allomancy:leadflakes").setCreativeTab(
-						CreativeTabs.tabMaterials);
+						ModRegistry.tabsAllomancy);
 		itemCopperIngot = new Item(AllomancyConfig.itemCopperIngot)
 				.setUnlocalizedName("allomancy:copperingot")
-				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+				.setCreativeTab(ModRegistry.tabsAllomancy).setMaxDamage(0);
 		itemCopperFlakes = new Item(AllomancyConfig.itemCopperFlakes)
 				.setUnlocalizedName("allomancy:copperflakes").setCreativeTab(
-						CreativeTabs.tabMaterials);
+						ModRegistry.tabsAllomancy);
 		itemZincIngot = new Item(AllomancyConfig.itemZincIngot)
 				.setUnlocalizedName("allomancy:zincingot")
-				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
+				.setCreativeTab(ModRegistry.tabsAllomancy).setMaxDamage(0);
 		itemZincFlakes = new Item(AllomancyConfig.itemZincFlakes)
 				.setUnlocalizedName("allomancy:zincflakes").setCreativeTab(
-						CreativeTabs.tabMaterials);
+						ModRegistry.tabsAllomancy);
 		itemIronFlakes = new Item(AllomancyConfig.itemIronFlakes)
 				.setUnlocalizedName("allomancy:ironflakes").setCreativeTab(
-						CreativeTabs.tabMaterials);
+						ModRegistry.tabsAllomancy);
 		itemSteelFlakes = new Item(AllomancyConfig.itemSteelFlakes)
 				.setUnlocalizedName("allomancy:steelflakes").setCreativeTab(
-						CreativeTabs.tabMaterials);
+						ModRegistry.tabsAllomancy);
 		itemBrassFlakes = new Item(AllomancyConfig.itemBrassFlakes)
 				.setUnlocalizedName("allomancy:brassflakes").setCreativeTab(
-						CreativeTabs.tabMaterials);
+						ModRegistry.tabsAllomancy);
 		itemPewterFlakes = new Item(AllomancyConfig.itemPewterFlakes)
 				.setUnlocalizedName("allomancy:pewterflakes").setCreativeTab(
-						CreativeTabs.tabMaterials);
+						ModRegistry.tabsAllomancy);
 		itemBronzeFlakes = new Item(AllomancyConfig.itemBronzeFlakes)
 				.setUnlocalizedName("allomancy:bronzeflakes").setCreativeTab(
-						CreativeTabs.tabMaterials);
+						ModRegistry.tabsAllomancy);
 
 		Mistcloak = new ItemMistcloak(AllomancyConfig.Mistcloak, WoolArmor, 5,
 				1).setUnlocalizedName("allomancy:mistcloak").setCreativeTab(
-				CreativeTabs.tabCombat);
+						ModRegistry.tabsAllomancy);
 
 		itemVial = new ItemVial(AllomancyConfig.itemVial);
 	}
@@ -258,6 +261,8 @@ public class ModRegistry {
 		LanguageRegistry.addName(Mistcloak, "Mistcloak");
 		Mistcloak.setTextureName("allomancy:mistcloak");
 
+		LanguageRegistry.instance().addStringLocalization("itemGroup.Allomancy",  "Allomancy");
+		
 		RenderingRegistry.addNewArmourRendererPrefix("Mistcloak");
 
 		ItemStack item;

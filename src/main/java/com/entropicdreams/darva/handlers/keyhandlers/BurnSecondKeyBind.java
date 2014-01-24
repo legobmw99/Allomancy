@@ -2,12 +2,13 @@ package com.entropicdreams.darva.handlers.keyhandlers;
 
 import java.util.EnumSet;
 
-import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.handlers.PacketHandler;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.settings.KeyBinding;
+
+import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.handlers.PacketHandler;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
@@ -47,35 +48,35 @@ public class BurnSecondKeyBind extends KeyHandler {
 				switch (data.getSelected()) {
 				case 1:
 					// toggle Steel.
-					if (data.MetalAmounts[data.matSteel] > 0)
-						data.MetalBurning[data.matSteel] = !data.MetalBurning[data.matSteel];
+					if (data.MetalAmounts[AllomancyData.matSteel] > 0)
+						data.MetalBurning[AllomancyData.matSteel] = !data.MetalBurning[AllomancyData.matSteel];
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matSteel,
-							data.MetalBurning[data.matSteel]));
+							data.MetalBurning[AllomancyData.matSteel]));
 					break;
 				case 2:
 					// toggle Pewter.
-					if (data.MetalAmounts[data.matPewter] > 0)
-						data.MetalBurning[data.matPewter] = !data.MetalBurning[data.matPewter];
+					if (data.MetalAmounts[AllomancyData.matPewter] > 0)
+						data.MetalBurning[AllomancyData.matPewter] = !data.MetalBurning[AllomancyData.matPewter];
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matPewter,
-							data.MetalBurning[data.matPewter]));
+							data.MetalBurning[AllomancyData.matPewter]));
 					break;
 				case 3:
 					// toggle Bronze.
-					if (data.MetalAmounts[data.matBronze] > 0)
-						data.MetalBurning[data.matBronze] = !data.MetalBurning[data.matBronze];
+					if (data.MetalAmounts[AllomancyData.matBronze] > 0)
+						data.MetalBurning[AllomancyData.matBronze] = !data.MetalBurning[AllomancyData.matBronze];
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matBronze,
-							data.MetalBurning[data.matBronze]));
+							data.MetalBurning[AllomancyData.matBronze]));
 					break;
 				case 4:
 					// toggle Brass.
-					if (data.MetalAmounts[data.matBrass] > 0)
-						data.MetalBurning[data.matBrass] = !data.MetalBurning[data.matBrass];
+					if (data.MetalAmounts[AllomancyData.matBrass] > 0)
+						data.MetalBurning[AllomancyData.matBrass] = !data.MetalBurning[AllomancyData.matBrass];
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matBrass,
-							data.MetalBurning[data.matBrass]));
+							data.MetalBurning[AllomancyData.matBrass]));
 					break;
 				default:
 					break;

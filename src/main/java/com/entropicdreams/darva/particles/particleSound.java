@@ -1,17 +1,12 @@
 package com.entropicdreams.darva.particles;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.client.renderer.texture.SimpleTexture;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.texture.TextureObject;
-import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import org.lwjgl.opengl.GL11;
 
 public class particleSound extends EntityFX {
 
@@ -95,31 +90,31 @@ public class particleSound extends EntityFX {
 		}
 
 		float f11 = (float) (this.prevPosX + (this.posX - this.prevPosX)
-				* (double) par2 - interpPosX);
+				* par2 - interpPosX);
 		float f12 = (float) (this.prevPosY + (this.posY - this.prevPosY)
-				* (double) par2 - interpPosY);
+				* par2 - interpPosY);
 		float f13 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ)
-				* (double) par2 - interpPosZ);
+				* par2 - interpPosZ);
 		float f14 = 1.0F;
 		par1Tessellator.setColorRGBA_F(this.particleRed * f14,
 				this.particleGreen * f14, this.particleBlue * f14,
 				this.particleAlpha);
 		par1Tessellator.addVertexWithUV(
-				(double) (f11 - par3 * f10 - par6 * f10), (double) (f12 - par4
-						* f10), (double) (f13 - par5 * f10 - par7 * f10),
-				(double) f7, (double) f9);
+				f11 - par3 * f10 - par6 * f10, f12 - par4
+						* f10, f13 - par5 * f10 - par7 * f10,
+				f7, f9);
 		par1Tessellator.addVertexWithUV(
-				(double) (f11 - par3 * f10 + par6 * f10), (double) (f12 + par4
-						* f10), (double) (f13 - par5 * f10 + par7 * f10),
-				(double) f7, (double) f8);
+				f11 - par3 * f10 + par6 * f10, f12 + par4
+						* f10, f13 - par5 * f10 + par7 * f10,
+				f7, f8);
 		par1Tessellator.addVertexWithUV(
-				(double) (f11 + par3 * f10 + par6 * f10), (double) (f12 + par4
-						* f10), (double) (f13 + par5 * f10 + par7 * f10),
-				(double) f6, (double) f8);
+				f11 + par3 * f10 + par6 * f10, f12 + par4
+						* f10, f13 + par5 * f10 + par7 * f10,
+				f6, f8);
 		par1Tessellator.addVertexWithUV(
-				(double) (f11 + par3 * f10 - par6 * f10), (double) (f12 - par4
-						* f10), (double) (f13 + par5 * f10 - par7 * f10),
-				(double) f6, (double) f9);
+				f11 + par3 * f10 - par6 * f10, f12 - par4
+						* f10, f13 + par5 * f10 - par7 * f10,
+				f6, f9);
 
 		par1Tessellator.draw();
 		GL11.glDisable(GL11.GL_BLEND);

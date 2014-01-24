@@ -18,16 +18,14 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @NetworkMod(clientSideRequired = true, channels = { "Allomancy_Data" }, packetHandler = PacketHandler.class)
-@Mod(modid = "allomancy", name = "Allomancy", version = "@VERSION@")
+@Mod(modid = "allomancy", name = "Allomancy", version = "1.1.5")
 public class ModMain {
 
 	public static CraftingHandler craftingHandler;
 	public static MetalParticleController MPC;
-
 	@Instance(value = "allomancy")
 	public static ModMain instance;
 
@@ -47,8 +45,7 @@ public class ModMain {
 	public void load(FMLInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
 		MinecraftForge.EVENT_BUS.register(new DamageHandler());
-		EntityRegistry.registerModEntity(FlyingItem.class, "Flying Item", 400,
-				ModMain.instance, 120, 3, true);
+		//EntityRegistry.registerModEntity(FlyingItem.class, "Flying Item", 400, ModMain.instance, 120, 3, true);
 
 	}
 

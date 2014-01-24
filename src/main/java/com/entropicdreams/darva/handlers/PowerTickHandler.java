@@ -1,7 +1,6 @@
 package com.entropicdreams.darva.handlers;
 
 import java.util.EnumSet;
-import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -9,16 +8,10 @@ import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAITaskEntry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumMovingObjectType;
@@ -30,7 +23,6 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.FlyingItem;
 import com.entropicdreams.darva.ModMain;
 import com.entropicdreams.darva.vector3;
 
@@ -66,7 +58,7 @@ public class PowerTickHandler implements ITickHandler {
 		data = AllomancyData.forPlayer(player);
 		MovingObjectPosition mop;
 		vector3 vec;
-		if (data.MetalBurning[data.matIron] || data.MetalBurning[data.matSteel]) {
+		if (data.MetalBurning[AllomancyData.matIron] || data.MetalBurning[AllomancyData.matSteel]) {
 			List<Entity> eList;
 			Entity target;
 			AxisAlignedBB box;
@@ -98,7 +90,7 @@ public class PowerTickHandler implements ITickHandler {
 			if (player.getCurrentEquippedItem() == null
 					&& Minecraft.getMinecraft().gameSettings.keyBindAttack.pressed == true) {
 
-				if (data.MetalBurning[data.matIron]) {
+				if (data.MetalBurning[AllomancyData.matIron]) {
 					getMouseOver();
 					if (this.pointedEntity != null) {
 						target = this.pointedEntity;
@@ -113,10 +105,10 @@ public class PowerTickHandler implements ITickHandler {
 							mop = Minecraft.getMinecraft().objectMouseOver;
 							vec = new vector3(mop.blockX, mop.blockY,
 									mop.blockZ);
-							if (ModMain.instance.MPC
+							if (ModMain.MPC
 									.isBlockMetal(player.worldObj.getBlockId(
 											vec.X, vec.Y, vec.Z)))
-								ModMain.instance.MPC.tryPullBlock(vec);
+								ModMain.MPC.tryPullBlock(vec);
 						}
 					}
 
@@ -125,7 +117,7 @@ public class PowerTickHandler implements ITickHandler {
 			}
 			if (player.getCurrentEquippedItem() == null
 					&& Minecraft.getMinecraft().gameSettings.keyBindUseItem.pressed == true) {
-				if (data.MetalBurning[data.matSteel]) {
+				if (data.MetalBurning[AllomancyData.matSteel]) {
 					getMouseOver();
 					if (this.pointedEntity != null) {
 						target = this.pointedEntity;
@@ -141,10 +133,10 @@ public class PowerTickHandler implements ITickHandler {
 							mop = Minecraft.getMinecraft().objectMouseOver;
 							vec = new vector3(mop.blockX, mop.blockY,
 									mop.blockZ);
-							if (ModMain.instance.MPC
+							if (ModMain.MPC
 									.isBlockMetal(player.worldObj.getBlockId(
 											vec.X, vec.Y, vec.Z)))
-								ModMain.instance.MPC.tryPushBlock(vec);
+								ModMain.MPC.tryPushBlock(vec);
 						}
 
 					}
@@ -157,7 +149,7 @@ public class PowerTickHandler implements ITickHandler {
 			ModMain.MPC.particleTargets.clear();
 		}
 
-		if (data.MetalBurning[data.matZinc]) {
+		if (data.MetalBurning[AllomancyData.matZinc]) {
 			Entity entity;
 			mop = Minecraft.getMinecraft().objectMouseOver;
 			if (mop != null
@@ -165,14 +157,14 @@ public class PowerTickHandler implements ITickHandler {
 					&& mop.entityHit instanceof EntityCreature
 					&& !(mop.entityHit instanceof EntityPlayer)
 					&& Minecraft.getMinecraft().gameSettings.keyBindAttack.pressed) {
-				entity = (EntityLiving) mop.entityHit;
+				entity = mop.entityHit;
 
 				player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(
 						entity.entityId, true));
 
 			}
 		}
-		if (data.MetalBurning[data.matBrass]) {
+		if (data.MetalBurning[AllomancyData.matBrass]) {
 			Entity entity;
 			mop = Minecraft.getMinecraft().objectMouseOver;
 			if (mop != null
@@ -180,7 +172,7 @@ public class PowerTickHandler implements ITickHandler {
 					&& mop.entityHit instanceof EntityLiving
 					&& !(mop.entityHit instanceof EntityPlayer)
 					&& Minecraft.getMinecraft().gameSettings.keyBindUseItem.pressed) {
-				entity = (EntityLiving) mop.entityHit;
+				entity = mop.entityHit;
 
 				player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(
 						entity.entityId, false));
@@ -188,7 +180,7 @@ public class PowerTickHandler implements ITickHandler {
 			}
 		}
 
-		if (data.MetalBurning[data.matPewter]) {
+		if (data.MetalBurning[AllomancyData.matPewter]) {
 			if (player.onGround == true) {
 				player.motionX *= 1.4;
 				player.motionZ *= 1.4;
@@ -222,14 +214,14 @@ public class PowerTickHandler implements ITickHandler {
 
 				data = AllomancyData.forPlayer(curPlayer);
 
-				if (!data.MetalBurning[data.matPewter] && data.damageStored > 0) {
+				if (!data.MetalBurning[AllomancyData.matPewter] && data.damageStored > 0) {
 					data.damageStored--;
 					curPlayer.attackEntityFrom(DamageSource.generic, 1);
 				}
 
 				updateBurnTime(data, curPlayer);
 
-				if (data.MetalBurning[data.matTin]) {
+				if (data.MetalBurning[AllomancyData.matTin]) {
 
 					if (!curPlayer.isPotionActive(Potion.nightVision.getId()))
 						curPlayer.addPotionEffect(new PotionEffect(
@@ -245,7 +237,7 @@ public class PowerTickHandler implements ITickHandler {
 					}
 
 				}
-				if (data.MetalBurning[data.matTin] == false
+				if (data.MetalBurning[AllomancyData.matTin] == false
 						&& curPlayer.isPotionActive(Potion.nightVision.getId())) {
 					if (curPlayer.getActivePotionEffect(Potion.nightVision)
 							.getDuration() < 201) {
@@ -322,8 +314,8 @@ public class PowerTickHandler implements ITickHandler {
 								this.mc.renderViewEntity,
 								this.mc.renderViewEntity.boundingBox.addCoord(
 										vec31.xCoord * d0, vec31.yCoord * d0,
-										vec31.zCoord * d0).expand((double) f1,
-										(double) f1, (double) f1));
+										vec31.zCoord * d0).expand(f1,
+										f1, f1));
 				double d2 = d1;
 
 				for (int i = 0; i < list.size(); ++i) {
@@ -332,7 +324,7 @@ public class PowerTickHandler implements ITickHandler {
 					if (true) {
 						float f2 = entity.getCollisionBorderSize();
 						AxisAlignedBB axisalignedbb = entity.boundingBox
-								.expand((double) f2, (double) f2, (double) f2);
+								.expand(f2, f2, f2);
 						MovingObjectPosition movingobjectposition = axisalignedbb
 								.calculateIntercept(vec3, vec32);
 

@@ -2,15 +2,7 @@ package com.entropicdreams.darva.util;
 
 import java.io.File;
 
-import com.entropicdreams.darva.items.ItemGrinder;
-import com.entropicdreams.darva.items.ItemMistcloak;
-import com.entropicdreams.darva.items.ItemVial;
-
-import cpw.mods.fml.common.Loader;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.Property;
 
 public class AllomancyConfig {
 

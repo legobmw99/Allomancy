@@ -2,6 +2,14 @@ package com.entropicdreams.darva.handlers;
 
 import java.util.EnumSet;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.renderer.texture.TextureObject;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
@@ -10,13 +18,6 @@ import com.entropicdreams.darva.ModMain;
 import com.entropicdreams.darva.vector3;
 import com.entropicdreams.darva.particles.ParticleMetal;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.renderer.texture.SimpleTexture;
-import net.minecraft.client.renderer.texture.TextureObject;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -62,7 +63,7 @@ public class renderHandler implements ITickHandler {
 
 		animationCounter++;
 
-		data = data.forPlayer(player);
+		data = AllomancyData.forPlayer(player);
 		// left hand side.
 		int ironY, steelY, tinY, pewterY;
 		// right hand side
@@ -92,36 +93,36 @@ public class renderHandler implements ITickHandler {
 
 		}
 
-		ironY = 9 - data.MetalAmounts[data.matIron]; // This will be replaced
+		ironY = 9 - data.MetalAmounts[AllomancyData.matIron]; // This will be replaced
 														// with a call to get
 														// the actual value of a
 														// players iron
 		// reserves eventually.
 		gig.drawTexturedModalRect(6, 20 + ironY, 7, 1 + ironY, 3, 10 - ironY);
 
-		steelY = 9 - data.MetalAmounts[data.matSteel];
+		steelY = 9 - data.MetalAmounts[AllomancyData.matSteel];
 		gig.drawTexturedModalRect(13, 20 + steelY, 13, 1 + steelY, 3,
 				10 - steelY);
 
-		tinY = 9 - data.MetalAmounts[data.matTin];
+		tinY = 9 - data.MetalAmounts[AllomancyData.matTin];
 		gig.drawTexturedModalRect(31, 20 + tinY, 19, 1 + tinY, 3, 10 - tinY);
 
-		pewterY = 9 - data.MetalAmounts[data.matPewter];
+		pewterY = 9 - data.MetalAmounts[AllomancyData.matPewter];
 		gig.drawTexturedModalRect(38, 20 + pewterY, 25, 1 + pewterY, 3,
 				10 - pewterY);
 
-		copperY = 9 - data.MetalAmounts[data.matCopper];
+		copperY = 9 - data.MetalAmounts[AllomancyData.matCopper];
 		gig.drawTexturedModalRect(56, 20 + copperY, 31, 1 + copperY, 3,
 				10 - copperY);
 
-		bronzeY = 9 - data.MetalAmounts[data.matBronze];
+		bronzeY = 9 - data.MetalAmounts[AllomancyData.matBronze];
 		gig.drawTexturedModalRect(63, 20 + bronzeY, 37, 1 + bronzeY, 3,
 				10 - bronzeY);
 
-		zincY = 9 - data.MetalAmounts[data.matZinc];
+		zincY = 9 - data.MetalAmounts[AllomancyData.matZinc];
 		gig.drawTexturedModalRect(81, 20 + zincY, 43, 1 + zincY, 3, 10 - zincY);
 
-		brassY = 9 - data.MetalAmounts[data.matBrass];
+		brassY = 9 - data.MetalAmounts[AllomancyData.matBrass];
 		gig.drawTexturedModalRect(88, 20 + brassY, 49, 1 + brassY, 3,
 				10 - brassY);
 
@@ -139,35 +140,35 @@ public class renderHandler implements ITickHandler {
 		gig.drawTexturedModalRect(80, 15, 0, 0, 5, 20);
 		gig.drawTexturedModalRect(87, 15, 0, 0, 5, 20);
 
-		if (data.MetalBurning[data.matIron])
+		if (data.MetalBurning[AllomancyData.matIron])
 			gig.drawTexturedModalRect(5, 20 + ironY,
 					Frames[currentFrame].getX(), Frames[currentFrame].getY(),
 					5, 3);
-		if (data.MetalBurning[data.matSteel])
+		if (data.MetalBurning[AllomancyData.matSteel])
 			gig.drawTexturedModalRect(12, 20 + steelY,
 					Frames[currentFrame].getX(), Frames[currentFrame].getY(),
 					5, 3);
-		if (data.MetalBurning[data.matTin])
+		if (data.MetalBurning[AllomancyData.matTin])
 			gig.drawTexturedModalRect(30, 20 + tinY,
 					Frames[currentFrame].getX(), Frames[currentFrame].getY(),
 					5, 3);
-		if (data.MetalBurning[data.matPewter])
+		if (data.MetalBurning[AllomancyData.matPewter])
 			gig.drawTexturedModalRect(37, 20 + pewterY,
 					Frames[currentFrame].getX(), Frames[currentFrame].getY(),
 					5, 3);
-		if (data.MetalBurning[data.matCopper])
+		if (data.MetalBurning[AllomancyData.matCopper])
 			gig.drawTexturedModalRect(55, 20 + copperY,
 					Frames[currentFrame].getX(), Frames[currentFrame].getY(),
 					5, 3);
-		if (data.MetalBurning[data.matBronze])
+		if (data.MetalBurning[AllomancyData.matBronze])
 			gig.drawTexturedModalRect(62, 20 + bronzeY,
 					Frames[currentFrame].getX(), Frames[currentFrame].getY(),
 					5, 3);
-		if (data.MetalBurning[data.matZinc])
+		if (data.MetalBurning[AllomancyData.matZinc])
 			gig.drawTexturedModalRect(80, 20 + zincY,
 					Frames[currentFrame].getX(), Frames[currentFrame].getY(),
 					5, 3);
-		if (data.MetalBurning[data.matBrass])
+		if (data.MetalBurning[AllomancyData.matBrass])
 			gig.drawTexturedModalRect(87, 20 + brassY,
 					Frames[currentFrame].getX(), Frames[currentFrame].getY(),
 					5, 3);
@@ -180,7 +181,7 @@ public class renderHandler implements ITickHandler {
 				currentFrame = 0;
 		}
 		double motionX, motionY, motionZ;
-		for (Entity entity : ModMain.instance.MPC.particleTargets) {
+		for (Entity entity : ModMain.MPC.particleTargets) {
 			motionX = ((player.posX - entity.posX) * -1) * .03;
 			motionY = ((player.posY - entity.posY) * -1) * .03;
 			motionZ = ((player.posZ - entity.posZ) * -1) * .03;
@@ -194,7 +195,7 @@ public class renderHandler implements ITickHandler {
 					motionY, motionZ);
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
-		for (vector3 v : ModMain.instance.MPC.particleBlockTargets) {
+		for (vector3 v : ModMain.MPC.particleBlockTargets) {
 			motionX = ((player.posX - v.X) * -1) * .03;
 			motionY = ((player.posY - v.Y) * -1) * .03;
 			motionZ = ((player.posZ - v.Z) * -1) * .03;
@@ -208,7 +209,7 @@ public class renderHandler implements ITickHandler {
 					motionY, motionZ);
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
-		ModMain.instance.MPC.particleBlockTargets.clear();
+		ModMain.MPC.particleBlockTargets.clear();
 	}
 
 	@Override

@@ -2,16 +2,16 @@ package com.entropicdreams.darva.handlers.keyhandlers;
 
 import java.util.EnumSet;
 
-import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.handlers.PacketHandler;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.settings.KeyBinding;
+
+import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.handlers.PacketHandler;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

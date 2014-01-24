@@ -1,14 +1,13 @@
 package com.entropicdreams.darva.handlers;
 
-import com.entropicdreams.darva.AllomancyData;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import cpw.mods.fml.common.IPlayerTracker;
+
+import com.entropicdreams.darva.AllomancyData;
+
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 

@@ -2,12 +2,13 @@ package com.entropicdreams.darva.handlers.keyhandlers;
 
 import java.util.EnumSet;
 
-import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.handlers.PacketHandler;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.settings.KeyBinding;
+
+import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.handlers.PacketHandler;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
@@ -44,35 +45,35 @@ public class BurnFirstKeyBind extends KeyHandler {
 				switch (data.getSelected()) {
 				case 1:
 					// toggle iron.
-					if (data.MetalAmounts[data.matIron] > 0)
-						data.MetalBurning[data.matIron] = !data.MetalBurning[data.matIron];
+					if (data.MetalAmounts[AllomancyData.matIron] > 0)
+						data.MetalBurning[AllomancyData.matIron] = !data.MetalBurning[AllomancyData.matIron];
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matIron,
-							data.MetalBurning[data.matIron]));
+							data.MetalBurning[AllomancyData.matIron]));
 					break;
 				case 2:
 					// toggle Tin.
-					if (data.MetalAmounts[data.matTin] > 0)
-						data.MetalBurning[data.matTin] = !data.MetalBurning[data.matTin];
+					if (data.MetalAmounts[AllomancyData.matTin] > 0)
+						data.MetalBurning[AllomancyData.matTin] = !data.MetalBurning[AllomancyData.matTin];
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matTin,
-							data.MetalBurning[data.matTin]));
+							data.MetalBurning[AllomancyData.matTin]));
 					break;
 				case 3:
 					// toggle Copper.
-					if (data.MetalAmounts[data.matCopper] > 0)
-						data.MetalBurning[data.matCopper] = !data.MetalBurning[data.matCopper];
+					if (data.MetalAmounts[AllomancyData.matCopper] > 0)
+						data.MetalBurning[AllomancyData.matCopper] = !data.MetalBurning[AllomancyData.matCopper];
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matCopper,
-							data.MetalBurning[data.matCopper]));
+							data.MetalBurning[AllomancyData.matCopper]));
 					break;
 				case 4:
 					// toggle Zinc.
-					if (data.MetalAmounts[data.matZinc] > 0)
-						data.MetalBurning[data.matZinc] = !data.MetalBurning[data.matZinc];
+					if (data.MetalAmounts[AllomancyData.matZinc] > 0)
+						data.MetalBurning[AllomancyData.matZinc] = !data.MetalBurning[AllomancyData.matZinc];
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matZinc,
-							data.MetalBurning[data.matZinc]));
+							data.MetalBurning[AllomancyData.matZinc]));
 					break;
 				default:
 					break;

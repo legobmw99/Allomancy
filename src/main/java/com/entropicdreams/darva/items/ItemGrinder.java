@@ -1,11 +1,9 @@
 package com.entropicdreams.darva.items;
 
-import com.entropicdreams.darva.ModMain;
-import com.entropicdreams.darva.common.ModRegistry;
-
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.entropicdreams.darva.common.ModRegistry;
 
 public class ItemGrinder extends Item {
 
@@ -13,7 +11,7 @@ public class ItemGrinder extends Item {
 		super(par1);
 		// TODO Auto-generated constructor stub
 		setUnlocalizedName("allomancy:Grinder");
-		setCreativeTab(CreativeTabs.tabMisc);
+		setCreativeTab(ModRegistry.tabsAllomancy);
 		setMaxDamage(31);
 		this.maxStackSize = 1;
 	}

@@ -2,20 +2,19 @@ package com.entropicdreams.darva.items;
 
 import java.util.List;
 
-import com.entropicdreams.darva.AllomancyData;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+
+import com.entropicdreams.darva.AllomancyData;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemVial extends ItemFood {
 	public static String[] localName = { "Empty Vial", "Iron Elixer",
@@ -99,6 +98,7 @@ public class ItemVial extends ItemFood {
 		return unlocalName[par1ItemStack.getItemDamage()];
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister IconRegister) {
 		super.registerIcons(IconRegister);

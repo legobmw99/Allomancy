@@ -2,7 +2,6 @@ package com.entropicdreams.darva.ai;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.pathfinding.PathEntity;
@@ -55,6 +54,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
+	@Override
 	public boolean shouldExecute() {
 		EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -81,6 +81,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
+	@Override
 	public boolean continueExecuting() {
 		EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 		return entitylivingbase == null ? false : (!entitylivingbase
@@ -94,6 +95,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
+	@Override
 	public void startExecuting() {
 		this.attacker.getNavigator().setPath(this.entityPathEntity,
 				this.speedTowardsTarget);
@@ -103,6 +105,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	/**
 	 * Resets the task
 	 */
+	@Override
 	public void resetTask() {
 		this.attacker.getNavigator().clearPathEntity();
 	}
@@ -110,6 +113,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	/**
 	 * Updates the task
 	 */
+	@Override
 	public void updateTask() {
 		EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 		if (entitylivingbase == null) {
@@ -142,8 +146,8 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 		}
 
 		this.attackTick = Math.max(this.attackTick - 1, 0);
-		double d0 = (double) (this.attacker.width * 2.0F * this.attacker.width
-				* 2.0F + entitylivingbase.width);
+		double d0 = this.attacker.width * 2.0F * this.attacker.width
+				* 2.0F + entitylivingbase.width;
 
 		if (this.attacker.getDistanceSq(entitylivingbase.posX,
 				entitylivingbase.boundingBox.minY, entitylivingbase.posZ) <= d0) {
@@ -155,12 +159,10 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 				}
 
 				if (this.attacker instanceof EntityAnimal) {
-					System.out.println("FakeAttack");
 					entitylivingbase.attackEntityFrom(
 							DamageSource.causeMobDamage(this.attacker), 3);
 				} else {
 					this.attacker.attackEntityAsMob(entitylivingbase);
-					System.out.println("RealAttack");
 				}
 			}
 		}

@@ -1,11 +1,11 @@
 package com.entropicdreams.darva.handlers;
 
-import com.entropicdreams.darva.ModMain;
-import com.entropicdreams.darva.common.ModRegistry;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+
+import com.entropicdreams.darva.common.ModRegistry;
+
 import cpw.mods.fml.common.ICraftingHandler;
 
 public class CraftingHandler implements ICraftingHandler {
