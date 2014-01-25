@@ -24,13 +24,13 @@ apply plugin: 'forge'
 ENV = System.getenv()
 
 if(ENV.DRONE_BUILD_NUMBER)
-buildNum = "-build" +ENV.DRONE_BUILD_NUMBER
+buildNum = "." +ENV.DRONE_BUILD_NUMBER
 
 else if (ENV.BUILD_NUMBER)
-buildNum = "-build" +ENV.BUILD_NUMBER
+buildNum = "." +ENV.BUILD_NUMBER
 
 else
-buildNum = ""
+buildNum = ".0"
 
 group= "com.entropicdreams.darva.allomancy"
 version = config.mod_version + buildNum
