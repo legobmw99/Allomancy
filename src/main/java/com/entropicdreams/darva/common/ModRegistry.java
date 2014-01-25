@@ -261,7 +261,7 @@ public class ModRegistry {
 		LanguageRegistry.addName(Mistcloak, "Mistcloak");
 		Mistcloak.setTextureName("allomancy:mistcloak");
 
-		LanguageRegistry.instance().addStringLocalization("itemGroup.Allomancy",  "Allomancy");
+		LanguageRegistry.instance().addStringLocalization("itemGroup.Allomancy", "Allomancy");
 		
 		RenderingRegistry.addNewArmourRendererPrefix("Mistcloak");
 

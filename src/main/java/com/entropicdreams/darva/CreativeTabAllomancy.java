@@ -14,9 +14,14 @@ public class CreativeTabAllomancy extends CreativeTabs
         super(id, mod_id);
     }
     @Override
+    public String getTabLabel()
+    {
+    	return "Allomancy";
+    }
+    @Override
     @SideOnly(Side.CLIENT)
     public int getTabIconItemIndex()
     {
-        return ModRegistry.Mistcloak.itemID;
+        return ModRegistry.itemVial.itemID;
     }
 }
