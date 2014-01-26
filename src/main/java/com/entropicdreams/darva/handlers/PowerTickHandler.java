@@ -190,9 +190,10 @@ public class PowerTickHandler implements ITickHandler {
 				player.motionZ = MathHelper.clamp_float((float) player.motionZ,
 						-2, 2);
 			}
-		}
+		
 		if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed()) {
 			player.motionY *= 1.6;
+		}
 		}
 	}
 
