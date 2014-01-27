@@ -18,7 +18,7 @@ public class CraftingHandler implements ICraftingHandler {
 			cur = craftMatrix.getStackInSlot(x);
 			if (cur == null)
 				continue;
-			if (cur.itemID == ModRegistry.itemGrinder.itemID) {
+			if (cur.itemID == ModRegistry.itemAllomancyGrinder.itemID) {
 				cur.damageItem(1, player);
 			}
 

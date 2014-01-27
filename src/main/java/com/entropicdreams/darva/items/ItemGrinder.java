@@ -31,7 +31,7 @@ public class ItemGrinder extends Item {
 	@Override
 	public ItemStack getContainerItemStack(ItemStack itemStack) {
 		// TODO Auto-generated method stub
-		return new ItemStack(ModRegistry.itemGrinder, 1,
+		return new ItemStack(ModRegistry.itemAllomancyGrinder, 1,
 				this.getDamage(itemStack) + 1);
 	}
 

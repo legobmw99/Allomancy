@@ -29,73 +29,44 @@ public class ModRegistry {
 		setupBlocks();
 		setupRecipies();
 		setupKeybinds();
+		oreRegistration();
+		
 	}
-
+	public static void oreRegistration()
+    {
+            OreDictionary.registerOre("ingotCopper", new ItemStack(itemCopperIngot));
+            OreDictionary.registerOre("ingotZinc", new ItemStack(itemZincIngot));
+            OreDictionary.registerOre("ingotTin", new ItemStack(itemTinIngot));
+            OreDictionary.registerOre("ingotLead", new ItemStack(itemLeadIngot));
+    }
 	public static void setupRecipies() {
 
-		GameRegistry.addSmelting(oreTin.blockID,
-				new ItemStack(itemTinIngot, 1), 5);
-		GameRegistry.addSmelting(oreCopper.blockID, new ItemStack(
-				itemCopperIngot, 1), 5);
-		GameRegistry.addSmelting(oreLead.blockID, new ItemStack(itemLeadIngot,
-				1), 5);
-		GameRegistry.addSmelting(oreZinc.blockID, new ItemStack(itemZincIngot,
-				1), 5);
+		GameRegistry.addSmelting(oreTin.blockID,new ItemStack(itemTinIngot, 1), 5);
+		GameRegistry.addSmelting(oreCopper.blockID, new ItemStack(itemCopperIngot, 1), 5);
+		GameRegistry.addSmelting(oreLead.blockID, new ItemStack(itemLeadIngot,1), 5);
+		GameRegistry.addSmelting(oreZinc.blockID, new ItemStack(itemZincIngot,1), 5);
 
-		GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes, 1),
-				new ItemStack(itemTinIngot), new ItemStack(itemGrinder, 1,
-						OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemLeadFlakes, 1),
-				new ItemStack(itemLeadIngot), new ItemStack(itemGrinder, 1,
-						OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemCopperFlakes, 1),
-				new ItemStack(itemCopperIngot), new ItemStack(itemGrinder, 1,
-						OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemZincFlakes, 1),
-				new ItemStack(itemZincIngot), new ItemStack(itemGrinder, 1,
-						OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 1),
-				new ItemStack(Item.ingotIron), new ItemStack(itemGrinder, 1,
-						OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 1),
-				new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes, 1),
-				new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes, 1),
-				new ItemStack(itemPewterFlakes), new ItemStack(itemLeadFlakes));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes, 1),
-				new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes, 1), "ingotTin", new ItemStack(itemAllomancyGrinder, 1, OreDictionary.WILDCARD_VALUE));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemLeadFlakes, 1), "ingotLead", new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemCopperFlakes, 1),"ingotCopper", new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemZincFlakes, 1),"ingotZinc", new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 1),new ItemStack(Item.ingotIron), new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 1),new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes, 1),new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes, 1),new ItemStack(itemPewterFlakes), new ItemStack(itemLeadFlakes));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes, 1),new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
 
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 1),
-				new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Item.bucketWater));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 2),
-				new ItemStack(itemIronFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Item.bucketWater));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 3),
-				new ItemStack(itemTinFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Item.bucketWater));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 4),
-				new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Item.bucketWater));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),
-				new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Item.bucketWater));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),
-				new ItemStack(itemSteelFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Item.bucketWater));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 7),
-				new ItemStack(itemPewterFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Item.bucketWater));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 8),
-				new ItemStack(itemBronzeFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Item.bucketWater));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 1),new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0),new ItemStack(Item.bucketWater));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 2),new ItemStack(itemIronFlakes), new ItemStack(itemVial, 1, 0),new ItemStack(Item.bucketWater));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 3),new ItemStack(itemTinFlakes), new ItemStack(itemVial, 1, 0),new ItemStack(Item.bucketWater));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 4),new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0),new ItemStack(Item.bucketWater));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0),new ItemStack(Item.bucketWater));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),new ItemStack(itemSteelFlakes), new ItemStack(itemVial, 1, 0),new ItemStack(Item.bucketWater));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 7),new ItemStack(itemPewterFlakes), new ItemStack(itemVial, 1, 0),new ItemStack(Item.bucketWater));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 8),new ItemStack(itemBronzeFlakes), new ItemStack(itemVial, 1, 0),new ItemStack(Item.bucketWater));
 
-		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {
-				"W W", "WWW", "WWW", 'W', new ItemStack(Block.cloth, 1, 7) });
-		GameRegistry.addRecipe(new ShapedOreRecipe(
-				new ItemStack(itemVial, 1, 0), " x ", "y y", " y ", 'x',
-				"slabWood", 'y', Block.glass));
+		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {"W W", "WWW", "WWW", 'W', new ItemStack(Block.cloth, 1, 7) });
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemVial, 1, 0), " x ", "y y", " y ", 'x',"slabWood", 'y', Block.glass));
 
 	}
 	public static CreativeTabs tabsAllomancy =
@@ -151,7 +122,7 @@ public class ModRegistry {
 			"Wool", 5, new int[] { 0, 4, 0, 0 }, 15);
 
 	public static void initItems() {
-		itemGrinder = new ItemGrinder(AllomancyConfig.itemGrinder);
+		itemAllomancyGrinder = new ItemGrinder(AllomancyConfig.itemGrinder);
 
 		itemTinIngot = new Item(AllomancyConfig.itemTinIngot)
 				.setUnlocalizedName("allomancy:tiningot")
@@ -201,9 +172,9 @@ public class ModRegistry {
 	}
 
 	public static void setupItems() {
-		GameRegistry.registerItem(itemGrinder, "allomancy:Grinder");
-		LanguageRegistry.addName(itemGrinder, "Hand Grinder");
-		itemGrinder.setTextureName("allomancy:handgrinder");
+		GameRegistry.registerItem(itemAllomancyGrinder, "allomancy:Grinder");
+		LanguageRegistry.addName(itemAllomancyGrinder, "Hand Grinder");
+		itemAllomancyGrinder.setTextureName("allomancy:handgrinder");
 
 		GameRegistry.registerItem(itemTinIngot, "allomancy:tiningot");
 		LanguageRegistry.addName(itemTinIngot, "Tin Ingot");
@@ -278,7 +249,7 @@ public class ModRegistry {
 
 	}
 
-	public static ItemGrinder itemGrinder;
+	public static ItemGrinder itemAllomancyGrinder;
 	public static Item itemTinIngot;
 	public static Item itemTinFlakes;
 	public static Item itemLeadIngot;
