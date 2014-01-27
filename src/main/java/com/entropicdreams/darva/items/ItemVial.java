@@ -29,6 +29,8 @@ public class ItemVial extends ItemFood {
 			"tindrink", "pewterdrink", "zincdrink", "bronzedrink",
 			"copperdrink", "brassdrink" };
 
+	@SideOnly(Side.CLIENT)
+	private Icon[] icons;
 	@Override
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
@@ -75,45 +77,53 @@ public class ItemVial extends ItemFood {
 		return par1ItemStack;
 	}
 
-	@SideOnly(Side.CLIENT)
-	private Icon[] icons;
+	
 
 	public ItemVial(int par1) {
 		super(par1, 0, false);
 		this.setAlwaysEdible();
-
-		// TODO Auto-generated constructor stub
-		setHasSubtypes(true);
+		this.setHasSubtypes(true);
 		this.setCreativeTab(ModRegistry.tabsAllomancy);
 	}
 
 	@Override
-	public Icon getIconFromDamage(int par1) {
+	public Icon getIconFromDamage(int meta) {
 		// TODO Auto-generated method stub
-		return icons[par1];
+		if (meta < 0 || meta >= icons.length) 
+		{
+			meta = 0;
+		}
+		return icons[meta];
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack par1ItemStack) {
+	public String getUnlocalizedName(ItemStack itemStack) {
 		// TODO Auto-generated method stub
-		return unlocalName[par1ItemStack.getItemDamage()];
+		int meta = itemStack.getItemDamage();
+		if (meta < 0 || meta >= unlocalName.length) 
+		{
+			meta = 0;
+		}
+
+		return super.getUnlocalizedName() + "." + unlocalName[meta];
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister IconRegister) {
-		super.registerIcons(IconRegister);
+	public void registerIcons(IconRegister IconRegister) 
+	{
 		icons = new Icon[textureName.length];
-		for (int x = 0; x < textureName.length; x++) {
-			icons[x] = IconRegister.registerIcon("allomancy:" + textureName[x]);
+
+		for (int i = 0; i < textureName.length; ++i) 
+		{
+			icons[i] = IconRegister.registerIcon("allomancy:"+textureName[i]);
 		}
 	}
 
 	@Override
 	public void getSubItems(int id, CreativeTabs tab, List list) {
-		for (int i = 0; i < icons.length; i++) {
-			ItemStack itemstack = new ItemStack(id, 1, i);
-			list.add(itemstack);
+		for (int i = 0; i < icons.length; i++) 
+		{
+			list.add(new ItemStack(id, 1, i));
 		}
 	}
 }

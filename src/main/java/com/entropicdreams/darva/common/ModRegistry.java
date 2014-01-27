@@ -155,25 +155,25 @@ public class ModRegistry {
 
 		itemTinIngot = new Item(AllomancyConfig.itemTinIngot)
 				.setUnlocalizedName("allomancy:tiningot")
-				.setCreativeTab(ModRegistry.tabsAllomancy).setMaxDamage(0);
+				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemTinFlakes = new Item(AllomancyConfig.itemTinFlakes)
 				.setUnlocalizedName("allomancy:tinflakes").setCreativeTab(
 						ModRegistry.tabsAllomancy);
 		itemLeadIngot = new Item(AllomancyConfig.itemLeadIngot)
 				.setUnlocalizedName("allomancy:leadingot")
-				.setCreativeTab(ModRegistry.tabsAllomancy).setMaxDamage(0);
+				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemLeadFlakes = new Item(AllomancyConfig.itemLeadFlakes)
 				.setUnlocalizedName("allomancy:leadflakes").setCreativeTab(
 						ModRegistry.tabsAllomancy);
 		itemCopperIngot = new Item(AllomancyConfig.itemCopperIngot)
 				.setUnlocalizedName("allomancy:copperingot")
-				.setCreativeTab(ModRegistry.tabsAllomancy).setMaxDamage(0);
+				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemCopperFlakes = new Item(AllomancyConfig.itemCopperFlakes)
 				.setUnlocalizedName("allomancy:copperflakes").setCreativeTab(
 						ModRegistry.tabsAllomancy);
 		itemZincIngot = new Item(AllomancyConfig.itemZincIngot)
 				.setUnlocalizedName("allomancy:zincingot")
-				.setCreativeTab(ModRegistry.tabsAllomancy).setMaxDamage(0);
+				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemZincFlakes = new Item(AllomancyConfig.itemZincFlakes)
 				.setUnlocalizedName("allomancy:zincflakes").setCreativeTab(
 						ModRegistry.tabsAllomancy);
@@ -195,7 +195,7 @@ public class ModRegistry {
 
 		Mistcloak = new ItemMistcloak(AllomancyConfig.Mistcloak, WoolArmor, 5,
 				1).setUnlocalizedName("allomancy:mistcloak").setCreativeTab(
-						ModRegistry.tabsAllomancy);
+						CreativeTabs.tabCombat);
 
 		itemVial = new ItemVial(AllomancyConfig.itemVial);
 	}
@@ -264,7 +264,7 @@ public class ModRegistry {
 		LanguageRegistry.instance().addStringLocalization("itemGroup.Allomancy", "Allomancy");
 		
 		RenderingRegistry.addNewArmourRendererPrefix("Mistcloak");
-
+		GameRegistry.registerItem(itemVial, "vial");
 		ItemStack item;
 
 		for (int i = 0; i < ItemVial.localName.length; i++) {

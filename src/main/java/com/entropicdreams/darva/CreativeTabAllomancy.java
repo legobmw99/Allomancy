@@ -1,6 +1,7 @@
 package com.entropicdreams.darva;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 
 import com.entropicdreams.darva.common.ModRegistry;
 
@@ -18,10 +19,13 @@ public class CreativeTabAllomancy extends CreativeTabs
     {
     	return "Allomancy";
     }
+	public ItemStack getIconItemStack()
+	{
+		return new ItemStack(ModRegistry.itemVial, 1, 5);
+	}
     @Override
-    @SideOnly(Side.CLIENT)
     public int getTabIconItemIndex()
     {
-        return ModRegistry.itemVial.itemID;
+        return 0;
     }
 }
