@@ -23,7 +23,6 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.FlyingItem;
 import com.entropicdreams.darva.ai.AIAttackOnCollideExtended;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -150,12 +149,6 @@ public class PacketHandler implements IPacketHandler {
 			itemId = inputStream.readInt();
 			entityId = inputStream.readInt();
 			targItem = Item.itemsList[itemId];
-			FlyingItem fi = (FlyingItem) player.worldObj
-					.getEntityByID(entityId);
-			if (fi == null) {
-				System.out.println("null");
-			}
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -261,20 +254,6 @@ public class PacketHandler implements IPacketHandler {
 				return;
 			}
 
-			/*
-			 * if (target instanceof EntityItem) { EntityItem item =
-			 * (EntityItem) target; FlyingItem fi = new
-			 * FlyingItem(player.worldObj,player,(EntityItem) target);
-			 * fi.setThrowableHeading(motionX, motionY, motionZ, .5f, 1.0f);
-			 * fi.motionX = motionX; fi.motionY = motionY; fi.motionZ = motionZ;
-			 * player.worldObj.spawnEntityInWorld(fi);
-			 * 
-			 * PacketDispatcher.sendPacketToAllInDimension(PacketHandler.updateIcon
-			 * (item.getEntityItem().itemID, fi.entityId, motionX, motionY,
-			 * motionZ),player.dimension);
-			 * 
-			 * }
-			 */
 			else {
 				target.motionX = motionX;
 				target.motionY = motionY;

@@ -45,7 +45,6 @@ public class ModMain {
 	public void load(FMLInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
 		MinecraftForge.EVENT_BUS.register(new DamageHandler());
-		//EntityRegistry.registerModEntity(FlyingItem.class, "Flying Item", 400, ModMain.instance, 120, 3, true);
 
 	}
 

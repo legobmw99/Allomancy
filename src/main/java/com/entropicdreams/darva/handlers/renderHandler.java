@@ -93,11 +93,7 @@ public class renderHandler implements ITickHandler {
 
 		}
 
-		ironY = 9 - data.MetalAmounts[AllomancyData.matIron]; // This will be replaced
-														// with a call to get
-														// the actual value of a
-														// players iron
-		// reserves eventually.
+		ironY = 9 - data.MetalAmounts[AllomancyData.matIron];
 		gig.drawTexturedModalRect(6, 20 + ironY, 7, 1 + ironY, 3, 10 - ironY);
 
 		steelY = 9 - data.MetalAmounts[AllomancyData.matSteel];
