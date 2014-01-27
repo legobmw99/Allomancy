@@ -10,6 +10,7 @@ import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.entropicdreams.darva.CreativeTabAllomancy;
 import com.entropicdreams.darva.items.ItemGrinder;
@@ -38,6 +39,8 @@ public class ModRegistry {
             OreDictionary.registerOre("ingotZinc", new ItemStack(itemZincIngot));
             OreDictionary.registerOre("ingotTin", new ItemStack(itemTinIngot));
             OreDictionary.registerOre("ingotLead", new ItemStack(itemLeadIngot));
+            OreDictionary.registerOre("itemAllomancyGrinder", new ItemStack(itemAllomancyGrinder));
+            
     }
 	public static void setupRecipies() {
 
@@ -45,11 +48,12 @@ public class ModRegistry {
 		GameRegistry.addSmelting(oreCopper.blockID, new ItemStack(itemCopperIngot, 1), 5);
 		GameRegistry.addSmelting(oreLead.blockID, new ItemStack(itemLeadIngot,1), 5);
 		GameRegistry.addSmelting(oreZinc.blockID, new ItemStack(itemZincIngot,1), 5);
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes, 1), "ingotTin", new ItemStack(itemAllomancyGrinder, 1, OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemLeadFlakes, 1), "ingotLead", new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemCopperFlakes, 1),"ingotCopper", new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemZincFlakes, 1),"ingotZinc", new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
+		
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemTinFlakes, 1), new Object[] {"ingotTin", "itemAllomancyGrinder"}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemLeadFlakes, 1), new Object[] {"ingotLead", "itemAllomancyGrinder"}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemZincFlakes, 1), new Object[] {"ingotZinc", "itemAllomancyGrinder"}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemCopperFlakes, 1), new Object[] {"ingotCopper", "itemAllomancyGrinder"}));
+		
 		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 1),new ItemStack(Item.ingotIron), new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
 		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 1),new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
 		GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes, 1),new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
