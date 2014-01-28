@@ -71,7 +71,7 @@ public class ModRegistry {
 
 		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {"W W", "WWW", "WWW", 'W', new ItemStack(Block.cloth, 1, 7) });
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemVial, 1, 0), " x ", "y y", " y ", 'x',"slabWood", 'y', Block.glass));
-
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemAllomancyGrinder, 1, 0), "xxx", "yyy", "xxx", 'x', Item.ingotIron, 'y', Item.goldNugget));
 	}
 	public static CreativeTabs tabsAllomancy =
 	        new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
