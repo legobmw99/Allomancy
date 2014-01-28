@@ -12,6 +12,7 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import com.entropicdreams.darva.common.ModRegistry;
 import com.entropicdreams.darva.handlers.PacketHandler;
@@ -24,6 +25,7 @@ public class MetalParticleController implements ITickHandler {
 	public LinkedList<Entity> particleTargets;
 	public LinkedList<vector3> particleBlockTargets;
 	private LinkedList<Integer> metallist;
+	private String[] ores = OreDictionary.getOreNames();
 
 	public void BuildMetalList() {
 		metallist = new LinkedList<Integer>();
@@ -103,6 +105,12 @@ public class MetalParticleController implements ITickHandler {
 		metallist.add(ModRegistry.itemVial.itemID);
 		metallist.add(ModRegistry.itemZincFlakes.itemID);
 		metallist.add(ModRegistry.itemZincIngot.itemID);
+
+ 		/*for (String s : ores){
+ 			if (s.contains("ingot") || s.contains("metal") || s.contains("ore")){
+ 					metallist.add(OreDictionary.getOreID(s));
+ 			}
+ 		}*/
 	}
 
 	public boolean isItemMetal(ItemStack item) {
