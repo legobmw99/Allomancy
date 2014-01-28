@@ -12,7 +12,7 @@ public class ItemGrinder extends Item {
 		// TODO Auto-generated constructor stub
 		setUnlocalizedName("allomancy:Grinder");
 		setCreativeTab(ModRegistry.tabsAllomancy);
-		setMaxDamage(31);
+		setMaxDamage(63);
 		this.maxStackSize = 1;
 	}
 
