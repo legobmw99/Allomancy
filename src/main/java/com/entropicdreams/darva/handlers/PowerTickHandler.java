@@ -37,7 +37,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class PowerTickHandler implements ITickHandler {
 
 	private Entity pointedEntity;
-	private Minecraft mc = Minecraft.getMinecraft();
+
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
@@ -290,30 +290,32 @@ public class PowerTickHandler implements ITickHandler {
 	}
 
 	/* Ugly below. Sorry */
+	@SideOnly(Side.CLIENT)
 	public void getMouseOver() {
+		Minecraft mc = Minecraft.getMinecraft();
 		float par1 = 0;
-		if (this.mc.renderViewEntity != null) {
-			if (this.mc.theWorld != null) {
-				this.mc.pointedEntityLiving = null;
+		if (mc.renderViewEntity != null) {
+			if (mc.theWorld != null) {
+				mc.pointedEntityLiving = null;
 				double d0 = 10;
-				this.mc.objectMouseOver = this.mc.renderViewEntity.rayTrace(d0,
+				mc.objectMouseOver = mc.renderViewEntity.rayTrace(d0,
 						par1);
 				double d1 = d0;
-				Vec3 vec3 = this.mc.renderViewEntity.getPosition(par1);
+				Vec3 vec3 = mc.renderViewEntity.getPosition(par1);
 
-				if (this.mc.objectMouseOver != null) {
-					d1 = this.mc.objectMouseOver.hitVec.distanceTo(vec3);
+				if (mc.objectMouseOver != null) {
+					d1 = mc.objectMouseOver.hitVec.distanceTo(vec3);
 				}
 
-				Vec3 vec31 = this.mc.renderViewEntity.getLook(par1);
+				Vec3 vec31 = mc.renderViewEntity.getLook(par1);
 				Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord
 						* d0, vec31.zCoord * d0);
 				this.pointedEntity = null;
 				float f1 = 1.0F;
-				List list = this.mc.theWorld
+				List list = mc.theWorld
 						.getEntitiesWithinAABBExcludingEntity(
-								this.mc.renderViewEntity,
-								this.mc.renderViewEntity.boundingBox.addCoord(
+								mc.renderViewEntity,
+								mc.renderViewEntity.boundingBox.addCoord(
 										vec31.xCoord * d0, vec31.yCoord * d0,
 										vec31.zCoord * d0).expand(f1,
 										f1, f1));
@@ -340,7 +342,7 @@ public class PowerTickHandler implements ITickHandler {
 									.distanceTo(movingobjectposition.hitVec);
 
 							if (d3 < d2 || d2 == 0.0D) {
-								if (entity == this.mc.renderViewEntity.ridingEntity
+								if (entity == mc.renderViewEntity.ridingEntity
 										&& !entity.canRiderInteract()) {
 									if (d2 == 0.0D) {
 										this.pointedEntity = entity;
