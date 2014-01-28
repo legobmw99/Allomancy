@@ -250,7 +250,7 @@ public class ModRegistry {
 
 		LanguageRegistry.instance().addStringLocalization("itemGroup.Allomancy", "Allomancy");
 		
-		RenderingRegistry.addNewArmourRendererPrefix("Mistcloak");
+
 		GameRegistry.registerItem(itemVial, "vial");
 		ItemStack item;
 
@@ -258,6 +258,8 @@ public class ModRegistry {
 			ItemStack Item;
 			Item = new ItemStack(itemVial, 1, i);
 			LanguageRegistry.addName(Item, ItemVial.localName[i]);
+			
+		
 		}
 	}
 

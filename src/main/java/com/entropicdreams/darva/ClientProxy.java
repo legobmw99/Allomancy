@@ -13,6 +13,7 @@ import com.entropicdreams.darva.handlers.keyhandlers.BurnSecondKeyBind;
 import com.entropicdreams.darva.handlers.keyhandlers.SwitchMetalKeybind;
 
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -33,7 +34,7 @@ public class ClientProxy extends CommonProxy {
 		
 		ModMain.MPC = new MetalParticleController();
 		TickRegistry.registerTickHandler(ModMain.MPC, Side.CLIENT);
-
+		RenderingRegistry.addNewArmourRendererPrefix("Mistcloak");
 		KeyBinding[] key = { new KeyBinding("Select Metal", Keyboard.KEY_R) };
 		boolean[] repeat = { false };
 		KeyBindingRegistry.registerKeyBinding(new SwitchMetalKeybind(key, repeat));
