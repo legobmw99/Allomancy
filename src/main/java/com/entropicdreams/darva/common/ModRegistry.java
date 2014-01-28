@@ -40,7 +40,6 @@ public class ModRegistry {
             OreDictionary.registerOre("ingotZinc", new ItemStack(itemZincIngot));
             OreDictionary.registerOre("ingotTin", new ItemStack(itemTinIngot));
             OreDictionary.registerOre("ingotLead", new ItemStack(itemLeadIngot));
-            OreDictionary.registerOre("itemAllomancyGrinder", new ItemStack(itemAllomancyGrinder));
             
     }
 	public static void setupRecipies() {
@@ -50,12 +49,12 @@ public class ModRegistry {
 		GameRegistry.addSmelting(oreLead.blockID, new ItemStack(itemLeadIngot,1), 5);
 		GameRegistry.addSmelting(oreZinc.blockID, new ItemStack(itemZincIngot,1), 5);
 		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemTinFlakes, 1), new Object[] {"ingotTin", "itemAllomancyGrinder"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemLeadFlakes, 1), new Object[] {"ingotLead", "itemAllomancyGrinder"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemZincFlakes, 1), new Object[] {"ingotZinc", "itemAllomancyGrinder"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemCopperFlakes, 1), new Object[] {"ingotCopper", "itemAllomancyGrinder"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemBronzeFlakes, 1), new Object[] {"ingotBronze", "itemAllomancyGrinder"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemSteelFlakes, 1), new Object[] {"ingotSteel", "itemAllomancyGrinder"}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemTinFlakes, 1), new Object[] {"ingotTin", itemAllomancyGrinder}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemLeadFlakes, 1), new Object[] {"ingotLead", itemAllomancyGrinder}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemZincFlakes, 1), new Object[] {"ingotZinc", itemAllomancyGrinder}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemCopperFlakes, 1), new Object[] {"ingotCopper", itemAllomancyGrinder}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemBronzeFlakes, 1), new Object[] {"ingotBronze", itemAllomancyGrinder}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemSteelFlakes, 1), new Object[] {"ingotSteel", itemAllomancyGrinder}));
 		
 		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 1),new ItemStack(Item.ingotIron), new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
 		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 1),new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
