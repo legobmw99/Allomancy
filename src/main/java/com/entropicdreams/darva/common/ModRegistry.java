@@ -23,6 +23,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ModRegistry {
+
 	public static void ModContent() {
 		initItems();
 		initBlocks();
@@ -54,6 +55,7 @@ public class ModRegistry {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemZincFlakes, 1), new Object[] {"ingotZinc", "itemAllomancyGrinder"}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemCopperFlakes, 1), new Object[] {"ingotCopper", "itemAllomancyGrinder"}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemBronzeFlakes, 1), new Object[] {"ingotBronze", "itemAllomancyGrinder"}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemSteelFlakes, 1), new Object[] {"ingotSteel", "itemAllomancyGrinder"}));
 		
 		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 1),new ItemStack(Item.ingotIron), new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
 		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 1),new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
