@@ -49,18 +49,18 @@ public class ModRegistry {
 		GameRegistry.addSmelting(oreLead.blockID, new ItemStack(itemLeadIngot,1), 5);
 		GameRegistry.addSmelting(oreZinc.blockID, new ItemStack(itemZincIngot,1), 5);
 		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemTinFlakes, 1), new Object[] {"ingotTin",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemLeadFlakes, 1), new Object[] {"ingotLead",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemZincFlakes, 1), new Object[] {"ingotZinc",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemCopperFlakes, 1), new Object[] {"ingotCopper",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemBronzeFlakes, 1), new Object[] {"ingotBronze",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemSteelFlakes, 1), new Object[] {"ingotSteel",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemTinFlakes, 2), new Object[] {"ingotTin",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemLeadFlakes, 2), new Object[] {"ingotLead",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemZincFlakes, 2), new Object[] {"ingotZinc",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemCopperFlakes, 2), new Object[] {"ingotCopper",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemBronzeFlakes, 2), new Object[] {"ingotBronze",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemSteelFlakes, 2), new Object[] {"ingotSteel",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
 		
-		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 1),new ItemStack(Item.ingotIron), new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 1),new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes, 1),new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes, 1),new ItemStack(itemTinFlakes), new ItemStack(itemLeadFlakes));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes, 1),new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 2),new ItemStack(Item.ingotIron), new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 2),new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes, 2),new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes, 2),new ItemStack(itemTinFlakes), new ItemStack(itemLeadFlakes));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes, 2),new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
 		
 		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 1),new ItemStack(itemIronFlakes), new ItemStack(itemVial, 1, 0),new ItemStack(Item.bucketWater));
 		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 2),new ItemStack(itemSteelFlakes), new ItemStack(itemVial, 1, 0),new ItemStack(Item.bucketWater));

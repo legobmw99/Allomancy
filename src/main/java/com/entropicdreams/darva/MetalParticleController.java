@@ -148,14 +148,15 @@ public class MetalParticleController implements ITickHandler {
 	private void tryAddLiving(EntityLiving entity) {
 		if (entity == null)
 			return;
-		if (entity instanceof EntityIronGolem
-				|| (entity.getHeldItem() != null && metallist.contains(entity
-						.getHeldItem().itemID))) {
-			particleTargets.add(entity);
+		 if (entity instanceof EntityIronGolem
+                 || (entity.getHeldItem() != null && metallist.contains(entity
+                                 .getHeldItem().itemID))) {
+         particleTargets.add(entity);
+ 
+		
 		}
-
 	}
-
+	
 	private void tryAddItem(EntityItem entity) {
 		if (isItemMetal(entity.getEntityItem())) {
 			particleTargets.add(entity);
@@ -220,6 +221,7 @@ public class MetalParticleController implements ITickHandler {
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
+
 			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
 					motionX, motionY, motionZ, entity.entityId));
 		}
@@ -237,8 +239,9 @@ public class MetalParticleController implements ITickHandler {
 			entity.motionZ = motionZ;
 			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
 					motionX, motionY, motionZ, entity.entityId));
+			}
 		}
-	}
+	
 
 	private void tryPullMob(EntityLiving entity) {
 
@@ -246,7 +249,7 @@ public class MetalParticleController implements ITickHandler {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (entity instanceof EntityIronGolem) {
 			motionX = ((player.posX - entity.posX) * .1) * -1;
-			motionY = ((player.posY - entity.posY) * .1);
+			motionY = ((player.posY - entity.posY) * .1) * -1;
 			motionZ = ((player.posZ - entity.posZ) * .1) * -1;
 			player.motionX = motionX;
 			player.motionY = motionY;
@@ -256,23 +259,23 @@ public class MetalParticleController implements ITickHandler {
 			// waaaaay too damn heavy to push... you get moved.
 		}
 
-		if (entity.getHeldItem() == null) {
-			return;
-		}
+		 if (entity.getHeldItem() == null) {
+              return;
+      }
 
-		if (isItemMetal(entity.getHeldItem())) {
-			// Pull em towards you.
-			motionX = ((player.posX - entity.posX) * .1);
-			motionY = ((player.posY - entity.posY) * .1);
-			motionZ = ((player.posZ - entity.posZ) * .1);
-			entity.motionX = motionX;
-			entity.motionY = motionY;
-			entity.motionZ = motionZ;
-			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
-					motionX, motionY, motionZ, entity.entityId));
-			PacketDispatcher.sendPacketToServer(PacketHandler
-					.stopFall(entity.entityId));
-		}
+      if (isItemMetal(entity.getHeldItem())) {
+              // Pull em towards you.
+              motionX = ((player.posX - entity.posX) * .1);
+              motionY = ((player.posY - entity.posY) * .1);
+              motionZ = ((player.posZ - entity.posZ) * .1);
+              entity.motionX = motionX;
+              entity.motionY = motionY;
+              entity.motionZ = motionZ;
+              PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
+                              motionX, motionY, motionZ, entity.entityId));
+              PacketDispatcher.sendPacketToServer(PacketHandler
+                              .stopFall(entity.entityId));
+      }
 	}
 
 	private void tryPushMob(EntityLiving entity) {
@@ -291,23 +294,23 @@ public class MetalParticleController implements ITickHandler {
 			// waaaaay too damn heavy to push... you get moved.
 		}
 
-		if (entity.getHeldItem() == null) {
-			return;
-		}
+		 if (entity.getHeldItem() == null) {
+             return;
+     }
 
-		if (isItemMetal(entity.getHeldItem())) {
-			// Pull em towards you.
-			motionX = ((player.posX - entity.posX) * .1) * -1;
-			motionY = (player.posY - entity.posY) * .1;
-			motionZ = ((player.posZ - entity.posZ) * .1) * -1;
-			entity.motionX = motionX;
-			entity.motionY = motionY;
-			entity.motionZ = motionZ;
-			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
-					motionX, motionY, motionZ, entity.entityId));
-			PacketDispatcher.sendPacketToServer(PacketHandler
-					.stopFall(entity.entityId));
-		}
+     if (isItemMetal(entity.getHeldItem())) {
+             // Pull em towards you.
+             motionX = ((player.posX - entity.posX) * .1) * -1;
+             motionY = (player.posY - entity.posY) * .1;
+             motionZ = ((player.posZ - entity.posZ) * .1) * -1;
+             entity.motionX = motionX;
+             entity.motionY = motionY;
+             entity.motionZ = motionZ;
+             PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
+                             motionX, motionY, motionZ, entity.entityId));
+             PacketDispatcher.sendPacketToServer(PacketHandler
+                             .stopFall(entity.entityId));
+     }
 	}
 
 	@Override
