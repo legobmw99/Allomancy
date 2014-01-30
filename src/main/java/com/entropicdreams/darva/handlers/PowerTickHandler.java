@@ -58,6 +58,7 @@ public class PowerTickHandler implements ITickHandler {
 		data = AllomancyData.forPlayer(player);
 		MovingObjectPosition mop;
 		vector3 vec;
+		if(data.isMistborn){
 		if (data.MetalBurning[AllomancyData.matIron] || data.MetalBurning[AllomancyData.matSteel]) {
 			List<Entity> eList;
 			Entity target;
@@ -197,6 +198,7 @@ public class PowerTickHandler implements ITickHandler {
 			player.motionZ *= 1.4;
 		}
 		}
+		}
 	}
 
 	@Override
@@ -216,10 +218,10 @@ public class PowerTickHandler implements ITickHandler {
 			for (EntityPlayerMP curPlayer : list) {
 
 				data = AllomancyData.forPlayer(curPlayer);
-
+				if(data.isMistborn){
 				if (!data.MetalBurning[AllomancyData.matPewter] && data.damageStored > 0) {
 					data.damageStored--;
-					curPlayer.attackEntityFrom(DamageSource.generic, 1);
+					curPlayer.attackEntityFrom(DamageSource.generic, 2);
 				}
 				Side side = FMLCommonHandler.instance().getEffectiveSide();
 				if (side == Side.CLIENT){
@@ -252,7 +254,7 @@ public class PowerTickHandler implements ITickHandler {
 
 			}
 		}
-
+		}
 	}
 
 	@Override

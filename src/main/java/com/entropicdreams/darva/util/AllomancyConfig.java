@@ -55,7 +55,7 @@ public class AllomancyConfig {
 		itemBronzeFlakes = config.getItem("Bronze Flakes", 813).getInt(813);
 		Mistcloak = config.getItem("Mistcloak", 814).getInt(814);
 		itemVial = config.getItem("Vials", 815).getInt(815);
-
+		nuggetLerasium = config.getItem("Lerasium", 816).getInt(816);
 		config.save();
 	}
 
@@ -99,4 +99,5 @@ public class AllomancyConfig {
 	public static int itemBronzeFlakes;
 	public static int Mistcloak;
 	public static int itemVial;
+	public static int nuggetLerasium;
 }

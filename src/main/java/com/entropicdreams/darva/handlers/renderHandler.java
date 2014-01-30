@@ -68,7 +68,7 @@ public class renderHandler implements ITickHandler {
 		int ironY, steelY, tinY, pewterY;
 		// right hand side
 		int copperY, bronzeY, zincY, brassY;
-
+		if(data.isMistborn){
 		GuiIngame gig = new GuiIngame(Minecraft.getMinecraft());
 		Minecraft.getMinecraft().renderEngine.bindTexture(meterLoc);
 		TextureObject obj;
@@ -206,6 +206,7 @@ public class renderHandler implements ITickHandler {
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
 		ModMain.MPC.particleBlockTargets.clear();
+	}
 	}
 
 	@Override

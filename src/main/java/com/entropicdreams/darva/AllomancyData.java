@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,8 +22,10 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public static final int matBronze = 5;
 	public static final int matCopper = 6;
 	public static final int matBrass = 7;
+	
+    public boolean isMistborn = true;
 
-	public static final String IDENTIFIER = "Allomancy_Data";
+	public static final String IDENTIFIER = "PlayerPersisted";
 	public boolean Dirty = true;
 	public int selected = 0;
 
@@ -81,6 +84,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public void saveNBTData(NBTTagCompound compound) {
 		// TODO Auto-generated method stub
 		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("mistborn", this.isMistborn);
 		nbt.setInteger("iron", MetalAmounts[0]);
 		nbt.setInteger("steel", MetalAmounts[1]);
 		nbt.setInteger("tin", MetalAmounts[2]);
@@ -97,6 +101,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public void loadNBTData(NBTTagCompound compound) {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt = compound.getCompoundTag(IDENTIFIER);
+		isMistborn = nbt.getBoolean("mistborn");
 		MetalAmounts[0] = nbt.getInteger("iron");
 		MetalAmounts[1] = nbt.getInteger("steel");
 		MetalAmounts[2] = nbt.getInteger("tin");

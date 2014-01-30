@@ -16,6 +16,7 @@ import com.entropicdreams.darva.CreativeTabAllomancy;
 import com.entropicdreams.darva.items.ItemGrinder;
 import com.entropicdreams.darva.items.ItemMistcloak;
 import com.entropicdreams.darva.items.ItemVial;
+import com.entropicdreams.darva.items.NuggetLerasium;
 import com.entropicdreams.darva.util.AllomancyConfig;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -182,7 +183,7 @@ public class ModRegistry {
 		Mistcloak = new ItemMistcloak(AllomancyConfig.Mistcloak, WoolArmor, 5,
 				1).setUnlocalizedName("allomancy:mistcloak").setCreativeTab(
 						CreativeTabs.tabCombat);
-
+		nuggetLerasium = new NuggetLerasium(AllomancyConfig.nuggetLerasium);
 		itemVial = new ItemVial(AllomancyConfig.itemVial);
 	}
 
@@ -246,7 +247,11 @@ public class ModRegistry {
 		GameRegistry.registerItem(Mistcloak, "allomancy:mistcloak");
 		LanguageRegistry.addName(Mistcloak, "Mistcloak");
 		Mistcloak.setTextureName("allomancy:mistcloak");
-
+		
+		GameRegistry.registerItem(nuggetLerasium, "allomancy:lerasium");
+		LanguageRegistry.addName(nuggetLerasium, "Lerasium Nugget");
+		nuggetLerasium.setTextureName("allomancy:lerasium");
+		
 		LanguageRegistry.instance().addStringLocalization("itemGroup.Allomancy", "Allomancy");
 		
 
@@ -285,5 +290,6 @@ public class ModRegistry {
 	public static Block oreLead;
 	public static Block oreCopper;
 	public static Block oreZinc;
+	public static NuggetLerasium nuggetLerasium;
 	public static ItemVial itemVial;
 }
