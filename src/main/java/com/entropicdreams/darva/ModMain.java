@@ -53,8 +53,8 @@ public class ModMain {
         MinecraftForge.EVENT_BUS.register(playerTracker);
 		damageHandler = new DamageHandler();
 		MinecraftForge.EVENT_BUS.register(damageHandler);
-		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(ModRegistry.nuggetLerasium),1,1,60));
-		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(ModRegistry.nuggetLerasium),1,1,60));
+		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(ModRegistry.nuggetLerasium),1,1,40));
+		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(ModRegistry.nuggetLerasium),1,1,40));
 	}
 
 	@EventHandler
