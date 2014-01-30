@@ -1,5 +1,8 @@
 package com.entropicdreams.darva;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.entropicdreams.darva.common.ModRegistry;
@@ -50,6 +53,8 @@ public class ModMain {
         MinecraftForge.EVENT_BUS.register(playerTracker);
 		damageHandler = new DamageHandler();
 		MinecraftForge.EVENT_BUS.register(damageHandler);
+		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(ModRegistry.nuggetLerasium),1,1,60));
+		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(ModRegistry.nuggetLerasium),1,1,60));
 	}
 
 	@EventHandler

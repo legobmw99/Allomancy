@@ -84,6 +84,8 @@ public class ModRegistry {
 		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {"W W", "WWW", "WWW", 'W', new ItemStack(Block.cloth, 1, 7) });
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemVial, 1, 0), " x ", "y y", " y ", 'x',"slabWood", 'y', Block.glass));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemAllomancyGrinder, 1, 0), "xxx", "yyy", "xxx", 'x', Item.ingotIron, 'y', Item.goldNugget));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(nuggetLerasium), new Object[] {new ItemStack(Block.blockGold, 1) , new ItemStack(Item.netherStar, 1)}));
+		
 	}
 	public static CreativeTabs tabsAllomancy =
 	        new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
@@ -249,7 +251,7 @@ public class ModRegistry {
 		Mistcloak.setTextureName("allomancy:mistcloak");
 		
 		GameRegistry.registerItem(nuggetLerasium, "allomancy:lerasium");
-		LanguageRegistry.addName(nuggetLerasium, "Lerasium Nugget");
+		LanguageRegistry.addName(nuggetLerasium, "\u00A7bLerasium Nugget");
 		nuggetLerasium.setTextureName("allomancy:lerasium");
 		
 		LanguageRegistry.instance().addStringLocalization("itemGroup.Allomancy", "Allomancy");
