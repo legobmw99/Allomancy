@@ -2,33 +2,64 @@ package com.entropicdreams.darva.handlers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 import com.entropicdreams.darva.AllomancyData;
+import com.entropicdreams.darva.ModMain;
 
+import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
-public class PlayerTracker {
+public class PlayerTracker implements IPlayerTracker {
 
 	@ForgeSubscribe
 	public void onPlayerLogin(EntityJoinWorldEvent event) {
 		// TODO Auto-generated method stub
-		if (event.entity instanceof EntityPlayerMP) {
-			PacketDispatcher.sendPacketToPlayer(
-					PacketHandler.updateAllomancyData(AllomancyData
-							.forPlayer(event.entity)), (Player) event.entity);
-		}
+		
 	}
-
+	@Override
+	public void onPlayerRespawn(EntityPlayer player)
+    {
+            NBTTagCompound old = player.getEntityData();
+            if (old.hasKey("Allomancy_Data"))
+            {	
+                player.getEntityData().setCompoundTag("Allomancy_Data", old.getCompoundTag("Allomancy_Data"));
+            }
+            
+    }
 	@ForgeSubscribe
 	public void onEntityConstruct(EntityEvent.EntityConstructing event) {
 		if (event.entity instanceof EntityPlayer) {
 			event.entity.registerExtendedProperties(AllomancyData.IDENTIFIER,
 					new AllomancyData((EntityPlayer) event.entity));
 		}
+	}
+	@Override
+	public void onPlayerLogin(EntityPlayer player) {
+		// TODO Auto-generated method stub
+		if (player instanceof EntityPlayerMP) {
+			PacketDispatcher.sendPacketToPlayer(
+					PacketHandler.updateAllomancyData(AllomancyData
+							.forPlayer(player)), (Player) player);
+			if(AllomancyData.isMistborn == true){
+			PacketDispatcher.sendPacketToPlayer(
+					PacketHandler.becomeMistborn(), (Player) player);
+		}
+		}
+	}
+	@Override
+	public void onPlayerLogout(EntityPlayer player) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onPlayerChangedDimension(EntityPlayer player) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

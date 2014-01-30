@@ -25,6 +25,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ModMain {
 
 	public static CraftingHandler craftingHandler;
+	public static DamageHandler damageHandler;
+    public static PlayerTracker playerTracker;
 	public static MetalParticleController MPC;
 	@Instance(value = "allomancy")
 	public static ModMain instance;
@@ -43,9 +45,11 @@ public class ModMain {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
-		MinecraftForge.EVENT_BUS.register(new DamageHandler());
-
+		playerTracker = new PlayerTracker();
+        GameRegistry.registerPlayerTracker(playerTracker);
+        MinecraftForge.EVENT_BUS.register(playerTracker);
+		damageHandler = new DamageHandler();
+		MinecraftForge.EVENT_BUS.register(damageHandler);
 	}
 
 	@EventHandler

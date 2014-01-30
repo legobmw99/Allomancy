@@ -40,6 +40,7 @@ public class PacketHandler implements IPacketHandler {
 	public final static int Packet_Allomancy_Move_Entity = 4;
 	public final static int Packet_Allomancy_Update_Texture = 5;
 	public final static int Packet_Allomancy_Stop_Fall = 6;
+	public final static int Packet_Allomancy_Become_Mistborn = 7;
 
 	@Override
 	public void onPacketData(INetworkManager manager,
@@ -101,11 +102,14 @@ public class PacketHandler implements IPacketHandler {
 			moveEntity(packet, player);
 		case PacketHandler.Packet_Allomancy_Stop_Fall:
 			stopFall(packet, player);
+		case PacketHandler.Packet_Allomancy_Become_Mistborn:
+			becomeMistborn(packet, player);
 		default:
 			return;
 		}
 
 	}
+
 
 	@SideOnly(Side.CLIENT)
 	private void clientRec(EntityPlayer player, Packet250CustomPayload packet) {
@@ -312,7 +316,30 @@ public class PacketHandler implements IPacketHandler {
 		packet.length = bos.size();
 		return packet;
 	}
+	private void becomeMistborn(Packet250CustomPayload packet, EntityPlayerMP player) {
+		AllomancyData data;
+		data = AllomancyData.forPlayer(player);
+		data.isMistborn = true;
+		data.Dirty = false;
+	}
 
+	public static Packet250CustomPayload becomeMistborn() {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(32);
+		DataOutputStream outputStream = new DataOutputStream(bos);
+
+		try {
+			outputStream.writeInt(PacketHandler.Packet_Allomancy_Become_Mistborn);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Allomancy_Data";
+		packet.data = bos.toByteArray();
+		packet.length = bos.size();
+		return packet;
+	}
 	private void changeEmotions(Packet250CustomPayload packet,
 			EntityPlayerMP player) // Nowhere better to stick this. *sigh*
 	{

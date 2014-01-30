@@ -10,6 +10,9 @@ import net.minecraft.world.World;
 
 import com.entropicdreams.darva.AllomancyData;
 import com.entropicdreams.darva.common.ModRegistry;
+import com.entropicdreams.darva.handlers.PacketHandler;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class NuggetLerasium extends ItemFood{
 	public NuggetLerasium(int par1) {
@@ -42,12 +45,12 @@ public class NuggetLerasium extends ItemFood{
 	
 	public ItemStack onEaten(ItemStack item, World world,
 			EntityPlayer player) {
-		// TODO Auto-generated method stub
 		AllomancyData data;
 		data = AllomancyData.forPlayer(player);
 	
 		if (data.isMistborn == false) {
 			data.isMistborn = true;
+			PacketDispatcher.sendPacketToServer(PacketHandler.becomeMistborn());
 		}
 		
 		return super.onEaten(item, world, player);

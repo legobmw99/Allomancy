@@ -1,13 +1,16 @@
 package com.entropicdreams.darva.handlers;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import com.entropicdreams.darva.AllomancyData;
 
 public class DamageHandler {
-
+    public static boolean NBTValOnDeath;
 	@ForgeSubscribe
 	public void onDamage(LivingHurtEvent event) {
 

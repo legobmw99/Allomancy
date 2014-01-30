@@ -68,7 +68,7 @@ public class renderHandler implements ITickHandler {
 		int ironY, steelY, tinY, pewterY;
 		// right hand side
 		int copperY, bronzeY, zincY, brassY;
-		if(data.isMistborn){
+		if(data.isMistborn == true){
 		GuiIngame gig = new GuiIngame(Minecraft.getMinecraft());
 		Minecraft.getMinecraft().renderEngine.bindTexture(meterLoc);
 		TextureObject obj;
