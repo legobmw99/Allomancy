@@ -58,7 +58,7 @@ public class PowerTickHandler implements ITickHandler {
 		data = AllomancyData.forPlayer(player);
 		MovingObjectPosition mop;
 		vector3 vec;
-		if(data.isMistborn == true){
+		if(AllomancyData.isMistborn == true){
 		if (data.MetalBurning[AllomancyData.matIron] || data.MetalBurning[AllomancyData.matSteel]) {
 			List<Entity> eList;
 			Entity target;
@@ -218,7 +218,7 @@ public class PowerTickHandler implements ITickHandler {
 			for (EntityPlayerMP curPlayer : list) {
 
 				data = AllomancyData.forPlayer(curPlayer);
-				if(data.isMistborn == true){
+				if(AllomancyData.isMistborn == true){
 				if (!data.MetalBurning[AllomancyData.matPewter] && data.damageStored > 0) {
 					data.damageStored--;
 					curPlayer.attackEntityFrom(DamageSource.generic, 2);
@@ -238,7 +238,7 @@ public class PowerTickHandler implements ITickHandler {
 								.getActivePotionEffect(Potion.nightVision);
 						if (eff.getDuration() < 210) {
 							curPlayer.addPotionEffect(new PotionEffect(
-									Potion.nightVision.getId(), 300, 1, true));
+									Potion.nightVision.getId(), 300, 0, true));
 						}
 					}
 

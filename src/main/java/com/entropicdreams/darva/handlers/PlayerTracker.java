@@ -8,7 +8,6 @@ import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.ModMain;
 
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.network.PacketDispatcher;

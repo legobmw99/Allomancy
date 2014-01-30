@@ -6,6 +6,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
@@ -19,7 +20,6 @@ import com.entropicdreams.darva.items.ItemVial;
 import com.entropicdreams.darva.items.NuggetLerasium;
 import com.entropicdreams.darva.util.AllomancyConfig;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -33,8 +33,16 @@ public class ModRegistry {
 		setupRecipies();
 		setupKeybinds();
 		oreRegistration();
+		addAchievements();
 		
 	}
+	
+	private static void addAchievements() {
+		becomeMistborn = new Achievement(450, "becomeMistborn", -5, -2, ModRegistry.Mistcloak, null).setIndependent().setSpecial().registerAchievement();
+		LanguageRegistry.instance().addStringLocalization("achievement.becomeMistborn","en_US","Become Mistborn!");
+		LanguageRegistry.instance().addStringLocalization("achievement.becomeMistborn.desc","en_US","You have a power most people envy...");
+	}
+
 	public static void oreRegistration()
     {
             OreDictionary.registerOre("ingotCopper", new ItemStack(itemCopperIngot));
@@ -187,6 +195,7 @@ public class ModRegistry {
 						CreativeTabs.tabCombat);
 		nuggetLerasium = new NuggetLerasium(AllomancyConfig.nuggetLerasium);
 		itemVial = new ItemVial(AllomancyConfig.itemVial);
+
 	}
 
 	public static void setupItems() {
@@ -255,6 +264,7 @@ public class ModRegistry {
 		nuggetLerasium.setTextureName("allomancy:lerasium");
 		
 		LanguageRegistry.instance().addStringLocalization("itemGroup.Allomancy", "Allomancy");
+
 		
 
 		GameRegistry.registerItem(itemVial, "vial");
@@ -268,11 +278,11 @@ public class ModRegistry {
 		
 		}
 	}
-
+    
 	public static void setupKeybinds() {
 
 	}
-
+	
 	public static ItemGrinder itemAllomancyGrinder;
 	public static Item itemTinIngot;
 	public static Item itemTinFlakes;
@@ -294,4 +304,5 @@ public class ModRegistry {
 	public static Block oreZinc;
 	public static NuggetLerasium nuggetLerasium;
 	public static ItemVial itemVial;
+	public static Achievement becomeMistborn;
 }

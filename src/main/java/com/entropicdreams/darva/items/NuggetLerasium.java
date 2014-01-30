@@ -2,15 +2,14 @@ package com.entropicdreams.darva.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ChestGenHooks;
 
 import com.entropicdreams.darva.AllomancyData;
 import com.entropicdreams.darva.common.ModRegistry;
@@ -26,6 +25,7 @@ public class NuggetLerasium extends ItemFood{
 		this.setAlwaysEdible();
 		this.setHasSubtypes(false);
 		this.setCreativeTab(ModRegistry.tabsAllomancy);
+		this.maxStackSize = 1;
 	}
 	@Override
 	public int getHealAmount() {
@@ -49,16 +49,21 @@ public class NuggetLerasium extends ItemFood{
 				this.getMaxItemUseDuration(par1ItemStack));
 		return par1ItemStack;
 	}
+	@Override
 	public ItemStack onEaten(ItemStack item, World world,
 			EntityPlayer player) {
 		AllomancyData data;
 		data = AllomancyData.forPlayer(player);
-	
-		if (data.isMistborn == false) {
-			data.isMistborn = true;
+		double x = player.posX;
+		double y = player.posY + 3;
+		double z = player.posZ;
+		if (AllomancyData.isMistborn == false) {
+			AllomancyData.isMistborn = true;
 			PacketDispatcher.sendPacketToServer(PacketHandler.becomeMistborn());
 		}
-		
+		world.spawnEntityInWorld(new EntityLightningBolt(world,x,y,z));
+		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(), 20, 0, true));
+		player.addStat(ModRegistry.becomeMistborn, 1);
 		return super.onEaten(item, world, player);
 	}
 	@Override
@@ -67,7 +72,8 @@ public class NuggetLerasium extends ItemFood{
 	par3List.add("\u00A75This item is endowed with strange powers");
 	par3List.add("\u00A75Perhaps you should ingest it?");
 	}
- @SideOnly(Side.CLIENT)
+ @Override
+@SideOnly(Side.CLIENT)
  	public boolean hasEffect(ItemStack par1ItemStack)
 	    {
 	        return true;

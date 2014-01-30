@@ -319,7 +319,7 @@ public class PacketHandler implements IPacketHandler {
 	private void becomeMistborn(Packet250CustomPayload packet, EntityPlayerMP player) {
 		AllomancyData data;
 		data = AllomancyData.forPlayer(player);
-		data.isMistborn = true;
+		AllomancyData.isMistborn = true;
 		data.Dirty = false;
 	}
 

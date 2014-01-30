@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -84,7 +83,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public void saveNBTData(NBTTagCompound compound) {
 		// TODO Auto-generated method stub
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setBoolean("ismistborn", this.isMistborn);
+		nbt.setBoolean("ismistborn", AllomancyData.isMistborn);
 		nbt.setInteger("iron", MetalAmounts[0]);
 		nbt.setInteger("steel", MetalAmounts[1]);
 		nbt.setInteger("tin", MetalAmounts[2]);

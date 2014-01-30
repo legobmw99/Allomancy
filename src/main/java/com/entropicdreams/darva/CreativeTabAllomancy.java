@@ -5,9 +5,6 @@ import net.minecraft.item.ItemStack;
 
 import com.entropicdreams.darva.common.ModRegistry;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public class CreativeTabAllomancy extends CreativeTabs
 {
     public CreativeTabAllomancy(int id, String mod_id)
@@ -19,6 +16,7 @@ public class CreativeTabAllomancy extends CreativeTabs
     {
     	return "Allomancy";
     }
+	@Override
 	public ItemStack getIconItemStack()
 	{
 		return new ItemStack(ModRegistry.itemVial, 1, 5);
