@@ -181,7 +181,7 @@ public class PowerTickHandler implements ITickHandler {
 		}
 
 		if (data.MetalBurning[AllomancyData.matPewter]) {
-			if (player.onGround == true) {
+			if (player.onGround == true && player.isInWater() == false) {
 				player.motionX *= 1.4;
 				player.motionZ *= 1.4;
 
@@ -229,14 +229,14 @@ public class PowerTickHandler implements ITickHandler {
 
 					if (!curPlayer.isPotionActive(Potion.nightVision.getId()))
 						curPlayer.addPotionEffect(new PotionEffect(
-								Potion.nightVision.getId(), 300));
+								Potion.nightVision.getId(), 300, 0, true));
 					else {
 						PotionEffect eff;
 						eff = curPlayer
 								.getActivePotionEffect(Potion.nightVision);
-						if (eff.getDuration() < 201) {
+						if (eff.getDuration() < 210) {
 							curPlayer.addPotionEffect(new PotionEffect(
-									Potion.nightVision.getId(), 300));
+									Potion.nightVision.getId(), 300, 1, true));
 						}
 					}
 
