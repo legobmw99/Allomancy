@@ -23,7 +23,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public static final int matCopper = 6;
 	public static final int matBrass = 7;
 	
-    public static boolean isMistborn = true;
+    public static boolean isMistborn = false;
 
 	public static final String IDENTIFIER = "Allomancy_Data";
 	public boolean Dirty = true;

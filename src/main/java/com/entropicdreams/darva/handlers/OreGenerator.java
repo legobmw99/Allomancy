@@ -105,7 +105,7 @@ public class OreGenerator implements IWorldGenerator {
 		lz = z;
 		int id;
 		id = world.getBlockId(lx, ly, lz);
-		if (id != Block.stone.blockID && id != Block.dirt.blockID) {
+		if (id != Block.stone.blockID ) {
 			return;
 		}
 		for (int i = 0; i < ntg; i++) {
