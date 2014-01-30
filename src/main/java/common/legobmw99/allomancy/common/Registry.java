@@ -9,16 +9,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
-import net.minecraft.stats.AchievementList;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
 import common.legobmw99.allomancy.blocks.OreBlock;
 import common.legobmw99.allomancy.blocks.OreBlock.OreType;
 import common.legobmw99.allomancy.items.ItemGrinder;
 import common.legobmw99.allomancy.items.ItemMistcloak;
 import common.legobmw99.allomancy.items.ItemVial;
 import common.legobmw99.allomancy.items.NuggetLerasium;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -57,7 +58,8 @@ public class Registry {
 		initItems();
 	}
 	private static void addAchievements() {
-		becomeMistborn = new Achievement("becomeMistborn", "becomeMistborn", -5, -2, new ItemStack(nuggetLerasium, 0, 0), AchievementList.openInventory).setSpecial().registerStat();
+		//																						TODO nuggetLerasium
+		becomeMistborn = new Achievement("achievement.becomeMistborn", "becomeMistborn", -5, -2, Blocks.portal, null).initIndependentStat().setSpecial().registerStat();
 		LanguageRegistry.instance().addStringLocalization("achievement.becomeMistborn","en_US","Become Mistborn!");
 		LanguageRegistry.instance().addStringLocalization("achievement.becomeMistborn.desc","en_US","You have a power most people envy...");
 	}

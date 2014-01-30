@@ -7,4 +7,8 @@ public class ClientProxy extends CommonProxy{
 	{
 		RenderingRegistry.addNewArmourRendererPrefix("Mistcloak");
 	}
+	private void registerTickHandlers()
+	{
+		
+	}
 }

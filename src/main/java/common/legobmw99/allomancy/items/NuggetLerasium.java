@@ -11,8 +11,10 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
+import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.network.packets.AllomancyBecomeMistbornPacket;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -56,7 +58,7 @@ public class NuggetLerasium extends ItemFood{
 		double z = player.posZ;
 		if (AllomancyData.isMistborn == false) {
 			AllomancyData.isMistborn = true;
-			//PacketDispatcher.sendPacketToServer(PacketHandler.becomeMistborn());
+			Allomancy.packetPipeline.sendToServer(new AllomancyBecomeMistbornPacket());
 		}
 		world.spawnEntityInWorld(new EntityLightningBolt(world,x,y,z));
 		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(), 20, 0, true));
