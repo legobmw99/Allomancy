@@ -43,8 +43,12 @@ public class ItemVial extends ItemFood {
 		if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10) {
 			data.MetalAmounts[par1ItemStack.getItemDamage() - 1]++;
 		}
-
+		if(par1ItemStack.getItemDamage() == 0){
+			return null;
+		}
+		else{
 		return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
+		}
 	}
 
 	@Override
