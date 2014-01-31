@@ -13,7 +13,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import com.entropicdreams.darva.CreativeTabAllomancy;
 import com.entropicdreams.darva.items.ItemGrinder;
 import com.entropicdreams.darva.items.ItemMistcloak;
 import com.entropicdreams.darva.items.ItemVial;
@@ -23,7 +22,7 @@ import com.entropicdreams.darva.util.AllomancyConfig;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class ModRegistry {
+public class Registry {
 
 	public static void ModContent() {
 		initItems();
@@ -38,7 +37,7 @@ public class ModRegistry {
 	}
 	
 	private static void addAchievements() {
-		becomeMistborn = new Achievement(450, "becomeMistborn", -5, -2, ModRegistry.Mistcloak, null).setIndependent().setSpecial().registerAchievement();
+		becomeMistborn = new Achievement(450, "becomeMistborn", -5, -2, Registry.Mistcloak, null).setIndependent().setSpecial().registerAchievement();
 		LanguageRegistry.instance().addStringLocalization("achievement.becomeMistborn","en_US","Become Mistborn!");
 		LanguageRegistry.instance().addStringLocalization("achievement.becomeMistborn.desc","en_US","You have a power most people envy...");
 	}
@@ -146,40 +145,40 @@ public class ModRegistry {
 				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemTinFlakes = new Item(AllomancyConfig.itemTinFlakes)
 				.setUnlocalizedName("allomancy:tinflakes").setCreativeTab(
-						ModRegistry.tabsAllomancy);
+						Registry.tabsAllomancy);
 		itemLeadIngot = new Item(AllomancyConfig.itemLeadIngot)
 				.setUnlocalizedName("allomancy:leadingot")
 				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemLeadFlakes = new Item(AllomancyConfig.itemLeadFlakes)
 				.setUnlocalizedName("allomancy:leadflakes").setCreativeTab(
-						ModRegistry.tabsAllomancy);
+						Registry.tabsAllomancy);
 		itemCopperIngot = new Item(AllomancyConfig.itemCopperIngot)
 				.setUnlocalizedName("allomancy:copperingot")
 				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemCopperFlakes = new Item(AllomancyConfig.itemCopperFlakes)
 				.setUnlocalizedName("allomancy:copperflakes").setCreativeTab(
-						ModRegistry.tabsAllomancy);
+						Registry.tabsAllomancy);
 		itemZincIngot = new Item(AllomancyConfig.itemZincIngot)
 				.setUnlocalizedName("allomancy:zincingot")
 				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
 		itemZincFlakes = new Item(AllomancyConfig.itemZincFlakes)
 				.setUnlocalizedName("allomancy:zincflakes").setCreativeTab(
-						ModRegistry.tabsAllomancy);
+						Registry.tabsAllomancy);
 		itemIronFlakes = new Item(AllomancyConfig.itemIronFlakes)
 				.setUnlocalizedName("allomancy:ironflakes").setCreativeTab(
-						ModRegistry.tabsAllomancy);
+						Registry.tabsAllomancy);
 		itemSteelFlakes = new Item(AllomancyConfig.itemSteelFlakes)
 				.setUnlocalizedName("allomancy:steelflakes").setCreativeTab(
-						ModRegistry.tabsAllomancy);
+						Registry.tabsAllomancy);
 		itemBrassFlakes = new Item(AllomancyConfig.itemBrassFlakes)
 				.setUnlocalizedName("allomancy:brassflakes").setCreativeTab(
-						ModRegistry.tabsAllomancy);
+						Registry.tabsAllomancy);
 		itemPewterFlakes = new Item(AllomancyConfig.itemPewterFlakes)
 				.setUnlocalizedName("allomancy:pewterflakes").setCreativeTab(
-						ModRegistry.tabsAllomancy);
+						Registry.tabsAllomancy);
 		itemBronzeFlakes = new Item(AllomancyConfig.itemBronzeFlakes)
 				.setUnlocalizedName("allomancy:bronzeflakes").setCreativeTab(
-						ModRegistry.tabsAllomancy);
+						Registry.tabsAllomancy);
 
 		Mistcloak = new ItemMistcloak(AllomancyConfig.Mistcloak, WoolArmor, 5,
 				1).setUnlocalizedName("allomancy:mistcloak").setCreativeTab(

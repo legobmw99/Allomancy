@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import com.entropicdreams.darva.common.ModRegistry;
+import com.entropicdreams.darva.common.Registry;
 
 import cpw.mods.fml.common.ICraftingHandler;
 
@@ -18,7 +18,7 @@ public class CraftingHandler implements ICraftingHandler {
 			cur = craftMatrix.getStackInSlot(x);
 			if (cur == null)
 				continue;
-			if (cur.itemID == ModRegistry.itemAllomancyGrinder.itemID) {
+			if (cur.itemID == Registry.itemAllomancyGrinder.itemID) {
 				cur.damageItem(1, player);
 			}
 

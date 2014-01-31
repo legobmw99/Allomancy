@@ -1,4 +1,4 @@
-package com.entropicdreams.darva;
+package com.entropicdreams.darva.util;
 
 //Fucking seriously?!?
 public class vector3 {

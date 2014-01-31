@@ -3,7 +3,7 @@ package com.entropicdreams.darva.items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import com.entropicdreams.darva.common.ModRegistry;
+import com.entropicdreams.darva.common.Registry;
 
 public class ItemGrinder extends Item {
 
@@ -11,7 +11,7 @@ public class ItemGrinder extends Item {
 		super(par1);
 		// TODO Auto-generated constructor stub
 		setUnlocalizedName("allomancy:Grinder");
-		setCreativeTab(ModRegistry.tabsAllomancy);
+		setCreativeTab(Registry.tabsAllomancy);
 		setMaxDamage(63);
 		this.maxStackSize = 1;
 	}
@@ -31,7 +31,7 @@ public class ItemGrinder extends Item {
 	@Override
 	public ItemStack getContainerItemStack(ItemStack itemStack) {
 		// TODO Auto-generated method stub
-		return new ItemStack(ModRegistry.itemAllomancyGrinder, 1,
+		return new ItemStack(Registry.itemAllomancyGrinder, 1,
 				this.getDamage(itemStack) + 1);
 	}
 

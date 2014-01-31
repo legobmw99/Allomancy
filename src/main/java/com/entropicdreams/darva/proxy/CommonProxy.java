@@ -1,4 +1,4 @@
-package com.entropicdreams.darva;
+package com.entropicdreams.darva.proxy;
 
 import com.entropicdreams.darva.handlers.PowerTickHandler;
 

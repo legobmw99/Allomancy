@@ -12,7 +12,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
 import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.common.ModRegistry;
+import com.entropicdreams.darva.common.Registry;
 import com.entropicdreams.darva.handlers.PacketHandler;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -24,7 +24,7 @@ public class NuggetLerasium extends ItemFood{
 		super(par1, 0, false);
 		this.setAlwaysEdible();
 		this.setHasSubtypes(false);
-		this.setCreativeTab(ModRegistry.tabsAllomancy);
+		this.setCreativeTab(Registry.tabsAllomancy);
 		this.maxStackSize = 1;
 	}
 	@Override
@@ -63,7 +63,7 @@ public class NuggetLerasium extends ItemFood{
 		}
 		world.spawnEntityInWorld(new EntityLightningBolt(world,x,y,z));
 		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(), 20, 0, true));
-		player.addStat(ModRegistry.becomeMistborn, 1);
+		player.addStat(Registry.becomeMistborn, 1);
 		return super.onEaten(item, world, player);
 	}
 	@Override

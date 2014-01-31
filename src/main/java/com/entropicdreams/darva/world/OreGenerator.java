@@ -1,4 +1,4 @@
-package com.entropicdreams.darva.handlers;
+package com.entropicdreams.darva.world;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -8,7 +8,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
-import com.entropicdreams.darva.common.ModRegistry;
+import com.entropicdreams.darva.common.Registry;
 import com.entropicdreams.darva.util.AllomancyConfig;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -44,19 +44,19 @@ public class OreGenerator implements IWorldGenerator {
 
 		data = new OreData(AllomancyConfig.copperMaxY,
 				AllomancyConfig.copperMinY, 8, 4,
-				AllomancyConfig.copperDensity, ModRegistry.oreCopper.blockID,
+				AllomancyConfig.copperDensity, Registry.oreCopper.blockID,
 				AllomancyConfig.generateCopper);
 		oreList.add(data);
 		data = new OreData(AllomancyConfig.tinMaxY, AllomancyConfig.tinMinY, 8,
-				4, AllomancyConfig.tinDensity, ModRegistry.oreTin.blockID,
+				4, AllomancyConfig.tinDensity, Registry.oreTin.blockID,
 				AllomancyConfig.generateTin);
 		oreList.add(data);
 		data = new OreData(AllomancyConfig.leadMaxY, AllomancyConfig.leadMinY,
-				8, 4, AllomancyConfig.leadDensity, ModRegistry.oreLead.blockID,
+				8, 4, AllomancyConfig.leadDensity, Registry.oreLead.blockID,
 				AllomancyConfig.generateLead);
 		oreList.add(data);
 		data = new OreData(AllomancyConfig.zincMaxY, AllomancyConfig.zincMinY,
-				8, 4, AllomancyConfig.zincDensity, ModRegistry.oreZinc.blockID,
+				8, 4, AllomancyConfig.zincDensity, Registry.oreZinc.blockID,
 				AllomancyConfig.generateZinc);
 		oreList.add(data);
 

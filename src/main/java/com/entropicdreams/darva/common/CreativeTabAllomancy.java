@@ -1,9 +1,7 @@
-package com.entropicdreams.darva;
+package com.entropicdreams.darva.common;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-
-import com.entropicdreams.darva.common.ModRegistry;
 
 public class CreativeTabAllomancy extends CreativeTabs
 {
@@ -19,7 +17,7 @@ public class CreativeTabAllomancy extends CreativeTabs
 	@Override
 	public ItemStack getIconItemStack()
 	{
-		return new ItemStack(ModRegistry.itemVial, 1, 5);
+		return new ItemStack(Registry.itemVial, 1, 5);
 	}
     @Override
     public int getTabIconItemIndex()

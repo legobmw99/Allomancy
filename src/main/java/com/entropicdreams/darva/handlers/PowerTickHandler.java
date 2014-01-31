@@ -23,8 +23,8 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.ModMain;
-import com.entropicdreams.darva.vector3;
+import com.entropicdreams.darva.Allomancy;
+import com.entropicdreams.darva.util.vector3;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
@@ -47,7 +47,7 @@ public class PowerTickHandler implements ITickHandler {
 
 	@ForgeSubscribe
 	public void onBlockBreak(BreakEvent event) {
-		ModMain.MPC.particleBlockTargets.clear();
+		Allomancy.MPC.particleBlockTargets.clear();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -68,7 +68,7 @@ public class PowerTickHandler implements ITickHandler {
 					player.posY + 10, player.posZ + 10);
 			eList = player.worldObj.getEntitiesWithinAABB(Entity.class, box);
 			for (Entity curEntity : eList) {
-				ModMain.MPC.tryAdd(curEntity);
+				Allomancy.MPC.tryAdd(curEntity);
 			}
 
 			int xLoc, zLoc, yLoc;
@@ -79,9 +79,9 @@ public class PowerTickHandler implements ITickHandler {
 			for (int x = xLoc - 5; x < xLoc + 5; x++) {
 				for (int z = zLoc - 5; z < zLoc + 5; z++) {
 					for (int y = yLoc - 5; y < yLoc + 5; y++) {
-						if (ModMain.MPC.isBlockMetal(player.worldObj
+						if (Allomancy.MPC.isBlockMetal(player.worldObj
 								.getBlockId(x, y, z))) {
-							ModMain.MPC.particleBlockTargets.add(new vector3(x,
+							Allomancy.MPC.particleBlockTargets.add(new vector3(x,
 									y, z));
 						}
 					}
@@ -95,21 +95,21 @@ public class PowerTickHandler implements ITickHandler {
 					getMouseOver();
 					if (this.pointedEntity != null) {
 						target = this.pointedEntity;
-						ModMain.MPC.tryPullEntity(target);
+						Allomancy.MPC.tryPullEntity(target);
 					}
 					if (Minecraft.getMinecraft().objectMouseOver != null) {
 						if (Minecraft.getMinecraft().objectMouseOver.entityHit != null) {
-							ModMain.MPC
+							Allomancy.MPC
 									.tryPullEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
 						}
 						if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == EnumMovingObjectType.TILE) {
 							mop = Minecraft.getMinecraft().objectMouseOver;
 							vec = new vector3(mop.blockX, mop.blockY,
 									mop.blockZ);
-							if (ModMain.MPC
+							if (Allomancy.MPC
 									.isBlockMetal(player.worldObj.getBlockId(
 											vec.X, vec.Y, vec.Z)))
-								ModMain.MPC.tryPullBlock(vec);
+								Allomancy.MPC.tryPullBlock(vec);
 						}
 					}
 
@@ -122,22 +122,22 @@ public class PowerTickHandler implements ITickHandler {
 					getMouseOver();
 					if (this.pointedEntity != null) {
 						target = this.pointedEntity;
-						ModMain.MPC.tryPushEntity(target);
+						Allomancy.MPC.tryPushEntity(target);
 					}
 
 					if (Minecraft.getMinecraft().objectMouseOver != null) {
 						if (Minecraft.getMinecraft().objectMouseOver.entityHit != null) {
-							ModMain.MPC
+							Allomancy.MPC
 									.tryPushEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
 						}
 						if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == EnumMovingObjectType.TILE) {
 							mop = Minecraft.getMinecraft().objectMouseOver;
 							vec = new vector3(mop.blockX, mop.blockY,
 									mop.blockZ);
-							if (ModMain.MPC
+							if (Allomancy.MPC
 									.isBlockMetal(player.worldObj.getBlockId(
 											vec.X, vec.Y, vec.Z)))
-								ModMain.MPC.tryPushBlock(vec);
+								Allomancy.MPC.tryPushBlock(vec);
 						}
 
 					}
@@ -147,7 +147,7 @@ public class PowerTickHandler implements ITickHandler {
 			}
 
 		} else {
-			ModMain.MPC.particleTargets.clear();
+			Allomancy.MPC.particleTargets.clear();
 		}
 
 		if (data.MetalBurning[AllomancyData.matZinc]) {

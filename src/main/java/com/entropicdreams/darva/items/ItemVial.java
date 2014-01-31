@@ -12,7 +12,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.common.ModRegistry;
+import com.entropicdreams.darva.common.Registry;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -76,7 +76,7 @@ public class ItemVial extends ItemFood {
 		super(par1, 0, false);
 		this.setAlwaysEdible();
 		this.setHasSubtypes(true);
-		this.setCreativeTab(ModRegistry.tabsAllomancy);
+		this.setCreativeTab(Registry.tabsAllomancy);
 	}
 
 	@Override

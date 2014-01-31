@@ -14,9 +14,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
 import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.ModMain;
-import com.entropicdreams.darva.vector3;
+import com.entropicdreams.darva.Allomancy;
 import com.entropicdreams.darva.particles.ParticleMetal;
+import com.entropicdreams.darva.util.vector3;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
@@ -25,7 +25,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class renderHandler implements ITickHandler {
+public class RenderHandler implements ITickHandler {
 	private final Minecraft mc;
 	private SimpleTexture meter;
 	private ResourceLocation meterLoc;
@@ -36,10 +36,9 @@ public class renderHandler implements ITickHandler {
 	private Point[] Frames = { new Point(72, 0), new Point(72, 4),
 			new Point(72, 8), new Point(72, 12) };
 
-	public renderHandler() {
+	public RenderHandler() {
 		mc = Minecraft.getMinecraft();
-		meterLoc = new ResourceLocation("allomancy",
-				"textures/overlay/meter.png");
+		meterLoc = new ResourceLocation("allomancy","textures/overlay/meter.png");
 
 	}
 
@@ -68,6 +67,7 @@ public class renderHandler implements ITickHandler {
 		int ironY, steelY, tinY, pewterY;
 		// right hand side
 		int copperY, bronzeY, zincY, brassY;
+		
 		if(AllomancyData.isMistborn == true){
 		GuiIngame gig = new GuiIngame(Minecraft.getMinecraft());
 		Minecraft.getMinecraft().renderEngine.bindTexture(meterLoc);
@@ -177,7 +177,7 @@ public class renderHandler implements ITickHandler {
 				currentFrame = 0;
 		}
 		double motionX, motionY, motionZ;
-		for (Entity entity : ModMain.MPC.particleTargets) {
+		for (Entity entity : Allomancy.MPC.particleTargets) {
 			motionX = ((player.posX - entity.posX) * -1) * .03;
 			motionY = ((player.posY - entity.posY) * -1) * .03;
 			motionZ = ((player.posZ - entity.posZ) * -1) * .03;
@@ -191,7 +191,7 @@ public class renderHandler implements ITickHandler {
 					motionY, motionZ);
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
-		for (vector3 v : ModMain.MPC.particleBlockTargets) {
+		for (vector3 v : Allomancy.MPC.particleBlockTargets) {
 			motionX = ((player.posX - v.X) * -1) * .03;
 			motionY = ((player.posY - v.Y) * -1) * .03;
 			motionZ = ((player.posZ - v.Z) * -1) * .03;
@@ -205,7 +205,7 @@ public class renderHandler implements ITickHandler {
 					motionY, motionZ);
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
-		ModMain.MPC.particleBlockTargets.clear();
+		Allomancy.MPC.particleBlockTargets.clear();
 	}
 	}
 

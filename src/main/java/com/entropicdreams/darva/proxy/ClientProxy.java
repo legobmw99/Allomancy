@@ -1,13 +1,15 @@
-package com.entropicdreams.darva;
+package com.entropicdreams.darva.proxy;
 
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
+import com.entropicdreams.darva.MetalParticleController;
+import com.entropicdreams.darva.Allomancy;
 import com.entropicdreams.darva.handlers.PowerTickHandler;
 import com.entropicdreams.darva.handlers.SoundHandler;
-import com.entropicdreams.darva.handlers.renderHandler;
+import com.entropicdreams.darva.handlers.RenderHandler;
 import com.entropicdreams.darva.handlers.keyhandlers.BurnFirstKeyBind;
 import com.entropicdreams.darva.handlers.keyhandlers.BurnSecondKeyBind;
 import com.entropicdreams.darva.handlers.keyhandlers.SwitchMetalKeybind;
@@ -27,13 +29,13 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(pth);
 
 
-		renderHandler rh = new renderHandler();
+		RenderHandler rh = new RenderHandler();
 		TickRegistry.registerTickHandler(rh, Side.CLIENT);
 		TickRegistry.registerTickHandler(pth, Side.SERVER);
 		TickRegistry.registerTickHandler(pth, Side.CLIENT);
 		
-		ModMain.MPC = new MetalParticleController();
-		TickRegistry.registerTickHandler(ModMain.MPC, Side.CLIENT);
+		Allomancy.MPC = new MetalParticleController();
+		TickRegistry.registerTickHandler(Allomancy.MPC, Side.CLIENT);
 		RenderingRegistry.addNewArmourRendererPrefix("Mistcloak");
 		KeyBinding[] key = { new KeyBinding("Select Metal", Keyboard.KEY_R) };
 		boolean[] repeat = { false };

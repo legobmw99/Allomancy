@@ -14,8 +14,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.entropicdreams.darva.common.ModRegistry;
+import com.entropicdreams.darva.common.Registry;
 import com.entropicdreams.darva.handlers.PacketHandler;
+import com.entropicdreams.darva.util.vector3;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -70,17 +71,18 @@ public class MetalParticleController implements ITickHandler {
 		metallist.add(Item.appleGold.itemID);
 		metallist.add(Item.swordGold.itemID);
 		metallist.add(Item.swordIron.itemID);
-		metallist.add(ModRegistry.itemBrassFlakes.itemID);
-		metallist.add(ModRegistry.itemBronzeFlakes.itemID);
-		metallist.add(ModRegistry.itemCopperFlakes.itemID);
-		metallist.add(ModRegistry.itemCopperIngot.itemID);
-		metallist.add(ModRegistry.itemIronFlakes.itemID);
-		metallist.add(ModRegistry.itemLeadFlakes.itemID);
-		metallist.add(ModRegistry.itemLeadIngot.itemID);
-		metallist.add(ModRegistry.itemPewterFlakes.itemID);
-		metallist.add(ModRegistry.itemSteelFlakes.itemID);
-		metallist.add(ModRegistry.itemTinFlakes.itemID);
-		metallist.add(ModRegistry.itemTinIngot.itemID);
+		metallist.add(Registry.itemBrassFlakes.itemID);
+		metallist.add(Registry.itemBronzeFlakes.itemID);
+		metallist.add(Registry.itemCopperFlakes.itemID);
+		metallist.add(Registry.itemCopperIngot.itemID);
+		metallist.add(Registry.itemIronFlakes.itemID);
+		metallist.add(Registry.itemLeadFlakes.itemID);
+		metallist.add(Registry.itemLeadIngot.itemID);
+		metallist.add(Registry.itemPewterFlakes.itemID);
+		metallist.add(Registry.itemSteelFlakes.itemID);
+		metallist.add(Registry.itemTinFlakes.itemID);
+		metallist.add(Registry.itemTinIngot.itemID);
+		metallist.add(Registry.nuggetLerasium.itemID);
 		metallist.add(Block.anvil.blockID);
 		metallist.add(Block.blockGold.blockID);
 		metallist.add(Block.blockIron.blockID);
@@ -98,13 +100,13 @@ public class MetalParticleController implements ITickHandler {
 		metallist.add(Block.railActivator.blockID);
 		metallist.add(Block.railDetector.blockID);
 		metallist.add(Block.railPowered.blockID);
-		metallist.add(ModRegistry.oreCopper.blockID);
-		metallist.add(ModRegistry.oreTin.blockID);
-		metallist.add(ModRegistry.oreZinc.blockID);
-		metallist.add(ModRegistry.oreLead.blockID);
-		metallist.add(ModRegistry.itemVial.itemID);
-		metallist.add(ModRegistry.itemZincFlakes.itemID);
-		metallist.add(ModRegistry.itemZincIngot.itemID);
+		metallist.add(Registry.oreCopper.blockID);
+		metallist.add(Registry.oreTin.blockID);
+		metallist.add(Registry.oreZinc.blockID);
+		metallist.add(Registry.oreLead.blockID);
+		metallist.add(Registry.itemVial.itemID);
+		metallist.add(Registry.itemZincFlakes.itemID);
+		metallist.add(Registry.itemZincIngot.itemID);
 
  		/*for (String s : ores){
  			if (s.contains("ingot") || s.contains("metal") || s.contains("ore")){
