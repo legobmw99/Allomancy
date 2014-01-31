@@ -9,7 +9,7 @@ import com.entropicdreams.darva.MetalParticleController;
 import com.entropicdreams.darva.Allomancy;
 import com.entropicdreams.darva.handlers.PowerTickHandler;
 import com.entropicdreams.darva.handlers.SoundHandler;
-import com.entropicdreams.darva.handlers.Derp;
+import com.entropicdreams.darva.handlers.RenderHandler;
 import com.entropicdreams.darva.handlers.keyhandlers.BurnFirstKeyBind;
 import com.entropicdreams.darva.handlers.keyhandlers.BurnSecondKeyBind;
 import com.entropicdreams.darva.handlers.keyhandlers.SwitchMetalKeybind;
@@ -29,7 +29,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(pth);
 
 
-		Derp rh = new Derp();
+		RenderHandler rh = new RenderHandler();
 		TickRegistry.registerTickHandler(rh, Side.CLIENT);
 		TickRegistry.registerTickHandler(pth, Side.SERVER);
 		TickRegistry.registerTickHandler(pth, Side.CLIENT);
