@@ -28,20 +28,17 @@ public class PlayerTracker implements IPlayerTracker {
 	@ForgeSubscribe
 	public void onEntityConstruct(EntityEvent.EntityConstructing event) {
 		if (event.entity instanceof EntityPlayer) {
-			event.entity.registerExtendedProperties(AllomancyData.IDENTIFIER,
-					new AllomancyData((EntityPlayer) event.entity));
+			event.entity.registerExtendedProperties(AllomancyData.IDENTIFIER,new AllomancyData((EntityPlayer) event.entity));
 		}
 	}
 	@ForgeSubscribe
 	public void onPlayerLogin(EntityJoinWorldEvent event) {
-		// TODO Auto-generated method stub
 		if (event.entity instanceof EntityPlayerMP) {
+			AllomancyData data = AllomancyData.forPlayer(event.entity);
 			PacketDispatcher.sendPacketToPlayer(
-					PacketHandler.updateAllomancyData(AllomancyData
-							.forPlayer(event.entity)), (Player) event.entity);
-			if(AllomancyData.isMistborn == true){
-			PacketDispatcher.sendPacketToPlayer(
-					PacketHandler.becomeMistborn(), (Player) event.entity);
+					PacketHandler.updateAllomancyData(data), (Player) event.entity);
+			if(data.isMistborn == true){
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.becomeMistborn(), (Player) event.entity);
 		}
 		}
 	}
@@ -57,14 +54,11 @@ public class PlayerTracker implements IPlayerTracker {
 	}
 	@Override
 	public void onPlayerLogin(EntityPlayer player) {
-		// TODO Auto-generated method stub
 		if (player instanceof EntityPlayerMP) {
-			PacketDispatcher.sendPacketToPlayer(
-					PacketHandler.updateAllomancyData(AllomancyData
-							.forPlayer(player)), (Player) player);
-			if(AllomancyData.isMistborn == true){
-			PacketDispatcher.sendPacketToPlayer(
-					PacketHandler.becomeMistborn(), (Player) player);
+			AllomancyData data = AllomancyData.forPlayer(player);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.updateAllomancyData(data), (Player) player);
+			if(data.isMistborn == true){
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.becomeMistborn(), (Player) player);
 		}
 		}
 	}
