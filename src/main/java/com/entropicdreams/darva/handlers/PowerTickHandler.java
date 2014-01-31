@@ -228,22 +228,37 @@ public class PowerTickHandler implements ITickHandler {
 					if (side == Side.CLIENT){
 						updateBurnTime(data, curPlayer);
 					}
-					
-					if (side == Side.CLIENT);
-						float gamma;
-						gamma = Minecraft.getMinecraft().gameSettings.gammaSetting;	
-
 						if (data.MetalBurning[AllomancyData.matTin]) {
 						
-							Minecraft.getMinecraft().gameSettings.gammaSetting = 20.0F;
+							if (!curPlayer.isPotionActive(Potion.nightVision.getId()))
+								curPlayer.addPotionEffect(new PotionEffect(
+										Potion.nightVision.getId(), 300, 0, true));
+							else {
+								PotionEffect eff;
+								eff = curPlayer
+										.getActivePotionEffect(Potion.nightVision);
+								if (eff.getDuration() < 210) {
+									curPlayer.addPotionEffect(new PotionEffect(
+											Potion.nightVision.getId(), 300, 0, true));
+								}
+							}
+
 						}
-						else{
-							Minecraft.getMinecraft().gameSettings.gammaSetting = 1.0F;
+						if (data.MetalBurning[AllomancyData.matTin] == false
+								&& curPlayer.isPotionActive(Potion.nightVision.getId())) {
+							if (curPlayer.getActivePotionEffect(Potion.nightVision)
+									.getDuration() < 201) {
+								curPlayer
+										.removePotionEffect(Potion.nightVision.getId());
+							}
 						}
+					}
 				}
 			}
 		}
-	}
+			
+
+	
 	
 	@Override
 	public EnumSet<TickType> ticks() {
