@@ -37,8 +37,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class PowerTickHandler implements ITickHandler {
 
 	private Entity pointedEntity;
-	private float gamma = Minecraft.getMinecraft().gameSettings.gammaSetting;	
-
+	
+	
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		// TODO Auto-generated method stub
@@ -228,17 +228,23 @@ public class PowerTickHandler implements ITickHandler {
 					if (side == Side.CLIENT){
 						updateBurnTime(data, curPlayer);
 					}
-					if (data.MetalBurning[AllomancyData.matTin]) {
+					
+					if (side == Side.CLIENT);
+						float gamma;
+						gamma = Minecraft.getMinecraft().gameSettings.gammaSetting;	
+
+						if (data.MetalBurning[AllomancyData.matTin]) {
 						
-						Minecraft.getMinecraft().gameSettings.gammaSetting = 20.0F;
-					}
-					else{
-						Minecraft.getMinecraft().gameSettings.gammaSetting = gamma;
-					}
+							Minecraft.getMinecraft().gameSettings.gammaSetting = 20.0F;
+						}
+						else{
+							Minecraft.getMinecraft().gameSettings.gammaSetting = 1.0F;
+						}
 				}
 			}
 		}
 	}
+	
 	@Override
 	public EnumSet<TickType> ticks() {
 		// TODO Auto-generated method stub
