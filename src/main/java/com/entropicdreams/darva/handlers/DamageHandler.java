@@ -7,7 +7,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import com.entropicdreams.darva.AllomancyData;
 
 public class DamageHandler {
-    public static boolean NBTValOnDeath;
 	@ForgeSubscribe
 	public void onDamage(LivingHurtEvent event) {
 

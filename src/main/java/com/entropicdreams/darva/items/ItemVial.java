@@ -18,16 +18,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemVial extends ItemFood {
-	public static String[] localName = { "Empty Vial", "Iron Elixer",
-			"Steel Elixer", "Tin Elixer", "Pewter Elixer", "Zinc Elixer",
-			"Brass Elixer", "Copper Elixer", "Bronze Elixer", };
-	public static String[] textureName = { "emptyvial", "ironelixer",
-			"steelelixer", "tinelixer", "pewterelixer", "zincelixer",
-			"brasselixer", "copperelixer", "bronzeelixer", };
-
-	public static String[] unlocalName = { "empty", "irondrink", "steeldrink",
-			"tindrink", "pewterdrink", "zincdrink", "brassdrink",
-			"copperdrink", "bronzedrink" };
+	public static String[] localName = { "Empty Vial", "Iron Elixer","Steel Elixer", "Tin Elixer", "Pewter Elixer", "Copper Elixer", "Bronze Elixer","Zinc Elixer","Brass Elixer", };
+	public static String[] textureName = { "emptyvial", "ironelixer","steelelixer", "tinelixer", "pewterelixer", "copperelixer", "bronzeelixer","zincelixer","brasselixer", };
+	public static String[] unlocalName = { "empty", "irondrink", "steeldrink","tindrink", "pewterdrink", "zincdrink", "brassdrink","copperdrink", "bronzedrink" };
 
 	@SideOnly(Side.CLIENT)
 	private Icon[] icons;

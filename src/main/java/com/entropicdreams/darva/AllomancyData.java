@@ -17,9 +17,9 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public static final int matSteel = 1;
 	public static final int matTin = 2;
 	public static final int matPewter = 3;
-	public static final int matZinc = 4;
+	public static final int matCopper = 4;
 	public static final int matBronze = 5;
-	public static final int matCopper = 6;
+	public static final int matZinc = 6;
 	public static final int matBrass = 7;
 	
     public static boolean isMistborn = false;
@@ -41,6 +41,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 	}
 
 	public static AllomancyData forPlayer(Entity player) {
+
 		return (AllomancyData) player.getExtendedProperties(IDENTIFIER);
 	}
 
@@ -81,7 +82,6 @@ public class AllomancyData implements IExtendedEntityProperties {
 
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
-		// TODO Auto-generated method stub
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setBoolean("ismistborn", AllomancyData.isMistborn);
 		nbt.setInteger("iron", MetalAmounts[0]);

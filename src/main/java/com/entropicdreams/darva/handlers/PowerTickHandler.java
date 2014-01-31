@@ -37,7 +37,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class PowerTickHandler implements ITickHandler {
 
 	private Entity pointedEntity;
-
+	private float gamma = Minecraft.getMinecraft().gameSettings.gammaSetting;	
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
@@ -209,54 +209,36 @@ public class PowerTickHandler implements ITickHandler {
 			Side side = FMLCommonHandler.instance().getEffectiveSide();
 			if (side == Side.CLIENT)
 				clientTick();
-		} else {
+		} 
+		else {
 			World world;
 			world = (World) tickData[0];
 
 			List<EntityPlayerMP> list = world.playerEntities;
 
 			for (EntityPlayerMP curPlayer : list) {
-
 				data = AllomancyData.forPlayer(curPlayer);
+				
 				if(AllomancyData.isMistborn == true){
-				if (!data.MetalBurning[AllomancyData.matPewter] && data.damageStored > 0) {
-					data.damageStored--;
-					curPlayer.attackEntityFrom(DamageSource.generic, 2);
-				}
-				Side side = FMLCommonHandler.instance().getEffectiveSide();
-				if (side == Side.CLIENT){
-					updateBurnTime(data, curPlayer);
-				}
-				if (data.MetalBurning[AllomancyData.matTin]) {
-
-					if (!curPlayer.isPotionActive(Potion.nightVision.getId()))
-						curPlayer.addPotionEffect(new PotionEffect(
-								Potion.nightVision.getId(), 300, 0, true));
-					else {
-						PotionEffect eff;
-						eff = curPlayer
-								.getActivePotionEffect(Potion.nightVision);
-						if (eff.getDuration() < 210) {
-							curPlayer.addPotionEffect(new PotionEffect(
-									Potion.nightVision.getId(), 300, 0, true));
-						}
+					if (!data.MetalBurning[AllomancyData.matPewter] && data.damageStored > 0) {
+						data.damageStored--;
+						curPlayer.attackEntityFrom(DamageSource.generic, 2);
 					}
-
-				}
-				if (data.MetalBurning[AllomancyData.matTin] == false
-						&& curPlayer.isPotionActive(Potion.nightVision.getId())) {
-					if (curPlayer.getActivePotionEffect(Potion.nightVision)
-							.getDuration() < 201) {
-						curPlayer
-								.removePotionEffect(Potion.nightVision.getId());
+					Side side = FMLCommonHandler.instance().getEffectiveSide();
+					if (side == Side.CLIENT){
+						updateBurnTime(data, curPlayer);
+					}
+					if (data.MetalBurning[AllomancyData.matTin]) {
+						
+						Minecraft.getMinecraft().gameSettings.gammaSetting = 20.0F;
+					}
+					else{
+						Minecraft.getMinecraft().gameSettings.gammaSetting = gamma;
 					}
 				}
-
 			}
 		}
-		}
 	}
-
 	@Override
 	public EnumSet<TickType> ticks() {
 		// TODO Auto-generated method stub
