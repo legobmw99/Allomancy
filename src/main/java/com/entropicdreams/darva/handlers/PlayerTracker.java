@@ -15,11 +15,6 @@ import cpw.mods.fml.common.network.Player;
 
 public class PlayerTracker implements IPlayerTracker {
 
-	@ForgeSubscribe
-	public void onPlayerLogin(EntityJoinWorldEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
 	@Override
 	public void onPlayerRespawn(EntityPlayer player)
     {
@@ -37,16 +32,16 @@ public class PlayerTracker implements IPlayerTracker {
 					new AllomancyData((EntityPlayer) event.entity));
 		}
 	}
-	@Override
-	public void onPlayerLogin(EntityPlayer player) {
+	@ForgeSubscribe
+	public void onPlayerLogin(EntityJoinWorldEvent event) {
 		// TODO Auto-generated method stub
-		if (player instanceof EntityPlayerMP) {
+		if (event.entity instanceof EntityPlayerMP) {
 			PacketDispatcher.sendPacketToPlayer(
 					PacketHandler.updateAllomancyData(AllomancyData
-							.forPlayer(player)), (Player) player);
+							.forPlayer(event.entity)), (Player) event.entity);
 			if(AllomancyData.isMistborn == true){
 			PacketDispatcher.sendPacketToPlayer(
-					PacketHandler.becomeMistborn(), (Player) player);
+					PacketHandler.becomeMistborn(), (Player) event.entity);
 		}
 		}
 	}
@@ -59,6 +54,19 @@ public class PlayerTracker implements IPlayerTracker {
 	public void onPlayerChangedDimension(EntityPlayer player) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void onPlayerLogin(EntityPlayer player) {
+		// TODO Auto-generated method stub
+		if (player instanceof EntityPlayerMP) {
+			PacketDispatcher.sendPacketToPlayer(
+					PacketHandler.updateAllomancyData(AllomancyData
+							.forPlayer(player)), (Player) player);
+			if(AllomancyData.isMistborn == true){
+			PacketDispatcher.sendPacketToPlayer(
+					PacketHandler.becomeMistborn(), (Player) player);
+		}
+		}
 	}
 
 }
