@@ -25,7 +25,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RenderHandler implements ITickHandler {
+public class Derp implements ITickHandler {
 	private final Minecraft mc;
 	private SimpleTexture meter;
 	private ResourceLocation meterLoc;
@@ -36,7 +36,7 @@ public class RenderHandler implements ITickHandler {
 	private Point[] Frames = { new Point(72, 0), new Point(72, 4),
 			new Point(72, 8), new Point(72, 12) };
 
-	public RenderHandler() {
+	public Derp() {
 		mc = Minecraft.getMinecraft();
 		meterLoc = new ResourceLocation("allomancy","textures/overlay/meter.png");
 
