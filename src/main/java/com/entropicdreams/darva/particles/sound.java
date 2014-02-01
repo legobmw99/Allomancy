@@ -8,13 +8,13 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-public class particleSound extends EntityFX {
+public class sound extends EntityFX {
 
 	private ResourceLocation loc;
 	private ResourceLocation oldLoc = new ResourceLocation(
 			"textures/particle/particles.png");
 
-	public particleSound(World world, double x, double y, double z,
+	public sound(World world, double x, double y, double z,
 			double par8, double par10, double par12, String soundType,
 			double toX, double toY, double toZ) {
 		super(world, x, y, z, par8, par10, par12);
