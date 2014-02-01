@@ -146,58 +146,57 @@ public class PowerTickHandler implements ITickHandler {
 
 			}
 
-		} else {
-			Allomancy.MPC.particleTargets.clear();
-		}
-
-		if (data.MetalBurning[AllomancyData.matZinc]) {
-			Entity entity;
-			mop = Minecraft.getMinecraft().objectMouseOver;
-			if (mop != null
-					&& mop.typeOfHit == EnumMovingObjectType.ENTITY
-					&& mop.entityHit instanceof EntityCreature
-					&& !(mop.entityHit instanceof EntityPlayer)
-					&& Minecraft.getMinecraft().gameSettings.keyBindAttack.pressed) {
-				entity = mop.entityHit;
-
-				player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(
-						entity.entityId, true));
-
+		} 
+			else {
+				Allomancy.MPC.particleTargets.clear();
 			}
-		}
-		if (data.MetalBurning[AllomancyData.matBrass]) {
-			Entity entity;
-			mop = Minecraft.getMinecraft().objectMouseOver;
-			if (mop != null
-					&& mop.typeOfHit == EnumMovingObjectType.ENTITY
-					&& mop.entityHit instanceof EntityLiving
-					&& !(mop.entityHit instanceof EntityPlayer)
-					&& Minecraft.getMinecraft().gameSettings.keyBindUseItem.pressed) {
-				entity = mop.entityHit;
 
-				player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(
-						entity.entityId, false));
+			if (data.MetalBurning[AllomancyData.matZinc]) {
+				Entity entity;
+				mop = Minecraft.getMinecraft().objectMouseOver;
+				if (mop != null
+						&& mop.typeOfHit == EnumMovingObjectType.ENTITY
+						&& mop.entityHit instanceof EntityCreature
+						&& !(mop.entityHit instanceof EntityPlayer)
+						&& Minecraft.getMinecraft().gameSettings.keyBindAttack.pressed) {
+					entity = mop.entityHit;
 
+					player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(
+							entity.entityId, true));
+
+				}
 			}
-		}
+			if (data.MetalBurning[AllomancyData.matBrass]) {
+				Entity entity;
+				mop = Minecraft.getMinecraft().objectMouseOver;
+				if (mop != null
+						&& mop.typeOfHit == EnumMovingObjectType.ENTITY
+						&& mop.entityHit instanceof EntityLiving
+						&& !(mop.entityHit instanceof EntityPlayer)
+						&& Minecraft.getMinecraft().gameSettings.keyBindUseItem.pressed) {
+					entity = mop.entityHit;
 
-		if (data.MetalBurning[AllomancyData.matPewter]) {
-			if (player.onGround == true && player.isInWater() == false) {
-				player.motionX *= 1.4;
-				player.motionZ *= 1.4;
+					player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(
+							entity.entityId, false));
 
-				player.motionX = MathHelper.clamp_float((float) player.motionX,
-						-2, 2);
-				player.motionZ = MathHelper.clamp_float((float) player.motionZ,
-						-2, 2);
+				}
 			}
-		
-			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed()) {
-				player.motionY *= 1.6;
-				player.motionX *= 1.4;
-				player.motionZ *= 1.4;
-			}	
-		}
+
+			if (data.MetalBurning[AllomancyData.matPewter]) {
+				if (player.onGround == true && player.isInWater() == false) {
+					player.motionX *= 1.4;
+					player.motionZ *= 1.4;
+
+					player.motionX = MathHelper.clamp_float((float) player.motionX,-2, 2);
+					player.motionZ = MathHelper.clamp_float((float) player.motionZ,-2, 2);
+			
+					if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed()) {
+						player.motionY *= 1.6;
+						player.motionX *= 1.4;
+						player.motionZ *= 1.4;
+					}	
+				}	
+			}
 		}
 	}
 
