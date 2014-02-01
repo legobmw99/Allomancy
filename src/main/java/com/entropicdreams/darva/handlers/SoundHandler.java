@@ -7,7 +7,7 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 
 import com.entropicdreams.darva.AllomancyData;
-import com.entropicdreams.darva.particles.sound;
+import com.entropicdreams.darva.particles.ParticleSound;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,7 +25,7 @@ public class SoundHandler {
 			if (event.name.contains("step") || event.name.contains(".big")
 					|| event.name.contains("scream")
 					|| event.name.contains("random.bow")) {
-				EntityFX particle = new sound(player.worldObj,
+				EntityFX particle = new ParticleSound(player.worldObj,
 						player.posX
 								+ -(Math.sin(Math.toRadians(player
 										.getRotationYawHead())) * .7d),
