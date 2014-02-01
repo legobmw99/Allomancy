@@ -25,7 +25,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @NetworkMod(clientSideRequired = true, channels = { "Allomancy_Data" }, packetHandler = PacketHandler.class)
-@Mod(modid = "allomancy", name = "Allomancy", version = "1.1.5")
+@Mod(modid = "allomancy", name = "Allomancy", version = "1.1.6")
 public class Allomancy {
 
 	public static CraftingHandler craftingHandler;

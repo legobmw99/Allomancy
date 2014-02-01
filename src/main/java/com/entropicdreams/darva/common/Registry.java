@@ -48,6 +48,10 @@ public class Registry {
             OreDictionary.registerOre("ingotZinc", new ItemStack(itemZincIngot));
             OreDictionary.registerOre("ingotTin", new ItemStack(itemTinIngot));
             OreDictionary.registerOre("ingotLead", new ItemStack(itemLeadIngot));
+            OreDictionary.registerOre("oreCopper", new ItemStack(oreCopper));
+            OreDictionary.registerOre("oreZinc", new ItemStack(oreZinc));
+            OreDictionary.registerOre("oreTin", new ItemStack(oreTin));
+            OreDictionary.registerOre("oreLead", new ItemStack(oreLead));
             
     }
 	public static void setupRecipies() {

@@ -192,11 +192,11 @@ public class PowerTickHandler implements ITickHandler {
 						-2, 2);
 			}
 		
-		if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed()) {
-			player.motionY *= 1.6;
-			player.motionX *= 1.4;
-			player.motionZ *= 1.4;
-		}
+			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed()) {
+				player.motionY *= 1.6;
+				player.motionX *= 1.4;
+				player.motionZ *= 1.4;
+			}	
 		}
 		}
 	}
@@ -225,9 +225,9 @@ public class PowerTickHandler implements ITickHandler {
 						curPlayer.attackEntityFrom(DamageSource.generic, 2);
 					}
 					Side side = FMLCommonHandler.instance().getEffectiveSide();
-					if (side == Side.CLIENT){
+
 						updateBurnTime(data, curPlayer);
-					}
+					
 						if (data.MetalBurning[AllomancyData.matTin]) {
 						
 							if (!curPlayer.isPotionActive(Potion.nightVision.getId()))
