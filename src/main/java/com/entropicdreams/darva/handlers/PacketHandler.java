@@ -139,11 +139,10 @@ public class PacketHandler implements IPacketHandler {
 			Packet250CustomPayload packet) {
 		DataInputStream inputStream = new DataInputStream(
 				new ByteArrayInputStream(packet.data));
-		int itemId;
 		try {
 			inputStream.readInt();
 
-			itemId = inputStream.readInt();
+			inputStream.readInt();
 			inputStream.readInt();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
