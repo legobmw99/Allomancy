@@ -189,13 +189,13 @@ public class PowerTickHandler implements ITickHandler {
 
 					player.motionX = MathHelper.clamp_float((float) player.motionX,-2, 2);
 					player.motionZ = MathHelper.clamp_float((float) player.motionZ,-2, 2);
-			
+				}
 					if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed()) {
 						player.motionY *= 1.6;
 						player.motionX *= 1.4;
 						player.motionZ *= 1.4;
 					}	
-				}	
+					
 			}
 		}
 	}
@@ -223,32 +223,23 @@ public class PowerTickHandler implements ITickHandler {
 						data.damageStored--;
 						curPlayer.attackEntityFrom(DamageSource.generic, 2);
 					}
-					Side side = FMLCommonHandler.instance().getEffectiveSide();
-
 						updateBurnTime(data, curPlayer);
-					
 						if (data.MetalBurning[AllomancyData.matTin]) {
 						
 							if (!curPlayer.isPotionActive(Potion.nightVision.getId()))
-								curPlayer.addPotionEffect(new PotionEffect(
-										Potion.nightVision.getId(), 300, 0, true));
+								curPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 300, 0, true));
 							else {
 								PotionEffect eff;
-								eff = curPlayer
-										.getActivePotionEffect(Potion.nightVision);
+								eff = curPlayer.getActivePotionEffect(Potion.nightVision);
 								if (eff.getDuration() < 210) {
-									curPlayer.addPotionEffect(new PotionEffect(
-											Potion.nightVision.getId(), 300, 0, true));
+									curPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 300, 0, true));
 								}
 							}
 
 						}
-						if (data.MetalBurning[AllomancyData.matTin] == false
-								&& curPlayer.isPotionActive(Potion.nightVision.getId())) {
-							if (curPlayer.getActivePotionEffect(Potion.nightVision)
-									.getDuration() < 201) {
-								curPlayer
-										.removePotionEffect(Potion.nightVision.getId());
+						if (data.MetalBurning[AllomancyData.matTin] == false&& curPlayer.isPotionActive(Potion.nightVision.getId())) {
+							if (curPlayer.getActivePotionEffect(Potion.nightVision).getDuration() < 201) {
+								curPlayer.removePotionEffect(Potion.nightVision.getId());
 							}
 						}
 					}

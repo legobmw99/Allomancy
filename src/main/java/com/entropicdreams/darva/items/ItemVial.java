@@ -30,8 +30,8 @@ public class ItemVial extends ItemFood {
 		// TODO Auto-generated method stub
 		AllomancyData data;
 		data = AllomancyData.forPlayer(par3EntityPlayer);
-		if (!par3EntityPlayer.capabilities.isCreativeMode) {
-			--par1ItemStack.stackSize;
+		if (par3EntityPlayer.capabilities.isCreativeMode) {
+			++par1ItemStack.stackSize;
 		}
 		if (data == null) {
 			return par1ItemStack;
@@ -43,12 +43,7 @@ public class ItemVial extends ItemFood {
 		if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10) {
 			data.MetalAmounts[par1ItemStack.getItemDamage() - 1]++;
 		}
-		if(par1ItemStack.getItemDamage() == 0){
-			return null;
-		}
-		else{
 		return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
-		}
 	}
 
 	@Override
@@ -63,14 +58,12 @@ public class ItemVial extends ItemFood {
 
 	@Override
 	public int getMaxItemUseDuration(ItemStack par1ItemStack) {
-		return 8;
+		return 12;
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
-		par3EntityPlayer.setItemInUse(par1ItemStack,
-				this.getMaxItemUseDuration(par1ItemStack));
+	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,EntityPlayer par3EntityPlayer) {
+		par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
 		return par1ItemStack;
 	}
 
