@@ -38,10 +38,11 @@ public class SwitchMetalKeybind extends KeyHandler {
 		player = Minecraft.getMinecraft().thePlayer;
 		Minecraft mc = FMLClientHandler.instance().getClient();
 		if (mc.currentScreen == null) {
-			if (player == null || !Minecraft.getMinecraft().inGameHasFocus)
+			if ((player == null) || !Minecraft.getMinecraft().inGameHasFocus) {
 				return;
-			if (keyDown == false) {
-				keyDown = true;
+			}
+			if (this.keyDown == false) {
+				this.keyDown = true;
 				AllomancyData data = AllomancyData.forPlayer(player);
 				data.setSelected(data.getSelected() + 1);
 				player.sendQueue.addToSendQueue(PacketHandler
@@ -53,14 +54,15 @@ public class SwitchMetalKeybind extends KeyHandler {
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
 		// TODO Auto-generated method stub
-		if (keyDown == true)
-			keyDown = false;
+		if (this.keyDown == true) {
+			this.keyDown = false;
+		}
 	}
 
 	@Override
 	public EnumSet<TickType> ticks() {
 		// TODO Auto-generated method stub
-		return tickTypes;
+		return this.tickTypes;
 	}
 
 }

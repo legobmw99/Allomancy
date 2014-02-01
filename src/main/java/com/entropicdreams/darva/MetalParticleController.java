@@ -29,139 +29,141 @@ public class MetalParticleController implements ITickHandler {
 	private String[] ores = OreDictionary.getOreNames();
 
 	public void BuildMetalList() {
-		metallist = new LinkedList<Integer>();
-		metallist.add(Item.ingotGold.itemID);
-		metallist.add(Item.ingotIron.itemID);
-		metallist.add(Item.axeIron.itemID);
-		metallist.add(Item.axeGold.itemID);
-		metallist.add(Item.bootsChain.itemID);
-		metallist.add(Item.bootsGold.itemID);
-		metallist.add(Item.bootsIron.itemID);
-		metallist.add(Item.bucketEmpty.itemID);
-		metallist.add(Item.bucketLava.itemID);
-		metallist.add(Item.bucketMilk.itemID);
-		metallist.add(Item.bucketWater.itemID);
-		metallist.add(Item.cauldron.itemID);
-		metallist.add(Item.compass.itemID);
-		metallist.add(Item.doorIron.itemID);
-		metallist.add(Item.flintAndSteel.itemID);
-		metallist.add(Item.goldNugget.itemID);
-		metallist.add(Item.helmetChain.itemID);
-		metallist.add(Item.helmetGold.itemID);
-		metallist.add(Item.helmetIron.itemID);
-		metallist.add(Item.hoeGold.itemID);
-		metallist.add(Item.hoeIron.itemID);
-		metallist.add(Item.horseArmorGold.itemID);
-		metallist.add(Item.horseArmorIron.itemID);
-		metallist.add(Item.legsChain.itemID);
-		metallist.add(Item.legsGold.itemID);
-		metallist.add(Item.legsIron.itemID);
-		metallist.add(Item.minecartCrate.itemID);
-		metallist.add(Item.minecartEmpty.itemID);
-		metallist.add(Item.minecartHopper.itemID);
-		metallist.add(Item.minecartPowered.itemID);
-		metallist.add(Item.minecartTnt.itemID);
-		metallist.add(Item.pickaxeIron.itemID);
-		metallist.add(Item.pickaxeGold.itemID);
-		metallist.add(Item.plateIron.itemID);
-		metallist.add(Item.pocketSundial.itemID);
-		metallist.add(Item.shovelGold.itemID);
-		metallist.add(Item.shovelIron.itemID);
-		metallist.add(Item.shears.itemID);
-		metallist.add(Item.appleGold.itemID);
-		metallist.add(Item.swordGold.itemID);
-		metallist.add(Item.swordIron.itemID);
-		metallist.add(Registry.itemBrassFlakes.itemID);
-		metallist.add(Registry.itemBronzeFlakes.itemID);
-		metallist.add(Registry.itemCopperFlakes.itemID);
-		metallist.add(Registry.itemCopperIngot.itemID);
-		metallist.add(Registry.itemIronFlakes.itemID);
-		metallist.add(Registry.itemLeadFlakes.itemID);
-		metallist.add(Registry.itemLeadIngot.itemID);
-		metallist.add(Registry.itemPewterFlakes.itemID);
-		metallist.add(Registry.itemSteelFlakes.itemID);
-		metallist.add(Registry.itemTinFlakes.itemID);
-		metallist.add(Registry.itemTinIngot.itemID);
-		metallist.add(Registry.nuggetLerasium.itemID);
-		metallist.add(Block.anvil.blockID);
-		metallist.add(Block.blockGold.blockID);
-		metallist.add(Block.blockIron.blockID);
-		metallist.add(Block.fenceIron.blockID);
-		metallist.add(Block.hopperBlock.blockID);
-		metallist.add(Block.oreGold.blockID);
-		metallist.add(Block.oreIron.blockID);
-		metallist.add(Block.pistonBase.blockID);
-		metallist.add(Block.pistonExtension.blockID);
-		metallist.add(Block.pistonMoving.blockID);
-		metallist.add(Block.pistonStickyBase.blockID);
-		metallist.add(Block.pressurePlateGold.blockID);
-		metallist.add(Block.pressurePlateIron.blockID);
-		metallist.add(Block.rail.blockID);
-		metallist.add(Block.railActivator.blockID);
-		metallist.add(Block.railDetector.blockID);
-		metallist.add(Block.railPowered.blockID);
-		metallist.add(Registry.oreCopper.blockID);
-		metallist.add(Registry.oreTin.blockID);
-		metallist.add(Registry.oreZinc.blockID);
-		metallist.add(Registry.oreLead.blockID);
-		metallist.add(Registry.itemVial.itemID);
-		metallist.add(Registry.itemZincFlakes.itemID);
-		metallist.add(Registry.itemZincIngot.itemID);
+		this.metallist = new LinkedList<Integer>();
+		this.metallist.add(Item.ingotGold.itemID);
+		this.metallist.add(Item.ingotIron.itemID);
+		this.metallist.add(Item.axeIron.itemID);
+		this.metallist.add(Item.axeGold.itemID);
+		this.metallist.add(Item.bootsChain.itemID);
+		this.metallist.add(Item.bootsGold.itemID);
+		this.metallist.add(Item.bootsIron.itemID);
+		this.metallist.add(Item.bucketEmpty.itemID);
+		this.metallist.add(Item.bucketLava.itemID);
+		this.metallist.add(Item.bucketMilk.itemID);
+		this.metallist.add(Item.bucketWater.itemID);
+		this.metallist.add(Item.cauldron.itemID);
+		this.metallist.add(Item.compass.itemID);
+		this.metallist.add(Item.doorIron.itemID);
+		this.metallist.add(Item.flintAndSteel.itemID);
+		this.metallist.add(Item.goldNugget.itemID);
+		this.metallist.add(Item.helmetChain.itemID);
+		this.metallist.add(Item.helmetGold.itemID);
+		this.metallist.add(Item.helmetIron.itemID);
+		this.metallist.add(Item.hoeGold.itemID);
+		this.metallist.add(Item.hoeIron.itemID);
+		this.metallist.add(Item.horseArmorGold.itemID);
+		this.metallist.add(Item.horseArmorIron.itemID);
+		this.metallist.add(Item.legsChain.itemID);
+		this.metallist.add(Item.legsGold.itemID);
+		this.metallist.add(Item.legsIron.itemID);
+		this.metallist.add(Item.minecartCrate.itemID);
+		this.metallist.add(Item.minecartEmpty.itemID);
+		this.metallist.add(Item.minecartHopper.itemID);
+		this.metallist.add(Item.minecartPowered.itemID);
+		this.metallist.add(Item.minecartTnt.itemID);
+		this.metallist.add(Item.pickaxeIron.itemID);
+		this.metallist.add(Item.pickaxeGold.itemID);
+		this.metallist.add(Item.plateIron.itemID);
+		this.metallist.add(Item.pocketSundial.itemID);
+		this.metallist.add(Item.shovelGold.itemID);
+		this.metallist.add(Item.shovelIron.itemID);
+		this.metallist.add(Item.shears.itemID);
+		this.metallist.add(Item.appleGold.itemID);
+		this.metallist.add(Item.swordGold.itemID);
+		this.metallist.add(Item.swordIron.itemID);
+		this.metallist.add(Registry.itemBrassFlakes.itemID);
+		this.metallist.add(Registry.itemBronzeFlakes.itemID);
+		this.metallist.add(Registry.itemCopperFlakes.itemID);
+		this.metallist.add(Registry.itemCopperIngot.itemID);
+		this.metallist.add(Registry.itemIronFlakes.itemID);
+		this.metallist.add(Registry.itemLeadFlakes.itemID);
+		this.metallist.add(Registry.itemLeadIngot.itemID);
+		this.metallist.add(Registry.itemPewterFlakes.itemID);
+		this.metallist.add(Registry.itemSteelFlakes.itemID);
+		this.metallist.add(Registry.itemTinFlakes.itemID);
+		this.metallist.add(Registry.itemTinIngot.itemID);
+		this.metallist.add(Registry.nuggetLerasium.itemID);
+		this.metallist.add(Block.anvil.blockID);
+		this.metallist.add(Block.blockGold.blockID);
+		this.metallist.add(Block.blockIron.blockID);
+		this.metallist.add(Block.fenceIron.blockID);
+		this.metallist.add(Block.hopperBlock.blockID);
+		this.metallist.add(Block.oreGold.blockID);
+		this.metallist.add(Block.oreIron.blockID);
+		this.metallist.add(Block.pistonBase.blockID);
+		this.metallist.add(Block.pistonExtension.blockID);
+		this.metallist.add(Block.pistonMoving.blockID);
+		this.metallist.add(Block.pistonStickyBase.blockID);
+		this.metallist.add(Block.pressurePlateGold.blockID);
+		this.metallist.add(Block.pressurePlateIron.blockID);
+		this.metallist.add(Block.rail.blockID);
+		this.metallist.add(Block.railActivator.blockID);
+		this.metallist.add(Block.railDetector.blockID);
+		this.metallist.add(Block.railPowered.blockID);
+		this.metallist.add(Registry.oreCopper.blockID);
+		this.metallist.add(Registry.oreTin.blockID);
+		this.metallist.add(Registry.oreZinc.blockID);
+		this.metallist.add(Registry.oreLead.blockID);
+		this.metallist.add(Registry.itemVial.itemID);
+		this.metallist.add(Registry.itemZincFlakes.itemID);
+		this.metallist.add(Registry.itemZincIngot.itemID);
 
- 		/*for (String s : ores){
- 			if (s.contains("ingot") || s.contains("metal") || s.contains("ore")){
- 					metallist.add(OreDictionary.getOreID(s));
- 			}
- 		}*/
+		/*
+		 * for (String s : ores){ if (s.contains("ingot") || s.contains("metal")
+		 * || s.contains("ore")){ metallist.add(OreDictionary.getOreID(s)); } }
+		 */
 	}
 
 	public boolean isItemMetal(ItemStack item) {
-		if (metallist.contains(item.itemID))
+		if (this.metallist.contains(item.itemID)) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 	public boolean isBlockMetal(int blockID) {
-		if (metallist.contains(blockID))
+		if (this.metallist.contains(blockID)) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 	public MetalParticleController() {
-		particleTargets = new LinkedList<Entity>();
-		BuildMetalList();
-		particleBlockTargets = new LinkedList<vector3>();
+		this.particleTargets = new LinkedList<Entity>();
+		this.BuildMetalList();
+		this.particleBlockTargets = new LinkedList<vector3>();
 	}
 
 	public void tryAdd(Entity entity) {
-		if (particleTargets.contains(entity))
+		if (this.particleTargets.contains(entity)) {
 			return;
+		}
 		if (entity instanceof EntityLiving) {
-			tryAddLiving((EntityLiving) entity);
+			this.tryAddLiving((EntityLiving) entity);
 			return;
 		}
 		if (entity instanceof EntityItem) {
-			tryAddItem((EntityItem) entity);
+			this.tryAddItem((EntityItem) entity);
 		}
 	}
 
 	private void tryAddLiving(EntityLiving entity) {
-		if (entity == null)
+		if (entity == null) {
 			return;
-		 if (entity instanceof EntityIronGolem
-                 || (entity.getHeldItem() != null && metallist.contains(entity
-                                 .getHeldItem().itemID))) {
-         particleTargets.add(entity);
- 
-		
+		}
+		if ((entity instanceof EntityIronGolem)
+				|| ((entity.getHeldItem() != null) && this.metallist
+						.contains(entity.getHeldItem().itemID))) {
+			this.particleTargets.add(entity);
+
 		}
 	}
-	
+
 	private void tryAddItem(EntityItem entity) {
-		if (isItemMetal(entity.getEntityItem())) {
-			particleTargets.add(entity);
+		if (this.isItemMetal(entity.getEntityItem())) {
+			this.particleTargets.add(entity);
 		}
 	}
 
@@ -194,21 +196,21 @@ public class MetalParticleController implements ITickHandler {
 	public void tryPushEntity(Entity entity) {
 
 		if (entity instanceof EntityItem) {
-			tryPushItem((EntityItem) entity);
+			this.tryPushItem((EntityItem) entity);
 		}
 
 		if (entity instanceof EntityLiving) {
-			tryPushMob((EntityLiving) entity);
+			this.tryPushMob((EntityLiving) entity);
 		}
 
 	}
 
 	public void tryPullEntity(Entity entity) {
 		if (entity instanceof EntityItem) {
-			tryPullItem((EntityItem) entity);
+			this.tryPullItem((EntityItem) entity);
 		}
 		if (entity instanceof EntityLiving) {
-			tryPullMob((EntityLiving) entity);
+			this.tryPullMob((EntityLiving) entity);
 		}
 
 	}
@@ -216,7 +218,7 @@ public class MetalParticleController implements ITickHandler {
 	private void tryPullItem(EntityItem entity) {
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if (metallist.contains(entity.getEntityItem().itemID)) {
+		if (this.metallist.contains(entity.getEntityItem().itemID)) {
 			motionX = (player.posX - entity.posX) * .1;
 			motionY = (player.posY - entity.posY) * .1;
 			motionZ = (player.posZ - entity.posZ) * .1;
@@ -232,7 +234,7 @@ public class MetalParticleController implements ITickHandler {
 	private void tryPushItem(EntityItem entity) {
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if (metallist.contains(entity.getEntityItem().itemID)) {
+		if (this.metallist.contains(entity.getEntityItem().itemID)) {
 			motionX = ((player.posX - entity.posX) * .1) * -1;
 			motionY = ((player.posY - entity.posY) * .1);
 			motionZ = ((player.posZ - entity.posZ) * .1) * -1;
@@ -241,9 +243,8 @@ public class MetalParticleController implements ITickHandler {
 			entity.motionZ = motionZ;
 			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
 					motionX, motionY, motionZ, entity.entityId));
-			}
 		}
-	
+	}
 
 	private void tryPullMob(EntityLiving entity) {
 
@@ -261,23 +262,23 @@ public class MetalParticleController implements ITickHandler {
 			// waaaaay too damn heavy to push... you get moved.
 		}
 
-		 if (entity.getHeldItem() == null) {
-              return;
-      }
+		if (entity.getHeldItem() == null) {
+			return;
+		}
 
-      if (isItemMetal(entity.getHeldItem())) {
-              // Pull em towards you.
-              motionX = ((player.posX - entity.posX) * .1);
-              motionY = ((player.posY - entity.posY) * .1);
-              motionZ = ((player.posZ - entity.posZ) * .1);
-              entity.motionX = motionX;
-              entity.motionY = motionY;
-              entity.motionZ = motionZ;
-              PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
-                              motionX, motionY, motionZ, entity.entityId));
-              PacketDispatcher.sendPacketToServer(PacketHandler
-                              .stopFall(entity.entityId));
-      }
+		if (this.isItemMetal(entity.getHeldItem())) {
+			// Pull em towards you.
+			motionX = ((player.posX - entity.posX) * .1);
+			motionY = ((player.posY - entity.posY) * .1);
+			motionZ = ((player.posZ - entity.posZ) * .1);
+			entity.motionX = motionX;
+			entity.motionY = motionY;
+			entity.motionZ = motionZ;
+			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
+					motionX, motionY, motionZ, entity.entityId));
+			PacketDispatcher.sendPacketToServer(PacketHandler
+					.stopFall(entity.entityId));
+		}
 	}
 
 	private void tryPushMob(EntityLiving entity) {
@@ -296,23 +297,23 @@ public class MetalParticleController implements ITickHandler {
 			// waaaaay too damn heavy to push... you get moved.
 		}
 
-		 if (entity.getHeldItem() == null) {
-             return;
-     }
+		if (entity.getHeldItem() == null) {
+			return;
+		}
 
-     if (isItemMetal(entity.getHeldItem())) {
-             // Pull em towards you.
-             motionX = ((player.posX - entity.posX) * .1) * -1;
-             motionY = (player.posY - entity.posY) * .1;
-             motionZ = ((player.posZ - entity.posZ) * .1) * -1;
-             entity.motionX = motionX;
-             entity.motionY = motionY;
-             entity.motionZ = motionZ;
-             PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
-                             motionX, motionY, motionZ, entity.entityId));
-             PacketDispatcher.sendPacketToServer(PacketHandler
-                             .stopFall(entity.entityId));
-     }
+		if (this.isItemMetal(entity.getHeldItem())) {
+			// Pull em towards you.
+			motionX = ((player.posX - entity.posX) * .1) * -1;
+			motionY = (player.posY - entity.posY) * .1;
+			motionZ = ((player.posZ - entity.posZ) * .1) * -1;
+			entity.motionX = motionX;
+			entity.motionY = motionY;
+			entity.motionZ = motionZ;
+			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
+					motionX, motionY, motionZ, entity.entityId));
+			PacketDispatcher.sendPacketToServer(PacketHandler
+					.stopFall(entity.entityId));
+		}
 	}
 
 	@Override
@@ -325,22 +326,25 @@ public class MetalParticleController implements ITickHandler {
 		// TODO Auto-generated method stub
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		LinkedList<Entity> toRemove = new LinkedList<Entity>();
-		LinkedList<vector3> toRemove2 = new LinkedList<vector3>();
-		if (player == null)
+		new LinkedList<vector3>();
+		if (player == null) {
 			return;
+		}
 
-		for (Entity entity : particleTargets) {
+		for (Entity entity : this.particleTargets) {
 
-			if (entity.isDead == true)
+			if (entity.isDead == true) {
 				toRemove.add(entity);
+			}
 
-			if (player.getDistanceToEntity(entity) > 10)
+			if (player.getDistanceToEntity(entity) > 10) {
 				toRemove.add(entity);
+			}
 		}
 		for (Entity entity : toRemove) {
-			particleTargets.remove(entity);
+			this.particleTargets.remove(entity);
 		}
-		particleBlockTargets.clear();
+		this.particleBlockTargets.clear();
 		toRemove.clear();
 	}
 

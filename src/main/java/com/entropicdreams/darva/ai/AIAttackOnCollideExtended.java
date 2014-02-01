@@ -62,7 +62,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 			return false;
 		} else if (!entitylivingbase.isEntityAlive()) {
 			return false;
-		} else if (this.classTarget != null
+		} else if ((this.classTarget != null)
 				&& !this.classTarget.isAssignableFrom(entitylivingbase
 						.getClass())) {
 			return false;
@@ -124,30 +124,30 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 
 		if ((this.longMemory || this.attacker.getEntitySenses().canSee(
 				entitylivingbase))
-				&& --this.field_75445_i <= 0) {
-			this.field_75445_i = failedPathFindingPenalty + 4
+				&& (--this.field_75445_i <= 0)) {
+			this.field_75445_i = this.failedPathFindingPenalty + 4
 					+ this.attacker.getRNG().nextInt(7);
 			this.attacker.getNavigator().tryMoveToEntityLiving(
 					entitylivingbase, this.speedTowardsTarget);
 			if (this.attacker.getNavigator().getPath() != null) {
 				PathPoint finalPathPoint = this.attacker.getNavigator()
 						.getPath().getFinalPathPoint();
-				if (finalPathPoint != null
-						&& entitylivingbase.getDistanceSq(
+				if ((finalPathPoint != null)
+						&& (entitylivingbase.getDistanceSq(
 								finalPathPoint.xCoord, finalPathPoint.yCoord,
-								finalPathPoint.zCoord) < 1) {
-					failedPathFindingPenalty = 0;
+								finalPathPoint.zCoord) < 1)) {
+					this.failedPathFindingPenalty = 0;
 				} else {
-					failedPathFindingPenalty += 10;
+					this.failedPathFindingPenalty += 10;
 				}
 			} else {
-				failedPathFindingPenalty += 10;
+				this.failedPathFindingPenalty += 10;
 			}
 		}
 
 		this.attackTick = Math.max(this.attackTick - 1, 0);
-		double d0 = this.attacker.width * 2.0F * this.attacker.width
-				* 2.0F + entitylivingbase.width;
+		double d0 = (this.attacker.width * 2.0F * this.attacker.width * 2.0F)
+				+ entitylivingbase.width;
 
 		if (this.attacker.getDistanceSq(entitylivingbase.posX,
 				entitylivingbase.boundingBox.minY, entitylivingbase.posZ) <= d0) {

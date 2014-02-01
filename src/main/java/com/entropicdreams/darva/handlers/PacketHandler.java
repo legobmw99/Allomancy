@@ -6,7 +6,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -18,7 +17,6 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
@@ -51,12 +49,10 @@ public class PacketHandler implements IPacketHandler {
 		if (side == Side.SERVER) {
 			EntityPlayerMP mpPlr;
 			mpPlr = (EntityPlayerMP) player;
-			serverRec(mpPlr, packet);
+			this.serverRec(mpPlr, packet);
 
 		} else if (side == Side.CLIENT) {
-			EntityClientPlayerMP mpPlr;
-
-			clientRec((EntityPlayer) player, packet);
+			this.clientRec((EntityPlayer) player, packet);
 
 		} else {
 			// We have an errornous state!
@@ -96,20 +92,19 @@ public class PacketHandler implements IPacketHandler {
 			data.updateBurn(packet);
 			break;
 		case PacketHandler.Packet_Allomancy_Change_Emotion:
-			changeEmotions(packet, player);
+			this.changeEmotions(packet, player);
 			break;
 		case PacketHandler.Packet_Allomancy_Move_Entity:
-			moveEntity(packet, player);
+			this.moveEntity(packet, player);
 		case PacketHandler.Packet_Allomancy_Stop_Fall:
-			stopFall(packet, player);
+			this.stopFall(packet, player);
 		case PacketHandler.Packet_Allomancy_Become_Mistborn:
-			becomeMistborn(packet, player);
+			this.becomeMistborn(packet, player);
 		default:
 			return;
 		}
 
 	}
-
 
 	@SideOnly(Side.CLIENT)
 	private void clientRec(EntityPlayer player, Packet250CustomPayload packet) {
@@ -135,7 +130,7 @@ public class PacketHandler implements IPacketHandler {
 			data = AllomancyData.forPlayer(player);
 			data.updateBurn(packet);
 		case PacketHandler.Packet_Allomancy_Update_Texture:
-			updateTexture(player, packet);
+			this.updateTexture(player, packet);
 		}
 
 	}
@@ -144,15 +139,12 @@ public class PacketHandler implements IPacketHandler {
 			Packet250CustomPayload packet) {
 		DataInputStream inputStream = new DataInputStream(
 				new ByteArrayInputStream(packet.data));
-		int entityId;
 		int itemId;
-		Item targItem;
 		try {
 			inputStream.readInt();
 
 			itemId = inputStream.readInt();
-			entityId = inputStream.readInt();
-			targItem = Item.itemsList[itemId];
+			inputStream.readInt();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -224,8 +216,8 @@ public class PacketHandler implements IPacketHandler {
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
 			outputStream.writeInt(PacketHandler.Packet_Allomancy_Data);
-			for (int i = 0; i < data.MetalAmounts.length; i++) {
-				outputStream.writeInt(data.MetalAmounts[i]);
+			for (int metalAmount : data.MetalAmounts) {
+				outputStream.writeInt(metalAmount);
 			}
 
 		} catch (Exception ex) {
@@ -316,7 +308,9 @@ public class PacketHandler implements IPacketHandler {
 		packet.length = bos.size();
 		return packet;
 	}
-	private void becomeMistborn(Packet250CustomPayload packet, EntityPlayerMP player) {
+
+	private void becomeMistborn(Packet250CustomPayload packet,
+			EntityPlayerMP player) {
 		AllomancyData data;
 		data = AllomancyData.forPlayer(player);
 		AllomancyData.isMistborn = true;
@@ -328,7 +322,8 @@ public class PacketHandler implements IPacketHandler {
 		DataOutputStream outputStream = new DataOutputStream(bos);
 
 		try {
-			outputStream.writeInt(PacketHandler.Packet_Allomancy_Become_Mistborn);
+			outputStream
+					.writeInt(PacketHandler.Packet_Allomancy_Become_Mistborn);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -340,6 +335,7 @@ public class PacketHandler implements IPacketHandler {
 		packet.length = bos.size();
 		return packet;
 	}
+
 	private void changeEmotions(Packet250CustomPayload packet,
 			EntityPlayerMP player) // Nowhere better to stick this. *sigh*
 	{
@@ -356,7 +352,7 @@ public class PacketHandler implements IPacketHandler {
 			makeAggro = inputStream.readBoolean();
 			target = (EntityCreature) player.worldObj.getEntityByID(targetID);
 
-			if (target != null && makeAggro) {
+			if ((target != null) && makeAggro) {
 				target.tasks.taskEntries.clear();
 				target.tasks.addTask(1, new EntityAISwimming(target));
 				target.tasks.addTask(5, new AIAttackOnCollideExtended(target,
@@ -371,7 +367,7 @@ public class PacketHandler implements IPacketHandler {
 				target.targetTasks.addTask(2, new EntityAIHurtByTarget(target,
 						false));
 			}
-			if (target != null && !makeAggro) {
+			if ((target != null) && !makeAggro) {
 				target.tasks.addTask(0, new EntityAISwimming(target));
 				target.tasks.addTask(1, new EntityAIPanic(target, 2.0D));
 				target.tasks.addTask(5, new EntityAIWander(target, 1.0D));

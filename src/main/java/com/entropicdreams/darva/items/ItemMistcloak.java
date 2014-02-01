@@ -29,7 +29,9 @@ public class ItemMistcloak extends ItemArmor {
 	@Override
 	public Multimap getItemAttributeModifiers() {
 		Multimap multimap = super.getItemAttributeModifiers();
-		multimap.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Speed modifier", .40, 2));
+		multimap.put(SharedMonsterAttributes.movementSpeed
+				.getAttributeUnlocalizedName(), new AttributeModifier(
+				field_111210_e, "Speed modifier", .40, 2));
 		return multimap;
 	}
 

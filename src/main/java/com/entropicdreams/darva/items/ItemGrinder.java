@@ -10,9 +10,9 @@ public class ItemGrinder extends Item {
 	public ItemGrinder(int par1) {
 		super(par1);
 		// TODO Auto-generated constructor stub
-		setUnlocalizedName("allomancy:Grinder");
-		setCreativeTab(Registry.tabsAllomancy);
-		setMaxDamage(63);
+		this.setUnlocalizedName("allomancy:Grinder");
+		this.setCreativeTab(Registry.tabsAllomancy);
+		this.setMaxDamage(63);
 		this.maxStackSize = 1;
 	}
 

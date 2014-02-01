@@ -30,7 +30,7 @@ public class Allomancy {
 
 	public static CraftingHandler craftingHandler;
 	public static DamageHandler damageHandler;
-    public static PlayerTracker playerTracker;
+	public static PlayerTracker playerTracker;
 	public static MetalParticleController MPC;
 
 	@Instance(value = "allomancy")
@@ -51,13 +51,17 @@ public class Allomancy {
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		playerTracker = new PlayerTracker();
-        GameRegistry.registerPlayerTracker(playerTracker);
-        MinecraftForge.EVENT_BUS.register(playerTracker);
+		GameRegistry.registerPlayerTracker(playerTracker);
+		MinecraftForge.EVENT_BUS.register(playerTracker);
 		damageHandler = new DamageHandler();
 		MinecraftForge.EVENT_BUS.register(damageHandler);
-		
-		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(Registry.nuggetLerasium),1,1,40));
-		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(Registry.nuggetLerasium),1,1,40));
+
+		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(
+				new WeightedRandomChestContent(new ItemStack(
+						Registry.nuggetLerasium), 1, 1, 40));
+		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(
+				new WeightedRandomChestContent(new ItemStack(
+						Registry.nuggetLerasium), 1, 1, 40));
 	}
 
 	@EventHandler

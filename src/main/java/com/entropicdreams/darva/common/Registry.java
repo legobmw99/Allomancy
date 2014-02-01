@@ -33,65 +33,122 @@ public class Registry {
 		setupKeybinds();
 		oreRegistration();
 		addAchievements();
-		
-	}
-	
-	private static void addAchievements() {
-		becomeMistborn = new Achievement(450, "becomeMistborn", -5, -2, Registry.Mistcloak, null).setIndependent().setSpecial().registerAchievement();
-		LanguageRegistry.instance().addStringLocalization("achievement.becomeMistborn","en_US","Become Mistborn!");
-		LanguageRegistry.instance().addStringLocalization("achievement.becomeMistborn.desc","en_US","You have a power most people envy...");
+
 	}
 
-	public static void oreRegistration()
-    {
-            OreDictionary.registerOre("ingotCopper", new ItemStack(itemCopperIngot));
-            OreDictionary.registerOre("ingotZinc", new ItemStack(itemZincIngot));
-            OreDictionary.registerOre("ingotTin", new ItemStack(itemTinIngot));
-            OreDictionary.registerOre("ingotLead", new ItemStack(itemLeadIngot));
-            OreDictionary.registerOre("oreCopper", new ItemStack(oreCopper));
-            OreDictionary.registerOre("oreZinc", new ItemStack(oreZinc));
-            OreDictionary.registerOre("oreTin", new ItemStack(oreTin));
-            OreDictionary.registerOre("oreLead", new ItemStack(oreLead));
-            
-    }
+	private static void addAchievements() {
+		becomeMistborn = new Achievement(450, "becomeMistborn", -5, -2,
+				Registry.Mistcloak, null).setIndependent().setSpecial()
+				.registerAchievement();
+		LanguageRegistry.instance().addStringLocalization(
+				"achievement.becomeMistborn", "en_US", "Become Mistborn!");
+		LanguageRegistry.instance().addStringLocalization(
+				"achievement.becomeMistborn.desc", "en_US",
+				"You have a power most people envy...");
+	}
+
+	public static void oreRegistration() {
+		OreDictionary
+				.registerOre("ingotCopper", new ItemStack(itemCopperIngot));
+		OreDictionary.registerOre("ingotZinc", new ItemStack(itemZincIngot));
+		OreDictionary.registerOre("ingotTin", new ItemStack(itemTinIngot));
+		OreDictionary.registerOre("ingotLead", new ItemStack(itemLeadIngot));
+		OreDictionary.registerOre("oreCopper", new ItemStack(oreCopper));
+		OreDictionary.registerOre("oreZinc", new ItemStack(oreZinc));
+		OreDictionary.registerOre("oreTin", new ItemStack(oreTin));
+		OreDictionary.registerOre("oreLead", new ItemStack(oreLead));
+
+	}
+
 	public static void setupRecipies() {
 
-		GameRegistry.addSmelting(oreTin.blockID,new ItemStack(itemTinIngot, 1), 5);
-		GameRegistry.addSmelting(oreCopper.blockID, new ItemStack(itemCopperIngot, 1), 5);
-		GameRegistry.addSmelting(oreLead.blockID, new ItemStack(itemLeadIngot,1), 5);
-		GameRegistry.addSmelting(oreZinc.blockID, new ItemStack(itemZincIngot,1), 5);
-		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemTinFlakes, 2), new Object[] {"ingotTin",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemLeadFlakes, 2), new Object[] {"ingotLead",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemZincFlakes, 2), new Object[] {"ingotZinc",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemCopperFlakes, 2), new Object[] {"ingotCopper",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemBronzeFlakes, 2), new Object[] {"ingotBronze",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemSteelFlakes, 2), new Object[] {"ingotSteel",  new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE)}));
-		
-		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 2),new ItemStack(Item.ingotIron), new ItemStack(itemAllomancyGrinder, 1,OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 2),new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes, 2),new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes, 2),new ItemStack(itemTinFlakes), new ItemStack(itemLeadFlakes));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes, 2),new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
-		
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 1),new ItemStack(itemIronFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 2),new ItemStack(itemSteelFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 3),new ItemStack(itemTinFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 4),new ItemStack(itemPewterFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 7),new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 8),new ItemStack(itemBronzeFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addSmelting(oreTin.blockID,
+				new ItemStack(itemTinIngot, 1), 5);
+		GameRegistry.addSmelting(oreCopper.blockID, new ItemStack(
+				itemCopperIngot, 1), 5);
+		GameRegistry.addSmelting(oreLead.blockID, new ItemStack(itemLeadIngot,
+				1), 5);
+		GameRegistry.addSmelting(oreZinc.blockID, new ItemStack(itemZincIngot,
+				1), 5);
 
-		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {"W W", "WWW", "WWW", 'W', new ItemStack(Block.cloth, 1, 7) });
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemVial, 3, 0), " x ", "y y", " y ", 'x',"slabWood", 'y', Block.glass));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemAllomancyGrinder, 1, 0), "xxx", "yyy", "xxx", 'x', Item.ingotIron, 'y', Item.goldNugget));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(nuggetLerasium), new Object[] {new ItemStack(Block.blockGold, 1) , new ItemStack(Item.netherStar, 1)}));
-		
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
+				itemTinFlakes, 2), new Object[] {
+				"ingotTin",
+				new ItemStack(itemAllomancyGrinder, 1,
+						OreDictionary.WILDCARD_VALUE) }));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
+				itemLeadFlakes, 2), new Object[] {
+				"ingotLead",
+				new ItemStack(itemAllomancyGrinder, 1,
+						OreDictionary.WILDCARD_VALUE) }));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
+				itemZincFlakes, 2), new Object[] {
+				"ingotZinc",
+				new ItemStack(itemAllomancyGrinder, 1,
+						OreDictionary.WILDCARD_VALUE) }));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
+				itemCopperFlakes, 2), new Object[] {
+				"ingotCopper",
+				new ItemStack(itemAllomancyGrinder, 1,
+						OreDictionary.WILDCARD_VALUE) }));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
+				itemBronzeFlakes, 2), new Object[] {
+				"ingotBronze",
+				new ItemStack(itemAllomancyGrinder, 1,
+						OreDictionary.WILDCARD_VALUE) }));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
+				itemSteelFlakes, 2), new Object[] {
+				"ingotSteel",
+				new ItemStack(itemAllomancyGrinder, 1,
+						OreDictionary.WILDCARD_VALUE) }));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 2),
+				new ItemStack(Item.ingotIron), new ItemStack(
+						itemAllomancyGrinder, 1, OreDictionary.WILDCARD_VALUE));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 2),
+				new ItemStack(itemIronFlakes), new ItemStack(Item.coal));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes, 2),
+				new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes, 2),
+				new ItemStack(itemTinFlakes), new ItemStack(itemLeadFlakes));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes, 2),
+				new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 1),
+				new ItemStack(itemIronFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 2),
+				new ItemStack(itemSteelFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 3),
+				new ItemStack(itemTinFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 4),
+				new ItemStack(itemPewterFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),
+				new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),
+				new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 7),
+				new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 8),
+				new ItemStack(itemBronzeFlakes), new ItemStack(itemVial, 1, 0));
+
+		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {
+				"W W", "WWW", "WWW", 'W', new ItemStack(Block.cloth, 1, 7) });
+		GameRegistry.addRecipe(new ShapedOreRecipe(
+				new ItemStack(itemVial, 3, 0), " x ", "y y", " y ", 'x',
+				"slabWood", 'y', Block.glass));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+				itemAllomancyGrinder, 1, 0), "xxx", "yyy", "xxx", 'x',
+				Item.ingotIron, 'y', Item.goldNugget));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
+				nuggetLerasium), new Object[] {
+				new ItemStack(Block.blockGold, 1),
+				new ItemStack(Item.netherStar, 1) }));
+
 	}
-	public static CreativeTabs tabsAllomancy =
-	        new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
-	
+
+	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(
+			CreativeTabs.getNextID(), "allomancy");
+
 	public static void initBlocks() {
 		oreTin = new Block(AllomancyConfig.oreTin, Material.rock)
 				.setHardness(.5f).setStepSound(Block.soundStoneFootstep)
@@ -186,7 +243,7 @@ public class Registry {
 
 		Mistcloak = new ItemMistcloak(AllomancyConfig.Mistcloak, WoolArmor, 5,
 				1).setUnlocalizedName("allomancy:mistcloak").setCreativeTab(
-						CreativeTabs.tabCombat);
+				CreativeTabs.tabCombat);
 		nuggetLerasium = new NuggetLerasium(AllomancyConfig.nuggetLerasium);
 		itemVial = new ItemVial(AllomancyConfig.itemVial);
 
@@ -252,31 +309,27 @@ public class Registry {
 		GameRegistry.registerItem(Mistcloak, "allomancy:mistcloak");
 		LanguageRegistry.addName(Mistcloak, "Mistcloak");
 		Mistcloak.setTextureName("allomancy:mistcloak");
-		
+
 		GameRegistry.registerItem(nuggetLerasium, "allomancy:lerasium");
 		LanguageRegistry.addName(nuggetLerasium, "\u00A7bLerasium Nugget");
 		nuggetLerasium.setTextureName("allomancy:lerasium");
-		
-		LanguageRegistry.instance().addStringLocalization("itemGroup.Allomancy", "Allomancy");
 
-		
+		LanguageRegistry.instance().addStringLocalization(
+				"itemGroup.Allomancy", "Allomancy");
 
 		GameRegistry.registerItem(itemVial, "vial");
-		ItemStack item;
-
 		for (int i = 0; i < ItemVial.localName.length; i++) {
 			ItemStack Item;
 			Item = new ItemStack(itemVial, 1, i);
 			LanguageRegistry.addName(Item, ItemVial.localName[i]);
-			
-		
+
 		}
 	}
-    
+
 	public static void setupKeybinds() {
 
 	}
-	
+
 	public static ItemGrinder itemAllomancyGrinder;
 	public static Item itemTinIngot;
 	public static Item itemTinFlakes;

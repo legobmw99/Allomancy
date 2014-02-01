@@ -40,40 +40,45 @@ public class BurnSecondKeyBind extends KeyHandler {
 		AllomancyData data;
 		Minecraft mc = FMLClientHandler.instance().getClient();
 		if (mc.currentScreen == null) {
-			if (player == null)
+			if (player == null) {
 				return;
-			if (keyDown == false) {
-				keyDown = true;
+			}
+			if (this.keyDown == false) {
+				this.keyDown = true;
 				data = AllomancyData.forPlayer(player);
 				switch (data.getSelected()) {
 				case 1:
 					// toggle Steel.
-					if (data.MetalAmounts[AllomancyData.matSteel] > 0)
+					if (data.MetalAmounts[AllomancyData.matSteel] > 0) {
 						data.MetalBurning[AllomancyData.matSteel] = !data.MetalBurning[AllomancyData.matSteel];
+					}
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matSteel,
 							data.MetalBurning[AllomancyData.matSteel]));
 					break;
 				case 2:
 					// toggle Pewter.
-					if (data.MetalAmounts[AllomancyData.matPewter] > 0)
+					if (data.MetalAmounts[AllomancyData.matPewter] > 0) {
 						data.MetalBurning[AllomancyData.matPewter] = !data.MetalBurning[AllomancyData.matPewter];
+					}
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matPewter,
 							data.MetalBurning[AllomancyData.matPewter]));
 					break;
 				case 3:
 					// toggle Bronze.
-					if (data.MetalAmounts[AllomancyData.matBronze] > 0)
+					if (data.MetalAmounts[AllomancyData.matBronze] > 0) {
 						data.MetalBurning[AllomancyData.matBronze] = !data.MetalBurning[AllomancyData.matBronze];
+					}
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matBronze,
 							data.MetalBurning[AllomancyData.matBronze]));
 					break;
 				case 4:
 					// toggle Brass.
-					if (data.MetalAmounts[AllomancyData.matBrass] > 0)
+					if (data.MetalAmounts[AllomancyData.matBrass] > 0) {
 						data.MetalBurning[AllomancyData.matBrass] = !data.MetalBurning[AllomancyData.matBrass];
+					}
 					player.sendQueue.addToSendQueue(PacketHandler.changeBurn(
 							AllomancyData.matBrass,
 							data.MetalBurning[AllomancyData.matBrass]));
@@ -88,8 +93,8 @@ public class BurnSecondKeyBind extends KeyHandler {
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
 		// TODO Auto-generated method stub
-		if (keyDown) {
-			keyDown = false;
+		if (this.keyDown) {
+			this.keyDown = false;
 		}
 	}
 

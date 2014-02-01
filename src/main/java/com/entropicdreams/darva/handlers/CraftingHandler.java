@@ -16,8 +16,9 @@ public class CraftingHandler implements ICraftingHandler {
 		ItemStack cur;
 		for (int x = 0; x < craftMatrix.getSizeInventory(); x++) {
 			cur = craftMatrix.getStackInSlot(x);
-			if (cur == null)
+			if (cur == null) {
 				continue;
+			}
 			if (cur.itemID == Registry.itemAllomancyGrinder.itemID) {
 				cur.damageItem(1, player);
 			}

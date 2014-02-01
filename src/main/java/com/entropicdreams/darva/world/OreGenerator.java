@@ -26,39 +26,39 @@ public class OreGenerator implements IWorldGenerator {
 
 		public OreData(int MaxHeight, int MinHeight, int MaxCluster,
 				int MinCluster, int PerChunk, int OreType, boolean Config) {
-			maxHeight = MaxHeight;
-			minHeight = MinHeight;
-			maxCluster = MaxCluster;
-			minCluster = MinCluster;
-			clusterPerChunk = PerChunk;
-			oreType = OreType;
-			config = Config;
+			this.maxHeight = MaxHeight;
+			this.minHeight = MinHeight;
+			this.maxCluster = MaxCluster;
+			this.minCluster = MinCluster;
+			this.clusterPerChunk = PerChunk;
+			this.oreType = OreType;
+			this.config = Config;
 		}
 	}
 
 	private LinkedList<OreData> oreList;
 
 	public OreGenerator() {
-		oreList = new LinkedList<OreData>();
+		this.oreList = new LinkedList<OreData>();
 		OreData data;
 
 		data = new OreData(AllomancyConfig.copperMaxY,
 				AllomancyConfig.copperMinY, 8, 4,
 				AllomancyConfig.copperDensity, Registry.oreCopper.blockID,
 				AllomancyConfig.generateCopper);
-		oreList.add(data);
+		this.oreList.add(data);
 		data = new OreData(AllomancyConfig.tinMaxY, AllomancyConfig.tinMinY, 8,
 				4, AllomancyConfig.tinDensity, Registry.oreTin.blockID,
 				AllomancyConfig.generateTin);
-		oreList.add(data);
+		this.oreList.add(data);
 		data = new OreData(AllomancyConfig.leadMaxY, AllomancyConfig.leadMinY,
 				8, 4, AllomancyConfig.leadDensity, Registry.oreLead.blockID,
 				AllomancyConfig.generateLead);
-		oreList.add(data);
+		this.oreList.add(data);
 		data = new OreData(AllomancyConfig.zincMaxY, AllomancyConfig.zincMinY,
 				8, 4, AllomancyConfig.zincDensity, Registry.oreZinc.blockID,
 				AllomancyConfig.generateZinc);
-		oreList.add(data);
+		this.oreList.add(data);
 
 	}
 
@@ -68,15 +68,15 @@ public class OreGenerator implements IWorldGenerator {
 		int x, y, z;
 		int numOre;
 		int numCluster;
-		int tcount = 0;
-		if (world.provider.dimensionId != 0) // Only generate in the main world.
+		if (world.provider.dimensionId != 0) {
 			return;
+		}
 
-		for (OreData data : oreList) {
-			tcount++;
+		for (OreData data : this.oreList) {
 			numCluster = random.nextInt(data.clusterPerChunk);
-			if (numCluster == 0 && data.clusterPerChunk != 0)
+			if ((numCluster == 0) && (data.clusterPerChunk != 0)) {
 				numCluster = 1;
+			}
 			if (data.config) {
 				for (int count = 0; count < numCluster; count++) {
 					x = random.nextInt(16);
@@ -89,7 +89,8 @@ public class OreGenerator implements IWorldGenerator {
 							random.nextInt(data.maxCluster), data.minCluster,
 							data.maxCluster);
 
-					generateOre(world, random, x, y, z, data.oreType, numOre);
+					this.generateOre(world, random, x, y, z, data.oreType,
+							numOre);
 
 				}
 			}
@@ -105,7 +106,7 @@ public class OreGenerator implements IWorldGenerator {
 		lz = z;
 		int id;
 		id = world.getBlockId(lx, ly, lz);
-		if (id != Block.stone.blockID ) {
+		if (id != Block.stone.blockID) {
 			return;
 		}
 		for (int i = 0; i < ntg; i++) {
