@@ -91,11 +91,9 @@ public class OreGenerator implements IWorldGenerator {
 
 					this.generateOre(world, random, x, y, z, data.oreType,
 							numOre);
-
 				}
 			}
 		}
-
 	}
 
 	private void generateOre(World world, Random random, int x, int y, int z,
@@ -126,9 +124,6 @@ public class OreGenerator implements IWorldGenerator {
 				lz = lz + (random.nextInt(4) - 2);
 				break;
 			}
-
 		}
-
 	}
-
 }

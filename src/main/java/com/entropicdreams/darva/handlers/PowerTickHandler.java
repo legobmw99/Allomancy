@@ -236,6 +236,11 @@ public class PowerTickHandler implements ITickHandler {
 								.getId())) {
 							curPlayer.addPotionEffect(new PotionEffect(
 									Potion.nightVision.getId(), 300, 0, true));
+						}
+						if (curPlayer.isPotionActive(Potion.blindness.getId())) {
+							curPlayer.removePotionEffect(Potion.blindness
+									.getId());
+
 						} else {
 							PotionEffect eff;
 							eff = curPlayer
