@@ -7,18 +7,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.network.AbstractPacket;
 
-public class AllomancyBecomeMistbornPacket extends AbstractPacket{
+public class AllomancyBecomeMistbornPacket extends AbstractPacket {
 
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

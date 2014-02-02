@@ -12,36 +12,38 @@ public class AllomancyUpdateBurnPacket extends AbstractPacket {
 	private int mat;
 	private boolean value;
 	AllomancyData data;
-	public AllomancyUpdateBurnPacket(int mat, boolean value){
-	this.mat = mat;
-	this.value = value;
+
+	public AllomancyUpdateBurnPacket(int mat, boolean value) {
+		this.mat = mat;
+		this.value = value;
 	}
+
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		// TODO Auto-generated method stub
-		buffer.writeInt(mat);
-        buffer.writeBoolean(value);
+		buffer.writeInt(this.mat);
+		buffer.writeBoolean(this.value);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		// TODO Auto-generated method stub
-	      mat = buffer.readInt();
-	      value = buffer.readBoolean();
+		this.mat = buffer.readInt();
+		this.value = buffer.readBoolean();
 	}
 
 	@Override
 	public void handleClientSide(EntityPlayer player) {
 		// TODO Auto-generated method stub
-		data = AllomancyData.forPlayer(player);
-		data.updateBurn(mat, value);
+		this.data = AllomancyData.forPlayer(player);
+		this.data.updateBurn(this.mat, this.value);
 	}
 
 	@Override
 	public void handleServerSide(EntityPlayer player) {
 		// TODO Auto-generated method stub
-		data = AllomancyData.forPlayer(player);
-		data.updateBurn(mat, value);
+		this.data = AllomancyData.forPlayer(player);
+		this.data.updateBurn(this.mat, this.value);
 	}
 
 }

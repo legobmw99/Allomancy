@@ -12,33 +12,34 @@ public class AllomancySelectMetalPacket extends AbstractPacket {
 	private int metal;
 	AllomancyData data;
 
-	public AllomancySelectMetalPacket(int metal){
+	public AllomancySelectMetalPacket(int metal) {
 		this.metal = metal;
 	}
+
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		// TODO Auto-generated method stub
-		buffer.writeInt(metal);
+		buffer.writeInt(this.metal);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		// TODO Auto-generated method stub
-		metal = buffer.readInt();
+		this.metal = buffer.readInt();
 	}
 
 	@Override
 	public void handleClientSide(EntityPlayer player) {
 		// TODO Auto-generated method stub
-		data = AllomancyData.forPlayer(player);
-		data.setSelected(metal);
+		this.data = AllomancyData.forPlayer(player);
+		this.data.setSelected(this.metal);
 	}
 
 	@Override
 	public void handleServerSide(EntityPlayer player) {
 		// TODO Auto-generated method stub
-		data = AllomancyData.forPlayer(player);
-		data.setSelected(metal);
+		this.data = AllomancyData.forPlayer(player);
+		this.data.setSelected(this.metal);
 	}
 
 }

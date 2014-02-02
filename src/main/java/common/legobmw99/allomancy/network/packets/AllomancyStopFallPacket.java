@@ -6,13 +6,12 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import common.legobmw99.allomancy.network.AbstractPacket;
 
-public class AllomancyStopFallPacket extends AbstractPacket{
-	
+public class AllomancyStopFallPacket extends AbstractPacket {
 
-	public AllomancyStopFallPacket()
-	{
+	public AllomancyStopFallPacket() {
 
 	}
+
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		// TODO Auto-generated method stub
@@ -22,13 +21,13 @@ public class AllomancyStopFallPacket extends AbstractPacket{
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void handleClientSide(EntityPlayer player) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

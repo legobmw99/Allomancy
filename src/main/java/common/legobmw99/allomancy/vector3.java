@@ -7,9 +7,9 @@ public class vector3 {
 	public int Z;
 
 	public vector3(int x, int y, int z) {
-		X = x;
-		Y = y;
-		Z = z;
+		this.X = x;
+		this.Y = y;
+		this.Z = z;
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public class vector3 {
 		// TODO Auto-generated method stub
 
 		vector3 vec = (vector3) paramObject;
-		if (vec.X == this.X && vec.Y == this.Y && vec.Z == this.Z) {
+		if ((vec.X == this.X) && (vec.Y == this.Y) && (vec.Z == this.Z)) {
 			System.out.println("True");
 			return true;
 		}

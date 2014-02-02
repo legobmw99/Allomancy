@@ -19,7 +19,7 @@ import common.legobmw99.allomancy.network.packets.AllomancyBecomeMistbornPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class NuggetLerasium extends ItemFood{
+public class NuggetLerasium extends ItemFood {
 	public NuggetLerasium() {
 		super(0, false);
 		this.setAlwaysEdible();
@@ -27,6 +27,7 @@ public class NuggetLerasium extends ItemFood{
 		this.setCreativeTab(Registry.tabsAllomancy);
 		this.maxStackSize = 1;
 	}
+
 	public int getHealAmount() {
 		return 0;
 	}
@@ -48,33 +49,35 @@ public class NuggetLerasium extends ItemFood{
 				this.getMaxItemUseDuration(par1ItemStack));
 		return par1ItemStack;
 	}
+
 	@Override
-	public ItemStack onEaten(ItemStack item, World world,
-			EntityPlayer player) {
-		AllomancyData data;
-		data = AllomancyData.forPlayer(player);
+	public ItemStack onEaten(ItemStack item, World world, EntityPlayer player) {
+		AllomancyData.forPlayer(player);
 		double x = player.posX;
 		double y = player.posY + 3;
 		double z = player.posZ;
 		if (AllomancyData.isMistborn == false) {
 			AllomancyData.isMistborn = true;
-			Allomancy.packetPipeline.sendToServer(new AllomancyBecomeMistbornPacket());
+			Allomancy.packetPipeline
+					.sendToServer(new AllomancyBecomeMistbornPacket());
 		}
-		world.spawnEntityInWorld(new EntityLightningBolt(world,x,y,z));
-		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(), 20, 0, true));
+		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));
+		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(),
+				20, 0, true));
 		player.addStat(Registry.becomeMistborn, 1);
 		return super.onEaten(item, world, player);
 	}
+
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
-	{
-	par3List.add("\u00A75This item is endowed with strange powers");
-	par3List.add("\u00A75Perhaps you should ingest it?");
+	public void addInformation(ItemStack par1ItemStack,
+			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+		par3List.add("\u00A75This item is endowed with strange powers");
+		par3List.add("\u00A75Perhaps you should ingest it?");
 	}
- @Override
-@SideOnly(Side.CLIENT)
- 	public boolean hasEffect(ItemStack par1ItemStack)
-	    {
-	        return true;
-	    }
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean hasEffect(ItemStack par1ItemStack) {
+		return true;
+	}
 }

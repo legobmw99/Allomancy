@@ -31,7 +31,7 @@ public class ItemVial extends ItemFood {
 			"copperdrink", "brassdrink" };
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
-	
+
 	@Override
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
@@ -77,8 +77,6 @@ public class ItemVial extends ItemFood {
 		return par1ItemStack;
 	}
 
-
-
 	public ItemVial() {
 		super(0, 0, false);
 		this.setAlwaysEdible();
@@ -91,19 +89,17 @@ public class ItemVial extends ItemFood {
 	@Override
 	public IIcon getIconFromDamage(int meta) {
 		// TODO Auto-generated method stub
-		if (meta < 0 || meta >= icons.length) 
-		{
+		if ((meta < 0) || (meta >= this.icons.length)) {
 			meta = 0;
 		}
-		return icons[meta];
+		return this.icons[meta];
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
 		// TODO Auto-generated method stub
 		int meta = itemStack.getItemDamage();
-		if (meta < 0 || meta >= unlocalName.length) 
-		{
+		if ((meta < 0) || (meta >= unlocalName.length)) {
 			meta = 0;
 		}
 
@@ -111,19 +107,20 @@ public class ItemVial extends ItemFood {
 	}
 
 	@Override
-	public void registerIcons(IIconRegister iconRegister)
-	{
-		icons = new IIcon[textureName.length];
+	public void registerIcons(IIconRegister iconRegister) {
+		this.icons = new IIcon[textureName.length];
 
-		for (int i = 0; i < textureName.length; ++i) 
-		{
-			icons[i] = iconRegister.registerIcon("allomancy:"+textureName[i]);
+		for (int i = 0; i < textureName.length; ++i) {
+			this.icons[i] = iconRegister.registerIcon("allomancy:"
+					+ textureName[i]);
 		}
 	}
-	//TODO: public void getSubItems(Item item, CreativeTabs creativeTabs, List list)
-    public void func_150895_a(Item item, CreativeTabs tab, List list) {
-		for (int meta = 0; meta < icons.length; meta++)
-		{
+
+	// TODO: public void getSubItems(Item item, CreativeTabs creativeTabs, List
+	// list)
+	@Override
+	public void func_150895_a(Item item, CreativeTabs tab, List list) {
+		for (int meta = 0; meta < this.icons.length; meta++) {
 			list.add(new ItemStack(item, 1, meta));
 		}
 	}
