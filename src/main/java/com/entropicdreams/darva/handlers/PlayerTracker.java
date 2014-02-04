@@ -43,6 +43,10 @@ public class PlayerTracker implements IPlayerTracker {
 			if (AllomancyData.isMistborn == true) {
 				PacketDispatcher.sendPacketToPlayer(
 						PacketHandler.becomeMistborn(), (Player) event.entity);
+				if(!event.world.isRemote){
+					AllomancyData.isMistborn = true;
+					data.Dirty = false;
+				}
 			}
 		}
 	}
@@ -68,6 +72,10 @@ public class PlayerTracker implements IPlayerTracker {
 			if (AllomancyData.isMistborn == true) {
 				PacketDispatcher.sendPacketToPlayer(
 						PacketHandler.becomeMistborn(), (Player) player);
+				if(!player.worldObj.isRemote){
+					AllomancyData.isMistborn = true;
+					data.Dirty = false;
+				}
 			}
 		}
 	}
