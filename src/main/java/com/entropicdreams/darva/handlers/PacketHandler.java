@@ -109,6 +109,7 @@ public class PacketHandler implements IPacketHandler {
 	@SideOnly(Side.CLIENT)
 	private void clientRec(EntityPlayer player, Packet250CustomPayload packet) {
 		AllomancyData data;
+		data = AllomancyData.forPlayer(player);
 		DataInputStream inputStream = new DataInputStream(
 				new ByteArrayInputStream(packet.data));
 		int Type = -1;
@@ -122,13 +123,15 @@ public class PacketHandler implements IPacketHandler {
 
 		switch (Type) {
 		case PacketHandler.Packet_Allomancy_Data:
-			data = AllomancyData.forPlayer(player);
 			data.updateData(packet);
 		default:
 			return;
 		case PacketHandler.Packet_Allomancy_Update_Burn:
 			data = AllomancyData.forPlayer(player);
 			data.updateBurn(packet);
+		case PacketHandler.Packet_Allomancy_Become_Mistborn:
+			this.becomeMistborn();
+			data.isMistborn = true;
 		case PacketHandler.Packet_Allomancy_Update_Texture:
 			this.updateTexture(player, packet);
 		}
@@ -321,13 +324,13 @@ public class PacketHandler implements IPacketHandler {
 		DataOutputStream outputStream = new DataOutputStream(bos);
 
 		try {
-			outputStream
-					.writeInt(PacketHandler.Packet_Allomancy_Become_Mistborn);
+			outputStream.writeInt(PacketHandler.Packet_Allomancy_Become_Mistborn);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Allomancy_Data";
 		packet.data = bos.toByteArray();

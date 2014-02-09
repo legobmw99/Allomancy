@@ -47,8 +47,7 @@ public class NuggetLerasium extends ItemFood {
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
-		AllomancyData data;
-		data = AllomancyData.forPlayer(par3EntityPlayer);
+		AllomancyData.forPlayer(par3EntityPlayer);
 		if (!AllomancyData.isMistborn) {
 			par3EntityPlayer.setItemInUse(par1ItemStack,
 					this.getMaxItemUseDuration(par1ItemStack));
@@ -58,14 +57,14 @@ public class NuggetLerasium extends ItemFood {
 
 	@Override
 	public ItemStack onEaten(ItemStack item, World world, EntityPlayer player) {
-		AllomancyData data;
-		data = AllomancyData.forPlayer(player);
+		AllomancyData.forPlayer(player);
 		double x = player.posX;
 		double y = player.posY + 3;
 		double z = player.posZ;
 		if (AllomancyData.isMistborn == false) {
 			AllomancyData.isMistborn = true;
-			PacketDispatcher.sendPacketToServer(PacketHandler.becomeMistborn());
+			PacketDispatcher.sendPacketToServer(PacketHandler
+					.becomeMistborn());
 		}
 		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));
 		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(),
