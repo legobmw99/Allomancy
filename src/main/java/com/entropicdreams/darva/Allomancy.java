@@ -50,9 +50,8 @@ public class Allomancy {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		playerTracker = new PlayerTracker();
-		GameRegistry.registerPlayerTracker(playerTracker);
-		MinecraftForge.EVENT_BUS.register(playerTracker);
+		GameRegistry.registerPlayerTracker(new PlayerTracker());
+		MinecraftForge.EVENT_BUS.register(new PlayerTracker());
 		damageHandler = new DamageHandler();
 		MinecraftForge.EVENT_BUS.register(damageHandler);
 

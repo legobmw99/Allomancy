@@ -20,6 +20,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class NuggetLerasium extends ItemFood {
+
 	public NuggetLerasium(int par1) {
 		super(par1, 0, false);
 		this.setAlwaysEdible();
@@ -46,14 +47,19 @@ public class NuggetLerasium extends ItemFood {
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
-		par3EntityPlayer.setItemInUse(par1ItemStack,
-				this.getMaxItemUseDuration(par1ItemStack));
+		AllomancyData data;
+		data = AllomancyData.forPlayer(par3EntityPlayer);
+		if (!AllomancyData.isMistborn) {
+			par3EntityPlayer.setItemInUse(par1ItemStack,
+					this.getMaxItemUseDuration(par1ItemStack));
+		}
 		return par1ItemStack;
 	}
 
 	@Override
 	public ItemStack onEaten(ItemStack item, World world, EntityPlayer player) {
-		AllomancyData.forPlayer(player);
+		AllomancyData data;
+		data = AllomancyData.forPlayer(player);
 		double x = player.posX;
 		double y = player.posY + 3;
 		double z = player.posZ;
