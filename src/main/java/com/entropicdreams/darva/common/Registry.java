@@ -122,13 +122,13 @@ public class Registry {
 				new ItemStack(itemTinFlakes), new ItemStack(itemVial, 1, 0));
 		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 4),
 				new ItemStack(itemPewterFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),
-				new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),
-				new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0));
 		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 7),
-				new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0));
+				new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0));
 		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 8),
+				new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),
+				new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),
 				new ItemStack(itemBronzeFlakes), new ItemStack(itemVial, 1, 0));
 
 		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {
