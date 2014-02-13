@@ -68,8 +68,6 @@ public class RenderHandler implements ITickHandler {
 		int ironY, steelY, tinY, pewterY;
 		// right hand side
 		int copperY, bronzeY, zincY, brassY;
-		System.out.println(player);
-		System.out.println(data.isMistborn);
 		if (!data.isMistborn) {
 			return;
 		}

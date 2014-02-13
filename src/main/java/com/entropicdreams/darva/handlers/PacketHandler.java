@@ -324,7 +324,8 @@ public class PacketHandler implements IPacketHandler {
 		DataOutputStream outputStream = new DataOutputStream(bos);
 
 		try {
-			outputStream.writeInt(PacketHandler.Packet_Allomancy_Become_Mistborn);
+			outputStream
+					.writeInt(PacketHandler.Packet_Allomancy_Become_Mistborn);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

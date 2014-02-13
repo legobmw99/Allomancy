@@ -63,8 +63,7 @@ public class NuggetLerasium extends ItemFood {
 		double z = player.posZ;
 		if (AllomancyData.isMistborn == false) {
 			AllomancyData.isMistborn = true;
-			PacketDispatcher.sendPacketToServer(PacketHandler
-					.becomeMistborn());
+			PacketDispatcher.sendPacketToServer(PacketHandler.becomeMistborn());
 		}
 		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));
 		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(),
