@@ -48,8 +48,7 @@ public class Registry {
 	}
 
 	public static void oreRegistration() {
-		OreDictionary
-				.registerOre("ingotCopper", new ItemStack(itemCopperIngot));
+		OreDictionary.registerOre("ingotCopper", new ItemStack(itemCopperIngot));
 		OreDictionary.registerOre("ingotZinc", new ItemStack(itemZincIngot));
 		OreDictionary.registerOre("ingotTin", new ItemStack(itemTinIngot));
 		OreDictionary.registerOre("ingotLead", new ItemStack(itemLeadIngot));
@@ -57,6 +56,7 @@ public class Registry {
 		OreDictionary.registerOre("oreZinc", new ItemStack(oreZinc));
 		OreDictionary.registerOre("oreTin", new ItemStack(oreTin));
 		OreDictionary.registerOre("oreLead", new ItemStack(oreLead));
+		OreDictionary.registerOre("glass", new ItemStack(Block.glass));
 
 	}
 
@@ -135,7 +135,7 @@ public class Registry {
 				"W W", "WWW", "WWW", 'W', new ItemStack(Block.cloth, 1, 7) });
 		GameRegistry.addRecipe(new ShapedOreRecipe(
 				new ItemStack(itemVial, 3, 0), " x ", "y y", " y ", 'x',
-				"slabWood", 'y', Block.glass));
+				"slabWood", 'y', "glass"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 				itemAllomancyGrinder, 1, 0), "xxx", "yyy", "xxx", 'x',
 				Item.ingotIron, 'y', Item.goldNugget));
