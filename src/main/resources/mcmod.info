@@ -1,0 +1,16 @@
+[
+{
+  "modid": "allomancy",
+  "name": "Allomancy",
+  "description": "Adds Allomancy to Minecraft!",
+  "version": "1.1.6",
+  "mcversion": "1.6.4",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["ZenDarva","legobmw99"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

@@ -1,0 +1,59 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
+    }
+}
+
+
+ext.configFile = file "build.properties"
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    ext.config = new ConfigSlurper().parse prop
+}
+
+apply plugin: 'forge'
+
+ENV = System.getenv()
+
+if(ENV.DRONE_BUILD_NUMBER)
+buildNum = "." +ENV.DRONE_BUILD_NUMBER
+
+else if (ENV.BUILD_NUMBER)
+buildNum = "." +ENV.BUILD_NUMBER
+
+else
+buildNum = ".0"
+
+group= "com.entropicdreams.darva.allomancy"
+version = config.mod_version + buildNum
+archivesBaseName = "allomancy"
+
+minecraft {
+	version = config.minecraft_version + "-" + config.forge_version
+	replaceIn "MainMod.java"
+    	replace "@VERSION@", version
+}
+version = "${config.minecraft_version}-${config.mod_version}${buildNum}"
+processResources
+{
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod/info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
