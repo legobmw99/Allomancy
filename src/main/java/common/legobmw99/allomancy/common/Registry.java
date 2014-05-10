@@ -195,134 +195,116 @@ public class Registry {
 	}
 
 	public static void initBlocks() {
-		oreTin = new OreBlock(Material.field_151576_e, OreType.TIN)
-				.func_149663_c("allomancy:tinore");
-		GameRegistry.registerBlock(oreTin, "allomancy:tinore");
-		LanguageRegistry.addName(oreTin, "Tin Ore");
+		oreTin = new OreBlock(Material.rock, OreType.TIN)
+				.setBlockName("tiles.tinore");
+		GameRegistry.registerBlock(oreTin, "tiles.tinore");
 
-		oreLead = new OreBlock(Material.field_151576_e, OreType.LEAD)
-				.func_149663_c("allomancy:leadore");
-		GameRegistry.registerBlock(oreLead, "allomancy:leadore");
-		LanguageRegistry.addName(oreLead, "Lead Ore");
+		oreLead = new OreBlock(Material.rock, OreType.LEAD)
+				.setBlockName("tiles.leadore");
+		GameRegistry.registerBlock(oreLead, "tiles.leadore");
 
-		oreCopper = new OreBlock(Material.field_151576_e, OreType.COPPER)
-				.func_149663_c("allomancy:copperore");
-		GameRegistry.registerBlock(oreCopper, "allomancy:copperore");
-		LanguageRegistry.addName(oreCopper, "Copper Ore");
 
-		oreZinc = new OreBlock(Material.field_151576_e, OreType.ZINC)
-				.func_149663_c("allomancy:zincore");
-		GameRegistry.registerBlock(oreZinc, "allomancy:zincore");
-		LanguageRegistry.addName(oreZinc, "Zinc Ore");
+		oreCopper = new OreBlock(Material.rock, OreType.COPPER)
+				.setBlockName("tiles.copperore");
+		GameRegistry.registerBlock(oreCopper, "tiles.copperore");
+
+
+		oreZinc = new OreBlock(Material.rock, OreType.ZINC)
+				.setBlockName("tiles.zincore");
+		GameRegistry.registerBlock(oreZinc, "tiles.zincore");
+
 	}
 
 	public static void initItems() {
 		itemAllomancyGrinder = new ItemGrinder();
-		GameRegistry.registerItem(itemAllomancyGrinder, "allomancy:Grinder");
-		LanguageRegistry.addName(itemAllomancyGrinder, "Hand Grinder");
+		GameRegistry.registerItem(itemAllomancyGrinder, "item.grinder");
 		itemAllomancyGrinder.setTextureName("allomancy:handgrinder");
 
-		itemTinIngot = new Item().setUnlocalizedName("allomancy:tiningot")
+		itemTinIngot = new Item().setUnlocalizedName("tiningot")
 				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		GameRegistry.registerItem(itemTinIngot, "allomancy:tiningot");
-		LanguageRegistry.addName(itemTinIngot, "Tin Ingot");
+		GameRegistry.registerItem(itemTinIngot, "item.tiningot");
 		itemTinIngot.setTextureName("allomancy:tiningot");
 
-		itemTinFlakes = new Item().setUnlocalizedName("allomancy:tinflakes")
+		itemTinFlakes = new Item().setUnlocalizedName("tinflakes")
 				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemTinFlakes, "allomancy:tinflakes");
-		LanguageRegistry.addName(itemTinFlakes, "Tin Flakes");
+		GameRegistry.registerItem(itemTinFlakes, "item.tinflakes");
 		itemTinFlakes.setTextureName("allomancy:tinflakes");
 
-		itemLeadIngot = new Item().setUnlocalizedName("allomancy:leadingot")
+		itemLeadIngot = new Item().setUnlocalizedName("leadingot")
 				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		GameRegistry.registerItem(itemLeadIngot, "allomancy:leadingot");
-		LanguageRegistry.addName(itemLeadIngot, "Lead Ingot");
+		GameRegistry.registerItem(itemLeadIngot, "item.leadingot");
 		itemLeadIngot.setTextureName("allomancy:leadingot");
 
-		itemLeadFlakes = new Item().setUnlocalizedName("allomancy:leadflakes")
+		itemLeadFlakes = new Item().setUnlocalizedName("leadflakes")
 				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemLeadFlakes, "allomancy:leadflakes");
-		LanguageRegistry.addName(itemLeadFlakes, "Lead Flakes");
+		GameRegistry.registerItem(itemLeadFlakes, "item.leadflakes");
 		itemLeadFlakes.setTextureName("allomancy:leadflakes");
 
 		itemCopperIngot = new Item()
-				.setUnlocalizedName("allomancy:copperingot")
+				.setUnlocalizedName("copperingot")
 				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		GameRegistry.registerItem(itemCopperIngot, "allomancy:copperingot");
-		LanguageRegistry.addName(itemCopperIngot, "Copper Ingot");
+		GameRegistry.registerItem(itemCopperIngot, "item.copperingot");
 		itemCopperIngot.setTextureName("allomancy:copperingot");
 
 		itemCopperFlakes = new Item().setUnlocalizedName(
-				"allomancy:copperflakes")
+				"copperflakes")
 				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemCopperFlakes, "allomancy:copperflakes");
-		LanguageRegistry.addName(itemCopperFlakes, "Copper Flakes");
+		GameRegistry.registerItem(itemCopperFlakes, "item.copperflakes");
 		itemCopperFlakes.setTextureName("allomancy:copperflakes");
 
-		itemZincIngot = new Item().setUnlocalizedName("allomancy:zincingot")
+		itemZincIngot = new Item().setUnlocalizedName("zincingot")
 				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		GameRegistry.registerItem(itemZincIngot, "allomancy:zincingot");
-		LanguageRegistry.addName(itemZincIngot, "Zinc Ingot");
+		GameRegistry.registerItem(itemZincIngot, "item.zincingot");
 		itemZincIngot.setTextureName("allomancy:zincingot");
 
-		itemZincFlakes = new Item().setUnlocalizedName("allomancy:zincflakes")
+		itemZincFlakes = new Item().setUnlocalizedName("zincflakes")
 				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemZincFlakes, "allomancy:zincflakes");
-		LanguageRegistry.addName(itemZincFlakes, "Zinc Flakes");
+		GameRegistry.registerItem(itemZincFlakes, "item.zincflakes");
 		itemZincFlakes.setTextureName("allomancy:zincflakes");
 
-		itemIronFlakes = new Item().setUnlocalizedName("allomancy:ironflakes")
+		itemIronFlakes = new Item().setUnlocalizedName("ironflakes")
 				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemIronFlakes, "allomancy:ironflakes");
-		LanguageRegistry.addName(itemIronFlakes, "Iron Flakes");
+		GameRegistry.registerItem(itemIronFlakes, "item.ironflakes");
 		itemIronFlakes.setTextureName("allomancy:ironflakes");
 
 		itemSteelFlakes = new Item()
-				.setUnlocalizedName("allomancy:steelflakes").setCreativeTab(
+				.setUnlocalizedName("steelflakes").setCreativeTab(
 						Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemSteelFlakes, "allomancy:steelflakes");
-		LanguageRegistry.addName(itemSteelFlakes, "Steel Flakes");
+		GameRegistry.registerItem(itemSteelFlakes, "item.steelflakes");
 		itemSteelFlakes.setTextureName("allomancy:steelflakes");
 
 		itemBrassFlakes = new Item()
-				.setUnlocalizedName("allomancy:brassflakes").setCreativeTab(
+				.setUnlocalizedName("brassflakes").setCreativeTab(
 						Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemBrassFlakes, "allomancy:brassflakes");
-		LanguageRegistry.addName(itemBrassFlakes, "Brass Flakes");
+		GameRegistry.registerItem(itemBrassFlakes, "item.brassflakes");
 		itemBrassFlakes.setTextureName("allomancy:brassflakes");
 
 		itemPewterFlakes = new Item().setUnlocalizedName(
-				"allomancy:pewterflakes")
+				"pewterflakes")
 				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemPewterFlakes, "allomancy:pewterflakes");
-		LanguageRegistry.addName(itemPewterFlakes, "Pewter Flakes");
+		GameRegistry.registerItem(itemPewterFlakes, "item.pewterflakes");
 		itemPewterFlakes.setTextureName("allomancy:pewterflakes");
 
 		itemBronzeFlakes = new Item().setUnlocalizedName(
-				"allomancy:bronzeflakes")
+				"bronzeflakes")
 				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemBronzeFlakes, "allomancy:bronzeflakes");
-		LanguageRegistry.addName(itemBronzeFlakes, "Bronze Flakes");
+		GameRegistry.registerItem(itemBronzeFlakes, "item.bronzeflakes");
 		itemBronzeFlakes.setTextureName("allomancy:bronzeflakes");
 
 		Mistcloak = new ItemMistcloak(WoolArmor, 5, 1).setUnlocalizedName(
-				"allomancy:mistcloak").setCreativeTab(CreativeTabs.tabCombat);
-		GameRegistry.registerItem(Mistcloak, "allomancy:mistcloak");
-		LanguageRegistry.addName(Mistcloak, "Mistcloak");
+				"mistcloak").setCreativeTab(CreativeTabs.tabCombat);
+		GameRegistry.registerItem(Mistcloak, "item.mistcloak");
 		Mistcloak.setTextureName("allomancy:mistcloak");
 
 		nuggetLerasium = new NuggetLerasium();
-		GameRegistry.registerItem(nuggetLerasium, "allomancy:lerasium");
-		LanguageRegistry.addName(nuggetLerasium, "\u00A7bLerasium Nugget");
+		GameRegistry.registerItem(nuggetLerasium, "item.lerasium");
 		nuggetLerasium.setTextureName("allomancy:lerasium");
 
 		itemVial = new ItemVial();
-		GameRegistry.registerItem(itemVial, "vial");
+		GameRegistry.registerItem(itemVial, "item.vial");
 		for (int i = 0; i < ItemVial.localName.length; i++) {
 			ItemStack Item;
 			Item = new ItemStack(itemVial, 1, i);
-			LanguageRegistry.addName(Item, ItemVial.localName[i]);
 		}
 	}
 }

@@ -45,7 +45,7 @@ public class Allomancy {
 	public void load(FMLInitializationEvent event) {
 		FMLCommonHandler.instance().bus().register(playerTracker);
 		packetPipeline.initalize();
-		FMLCommonHandler.instance().bus().register(eventHandler);
+		//FMLCommonHandler.instance().bus().register(eventHandler);
 		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(
 				new WeightedRandomChestContent(new ItemStack(
 						Registry.nuggetLerasium), 1, 1, 40));

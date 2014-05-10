@@ -17,11 +17,11 @@ public class OreBlock extends Block {
 	public OreBlock(Material material, OreType type) {
 		super(material);
 		// This.SetHardness
-		this.func_149711_c(.5F);
+		this.setHardness(.5F);
 		// setStepSound(Block.soundStoneFootstep)
-		this.func_149672_a(Block.field_149780_i);
+		this.setStepSound(Block.soundTypeStone);
 		// setCreativeTabs
-		this.func_149647_a(CreativeTabs.tabBlock);
+		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setHarvestLevel("pick", 1);
 	}
 
@@ -42,7 +42,7 @@ public class OreBlock extends Block {
 
 	// getIcon()
 	@Override
-	public IIcon func_149691_a(int side, int meta) {
+	public IIcon getIcon(int side, int meta) {
 		return this.texture;
 	}
 }

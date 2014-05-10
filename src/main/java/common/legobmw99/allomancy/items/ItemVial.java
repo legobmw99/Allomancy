@@ -119,7 +119,7 @@ public class ItemVial extends ItemFood {
 	// TODO: public void getSubItems(Item item, CreativeTabs creativeTabs, List
 	// list)
 	@Override
-	public void func_150895_a(Item item, CreativeTabs tab, List list) {
+	public void getSubItems(Item item, CreativeTabs tab, List list) {
 		for (int meta = 0; meta < this.icons.length; meta++) {
 			list.add(new ItemStack(item, 1, meta));
 		}

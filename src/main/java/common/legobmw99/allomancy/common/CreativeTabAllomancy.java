@@ -16,7 +16,7 @@ public class CreativeTabAllomancy extends CreativeTabs {
 
 	// TODO: public ItemStack getIconItemStack()
 	@Override
-	public ItemStack func_151244_d() {
+	public ItemStack getIconItemStack() {
 		return new ItemStack(Registry.itemVial, 1, 5);
 	}
 
