@@ -53,10 +53,10 @@ public class Registry {
 
 	public static void ModContent() {
 		addAchievements();
-		oreRegistration();
 		setupRecipes();
 		initBlocks();
 		initItems();
+		oreRegistration();
 	}
 
 	private static void addAchievements() {
@@ -69,14 +69,6 @@ public class Registry {
 		LanguageRegistry.instance().addStringLocalization(
 				"achievement.becomeMistborn.desc", "en_US",
 				"You have a power most people envy...");
-	}
-
-	public static void oreRegistration() {
-		OreDictionary
-				.registerOre("ingotCopper", new ItemStack(itemCopperIngot));
-		OreDictionary.registerOre("ingotZinc", new ItemStack(itemZincIngot));
-		OreDictionary.registerOre("ingotTin", new ItemStack(itemTinIngot));
-		OreDictionary.registerOre("ingotLead", new ItemStack(itemLeadIngot));
 	}
 
 	public static void setupRecipes() {
@@ -254,7 +246,7 @@ public class Registry {
 
 		itemZincIngot = new Item().setUnlocalizedName("zincingot")
 				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		GameRegistry.registerItem(itemZincIngot, "item.zincingot");
+		GameRegistry.registerItem(itemZincIngot, "item.allomancy:zincingot");
 		itemZincIngot.setTextureName("allomancy:zincingot");
 
 		itemZincFlakes = new Item().setUnlocalizedName("zincflakes")
@@ -307,4 +299,11 @@ public class Registry {
 			Item = new ItemStack(itemVial, 1, i);
 		}
 	}
+	public static void oreRegistration() {
+		OreDictionary.registerOre("ingotCopper", new ItemStack(itemCopperIngot));
+		OreDictionary.registerOre("ingotZinc", new ItemStack(itemZincIngot));
+		OreDictionary.registerOre("ingotTin", new ItemStack(itemTinIngot));
+		OreDictionary.registerOre("ingotLead", new ItemStack(itemLeadIngot));
+	}
+
 }

@@ -16,26 +16,26 @@ public class OreBlock extends Block {
 
 	public OreBlock(Material material, OreType type) {
 		super(material);
-		// This.SetHardness
+
 		this.setHardness(.5F);
-		// setStepSound(Block.soundStoneFootstep)
+
 		this.setStepSound(Block.soundTypeStone);
-		// setCreativeTabs
+
 		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setHarvestLevel("pick", 1);
 	}
 
-	// registerIcons()
+
 	public void registerIcon(IIconRegister iconRegister) {
 		switch (this.type) {
 		case LEAD:
-			this.texture = iconRegister.registerIcon("allomancy:leadore");
+			this.texture = iconRegister.registerIcon("allomancy/ore:leadore");
 		case TIN:
-			this.texture = iconRegister.registerIcon("allomancy:tinore");
+			this.texture = iconRegister.registerIcon("allomancy/ore:tinore");
 		case ZINC:
-			this.texture = iconRegister.registerIcon("allomancy:zincrore");
+			this.texture = iconRegister.registerIcon("allomancy/ore:zincrore");
 		case COPPER:
-			this.texture = iconRegister.registerIcon("allomancy:copperore");
+			this.texture = iconRegister.registerIcon("allomancy/ore:copperore");
 
 		}
 	}

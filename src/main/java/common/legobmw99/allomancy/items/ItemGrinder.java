@@ -22,10 +22,14 @@ public class ItemGrinder extends Item {
 		return false;
 	}
 
-	public ItemStack getContainerItemStack(ItemStack itemStack) {
-		// TODO Auto-generated method stub
-		return new ItemStack(Registry.itemAllomancyGrinder, 1,
-				this.getDamage(itemStack) + 1);
-	}
+    @Override
+    public ItemStack getContainerItem(ItemStack itemStack)
+    {
+        ItemStack copiedStack = itemStack.copy();
 
+        copiedStack.setItemDamage(copiedStack.getItemDamage() + 1);
+        copiedStack.stackSize = 1;
+
+        return copiedStack;
+    }
 }
