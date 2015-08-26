@@ -204,9 +204,9 @@ public class RenderHandler implements ITickHandler {
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
 		for (vector3 v : Allomancy.MPC.particleBlockTargets) {
-			motionX = ((player.posX - v.X  - .5) * -1) * .03;
-			motionY = (((player.posY - v.Y  - .5) * -1) * .03) + .021;
-			motionZ = ((player.posZ - v.Z  - .5) * -1) * .03;
+			motionX = ((player.posX - v.X - .5) * -1) * .03;
+			motionY = (((player.posY - v.Y - .5) * -1) * .03) + .021;
+			motionZ = ((player.posZ - v.Z - .5) * -1) * .03;
 			particle = new ParticleMetal(player.worldObj,
 					player.posX
 							- (Math.sin(Math.toRadians(player
