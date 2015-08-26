@@ -77,9 +77,9 @@ public class PowerTickHandler implements ITickHandler {
 				zLoc = (int) player.posZ;
 				yLoc = (int) player.posY;
 
-				for (int x = xLoc - 5; x < (xLoc + 5); x++) {
-					for (int z = zLoc - 5; z < (zLoc + 5); z++) {
-						for (int y = yLoc - 5; y < (yLoc + 5); y++) {
+				for (int x = xLoc - 10; x < (xLoc + 10); x++) {
+					for (int z = zLoc - 10; z < (zLoc + 10); z++) {
+						for (int y = yLoc - 10; y < (yLoc + 10); y++) {
 							if (Allomancy.MPC.isBlockMetal(player.worldObj
 									.getBlockId(x, y, z))) {
 								Allomancy.MPC.particleBlockTargets
