@@ -84,6 +84,7 @@ public class MetalParticleController implements ITickHandler {
 		this.metallist.add(Registry.itemTinIngot.itemID);
 		this.metallist.add(Registry.nuggetLerasium.itemID);
 		this.metallist.add(Block.anvil.blockID);
+		this.metallist.add(Block.cauldron.blockID);
 		this.metallist.add(Block.blockGold.blockID);
 		this.metallist.add(Block.blockIron.blockID);
 		this.metallist.add(Block.fenceIron.blockID);

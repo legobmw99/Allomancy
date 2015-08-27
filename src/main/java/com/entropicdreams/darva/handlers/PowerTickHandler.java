@@ -171,7 +171,7 @@ public class PowerTickHandler implements ITickHandler {
 				mop = Minecraft.getMinecraft().objectMouseOver;
 				if ((mop != null)
 						&& (mop.typeOfHit == EnumMovingObjectType.ENTITY)
-						&& (mop.entityHit instanceof EntityLiving)
+						&& (mop.entityHit instanceof EntityCreature)
 						&& !(mop.entityHit instanceof EntityPlayer)
 						&& Minecraft.getMinecraft().gameSettings.keyBindUseItem.pressed) {
 					entity = mop.entityHit;
