@@ -183,7 +183,7 @@ public class PowerTickHandler implements ITickHandler {
 			}
 
 			if (data.MetalBurning[AllomancyData.matPewter]) {
-				if ((player.onGround == true) && (player.isInWater() == false)) {
+				if ((player.onGround == true) && (player.isInWater() == false) && (Minecraft.getMinecraft().gameSettings.keyBindForward.pressed)) {
 					player.motionX *= 1.4;
 					player.motionZ *= 1.4;
 
