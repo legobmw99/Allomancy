@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
@@ -183,7 +182,9 @@ public class PowerTickHandler implements ITickHandler {
 			}
 
 			if (data.MetalBurning[AllomancyData.matPewter]) {
-				if ((player.onGround == true) && (player.isInWater() == false) && (Minecraft.getMinecraft().gameSettings.keyBindForward.pressed)) {
+				if ((player.onGround == true)
+						&& (player.isInWater() == false)
+						&& (Minecraft.getMinecraft().gameSettings.keyBindForward.pressed)) {
 					player.motionX *= 1.4;
 					player.motionZ *= 1.4;
 
