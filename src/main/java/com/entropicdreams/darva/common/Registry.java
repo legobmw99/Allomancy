@@ -202,7 +202,7 @@ public class Registry {
 	public static void initItems() {
 		itemAllomancyGrinder = new ItemGrinder(AllomancyConfig.itemGrinder);
 		
-		itemCoinBag = new ItemCoinBag(12322);
+		itemCoinBag = new ItemCoinBag(AllomancyConfig.itemCoinBag);
 		
 		itemTinIngot = new Item(AllomancyConfig.itemTinIngot)
 				.setUnlocalizedName("allomancy:tiningot")
@@ -320,6 +320,10 @@ public class Registry {
 		LanguageRegistry.instance().addStringLocalization(
 				"itemGroup.Allomancy", "Allomancy");
 
+		GameRegistry.registerItem(itemCoinBag, "allomancy:CoinBag");
+		LanguageRegistry.addName(itemCoinBag, "Coin Bag");
+		itemCoinBag.setTextureName("allomancy:CoinBag");
+		
 		GameRegistry.registerItem(itemVial, "vial");
 		for (int i = 0; i < ItemVial.localName.length; i++) {
 			ItemStack Item;

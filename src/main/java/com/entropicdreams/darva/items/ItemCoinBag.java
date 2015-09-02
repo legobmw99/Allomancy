@@ -35,8 +35,10 @@ public class ItemCoinBag extends Item{
         {
             EntityGoldNugget entitygold = new EntityGoldNugget(par2World, par3EntityPlayer);
             par2World.spawnEntityInWorld(entitygold);
+            
+            if(!par3EntityPlayer.capabilities.isCreativeMode){
             par3EntityPlayer.inventory.consumeInventoryItem(Item.goldNugget.itemID);
-
+            }
         }
 
         return par1ItemStack;
