@@ -171,9 +171,9 @@ public class MetalParticleController implements ITickHandler {
 	public void tryPushBlock(vector3 vec) {
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		motionX = ((player.posX - vec.X) * .1);
-		motionY = ((player.posY - vec.Y) * .1);
-		motionZ = ((player.posZ - vec.Z) * .1);
+		motionX = ((player.posX - vec.X) * .085);
+		motionY = ((player.posY - vec.Y) * .085);
+		motionZ = ((player.posZ - vec.Z) * .085);
 		player.motionX = motionX;
 		player.motionY = motionY;
 		player.motionZ = motionZ;
@@ -184,9 +184,9 @@ public class MetalParticleController implements ITickHandler {
 	public void tryPullBlock(vector3 vec) {
 		double motionX, motionY, motionZ;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		motionX = ((player.posX - vec.X) * .1) * -1;
-		motionY = ((player.posY - vec.Y) * .1) * -1;
-		motionZ = ((player.posZ - vec.Z) * .1) * -1;
+		motionX = ((player.posX - vec.X) * .085) * -1;
+		motionY = ((player.posY - vec.Y) * .085) * -1;
+		motionZ = ((player.posZ - vec.Z) * .085) * -1;
 		player.motionX = motionX;
 		player.motionY = motionY;
 		player.motionZ = motionZ;

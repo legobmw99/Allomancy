@@ -1,12 +1,16 @@
 package com.entropicdreams.darva.proxy;
 
+import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
 import com.entropicdreams.darva.Allomancy;
 import com.entropicdreams.darva.MetalParticleController;
+import com.entropicdreams.darva.entity.EntityGoldNugget;
+import com.entropicdreams.darva.entity.GoldNuggetRenderer;
 import com.entropicdreams.darva.handlers.PowerTickHandler;
 import com.entropicdreams.darva.handlers.RenderHandler;
 import com.entropicdreams.darva.handlers.SoundHandler;
@@ -46,6 +50,7 @@ public class ClientProxy extends CommonProxy {
 		KeyBinding[] key3 = { new KeyBinding("Burn Second", Keyboard.KEY_G) };
 		KeyBindingRegistry.registerKeyBinding(new BurnSecondKeyBind(key3,
 				repeat));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class, new RenderSnowball(Item.goldNugget));
 
 		MinecraftForge.EVENT_BUS.register(new SoundHandler());
 	}

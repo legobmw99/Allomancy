@@ -13,6 +13,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import com.entropicdreams.darva.items.ItemCoinBag;
 import com.entropicdreams.darva.items.ItemGrinder;
 import com.entropicdreams.darva.items.ItemMistcloak;
 import com.entropicdreams.darva.items.ItemVial;
@@ -200,7 +201,9 @@ public class Registry {
 
 	public static void initItems() {
 		itemAllomancyGrinder = new ItemGrinder(AllomancyConfig.itemGrinder);
-
+		
+		itemCoinBag = new ItemCoinBag(12322);
+		
 		itemTinIngot = new Item(AllomancyConfig.itemTinIngot)
 				.setUnlocalizedName("allomancy:tiningot")
 				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
@@ -345,6 +348,7 @@ public class Registry {
 	public static Item itemIronFlakes;
 	public static Item itemBronzeFlakes;
 	public static Item Mistcloak;
+	public static Item itemCoinBag;
 	public static Block oreTin;
 	public static Block oreLead;
 	public static Block oreCopper;

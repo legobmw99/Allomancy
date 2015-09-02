@@ -313,7 +313,7 @@ public class PowerTickHandler implements ITickHandler {
 		if (mc.renderViewEntity != null) {
 			if (mc.theWorld != null) {
 				mc.pointedEntityLiving = null;
-				double d0 = 10;
+				double d0 = 20;
 				mc.objectMouseOver = mc.renderViewEntity.rayTrace(d0, par1);
 				double d1 = d0;
 				Vec3 vec3 = mc.renderViewEntity.getPosition(par1);
