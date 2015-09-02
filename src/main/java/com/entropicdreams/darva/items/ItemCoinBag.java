@@ -33,7 +33,7 @@ public class ItemCoinBag extends Item{
 
         if (par3EntityPlayer.capabilities.isCreativeMode || par3EntityPlayer.inventory.hasItem(Item.goldNugget.itemID) && AllomancyData.forPlayer(par3EntityPlayer).MetalBurning[AllomancyData.matSteel])
         {
-            EntityGoldNugget entitygold = new EntityGoldNugget(par2World, par3EntityPlayer,  2.0F);
+            EntityGoldNugget entitygold = new EntityGoldNugget(par2World, par3EntityPlayer);
             par2World.spawnEntityInWorld(entitygold);
             par3EntityPlayer.inventory.consumeInventoryItem(Item.goldNugget.itemID);
 
