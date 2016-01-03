@@ -16,7 +16,7 @@ public class ItemCoinBag extends Item{
 	public ItemCoinBag(int par1) {
 		super(par1);
 		// TODO Auto-generated constructor stub
-		this.setUnlocalizedName("allomancy:CoinBag");
+		this.setUnlocalizedName("allomancy:coinbag");
 		this.setCreativeTab(Registry.tabsAllomancy);
 		this.maxStackSize = 1;
 		}
@@ -31,7 +31,7 @@ public class ItemCoinBag extends Item{
             return event.result;
         }
 
-        if (par3EntityPlayer.capabilities.isCreativeMode || par3EntityPlayer.inventory.hasItem(Item.goldNugget.itemID) && AllomancyData.forPlayer(par3EntityPlayer).MetalBurning[AllomancyData.matSteel])
+        if (par3EntityPlayer.capabilities.isCreativeMode || (par3EntityPlayer.inventory.hasItem(Item.goldNugget.itemID) && AllomancyData.forPlayer(par3EntityPlayer).MetalBurning[AllomancyData.matSteel]))
         {
             EntityGoldNugget entitygold = new EntityGoldNugget(par2World, par3EntityPlayer);
             par2World.spawnEntityInWorld(entitygold);

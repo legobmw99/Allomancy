@@ -140,6 +140,9 @@ public class Registry {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 				itemAllomancyGrinder, 1, 0), "xxx", "yyy", "xxx", 'x',
 				Item.ingotIron, 'y', Item.goldNugget));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+				itemCoinBag, 1, 0), " xy", "l l", " l ", 'l',
+				Item.leather, 'y', Item.goldNugget, 'x', Item.leash));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
 				nuggetLerasium), new Object[] {
 				new ItemStack(Block.blockGold, 1),
@@ -202,7 +205,8 @@ public class Registry {
 	public static void initItems() {
 		itemAllomancyGrinder = new ItemGrinder(AllomancyConfig.itemGrinder);
 		
-		itemCoinBag = new ItemCoinBag(AllomancyConfig.itemCoinBag);
+		itemCoinBag = new ItemCoinBag(AllomancyConfig.itemCoinBag).setUnlocalizedName("allomancy:coinbag").setCreativeTab(
+				Registry.tabsAllomancy);
 		
 		itemTinIngot = new Item(AllomancyConfig.itemTinIngot)
 				.setUnlocalizedName("allomancy:tiningot")
