@@ -1,6 +1,7 @@
 package common.legobmw99.allomancy.proxy;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+
 
 public class ClientProxy extends CommonProxy {
 	@Override

@@ -9,9 +9,9 @@ import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.network.packets.AllomancyBecomeMistbornPacket;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 
 public class PlayerTrackerHandler {
 	@SubscribeEvent

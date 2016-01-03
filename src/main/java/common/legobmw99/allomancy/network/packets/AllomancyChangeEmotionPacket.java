@@ -52,7 +52,7 @@ public class AllomancyChangeEmotionPacket extends AbstractPacket {
 			target.tasks.taskEntries.clear();
 			target.tasks.addTask(1, new EntityAISwimming(target));
 			target.targetTasks.addTask(5, new EntityAINearestAttackableTarget(
-					target, EntityPlayer.class, 100, false));
+					target, EntityPlayer.class, false));
 			target.tasks.addTask(5, new EntityAIWander(target, 0.8D));
 			target.tasks.addTask(6, new EntityAIWatchClosest(target,
 					EntityPlayer.class, 8.0F));

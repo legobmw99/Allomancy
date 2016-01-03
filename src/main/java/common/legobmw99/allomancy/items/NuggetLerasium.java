@@ -16,8 +16,8 @@ import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.network.packets.AllomancyBecomeMistbornPacket;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class NuggetLerasium extends ItemFood {
 	public NuggetLerasium() {
@@ -34,7 +34,7 @@ public class NuggetLerasium extends ItemFood {
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.eat;
+		return EnumAction.EAT;
 	}
 
 	@Override
@@ -50,8 +50,7 @@ public class NuggetLerasium extends ItemFood {
 		return par1ItemStack;
 	}
 
-	@Override
-	public ItemStack onEaten(ItemStack item, World world, EntityPlayer player) {
+	public ItemStack onFoodEaten(ItemStack item, World world, EntityPlayer player) {
 		AllomancyData.forPlayer(player);
 		double x = player.posX;
 		double y = player.posY + 3;
@@ -63,9 +62,9 @@ public class NuggetLerasium extends ItemFood {
 		}
 		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));
 		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(),
-				20, 0, true));
+				20, 0, true, false));
 		player.addStat(Registry.becomeMistborn, 1);
-		return super.onEaten(item, world, player);
+		return super.onFoodEaten(item, world, player);
 	}
 
 	@Override

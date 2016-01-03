@@ -2,9 +2,7 @@ package common.legobmw99.allomancy.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.util.IIcon;
 
 public class OreBlock extends Block {
 	public enum OreType {

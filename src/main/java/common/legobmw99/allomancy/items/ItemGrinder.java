@@ -16,7 +16,6 @@ public class ItemGrinder extends Item {
 		this.maxStackSize = 1;
 	}
 
-	@Override
 	public boolean doesContainerItemLeaveCraftingGrid(ItemStack itemstack) {
 		// TODO Auto-generated method stub
 		return false;

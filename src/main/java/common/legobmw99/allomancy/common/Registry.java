@@ -20,8 +20,8 @@ import common.legobmw99.allomancy.items.ItemMistcloak;
 import common.legobmw99.allomancy.items.ItemVial;
 import common.legobmw99.allomancy.items.NuggetLerasium;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.LanguageRegistry;
 
 public class Registry {
 	public static ItemGrinder itemAllomancyGrinder;
@@ -49,7 +49,7 @@ public class Registry {
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(
 			CreativeTabs.getNextID(), "allomancy");
 	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper
-			.addArmorMaterial("Wool", 5, new int[] { 0, 4, 0, 0 }, 15);
+			.addArmorMaterial("Wool", null, 5, new int[] { 0, 4, 0, 0 }, 15);
 
 	public static void ModContent() {
 		addAchievements();
@@ -62,8 +62,7 @@ public class Registry {
 	private static void addAchievements() {
 		// TODO nuggetLerasium
 		becomeMistborn = new Achievement("achievement.becomeMistborn",
-				"becomeMistborn", -5, -2, Blocks.portal, null)
-				.initIndependentStat().setSpecial().registerStat();
+				"becomeMistborn", -5, -2, Blocks.portal, null).setIndependent().setSpecial();
 		LanguageRegistry.instance().addStringLocalization(
 				"achievement.becomeMistborn", "en_US", "Become Mistborn!");
 		LanguageRegistry.instance().addStringLocalization(

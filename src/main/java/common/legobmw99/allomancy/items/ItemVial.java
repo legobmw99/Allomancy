@@ -15,8 +15,8 @@ import net.minecraft.world.World;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemVial extends ItemFood {
 	public static String[] localName = { "Empty Vial", "Iron Elixer",
@@ -32,7 +32,6 @@ public class ItemVial extends ItemFood {
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
 
-	@Override
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
 		// TODO Auto-generated method stub
@@ -61,7 +60,7 @@ public class ItemVial extends ItemFood {
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.drink;
+		return EnumAction.DRINK;
 	}
 
 	@Override
@@ -86,7 +85,6 @@ public class ItemVial extends ItemFood {
 		this.setCreativeTab(Registry.tabsAllomancy);
 	}
 
-	@Override
 	public IIcon getIconFromDamage(int meta) {
 		// TODO Auto-generated method stub
 		if ((meta < 0) || (meta >= this.icons.length)) {
