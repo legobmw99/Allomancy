@@ -169,11 +169,12 @@ public class MetalParticleController implements ITickHandler {
 	}
 
 	public void tryPushBlock(vector3 vec) {
-		double motionX, motionY, motionZ;
+		double motionX, motionY, motionZ, magnitude;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		motionX = ((player.posX - vec.X) * .085);
-		motionY = ((player.posY - vec.Y) * .085);
-		motionZ = ((player.posZ - vec.Z) * .085);
+		magnitude = Math.sqrt(Math.pow((player.posX - vec.X),2) + Math.pow((player.posY - vec.Y),2) + Math.pow((player.posZ - vec.Z),2) );
+		motionX = ((player.posX - vec.X) * (1.1)/magnitude);
+		motionY = ((player.posY - vec.Y) * (1.1)/magnitude);
+		motionZ = ((player.posZ - vec.Z) * (1.1)/magnitude);
 		player.motionX = motionX;
 		player.motionY = motionY;
 		player.motionZ = motionZ;
@@ -182,11 +183,12 @@ public class MetalParticleController implements ITickHandler {
 	}
 
 	public void tryPullBlock(vector3 vec) {
-		double motionX, motionY, motionZ;
+		double motionX, motionY, motionZ, magnitude;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		motionX = ((player.posX - vec.X) * .085) * -1;
-		motionY = ((player.posY - vec.Y) * .085) * -1;
-		motionZ = ((player.posZ - vec.Z) * .085) * -1;
+		magnitude = Math.sqrt(Math.pow((player.posX - vec.X),2) + Math.pow((player.posY - vec.Y),2) + Math.pow((player.posZ - vec.Z),2) );
+		motionX = ((player.posX - vec.X) * -(1.1)/magnitude);
+		motionY = ((player.posY - vec.Y) * -(1.1)/magnitude);
+		motionZ = ((player.posZ - vec.Z) * -(1.1)/magnitude);
 		player.motionX = motionX;
 		player.motionY = motionY;
 		player.motionZ = motionZ;
@@ -249,12 +251,13 @@ public class MetalParticleController implements ITickHandler {
 
 	private void tryPullMob(EntityLiving entity) {
 
-		double motionX, motionY, motionZ;
+		double motionX, motionY, motionZ,magnitude;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (entity instanceof EntityIronGolem) {
-			motionX = ((player.posX - entity.posX) * .1) * -1;
-			motionY = ((player.posY - entity.posY) * .1) * -1;
-			motionZ = ((player.posZ - entity.posZ) * .1) * -1;
+			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
+			motionX = ((player.posX - entity.posX) * -(1.1)/magnitude);
+			motionY = ((player.posY - entity.posY) * -(1.1)/magnitude);
+			motionZ = ((player.posZ - entity.posZ) * -(1.1)/magnitude);
 			player.motionX = motionX;
 			player.motionY = motionY;
 			player.motionZ = motionZ;
@@ -284,15 +287,13 @@ public class MetalParticleController implements ITickHandler {
 
 	private void tryPushMob(EntityLiving entity) {
 
-		double motionX, motionY, motionZ;
+		double motionX, motionY, motionZ,magnitude;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (entity instanceof EntityIronGolem) {
-			motionX = ((player.posX - entity.posX) * .1);
-			motionY = ((player.posY - entity.posY) * .1);
-			motionZ = ((player.posZ - entity.posZ) * .1);
-			player.motionX = motionX;
-			player.motionY = motionY;
-			player.motionZ = motionZ;
+			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
+			motionX = ((player.posX - entity.posX) * (1.1)/magnitude);
+			motionY = ((player.posY - entity.posY) * (1.1)/magnitude);
+			motionZ = ((player.posZ - entity.posZ) * (1.1)/magnitude);
 			PacketDispatcher.sendPacketToServer(PacketHandler
 					.stopFall(player.entityId));
 			// waaaaay too damn heavy to push... you get moved.
