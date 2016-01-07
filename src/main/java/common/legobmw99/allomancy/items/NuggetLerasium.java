@@ -64,7 +64,7 @@ public class NuggetLerasium extends ItemFood {
 		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(),
 				20, 0, true, false));
 		player.addStat(Registry.becomeMistborn, 1);
-		return super.onFoodEaten(item, world, player);
+		return super.onItemUseFinish(item, world, player);
 	}
 
 	@Override

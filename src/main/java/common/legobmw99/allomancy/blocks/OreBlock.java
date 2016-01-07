@@ -1,46 +1,54 @@
 package common.legobmw99.allomancy.blocks;
 
+import common.legobmw99.allomancy.Allomancy;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class OreBlock extends Block {
+	public static Block oreTin;
+	public static Block oreLead;
+	public static Block oreCopper;
+	public static Block oreZinc;
+	
 	public enum OreType {
 		LEAD, TIN, COPPER, ZINC;
 	}
 
 	private OreType type;
-	private IIcon texture;
 
-	public OreBlock(Material material, OreType type) {
-		super(material);
-
+	public OreBlock(OreType type) {
+		super(Material.rock);
 		this.setHardness(.5F);
-
 		this.setStepSound(Block.soundTypeStone);
+		switch (type) {
+			case LEAD: this.setUnlocalizedName("allomancy_leadore");
+                break;
+			case TIN: this.setUnlocalizedName("allomancy_tinore");
+				break;
+			case ZINC: this.setUnlocalizedName("allomancy_zincore");
+				break;
+			case COPPER: this.setUnlocalizedName("allomancy:copper_ore");
+				break;
+
+		}
 
 		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setHarvestLevel("pick", 1);
 	}
 
-
-	public void registerIcon(IIconRegister iconRegister) {
-		switch (this.type) {
-		case LEAD:
-			this.texture = iconRegister.registerIcon("allomancy/ore:leadore");
-		case TIN:
-			this.texture = iconRegister.registerIcon("allomancy/ore:tinore");
-		case ZINC:
-			this.texture = iconRegister.registerIcon("allomancy/ore:zincrore");
-		case COPPER:
-			this.texture = iconRegister.registerIcon("allomancy/ore:copperore");
-
-		}
+	public static void init() {
+		oreTin = new OreBlock(OreType.TIN);
+		GameRegistry.registerBlock(oreTin, "tinore");
+		oreLead = new OreBlock(OreType.LEAD);
+		GameRegistry.registerBlock(oreLead, "leadore");
+		oreCopper = new OreBlock(OreType.COPPER);
+		GameRegistry.registerBlock(oreCopper, "copperore");
+		oreZinc = new OreBlock(OreType.ZINC);
+		GameRegistry.registerBlock(oreZinc, "zincore");
 	}
 
-	// getIcon()
-	@Override
-	public IIcon getIcon(int side, int meta) {
-		return this.texture;
-	}
+
 }

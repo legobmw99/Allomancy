@@ -1,6 +1,5 @@
 package common.legobmw99.allomancy.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -19,17 +18,11 @@ public class ItemMistcloak extends ItemArmor {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister par1iconregister) {
-		this.itemIcon = par1iconregister.registerIcon("allomancy:mistcloak");
-	}
-
-	@Override
 	public Multimap getItemAttributeModifiers() {
 		Multimap multimap = super.getItemAttributeModifiers();
 		multimap.put(SharedMonsterAttributes.movementSpeed
 				.getAttributeUnlocalizedName(), new AttributeModifier(
-				field_111210_e, "Speed modifier", .40, 2));
+				SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), .40, 2));
 		return multimap;
 	}
 
@@ -38,4 +31,5 @@ public class ItemMistcloak extends ItemArmor {
 			String type) {
 		return "allomancy:textures/models/armor/mistcloak.png";
 	}
+
 }

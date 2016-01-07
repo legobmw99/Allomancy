@@ -2,14 +2,12 @@ package common.legobmw99.allomancy.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import common.legobmw99.allomancy.common.AllomancyData;
@@ -30,7 +28,7 @@ public class ItemVial extends ItemFood {
 			"tindrink", "pewterdrink", "zincdrink", "bronzedrink",
 			"copperdrink", "brassdrink" };
 	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
+	//private IIcon[] icons;
 
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
@@ -51,7 +49,7 @@ public class ItemVial extends ItemFood {
 			data.MetalAmounts[par1ItemStack.getItemDamage() - 1]++;
 		}
 
-		return super.onEaten(par1ItemStack, par2World, par3EntityPlayer);
+		return super.onItemUseFinish(par1ItemStack, par2World, par3EntityPlayer);
 	}
 
 	public int getHealAmount() {
@@ -85,13 +83,13 @@ public class ItemVial extends ItemFood {
 		this.setCreativeTab(Registry.tabsAllomancy);
 	}
 
-	public IIcon getIconFromDamage(int meta) {
+	/*public IIcon getIconFromDamage(int meta) {
 		// TODO Auto-generated method stub
 		if ((meta < 0) || (meta >= this.icons.length)) {
 			meta = 0;
 		}
 		return this.icons[meta];
-	}
+	}*/
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
@@ -104,7 +102,7 @@ public class ItemVial extends ItemFood {
 		return super.getUnlocalizedName() + "." + unlocalName[meta];
 	}
 
-	@Override
+	/*@Override
 	public void registerIcons(IIconRegister iconRegister) {
 		this.icons = new IIcon[textureName.length];
 
@@ -121,5 +119,5 @@ public class ItemVial extends ItemFood {
 		for (int meta = 0; meta < this.icons.length; meta++) {
 			list.add(new ItemStack(item, 1, meta));
 		}
-	}
+	}*/
 }

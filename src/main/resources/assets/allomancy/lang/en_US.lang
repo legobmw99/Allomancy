@@ -1,2 +1,4 @@
-# Items
-item.allomancy:zincingot.name = Zinc Ingot
+tile.allomancy_tinore.name = Tin Ore
+tile.allomancy_leadore.name = Lead Ore
+tile.allomancy_copperore.name = Copper Ore
+tile.allomancy_zincore.name = Zinc Ore
