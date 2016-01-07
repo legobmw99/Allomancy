@@ -3,14 +3,6 @@ package common.legobmw99.allomancy;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-
-import common.legobmw99.allomancy.common.AllomancyPackets;
-import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.handlers.PlayerTrackerHandler;
-import common.legobmw99.allomancy.network.PacketPipeline;
-import common.legobmw99.allomancy.proxy.CommonProxy;
-import common.legobmw99.allomancy.util.AllomancyConfig;
-
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -19,6 +11,13 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import common.legobmw99.allomancy.common.AllomancyPackets;
+import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.handlers.PlayerTrackerHandler;
+import common.legobmw99.allomancy.network.PacketPipeline;
+import common.legobmw99.allomancy.proxy.CommonProxy;
+import common.legobmw99.allomancy.util.AllomancyConfig;
 
 @Mod(modid = Allomancy.MODID, version = Allomancy.VERSION)
 public class Allomancy {
@@ -52,6 +51,10 @@ public class Allomancy {
 		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(
 				new WeightedRandomChestContent(new ItemStack(
 						Registry.nuggetLerasium), 1, 1, 40));
+		if(event.getSide() == Side.CLIENT)
+    	{
+			Registry.Renders();
+    		}
 	}
 
 	@EventHandler
