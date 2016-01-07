@@ -24,13 +24,13 @@ public class OreBlock extends Block {
 		this.setHardness(.5F);
 		this.setStepSound(Block.soundTypeStone);
 		switch (type) {
-			case LEAD: this.setUnlocalizedName("allomancy_leadore");
+			case LEAD: this.setUnlocalizedName("leadore");
                 break;
-			case TIN: this.setUnlocalizedName("allomancy_tinore");
+			case TIN: this.setUnlocalizedName("tinore");
 				break;
-			case ZINC: this.setUnlocalizedName("allomancy_zincore");
+			case ZINC: this.setUnlocalizedName("zincore");
 				break;
-			case COPPER: this.setUnlocalizedName("allomancy:copper_ore");
+			case COPPER: this.setUnlocalizedName("copperore");
 				break;
 
 		}

@@ -20,19 +20,13 @@ public class ItemVial extends ItemFood {
 	public static String[] localName = { "Empty Vial", "Iron Elixer",
 			"Steel Elixer", "Tin Elixer", "Pewter Elixer", "Zinc Elixer",
 			"Bronze Elixer", "Copper Elixer", "Brass Elixer", };
-	public static String[] textureName = { "emptyvial", "ironelixer",
-			"steelelixer", "tinelixer", "pewterelixer", "zincelixer",
-			"bronzeelixer", "copperelixer", "brasselixer", };
 
-	public static String[] unlocalName = { "empty", "irondrink", "steeldrink",
-			"tindrink", "pewterdrink", "zincdrink", "bronzedrink",
-			"copperdrink", "brassdrink" };
-	@SideOnly(Side.CLIENT)
-	//private IIcon[] icons;
+	public static String[] unlocalName = { "emptyvial", "ironelixer",
+		"steelelixer", "tinelixer", "pewterelixer", "zincelixer",
+		"bronzeelixer", "copperelixer", "brasselixer", };
 
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
-		// TODO Auto-generated method stub
 		AllomancyData data;
 		data = AllomancyData.forPlayer(par3EntityPlayer);
 		if (!par3EntityPlayer.capabilities.isCreativeMode) {
@@ -77,47 +71,27 @@ public class ItemVial extends ItemFood {
 	public ItemVial() {
 		super(0, 0, false);
 		this.setAlwaysEdible();
-
-		// TODO Auto-generated constructor stub
 		this.setHasSubtypes(true);
 		this.setCreativeTab(Registry.tabsAllomancy);
 	}
 
-	/*public IIcon getIconFromDamage(int meta) {
-		// TODO Auto-generated method stub
-		if ((meta < 0) || (meta >= this.icons.length)) {
-			meta = 0;
-		}
-		return this.icons[meta];
-	}*/
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
-		// TODO Auto-generated method stub
 		int meta = itemStack.getItemDamage();
 		if ((meta < 0) || (meta >= unlocalName.length)) {
 			meta = 0;
 		}
 
-		return super.getUnlocalizedName() + "." + unlocalName[meta];
+		return "item.itemVial" + "." + unlocalName[meta];
 	}
 
-	/*@Override
-	public void registerIcons(IIconRegister iconRegister) {
-		this.icons = new IIcon[textureName.length];
+	
 
-		for (int i = 0; i < textureName.length; ++i) {
-			this.icons[i] = iconRegister.registerIcon("allomancy:"
-					+ textureName[i]);
-		}
-	}
-
-	// TODO: public void getSubItems(Item item, CreativeTabs creativeTabs, List
-	// list)
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
-		for (int meta = 0; meta < this.icons.length; meta++) {
+		for (int meta = 0; meta < 9; meta++) {
 			list.add(new ItemStack(item, 1, meta));
 		}
-	}*/
+	}
 }

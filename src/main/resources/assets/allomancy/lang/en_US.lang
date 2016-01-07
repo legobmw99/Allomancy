@@ -1,4 +1,36 @@
-tile.allomancy_tinore.name = Tin Ore
-tile.allomancy_leadore.name = Lead Ore
-tile.allomancy_copperore.name = Copper Ore
-tile.allomancy_zincore.name = Zinc Ore
+itemGroup.Allomancy=Allomancy
+
+tile.tinore.name=Tin Ore
+tile.leadore.name=Lead Ore
+tile.copperore.name=Copper Ore
+tile.zincore.name=Zinc Ore
+
+item.handgrinder.name=Hand Grinder
+item.nuggetlerasium.name=Lerasium Nugget
+item.mistcloak.name=Mistcloak
+
+item.itemVial.emptyvial.name=Empty Vial
+item.itemVial.brasselixer.name=Brass Elixer
+item.itemVial.bronzeelixer.name=Bronze Elixer
+item.itemVial.copperelixer.name=Copper Elixer
+item.itemVial.pewterelixer.name=Pewter Elixer
+item.itemVial.tinelixer.name=Tin Elixer
+item.itemVial.ironelixer.name=Iron Elixer
+item.itemVial.steelelixer.name=Steel Elixer
+item.itemVial.zincelixer.name=Zinc Elixer
+item.itemVial.leadelixer.name=Lead Elixer
+
+item.brassflakes.name=Brass Flakes
+item.bronzeflakes.name=Bronze Flakes
+item.ironflakes.name=Iron Flakes
+item.steelflakes.name=Steel Flakes
+item.pewterflakes.name=Pewter Flakes
+item.copperflakes.name=Copper Flakes
+item.tinflakes.name=Tin Flakes
+item.zincflakes.name=Zinc Flakes
+item.leadflakes.name=Lead Flakes
+
+item.zincingot.name=Zinc Ingot
+item.leadingot.name=Lead Ingot
+item.tiningot.name=Tin Ingot
+item.copperingot.name=Copper Ingot
