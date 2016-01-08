@@ -1,4 +1,8 @@
-package common.legobmw99.allomancy.common;
+package common.legobmw99.allomancy;
+
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,9 +16,9 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public static final int matSteel = 1;
 	public static final int matTin = 2;
 	public static final int matPewter = 3;
-	public static final int matZinc = 4;
+	public static final int matCopper = 4;
 	public static final int matBronze = 5;
-	public static final int matCopper = 6;
+	public static final int matZinc = 6;
 	public static final int matBrass = 7;
 
 	public static boolean isMistborn = false;
@@ -24,32 +28,55 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public int selected = 0;
 
 	public int damageStored = 0;
-	public int[] BurnTime = { 600, 600, 1200, 400, 600, 600, 800, 800 };
-	public int[] MaxBurnTime = { 600, 600, 1200, 400, 600, 600, 800, 800 };
+	public int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
+	public int[] MaxBurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
 	public int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0 };
 	public boolean[] MetalBurning = { false, false, false, false, false, false,
 			false, false };
-	public EntityPlayer player;
 
-	public AllomancyData(EntityPlayer player) {
-		this.player = player;
+	public AllomancyData(EntityPlayer Player) {
 	}
 
 	public static AllomancyData forPlayer(Entity player) {
+
 		return (AllomancyData) player.getExtendedProperties(IDENTIFIER);
-
 	}
 
-	public void updateBurn(int mat, boolean value) {
-		if (this.MetalAmounts[mat] != 0) {
-			this.MetalBurning[mat] = value;
-		} else
-			this.MetalBurning[mat] = false;
+	public void updateBurn(Packet250CustomPayload packet) {
+		DataInputStream inputStream = new DataInputStream(
+				new ByteArrayInputStream(packet.data));
+		int Material = -1;
+		boolean value;
+		try {
+			inputStream.readInt(); // Throw away packet type info.
+			Material = inputStream.readInt();
+			value = inputStream.readBoolean();
+
+			if (this.MetalAmounts[Material] != 0) {
+				this.MetalBurning[Material] = value;
+			} else {
+				this.MetalBurning[Material] = false;
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public void updateData(int[] value) {
-		for (int i = 0; i < this.MetalAmounts.length; i++)
-			this.MetalAmounts[i] = value[i];
+	public void updateData(Packet250CustomPayload packet) {
+		DataInputStream inputStream = new DataInputStream(
+				new ByteArrayInputStream(packet.data));
+		try {
+			inputStream.readInt();
+			for (int i = 0; i < this.MetalAmounts.length; i++) {
+				this.MetalAmounts[i] = inputStream.readInt();
+			}
+			this.Dirty = false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // Clear the type byte.
 	}
 
 	@Override
@@ -65,8 +92,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 		nbt.setInteger("copper", this.MetalAmounts[6]);
 		nbt.setInteger("brass", this.MetalAmounts[7]);
 		nbt.setInteger("selected", this.selected);
-		compound.setTag(IDENTIFIER, nbt);
-
+		compound.setCompoundTag(IDENTIFIER, nbt);
 	}
 
 	@Override
@@ -86,6 +112,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 
 	@Override
 	public void init(Entity entity, World world) {
+		// TODO Auto-generated method stub
 
 	}
 

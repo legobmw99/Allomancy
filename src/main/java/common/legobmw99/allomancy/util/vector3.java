@@ -1,4 +1,4 @@
-package common.legobmw99.allomancy;
+package common.legobmw99.allomancy.util;
 
 public class vector3 {
 

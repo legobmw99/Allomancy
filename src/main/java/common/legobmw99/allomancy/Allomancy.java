@@ -3,6 +3,7 @@ package common.legobmw99.allomancy;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -11,13 +12,17 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+
 import common.legobmw99.allomancy.common.AllomancyPackets;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.handlers.PlayerTrackerHandler;
+import common.legobmw99.allomancy.handlers.PowerTickHandler;
 import common.legobmw99.allomancy.network.PacketPipeline;
 import common.legobmw99.allomancy.proxy.CommonProxy;
 import common.legobmw99.allomancy.util.AllomancyConfig;
+import common.legobmw99.allomancy.world.OreGenerator;
 
 @Mod(modid = Allomancy.MODID, version = Allomancy.VERSION)
 public class Allomancy {
@@ -26,6 +31,7 @@ public class Allomancy {
 	public static EventHandler eventHandler;
 	public static final PacketPipeline packetPipeline = new PacketPipeline();
 	public static PlayerTrackerHandler playerTracker = new PlayerTrackerHandler();
+	public static OreGenerator oregenerator = new OreGenerator();
 
 	@Instance(value = "allomancy")
 	public static Allomancy instance;
@@ -44,7 +50,9 @@ public class Allomancy {
 	public void load(FMLInitializationEvent event) {
 		FMLCommonHandler.instance().bus().register(playerTracker);
 		packetPipeline.initalize();
-		//FMLCommonHandler.instance().bus().register(eventHandler);
+		MinecraftForge.EVENT_BUS.register(new PowerTickHandler());
+
+		GameRegistry.registerWorldGenerator(oregenerator, 0);
 		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(
 				new WeightedRandomChestContent(new ItemStack(
 						Registry.nuggetLerasium), 1, 1, 40));
