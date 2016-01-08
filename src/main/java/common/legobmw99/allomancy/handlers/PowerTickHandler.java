@@ -2,6 +2,7 @@ package common.legobmw99.allomancy.handlers;
 
 import ibxm.Player;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -17,14 +18,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -39,6 +44,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
 import common.legobmw99.allomancy.Allomancy;
+import common.legobmw99.allomancy.MetalParticleController;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.particle.ParticleMetal;
@@ -107,8 +113,9 @@ public class PowerTickHandler {
 				for (int x = xLoc - 10; x < (xLoc + 10); x++) {
 					for (int z = zLoc - 10; z < (zLoc + 10); z++) {
 						for (int y = yLoc - 10; y < (yLoc + 10); y++) {
+					        BlockPos pos1 = new BlockPos(x, y, z);
 							if (Allomancy.MPC.isBlockMetal(player.worldObj
-									.getBlockId(x, y, z))) {
+									.getBlockState(pos1).getBlock().getDefaultState())) {
 								Allomancy.MPC.particleBlockTargets
 										.add(new vector3(x, y, z));
 							}
@@ -117,7 +124,7 @@ public class PowerTickHandler {
 				}
 
 				if ((player.getCurrentEquippedItem() == null)
-						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.pressed == true)) {
+						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isPressed() == true)) {
 
 					if (data.MetalBurning[AllomancyData.matIron]) {
 						this.getMouseOver();
@@ -130,12 +137,11 @@ public class PowerTickHandler {
 								Allomancy.MPC
 										.tryPullEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
 							}
-							if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == EnumMovingObjectType.TILE) {
+							if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == MovingObjectType.BLOCK) {
 								mop = Minecraft.getMinecraft().objectMouseOver;
-								vec = new vector3(mop.blockX, mop.blockY,
-										mop.blockZ);
+								vec = new vector3(mop.getBlockPos());
 								if (Allomancy.MPC.isBlockMetal(player.worldObj
-										.getBlockId(vec.X, vec.Y, vec.Z))) {
+										.getBlockState(vec.pos))) {
 									Allomancy.MPC.tryPullBlock(vec);
 								}
 							}
@@ -145,7 +151,7 @@ public class PowerTickHandler {
 
 				}
 				if ((player.getCurrentEquippedItem() == null)
-						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.pressed == true)) {
+						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isPressed() == true)) {
 					if (data.MetalBurning[AllomancyData.matSteel]) {
 						this.getMouseOver();
 						if (this.pointedEntity != null) {
@@ -158,12 +164,11 @@ public class PowerTickHandler {
 								Allomancy.MPC
 										.tryPushEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
 							}
-							if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == EnumMovingObjectType.TILE) {
+							if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == MovingObjectType.BLOCK) {
 								mop = Minecraft.getMinecraft().objectMouseOver;
-								vec = new vector3(mop.blockX, mop.blockY,
-										mop.blockZ);
+								vec = new vector3(mop.getBlockPos());
 								if (Allomancy.MPC.isBlockMetal(player.worldObj
-										.getBlockId(vec.X, vec.Y, vec.Z))) {
+										.getBlockState(vec.pos))) {
 									Allomancy.MPC.tryPushBlock(vec);
 								}
 							}
@@ -182,14 +187,13 @@ public class PowerTickHandler {
 				Entity entity;
 				mop = Minecraft.getMinecraft().objectMouseOver;
 				if ((mop != null)
-						&& (mop.typeOfHit == EnumMovingObjectType.ENTITY)
+						&& (mop.typeOfHit == MovingObjectType.ENTITY)
 						&& (mop.entityHit instanceof EntityCreature)
 						&& !(mop.entityHit instanceof EntityPlayer)
-						&& Minecraft.getMinecraft().gameSettings.keyBindAttack.pressed) {
+						&& Minecraft.getMinecraft().gameSettings.keyBindAttack.isPressed()) {
 					entity = mop.entityHit;
 
-					player.sendQueue.addToSendQueue(PacketHandler
-							.changeEmotions(entity.entityId, true));
+					//player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, true));
 
 				}
 			}
@@ -197,14 +201,13 @@ public class PowerTickHandler {
 				Entity entity;
 				mop = Minecraft.getMinecraft().objectMouseOver;
 				if ((mop != null)
-						&& (mop.typeOfHit == EnumMovingObjectType.ENTITY)
+						&& (mop.typeOfHit == MovingObjectType.ENTITY)
 						&& (mop.entityHit instanceof EntityCreature)
 						&& !(mop.entityHit instanceof EntityPlayer)
-						&& Minecraft.getMinecraft().gameSettings.keyBindUseItem.pressed) {
+						&& Minecraft.getMinecraft().gameSettings.keyBindUseItem.isPressed()) {
 					entity = mop.entityHit;
 
-					player.sendQueue.addToSendQueue(PacketHandler
-							.changeEmotions(entity.entityId, false));
+					//player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, false));
 
 				}
 			}
@@ -212,7 +215,7 @@ public class PowerTickHandler {
 			if (data.MetalBurning[AllomancyData.matPewter]) {
 				if ((player.onGround == true)
 						&& (player.isInWater() == false)
-						&& (Minecraft.getMinecraft().gameSettings.keyBindForward.pressed)) {
+						&& (Minecraft.getMinecraft().gameSettings.keyBindForward.isPressed())) {
 					player.motionX *= 1.4;
 					player.motionZ *= 1.4;
 
@@ -242,23 +245,48 @@ public class PowerTickHandler {
 		}
 	}
 	
+	
+	
+	
+	
 	@SubscribeEvent
-	public void onPlayerRespawn(EntityPlayer player) {
-		NBTTagCompound old = player.getEntityData();
+	public void onEntityJoinWorld(EntityJoinWorldEvent event)
+	{
+		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer)
+		{
+		NBTTagCompound old = event.entity.getEntityData();
 		if (old.hasKey("Allomancy_Data")) {
-			player.getEntityData().setCompoundTag("Allomancy_Data",
-					old.getCompoundTag("Allomancy_Data"));
+			event.entity.getEntityData().merge(old.getCompoundTag("Allomancy_Data"));
 		}
-
+		}
 	}
-	
-	
-
-	
 	@SubscribeEvent
-	public void onEntityUpdate() {
+	public void onEntityUpdate(LivingUpdateEvent event) {
 		AllomancyData data;
 
+		LinkedList<Entity> toRemove = new LinkedList<Entity>();
+		new LinkedList<vector3>();
+
+		if (event.entity instanceof EntityPlayer) {
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			if (player == null) {
+				return;
+			}
+		/*for (Entity entity : Allomancy.MCP.particleTargets) {
+
+			if (entity.isDead == true) {
+				toRemove.add(entity);
+			}
+
+			if (player.getDistanceToEntity(entity) > 10) {
+				toRemove.add(entity);
+			}
+		}
+		for (Entity entity : toRemove) {
+			Allomancy.MCP.particleTargets.remove(entity);
+		}
+		Allomancy.MCP.particleBlockTargets.clear();*/
+		toRemove.clear();
 			Side side = FMLCommonHandler.instance().getEffectiveSide();
 			if (side == Side.CLIENT) {
 				this.clientTick();
@@ -315,6 +343,7 @@ public class PowerTickHandler {
 				}
 			}
 		}
+		}
 	}
 
 
@@ -351,7 +380,7 @@ public class PowerTickHandler {
 		if (FMLClientHandler.instance().getClient().currentScreen != null) {
 			return;
 		}
-		EntityClientPlayerMP player;
+		EntityPlayerSP player;
 		player = this.mc.thePlayer;
 		if (player == null) {
 			return;

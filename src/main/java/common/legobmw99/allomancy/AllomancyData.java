@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import common.legobmw99.allomancy.network.packets.AllomancyUpdateBurnPacket;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,26 +44,10 @@ public class AllomancyData implements IExtendedEntityProperties {
 		return (AllomancyData) player.getExtendedProperties(IDENTIFIER);
 	}
 
-	public void updateBurn(Packet250CustomPayload packet) {
-		DataInputStream inputStream = new DataInputStream(
-				new ByteArrayInputStream(packet.data));
-		int Material = -1;
-		boolean value;
-		try {
-			inputStream.readInt(); // Throw away packet type info.
-			Material = inputStream.readInt();
-			value = inputStream.readBoolean();
+	
+	public void updateBurn(EntityPlayer player) {
+		Allomancy.packetPipeline.sendTo(new AllomancyUpdateBurnPacket(player), (EntityPlayerMP) player);
 
-			if (this.MetalAmounts[Material] != 0) {
-				this.MetalBurning[Material] = value;
-			} else {
-				this.MetalBurning[Material] = false;
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void updateData(Packet250CustomPayload packet) {

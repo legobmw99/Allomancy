@@ -28,9 +28,10 @@ import common.legobmw99.allomancy.world.OreGenerator;
 public class Allomancy {
 	public static final String MODID = "allomancy";
 	public static final String VERSION = "2.0";
-	public static EventHandler eventHandler;
+	public static MetalParticleController MCP;
+	public static MetalParticleController MPC;
+
 	public static final PacketPipeline packetPipeline = new PacketPipeline();
-	public static PlayerTrackerHandler playerTracker = new PlayerTrackerHandler();
 	public static OreGenerator oregenerator = new OreGenerator();
 
 	@Instance(value = "allomancy")
@@ -38,6 +39,7 @@ public class Allomancy {
 
 	@SidedProxy(clientSide = "common.legobmw99.allomancy.proxy.ClientProxy", serverSide = "common.legobmw99.allomancy.proxy.CommonProxy")
 	public static CommonProxy proxy;
+
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -48,7 +50,6 @@ public class Allomancy {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		FMLCommonHandler.instance().bus().register(playerTracker);
 		packetPipeline.initalize();
 		MinecraftForge.EVENT_BUS.register(new PowerTickHandler());
 
@@ -68,6 +69,5 @@ public class Allomancy {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		packetPipeline.postInitialize();
-		proxy.init();
 	}
 }

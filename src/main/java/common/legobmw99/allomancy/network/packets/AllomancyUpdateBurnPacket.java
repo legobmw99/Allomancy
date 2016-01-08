@@ -1,13 +1,17 @@
 package common.legobmw99.allomancy.network.packets;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
-
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.network.AbstractPacket;
 
 public class AllomancyUpdateBurnPacket extends AbstractPacket {
+	public AllomancyUpdateBurnPacket() {}
 
 	private int mat;
 	private boolean value;
@@ -36,14 +40,26 @@ public class AllomancyUpdateBurnPacket extends AbstractPacket {
 	public void handleClientSide(EntityPlayer player) {
 		// TODO Auto-generated method stub
 		this.data = AllomancyData.forPlayer(player);
-		this.data.updateBurn(this.mat, this.value);
+		if (data.MetalAmounts[mat] != 0) {
+			data.MetalBurning[mat] = value;
+		} else {
+			data.MetalBurning[mat] = false;
+		}
 	}
 
 	@Override
 	public void handleServerSide(EntityPlayer player) {
 		// TODO Auto-generated method stub
 		this.data = AllomancyData.forPlayer(player);
-		this.data.updateBurn(this.mat, this.value);
+
+			if (data.MetalAmounts[mat] != 0) {
+				data.MetalBurning[mat] = value;
+			} else {
+				data.MetalBurning[mat] = false;
+			}
+		}
 	}
 
-}
+
+		
+			

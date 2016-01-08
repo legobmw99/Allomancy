@@ -75,7 +75,7 @@ public class OreGenerator implements IWorldGenerator {
 		}
 
 		for (OreData data : this.oreList) {
-			numCluster = random.nextInt(data.clusterPerChunk);
+			numCluster = random.nextInt(5);
 			if ((numCluster == 0) && (data.clusterPerChunk != 0)) {
 				numCluster = 1;
 			}

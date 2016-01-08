@@ -8,6 +8,8 @@ tile.zincore.name=Zinc Ore
 item.handgrinder.name=Hand Grinder
 item.nuggetlerasium.name=Lerasium Nugget
 item.mistcloak.name=Mistcloak
+item.coinbag.name=Coin Bag
+
 
 item.itemVial.emptyvial.name=Empty Vial
 item.itemVial.brasselixer.name=Brass Elixer

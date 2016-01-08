@@ -18,10 +18,12 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.blocks.OreBlock;
 import common.legobmw99.allomancy.blocks.OreBlock.OreType;
+import common.legobmw99.allomancy.items.ItemCoinBag;
 import common.legobmw99.allomancy.items.ItemGrinder;
 import common.legobmw99.allomancy.items.ItemMistcloak;
 import common.legobmw99.allomancy.items.ItemVial;
 import common.legobmw99.allomancy.items.NuggetLerasium;
+import common.legobmw99.allomancy.util.AllomancyConfig;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.LanguageRegistry;
 
@@ -40,6 +42,7 @@ public class Registry {
 	public static Item itemPewterFlakes;
 	public static Item itemIronFlakes;
 	public static Item itemBronzeFlakes;
+	public static Item itemCoinBag;
 	public static Item Mistcloak;
 	public static Block oreTin;
 	public static Block oreLead;
@@ -177,6 +180,9 @@ public class Registry {
 				new ItemStack(itemVial, 1, 0), " x ", "y y", " y ", 'x',
 				"slabWood", 'y', Blocks.glass));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+				itemCoinBag, 1, 0), " xy", "l l", " l ", 'l',
+				Items.leather, 'y', Items.gold_nugget, 'x', Items.lead));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 				itemAllomancyGrinder, 1, 0), "xxx", "yyy", "xxx", 'x',
 				Items.iron_ingot, 'y', Items.gold_nugget));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
@@ -194,6 +200,10 @@ public class Registry {
 		itemAllomancyGrinder = new ItemGrinder();
 		GameRegistry.registerItem(itemAllomancyGrinder, "grinder");
 		itemAllomancyGrinder.setUnlocalizedName("handgrinder");
+
+		itemCoinBag = new ItemCoinBag().setUnlocalizedName("coinbag").setCreativeTab(
+				Registry.tabsAllomancy);
+		GameRegistry.registerItem(itemCoinBag, "coinbag");
 
 		itemTinIngot = new Item().setUnlocalizedName("tiningot")
 				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);

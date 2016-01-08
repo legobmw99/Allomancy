@@ -26,7 +26,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public int damageStored = 0;
 	public int[] BurnTime = { 600, 600, 1200, 400, 600, 600, 800, 800 };
 	public int[] MaxBurnTime = { 600, 600, 1200, 400, 600, 600, 800, 800 };
-	public int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	public static int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0 };
 	public boolean[] MetalBurning = { false, false, false, false, false, false,
 			false, false };
 	public EntityPlayer player;

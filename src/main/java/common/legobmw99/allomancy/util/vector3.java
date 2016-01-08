@@ -1,15 +1,22 @@
 package common.legobmw99.allomancy.util;
 
+import net.minecraft.util.BlockPos;
+
 public class vector3 {
 
 	public int X;
 	public int Y;
 	public int Z;
+	public BlockPos pos;
 
 	public vector3(int x, int y, int z) {
 		this.X = x;
 		this.Y = y;
 		this.Z = z;
+	}
+	
+	public vector3(BlockPos pos1) {
+		this.pos = pos1;
 	}
 
 	@Override

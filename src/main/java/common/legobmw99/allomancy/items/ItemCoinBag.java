@@ -13,10 +13,10 @@ import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.entity.EntityGoldNugget;
 
 public class ItemCoinBag extends Item{
-	public ItemCoinBag(int par1) {
+	public ItemCoinBag() {
 		super();
 		// TODO Auto-generated constructor stub
-		this.setUnlocalizedName("allomancy:coinbag");
+		this.setUnlocalizedName("coinbag");
 		this.setCreativeTab(Registry.tabsAllomancy);
 		this.maxStackSize = 1;
 		}
