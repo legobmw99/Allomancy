@@ -13,9 +13,7 @@ public class AllomancyDataPacket extends AbstractPacket {
 	private int[] value;
 
 	public AllomancyDataPacket(AllomancyData data) {
-		for (int i = 0; i < data.MetalAmounts.length; i++) {
-			this.value[i] = data.MetalAmounts[1];
-		}
+
 	}
 
 	@Override
@@ -35,6 +33,9 @@ public class AllomancyDataPacket extends AbstractPacket {
 	@Override
 	public void handleClientSide(EntityPlayer player) {
 		// TODO Auto-generated method stub
+		for (int i = 0; i < data.MetalAmounts.length; i++) {
+			this.value[i] = data.MetalAmounts[i];
+		}
 		this.data = AllomancyData.forPlayer(player);
 		this.data.updateData(this.value);
 	}
@@ -42,6 +43,9 @@ public class AllomancyDataPacket extends AbstractPacket {
 	@Override
 	public void handleServerSide(EntityPlayer player) {
 		// TODO Auto-generated method stub
+		for (int i = 0; i < data.MetalAmounts.length; i++) {
+			this.value[i] = data.MetalAmounts[i];
+		}
 		this.data = AllomancyData.forPlayer(player);
 		this.data.updateData(this.value);
 

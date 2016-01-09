@@ -3,7 +3,6 @@ package common.legobmw99.allomancy.network.packets;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
-
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.network.AbstractPacket;
 
@@ -26,6 +25,8 @@ public class AllomancySelectMetalPacket extends AbstractPacket {
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		// TODO Auto-generated method stub
 		this.metal = buffer.readInt();
+		System.out.println("packet2");
+
 	}
 
 	@Override
@@ -33,6 +34,8 @@ public class AllomancySelectMetalPacket extends AbstractPacket {
 		// TODO Auto-generated method stub
 		this.data = AllomancyData.forPlayer(player);
 		this.data.setSelected(this.metal);
+		System.out.println("packet1");
+
 	}
 
 	@Override
@@ -40,6 +43,7 @@ public class AllomancySelectMetalPacket extends AbstractPacket {
 		// TODO Auto-generated method stub
 		this.data = AllomancyData.forPlayer(player);
 		this.data.setSelected(this.metal);
+		System.out.println("packet");
 	}
 
 }

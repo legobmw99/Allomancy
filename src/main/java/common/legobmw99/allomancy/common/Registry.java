@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -11,10 +12,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import org.lwjgl.input.Keyboard;
 
 import common.legobmw99.allomancy.blocks.OreBlock;
 import common.legobmw99.allomancy.items.ItemCoinBag;
@@ -24,6 +28,9 @@ import common.legobmw99.allomancy.items.ItemVial;
 import common.legobmw99.allomancy.items.NuggetLerasium;
 
 public class Registry {
+    public static KeyBinding changeGroup;
+    public static KeyBinding burnFirst;
+    public static KeyBinding burnSecond;
 	public static ItemGrinder itemAllomancyGrinder;
 	public static Item itemTinIngot;
 	public static Item itemTinFlakes;
@@ -58,6 +65,8 @@ public class Registry {
 		initItems();
 		oreRegistration();
 		setupRecipes();
+		initKeyBindings();
+		registerPackets();
 	}
 
 	private static void addAchievements() {
@@ -277,7 +286,18 @@ public class Registry {
 		OreDictionary.registerOre("ingotTin", new ItemStack(itemTinIngot));
 		OreDictionary.registerOre("ingotLead", new ItemStack(itemLeadIngot));
 	}
+	public static void initKeyBindings(){
+    	changeGroup = new KeyBinding("key.changeGroup", Keyboard.KEY_F, "key.categories.allomancy");
+    	burnFirst = new KeyBinding("key.burnFirst", Keyboard.KEY_G, "key.categories.allomancy");
+    	burnSecond = new KeyBinding("key.burnSecond", Keyboard.KEY_H, "key.categories.allomancy");
 
+        ClientRegistry.registerKeyBinding(changeGroup);
+        ClientRegistry.registerKeyBinding(burnFirst);
+        ClientRegistry.registerKeyBinding(burnSecond);
+	}
+	public static void registerPackets() {
+		
+	}
 	public static void Renders() {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		

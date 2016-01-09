@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -13,7 +14,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-
 import common.legobmw99.allomancy.common.AllomancyPackets;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.handlers.PowerTickHandler;
@@ -25,7 +25,7 @@ import common.legobmw99.allomancy.world.OreGenerator;
 @Mod(modid = Allomancy.MODID, version = Allomancy.VERSION)
 public class Allomancy {
 	public static final String MODID = "allomancy";
-	public static final String VERSION = "2.0";
+	public static final String VERSION = "@VERSION@";
 	public static MetalParticleController MCP;
 	public static MetalParticleController MPC;
 
@@ -50,6 +50,7 @@ public class Allomancy {
 	public void load(FMLInitializationEvent event) {
 		packetPipeline.initalize();
 		MinecraftForge.EVENT_BUS.register(new PowerTickHandler());
+		FMLCommonHandler.instance().bus().register(new PowerTickHandler());
 
 		GameRegistry.registerWorldGenerator(oregenerator, 0);
 		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(

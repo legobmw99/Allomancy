@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
@@ -33,6 +34,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
@@ -48,6 +50,8 @@ import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.network.packets.AllomancyBecomeMistbornPacket;
 import common.legobmw99.allomancy.network.packets.AllomancyDataPacket;
+import common.legobmw99.allomancy.network.packets.AllomancySelectMetalPacket;
+import common.legobmw99.allomancy.network.packets.AllomancyStopFallPacket;
 import common.legobmw99.allomancy.network.packets.AllomancyUpdateBurnPacket;
 import common.legobmw99.allomancy.particle.ParticleMetal;
 import common.legobmw99.allomancy.util.vector3;
@@ -94,12 +98,134 @@ public class PowerTickHandler {
 	}
 	
 	@SubscribeEvent
+	public void onKeyInput(InputEvent.KeyInputEvent event) {
+	        if(Registry.changeGroup.isPressed()){
+				System.out.println("key");
+
+	        	EntityPlayerSP player;
+	    		player = Minecraft.getMinecraft().thePlayer;
+	    		Minecraft mc = FMLClientHandler.instance().getClient();
+	    		if (mc.currentScreen == null) {
+	    			if ((player == null) || !Minecraft.getMinecraft().inGameHasFocus) {
+	    				return;
+	    			}
+	    				AllomancyData data = AllomancyData.forPlayer(player);
+	    				data.setSelected(data.getSelected() + 1);
+	    				Allomancy.packetPipeline.sendToServer(new AllomancySelectMetalPacket(data.getSelected()));
+	    			}
+	    		}	        
+	        if(Registry.burnFirst.isPressed()){
+	        	EntityPlayerSP player;
+	    		player = Minecraft.getMinecraft().thePlayer;
+	    		AllomancyData data;
+	    		Minecraft mc = FMLClientHandler.instance().getClient();
+	    		if (mc.currentScreen == null) {
+	    			if (player == null) {
+	    				return;
+	    			}
+	    				data = AllomancyData.forPlayer(player);
+	    				switch (data.getSelected()) {
+	    				case 1:
+	    					// toggle iron.
+	    					if (data.MetalAmounts[AllomancyData.matIron] > 0) {
+	    						data.MetalBurning[AllomancyData.matIron] = !data.MetalBurning[AllomancyData.matIron];
+	    					}
+	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matIron,
+	    							data.MetalBurning[AllomancyData.matIron]));
+
+	    					break;
+	    				case 2:
+	    					// toggle Tin.
+	    					if (data.MetalAmounts[AllomancyData.matTin] > 0) {
+	    						data.MetalBurning[AllomancyData.matTin] = !data.MetalBurning[AllomancyData.matTin];
+	    					}
+	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matTin,
+	    							data.MetalBurning[AllomancyData.matTin]));
+
+	    					break;
+	    				case 3:
+	    					// toggle Copper.
+	    					if (data.MetalAmounts[AllomancyData.matCopper] > 0) {
+	    						data.MetalBurning[AllomancyData.matCopper] = !data.MetalBurning[AllomancyData.matCopper];
+	    					}
+	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matCopper,
+	    							data.MetalBurning[AllomancyData.matCopper]));
+
+	    					break;
+	    				case 4:
+	    					// toggle Zinc.
+	    					if (data.MetalAmounts[AllomancyData.matZinc] > 0) {
+	    						data.MetalBurning[AllomancyData.matZinc] = !data.MetalBurning[AllomancyData.matZinc];
+	    					}
+	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matZinc,
+	    							data.MetalBurning[AllomancyData.matZinc]));
+
+	    					break;
+	    				default:
+	    					break;
+	    				}
+	    			}
+	    		}	        
+	        if(Registry.burnSecond.isPressed()){
+	        	EntityPlayerSP player;
+	    		player = Minecraft.getMinecraft().thePlayer;
+	    		AllomancyData data;
+	    		Minecraft mc = FMLClientHandler.instance().getClient();
+	    		if (mc.currentScreen == null) {
+	    			if (player == null) {
+	    				return;
+	    			}
+
+	    				data = AllomancyData.forPlayer(player);
+	    				switch (data.getSelected()) {
+	    				case 1:
+	    					// toggle Steel.
+	    					if (data.MetalAmounts[AllomancyData.matSteel] > 0) {
+	    						data.MetalBurning[AllomancyData.matSteel] = !data.MetalBurning[AllomancyData.matSteel];
+	    					}
+	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matSteel,
+	    							data.MetalBurning[AllomancyData.matSteel]));
+
+	    					break;
+	    				case 2:
+	    					// toggle Pewter.
+	    					if (data.MetalAmounts[AllomancyData.matPewter] > 0) {
+	    						data.MetalBurning[AllomancyData.matPewter] = !data.MetalBurning[AllomancyData.matPewter];
+	    					}
+	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matPewter,
+	    							data.MetalBurning[AllomancyData.matPewter]));
+	    					break;
+	    				case 3:
+	    					// toggle Bronze.
+	    					if (data.MetalAmounts[AllomancyData.matBronze] > 0) {
+	    						data.MetalBurning[AllomancyData.matBronze] = !data.MetalBurning[AllomancyData.matBronze];
+	    					}
+	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matBronze,
+	    							data.MetalBurning[AllomancyData.matBronze]));
+	    					break;
+	    				case 4:
+	    					// toggle Brass.
+	    					if (data.MetalAmounts[AllomancyData.matBrass] > 0) {
+	    						data.MetalBurning[AllomancyData.matBrass] = !data.MetalBurning[AllomancyData.matBrass];
+	    					}
+	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matBrass,
+	    							data.MetalBurning[AllomancyData.matBrass]));
+	    					break;
+	    				default:
+	    					break;
+	    				}
+	    			}
+	    		}	       
+	    	}
+	    
+	@SubscribeEvent
 	public void onPlayerLogin(PlayerLoggedInEvent event) {
 		if (event.player instanceof EntityPlayerMP) {
+			AllomancyData data = AllomancyData.forPlayer(event.player);
 			Allomancy.packetPipeline.sendTo(new
 			AllomancyDataPacket(AllomancyData.forPlayer(event.player)),
 			(EntityPlayerMP) event.player);
-			if (AllomancyData.isMistborn == true) {
+			if (data.isMistborn == true) {
 				Allomancy.packetPipeline.sendTo(
 						new AllomancyBecomeMistbornPacket(),
 						(EntityPlayerMP) event.player);
@@ -127,7 +253,7 @@ public class PowerTickHandler {
 				eList = player.worldObj
 						.getEntitiesWithinAABB(Entity.class, box);
 				for (Entity curEntity : eList) {
-					//Allomancy.MPC.tryAdd(curEntity);
+					Allomancy.MPC.tryAdd(curEntity);
 				}
 
 				int xLoc, zLoc, yLoc;
@@ -320,10 +446,11 @@ public class PowerTickHandler {
 			Side side = FMLCommonHandler.instance().getEffectiveSide();
 			if (side == Side.CLIENT) {
 				this.clientTick();
-			}else {
-			this.mc = Minecraft.getMinecraft();
+			}
+			MinecraftServer mcs;
+			mcs = MinecraftServer.getServer();
 			World world;
-			world = (World) mc.theWorld;
+			world = (World) mcs.getEntityWorld();
 
 			List<EntityPlayerMP> list = world.playerEntities;
 
@@ -373,7 +500,7 @@ public class PowerTickHandler {
 			}
 		}
 			
-	}
+	
 	@SubscribeEvent
 	public void onDamage(LivingHurtEvent event) {
 		if (event.source.getSourceOfDamage() instanceof EntityPlayerMP) {
@@ -394,11 +521,10 @@ public class PowerTickHandler {
 		}
 	}
 
-    @SubscribeEvent(priority = EventPriority.NORMAL)
+    @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
     	this.mc = Minecraft.getMinecraft();
     	this.meterLoc = new ResourceLocation("allomancy","textures/overlay/meter.png");
-    	
     	
     	ParticleMetal particle;
 		if (!Minecraft.getMinecraft().inGameHasFocus) {

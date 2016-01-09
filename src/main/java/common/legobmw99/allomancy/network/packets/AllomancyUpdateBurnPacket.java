@@ -11,7 +11,6 @@ import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.network.AbstractPacket;
 
 public class AllomancyUpdateBurnPacket extends AbstractPacket {
-	public AllomancyUpdateBurnPacket() {}
 
 	private int mat;
 	private boolean value;

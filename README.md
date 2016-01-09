@@ -1,6 +1,6 @@
 Allomancy
 =========
 
-Allomancy-Modjam
+Allomancy
 
-Warning: The 1.7 version is extremely broken and almost nothing works. Do not use
+Warning: This 1.8 version is extremely broken and almost nothing works. Do not use

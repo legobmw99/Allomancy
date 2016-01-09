@@ -60,8 +60,13 @@ public class ItemVial extends ItemFood {
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
-		par3EntityPlayer.setItemInUse(par1ItemStack,
-				this.getMaxItemUseDuration(par1ItemStack));
+		AllomancyData data;
+		data = AllomancyData.forPlayer(par3EntityPlayer);
+		if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10
+				&& par1ItemStack.getItemDamage() > 0) {
+			par3EntityPlayer.setItemInUse(par1ItemStack,
+					this.getMaxItemUseDuration(par1ItemStack));
+		}
 		return par1ItemStack;
 	}
 
