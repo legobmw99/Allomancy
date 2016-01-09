@@ -1,6 +1,5 @@
 package common.legobmw99.allomancy.items;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemArmor;

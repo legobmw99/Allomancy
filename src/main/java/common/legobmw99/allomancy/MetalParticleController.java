@@ -1,9 +1,7 @@
 package common.legobmw99.allomancy;
 
-import java.util.EnumSet;
 import java.util.LinkedList;
 
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -13,11 +11,10 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
 import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.network.packets.AllomancyBecomeMistbornPacket;
 import common.legobmw99.allomancy.network.packets.AllomancyMoveEntityPacket;
 import common.legobmw99.allomancy.network.packets.AllomancyStopFallPacket;
 import common.legobmw99.allomancy.util.vector3;

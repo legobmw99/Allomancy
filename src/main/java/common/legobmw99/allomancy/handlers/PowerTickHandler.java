@@ -1,6 +1,5 @@
 package common.legobmw99.allomancy.handlers;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;

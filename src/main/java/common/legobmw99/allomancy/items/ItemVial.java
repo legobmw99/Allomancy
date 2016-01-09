@@ -13,9 +13,6 @@ import net.minecraft.world.World;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 public class ItemVial extends ItemFood {
 	public static String[] localName = { "Empty Vial", "Iron Elixer",
 			"Steel Elixer", "Tin Elixer", "Pewter Elixer", "Zinc Elixer",

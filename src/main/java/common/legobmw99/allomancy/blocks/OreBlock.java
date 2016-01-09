@@ -1,7 +1,5 @@
 package common.legobmw99.allomancy.blocks;
 
-import common.legobmw99.allomancy.Allomancy;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;

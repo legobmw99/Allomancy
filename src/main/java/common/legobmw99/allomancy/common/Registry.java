@@ -1,7 +1,6 @@
 package common.legobmw99.allomancy.common;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -12,20 +11,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import common.legobmw99.allomancy.Allomancy;
+
 import common.legobmw99.allomancy.blocks.OreBlock;
-import common.legobmw99.allomancy.blocks.OreBlock.OreType;
 import common.legobmw99.allomancy.items.ItemCoinBag;
 import common.legobmw99.allomancy.items.ItemGrinder;
 import common.legobmw99.allomancy.items.ItemMistcloak;
 import common.legobmw99.allomancy.items.ItemVial;
 import common.legobmw99.allomancy.items.NuggetLerasium;
-import common.legobmw99.allomancy.util.AllomancyConfig;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.LanguageRegistry;
 
 public class Registry {
 	public static ItemGrinder itemAllomancyGrinder;

@@ -10,14 +10,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.network.packets.AllomancyBecomeMistbornPacket;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class NuggetLerasium extends ItemFood {
 	public NuggetLerasium() {
