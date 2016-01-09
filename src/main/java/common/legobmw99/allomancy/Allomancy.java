@@ -4,7 +4,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -17,7 +16,6 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import common.legobmw99.allomancy.common.AllomancyPackets;
 import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.handlers.PlayerTrackerHandler;
 import common.legobmw99.allomancy.handlers.PowerTickHandler;
 import common.legobmw99.allomancy.network.PacketPipeline;
 import common.legobmw99.allomancy.proxy.CommonProxy;

@@ -51,7 +51,7 @@ public class NuggetLerasium extends ItemFood {
 		return par1ItemStack;
 	}
 
-	public ItemStack onFoodEaten(ItemStack item, World world, EntityPlayer player) {
+	public ItemStack onItemUseFinish(ItemStack item, World world, EntityPlayer player) {
 		AllomancyData.forPlayer(player);
 		double x = player.posX;
 		double y = player.posY + 3;
@@ -78,6 +78,6 @@ public class NuggetLerasium extends ItemFood {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack par1ItemStack) {
-		return true;
+        return par1ItemStack.isItemEnchanted();
 	}
 }

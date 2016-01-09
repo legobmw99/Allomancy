@@ -65,14 +65,10 @@ public class Registry {
 	}
 
 	private static void addAchievements() {
-		// TODO nuggetLerasium
 		becomeMistborn = new Achievement("achievement.becomeMistborn",
-				"becomeMistborn", -5, -2, Blocks.portal, null).setIndependent().setSpecial();
-		LanguageRegistry.instance().addStringLocalization(
-				"achievement.becomeMistborn", "en_US", "Become Mistborn!");
-		LanguageRegistry.instance().addStringLocalization(
-				"achievement.becomeMistborn.desc", "en_US",
-				"You have a power most people envy...");
+				"becomeMistborn", -5, -2, Blocks.beacon, null).func_180788_c().setIndependent().setSpecial(); //registerAchievement
+
+
 	}
 
 	public static void setupRecipes() {

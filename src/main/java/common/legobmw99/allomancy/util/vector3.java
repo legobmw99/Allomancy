@@ -1,6 +1,7 @@
 package common.legobmw99.allomancy.util;
 
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3;
 
 public class vector3 {
 
@@ -14,7 +15,7 @@ public class vector3 {
 		this.Y = y;
 		this.Z = z;
 	}
-	
+
 	public vector3(BlockPos pos1) {
 		this.pos = pos1;
 	}

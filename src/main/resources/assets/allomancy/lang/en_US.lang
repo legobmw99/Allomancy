@@ -36,3 +36,6 @@ item.zincingot.name=Zinc Ingot
 item.leadingot.name=Lead Ingot
 item.tiningot.name=Tin Ingot
 item.copperingot.name=Copper Ingot
+
+achievement.becomeMistborn=Become Mistborn!
+achievement.becomeMistborn.desc=You have a power most people envy...

@@ -8,10 +8,7 @@ import net.minecraft.item.ItemStack;
 
 import com.google.common.collect.Multimap;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-public class ItemMistcloak extends ItemArmor {
+public class ItemMistcloak extends ItemArmor{
 
 	public ItemMistcloak(ArmorMaterial par2EnumArmorMaterial, int par3, int par4) {
 		super(par2EnumArmorMaterial, par3, par4);
@@ -22,13 +19,11 @@ public class ItemMistcloak extends ItemArmor {
 		Multimap multimap = super.getItemAttributeModifiers();
 		multimap.put(SharedMonsterAttributes.movementSpeed
 				.getAttributeUnlocalizedName(), new AttributeModifier(
-				SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), .40, 2));
+				SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), .10, 2));
 		return multimap;
 	}
 
-	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot,
-			String type) {
+	public String getArmorTextureFile(ItemStack stack) {
 		return "allomancy:textures/models/armor/mistcloak.png";
 	}
 

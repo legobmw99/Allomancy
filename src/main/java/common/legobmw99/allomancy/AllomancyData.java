@@ -1,16 +1,13 @@
 package common.legobmw99.allomancy;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-
-import common.legobmw99.allomancy.network.packets.AllomancyUpdateBurnPacket;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
+
+import common.legobmw99.allomancy.network.packets.AllomancyUpdateBurnPacket;
 
 public class AllomancyData implements IExtendedEntityProperties {
 
@@ -46,23 +43,17 @@ public class AllomancyData implements IExtendedEntityProperties {
 
 	
 	public void updateBurn(EntityPlayer player) {
-		Allomancy.packetPipeline.sendTo(new AllomancyUpdateBurnPacket(player), (EntityPlayerMP) player);
+		Allomancy.packetPipeline.sendTo(new AllomancyUpdateBurnPacket(), (EntityPlayerMP) player);
 
 	}
 
-	public void updateData(Packet250CustomPayload packet) {
-		DataInputStream inputStream = new DataInputStream(
-				new ByteArrayInputStream(packet.data));
-		try {
-			inputStream.readInt();
+	public void updateData() {
+
 			for (int i = 0; i < this.MetalAmounts.length; i++) {
-				this.MetalAmounts[i] = inputStream.readInt();
+				//this.MetalAmounts[i] = inputStream.readInt();
 			}
 			this.Dirty = false;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} // Clear the type byte.
+		
 	}
 
 	@Override

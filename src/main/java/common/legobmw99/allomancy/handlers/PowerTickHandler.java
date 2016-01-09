@@ -1,7 +1,5 @@
 package common.legobmw99.allomancy.handlers;
 
-import ibxm.Player;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,6 +35,9 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -44,9 +45,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
 import common.legobmw99.allomancy.Allomancy;
-import common.legobmw99.allomancy.MetalParticleController;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.network.packets.AllomancyBecomeMistbornPacket;
+import common.legobmw99.allomancy.network.packets.AllomancyDataPacket;
+import common.legobmw99.allomancy.network.packets.AllomancyUpdateBurnPacket;
 import common.legobmw99.allomancy.particle.ParticleMetal;
 import common.legobmw99.allomancy.util.vector3;
 
@@ -81,7 +84,30 @@ public class PowerTickHandler {
 		}
 	}
 
+	@SubscribeEvent
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		NBTTagCompound old = event.player.getEntityData();
+		if (old.hasKey("Allomancy_Data")) {
+			event.player.getEntityData().setTag("Allomancy_Data",
+					old.getCompoundTag("Allomancy_Data"));
+		}
 
+	}
+	
+	@SubscribeEvent
+	public void onPlayerLogin(PlayerLoggedInEvent event) {
+		if (event.player instanceof EntityPlayerMP) {
+			Allomancy.packetPipeline.sendTo(new
+			AllomancyDataPacket(AllomancyData.forPlayer(event.player)),
+			(EntityPlayerMP) event.player);
+			if (AllomancyData.isMistborn == true) {
+				Allomancy.packetPipeline.sendTo(
+						new AllomancyBecomeMistbornPacket(),
+						(EntityPlayerMP) event.player);
+
+			}
+		}
+	}
 	@SideOnly(Side.CLIENT)
 	private void clientTick() {
 		AllomancyData data;
@@ -180,7 +206,7 @@ public class PowerTickHandler {
 				}
 
 			} else {
-				Allomancy.MPC.particleTargets.clear();
+				//Allomancy.MPC.particleTargets.clear();
 			}
 
 			if (data.MetalBurning[AllomancyData.matZinc]) {
@@ -264,14 +290,8 @@ public class PowerTickHandler {
 	public void onEntityUpdate(LivingUpdateEvent event) {
 		AllomancyData data;
 
-		LinkedList<Entity> toRemove = new LinkedList<Entity>();
-		new LinkedList<vector3>();
+		//LinkedList<Entity> toRemove = new LinkedList<Entity>();
 
-		if (event.entity instanceof EntityPlayer) {
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			if (player == null) {
-				return;
-			}
 		/*for (Entity entity : Allomancy.MCP.particleTargets) {
 
 			if (entity.isDead == true) {
@@ -286,12 +306,22 @@ public class PowerTickHandler {
 			Allomancy.MCP.particleTargets.remove(entity);
 		}
 		Allomancy.MCP.particleBlockTargets.clear();*/
-		toRemove.clear();
+		//toRemove.clear();
+		if (event.entity instanceof EntityPlayer) {
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			if (player == null) {
+				return;
+			
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onWorldTick(TickEvent.WorldTickEvent event){
 			Side side = FMLCommonHandler.instance().getEffectiveSide();
 			if (side == Side.CLIENT) {
 				this.clientTick();
-			} 
-			else {
+			}else {
 			this.mc = Minecraft.getMinecraft();
 			World world;
 			world = (World) mc.theWorld;
@@ -343,10 +373,8 @@ public class PowerTickHandler {
 				}
 			}
 		}
-		}
+			
 	}
-
-
 	@SubscribeEvent
 	public void onDamage(LivingHurtEvent event) {
 		if (event.source.getSourceOfDamage() instanceof EntityPlayerMP) {
@@ -514,7 +542,7 @@ public class PowerTickHandler {
 			}
 		}
 		double motionX, motionY, motionZ;
-		/*for (Entity entity : Allomancy.MPC.particleTargets) {
+/*		for (Entity entity : Allomancy.MPC.particleTargets) {
 			motionX = ((player.posX - entity.posX) * -1) * .03;
 			motionY = (((player.posY - entity.posY) * -1) * .03) + .021;
 			motionZ = ((player.posZ - entity.posZ) * -1) * .03;
@@ -558,14 +586,12 @@ public class PowerTickHandler {
 				if (data.BurnTime[i] == 0) {
 					data.BurnTime[i] = data.MaxBurnTime[i];
 					data.MetalAmounts[i]--;
-					PacketDispatcher.sendPacketToPlayer(
-							PacketHandler.updateAllomancyData(data),
-							(Player) player);
+					Allomancy.packetPipeline
+					.sendToServer(new AllomancyUpdateBurnPacket(i,data.MetalBurning[i]));
 					if (data.MetalAmounts[i] == 0) {
 						data.MetalBurning[i] = false;
-						PacketDispatcher.sendPacketToPlayer(
-								PacketHandler.changeBurn(i, false),
-								(Player) player);
+						Allomancy.packetPipeline
+						.sendTo((new AllomancyUpdateBurnPacket(i,data.MetalBurning[i])), player);
 					}
 				}
 
@@ -585,7 +611,7 @@ public class PowerTickHandler {
 				double d0 = 20;
 				mc.objectMouseOver = mc.getRenderViewEntity().rayTrace(d0, par1);
 				double d1 = d0;
-				Vec3 vec3 = mc.getRenderViewEntity().getPosition();
+				Vec3 vec3 = (mc.getRenderViewEntity().getPositionVector());
 
 				if (mc.objectMouseOver != null) {
 					d1 = mc.objectMouseOver.hitVec.distanceTo(vec3);

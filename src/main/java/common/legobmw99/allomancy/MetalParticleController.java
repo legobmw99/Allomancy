@@ -17,6 +17,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.network.packets.AllomancyBecomeMistbornPacket;
+import common.legobmw99.allomancy.network.packets.AllomancyMoveEntityPacket;
+import common.legobmw99.allomancy.network.packets.AllomancyStopFallPacket;
 import common.legobmw99.allomancy.util.vector3;
 
 public class MetalParticleController{
@@ -175,8 +178,8 @@ public class MetalParticleController{
 		player.motionX = motionX;
 		player.motionY = motionY;
 		player.motionZ = motionZ;
-		PacketDispatcher.sendPacketToServer(PacketHandler
-				.stopFall(player.entityId));
+		Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
+
 	}
 
 	public void tryPullBlock(vector3 vec) {
@@ -189,8 +192,8 @@ public class MetalParticleController{
 		player.motionX = motionX;
 		player.motionY = motionY;
 		player.motionZ = motionZ;
-		PacketDispatcher.sendPacketToServer(PacketHandler
-				.stopFall(player.entityId));
+		Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
+
 	}
 
 	public void tryPushEntity(Entity entity) {
@@ -206,8 +209,8 @@ public class MetalParticleController{
 	}
 
 	public void tryPullEntity(Entity entity) {
-		if (entity instanceof EntityItems) {
-			this.tryPullItems((EntityItems) entity);
+		if (entity instanceof EntityItem) {
+			this.tryPullItem((EntityItem) entity);
 		}
 		if (entity instanceof EntityLiving) {
 			this.tryPullMob((EntityLiving) entity);
@@ -226,8 +229,8 @@ public class MetalParticleController{
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
 
-			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
-					motionX, motionY, motionZ, entity.entityId));
+			Allomancy.packetPipeline.sendToServer(new AllomancyMoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
+
 		}
 	}
 
@@ -241,8 +244,8 @@ public class MetalParticleController{
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
-			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
-					motionX, motionY, motionZ, entity.entityId));
+			Allomancy.packetPipeline.sendToServer(new AllomancyMoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
+
 		}
 	}
 
@@ -258,8 +261,8 @@ public class MetalParticleController{
 			player.motionX = motionX;
 			player.motionY = motionY;
 			player.motionZ = motionZ;
-			PacketDispatcher.sendPacketToServer(PacketHandler
-					.stopFall(player.entityId));
+			Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
+
 			// waaaaay too damn heavy to push... you get moved.
 		}
 
@@ -275,10 +278,8 @@ public class MetalParticleController{
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
-			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
-					motionX, motionY, motionZ, entity.entityId));
-			PacketDispatcher.sendPacketToServer(PacketHandler
-					.stopFall(entity.entityId));
+			Allomancy.packetPipeline.sendToServer(new AllomancyMoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
+			Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
 		}
 	}
 
@@ -291,8 +292,8 @@ public class MetalParticleController{
 			motionX = ((player.posX - entity.posX) * (1.1)/magnitude);
 			motionY = ((player.posY - entity.posY) * (1.1)/magnitude);
 			motionZ = ((player.posZ - entity.posZ) * (1.1)/magnitude);
-			PacketDispatcher.sendPacketToServer(PacketHandler
-					.stopFall(player.entityId));
+			Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
+
 			// waaaaay too damn heavy to push... you get moved.
 		}
 
@@ -308,40 +309,9 @@ public class MetalParticleController{
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
-			PacketDispatcher.sendPacketToServer(PacketHandler.moveEntity(
-					motionX, motionY, motionZ, entity.entityId));
-			PacketDispatcher.sendPacketToServer(PacketHandler
-					.stopFall(entity.entityId));
+			Allomancy.packetPipeline.sendToServer(new AllomancyMoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
+			Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
 		}
-	}
-
-
-
-	@Override
-	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		// TODO Auto-generated method stub
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		LinkedList<Entity> toRemove = new LinkedList<Entity>();
-		new LinkedList<vector3>();
-		if (player == null) {
-			return;
-		}
-
-		for (Entity entity : this.particleTargets) {
-
-			if (entity.isDead == true) {
-				toRemove.add(entity);
-			}
-
-			if (player.getDistanceToEntity(entity) > 10) {
-				toRemove.add(entity);
-			}
-		}
-		for (Entity entity : toRemove) {
-			this.particleTargets.remove(entity);
-		}
-		this.particleBlockTargets.clear();
-		toRemove.clear();
 	}
 
 }

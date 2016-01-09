@@ -25,7 +25,7 @@ public class ItemVial extends ItemFood {
 		"steelelixer", "tinelixer", "pewterelixer", "zincelixer",
 		"bronzeelixer", "copperelixer", "brasselixer", };
 
-	public ItemStack onEaten(ItemStack par1ItemStack, World par2World,
+	public ItemStack onItemUseFinish(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
 		AllomancyData data;
 		data = AllomancyData.forPlayer(par3EntityPlayer);
