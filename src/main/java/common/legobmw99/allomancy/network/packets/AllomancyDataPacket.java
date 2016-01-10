@@ -1,54 +1,55 @@
 package common.legobmw99.allomancy.network.packets;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.entity.player.EntityPlayer;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.IThreadListener;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import common.legobmw99.allomancy.common.AllomancyData;
-import common.legobmw99.allomancy.network.AbstractPacket;
 
-public class AllomancyDataPacket extends AbstractPacket {
+public class AllomancyDataPacket implements IMessage{
+	public AllomancyDataPacket() {}
 
+	
 	AllomancyData data;
 	private int[] value;
-
+	
 	public AllomancyDataPacket(AllomancyData data) {
-
-	}
-
+			 this.value = data.MetalAmounts;
+		
+		}
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
-		// TODO Auto-generated method stub
-		for (int element : this.value)
-			buffer.writeInt(element);
-	}
-
-	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
-		// TODO Auto-generated method stub
+	public void fromBytes(ByteBuf buf) {
 		for (int i = 0; i < 8; i++)
-			this.value[i] = buffer.readInt();
+			this.value[i] = ByteBufUtils.readVarInt(buf,200);		
 	}
 
 	@Override
-	public void handleClientSide(EntityPlayer player) {
-		// TODO Auto-generated method stub
-		for (int i = 0; i < data.MetalAmounts.length; i++) {
-			this.value[i] = data.MetalAmounts[i];
-		}
-		this.data = AllomancyData.forPlayer(player);
-		this.data.updateData(this.value);
+	public void toBytes(ByteBuf buf) {
+		for (int element : this.value)
+			ByteBufUtils.writeVarInt(buf,element,200);
+		
 	}
 
-	@Override
-	public void handleServerSide(EntityPlayer player) {
-		// TODO Auto-generated method stub
-		for (int i = 0; i < data.MetalAmounts.length; i++) {
-			this.value[i] = data.MetalAmounts[i];
+	public static class Handler implements IMessageHandler<AllomancyDataPacket, IMessage>{
+
+		@Override
+		public IMessage onMessage(final AllomancyDataPacket message, final MessageContext ctx) {
+	        IThreadListener mainThread =  Minecraft.getMinecraft();
+	        mainThread.addScheduledTask(new Runnable() {
+	            @Override
+	            public void run() {
+	            	EntityPlayerMP player =  ctx.getServerHandler().playerEntity;
+	        		AllomancyData data = AllomancyData.forPlayer(player);
+	        		for (int i : message.value){
+	        			data.MetalAmounts[i] = message.value[i];
+	        		}
+	        		data.updateData(message.value, player);
+	            }
+	        });		return null;
 		}
-		this.data = AllomancyData.forPlayer(player);
-		this.data.updateData(this.value);
-
 	}
-
 }

@@ -1,5 +1,6 @@
 package common.legobmw99.allomancy.handlers;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -32,7 +33,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -48,11 +48,11 @@ import org.lwjgl.util.Point;
 import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.network.packets.AllomancyBecomeMistbornPacket;
 import common.legobmw99.allomancy.network.packets.AllomancyDataPacket;
-import common.legobmw99.allomancy.network.packets.AllomancySelectMetalPacket;
-import common.legobmw99.allomancy.network.packets.AllomancyStopFallPacket;
-import common.legobmw99.allomancy.network.packets.AllomancyUpdateBurnPacket;
+import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
+import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
+import common.legobmw99.allomancy.network.packets.StopFallPacket;
+import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import common.legobmw99.allomancy.particle.ParticleMetal;
 import common.legobmw99.allomancy.util.vector3;
 
@@ -100,7 +100,6 @@ public class PowerTickHandler {
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
 	        if(Registry.changeGroup.isPressed()){
-				System.out.println("key");
 
 	        	EntityPlayerSP player;
 	    		player = Minecraft.getMinecraft().thePlayer;
@@ -110,8 +109,8 @@ public class PowerTickHandler {
 	    				return;
 	    			}
 	    				AllomancyData data = AllomancyData.forPlayer(player);
+	    				Registry.network.sendToServer(new SelectMetalPacket(data.getSelected()+1));
 	    				data.setSelected(data.getSelected() + 1);
-	    				Allomancy.packetPipeline.sendToServer(new AllomancySelectMetalPacket(data.getSelected()));
 	    			}
 	    		}	        
 	        if(Registry.burnFirst.isPressed()){
@@ -127,39 +126,41 @@ public class PowerTickHandler {
 	    				switch (data.getSelected()) {
 	    				case 1:
 	    					// toggle iron.
+	    					
+	    					
+	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matIron,
+	    							data.MetalBurning[AllomancyData.matIron]));
+	    					
 	    					if (data.MetalAmounts[AllomancyData.matIron] > 0) {
 	    						data.MetalBurning[AllomancyData.matIron] = !data.MetalBurning[AllomancyData.matIron];
 	    					}
-	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matIron,
-	    							data.MetalBurning[AllomancyData.matIron]));
-
 	    					break;
 	    				case 2:
 	    					// toggle Tin.
+	    					
+	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matTin,
+	    							data.MetalBurning[AllomancyData.matTin]));
 	    					if (data.MetalAmounts[AllomancyData.matTin] > 0) {
 	    						data.MetalBurning[AllomancyData.matTin] = !data.MetalBurning[AllomancyData.matTin];
 	    					}
-	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matTin,
-	    							data.MetalBurning[AllomancyData.matTin]));
-
 	    					break;
 	    				case 3:
 	    					// toggle Copper.
+	    					
+	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matCopper,
+	    							data.MetalBurning[AllomancyData.matCopper]));
 	    					if (data.MetalAmounts[AllomancyData.matCopper] > 0) {
 	    						data.MetalBurning[AllomancyData.matCopper] = !data.MetalBurning[AllomancyData.matCopper];
 	    					}
-	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matCopper,
-	    							data.MetalBurning[AllomancyData.matCopper]));
-
 	    					break;
 	    				case 4:
 	    					// toggle Zinc.
+	    					
+	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matZinc,
+	    							data.MetalBurning[AllomancyData.matZinc]));
 	    					if (data.MetalAmounts[AllomancyData.matZinc] > 0) {
 	    						data.MetalBurning[AllomancyData.matZinc] = !data.MetalBurning[AllomancyData.matZinc];
 	    					}
-	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matZinc,
-	    							data.MetalBurning[AllomancyData.matZinc]));
-
 	    					break;
 	    				default:
 	    					break;
@@ -180,36 +181,39 @@ public class PowerTickHandler {
 	    				switch (data.getSelected()) {
 	    				case 1:
 	    					// toggle Steel.
+	    					
+	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matSteel,
+	    							data.MetalBurning[AllomancyData.matSteel]));
 	    					if (data.MetalAmounts[AllomancyData.matSteel] > 0) {
 	    						data.MetalBurning[AllomancyData.matSteel] = !data.MetalBurning[AllomancyData.matSteel];
 	    					}
-	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matSteel,
-	    							data.MetalBurning[AllomancyData.matSteel]));
-
 	    					break;
 	    				case 2:
 	    					// toggle Pewter.
+	    					
+	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matPewter,
+	    							data.MetalBurning[AllomancyData.matPewter]));
 	    					if (data.MetalAmounts[AllomancyData.matPewter] > 0) {
 	    						data.MetalBurning[AllomancyData.matPewter] = !data.MetalBurning[AllomancyData.matPewter];
 	    					}
-	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matPewter,
-	    							data.MetalBurning[AllomancyData.matPewter]));
 	    					break;
 	    				case 3:
 	    					// toggle Bronze.
+	    					
+	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matBronze,
+	    							data.MetalBurning[AllomancyData.matBronze]));
 	    					if (data.MetalAmounts[AllomancyData.matBronze] > 0) {
 	    						data.MetalBurning[AllomancyData.matBronze] = !data.MetalBurning[AllomancyData.matBronze];
 	    					}
-	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matBronze,
-	    							data.MetalBurning[AllomancyData.matBronze]));
 	    					break;
 	    				case 4:
 	    					// toggle Brass.
+	    					
+	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matBrass,
+	    							data.MetalBurning[AllomancyData.matBrass]));
 	    					if (data.MetalAmounts[AllomancyData.matBrass] > 0) {
 	    						data.MetalBurning[AllomancyData.matBrass] = !data.MetalBurning[AllomancyData.matBrass];
 	    					}
-	    					Allomancy.packetPipeline.sendToServer(new AllomancyUpdateBurnPacket(AllomancyData.matBrass,
-	    							data.MetalBurning[AllomancyData.matBrass]));
 	    					break;
 	    				default:
 	    					break;
@@ -222,26 +226,25 @@ public class PowerTickHandler {
 	public void onPlayerLogin(PlayerLoggedInEvent event) {
 		if (event.player instanceof EntityPlayerMP) {
 			AllomancyData data = AllomancyData.forPlayer(event.player);
-			Allomancy.packetPipeline.sendTo(new
-			AllomancyDataPacket(AllomancyData.forPlayer(event.player)),
-			(EntityPlayerMP) event.player);
 			if (data.isMistborn == true) {
-				Allomancy.packetPipeline.sendTo(
-						new AllomancyBecomeMistbornPacket(),
-						(EntityPlayerMP) event.player);
+				//Registry.network.sendTo(new AllomancyDataPacket(data), (EntityPlayerMP) event.player);
+				//Allomancy.packetPipeline.sendTo(new AllomancyBecomeMistbornPacket(),(EntityPlayerMP) event.player);
 
 			}
 		}
 	}
-	@SideOnly(Side.CLIENT)
-	private void clientTick() {
+
+	@SubscribeEvent
+	public void onClientTick(TickEvent.ClientTickEvent event) {
+	    if (event.phase == TickEvent.Phase.END && (!Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().thePlayer != null)) {
+
 		AllomancyData data;
 		EntityPlayerSP player;
 		player = Minecraft.getMinecraft().thePlayer;
 		data = AllomancyData.forPlayer(player);
 		MovingObjectPosition mop;
 		vector3 vec;
-		if (AllomancyData.isMistborn == true) {
+		if (data.isMistborn == true) {
 			if (data.MetalBurning[AllomancyData.matIron]
 					|| data.MetalBurning[AllomancyData.matSteel]) {
 				List<Entity> eList;
@@ -253,15 +256,15 @@ public class PowerTickHandler {
 				eList = player.worldObj
 						.getEntitiesWithinAABB(Entity.class, box);
 				for (Entity curEntity : eList) {
-					Allomancy.MPC.tryAdd(curEntity);
+					//Allomancy.MPC.tryAdd(curEntity);
 				}
-
+				System.out.println("iron");
 				int xLoc, zLoc, yLoc;
 				xLoc = (int) player.posX;
 				zLoc = (int) player.posZ;
 				yLoc = (int) player.posY;
 
-				for (int x = xLoc - 10; x < (xLoc + 10); x++) {
+				/*for (int x = xLoc - 10; x < (xLoc + 10); x++) {
 					for (int z = zLoc - 10; z < (zLoc + 10); z++) {
 						for (int y = yLoc - 10; y < (yLoc + 10); y++) {
 					        BlockPos pos1 = new BlockPos(x, y, z);
@@ -272,7 +275,7 @@ public class PowerTickHandler {
 							}
 						}
 					}
-				}
+				}*/
 
 				if ((player.getCurrentEquippedItem() == null)
 						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isPressed() == true)) {
@@ -318,10 +321,10 @@ public class PowerTickHandler {
 							if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == MovingObjectType.BLOCK) {
 								mop = Minecraft.getMinecraft().objectMouseOver;
 								vec = new vector3(mop.getBlockPos());
-								if (Allomancy.MPC.isBlockMetal(player.worldObj
-										.getBlockState(vec.pos))) {
+								//if (Allomancy.MPC.isBlockMetal(player.worldObj
+										//.getBlockState(vec.pos))) {
 									Allomancy.MPC.tryPushBlock(vec);
-								}
+								//}
 							}
 
 						}
@@ -344,7 +347,7 @@ public class PowerTickHandler {
 						&& Minecraft.getMinecraft().gameSettings.keyBindAttack.isPressed()) {
 					entity = mop.entityHit;
 
-					//player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, true));
+					Registry.network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), true));
 
 				}
 			}
@@ -358,7 +361,7 @@ public class PowerTickHandler {
 						&& Minecraft.getMinecraft().gameSettings.keyBindUseItem.isPressed()) {
 					entity = mop.entityHit;
 
-					//player.sendQueue.addToSendQueue(PacketHandler.changeEmotions(entity.entityId, false));
+					Registry.network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), false));
 
 				}
 			}
@@ -386,7 +389,31 @@ public class PowerTickHandler {
 
 			}
 		}
-	}
+
+		/*LinkedList<Entity> toRemove = new LinkedList<Entity>();
+
+		for (Entity entity : Allomancy.MCP.particleTargets) {
+
+			if (entity.isDead == true) {
+				toRemove.add(entity);
+			}
+			if (player == null) {
+				return;
+			}
+			if (player.getDistanceToEntity(entity) > 10) {
+				toRemove.add(entity);
+				}
+			}
+		
+		for (Entity entity : toRemove) {
+			Allomancy.MCP.particleTargets.remove(entity);
+		}
+		Allomancy.MCP.particleBlockTargets.clear();
+		toRemove.clear();*/
+	    }
+
+}
+	
 	
 	
 	@SubscribeEvent
@@ -406,47 +433,21 @@ public class PowerTickHandler {
 		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer)
 		{
 		NBTTagCompound old = event.entity.getEntityData();
-		if (old.hasKey("Allomancy_Data")) {
+		if (old.hasKey("Allomancy_Data" + event.entity.getDisplayName())) {
 			event.entity.getEntityData().merge(old.getCompoundTag("Allomancy_Data"));
 		}
 		}
 	}
 	@SubscribeEvent
 	public void onEntityUpdate(LivingUpdateEvent event) {
-		AllomancyData data;
-
-		//LinkedList<Entity> toRemove = new LinkedList<Entity>();
-
-		/*for (Entity entity : Allomancy.MCP.particleTargets) {
-
-			if (entity.isDead == true) {
-				toRemove.add(entity);
-			}
-
-			if (player.getDistanceToEntity(entity) > 10) {
-				toRemove.add(entity);
-			}
-		}
-		for (Entity entity : toRemove) {
-			Allomancy.MCP.particleTargets.remove(entity);
-		}
-		Allomancy.MCP.particleBlockTargets.clear();*/
-		//toRemove.clear();
-		if (event.entity instanceof EntityPlayer) {
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			if (player == null) {
-				return;
-			
-			}
-		}
+		
 	}
 
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event){
-			Side side = FMLCommonHandler.instance().getEffectiveSide();
-			if (side == Side.CLIENT) {
-				this.clientTick();
-			}
+	    if (event.phase == TickEvent.Phase.END) {
+
+
 			MinecraftServer mcs;
 			mcs = MinecraftServer.getServer();
 			World world;
@@ -457,7 +458,7 @@ public class PowerTickHandler {
 			for (EntityPlayerMP curPlayer : list) {
 				data = AllomancyData.forPlayer(curPlayer);
 
-				if (AllomancyData.isMistborn == true) {
+				if (data.isMistborn == true) {
 					if (!data.MetalBurning[AllomancyData.matPewter]
 							&& (data.damageStored > 0)) {
 						data.damageStored--;
@@ -465,7 +466,6 @@ public class PowerTickHandler {
 					}
 					this.updateBurnTime(data, curPlayer);
 					if (data.MetalBurning[AllomancyData.matTin]) {
-
 						if (!curPlayer.isPotionActive(Potion.nightVision
 								.getId())) {
 							curPlayer.addPotionEffect(new PotionEffect(
@@ -498,7 +498,8 @@ public class PowerTickHandler {
 					}
 				}
 			}
-		}
+	    }
+	}
 			
 	
 	@SubscribeEvent
@@ -667,7 +668,8 @@ public class PowerTickHandler {
 			}
 		}
 		double motionX, motionY, motionZ;
-/*		for (Entity entity : Allomancy.MPC.particleTargets) {
+		if (this.data.MetalBurning[AllomancyData.matIron] || this.data.MetalBurning[AllomancyData.matSteel]) {
+		/*for (Entity entity : Allomancy.MPC.particleTargets) {
 			motionX = ((player.posX - entity.posX) * -1) * .03;
 			motionY = (((player.posY - entity.posY) * -1) * .03) + .021;
 			motionZ = ((player.posZ - entity.posZ) * -1) * .03;
@@ -696,6 +698,7 @@ public class PowerTickHandler {
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
 		Allomancy.MPC.particleBlockTargets.clear();*/
+		}
 	}
     	
 
@@ -711,12 +714,10 @@ public class PowerTickHandler {
 				if (data.BurnTime[i] == 0) {
 					data.BurnTime[i] = data.MaxBurnTime[i];
 					data.MetalAmounts[i]--;
-					Allomancy.packetPipeline
-					.sendToServer(new AllomancyUpdateBurnPacket(i,data.MetalBurning[i]));
+					Registry.network.sendToServer(new UpdateBurnPacket(i,data.MetalBurning[i]));
 					if (data.MetalAmounts[i] == 0) {
 						data.MetalBurning[i] = false;
-						Allomancy.packetPipeline
-						.sendTo((new AllomancyUpdateBurnPacket(i,data.MetalBurning[i])), player);
+    					//Registry.network.sendToServer(new UpdateBurnPacket(i,data.MetalBurning[i]));
 					}
 				}
 

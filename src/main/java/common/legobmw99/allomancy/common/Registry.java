@@ -13,7 +13,10 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -26,11 +29,19 @@ import common.legobmw99.allomancy.items.ItemGrinder;
 import common.legobmw99.allomancy.items.ItemMistcloak;
 import common.legobmw99.allomancy.items.ItemVial;
 import common.legobmw99.allomancy.items.NuggetLerasium;
+import common.legobmw99.allomancy.network.packets.AllomancyDataPacket;
+import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
+import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
+import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
+import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
+import common.legobmw99.allomancy.network.packets.StopFallPacket;
+import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 
 public class Registry {
     public static KeyBinding changeGroup;
     public static KeyBinding burnFirst;
     public static KeyBinding burnSecond;
+    public static SimpleNetworkWrapper network;
 	public static ItemGrinder itemAllomancyGrinder;
 	public static Item itemTinIngot;
 	public static Item itemTinFlakes;
@@ -296,7 +307,17 @@ public class Registry {
         ClientRegistry.registerKeyBinding(burnSecond);
 	}
 	public static void registerPackets() {
-		
+	       network = NetworkRegistry.INSTANCE.newSimpleChannel("allomancy");
+	       network.registerMessage(StopFallPacket.Handler.class, StopFallPacket.class, 0, Side.SERVER);
+	       network.registerMessage(BecomeMistbornPacket.Handler.class, BecomeMistbornPacket.class, 1, Side.SERVER);
+	       network.registerMessage(SelectMetalPacket.Handler.class, SelectMetalPacket.class, 2, Side.SERVER);
+	       network.registerMessage(MoveEntityPacket.Handler.class, MoveEntityPacket.class, 3, Side.SERVER);
+	       network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 4, Side.SERVER);
+	       network.registerMessage(AllomancyDataPacket.Handler.class, AllomancyDataPacket.class, 5, Side.CLIENT);
+	       network.registerMessage(ChangeEmotionPacket.Handler.class, ChangeEmotionPacket.class, 6, Side.SERVER);
+
+
+
 	}
 	public static void Renders() {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();

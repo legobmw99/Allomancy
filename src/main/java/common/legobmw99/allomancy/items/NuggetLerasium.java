@@ -12,11 +12,9 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.network.packets.AllomancyBecomeMistbornPacket;
+import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
 
 public class NuggetLerasium extends ItemFood {
 	public NuggetLerasium() {
@@ -45,8 +43,11 @@ public class NuggetLerasium extends ItemFood {
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
-		par3EntityPlayer.setItemInUse(par1ItemStack,
-				this.getMaxItemUseDuration(par1ItemStack));
+		AllomancyData.forPlayer(par3EntityPlayer);
+		if (!AllomancyData.isMistborn) {
+			par3EntityPlayer.setItemInUse(par1ItemStack,
+					this.getMaxItemUseDuration(par1ItemStack));
+		}
 		return par1ItemStack;
 	}
 
@@ -57,8 +58,9 @@ public class NuggetLerasium extends ItemFood {
 		double z = player.posZ;
 		if (AllomancyData.isMistborn == false) {
 			AllomancyData.isMistborn = true;
-			Allomancy.packetPipeline
-					.sendToServer(new AllomancyBecomeMistbornPacket());
+			Registry.network.sendToServer(new BecomeMistbornPacket());
+			System.out.println("congrats");
+
 		}
 		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));
 		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(),

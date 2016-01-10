@@ -2,6 +2,7 @@ package common.legobmw99.allomancy.common;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
@@ -47,9 +48,11 @@ public class AllomancyData implements IExtendedEntityProperties {
 			this.MetalBurning[mat] = false;
 	}
 
-	public void updateData(int[] value) {
-		for (int i = 0; i < this.MetalAmounts.length; i++)
-			this.MetalAmounts[i] = value[i];
+	public void updateData(int[] value, EntityPlayerMP player){
+		AllomancyData data = AllomancyData.forPlayer(player);
+		for (int i : value){
+			data.MetalAmounts[i] = value[i];
+		}
 	}
 
 	@Override
@@ -102,3 +105,4 @@ public class AllomancyData implements IExtendedEntityProperties {
 	}
 
 }
+

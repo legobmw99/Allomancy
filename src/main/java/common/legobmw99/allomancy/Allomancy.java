@@ -14,10 +14,9 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import common.legobmw99.allomancy.common.AllomancyPackets;
+
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.handlers.PowerTickHandler;
-import common.legobmw99.allomancy.network.PacketPipeline;
 import common.legobmw99.allomancy.proxy.CommonProxy;
 import common.legobmw99.allomancy.util.AllomancyConfig;
 import common.legobmw99.allomancy.world.OreGenerator;
@@ -28,8 +27,6 @@ public class Allomancy {
 	public static final String VERSION = "@VERSION@";
 	public static MetalParticleController MCP;
 	public static MetalParticleController MPC;
-
-	public static final PacketPipeline packetPipeline = new PacketPipeline();
 	public static OreGenerator oregenerator = new OreGenerator();
 
 	@Instance(value = "allomancy")
@@ -43,12 +40,10 @@ public class Allomancy {
 	public void preInit(FMLPreInitializationEvent event) {
 		AllomancyConfig.initProps(event.getSuggestedConfigurationFile());
 		Registry.ModContent();
-		AllomancyPackets.init();
 	}
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		packetPipeline.initalize();
 		MinecraftForge.EVENT_BUS.register(new PowerTickHandler());
 		FMLCommonHandler.instance().bus().register(new PowerTickHandler());
 
@@ -67,6 +62,5 @@ public class Allomancy {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		packetPipeline.postInitialize();
 	}
 }

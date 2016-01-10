@@ -15,8 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.network.packets.AllomancyMoveEntityPacket;
-import common.legobmw99.allomancy.network.packets.AllomancyStopFallPacket;
+import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
+import common.legobmw99.allomancy.network.packets.StopFallPacket;
 import common.legobmw99.allomancy.util.vector3;
 
 public class MetalParticleController{
@@ -175,7 +175,7 @@ public class MetalParticleController{
 		player.motionX = motionX;
 		player.motionY = motionY;
 		player.motionZ = motionZ;
-		Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
+		Registry.network.sendToServer(new StopFallPacket());
 
 	}
 
@@ -189,8 +189,7 @@ public class MetalParticleController{
 		player.motionX = motionX;
 		player.motionY = motionY;
 		player.motionZ = motionZ;
-		Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
-
+		Registry.network.sendToServer(new StopFallPacket());
 	}
 
 	public void tryPushEntity(Entity entity) {
@@ -226,7 +225,7 @@ public class MetalParticleController{
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
 
-			Allomancy.packetPipeline.sendToServer(new AllomancyMoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
+			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
 
 		}
 	}
@@ -241,7 +240,7 @@ public class MetalParticleController{
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
-			Allomancy.packetPipeline.sendToServer(new AllomancyMoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
+			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
 
 		}
 	}
@@ -258,7 +257,7 @@ public class MetalParticleController{
 			player.motionX = motionX;
 			player.motionY = motionY;
 			player.motionZ = motionZ;
-			Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
+			Registry.network.sendToServer(new StopFallPacket());
 
 			// waaaaay too damn heavy to push... you get moved.
 		}
@@ -275,8 +274,7 @@ public class MetalParticleController{
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
-			Allomancy.packetPipeline.sendToServer(new AllomancyMoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
-			Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
+			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
 		}
 	}
 
@@ -289,7 +287,7 @@ public class MetalParticleController{
 			motionX = ((player.posX - entity.posX) * (1.1)/magnitude);
 			motionY = ((player.posY - entity.posY) * (1.1)/magnitude);
 			motionZ = ((player.posZ - entity.posZ) * (1.1)/magnitude);
-			Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
+			Registry.network.sendToServer(new StopFallPacket());
 
 			// waaaaay too damn heavy to push... you get moved.
 		}
@@ -306,8 +304,7 @@ public class MetalParticleController{
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
-			Allomancy.packetPipeline.sendToServer(new AllomancyMoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
-			Allomancy.packetPipeline.sendToServer(new AllomancyStopFallPacket());
+			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
 		}
 	}
 

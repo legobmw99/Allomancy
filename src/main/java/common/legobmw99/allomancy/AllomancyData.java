@@ -6,8 +6,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
-
-import common.legobmw99.allomancy.network.packets.AllomancyUpdateBurnPacket;
+import common.legobmw99.allomancy.common.AllomancyData;
+import common.legobmw99.allomancy.network.packetsold.AllomancyUpdateBurnPacket;
 
 public class AllomancyData implements IExtendedEntityProperties {
 
@@ -41,19 +41,11 @@ public class AllomancyData implements IExtendedEntityProperties {
 		return (AllomancyData) player.getExtendedProperties(IDENTIFIER);
 	}
 
-	
-	public void updateBurn(EntityPlayer player) {
-		Allomancy.packetPipeline.sendTo(new AllomancyUpdateBurnPacket(), (EntityPlayerMP) player);
-
-	}
-
-	public void updateData() {
-
-			for (int i = 0; i < this.MetalAmounts.length; i++) {
-				//this.MetalAmounts[i] = inputStream.readInt();
-			}
-			this.Dirty = false;
-		
+	public void updateData(int[] value, EntityPlayerMP player){
+		AllomancyData data = AllomancyData.forPlayer(player);
+		for (int i : value){
+			data.MetalAmounts[i] = value[i];
+		}
 	}
 
 	@Override
@@ -89,7 +81,6 @@ public class AllomancyData implements IExtendedEntityProperties {
 
 	@Override
 	public void init(Entity entity, World world) {
-		// TODO Auto-generated method stub
 
 	}
 
