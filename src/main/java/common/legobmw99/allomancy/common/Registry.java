@@ -136,60 +136,19 @@ public class Registry {
 		GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes, 2),
 				new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
 
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 1),
-				new ItemStack(itemIronFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.water_bucket));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 2),
-				new ItemStack(itemSteelFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.water_bucket));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 3),
-				new ItemStack(itemTinFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.water_bucket));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 4),
-				new ItemStack(itemPewterFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.water_bucket));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),
-				new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.water_bucket));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),
-				new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.water_bucket));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 7),
-				new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.water_bucket));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 8),
-				new ItemStack(itemBronzeFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.water_bucket));
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 1),
-				new ItemStack(itemIronFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.potionitem));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 2),
-				new ItemStack(itemSteelFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.potionitem));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 3),
-				new ItemStack(itemTinFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.potionitem));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 4),
-				new ItemStack(itemPewterFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.potionitem));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),
-				new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.potionitem));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),
-				new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.potionitem));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 7),
-				new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.potionitem));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 8),
-				new ItemStack(itemBronzeFlakes), new ItemStack(itemVial, 1, 0),
-				new ItemStack(Items.potionitem));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 1),new ItemStack(itemIronFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 2),new ItemStack(itemSteelFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 3),new ItemStack(itemTinFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 4),new ItemStack(itemPewterFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 7),new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 8),new ItemStack(itemBronzeFlakes), new ItemStack(itemVial, 1, 0));
 
 		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {
 				"W W", "WWW", "WWW", 'W', new ItemStack(Blocks.wool, 1, 7) });
 		GameRegistry.addRecipe(new ShapedOreRecipe(
-				new ItemStack(itemVial, 1, 0), " x ", "y y", " y ", 'x',
+				new ItemStack(itemVial, 3, 0), " x ", "y y", " y ", 'x',
 				"slabWood", 'y', Blocks.glass));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 				itemCoinBag, 1, 0), " xy", "l l", " l ", 'l',

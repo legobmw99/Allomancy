@@ -13,9 +13,9 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public static final int matSteel = 1;
 	public static final int matTin = 2;
 	public static final int matPewter = 3;
-	public static final int matZinc = 4;
+	public static final int matCopper = 4;
 	public static final int matBronze = 5;
-	public static final int matCopper = 6;
+	public static final int matZinc = 6;
 	public static final int matBrass = 7;
 
 	public static boolean isMistborn = false;
@@ -25,8 +25,8 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public int selected = 0;
 
 	public int damageStored = 0;
-	public int[] BurnTime = { 600, 600, 1200, 400, 600, 600, 800, 800 };
-	public int[] MaxBurnTime = { 600, 600, 1200, 400, 600, 600, 800, 800 };
+	public int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
+	public int[] MaxBurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
 	public static int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0 };
 	public boolean[] MetalBurning = { false, false, false, false, false, false,
 			false, false };
