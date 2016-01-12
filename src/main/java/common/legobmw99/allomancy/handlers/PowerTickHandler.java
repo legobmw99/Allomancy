@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -70,7 +71,7 @@ public class PowerTickHandler {
 
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
-		//Allomancy.MPC.particleBlockTargets.clear();
+		Allomancy.MPC.particleBlockTargets.clear();
 	}
 	
 	@SubscribeEvent
@@ -227,10 +228,14 @@ public class PowerTickHandler {
 		if (event.player instanceof EntityPlayerMP) {
 			AllomancyData data = AllomancyData.forPlayer(event.player);
 			if (data.isMistborn == true) {
+				if(!event.player.worldObj.isRemote){
+					AllomancyData.isMistborn = true;
+					data.Dirty = false;
 				//Registry.network.sendTo(new AllomancyDataPacket(data), (EntityPlayerMP) event.player);
 				//Allomancy.packetPipeline.sendTo(new AllomancyBecomeMistbornPacket(),(EntityPlayerMP) event.player);
 
 			}
+		}
 		}
 	}
 
@@ -256,15 +261,14 @@ public class PowerTickHandler {
 				eList = player.worldObj
 						.getEntitiesWithinAABB(Entity.class, box);
 				for (Entity curEntity : eList) {
-					//Allomancy.MPC.tryAdd(curEntity);
+					Allomancy.MPC.tryAdd(curEntity);
 				}
-				System.out.println("iron");
 				int xLoc, zLoc, yLoc;
 				xLoc = (int) player.posX;
 				zLoc = (int) player.posZ;
 				yLoc = (int) player.posY;
 
-				/*for (int x = xLoc - 10; x < (xLoc + 10); x++) {
+				for (int x = xLoc - 10; x < (xLoc + 10); x++) {
 					for (int z = zLoc - 10; z < (zLoc + 10); z++) {
 						for (int y = yLoc - 10; y < (yLoc + 10); y++) {
 					        BlockPos pos1 = new BlockPos(x, y, z);
@@ -275,10 +279,10 @@ public class PowerTickHandler {
 							}
 						}
 					}
-				}*/
+				}
 
 				if ((player.getCurrentEquippedItem() == null)
-						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isPressed() == true)) {
+						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() == true)) {
 
 					if (data.MetalBurning[AllomancyData.matIron]) {
 						this.getMouseOver();
@@ -294,8 +298,7 @@ public class PowerTickHandler {
 							if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == MovingObjectType.BLOCK) {
 								mop = Minecraft.getMinecraft().objectMouseOver;
 								vec = new vector3(mop.getBlockPos());
-								if (Allomancy.MPC.isBlockMetal(player.worldObj
-										.getBlockState(vec.pos))) {
+								if (Allomancy.MPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
 									Allomancy.MPC.tryPullBlock(vec);
 								}
 							}
@@ -305,9 +308,10 @@ public class PowerTickHandler {
 
 				}
 				if ((player.getCurrentEquippedItem() == null)
-						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isPressed() == true)) {
+						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() == true)) {
 					if (data.MetalBurning[AllomancyData.matSteel]) {
-						this.getMouseOver();
+						//this.getMouseOver();
+
 						if (this.pointedEntity != null) {
 							target = this.pointedEntity;
 							Allomancy.MPC.tryPushEntity(target);
@@ -321,10 +325,9 @@ public class PowerTickHandler {
 							if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == MovingObjectType.BLOCK) {
 								mop = Minecraft.getMinecraft().objectMouseOver;
 								vec = new vector3(mop.getBlockPos());
-								//if (Allomancy.MPC.isBlockMetal(player.worldObj
-										//.getBlockState(vec.pos))) {
+								if (Allomancy.MPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
 									Allomancy.MPC.tryPushBlock(vec);
-								//}
+								}
 							}
 
 						}
@@ -334,7 +337,7 @@ public class PowerTickHandler {
 				}
 
 			} else {
-				//Allomancy.MPC.particleTargets.clear();
+				Allomancy.MPC.particleTargets.clear();
 			}
 
 			if (data.MetalBurning[AllomancyData.matZinc]) {
@@ -390,9 +393,9 @@ public class PowerTickHandler {
 			}
 		}
 
-		/*LinkedList<Entity> toRemove = new LinkedList<Entity>();
+		LinkedList<Entity> toRemove = new LinkedList<Entity>();
 
-		for (Entity entity : Allomancy.MCP.particleTargets) {
+		for (Entity entity : Allomancy.MPC.particleTargets) {
 
 			if (entity.isDead == true) {
 				toRemove.add(entity);
@@ -406,10 +409,10 @@ public class PowerTickHandler {
 			}
 		
 		for (Entity entity : toRemove) {
-			Allomancy.MCP.particleTargets.remove(entity);
+			Allomancy.MPC.particleTargets.remove(entity);
 		}
-		Allomancy.MCP.particleBlockTargets.clear();
-		toRemove.clear();*/
+		Allomancy.MPC.particleBlockTargets.clear();
+		toRemove.clear();
 	    }
 
 }
@@ -466,6 +469,7 @@ public class PowerTickHandler {
 					}
 					this.updateBurnTime(data, curPlayer);
 					if (data.MetalBurning[AllomancyData.matTin]) {
+
 						if (!curPlayer.isPotionActive(Potion.nightVision
 								.getId())) {
 							curPlayer.addPotionEffect(new PotionEffect(
@@ -669,7 +673,7 @@ public class PowerTickHandler {
 		}
 		double motionX, motionY, motionZ;
 		if (this.data.MetalBurning[AllomancyData.matIron] || this.data.MetalBurning[AllomancyData.matSteel]) {
-		/*for (Entity entity : Allomancy.MPC.particleTargets) {
+		for (Entity entity : Allomancy.MPC.particleTargets) {
 			motionX = ((player.posX - entity.posX) * -1) * .03;
 			motionY = (((player.posY - entity.posY) * -1) * .03) + .021;
 			motionZ = ((player.posZ - entity.posZ) * -1) * .03;
@@ -697,7 +701,7 @@ public class PowerTickHandler {
 					motionY, motionZ);
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
-		Allomancy.MPC.particleBlockTargets.clear();*/
+		Allomancy.MPC.particleBlockTargets.clear();
 		}
 	}
     	
