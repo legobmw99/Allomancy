@@ -55,6 +55,7 @@ import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
 import common.legobmw99.allomancy.network.packets.StopFallPacket;
 import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import common.legobmw99.allomancy.particle.ParticleMetal;
+import common.legobmw99.allomancy.util.MovingObjectExtended;
 import common.legobmw99.allomancy.util.vector3;
 
 public class PowerTickHandler {
@@ -130,7 +131,7 @@ public class PowerTickHandler {
 	    					
 	    					
 	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matIron,
-	    							data.MetalBurning[AllomancyData.matIron]));
+	    							!data.MetalBurning[AllomancyData.matIron]));
 	    					
 	    					if (data.MetalAmounts[AllomancyData.matIron] > 0) {
 	    						data.MetalBurning[AllomancyData.matIron] = !data.MetalBurning[AllomancyData.matIron];
@@ -140,7 +141,7 @@ public class PowerTickHandler {
 	    					// toggle Tin.
 	    					
 	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matTin,
-	    							data.MetalBurning[AllomancyData.matTin]));
+	    							!data.MetalBurning[AllomancyData.matTin]));
 	    					if (data.MetalAmounts[AllomancyData.matTin] > 0) {
 	    						data.MetalBurning[AllomancyData.matTin] = !data.MetalBurning[AllomancyData.matTin];
 	    					}
@@ -149,7 +150,7 @@ public class PowerTickHandler {
 	    					// toggle Copper.
 	    					
 	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matCopper,
-	    							data.MetalBurning[AllomancyData.matCopper]));
+	    							!data.MetalBurning[AllomancyData.matCopper]));
 	    					if (data.MetalAmounts[AllomancyData.matCopper] > 0) {
 	    						data.MetalBurning[AllomancyData.matCopper] = !data.MetalBurning[AllomancyData.matCopper];
 	    					}
@@ -158,7 +159,7 @@ public class PowerTickHandler {
 	    					// toggle Zinc.
 	    					
 	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matZinc,
-	    							data.MetalBurning[AllomancyData.matZinc]));
+	    							!data.MetalBurning[AllomancyData.matZinc]));
 	    					if (data.MetalAmounts[AllomancyData.matZinc] > 0) {
 	    						data.MetalBurning[AllomancyData.matZinc] = !data.MetalBurning[AllomancyData.matZinc];
 	    					}
@@ -184,7 +185,7 @@ public class PowerTickHandler {
 	    					// toggle Steel.
 	    					
 	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matSteel,
-	    							data.MetalBurning[AllomancyData.matSteel]));
+	    							!data.MetalBurning[AllomancyData.matSteel]));
 	    					if (data.MetalAmounts[AllomancyData.matSteel] > 0) {
 	    						data.MetalBurning[AllomancyData.matSteel] = !data.MetalBurning[AllomancyData.matSteel];
 	    					}
@@ -193,7 +194,7 @@ public class PowerTickHandler {
 	    					// toggle Pewter.
 	    					
 	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matPewter,
-	    							data.MetalBurning[AllomancyData.matPewter]));
+	    							!data.MetalBurning[AllomancyData.matPewter]));
 	    					if (data.MetalAmounts[AllomancyData.matPewter] > 0) {
 	    						data.MetalBurning[AllomancyData.matPewter] = !data.MetalBurning[AllomancyData.matPewter];
 	    					}
@@ -202,7 +203,7 @@ public class PowerTickHandler {
 	    					// toggle Bronze.
 	    					
 	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matBronze,
-	    							data.MetalBurning[AllomancyData.matBronze]));
+	    							!data.MetalBurning[AllomancyData.matBronze]));
 	    					if (data.MetalAmounts[AllomancyData.matBronze] > 0) {
 	    						data.MetalBurning[AllomancyData.matBronze] = !data.MetalBurning[AllomancyData.matBronze];
 	    					}
@@ -211,7 +212,7 @@ public class PowerTickHandler {
 	    					// toggle Brass.
 	    					
 	    					Registry.network.sendToServer(new UpdateBurnPacket(AllomancyData.matBrass,
-	    							data.MetalBurning[AllomancyData.matBrass]));
+	    							!data.MetalBurning[AllomancyData.matBrass]));
 	    					if (data.MetalAmounts[AllomancyData.matBrass] > 0) {
 	    						data.MetalBurning[AllomancyData.matBrass] = !data.MetalBurning[AllomancyData.matBrass];
 	    					}
@@ -227,6 +228,9 @@ public class PowerTickHandler {
 	public void onPlayerLogin(PlayerLoggedInEvent event) {
 		if (event.player instanceof EntityPlayerMP) {
 			AllomancyData data = AllomancyData.forPlayer(event.player);
+			for (int i = 0; i < 7; i++){
+    			data.MetalBurning[i] = false;
+    		}
 			Registry.network.sendTo(new AllomancyDataPacket(), (EntityPlayerMP) event.player);
 			if (data.isMistborn == true) {
 				if(event.player.worldObj.isRemote){
@@ -283,7 +287,7 @@ public class PowerTickHandler {
 						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() == true)) {
 
 					if (data.MetalBurning[AllomancyData.matIron]) {
-						this.getMouseOver();
+						//this.getMouseOver();
 						if (this.pointedEntity != null) {
 							target = this.pointedEntity;
 							Allomancy.MPC.tryPullEntity(target);
@@ -294,6 +298,7 @@ public class PowerTickHandler {
 										.tryPullEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
 							}
 							if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == MovingObjectType.BLOCK) {
+								
 								mop = Minecraft.getMinecraft().objectMouseOver;
 								vec = new vector3(mop.getBlockPos());
 								if (Allomancy.MPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
@@ -324,7 +329,7 @@ public class PowerTickHandler {
 								mop = Minecraft.getMinecraft().objectMouseOver;
 								vec = new vector3(mop.getBlockPos());
 								if (Allomancy.MPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
-									Allomancy.MPC.tryPushBlock(vec);
+										Allomancy.MPC.tryPushBlock(vec);
 								}
 							}
 
@@ -439,10 +444,6 @@ public class PowerTickHandler {
 		}
 		}
 	}
-	@SubscribeEvent
-	public void onEntityUpdate(LivingUpdateEvent event) {
-		
-	}
 
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event){
@@ -468,10 +469,11 @@ public class PowerTickHandler {
 					this.updateBurnTime(data, curPlayer);
 					if (data.MetalBurning[AllomancyData.matTin]) {
 
-						if (!curPlayer.isPotionActive(Potion.nightVision
-								.getId())) {
+						if (curPlayer.isPotionActive(Potion.nightVision
+								.getId()) == false) {
 							curPlayer.addPotionEffect(new PotionEffect(
-									Potion.nightVision.getId(), 300, 0, true, false));
+									Potion.nightVision.getId(), 300, 0));
+							System.out.println("yay");
 						}
 						if (curPlayer.isPotionActive(Potion.blindness.getId())) {
 							curPlayer.removePotionEffect(Potion.blindness
@@ -483,8 +485,7 @@ public class PowerTickHandler {
 									.getActivePotionEffect(Potion.nightVision);
 							if (eff.getDuration() < 210) {
 								curPlayer.addPotionEffect(new PotionEffect(
-										Potion.nightVision.getId(), 300, 0,
-										true, false));
+										Potion.nightVision.getId(), 300, 0));
 							}
 						}
 
