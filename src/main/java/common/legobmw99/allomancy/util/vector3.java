@@ -17,6 +17,10 @@ public class vector3 {
 
 	public vector3(BlockPos pos1) {
 		this.pos = pos1;
+		this.X = pos1.getX();
+		this.Y = pos1.getY();
+		this.Z = pos1.getZ();
+
 	}
 
 	@Override

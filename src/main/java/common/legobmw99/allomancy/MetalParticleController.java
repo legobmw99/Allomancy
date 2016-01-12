@@ -12,8 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.oredict.OreDictionary;
-
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
 import common.legobmw99.allomancy.network.packets.StopFallPacket;
@@ -99,10 +99,10 @@ public class MetalParticleController{
 		this.metallist.add(Blocks.activator_rail.getStateId(Blocks.activator_rail.getDefaultState()));
 		this.metallist.add(Blocks.detector_rail.getStateId(Blocks.detector_rail.getDefaultState()));
 		this.metallist.add(Blocks.golden_rail.getStateId(Blocks.golden_rail.getDefaultState()));
-		this.metallist.add(Registry.oreCopper.getStateId(Registry.oreCopper.getDefaultState()));
+		/*this.metallist.add(Registry.oreCopper.getStateId(Registry.oreCopper.getDefaultState()));
 		this.metallist.add(Registry.oreTin.getStateId(Registry.oreTin.getDefaultState()));
 		this.metallist.add(Registry.oreZinc.getStateId(Registry.oreZinc.getDefaultState()));
-		this.metallist.add(Registry.oreLead.getStateId(Registry.oreLead.getDefaultState()));
+		this.metallist.add(Registry.oreLead.getStateId(Registry.oreLead.getDefaultState()));*/
 		this.metallist.add(Registry.itemVial.getIdFromItem(Registry.itemVial));
 		this.metallist.add(Registry.itemZincFlakes.getIdFromItem(Registry.itemZincFlakes));
 		this.metallist.add(Registry.itemZincIngot.getIdFromItem(Registry.itemZincIngot));
