@@ -2,6 +2,7 @@ package common.legobmw99.allomancy;
 
 import java.util.LinkedList;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -113,8 +114,8 @@ public class MetalParticleController{
 		 */
 	}
 
-	public boolean isItemsMetal(ItemStack Item) {
-		if (this.metallist.contains(Item.getItem().getIdFromItem(Item.getItem()))) {
+	public boolean isItemMetal(ItemStack Item) {
+		if (this.metallist.contains(Item.getItem().getIdFromItem(Item.getItem())) || this.metallist.contains(Block.getBlockFromItem(Item.getItem()).getDefaultState())) {
 			return true;
 		} else {
 			return false;
@@ -160,7 +161,7 @@ public class MetalParticleController{
 	}
 
 	private void tryAddItem(EntityItem entity) {
-		if (this.isItemsMetal(entity.getEntityItem())) {
+		if (this.isItemMetal(entity.getEntityItem())) {
 			this.particleTargets.add(entity);
 		}
 	}
@@ -266,7 +267,7 @@ public class MetalParticleController{
 			return;
 		}
 
-		if (this.isItemsMetal(entity.getHeldItem())) {
+		if (this.isItemMetal(entity.getHeldItem())) {
 			// Pull em towards you.
 			motionX = ((player.posX - entity.posX) * .1);
 			motionY = ((player.posY - entity.posY) * .1);
@@ -296,7 +297,7 @@ public class MetalParticleController{
 			return;
 		}
 
-		if (this.isItemsMetal(entity.getHeldItem())) {
+		if (this.isItemMetal(entity.getHeldItem())) {
 			// Pull em towards you.
 			motionX = ((player.posX - entity.posX) * .1) * -1;
 			motionY = (player.posY - entity.posY) * .1;

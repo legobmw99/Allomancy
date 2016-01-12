@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -29,11 +28,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -52,10 +49,8 @@ import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.network.packets.AllomancyDataPacket;
 import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
-import common.legobmw99.allomancy.network.packets.StopFallPacket;
 import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import common.legobmw99.allomancy.particle.ParticleMetal;
-import common.legobmw99.allomancy.util.MovingObjectExtended;
 import common.legobmw99.allomancy.util.vector3;
 
 public class PowerTickHandler {
@@ -249,8 +244,10 @@ public class PowerTickHandler {
 		EntityPlayerSP player;
 		player = Minecraft.getMinecraft().thePlayer;
 		data = AllomancyData.forPlayer(player);
+		MovingObjectPosition ray;
 		MovingObjectPosition mop;
 		vector3 vec;
+		
 		if (data.isMistborn == true) {
 			if (data.MetalBurning[AllomancyData.matIron]
 					|| data.MetalBurning[AllomancyData.matSteel]) {
@@ -274,10 +271,9 @@ public class PowerTickHandler {
 					for (int z = zLoc - 10; z < (zLoc + 10); z++) {
 						for (int y = yLoc - 10; y < (yLoc + 10); y++) {
 					        BlockPos pos1 = new BlockPos(x, y, z);
-							if (Allomancy.MPC.isBlockMetal(player.worldObj
-									.getBlockState(pos1).getBlock().getDefaultState())) {
+							if (Allomancy.MPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(pos1))) {
 								Allomancy.MPC.particleBlockTargets
-										.add(new vector3(x, y, z));
+										.add(new vector3(pos1));
 							}
 						}
 					}
@@ -288,19 +284,18 @@ public class PowerTickHandler {
 
 					if (data.MetalBurning[AllomancyData.matIron]) {
 						//this.getMouseOver();
+						ray = player.rayTrace(20.0F ,0.0F);
 						if (this.pointedEntity != null) {
 							target = this.pointedEntity;
 							Allomancy.MPC.tryPullEntity(target);
 						}
-						if (Minecraft.getMinecraft().objectMouseOver != null) {
-							if (Minecraft.getMinecraft().objectMouseOver.entityHit != null) {
+						if (ray != null) {
+							if (ray.entityHit != null) {
 								Allomancy.MPC
-										.tryPullEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
+										.tryPullEntity(ray.entityHit);
 							}
-							if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == MovingObjectType.BLOCK) {
-								
-								mop = Minecraft.getMinecraft().objectMouseOver;
-								vec = new vector3(mop.getBlockPos());
+							if (ray.typeOfHit == MovingObjectType.BLOCK || ray.typeOfHit == MovingObjectType.MISS) {
+								vec = new vector3(ray.getBlockPos());
 								if (Allomancy.MPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
 									Allomancy.MPC.tryPullBlock(vec);
 								}
@@ -314,20 +309,19 @@ public class PowerTickHandler {
 						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() == true)) {
 					if (data.MetalBurning[AllomancyData.matSteel]) {
 						//this.getMouseOver();
-
+						ray = player.rayTrace(20.0F ,0.0F);
 						if (this.pointedEntity != null) {
 							target = this.pointedEntity;
 							Allomancy.MPC.tryPushEntity(target);
 						}
 
-						if (Minecraft.getMinecraft().objectMouseOver != null) {
-							if (Minecraft.getMinecraft().objectMouseOver.entityHit != null) {
+						if (ray != null) {
+							if (ray.entityHit != null) {
 								Allomancy.MPC
-										.tryPushEntity(Minecraft.getMinecraft().objectMouseOver.entityHit);
+										.tryPushEntity(ray.entityHit);
 							}
-							if (Minecraft.getMinecraft().objectMouseOver.typeOfHit == MovingObjectType.BLOCK) {
-								mop = Minecraft.getMinecraft().objectMouseOver;
-								vec = new vector3(mop.getBlockPos());
+							if (ray.typeOfHit == MovingObjectType.BLOCK || ray.typeOfHit == MovingObjectType.MISS) {
+								vec = new vector3(ray.getBlockPos());
 								if (Allomancy.MPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
 										Allomancy.MPC.tryPushBlock(vec);
 								}
@@ -670,25 +664,26 @@ public class PowerTickHandler {
 				this.currentFrame = 0;
 			}
 		}
+		
 		double motionX, motionY, motionZ;
 		if (this.data.MetalBurning[AllomancyData.matIron] || this.data.MetalBurning[AllomancyData.matSteel]) {
 		for (Entity entity : Allomancy.MPC.particleTargets) {
 			motionX = ((player.posX - entity.posX) * -1) * .03;
-			motionY = (((player.posY - entity.posY) * -1) * .03) + .021;
+			motionY = (((player.posY - entity.posY + 1.2) * -1) * .03) + .021;
 			motionZ = ((player.posZ - entity.posZ) * -1) * .03;
 			particle = new ParticleMetal(player.worldObj,
 					player.posX
 							- (Math.sin(Math.toRadians(player
 									.getRotationYawHead())) * .7d),
-					player.posY - .7, player.posZ
+					player.posY - .2, player.posZ
 							+ (Math.cos(Math.toRadians(player
 									.getRotationYawHead())) * .7d), motionX,
 					motionY, motionZ);
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
-		}
+		} 
 		for (vector3 v : Allomancy.MPC.particleBlockTargets) {
 			motionX = ((player.posX - v.X - .5) * -1) * .03;
-			motionY = (((player.posY - v.Y - .5) * -1) * .03) + .021;
+			motionY = (((player.posY - v.Y - 1.5) * -1) * .03) + .021;
 			motionZ = ((player.posZ - v.Z - .5) * -1) * .03;
 			particle = new ParticleMetal(player.worldObj,
 					player.posX
