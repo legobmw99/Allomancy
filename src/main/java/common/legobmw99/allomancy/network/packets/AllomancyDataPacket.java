@@ -2,6 +2,7 @@ package common.legobmw99.allomancy.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IThreadListener;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -14,23 +15,19 @@ public class AllomancyDataPacket implements IMessage{
 	public AllomancyDataPacket() {}
 
 	
-	AllomancyData data;
-	private int[] value;
+
 	
 	public AllomancyDataPacket(AllomancyData data) {
-			 this.value = data.MetalAmounts;
+			 
 		
 		}
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		for (int i = 0; i < 8; i++)
-			this.value[i] = ByteBufUtils.readVarInt(buf,200);		
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		for (int element : this.value)
-			ByteBufUtils.writeVarInt(buf,element,200);
+
 		
 	}
 
@@ -42,12 +39,11 @@ public class AllomancyDataPacket implements IMessage{
 	        mainThread.addScheduledTask(new Runnable() {
 	            @Override
 	            public void run() {
-	            	EntityPlayerMP player =  ctx.getServerHandler().playerEntity;
+	            	EntityPlayer player =  Minecraft.getMinecraft().thePlayer;
 	        		AllomancyData data = AllomancyData.forPlayer(player);
-	        		for (int i : message.value){
-	        			data.MetalAmounts[i] = message.value[i];
+	        		for (int i : data.MaxBurnTime){
+	        			data.MetalBurning[i] = AllomancyData.MetalBurning[i];
 	        		}
-	        		data.updateData(message.value, player);
 	            }
 	        });		return null;
 		}

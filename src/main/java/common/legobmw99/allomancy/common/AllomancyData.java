@@ -2,7 +2,6 @@ package common.legobmw99.allomancy.common;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
@@ -28,7 +27,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
 	public int[] MaxBurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
 	public static int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0 };
-	public boolean[] MetalBurning = { false, false, false, false, false, false,
+	public static boolean[] MetalBurning = { false, false, false, false, false, false,
 			false, false };
 	public EntityPlayer player;
 
@@ -48,8 +47,8 @@ public class AllomancyData implements IExtendedEntityProperties {
 			this.MetalBurning[mat] = false;
 	}
 
-	public void updateData(int[] value, EntityPlayerMP player){
-		AllomancyData data = AllomancyData.forPlayer(player);
+	public void updateData(int[] value, EntityPlayer player2){
+		AllomancyData data = AllomancyData.forPlayer(player2);
 		for (int i : value){
 			data.MetalAmounts[i] = value[i];
 		}

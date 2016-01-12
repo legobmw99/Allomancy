@@ -227,13 +227,11 @@ public class PowerTickHandler {
 	public void onPlayerLogin(PlayerLoggedInEvent event) {
 		if (event.player instanceof EntityPlayerMP) {
 			AllomancyData data = AllomancyData.forPlayer(event.player);
+			Registry.network.sendTo(new AllomancyDataPacket(), (EntityPlayerMP) event.player);
 			if (data.isMistborn == true) {
-				if(!event.player.worldObj.isRemote){
-					AllomancyData.isMistborn = true;
+				if(event.player.worldObj.isRemote){
+					data.isMistborn = true;
 					data.Dirty = false;
-				//Registry.network.sendTo(new AllomancyDataPacket(data), (EntityPlayerMP) event.player);
-				//Allomancy.packetPipeline.sendTo(new AllomancyBecomeMistbornPacket(),(EntityPlayerMP) event.player);
-
 			}
 		}
 		}
@@ -372,7 +370,7 @@ public class PowerTickHandler {
 			if (data.MetalBurning[AllomancyData.matPewter]) {
 				if ((player.onGround == true)
 						&& (player.isInWater() == false)
-						&& (Minecraft.getMinecraft().gameSettings.keyBindForward.isPressed())) {
+						&& (Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())) {
 					player.motionX *= 1.4;
 					player.motionZ *= 1.4;
 
