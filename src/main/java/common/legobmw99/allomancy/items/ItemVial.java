@@ -20,7 +20,7 @@ public class ItemVial extends ItemFood {
 
 	public static String[] unlocalName = { "emptyvial", "ironelixer",
 		"steelelixer", "tinelixer", "pewterelixer", "zincelixer",
-		"bronzeelixer", "copperelixer", "brasselixer", };
+		"brasselixer", "copperelixer", "bronzeelixer", };
 
 	public ItemStack onItemUseFinish(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
