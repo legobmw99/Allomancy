@@ -9,6 +9,8 @@ import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -260,7 +262,8 @@ public class PowerTickHandler {
 				eList = player.worldObj
 						.getEntitiesWithinAABB(Entity.class, box);
 				for (Entity curEntity : eList) {
-					Allomancy.MPC.tryAdd(curEntity);
+					if (curEntity != null && (curEntity instanceof EntityItem || curEntity instanceof EntityLiving))
+						Allomancy.MPC.tryAdd(curEntity);
 				}
 				int xLoc, zLoc, yLoc;
 				xLoc = (int) player.posX;
@@ -271,9 +274,9 @@ public class PowerTickHandler {
 					for (int z = zLoc - 10; z < (zLoc + 10); z++) {
 						for (int y = yLoc - 10; y < (yLoc + 10); y++) {
 					        BlockPos pos1 = new BlockPos(x, y, z);
-							if (Allomancy.MPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(pos1))) {
-								Allomancy.MPC.particleBlockTargets
-										.add(new vector3(pos1));
+							vec = new vector3(pos1);
+							if (Allomancy.MPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
+								Allomancy.MPC.particleBlockTargets.add(vec);
 							}
 						}
 					}
@@ -316,7 +319,8 @@ public class PowerTickHandler {
 						}
 
 						if (ray != null) {
-							if (ray.entityHit != null) {
+							if (ray.typeOfHit == MovingObjectType.ENTITY) {
+								System.out.println(ray.entityHit);
 								Allomancy.MPC
 										.tryPushEntity(ray.entityHit);
 							}

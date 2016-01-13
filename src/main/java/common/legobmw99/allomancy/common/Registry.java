@@ -302,7 +302,7 @@ public class Registry {
     	renderItem.getItemModelMesher().register(itemZincFlakes, 0, new ModelResourceLocation("allomancy:zincflakes", "inventory"));
     	
     	renderItem.getItemModelMesher().register(itemVial, 0, new ModelResourceLocation("allomancy:emptyvial", "inventory"));
-    	renderItem.getItemModelMesher().register(itemVial, 1, new ModelResourceLocation("allomancy:ironelixer", "inventory"));
+    	renderItem.getItemModelMesher().register(itemVial, 1, new ModelResourceLocation("allomancy:itemVial.ironelixer", "inventory"));
 
 
 

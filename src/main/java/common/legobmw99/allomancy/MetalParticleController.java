@@ -12,6 +12,7 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.oredict.OreDictionary;
@@ -115,10 +116,16 @@ public class MetalParticleController{
 	}
 
 	public boolean isItemMetal(ItemStack Item) {
-		if (this.metallist.contains(Item.getItem().getIdFromItem(Item.getItem())) || this.metallist.contains(Block.getBlockFromItem(Item.getItem()).getDefaultState())) {
+		if (this.metallist.contains(Item.getItem().getIdFromItem(Item.getItem())) ) {
 			return true;
 		} else {
+			if (Item.getItem() instanceof ItemBlock){
+				if (this.metallist.contains(Block.getBlockFromItem(Item.getItem()).getDefaultState())){
+			return true;
+
+		}}
 			return false;
+
 		}
 	}
 
