@@ -26,19 +26,19 @@ public class MoveEntityPacket implements IMessage {
 	}
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		motionX = ((double) ByteBufUtils.readVarInt(buf, 3000))/100;
-		motionY = ((double) ByteBufUtils.readVarInt(buf, 3000))/100;
-		motionZ = ((double) ByteBufUtils.readVarInt(buf, 3000))/100;
-		entityID =  ByteBufUtils.readVarInt(buf, 2147483647);
+		motionX = ((double) ByteBufUtils.readVarInt(buf, 5))/100;
+		motionY = ((double) ByteBufUtils.readVarInt(buf, 5))/100;
+		motionZ = ((double) ByteBufUtils.readVarInt(buf, 5))/100;
+		entityID =  ByteBufUtils.readVarInt(buf, 5);
 
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeVarInt(buf,(int)(motionX*100), 3000);
-		ByteBufUtils.writeVarInt(buf,(int)(motionY*100), 3000);
-		ByteBufUtils.writeVarInt(buf, (int)(motionZ*100), 3000);
-		ByteBufUtils.writeVarInt(buf, entityID, 2147483647);		
+		ByteBufUtils.writeVarInt(buf,(int)(motionX*100), 5);
+		ByteBufUtils.writeVarInt(buf,(int)(motionY*100), 5);
+		ByteBufUtils.writeVarInt(buf, (int)(motionZ*100), 5);
+		ByteBufUtils.writeVarInt(buf, entityID, 5);		
 	}
 
 	public static class Handler implements IMessageHandler<MoveEntityPacket, IMessage>{

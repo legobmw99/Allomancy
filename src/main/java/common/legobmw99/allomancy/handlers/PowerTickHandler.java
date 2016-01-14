@@ -88,6 +88,10 @@ public class PowerTickHandler {
 
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		AllomancyData data = AllomancyData.forPlayer(event.player);
+		for (int i = 0; i < 7; i++){
+			data.MetalAmounts[i] = 0;
+		}
 		NBTTagCompound old = event.player.getEntityData();
 		if (old.hasKey("Allomancy_Data")) {
 			event.player.getEntityData().setTag("Allomancy_Data",
@@ -286,23 +290,22 @@ public class PowerTickHandler {
 						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() == true)) {
 
 					if (data.MetalBurning[AllomancyData.matIron]) {
-						//this.getMouseOver();
-						ray = player.rayTrace(20.0F ,0.0F);
-						if (this.pointedEntity != null) {
-							target = this.pointedEntity;
-							Allomancy.MPC.tryPullEntity(target);
-						}
-						if (ray != null) {
-							if (ray.entityHit != null) {
-								Allomancy.MPC
-										.tryPullEntity(ray.entityHit);
+	                    MovingObjectPosition mov = getMouseOverExtended(20.0F); 
+						if (mov != null) {
+							if (mov.entityHit != null) {
+								Allomancy.MPC.tryPullEntity(mov.entityHit);
+								
 							}
+						}
+						ray = player.rayTrace(20.0F ,0.0F);						
+						if (ray != null){
 							if (ray.typeOfHit == MovingObjectType.BLOCK || ray.typeOfHit == MovingObjectType.MISS) {
 								vec = new vector3(ray.getBlockPos());
 								if (Allomancy.MPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
-									Allomancy.MPC.tryPullBlock(vec);
+										Allomancy.MPC.tryPullBlock(vec);
 								}
 							}
+
 						}
 
 					}
@@ -311,19 +314,15 @@ public class PowerTickHandler {
 				if ((player.getCurrentEquippedItem() == null)
 						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() == true)) {
 					if (data.MetalBurning[AllomancyData.matSteel]) {
-						//this.getMouseOver();
-						ray = player.rayTrace(20.0F ,0.0F);
-						if (this.pointedEntity != null) {
-							target = this.pointedEntity;
-							Allomancy.MPC.tryPushEntity(target);
-						}
-
-						if (ray != null) {
-							if (ray.typeOfHit == MovingObjectType.ENTITY) {
-								System.out.println(ray.entityHit);
-								Allomancy.MPC
-										.tryPushEntity(ray.entityHit);
+	                    MovingObjectPosition mov = getMouseOverExtended(20.0F); 
+						if (mov != null) {
+							if (mov.entityHit != null) {
+								Allomancy.MPC.tryPushEntity(mov.entityHit);
+								
 							}
+						}
+						ray = player.rayTrace(20.0F ,0.0F);						
+						if (ray != null){
 							if (ray.typeOfHit == MovingObjectType.BLOCK || ray.typeOfHit == MovingObjectType.MISS) {
 								vec = new vector3(ray.getBlockPos());
 								if (Allomancy.MPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
@@ -719,7 +718,7 @@ public class PowerTickHandler {
 					Registry.network.sendToServer(new UpdateBurnPacket(i,data.MetalBurning[i]));
 					if (data.MetalAmounts[i] == 0) {
 						data.MetalBurning[i] = false;
-    					//Registry.network.sendToServer(new UpdateBurnPacket(i,data.MetalBurning[i]));
+    					Registry.network.sendToServer(new UpdateBurnPacket(i,data.MetalBurning[i]));
 					}
 				}
 
@@ -728,72 +727,85 @@ public class PowerTickHandler {
 
 	}
 
-	/* Ugly below. Sorry */
-	@SideOnly(Side.CLIENT)
-	public void getMouseOver() {
-		Minecraft mc = Minecraft.getMinecraft();
-		float par1 = 0;
-		if (mc.getRenderViewEntity() != null) {
-			if (mc.theWorld != null) {
-				mc.pointedEntity = null;
-				double d0 = 20;
-				mc.objectMouseOver = mc.getRenderViewEntity().rayTrace(d0, par1);
-				double d1 = d0;
-				Vec3 vec3 = (mc.getRenderViewEntity().getPositionVector());
-
-				if (mc.objectMouseOver != null) {
-					d1 = mc.objectMouseOver.hitVec.distanceTo(vec3);
-				}
-
-				Vec3 vec31 = mc.getRenderViewEntity().getLook(par1);
-				Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord
-						* d0, vec31.zCoord * d0);
-				this.pointedEntity = null;
-				float f1 = 1.0F;
-				List list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(
-						mc.getRenderViewEntity(),
-						mc.getRenderViewEntity().getBoundingBox().addCoord(
-								vec31.xCoord * d0, vec31.yCoord * d0,
-								vec31.zCoord * d0).expand(f1, f1, f1));
-				double d2 = d1;
-
-				for (int i = 0; i < list.size(); ++i) {
-					Entity entity = (Entity) list.get(i);
-
-					if (true) {
-						float f2 = entity.getCollisionBorderSize();
-						AxisAlignedBB axisalignedbb = entity.getBoundingBox()
-								.expand(f2, f2, f2);
-						MovingObjectPosition movingobjectposition = axisalignedbb
-								.calculateIntercept(vec3, vec32);
-
-						if (axisalignedbb.isVecInside(vec3)) {
-							if ((0.0D < d2) || (d2 == 0.0D)) {
-								this.pointedEntity = entity;
-								d2 = 0.0D;
-								return;
-							}
-						} else if (movingobjectposition != null) {
-							double d3 = vec3
-									.distanceTo(movingobjectposition.hitVec);
-
-							if ((d3 < d2) || (d2 == 0.0D)) {
-								if ((entity == mc.getRenderViewEntity().ridingEntity)
-										&& !entity.canRiderInteract()) {
-									if (d2 == 0.0D) {
-										this.pointedEntity = entity;
-										return;
-									}
-								} else {
-									this.pointedEntity = entity;
-									d2 = d3;
-									return;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	public static MovingObjectPosition getMouseOverExtended(float dist)
+{
+    Minecraft mc = FMLClientHandler.instance().getClient();
+    Entity theRenderViewEntity = mc.getRenderViewEntity();
+    AxisAlignedBB theViewBoundingBox = new AxisAlignedBB(
+            theRenderViewEntity.posX-0.5D,
+            theRenderViewEntity.posY-0.0D,
+            theRenderViewEntity.posZ-0.5D,
+            theRenderViewEntity.posX+0.5D,
+            theRenderViewEntity.posY+1.5D,
+            theRenderViewEntity.posZ+0.5D
+            );
+    MovingObjectPosition returnMOP = null;
+    if (mc.theWorld != null)
+    {
+        double var2 = dist;
+        returnMOP = theRenderViewEntity.rayTrace(var2, 0);
+        double calcdist = var2;
+        Vec3 pos = theRenderViewEntity.getPositionEyes(0);
+        var2 = calcdist;
+        if (returnMOP != null)
+        {
+            calcdist = returnMOP.hitVec.distanceTo(pos);
+        }
+         
+        Vec3 lookvec = theRenderViewEntity.getLook(0);
+        Vec3 var8 = pos.addVector(lookvec.xCoord * var2, 
+              lookvec.yCoord * var2, 
+              lookvec.zCoord * var2);
+        Entity pointedEntity = null;
+        float var9 = 1.0F;
+        @SuppressWarnings("unchecked")
+        List<Entity> list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(
+              theRenderViewEntity, 
+              theViewBoundingBox.addCoord(
+                    lookvec.xCoord * var2, 
+                    lookvec.yCoord * var2, 
+                    lookvec.zCoord * var2).expand(var9, var9, var9));
+        double d = calcdist;
+            
+        for (Entity entity : list)
+        {
+            {
+                float bordersize = entity.getCollisionBorderSize();
+                AxisAlignedBB aabb = new AxisAlignedBB(
+                      entity.posX-entity.width/2, 
+                      entity.posY, 
+                      entity.posZ-entity.width/2, 
+                      entity.posX+entity.width/2, 
+                      entity.posY+entity.height, 
+                      entity.posZ+entity.width/2);
+                aabb.expand(bordersize, bordersize, bordersize);
+                MovingObjectPosition mop0 = aabb.calculateIntercept(pos, var8);
+                    
+                if (aabb.isVecInside(pos))
+                {
+                    if (0.0D < d || d == 0.0D)
+                    {
+                        pointedEntity = entity;
+                        d = 0.0D;
+                    }
+                } else if (mop0 != null)
+                {
+                    double d1 = pos.distanceTo(mop0.hitVec);
+                        
+                    if (d1 < d || d == 0.0D)
+                    {
+                        pointedEntity = entity;
+                        d = d1;
+                    }
+                }
+            }
+        }
+           
+        if (pointedEntity != null && (d < calcdist || returnMOP == null))
+        {
+             returnMOP = new MovingObjectPosition(pointedEntity);
+        }
+    }
+    return returnMOP;
+}
 }

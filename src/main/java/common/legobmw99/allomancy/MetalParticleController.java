@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityIronGolem;
@@ -206,8 +207,9 @@ public class MetalParticleController{
 			this.tryPushItem((EntityItem) entity);
 		}
 
-		if (entity instanceof EntityLiving) {
-			this.tryPushMob((EntityLiving) entity);
+		if (entity instanceof EntityCreature) {
+
+			this.tryPushMob((EntityCreature) entity);
 		}
 
 	}
@@ -295,6 +297,9 @@ public class MetalParticleController{
 			motionX = ((player.posX - entity.posX) * (1.1)/magnitude);
 			motionY = ((player.posY - entity.posY) * (1.1)/magnitude);
 			motionZ = ((player.posZ - entity.posZ) * (1.1)/magnitude);
+			player.motionX = motionX;
+			player.motionY = motionY;
+			player.motionZ = motionZ;
 			Registry.network.sendToServer(new StopFallPacket());
 
 			// waaaaay too damn heavy to push... you get moved.

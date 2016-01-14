@@ -26,8 +26,8 @@ public class ItemVial extends ItemFood {
 			EntityPlayer par3EntityPlayer) {
 		AllomancyData data;
 		data = AllomancyData.forPlayer(par3EntityPlayer);
-		if (!par3EntityPlayer.capabilities.isCreativeMode) {
-			--par1ItemStack.stackSize;
+		if (par3EntityPlayer.capabilities.isCreativeMode == false) {
+			par1ItemStack.stackSize--;
 		}
 		if (data == null) {
 			return par1ItemStack;
@@ -54,7 +54,7 @@ public class ItemVial extends ItemFood {
 
 	@Override
 	public int getMaxItemUseDuration(ItemStack par1ItemStack) {
-		return 8;
+		return 6;
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ItemVial extends ItemFood {
 			EntityPlayer par3EntityPlayer) {
 		AllomancyData data;
 		data = AllomancyData.forPlayer(par3EntityPlayer);
-		if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10 && par1ItemStack.getItemDamage() > 0) {
+		if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10 && par1ItemStack.getItemDamage() >= 1) {
 			par3EntityPlayer.setItemInUse(par1ItemStack,
 					this.getMaxItemUseDuration(par1ItemStack));
 		}
