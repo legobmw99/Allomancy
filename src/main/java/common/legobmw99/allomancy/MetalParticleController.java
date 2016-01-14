@@ -176,10 +176,10 @@ public class MetalParticleController{
 	public void tryPushBlock(vector3 vec) {
 		double motionX, motionY, motionZ, magnitude;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		magnitude = Math.sqrt(Math.pow((player.posX - vec.X),2) + Math.pow((player.posY - vec.Y),2) + Math.pow((player.posZ - vec.Z),2) );
-		motionX = ((player.posX - vec.X) * (1.1)/magnitude);
-		motionY = ((player.posY - vec.Y) * (1.1)/magnitude);
-		motionZ = ((player.posZ - vec.Z) * (1.1)/magnitude);
+		magnitude = Math.sqrt(Math.pow((player.posX - (double)(vec.X + .5)),2) + Math.pow((player.posY - (double)(vec.Y + .5)),2) + Math.pow((player.posZ - (double)(vec.Z + .5)),2) );
+		motionX = ((player.posX - (double)(vec.X + .5)) * (1.1)/magnitude);
+		motionY = ((player.posY - (double)(vec.Y + .5)) * (1.1)/magnitude);
+		motionZ = ((player.posZ - (double)(vec.Z + .5)) * (1.1)/magnitude);
 		player.motionX = motionX;
 		player.motionY = motionY;
 		player.motionZ = motionZ;
@@ -190,10 +190,10 @@ public class MetalParticleController{
 	public void tryPullBlock(vector3 vec) {
 		double motionX, motionY, motionZ, magnitude;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		magnitude = Math.sqrt(Math.pow((player.posX - vec.X),2) + Math.pow((player.posY - vec.Y),2) + Math.pow((player.posZ - vec.Z),2) );
-		motionX = ((player.posX - vec.X) * -(1.1)/magnitude);
-		motionY = ((player.posY - vec.Y) * -(1.1)/magnitude);
-		motionZ = ((player.posZ - vec.Z) * -(1.1)/magnitude);
+		magnitude = Math.sqrt(Math.pow((player.posX - (double)(vec.X + .5)),2) + Math.pow((player.posY - (double)(vec.Y + .5)),2) + Math.pow((player.posZ - (double)(vec.Z + .5)),2) );
+		motionX = ((player.posX - (double)(vec.X + .5)) * -(1.1)/magnitude);
+		motionY = ((player.posY - (double)(vec.Y + .5)) * -(1.1)/magnitude);
+		motionZ = ((player.posZ - (double)(vec.Z + .5)) * -(1.1)/magnitude);
 		player.motionX = motionX;
 		player.motionY = motionY;
 		player.motionZ = motionZ;
