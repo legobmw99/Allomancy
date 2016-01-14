@@ -13,6 +13,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -48,6 +50,7 @@ import org.lwjgl.util.Point;
 import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.items.ItemGrinder;
 import common.legobmw99.allomancy.network.packets.AllomancyDataPacket;
 import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
@@ -74,7 +77,7 @@ public class PowerTickHandler {
 	
 	@SubscribeEvent
 	public void onCrafting(ItemCraftedEvent event) {
-		ItemStack cur;
+		/*ItemStack cur;
 		for (int x = 0; x < event.craftMatrix.getSizeInventory(); x++) {
 			cur = event.craftMatrix.getStackInSlot(x);
 			if (cur == null)
@@ -83,7 +86,22 @@ public class PowerTickHandler {
 				cur.damageItem(1, event.player);
 			}
 
+		}*/
+		for(int i=0; i < event.craftMatrix.getSizeInventory(); i++){
+			if(event.craftMatrix.getStackInSlot(i) != null){
+				ItemStack j = event.craftMatrix.getStackInSlot(i);
+				System.out.println(j);
+				if(j.getItem() != null) {
+					if (j.getItem() instanceof ItemGrinder) {
+						System.out.println("working");
+						ItemStack k = new ItemStack(Registry.itemAllomancyGrinder);
+						k.damageItem(1, event.player);
+						event.craftMatrix.setInventorySlotContents(i, k);
+					}
+				}
+			}
 		}
+		
 	}
 
 	@SubscribeEvent
@@ -285,7 +303,7 @@ public class PowerTickHandler {
 						}
 					}
 				}
-
+				this.updateBurnTime(data, player);
 				if ((player.getCurrentEquippedItem() == null)
 						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() == true)) {
 
@@ -411,7 +429,7 @@ public class PowerTickHandler {
 		for (Entity entity : toRemove) {
 			Allomancy.MPC.particleTargets.remove(entity);
 		}
-		Allomancy.MPC.particleBlockTargets.clear();
+		//Allomancy.MPC.particleBlockTargets.clear();
 		toRemove.clear();
 	    }
 
@@ -463,14 +481,12 @@ public class PowerTickHandler {
 						data.damageStored--;
 						curPlayer.attackEntityFrom(DamageSource.generic, 2);
 					}
-					this.updateBurnTime(data, curPlayer);
 					if (data.MetalBurning[AllomancyData.matTin]) {
 
 						if (curPlayer.isPotionActive(Potion.nightVision
 								.getId()) == false) {
 							curPlayer.addPotionEffect(new PotionEffect(
 									Potion.nightVision.getId(), 300, 0));
-							System.out.println("yay");
 						}
 						if (curPlayer.isPotionActive(Potion.blindness.getId())) {
 							curPlayer.removePotionEffect(Potion.blindness
@@ -675,27 +691,21 @@ public class PowerTickHandler {
 			motionY = (((player.posY - entity.posY + 1.2) * -1) * .03) + .021;
 			motionZ = ((player.posZ - entity.posZ) * -1) * .03;
 			particle = new ParticleMetal(player.worldObj,
-					player.posX
-							- (Math.sin(Math.toRadians(player
-									.getRotationYawHead())) * .7d),
-					player.posY - .2, player.posZ
-							+ (Math.cos(Math.toRadians(player
-									.getRotationYawHead())) * .7d), motionX,
-					motionY, motionZ);
+					player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d),
+					player.posY - .2, 
+					player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),
+					motionX, motionY, motionZ);
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		} 
 		for (vector3 v : Allomancy.MPC.particleBlockTargets) {
-			motionX = ((player.posX - v.X - .5) * -1) * .03;
-			motionY = (((player.posY - v.Y - 1.5) * -1) * .03) + .021;
-			motionZ = ((player.posZ - v.Z - .5) * -1) * .03;
+			motionX = ((player.posX - (v.X + .5)) * -1) * .03;
+			motionY = (((player.posY - (v.Y + .2)) * -1) * .03) ;
+			motionZ = ((player.posZ - (v.Z + .5)) * -1) * .03;
 			particle = new ParticleMetal(player.worldObj,
-					player.posX
-							- (Math.sin(Math.toRadians(player
-									.getRotationYawHead())) * .7d),
-					player.posY - .7, player.posZ
-							+ (Math.cos(Math.toRadians(player
-									.getRotationYawHead())) * .7d), motionX,
-					motionY, motionZ);
+					player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d),
+					player.posY - .7, 
+					player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),
+					motionX, motionY, motionZ);
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
 		Allomancy.MPC.particleBlockTargets.clear();
@@ -706,7 +716,7 @@ public class PowerTickHandler {
     
 
 
-	private void updateBurnTime(AllomancyData data, EntityPlayerMP player) {
+	private void updateBurnTime(AllomancyData data, EntityPlayerSP player) {
 		data = AllomancyData.forPlayer(player);
 
 		for (int i = 0; i < 8; i++) {

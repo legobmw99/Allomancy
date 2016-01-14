@@ -140,8 +140,8 @@ public class MetalParticleController{
 
 	public MetalParticleController() {
 		this.particleTargets = new LinkedList<Entity>();
-		this.BuildMetalList();
 		this.particleBlockTargets = new LinkedList<vector3>();
+		this.BuildMetalList();
 	}
 
 	public void tryAdd(Entity entity) {
