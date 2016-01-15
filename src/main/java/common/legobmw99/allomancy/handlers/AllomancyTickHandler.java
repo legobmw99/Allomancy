@@ -48,6 +48,7 @@ import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.network.packets.AllomancyDataPacket;
+import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
 import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
 import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
@@ -453,6 +454,8 @@ public class AllomancyTickHandler {
 			Registry.network.sendTo(new AllomancyDataPacket(),
 					(EntityPlayerMP) event.player);
 			if (data.isMistborn == true) {
+				Registry.network.sendTo(new BecomeMistbornPacket(),(EntityPlayerMP) event.player);
+
 				if (event.player.worldObj.isRemote) {
 					data.isMistborn = true;
 					data.Dirty = false;

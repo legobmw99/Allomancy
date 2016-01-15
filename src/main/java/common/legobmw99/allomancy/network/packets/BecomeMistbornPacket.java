@@ -1,8 +1,9 @@
 package common.legobmw99.allomancy.network.packets;
 
 import common.legobmw99.allomancy.common.AllomancyData;
-
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
@@ -32,14 +33,14 @@ public class BecomeMistbornPacket implements IMessage {
 
 		@Override
 		public IMessage onMessage(BecomeMistbornPacket message, final MessageContext ctx) {
-	        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj; // or Minecraft.getMinecraft() on the client
+	        IThreadListener mainThread = Minecraft.getMinecraft();
 	        mainThread.addScheduledTask(new Runnable() {
 	            @Override
 	            public void run() {
-	            	EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+	            	EntityPlayer player =  Minecraft.getMinecraft().thePlayer;
 	        		AllomancyData data;
 	        		data = AllomancyData.forPlayer(player);
-	        		AllomancyData.isMistborn = true;
+	        		data.isMistborn = true;
 	        		data.Dirty = false;
 	            }
 	        });		return null;

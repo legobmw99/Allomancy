@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -58,7 +59,7 @@ public class NuggetLerasium extends ItemFood {
 		double z = player.posZ;
 		if (AllomancyData.isMistborn == false) {
 			AllomancyData.isMistborn = true;
-			Registry.network.sendToServer(new BecomeMistbornPacket());
+			Registry.network.sendTo(new BecomeMistbornPacket(),(EntityPlayerMP) player);
 
 		}
 		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));

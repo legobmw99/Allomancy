@@ -178,7 +178,7 @@ public class Registry {
 	public static void registerPackets() {
 	       network = NetworkRegistry.INSTANCE.newSimpleChannel("allomancy");
 	       network.registerMessage(StopFallPacket.Handler.class, StopFallPacket.class, 0, Side.SERVER);
-	       network.registerMessage(BecomeMistbornPacket.Handler.class, BecomeMistbornPacket.class, 1, Side.SERVER);
+	       network.registerMessage(BecomeMistbornPacket.Handler.class, BecomeMistbornPacket.class, 1, Side.CLIENT);
 	       network.registerMessage(SelectMetalPacket.Handler.class, SelectMetalPacket.class, 2, Side.SERVER);
 	       network.registerMessage(MoveEntityPacket.Handler.class, MoveEntityPacket.class, 3, Side.SERVER);
 	       network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 4, Side.SERVER);
