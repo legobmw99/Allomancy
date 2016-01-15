@@ -27,7 +27,6 @@ public class MetalParticleController{
 	public LinkedList<Entity> particleTargets;
 	public LinkedList<vector3> particleBlockTargets;
 	private LinkedList<Integer> metallist;
-	private String[] ores = OreDictionary.getOreNames();
 
 	public void BuildMetalList() {
 		this.metallist = new LinkedList<Integer>();
@@ -111,10 +110,6 @@ public class MetalParticleController{
 		this.metallist.add(Registry.itemZincFlakes.getIdFromItem(Registry.itemZincFlakes));
 		this.metallist.add(Registry.itemZincIngot.getIdFromItem(Registry.itemZincIngot));
 
-		/*
-		 * for (String s : ores){ if (s.contains("ingot") || s.contains("metal")
-		 * || s.contains("ore")){ metallist.add(OreDictionary.getOreID(s)); } }
-		 */
 	}
 
 	public boolean isItemMetal(ItemStack Item) {
