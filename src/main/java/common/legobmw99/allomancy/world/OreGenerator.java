@@ -4,14 +4,15 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
-import common.legobmw99.allomancy.common.Registry;
+
+import common.legobmw99.allomancy.blocks.OreBlock;
 import common.legobmw99.allomancy.util.AllomancyConfig;
 
 public class OreGenerator implements IWorldGenerator {
@@ -46,19 +47,19 @@ public class OreGenerator implements IWorldGenerator {
 
 		data = new OreData(AllomancyConfig.copperMaxY,
 				AllomancyConfig.copperMinY, 8, 4,
-				AllomancyConfig.copperDensity, Registry.oreCopper,
+				AllomancyConfig.copperDensity, OreBlock.oreCopper,
 				AllomancyConfig.generateCopper);
 		this.oreList.add(data);
 		data = new OreData(AllomancyConfig.tinMaxY, AllomancyConfig.tinMinY, 8,
-				4, AllomancyConfig.tinDensity, Registry.oreTin,
+				4, AllomancyConfig.tinDensity, OreBlock.oreTin,
 				AllomancyConfig.generateTin);
 		this.oreList.add(data);
 		data = new OreData(AllomancyConfig.leadMaxY, AllomancyConfig.leadMinY,
-				8, 4, AllomancyConfig.leadDensity, Registry.oreLead,
+				8, 4, AllomancyConfig.leadDensity, OreBlock.oreLead,
 				AllomancyConfig.generateLead);
 		this.oreList.add(data);
 		data = new OreData(AllomancyConfig.zincMaxY, AllomancyConfig.zincMinY,
-				8, 4, AllomancyConfig.zincDensity, Registry.oreZinc,
+				8, 4, AllomancyConfig.zincDensity, OreBlock.oreZinc,
 				AllomancyConfig.generateZinc);
 		this.oreList.add(data);
 
@@ -79,21 +80,21 @@ public class OreGenerator implements IWorldGenerator {
 			if ((numCluster == 0) && (data.clusterPerChunk != 0)) {
 				numCluster = 1;
 			}
-			if (data.config) {
+			
 				for (int count = 0; count < numCluster; count++) {
 					x = random.nextInt(16);
 					z = random.nextInt(16);
-					y = random.nextInt(data.maxHeight - data.minHeight);
+					y = random.nextInt(40);
 					x = x + (16 * chunkX);
 					z = z + (16 * chunkZ);
 					y = y + data.minHeight;
 					numOre = MathHelper.clamp_int(
 							random.nextInt(data.maxCluster), data.minCluster,
 							data.maxCluster);
-
+					
 					this.generateOre(world, random, x, y, z, data.oreType,
 							numOre);
-				}
+				
 			}
 		}
 	}
@@ -104,29 +105,7 @@ public class OreGenerator implements IWorldGenerator {
 		lx = x;
 		ly = y;
 		lz = z;
-		int id;
         BlockPos pos1 = new BlockPos(lx, ly, lz);
-		IBlockState curblock = world.getBlockState(pos1);
-		if (curblock != Blocks.stone.getDefaultState()) {
-			return;
-		}
-		for (int i = 0; i < ntg; i++) {
-
-			
-
-			world.setBlockState(pos1, block.getDefaultState());
-
-			switch (random.nextInt(3)) {
-			case 0:
-				lx = lx + (random.nextInt(4) - 2);
-				break;
-			case 1:
-				ly = ly + (random.nextInt(4) - 2);
-				break;
-			case 2:
-				lz = lz + (random.nextInt(4) - 2);
-				break;
-			}
-		}
+          (new WorldGenMinable(block.getDefaultState(), ntg*2)).generate(world, random, pos1);
 	}
 }

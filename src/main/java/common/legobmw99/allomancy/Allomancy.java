@@ -25,7 +25,6 @@ public class Allomancy {
 	public static final String MODID = "allomancy";
 	public static final String VERSION = "@VERSION@";
 	public static MetalParticleController MPC;
-	public static OreGenerator oregenerator = new OreGenerator();
 
 	@Instance(value = "allomancy")
 	public static Allomancy instance;
@@ -45,7 +44,7 @@ public class Allomancy {
 		MinecraftForge.EVENT_BUS.register(new PowerTickHandler());
 		FMLCommonHandler.instance().bus().register(new PowerTickHandler());
 		
-		GameRegistry.registerWorldGenerator(oregenerator, 0);
+		GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
 		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(
 				new WeightedRandomChestContent(new ItemStack(
 						Registry.nuggetLerasium), 1, 1, 40));

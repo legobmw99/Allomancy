@@ -59,10 +59,6 @@ public class Registry {
 	public static Item itemBronzeFlakes;
 	public static Item itemCoinBag;
 	public static Item Mistcloak;
-	public static Block oreTin;
-	public static Block oreLead;
-	public static Block oreCopper;
-	public static Block oreZinc;
 	public static NuggetLerasium nuggetLerasium;
 	public static ItemVial itemVial;
 	public static Achievement becomeMistborn;
@@ -89,10 +85,10 @@ public class Registry {
 	}
 
 	public static void setupRecipes() {
-		GameRegistry.addSmelting(oreTin, new ItemStack(itemTinIngot, 1), 5);
-		GameRegistry.addSmelting(oreCopper, new ItemStack(itemCopperIngot, 1),5);
-		GameRegistry.addSmelting(oreLead, new ItemStack(itemLeadIngot, 1), 5);
-		GameRegistry.addSmelting(oreZinc, new ItemStack(itemZincIngot, 1), 5);
+		GameRegistry.addSmelting(OreBlock.oreTin, new ItemStack(itemTinIngot, 1), 5);
+		GameRegistry.addSmelting(OreBlock.oreCopper, new ItemStack(itemCopperIngot, 1),5);
+		GameRegistry.addSmelting(OreBlock.oreLead, new ItemStack(itemLeadIngot, 1), 5);
+		GameRegistry.addSmelting(OreBlock.oreZinc, new ItemStack(itemZincIngot, 1), 5);
 
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
 				itemTinFlakes, 2), new Object[] {
@@ -282,10 +278,10 @@ public class Registry {
 	public static void Renders() {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreTin), 0, new ModelResourceLocation("allomancy:tinore", "inventory"));
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreZinc), 0, new ModelResourceLocation("allomancy:zincore", "inventory"));
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreCopper), 0, new ModelResourceLocation("allomancy:copperore", "inventory"));
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreLead), 0, new ModelResourceLocation("allomancy:leadore", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreTin), 0, new ModelResourceLocation("allomancy:tinore", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreZinc), 0, new ModelResourceLocation("allomancy:zincore", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreCopper), 0, new ModelResourceLocation("allomancy:copperore", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreLead), 0, new ModelResourceLocation("allomancy:leadore", "inventory"));
 
     	renderItem.getItemModelMesher().register(nuggetLerasium, 0, new ModelResourceLocation("allomancy:lerasium", "inventory"));
     	renderItem.getItemModelMesher().register(itemAllomancyGrinder, 0, new ModelResourceLocation("allomancy:grinder", "inventory"));
