@@ -12,10 +12,10 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public static final int matSteel = 1;
 	public static final int matTin = 2;
 	public static final int matPewter = 3;
-	public static final int matCopper = 4;
-	public static final int matBronze = 5;
-	public static final int matZinc = 6;
-	public static final int matBrass = 7;
+	public static final int matZinc = 4;
+	public static final int matBrass = 5;
+	public static final int matCopper = 6;
+	public static final int matBronze = 7;
 
 	public static boolean isMistborn = false;
 

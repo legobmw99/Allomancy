@@ -1,7 +1,6 @@
 package common.legobmw99.allomancy.network.packets;
 
 import io.netty.buffer.ByteBuf;
-import common.legobmw99.allomancy.common.AllomancyData;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -11,13 +10,14 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import common.legobmw99.allomancy.ai.AIAttackOnCollideExtended;
 
 public class ChangeEmotionPacket implements IMessage{
 	public  ChangeEmotionPacket(){}
@@ -33,13 +33,13 @@ public class ChangeEmotionPacket implements IMessage{
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		entityID = ByteBufUtils.readVarInt(buf, 2147483647);
+		entityID = ByteBufUtils.readVarInt(buf, 5);
 		aggro = ByteBufUtils.readVarInt(buf,1);
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeVarInt(buf, entityID, 2147483647);
+		ByteBufUtils.writeVarInt(buf, entityID, 5);
 		ByteBufUtils.writeVarInt(buf, aggro, 1);
 	}
 	
@@ -56,6 +56,8 @@ public class ChangeEmotionPacket implements IMessage{
 	        		if ((target != null) && message.aggro == 1) {
 	        			target.tasks.taskEntries.clear();
 	        			target.tasks.addTask(1, new EntityAISwimming(target));
+	    				target.tasks.addTask(5, new AIAttackOnCollideExtended(target,
+	    						1d, false));
 	        			target.targetTasks.addTask(5, new EntityAINearestAttackableTarget(
 	        					target, EntityPlayer.class, false));
 	        			target.tasks.addTask(5, new EntityAIWander(target, 0.8D));

@@ -14,9 +14,6 @@ import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
 
 public class ItemVial extends ItemFood {
-	public static String[] localName = { "Empty Vial", "Iron Elixer",
-			"Steel Elixer", "Tin Elixer", "Pewter Elixer", "Zinc Elixer",
-			"Bronze Elixer", "Copper Elixer", "Brass Elixer", };
 
 	public static String[] unlocalName = { "emptyvial", "ironelixer",
 		"steelelixer", "tinelixer", "pewterelixer", "zincelixer",

@@ -151,7 +151,7 @@ public class Registry {
 		
 		itemVial = new ItemVial();
 		GameRegistry.registerItem(itemVial, "itemVial");
-		for (int i = 0; i < ItemVial.localName.length; i++) {
+		for (int i = 0; i < ItemVial.unlocalName.length; i++) {
 			ItemStack Item;
 			Item = new ItemStack(itemVial, 1, i);
 		}

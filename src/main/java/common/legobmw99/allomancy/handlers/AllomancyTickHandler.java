@@ -122,6 +122,9 @@ public class AllomancyTickHandler {
 							}
 						}
 					}
+				}	else {
+						Allomancy.MPC.particleTargets.clear();
+					}
 					this.updateBurnTime(data, player);
 					if ((player.getCurrentEquippedItem() == null)
 							&& (Minecraft.getMinecraft().gameSettings.keyBindAttack
@@ -155,12 +158,11 @@ public class AllomancyTickHandler {
 							Entity entity;
 							MovingObjectPosition mov = getMouseOverExtended(20.0F);
 							if ((mov != null)
-									&& (mov.typeOfHit == MovingObjectType.ENTITY)
+									&& (mov.entityHit != null)
 									&& (mov.entityHit instanceof EntityCreature)
 									&& !(mov.entityHit instanceof EntityPlayer)) {
 
 								entity = mov.entityHit;
-
 								Registry.network
 										.sendToServer(new ChangeEmotionPacket(
 												entity.getEntityId(), true));
@@ -197,13 +199,12 @@ public class AllomancyTickHandler {
 						}
 						if (data.MetalBurning[AllomancyData.matBrass]) {
 							Entity entity;
-							mop = Minecraft.getMinecraft().objectMouseOver;
-							if ((mop != null)
-									&& (mop.typeOfHit == MovingObjectType.ENTITY)
-									&& (mop.entityHit instanceof EntityCreature)
-									&& !(mop.entityHit instanceof EntityPlayer)) {
-								entity = mop.entityHit;
-
+							MovingObjectPosition mov = getMouseOverExtended(20.0F);
+							if ((mov != null)
+									&& (mov.entityHit != null)
+									&& (mov.entityHit instanceof EntityCreature)
+									&& !(mov.entityHit instanceof EntityPlayer)) {
+								entity = mov.entityHit;
 								Registry.network
 										.sendToServer(new ChangeEmotionPacket(
 												entity.getEntityId(), false));
@@ -212,10 +213,7 @@ public class AllomancyTickHandler {
 						}
 
 					}
-
-				} else {
-					Allomancy.MPC.particleTargets.clear();
-				}
+				
 
 				if (data.MetalBurning[AllomancyData.matPewter]) {
 					if ((player.onGround == true)
@@ -263,8 +261,9 @@ public class AllomancyTickHandler {
 			// Allomancy.MPC.particleBlockTargets.clear();
 			toRemove.clear();
 		}
-
 	}
+
+	
 
 	@SubscribeEvent
 	public void onDamage(LivingHurtEvent event) {
@@ -359,16 +358,6 @@ public class AllomancyTickHandler {
 					}
 					break;
 				case 3:
-					// toggle Copper.
-
-					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyData.matCopper,
-							!data.MetalBurning[AllomancyData.matCopper]));
-					if (data.MetalAmounts[AllomancyData.matCopper] > 0) {
-						data.MetalBurning[AllomancyData.matCopper] = !data.MetalBurning[AllomancyData.matCopper];
-					}
-					break;
-				case 4:
 					// toggle Zinc.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
@@ -376,6 +365,17 @@ public class AllomancyTickHandler {
 							!data.MetalBurning[AllomancyData.matZinc]));
 					if (data.MetalAmounts[AllomancyData.matZinc] > 0) {
 						data.MetalBurning[AllomancyData.matZinc] = !data.MetalBurning[AllomancyData.matZinc];
+					}
+					
+					break;
+				case 4:
+					// toggle Copper.
+
+					Registry.network.sendToServer(new UpdateBurnPacket(
+							AllomancyData.matCopper,
+							!data.MetalBurning[AllomancyData.matCopper]));
+					if (data.MetalAmounts[AllomancyData.matCopper] > 0) {
+						data.MetalBurning[AllomancyData.matCopper] = !data.MetalBurning[AllomancyData.matCopper];
 					}
 					break;
 				default:
@@ -416,16 +416,6 @@ public class AllomancyTickHandler {
 					}
 					break;
 				case 3:
-					// toggle Bronze.
-
-					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyData.matBronze,
-							!data.MetalBurning[AllomancyData.matBronze]));
-					if (data.MetalAmounts[AllomancyData.matBronze] > 0) {
-						data.MetalBurning[AllomancyData.matBronze] = !data.MetalBurning[AllomancyData.matBronze];
-					}
-					break;
-				case 4:
 					// toggle Brass.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
@@ -433,6 +423,17 @@ public class AllomancyTickHandler {
 							!data.MetalBurning[AllomancyData.matBrass]));
 					if (data.MetalAmounts[AllomancyData.matBrass] > 0) {
 						data.MetalBurning[AllomancyData.matBrass] = !data.MetalBurning[AllomancyData.matBrass];
+					}
+					
+					break;
+				case 4:
+					// toggle Bronze.
+
+					Registry.network.sendToServer(new UpdateBurnPacket(
+							AllomancyData.matBronze,
+							!data.MetalBurning[AllomancyData.matBronze]));
+					if (data.MetalAmounts[AllomancyData.matBronze] > 0) {
+						data.MetalBurning[AllomancyData.matBronze] = !data.MetalBurning[AllomancyData.matBronze];
 					}
 					break;
 				default:
@@ -463,7 +464,7 @@ public class AllomancyTickHandler {
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		AllomancyData data = AllomancyData.forPlayer(event.player);
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 8; i++) {
 			data.MetalAmounts[i] = 0;
 		}
 		NBTTagCompound old = event.player.getEntityData();
@@ -547,18 +548,18 @@ public class AllomancyTickHandler {
 				10 - pewterY);
 
 		copperY = 9 - this.data.MetalAmounts[AllomancyData.matCopper];
-		gig.drawTexturedModalRect(56, 20 + copperY, 31, 1 + copperY, 3,
+		gig.drawTexturedModalRect(81, 20 + copperY, 31, 1 + copperY, 3,
 				10 - copperY);
 
 		bronzeY = 9 - this.data.MetalAmounts[AllomancyData.matBronze];
-		gig.drawTexturedModalRect(63, 20 + bronzeY, 37, 1 + bronzeY, 3,
+		gig.drawTexturedModalRect(88, 20 + bronzeY, 37, 1 + bronzeY, 3,
 				10 - bronzeY);
 
 		zincY = 9 - this.data.MetalAmounts[AllomancyData.matZinc];
-		gig.drawTexturedModalRect(81, 20 + zincY, 43, 1 + zincY, 3, 10 - zincY);
+		gig.drawTexturedModalRect(56, 20 + zincY, 43, 1 + zincY, 3, 10 - zincY);
 
 		brassY = 9 - this.data.MetalAmounts[AllomancyData.matBrass];
-		gig.drawTexturedModalRect(88, 20 + brassY, 49, 1 + brassY, 3,
+		gig.drawTexturedModalRect(63, 20 + brassY, 49, 1 + brassY, 3,
 				10 - brassY);
 
 		// Draw the gauges second, so that highlights and decorations show
@@ -597,22 +598,22 @@ public class AllomancyTickHandler {
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
 		if (this.data.MetalBurning[AllomancyData.matCopper]) {
-			gig.drawTexturedModalRect(55, 20 + copperY,
+			gig.drawTexturedModalRect(80, 20 + copperY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
 		if (this.data.MetalBurning[AllomancyData.matBronze]) {
-			gig.drawTexturedModalRect(62, 20 + bronzeY,
+			gig.drawTexturedModalRect(87, 20 + bronzeY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
 		if (this.data.MetalBurning[AllomancyData.matZinc]) {
-			gig.drawTexturedModalRect(80, 20 + zincY,
+			gig.drawTexturedModalRect(55, 20 + zincY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
 		if (this.data.MetalBurning[AllomancyData.matBrass]) {
-			gig.drawTexturedModalRect(87, 20 + brassY,
+			gig.drawTexturedModalRect(62, 20 + brassY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}

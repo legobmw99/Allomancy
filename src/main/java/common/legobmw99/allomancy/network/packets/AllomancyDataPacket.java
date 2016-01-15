@@ -41,7 +41,7 @@ public class AllomancyDataPacket implements IMessage{
 	            public void run() {
 	            	EntityPlayer player =  Minecraft.getMinecraft().thePlayer;
 	        		AllomancyData data = AllomancyData.forPlayer(player);
-	        		for (int i = 0; i < 7; i++){
+	        		for (int i = 0; i < 8; i++){
 	        			data.MetalBurning[i] = false;
 	        		}
 	        		
