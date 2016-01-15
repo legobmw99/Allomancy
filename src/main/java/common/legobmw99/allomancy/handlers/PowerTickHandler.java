@@ -301,6 +301,21 @@ public class PowerTickHandler {
 						}
 
 					}
+					
+					if (data.MetalBurning[AllomancyData.matZinc]) {
+						Entity entity;
+		                MovingObjectPosition mov = getMouseOverExtended(20.0F); 
+						if ((mov != null)
+								&& (mov.typeOfHit == MovingObjectType.ENTITY)
+								&& (mov.entityHit instanceof EntityCreature)
+								&& !(mov.entityHit instanceof EntityPlayer)) {
+							
+							entity = mov.entityHit;
+
+							Registry.network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), true));
+
+						}
+					}
 
 				}
 				if ((player.getCurrentEquippedItem() == null)
@@ -325,6 +340,19 @@ public class PowerTickHandler {
 						}
 
 					}
+					if (data.MetalBurning[AllomancyData.matBrass]) {
+						Entity entity;
+						mop = Minecraft.getMinecraft().objectMouseOver;
+						if ((mop != null)
+								&& (mop.typeOfHit == MovingObjectType.ENTITY)
+								&& (mop.entityHit instanceof EntityCreature)
+								&& !(mop.entityHit instanceof EntityPlayer)) {
+							entity = mop.entityHit;
+
+							Registry.network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), false));
+
+						}
+					}
 
 				}
 
@@ -332,34 +360,8 @@ public class PowerTickHandler {
 				Allomancy.MPC.particleTargets.clear();
 			}
 
-			if (data.MetalBurning[AllomancyData.matZinc]) {
-				Entity entity;
-				mop = Minecraft.getMinecraft().objectMouseOver;
-				if ((mop != null)
-						&& (mop.typeOfHit == MovingObjectType.ENTITY)
-						&& (mop.entityHit instanceof EntityCreature)
-						&& !(mop.entityHit instanceof EntityPlayer)
-						&& Minecraft.getMinecraft().gameSettings.keyBindAttack.isPressed()) {
-					entity = mop.entityHit;
 
-					Registry.network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), true));
-
-				}
-			}
-			if (data.MetalBurning[AllomancyData.matBrass]) {
-				Entity entity;
-				mop = Minecraft.getMinecraft().objectMouseOver;
-				if ((mop != null)
-						&& (mop.typeOfHit == MovingObjectType.ENTITY)
-						&& (mop.entityHit instanceof EntityCreature)
-						&& !(mop.entityHit instanceof EntityPlayer)
-						&& Minecraft.getMinecraft().gameSettings.keyBindUseItem.isPressed()) {
-					entity = mop.entityHit;
-
-					Registry.network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), false));
-
-				}
-			}
+			
 
 			if (data.MetalBurning[AllomancyData.matPewter]) {
 				if ((player.onGround == true)
