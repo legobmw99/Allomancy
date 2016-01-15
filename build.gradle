@@ -24,7 +24,7 @@ configFile.withReader {
 
 apply plugin: 'forge'
 
-version = config.mod_version + buildNum
+version = config.mod_version + config.buildNum
 group= "com.legobmw99.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "allomancy"
 
