@@ -73,7 +73,6 @@ public class Registry {
 		initItems();
 		oreRegistration();
 		setupRecipes();
-		initKeyBindings();
 		registerPackets();
 	}
 

@@ -13,9 +13,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -38,7 +35,6 @@ import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -51,7 +47,6 @@ import org.lwjgl.util.Point;
 import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.items.ItemGrinder;
 import common.legobmw99.allomancy.network.packets.AllomancyDataPacket;
 import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
@@ -71,6 +66,7 @@ public class PowerTickHandler {
 			new Point(72, 8), new Point(72, 12) };
 
 
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
 		Allomancy.MPC.particleBlockTargets.clear();
@@ -92,6 +88,7 @@ public class PowerTickHandler {
 
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
 	        if(Registry.changeGroup.isPressed()){
@@ -233,7 +230,8 @@ public class PowerTickHandler {
 		}
 		}
 	}
-
+	
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 	    if (event.phase == TickEvent.Phase.END && (!Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().thePlayer != null)) {
@@ -514,6 +512,7 @@ public class PowerTickHandler {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
     	  if(event.isCancelable() || event.type != ElementType.EXPERIENCE)
@@ -696,7 +695,7 @@ public class PowerTickHandler {
 
     
 
-
+	@SideOnly(Side.CLIENT)
 	private void updateBurnTime(AllomancyData data, EntityPlayerSP player) {
 		data = AllomancyData.forPlayer(player);
 
@@ -717,7 +716,8 @@ public class PowerTickHandler {
 		}
 
 	}
-
+	
+	@SideOnly(Side.CLIENT)
 	public static MovingObjectPosition getMouseOverExtended(float dist)
 {
     Minecraft mc = FMLClientHandler.instance().getClient();
