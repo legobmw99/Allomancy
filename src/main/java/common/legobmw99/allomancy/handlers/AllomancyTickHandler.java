@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -30,6 +31,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -53,6 +55,7 @@ import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
 import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import common.legobmw99.allomancy.particle.ParticleMetal;
+import common.legobmw99.allomancy.particle.ParticleSound;
 import common.legobmw99.allomancy.util.vector3;
 
 public class AllomancyTickHandler {
@@ -665,6 +668,30 @@ public class AllomancyTickHandler {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onSound(PlaySoundAtEntityEvent event) {
+		EntityPlayerSP player;
+		player = Minecraft.getMinecraft().thePlayer;
+		if (player == null) {
+				return;
+	}
+		AllomancyData data = AllomancyData.forPlayer(player);
+		if (data.MetalBurning[AllomancyData.matTin]) {
+			if (event.name.contains("step") || event.name.contains(".big")
+					|| event.name.contains("scream")
+					|| event.name.contains("random.bow")) {
+				EntityFX particle = new ParticleSound(player.worldObj,
+						player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d),
+						player.posY - .2, 
+						player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),
+						0, 0, 0, event.name, event.entity.posX, event.entity.posY, event.entity.posZ);
+				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+			}
+
+		}
+	}
+	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		if (event.phase == TickEvent.Phase.END) {
@@ -690,7 +717,7 @@ public class AllomancyTickHandler {
 						if (curPlayer
 								.isPotionActive(Potion.nightVision.getId()) == false) {
 							curPlayer.addPotionEffect(new PotionEffect(
-									Potion.nightVision.getId(), 300, 0));
+									Potion.nightVision.getId(), 300, 0, false, false));
 						}
 						if (curPlayer.isPotionActive(Potion.blindness.getId())) {
 							curPlayer.removePotionEffect(Potion.blindness
@@ -702,7 +729,7 @@ public class AllomancyTickHandler {
 									.getActivePotionEffect(Potion.nightVision);
 							if (eff.getDuration() < 210) {
 								curPlayer.addPotionEffect(new PotionEffect(
-										Potion.nightVision.getId(), 300, 0));
+										Potion.nightVision.getId(), 300, 0, false, false));
 							}
 						}
 
