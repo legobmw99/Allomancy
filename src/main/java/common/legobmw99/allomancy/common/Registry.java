@@ -90,46 +90,25 @@ public class Registry {
 		GameRegistry.addSmelting(OreBlock.oreLead, new ItemStack(itemLeadIngot, 1), 5);
 		GameRegistry.addSmelting(OreBlock.oreZinc, new ItemStack(itemZincIngot, 1), 5);
 
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
-				itemTinFlakes, 2), new Object[] {
-				"ingotTin",
-				new ItemStack(itemAllomancyGrinder, 1,
-						OreDictionary.WILDCARD_VALUE) }));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
-				itemLeadFlakes, 2), new Object[] {
-				"ingotLead",
-				new ItemStack(itemAllomancyGrinder, 1,
-						OreDictionary.WILDCARD_VALUE) }));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
-				itemZincFlakes, 2), new Object[] {
-				"ingotZinc",
-				new ItemStack(itemAllomancyGrinder, 1,
-						OreDictionary.WILDCARD_VALUE) }));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
-				itemCopperFlakes, 2), new Object[] {
-				"ingotCopper",
-				new ItemStack(itemAllomancyGrinder, 1,
-						OreDictionary.WILDCARD_VALUE) }));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
-				itemBronzeFlakes, 2), new Object[] {
-				"ingotBronze",
-				new ItemStack(itemAllomancyGrinder, 1,
-						OreDictionary.WILDCARD_VALUE) }));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
-				itemSteelFlakes, 2), new Object[] {
-				"ingotSteel",
-				new ItemStack(itemAllomancyGrinder, 1,
-						OreDictionary.WILDCARD_VALUE) }));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes, 2), new ItemStack(itemTinIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
+		
+		GameRegistry.addShapelessRecipe(new ItemStack(itemLeadFlakes, 2), new ItemStack(itemLeadIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
 
-		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 2),
-				new ItemStack(Items.iron_ingot), new ItemStack(
-						itemAllomancyGrinder, 1, OreDictionary.WILDCARD_VALUE));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemZincFlakes, 2), new ItemStack(itemZincIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(itemCopperFlakes, 2), new ItemStack(itemCopperIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 2), new ItemStack(Items.iron_ingot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
+
 		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 2),
 				new ItemStack(itemIronFlakes), new ItemStack(Items.coal));
+		
 		GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes, 2),
 				new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
+		
 		GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes, 2),
 				new ItemStack(itemTinFlakes), new ItemStack(itemLeadFlakes));
+		
 		GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes, 2),
 				new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
 

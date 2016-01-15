@@ -30,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -75,34 +76,7 @@ public class PowerTickHandler {
 		Allomancy.MPC.particleBlockTargets.clear();
 	}
 	
-	@SubscribeEvent
-	public void onCrafting(ItemCraftedEvent event) {
-		/*ItemStack cur;
-		for (int x = 0; x < event.craftMatrix.getSizeInventory(); x++) {
-			cur = event.craftMatrix.getStackInSlot(x);
-			if (cur == null)
-				continue;
-			if (cur == new ItemStack(Registry.itemAllomancyGrinder)) {
-				cur.damageItem(1, event.player);
-			}
-
-		}*/
-		for(int i=0; i < event.craftMatrix.getSizeInventory(); i++){
-			if(event.craftMatrix.getStackInSlot(i) != null){
-				ItemStack j = event.craftMatrix.getStackInSlot(i);
-				System.out.println(j);
-				if(j.getItem() != null) {
-					if (j.getItem() instanceof ItemGrinder) {
-						System.out.println("working");
-						ItemStack k = new ItemStack(Registry.itemAllomancyGrinder);
-						k.damageItem(1, event.player);
-						event.craftMatrix.setInventorySlotContents(i, k);
-					}
-				}
-			}
-		}
-		
-	}
+	
 
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
@@ -540,6 +514,11 @@ public class PowerTickHandler {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
+    	  if(event.isCancelable() || event.type != ElementType.EXPERIENCE)
+    	    {      
+    	      return;
+    	    }
+
     	this.mc = Minecraft.getMinecraft();
     	this.meterLoc = new ResourceLocation("allomancy","textures/overlay/meter.png");
     	

@@ -26,8 +26,8 @@ public class ItemVial extends ItemFood {
 			EntityPlayer par3EntityPlayer) {
 		AllomancyData data;
 		data = AllomancyData.forPlayer(par3EntityPlayer);
-		if (par3EntityPlayer.capabilities.isCreativeMode == false) {
-			par1ItemStack.stackSize--;
+		if (par3EntityPlayer.capabilities.isCreativeMode == true) {
+			par1ItemStack.stackSize++;
 		}
 		if (data == null) {
 			return par1ItemStack;

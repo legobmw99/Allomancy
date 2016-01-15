@@ -55,7 +55,7 @@ public class Allomancy {
     	{
 			Registry.Renders();
 			Allomancy.MPC = new MetalParticleController();
-
+			
     		}
 	}
 

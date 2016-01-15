@@ -14,19 +14,4 @@ public class ItemGrinder extends Item {
 		this.maxStackSize = 1;
 	}
 
-	public boolean doesContainerItemLeaveCraftingGrid(ItemStack itemstack) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-    @Override
-    public ItemStack getContainerItem(ItemStack itemStack)
-    {
-        ItemStack copiedStack = itemStack.copy();
-
-        copiedStack.setItemDamage(copiedStack.getItemDamage() + 1);
-        copiedStack.stackSize = 1;
-
-        return copiedStack;
-    }
 }
