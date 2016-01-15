@@ -62,80 +62,11 @@ public class Registry {
 	public static NuggetLerasium nuggetLerasium;
 	public static ItemVial itemVial;
 	public static Achievement becomeMistborn;
-	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(
-			CreativeTabs.getNextID(), "allomancy");
-	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper
-			.addArmorMaterial("Wool", null, 5, new int[] { 0, 4, 0, 0 }, 15);
-
-	public static void ModContent() {
-		addAchievements();
-		initBlocks();
-		initItems();
-		oreRegistration();
-		setupRecipes();
-		registerPackets();
-	}
+	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
+	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool", null, 5, new int[] { 0, 4, 0, 0 }, 15);
 
 	private static void addAchievements() {
-		becomeMistborn = new Achievement("achievement.becomeMistborn",
-				"becomeMistborn", -5, -2, Blocks.beacon, null).func_180788_c().setIndependent().setSpecial(); //registerAchievement
-
-
-	}
-
-	public static void setupRecipes() {
-		GameRegistry.addSmelting(OreBlock.oreTin, new ItemStack(itemTinIngot, 1), 5);
-		GameRegistry.addSmelting(OreBlock.oreCopper, new ItemStack(itemCopperIngot, 1),5);
-		GameRegistry.addSmelting(OreBlock.oreLead, new ItemStack(itemLeadIngot, 1), 5);
-		GameRegistry.addSmelting(OreBlock.oreZinc, new ItemStack(itemZincIngot, 1), 5);
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes, 2), new ItemStack(itemTinIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
-		
-		GameRegistry.addShapelessRecipe(new ItemStack(itemLeadFlakes, 2), new ItemStack(itemLeadIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemZincFlakes, 2), new ItemStack(itemZincIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemCopperFlakes, 2), new ItemStack(itemCopperIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 2), new ItemStack(Items.iron_ingot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 2),
-				new ItemStack(itemIronFlakes), new ItemStack(Items.coal));
-		
-		GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes, 2),
-				new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
-		
-		GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes, 2),
-				new ItemStack(itemTinFlakes), new ItemStack(itemLeadFlakes));
-		
-		GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes, 2),
-				new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 1),new ItemStack(itemIronFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 2),new ItemStack(itemSteelFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 3),new ItemStack(itemTinFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 4),new ItemStack(itemPewterFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 7),new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 8),new ItemStack(itemBronzeFlakes), new ItemStack(itemVial, 1, 0));
-
-		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {
-				"W W", "WWW", "WWW", 'W', new ItemStack(Blocks.wool, 1, 7) });
-		GameRegistry.addRecipe(new ShapedOreRecipe(
-				new ItemStack(itemVial, 3, 0), " x ", "y y", " y ", 'x',
-				"slabWood", 'y', Blocks.glass));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-				itemCoinBag, 1, 0), " xy", "l l", " l ", 'l',
-				Items.leather, 'y', Items.gold_nugget, 'x', Items.lead));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
-				itemAllomancyGrinder, 1, 0), "xxx", "yyy", "xxx", 'x',
-				Items.iron_ingot, 'y', Items.gold_nugget));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
-				nuggetLerasium), new Object[] {
-				new ItemStack(Blocks.gold_block, 1),
-				new ItemStack(Items.nether_star, 1) }));
-
+		becomeMistborn = new Achievement("achievement.becomeMistborn","becomeMistborn", -5, -2, Blocks.beacon, null).func_180788_c().setIndependent().setSpecial(); //registerAchievement
 	}
 
 	public static void initBlocks() {
@@ -225,21 +156,25 @@ public class Registry {
 			Item = new ItemStack(itemVial, 1, i);
 		}
 	}
-	public static void oreRegistration() {
-		OreDictionary.registerOre("ingotCopper", new ItemStack(itemCopperIngot));
-		OreDictionary.registerOre("ingotZinc", new ItemStack(itemZincIngot));
-		OreDictionary.registerOre("ingotTin", new ItemStack(itemTinIngot));
-		OreDictionary.registerOre("ingotLead", new ItemStack(itemLeadIngot));
-	}
+
 	public static void initKeyBindings(){
-    	changeGroup = new KeyBinding("key.changeGroup", Keyboard.KEY_F, "key.categories.allomancy");
-    	burnFirst = new KeyBinding("key.burnFirst", Keyboard.KEY_G, "key.categories.allomancy");
-    	burnSecond = new KeyBinding("key.burnSecond", Keyboard.KEY_H, "key.categories.allomancy");
+    	changeGroup = new KeyBinding("key.changeGroup", Keyboard.KEY_R, "key.categories.allomancy");
+    	burnFirst = new KeyBinding("key.burnFirst", Keyboard.KEY_F, "key.categories.allomancy");
+    	burnSecond = new KeyBinding("key.burnSecond", Keyboard.KEY_G, "key.categories.allomancy");
 
         ClientRegistry.registerKeyBinding(changeGroup);
         ClientRegistry.registerKeyBinding(burnFirst);
         ClientRegistry.registerKeyBinding(burnSecond);
 	}
+
+	public static void ModContent() {
+		addAchievements();
+		initBlocks();
+		initItems();
+		setupRecipes();
+		registerPackets();
+	}
+
 	public static void registerPackets() {
 	       network = NetworkRegistry.INSTANCE.newSimpleChannel("allomancy");
 	       network.registerMessage(StopFallPacket.Handler.class, StopFallPacket.class, 0, Side.SERVER);
@@ -250,10 +185,9 @@ public class Registry {
 	       network.registerMessage(AllomancyDataPacket.Handler.class, AllomancyDataPacket.class, 5, Side.CLIENT);
 	       network.registerMessage(ChangeEmotionPacket.Handler.class, ChangeEmotionPacket.class, 6, Side.SERVER);
 
-
-
 	}
-	public static void Renders() {
+	
+	public static void registerRenders() {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreTin), 0, new ModelResourceLocation("allomancy:tinore", "inventory"));
@@ -294,6 +228,60 @@ public class Registry {
     	renderItem.getItemModelMesher().register(itemVial, 8, new ModelResourceLocation("allomancy:itemVial.bronzeelixer", "inventory"));
 
 
+
+	}
+	public static void setupRecipes() {
+		GameRegistry.addSmelting(OreBlock.oreTin, new ItemStack(itemTinIngot, 1), 5);
+		GameRegistry.addSmelting(OreBlock.oreCopper, new ItemStack(itemCopperIngot, 1),5);
+		GameRegistry.addSmelting(OreBlock.oreLead, new ItemStack(itemLeadIngot, 1), 5);
+		GameRegistry.addSmelting(OreBlock.oreZinc, new ItemStack(itemZincIngot, 1), 5);
+
+		GameRegistry.addShapelessRecipe(new ItemStack(itemTinFlakes, 2), new ItemStack(itemTinIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
+		
+		GameRegistry.addShapelessRecipe(new ItemStack(itemLeadFlakes, 2), new ItemStack(itemLeadIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(itemZincFlakes, 2), new ItemStack(itemZincIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(itemCopperFlakes, 2), new ItemStack(itemCopperIngot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(itemIronFlakes, 2), new ItemStack(Items.iron_ingot), new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 2),
+				new ItemStack(itemIronFlakes), new ItemStack(Items.coal));
+		
+		GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes, 2),
+				new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
+		
+		GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes, 2),
+				new ItemStack(itemTinFlakes), new ItemStack(itemLeadFlakes));
+		
+		GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes, 2),
+				new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
+
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 1),new ItemStack(itemIronFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 2),new ItemStack(itemSteelFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 3),new ItemStack(itemTinFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 4),new ItemStack(itemPewterFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 7),new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 8),new ItemStack(itemBronzeFlakes), new ItemStack(itemVial, 1, 0));
+
+		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {
+				"W W", "WWW", "WWW", 'W', new ItemStack(Blocks.wool, 1, 7) });
+		GameRegistry.addRecipe(new ShapedOreRecipe(
+				new ItemStack(itemVial, 3, 0), " x ", "y y", " y ", 'x',
+				"slabWood", 'y', Blocks.glass));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+				itemCoinBag, 1, 0), " xy", "l l", " l ", 'l',
+				Items.leather, 'y', Items.gold_nugget, 'x', Items.lead));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
+				itemAllomancyGrinder, 1, 0), "xxx", "yyy", "xxx", 'x',
+				Items.iron_ingot, 'y', Items.gold_nugget));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
+				nuggetLerasium), new Object[] {
+				new ItemStack(Blocks.gold_block, 1),
+				new ItemStack(Items.nether_star, 1) }));
 
 	}
 

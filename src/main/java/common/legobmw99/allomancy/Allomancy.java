@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.handlers.PowerTickHandler;
+import common.legobmw99.allomancy.handlers.AllomancyTickHandler;
 import common.legobmw99.allomancy.proxy.CommonProxy;
 import common.legobmw99.allomancy.util.AllomancyConfig;
 import common.legobmw99.allomancy.world.OreGenerator;
@@ -41,8 +41,8 @@ public class Allomancy {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		MinecraftForge.EVENT_BUS.register(new PowerTickHandler());
-		FMLCommonHandler.instance().bus().register(new PowerTickHandler());
+		MinecraftForge.EVENT_BUS.register(new AllomancyTickHandler());
+		FMLCommonHandler.instance().bus().register(new AllomancyTickHandler());
 		
 		GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
 		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(
@@ -53,7 +53,7 @@ public class Allomancy {
 						Registry.nuggetLerasium), 1, 1, 40));
 		if(event.getSide() == Side.CLIENT)
     	{
-			Registry.Renders();
+			Registry.registerRenders();
 			Allomancy.MPC = new MetalParticleController();
 			Registry.initKeyBindings();
     		} 
