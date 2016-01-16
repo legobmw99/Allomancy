@@ -73,7 +73,7 @@ public class AllomancyTickHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
-		Allomancy.MPC.particleBlockTargets.clear();
+		Allomancy.XPC.particleBlockTargets.clear();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -106,7 +106,7 @@ public class AllomancyTickHandler {
 					for (Entity curEntity : eList) {
 						if (curEntity != null
 								&& (curEntity instanceof EntityItem || curEntity instanceof EntityLiving))
-							Allomancy.MPC.tryAdd(curEntity);
+							Allomancy.XPC.tryAdd(curEntity);
 					}
 					int xLoc, zLoc, yLoc;
 					xLoc = (int) player.posX;
@@ -118,16 +118,16 @@ public class AllomancyTickHandler {
 							for (int y = yLoc - 10; y < (yLoc + 10); y++) {
 								BlockPos pos1 = new BlockPos(x, y, z);
 								vec = new vector3(pos1);
-								if (Allomancy.MPC.isBlockMetal(Minecraft
+								if (Allomancy.XPC.isBlockMetal(Minecraft
 										.getMinecraft().theWorld
 										.getBlockState(vec.pos))) {
-									Allomancy.MPC.particleBlockTargets.add(vec);
+									Allomancy.XPC.particleBlockTargets.add(vec);
 								}
 							}
 						}
 					}
 				}	else {
-						Allomancy.MPC.particleTargets.clear();
+						Allomancy.XPC.particleTargets.clear();
 					}
 					this.updateBurnTime(data, player);
 					if ((player.getCurrentEquippedItem() == null)
@@ -138,7 +138,7 @@ public class AllomancyTickHandler {
 							MovingObjectPosition mov = getMouseOverExtended(20.0F);
 							if (mov != null) {
 								if (mov.entityHit != null) {
-									Allomancy.MPC.tryPullEntity(mov.entityHit);
+									Allomancy.XPC.tryPullEntity(mov.entityHit);
 
 								}
 							}
@@ -147,10 +147,10 @@ public class AllomancyTickHandler {
 								if (ray.typeOfHit == MovingObjectType.BLOCK
 										|| ray.typeOfHit == MovingObjectType.MISS) {
 									vec = new vector3(ray.getBlockPos());
-									if (Allomancy.MPC.isBlockMetal(Minecraft
+									if (Allomancy.XPC.isBlockMetal(Minecraft
 											.getMinecraft().theWorld
 											.getBlockState(vec.pos))) {
-										Allomancy.MPC.tryPullBlock(vec);
+										Allomancy.XPC.tryPullBlock(vec);
 									}
 								}
 
@@ -182,7 +182,7 @@ public class AllomancyTickHandler {
 							MovingObjectPosition mov = getMouseOverExtended(20.0F);
 							if (mov != null) {
 								if (mov.entityHit != null) {
-									Allomancy.MPC.tryPushEntity(mov.entityHit);
+									Allomancy.XPC.tryPushEntity(mov.entityHit);
 
 								}
 							}
@@ -191,10 +191,10 @@ public class AllomancyTickHandler {
 								if (ray.typeOfHit == MovingObjectType.BLOCK
 										|| ray.typeOfHit == MovingObjectType.MISS) {
 									vec = new vector3(ray.getBlockPos());
-									if (Allomancy.MPC.isBlockMetal(Minecraft
+									if (Allomancy.XPC.isBlockMetal(Minecraft
 											.getMinecraft().theWorld
 											.getBlockState(vec.pos))) {
-										Allomancy.MPC.tryPushBlock(vec);
+										Allomancy.XPC.tryPushBlock(vec);
 									}
 								}
 
@@ -246,7 +246,7 @@ public class AllomancyTickHandler {
 
 			LinkedList<Entity> toRemove = new LinkedList<Entity>();
 
-			for (Entity entity : Allomancy.MPC.particleTargets) {
+			for (Entity entity : Allomancy.XPC.particleTargets) {
 
 				if (entity.isDead == true) {
 					toRemove.add(entity);
@@ -260,9 +260,9 @@ public class AllomancyTickHandler {
 			}
 
 			for (Entity entity : toRemove) {
-				Allomancy.MPC.particleTargets.remove(entity);
+				Allomancy.XPC.particleTargets.remove(entity);
 			}
-			// Allomancy.MPC.particleBlockTargets.clear();
+			// Allomancy.XPC.particleBlockTargets.clear();
 			toRemove.clear();
 		}
 	}
@@ -636,7 +636,7 @@ public class AllomancyTickHandler {
 		double motionX, motionY, motionZ;
 		if (this.data.MetalBurning[AllomancyData.matIron]
 				|| this.data.MetalBurning[AllomancyData.matSteel]) {
-			for (Entity entity : Allomancy.MPC.particleTargets) {
+			for (Entity entity : Allomancy.XPC.particleTargets) {
 				motionX = ((player.posX - entity.posX) * -1) * .03;
 				motionY = (((player.posY - entity.posY + 1.2) * -1) * .03) + .021;
 				motionZ = ((player.posZ - entity.posZ) * -1) * .03;
@@ -650,7 +650,7 @@ public class AllomancyTickHandler {
 						motionX, motionY, motionZ);
 				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			}
-			for (vector3 v : Allomancy.MPC.particleBlockTargets) {
+			for (vector3 v : Allomancy.XPC.particleBlockTargets) {
 				motionX = ((player.posX - (v.X + .5)) * -1) * .03;
 				motionY = (((player.posY - (v.Y + .2)) * -1) * .03);
 				motionZ = ((player.posZ - (v.Z + .5)) * -1) * .03;
@@ -664,7 +664,7 @@ public class AllomancyTickHandler {
 						motionX, motionY, motionZ);
 				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			}
-			Allomancy.MPC.particleBlockTargets.clear();
+			Allomancy.XPC.particleBlockTargets.clear();
 		}
 	}
 
@@ -743,6 +743,8 @@ public class AllomancyTickHandler {
 									.getId());
 						}
 					}
+					
+				//bronze stuff here
 				}
 			}
 		}

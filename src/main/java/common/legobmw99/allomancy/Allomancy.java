@@ -18,13 +18,14 @@ import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.handlers.AllomancyTickHandler;
 import common.legobmw99.allomancy.proxy.CommonProxy;
 import common.legobmw99.allomancy.util.AllomancyConfig;
+import common.legobmw99.allomancy.util.ExternalPowerController;
 import common.legobmw99.allomancy.world.OreGenerator;
 
 @Mod(modid = Allomancy.MODID, version = Allomancy.VERSION)
 public class Allomancy {
 	public static final String MODID = "allomancy";
 	public static final String VERSION = "@VERSION@";
-	public static MetalParticleController MPC;
+	public static ExternalPowerController XPC;
 
 	@Instance(value = "allomancy")
 	public static Allomancy instance;
@@ -54,7 +55,7 @@ public class Allomancy {
 		if(event.getSide() == Side.CLIENT)
     	{
 			Registry.registerRenders();
-			Allomancy.MPC = new MetalParticleController();
+			Allomancy.XPC = new ExternalPowerController();
 			Registry.initKeyBindings();
     		} 
 	}

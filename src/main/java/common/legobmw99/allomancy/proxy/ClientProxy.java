@@ -1,8 +1,8 @@
 package common.legobmw99.allomancy.proxy;
 
 import common.legobmw99.allomancy.Allomancy;
-import common.legobmw99.allomancy.MetalParticleController;
 import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.util.ExternalPowerController;
 
 
 

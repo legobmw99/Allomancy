@@ -1,4 +1,4 @@
-package common.legobmw99.allomancy;
+package common.legobmw99.allomancy.util;
 
 import java.util.LinkedList;
 
@@ -16,14 +16,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-
 import common.legobmw99.allomancy.blocks.OreBlock;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
 import common.legobmw99.allomancy.network.packets.StopFallPacket;
-import common.legobmw99.allomancy.util.vector3;
 
-public class MetalParticleController{
+public class ExternalPowerController{
 	public LinkedList<Entity> particleTargets;
 	public LinkedList<vector3> particleBlockTargets;
 	private LinkedList<Integer> metallist;
@@ -134,7 +132,7 @@ public class MetalParticleController{
 		}
 	}
 
-	public MetalParticleController() {
+	public ExternalPowerController() {
 		this.particleTargets = new LinkedList<Entity>();
 		this.particleBlockTargets = new LinkedList<vector3>();
 		this.BuildMetalList();
