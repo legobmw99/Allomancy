@@ -59,7 +59,7 @@ public class NuggetLerasium extends ItemFood {
 		double z = player.posZ;
 		if (AllomancyData.isMistborn == false) {
 			AllomancyData.isMistborn = true;
-			Registry.network.sendTo(new BecomeMistbornPacket(),(EntityPlayerMP) player);
+			//Registry.network.sendTo(new BecomeMistbornPacket(),(EntityPlayerMP) player);
 
 		}
 		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));

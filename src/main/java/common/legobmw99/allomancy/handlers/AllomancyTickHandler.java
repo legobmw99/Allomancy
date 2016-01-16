@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
@@ -67,6 +68,7 @@ public class AllomancyTickHandler {
 	private int animationCounter = 0;
 	private int currentFrame = 0;
 
+
 	private Point[] Frames = { new Point(72, 0), new Point(72, 4),
 			new Point(72, 8), new Point(72, 12) };
 
@@ -90,11 +92,13 @@ public class AllomancyTickHandler {
 			MovingObjectPosition ray;
 			MovingObjectPosition mop;
 			vector3 vec;
-
+			
 			if (data.isMistborn == true) {
+				
 				if (data.MetalBurning[AllomancyData.matIron]
 						|| data.MetalBurning[AllomancyData.matSteel]) {
 					List<Entity> eList;
+					
 					Entity target;
 					AxisAlignedBB box;
 					box = AxisAlignedBB.fromBounds(player.posX - 10,
@@ -106,7 +110,7 @@ public class AllomancyTickHandler {
 					for (Entity curEntity : eList) {
 						if (curEntity != null
 								&& (curEntity instanceof EntityItem || curEntity instanceof EntityLiving))
-							Allomancy.XPC.tryAdd(curEntity);
+							Allomancy.XPC.tryAddMetalEntity(curEntity);
 					}
 					int xLoc, zLoc, yLoc;
 					xLoc = (int) player.posX;
@@ -702,11 +706,11 @@ public class AllomancyTickHandler {
 			world = (World) mcs.getEntityWorld();
 
 			List<EntityPlayerMP> list = world.playerEntities;
-
 			for (EntityPlayerMP curPlayer : list) {
 				data = AllomancyData.forPlayer(curPlayer);
 
 				if (data.isMistborn == true) {
+								
 					if (!data.MetalBurning[AllomancyData.matPewter]
 							&& (data.damageStored > 0)) {
 						data.damageStored--;
