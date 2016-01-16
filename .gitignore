@@ -6,3 +6,5 @@
 .classpath
 .project
 /run
+Allomancy_Server.launch
+*.launch
