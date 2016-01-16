@@ -3,6 +3,7 @@ package common.legobmw99.allomancy.common;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
@@ -14,6 +15,7 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -25,6 +27,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.lwjgl.input.Keyboard;
 
 import common.legobmw99.allomancy.blocks.OreBlock;
+import common.legobmw99.allomancy.entity.EntityGoldNugget;
 import common.legobmw99.allomancy.items.ItemCoinBag;
 import common.legobmw99.allomancy.items.ItemGrinder;
 import common.legobmw99.allomancy.items.ItemMistcloak;
@@ -190,6 +193,8 @@ public class Registry {
 	public static void registerRenders() {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		
+		RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class , new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.gold_nugget, renderItem));
+
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreTin), 0, new ModelResourceLocation("allomancy:tinore", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreZinc), 0, new ModelResourceLocation("allomancy:zincore", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreCopper), 0, new ModelResourceLocation("allomancy:copperore", "inventory"));

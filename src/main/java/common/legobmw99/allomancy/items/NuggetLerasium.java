@@ -77,8 +77,7 @@ public class NuggetLerasium extends ItemFood {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack par1ItemStack) {
-        return par1ItemStack.isItemEnchanted();
+        return true;
 	}
 }
