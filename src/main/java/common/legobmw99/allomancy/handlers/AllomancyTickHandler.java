@@ -458,7 +458,7 @@ public class AllomancyTickHandler {
 			for (int i = 0; i < 7; i++) {
 				data.MetalBurning[i] = false;
 			}
-			Registry.network.sendTo(new AllomancyDataPacket(),
+			Registry.network.sendTo(new AllomancyDataPacket(data),
 					(EntityPlayerMP) event.player);
 			if (data.isMistborn == true) {
 				Registry.network.sendTo(new BecomeMistbornPacket(),(EntityPlayerMP) event.player);

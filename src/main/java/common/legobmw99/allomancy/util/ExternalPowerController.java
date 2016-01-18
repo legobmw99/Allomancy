@@ -25,7 +25,7 @@ public class ExternalPowerController{
 	public LinkedList<Entity> particleTargets;
 	public LinkedList<vector3> particleBlockTargets;
 	private LinkedList<Integer> metallist;
-	public LinkedList<EntityPlayer> metalBurners;
+	//public LinkedList<EntityPlayer> metalBurners;
 
 	public void BuildMetalList() {
 		this.metallist = new LinkedList<Integer>();
@@ -136,12 +136,12 @@ public class ExternalPowerController{
 	public ExternalPowerController() {
 		this.particleTargets = new LinkedList<Entity>();
 		this.particleBlockTargets = new LinkedList<vector3>();
-		this.metalBurners = new LinkedList<EntityPlayer>();
+		//this.metalBurners = new LinkedList<EntityPlayer>();
 		this.BuildMetalList();
 	}
-	public void tryAddBurningPlayer(EntityPlayer player){
+	/*public void tryAddBurningPlayer(EntityPlayer player){
 		this.metalBurners.add(player);
-	}
+	}*/
 	public void tryAddMetalEntity(Entity entity) {
 		if (this.particleTargets.contains(entity)) {
 			return;
