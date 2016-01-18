@@ -80,7 +80,7 @@ public class OreGenerator implements IWorldGenerator {
 			if ((numCluster == 0) && (data.clusterPerChunk != 0)) {
 				numCluster = 1;
 			}
-			
+			if (data.config){
 				for (int count = 0; count < numCluster; count++) {
 					x = random.nextInt(16);
 					z = random.nextInt(16);
@@ -88,13 +88,10 @@ public class OreGenerator implements IWorldGenerator {
 					x = x + (16 * chunkX);
 					z = z + (16 * chunkZ);
 					y = y + data.minHeight;
-					numOre = MathHelper.clamp_int(
-							random.nextInt(data.maxCluster), data.minCluster,
-							data.maxCluster);
-					
-					this.generateOre(world, random, x, y, z, data.oreType,
-							numOre);
+					numOre = MathHelper.clamp_int(random.nextInt(data.maxCluster), data.minCluster,data.maxCluster);
+					this.generateOre(world, random, x, y, z, data.oreType, numOre); 
 				
+				}
 			}
 		}
 	}
