@@ -42,7 +42,6 @@ public class ExternalPowerController{
 		this.metallist.add(Items.water_bucket.getIdFromItem(Items.water_bucket));
 		this.metallist.add(Items.cauldron.getIdFromItem(Items.cauldron));
 		this.metallist.add(Items.compass.getIdFromItem(Items.compass));
-		this.metallist.add(Items.iron_door.getIdFromItem(Items.iron_door));
 		this.metallist.add(Items.flint_and_steel.getIdFromItem(Items.flint_and_steel));
 		this.metallist.add(Items.gold_nugget.getIdFromItem(Items.gold_nugget));
 		this.metallist.add(Items.chainmail_helmet.getIdFromItem(Items.chainmail_helmet));
@@ -63,13 +62,15 @@ public class ExternalPowerController{
 		this.metallist.add(Items.iron_pickaxe.getIdFromItem(Items.iron_pickaxe));
 		this.metallist.add(Items.golden_pickaxe.getIdFromItem(Items.golden_pickaxe));
 		this.metallist.add(Items.iron_chestplate.getIdFromItem(Items.iron_chestplate));
+		this.metallist.add(Items.chainmail_chestplate.getIdFromItem(Items.chainmail_chestplate));
 		this.metallist.add(Items.golden_chestplate.getIdFromItem(Items.golden_chestplate));
 		this.metallist.add(Items.clock.getIdFromItem(Items.clock));
 		this.metallist.add(Items.golden_shovel.getIdFromItem(Items.golden_shovel));
 		this.metallist.add(Items.iron_shovel.getIdFromItem(Items.iron_shovel));
 		this.metallist.add(Items.shears.getIdFromItem(Items.shears));
 		this.metallist.add(Items.golden_apple.getIdFromItem(Items.golden_apple));
-		this.metallist.add(Items.golden_sword.getIdFromItem(Items.golden_sword));
+		this.metallist.add(Items.golden_apple.getIdFromItem(Items.golden_apple));
+		this.metallist.add(Items.golden_carrot.getIdFromItem(Items.golden_carrot));
 		this.metallist.add(Items.iron_sword.getIdFromItem(Items.iron_sword));
 		this.metallist.add(Registry.itemBrassFlakes.getIdFromItem(Registry.itemBrassFlakes));
 		this.metallist.add(Registry.itemBronzeFlakes.getIdFromItem(Registry.itemBronzeFlakes));
@@ -84,6 +85,8 @@ public class ExternalPowerController{
 		this.metallist.add(Registry.itemTinIngot.getIdFromItem(Registry.itemTinIngot));
 		this.metallist.add(Registry.nuggetLerasium.getIdFromItem(Registry.nuggetLerasium));
 		this.metallist.add(Blocks.anvil.getStateId(Blocks.anvil.getDefaultState()));
+		this.metallist.add(Blocks.iron_trapdoor.getStateId(Blocks.iron_trapdoor.getDefaultState()));
+		this.metallist.add(Blocks.iron_door.getStateId(Blocks.iron_door.getDefaultState()));
 		this.metallist.add(Blocks.cauldron.getStateId(Blocks.cauldron.getDefaultState()));
 		this.metallist.add(Blocks.gold_block.getStateId(Blocks.gold_block.getDefaultState()));
 		this.metallist.add(Blocks.iron_block.getStateId(Blocks.iron_block.getDefaultState()));
