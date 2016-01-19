@@ -71,7 +71,6 @@ public class ParticleSound extends EntityFX {
 	@Override
 	public void func_180434_a(WorldRenderer wr, Entity e, float p3, float p4, float p5, float p6, float p7, float p8)
 	{
-		System.out.println("working");
 
 	Minecraft.getMinecraft().getTextureManager().bindTexture(loc);
 	   GlStateManager.enableBlend();
