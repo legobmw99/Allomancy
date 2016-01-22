@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.handlers.AllomancyTickHandler;
 import common.legobmw99.allomancy.proxy.CommonProxy;

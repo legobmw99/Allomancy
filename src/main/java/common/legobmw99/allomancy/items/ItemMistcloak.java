@@ -6,6 +6,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
 import com.google.common.collect.Multimap;
+import common.legobmw99.allomancy.common.Registry;
 
 public class ItemMistcloak extends ItemArmor{
 
@@ -15,10 +16,8 @@ public class ItemMistcloak extends ItemArmor{
 
 	@Override
 	public Multimap getItemAttributeModifiers() {
-		Multimap multimap = super.getItemAttributeModifiers();
-		multimap.put(SharedMonsterAttributes.movementSpeed
-				.getAttributeUnlocalizedName(), new AttributeModifier(
-				SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), .10, 2));
+		Multimap multimap = super.getItemAttributeModifiers(/*new ItemStack(Registry.Mistcloak)*/);
+		multimap.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(itemModifierUUID, "Speed Modifier", .25, 1));
 		return multimap;
 	}
 
