@@ -50,6 +50,7 @@ import org.lwjgl.util.Point;
 import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.entity.EntityGoldNugget;
 import common.legobmw99.allomancy.network.packets.AllomancyDataPacket;
 import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
 import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
@@ -75,7 +76,9 @@ public class AllomancyTickHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
-		Allomancy.XPC.particleBlockTargets.clear();
+		if(Allomancy.XPC.isBlockMetal(event.state)){
+			Allomancy.XPC.particleBlockTargets.clear();
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -109,7 +112,7 @@ public class AllomancyTickHandler {
 							box);
 					for (Entity curEntity : eList) {
 						if (curEntity != null
-								&& (curEntity instanceof EntityItem || curEntity instanceof EntityLiving))
+								&& (curEntity instanceof EntityItem || curEntity instanceof EntityLiving || curEntity instanceof EntityGoldNugget))
 							Allomancy.XPC.tryAddMetalEntity(curEntity);
 					}
 					int xLoc, zLoc, yLoc;

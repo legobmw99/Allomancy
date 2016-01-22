@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import common.legobmw99.allomancy.blocks.OreBlock;
 import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.entity.EntityGoldNugget;
 import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
 import common.legobmw99.allomancy.network.packets.StopFallPacket;
 
@@ -146,7 +147,15 @@ public class ExternalPowerController{
 		this.metalBurners.add(player);
 	}*/
 	public void tryAddMetalEntity(Entity entity) {
+		if (entity == null) {
+			return;
+		}
 		if (this.particleTargets.contains(entity)) {
+			return;
+		}
+		if (entity instanceof EntityGoldNugget) {
+			this.particleTargets.add(entity);
+
 			return;
 		}
 		if (entity instanceof EntityLiving) {
@@ -159,9 +168,6 @@ public class ExternalPowerController{
 	}
 
 	private void tryAddMetalLiving(EntityLiving entity) {
-		if (entity == null) {
-			return;
-		}
 		if ((entity instanceof EntityIronGolem)
 				|| ((entity.getHeldItem() != null) && this.metallist.contains(entity.getHeldItem().getItem().getIdFromItem(entity.getHeldItem().getItem())))) {
 			this.particleTargets.add(entity);
