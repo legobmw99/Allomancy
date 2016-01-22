@@ -675,21 +675,26 @@ public class AllomancyTickHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onSound(PlaySoundAtEntityEvent event) {
+		double motionX, motionY, motionZ;
 		EntityPlayerSP player;
 		player = Minecraft.getMinecraft().thePlayer;
-		if (player == null) {
+		if ((player == null) || (event.entity == null) || (player.getDistanceToEntity(event.entity) > 20)) {
 				return;
-	}
+		}
+
 		AllomancyData data = AllomancyData.forPlayer(player);
 		if (data.MetalBurning[AllomancyData.matTin]) {
 			if (event.name.contains("step") || event.name.contains(".big")
 					|| event.name.contains("scream")
-					|| event.name.contains("random.bow")) {
+					|| event.name.contains("bow")) {
+				motionX = ((player.posX - (event.entity.posX + .5)) * -0.7)/ player.getDistanceToEntity(event.entity);
+				motionY = (((player.posY - (event.entity.posY + .2)) * -0.7)/ player.getDistanceToEntity(event.entity));
+				motionZ = ((player.posZ - (event.entity.posZ + .5)) * -0.7) /player.getDistanceToEntity(event.entity);
 				EntityFX particle = new ParticleSound(player.worldObj,
 						player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d),
-						player.posY - .2, 
+						player.posY + .2, 
 						player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),
-						0, 0, 0, event.name, event.entity.posX, event.entity.posY, event.entity.posZ);
+						motionX, motionY, motionZ, event);
 				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 			}
 
@@ -747,8 +752,11 @@ public class AllomancyTickHandler {
 									.getId());
 						}
 					}
-					
-				//bronze stuff here
+					if(data.MetalBurning[AllomancyData.matCopper] == false){
+						if(data.MetalBurning[AllomancyData.matIron] || data.MetalBurning[AllomancyData.matSteel] || data.MetalBurning[AllomancyData.matTin] || data.MetalBurning[AllomancyData.matPewter] || data.MetalBurning[AllomancyData.matZinc] || data.MetalBurning[AllomancyData.matBrass] || data.MetalBurning[AllomancyData.matBronze]){
+						//TODO:bronze stuff here, probably a packet
+						}
+					}
 				}
 			}
 		}
