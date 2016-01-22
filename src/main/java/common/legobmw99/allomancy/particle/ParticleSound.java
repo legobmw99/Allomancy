@@ -34,30 +34,43 @@ public class ParticleSound extends EntityFX {
 		entityX = event.entity.posX;
 		entityX = event.entity.posX;
 
-
+		if( event.name.contains("step")){
+			this.particleGreen = 0;
+			this.particleBlue = 1F;
+			this.particleRed = 0;
+		}
 
 		if (event.name.contains("pig") 
+				|| event.name.contains("rabbit")
 				|| event.name.contains("sheep")
 				|| event.name.contains("cow") 
+				|| event.name.contains("cat")
+				|| event.name.contains("bat") 
 				|| event.name.contains("horse")
+				 || event.name.contains("wolf")
 				|| event.name.contains("mooshroom")
 				|| event.name.contains("villager")
 				|| event.name.contains("golem") 
-				|| event.name.contains("chicken")
-				|| event.name.contains("step")) {
+				|| event.name.contains("chicken")) {
 			this.particleGreen = 1;
 			this.particleBlue = 0.25F;
 			this.particleRed = 0;
 		}
 
 		if (event.name.contains("skeleton") 
+				|| event.name.contains("hostile")
 				|| event.name.contains("zombie")
 				|| event.name.contains("slime")
 				|| event.name.contains("silverfish")
 				|| event.name.contains("spider") 
+				|| event.name.contains("blaze") 
 				|| event.name.contains("witch")
-				|| event.name.contains("enderman")
+				|| event.name.contains("guardian")
+				|| event.name.contains("magmacube")
+				|| event.name.contains("endermen")
+				|| event.name.contains("enderdragon")
 				|| event.name.contains("ghast")
+				|| event.name.contains("spider") 
 				|| event.name.contains("silverfish")
 				|| event.name.contains("creeper")
 				|| event.name.contains("bow")) {

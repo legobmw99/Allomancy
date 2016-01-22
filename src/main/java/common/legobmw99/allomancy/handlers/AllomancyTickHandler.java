@@ -636,10 +636,9 @@ public class AllomancyTickHandler {
 				this.currentFrame = 0;
 			}
 		}
-
+		
 		double motionX, motionY, motionZ;
-		if (this.data.MetalBurning[AllomancyData.matIron]
-				|| this.data.MetalBurning[AllomancyData.matSteel]) {
+		if ((this.data.MetalBurning[AllomancyData.matIron] || this.data.MetalBurning[AllomancyData.matSteel]) && (event instanceof RenderGameOverlayEvent.Post)){
 			for (Entity entity : Allomancy.XPC.particleTargets) {
 				motionX = ((player.posX - entity.posX) * -1) * .03;
 				motionY = (((player.posY - entity.posY + 1.2) * -1) * .03) + .021;
@@ -678,13 +677,17 @@ public class AllomancyTickHandler {
 		double motionX, motionY, motionZ;
 		EntityPlayerSP player;
 		player = Minecraft.getMinecraft().thePlayer;
-		if ((player == null) || (event.entity == null) || (player.getDistanceToEntity(event.entity) > 20)) {
-				return;
+		if ((player == null) || (event.entity == null) || ((player.getDistanceToEntity(event.entity) > 20) || (player.getDistanceToEntity(event.entity) < .5))) {
+			return;
 		}
+
 
 		AllomancyData data = AllomancyData.forPlayer(player);
 		if (data.MetalBurning[AllomancyData.matTin]) {
-			if (event.name.contains("step") || event.name.contains(".big")
+			if (event.name.contains("step") 
+					|| event.name.contains("mob")
+					|| event.name.contains("hostile")
+					|| event.name.contains(".big")
 					|| event.name.contains("scream")
 					|| event.name.contains("bow")) {
 				motionX = ((player.posX - (event.entity.posX + .5)) * -0.7)/ player.getDistanceToEntity(event.entity);
