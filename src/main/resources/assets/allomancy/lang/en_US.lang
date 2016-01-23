@@ -10,6 +10,11 @@ item.nuggetlerasium.name=Lerasium Nugget
 item.mistcloak.name=Mistcloak
 item.coinbag.name=Coin Bag
 
+key.categories.allomancy=Allomancy
+key.burnFirst=Burn First Metal
+key.burnSecond=Burn Second Metal
+key.changeGroup=Select Next Group
+
 
 item.itemVial.emptyvial.name=Empty Vial
 item.itemVial.brasselixer.name=Brass Elixer
