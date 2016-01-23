@@ -93,7 +93,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 
 		return (entitylivingbase == null) ? false : (!entitylivingbase
 				.isEntityAlive() ? false : (!this.longMemory ? !this.attacker
-				.getNavigator().noPath() : this.attacker.func_180485_d(pos1)));
+				.getNavigator().noPath() : this.attacker.isWithinHomeDistanceFromPosition(pos1)));
 	}
 
 	/**
