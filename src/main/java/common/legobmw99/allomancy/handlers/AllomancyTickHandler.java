@@ -716,8 +716,8 @@ public class AllomancyTickHandler {
 			World world;
 			world = (World) mcs.getEntityWorld();
 
-			List<EntityPlayerMP> list = world.playerEntities;
-			for (EntityPlayerMP curPlayer : list) {
+			List<EntityPlayer> list = world.playerEntities;
+			for (EntityPlayer curPlayer : list) {
 				data = AllomancyData.forPlayer(curPlayer);
 
 				if (data.isMistborn == true) {
