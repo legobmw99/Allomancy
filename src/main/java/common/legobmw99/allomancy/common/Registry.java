@@ -226,7 +226,7 @@ public class Registry {
     	renderItem.getItemModelMesher().register(itemLeadFlakes, 0, new ModelResourceLocation("allomancy:leadflakes", "inventory"));
     	renderItem.getItemModelMesher().register(itemZincFlakes, 0, new ModelResourceLocation("allomancy:zincflakes", "inventory"));
     	
-    	ModelBakery.addVariantName(itemVial, "allomancy:itemVial.emptyvial","allomancy:itemVial.ironelixer","allomancy:itemVial.steelelixer","allomancy:itemVial.tinelixer","allomancy:itemVial.pewterelixer","allomancy:itemVial.zincelixer","allomancy:itemVial.brasselixer","allomancy:itemVial.copperelixer","allomancy:itemVial.bronzeelixer");
+    	ModelBakery.registerItemVariants(itemVial,new ModelResourceLocation("allomancy:itemVial.emptyvial", "inventory"),new ModelResourceLocation("allomancy:itemVial.ironelixer", "inventory"),new ModelResourceLocation("allomancy:itemVial.steelelixer", "inventory"),new ModelResourceLocation("allomancy:itemVial.tinelixer", "inventory"),new ModelResourceLocation("allomancy:itemVial.pewterelixer", "inventory"), new ModelResourceLocation("allomancy:itemVial.zincelixer", "inventory"),new ModelResourceLocation("allomancy:itemVial.brasselixer", "inventory"), new ModelResourceLocation("allomancy:itemVial.copperelixer", "inventory"),new ModelResourceLocation("allomancy:itemVial.bronzeelixer", "inventory"));
     	renderItem.getItemModelMesher().register(itemVial, 0, new ModelResourceLocation("allomancy:itemVial.emptyvial", "inventory"));
     	renderItem.getItemModelMesher().register(itemVial, 1, new ModelResourceLocation("allomancy:itemVial.ironelixer", "inventory"));
     	renderItem.getItemModelMesher().register(itemVial, 2, new ModelResourceLocation("allomancy:itemVial.steelelixer", "inventory"));
