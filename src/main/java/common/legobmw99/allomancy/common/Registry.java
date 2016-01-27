@@ -66,7 +66,7 @@ public class Registry {
 	public static ItemVial itemVial;
 	public static Achievement becomeMistborn;
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
-	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool", null, 5, new int[] { 0, 4, 0, 0 }, 15);
+	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool", "allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15);
 
 	public static void addAchievements() {
 		becomeMistborn = new Achievement("achievement.becomeMistborn","becomeMistborn", -5, -2, Registry.nuggetLerasium, null).initIndependentStat().registerStat().setSpecial(); //registerAchievement
@@ -145,9 +145,8 @@ public class Registry {
 				.setCreativeTab(Registry.tabsAllomancy);
 		GameRegistry.registerItem(itemBronzeFlakes, "bronzeflakes");
 		
-		Mistcloak = new ItemMistcloak(WoolArmor, 5, 1).setUnlocalizedName(
-				"mistcloak").setCreativeTab(CreativeTabs.tabCombat);
-		GameRegistry.registerItem(Mistcloak, "mistcloak");
+		
+		GameRegistry.registerItem(Mistcloak = new ItemMistcloak(WoolArmor, 1, 1), "mistcloak");
 		
 		nuggetLerasium = new NuggetLerasium();
 		GameRegistry.registerItem(nuggetLerasium, "lerasium");
