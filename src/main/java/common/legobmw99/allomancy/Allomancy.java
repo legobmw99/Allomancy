@@ -59,6 +59,7 @@ public class Allomancy {
 			Allomancy.XPC = new ExternalPowerController();
 			Registry.initKeyBindings();
     		} 
+		Registry.addAchievements();
 	}
 
 	@EventHandler

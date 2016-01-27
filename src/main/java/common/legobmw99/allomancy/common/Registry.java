@@ -68,8 +68,8 @@ public class Registry {
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
 	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool", null, 5, new int[] { 0, 4, 0, 0 }, 15);
 
-	private static void addAchievements() {
-		becomeMistborn = new Achievement("achievement.becomeMistborn","becomeMistborn", -5, -2, Blocks.beacon, null).initIndependentStat().setSpecial(); //registerAchievement
+	public static void addAchievements() {
+		becomeMistborn = new Achievement("achievement.becomeMistborn","becomeMistborn", -5, -2, Registry.nuggetLerasium, null).initIndependentStat().registerStat().setSpecial(); //registerAchievement
 	}
 
 	public static void initBlocks() {
@@ -176,7 +176,6 @@ public class Registry {
 	}
 
 	public static void ModContent() {
-		addAchievements();
 		initBlocks();
 		initItems();
 		setupRecipes();
