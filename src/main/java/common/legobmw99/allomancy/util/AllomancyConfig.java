@@ -33,6 +33,8 @@ public class AllomancyConfig {
 		leadMaxY = config.get("Worldgen", "Lead Max Y", 40).getInt(40);
 		zincMinY = config.get("Worldgen", "Zinc Min Y", 20).getInt(20);
 		zincMaxY = config.get("Worldgen", "Zinc Max Y", 40).getInt(40);
+		
+		overlayPosition = config.get("Display", "Screen Overlay Position", 0).getInt(0);
 
 		config.save();
 	}
@@ -41,6 +43,8 @@ public class AllomancyConfig {
 	public static boolean generateTin;
 	public static boolean generateLead;
 	public static boolean generateZinc;
+	
+	public static int overlayPosition;
 
 	public static int copperDensity;
 	public static int tinDensity;

@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
@@ -58,6 +58,7 @@ import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
 import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import common.legobmw99.allomancy.particle.ParticleMetal;
 import common.legobmw99.allomancy.particle.ParticleSound;
+import common.legobmw99.allomancy.util.AllomancyConfig;
 import common.legobmw99.allomancy.util.vector3;
 
 public class AllomancyTickHandler {
@@ -519,6 +520,32 @@ public class AllomancyTickHandler {
 		int ironY, steelY, tinY, pewterY;
 		// right hand side
 		int copperY, bronzeY, zincY, brassY;
+		int renderX,renderY = 0;
+	   	ScaledResolution res = new ScaledResolution(this.mc);
+
+		switch (AllomancyConfig.overlayPosition){
+		case 0:
+			 renderX = 5;
+			 renderY = 10;
+			 break;
+		case 1:
+			renderX = res.getScaledWidth() - 95;
+			renderY = 10;
+			break;
+		case 2:
+			renderX = res.getScaledWidth() - 95;
+			renderY = res.getScaledHeight() - 30;
+			break;
+		case 3:
+			renderX = 5;
+			renderY = res.getScaledHeight() - 30;
+			break;
+		default:
+			 renderX = 5;
+			 renderY = 10;
+			 break;
+		
+		}
 		if (!data.isMistborn) {
 			return;
 		}
@@ -532,104 +559,106 @@ public class AllomancyTickHandler {
 		case 0:
 			break;
 		case 1:
-			gig.drawTexturedModalRect(3, 13, 54, 0, 16, 24);
+			gig.drawTexturedModalRect(renderX-2, renderY-2, 54, 0, 16, 24);
 			break;
 		case 2:
-			gig.drawTexturedModalRect(28, 13, 54, 0, 16, 24);
+			gig.drawTexturedModalRect(renderX+23, renderY-2, 54, 0, 16, 24);
 			break;
 		case 3:
-			gig.drawTexturedModalRect(53, 13, 54, 0, 16, 24);
+			gig.drawTexturedModalRect(renderX+48, renderY-2, 54, 0, 16, 24);
 			break;
 		case 4:
-			gig.drawTexturedModalRect(78, 13, 54, 0, 16, 24);
+			gig.drawTexturedModalRect(renderX+73, renderY-2, 54, 0, 16, 24);
 			break;
 
 		}
 
 		ironY = 9 - this.data.MetalAmounts[AllomancyData.matIron];
-		gig.drawTexturedModalRect(6, 20 + ironY, 7, 1 + ironY, 3, 10 - ironY);
+		gig.drawTexturedModalRect(renderX+1, renderY + 5 + ironY, 7, 1 + ironY, 3, 10 - ironY);
 
 		steelY = 9 - this.data.MetalAmounts[AllomancyData.matSteel];
-		gig.drawTexturedModalRect(13, 20 + steelY, 13, 1 + steelY, 3,
+		gig.drawTexturedModalRect(renderX+8, renderY + 5 + steelY, 13, 1 + steelY, 3,
 				10 - steelY);
 
 		tinY = 9 - this.data.MetalAmounts[AllomancyData.matTin];
-		gig.drawTexturedModalRect(31, 20 + tinY, 19, 1 + tinY, 3, 10 - tinY);
+		gig.drawTexturedModalRect(renderX+26, renderY + 5 + tinY, 19, 1 + tinY, 3, 10 - tinY);
 
 		pewterY = 9 - this.data.MetalAmounts[AllomancyData.matPewter];
-		gig.drawTexturedModalRect(38, 20 + pewterY, 25, 1 + pewterY, 3,
+		gig.drawTexturedModalRect(renderX+33, renderY + 5 + pewterY, 25, 1 + pewterY, 3,
 				10 - pewterY);
+		
+		zincY = 9 - this.data.MetalAmounts[AllomancyData.matZinc];
+		gig.drawTexturedModalRect(renderX+51, renderY + 5 + zincY, 43, 1 + zincY, 3, 10 - zincY);
 
+		brassY = 9 - this.data.MetalAmounts[AllomancyData.matBrass];
+		gig.drawTexturedModalRect(renderX+58, renderY + 5 + brassY, 49, 1 + brassY, 3,
+				10 - brassY);
+		
 		copperY = 9 - this.data.MetalAmounts[AllomancyData.matCopper];
-		gig.drawTexturedModalRect(81, 20 + copperY, 31, 1 + copperY, 3,
+		gig.drawTexturedModalRect(renderX+75, renderY + 5 + copperY, 31, 1 + copperY, 3,
 				10 - copperY);
 
 		bronzeY = 9 - this.data.MetalAmounts[AllomancyData.matBronze];
-		gig.drawTexturedModalRect(88, 20 + bronzeY, 37, 1 + bronzeY, 3,
+		gig.drawTexturedModalRect(renderX+83, renderY + 5 + bronzeY, 37, 1 + bronzeY, 3,
 				10 - bronzeY);
 
-		zincY = 9 - this.data.MetalAmounts[AllomancyData.matZinc];
-		gig.drawTexturedModalRect(56, 20 + zincY, 43, 1 + zincY, 3, 10 - zincY);
-
-		brassY = 9 - this.data.MetalAmounts[AllomancyData.matBrass];
-		gig.drawTexturedModalRect(63, 20 + brassY, 49, 1 + brassY, 3,
-				10 - brassY);
 
 		// Draw the gauges second, so that highlights and decorations show
 		// over
 		// the bar.
-		gig.drawTexturedModalRect(5, 15, 0, 0, 5, 20);
-		gig.drawTexturedModalRect(12, 15, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(renderX, renderY, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(renderX+7, renderY, 0, 0, 5, 20);
 
-		gig.drawTexturedModalRect(30, 15, 0, 0, 5, 20);
-		gig.drawTexturedModalRect(37, 15, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(renderX+25, renderY, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(renderX+32, renderY, 0, 0, 5, 20);
 
-		gig.drawTexturedModalRect(55, 15, 0, 0, 5, 20);
-		gig.drawTexturedModalRect(62, 15, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(renderX+50, renderY, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(renderX+57, renderY, 0, 0, 5, 20);
 
-		gig.drawTexturedModalRect(80, 15, 0, 0, 5, 20);
-		gig.drawTexturedModalRect(87, 15, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(renderX+75, renderY, 0, 0, 5, 20);
+		gig.drawTexturedModalRect(renderX+82, renderY, 0, 0, 5, 20);
 
 		if (this.data.MetalBurning[AllomancyData.matIron]) {
-			gig.drawTexturedModalRect(5, 20 + ironY,
+			gig.drawTexturedModalRect(renderX, renderY + 5 + ironY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
 		if (this.data.MetalBurning[AllomancyData.matSteel]) {
-			gig.drawTexturedModalRect(12, 20 + steelY,
+			gig.drawTexturedModalRect(renderX+7, renderY + 5 + steelY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
 		if (this.data.MetalBurning[AllomancyData.matTin]) {
-			gig.drawTexturedModalRect(30, 20 + tinY,
+			gig.drawTexturedModalRect(renderX+25, renderY + 5 + tinY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
 		if (this.data.MetalBurning[AllomancyData.matPewter]) {
-			gig.drawTexturedModalRect(37, 20 + pewterY,
-					this.Frames[this.currentFrame].getX(),
-					this.Frames[this.currentFrame].getY(), 5, 3);
-		}
-		if (this.data.MetalBurning[AllomancyData.matCopper]) {
-			gig.drawTexturedModalRect(80, 20 + copperY,
-					this.Frames[this.currentFrame].getX(),
-					this.Frames[this.currentFrame].getY(), 5, 3);
-		}
-		if (this.data.MetalBurning[AllomancyData.matBronze]) {
-			gig.drawTexturedModalRect(87, 20 + bronzeY,
+			gig.drawTexturedModalRect(renderX+32, renderY + 5 + pewterY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
 		if (this.data.MetalBurning[AllomancyData.matZinc]) {
-			gig.drawTexturedModalRect(55, 20 + zincY,
+			gig.drawTexturedModalRect(renderX+50, renderY + 5 + zincY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
 		if (this.data.MetalBurning[AllomancyData.matBrass]) {
-			gig.drawTexturedModalRect(62, 20 + brassY,
+			gig.drawTexturedModalRect(renderX+57, renderY + 5 + brassY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
+		if (this.data.MetalBurning[AllomancyData.matCopper]) {
+			gig.drawTexturedModalRect(renderX+75, renderY + 5 + copperY,
+					this.Frames[this.currentFrame].getX(),
+					this.Frames[this.currentFrame].getY(), 5, 3);
+		}
+		if (this.data.MetalBurning[AllomancyData.matBronze]) {
+			gig.drawTexturedModalRect(renderX+82, renderY + 5 + bronzeY,
+					this.Frames[this.currentFrame].getX(),
+					this.Frames[this.currentFrame].getY(), 5, 3);
+		}
+
 
 		if (this.animationCounter > 6) // Draw the burning symbols...
 		{
