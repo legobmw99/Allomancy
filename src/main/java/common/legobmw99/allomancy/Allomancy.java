@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -17,7 +16,6 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.handlers.AllomancyTickHandler;
-import common.legobmw99.allomancy.proxy.CommonProxy;
 import common.legobmw99.allomancy.util.AllomancyConfig;
 import common.legobmw99.allomancy.util.ExternalPowerController;
 import common.legobmw99.allomancy.world.OreGenerator;
@@ -30,9 +28,6 @@ public class Allomancy {
 
 	@Instance(value = "allomancy")
 	public static Allomancy instance;
-
-	@SidedProxy(clientSide = "common.legobmw99.allomancy.proxy.ClientProxy", serverSide = "common.legobmw99.allomancy.proxy.CommonProxy")
-	public static CommonProxy proxy;
 
 
 	@EventHandler

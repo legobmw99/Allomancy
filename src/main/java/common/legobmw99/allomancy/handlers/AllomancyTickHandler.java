@@ -469,7 +469,6 @@ public class AllomancyTickHandler {
 
 				if (event.player.worldObj.isRemote) {
 					data.isMistborn = true;
-					data.Dirty = false;
 				}
 			}
 		}
@@ -595,7 +594,7 @@ public class AllomancyTickHandler {
 				10 - brassY);
 		
 		copperY = 9 - this.data.MetalAmounts[AllomancyData.matCopper];
-		gig.drawTexturedModalRect(renderX+75, renderY + 5 + copperY, 31, 1 + copperY, 3,
+		gig.drawTexturedModalRect(renderX+76, renderY + 5 + copperY, 31, 1 + copperY, 3,
 				10 - copperY);
 
 		bronzeY = 9 - this.data.MetalAmounts[AllomancyData.matBronze];

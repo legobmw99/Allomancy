@@ -20,7 +20,6 @@ public class AllomancyData implements IExtendedEntityProperties {
 	public static boolean isMistborn = false;
 
 	public static final String IDENTIFIER = "Allomancy_Data";
-	public boolean Dirty = true;
 	public int selected = 0;
 
 	public int damageStored = 0;
@@ -40,19 +39,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 
 	}
 
-	public void updateBurn(int mat, boolean value) {
-		if (this.MetalAmounts[mat] != 0) {
-			this.MetalBurning[mat] = value;
-		} else
-			this.MetalBurning[mat] = false;
-	}
 
-	public void updateData(int[] value, EntityPlayer player2){
-		AllomancyData data = AllomancyData.forPlayer(player2);
-		for (int i : value){
-			data.MetalAmounts[i] = value[i];
-		}
-	}
 
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
@@ -100,7 +87,6 @@ public class AllomancyData implements IExtendedEntityProperties {
 		if ((this.selected > 4) || (this.selected < 0)) {
 			this.selected = 0;
 		}
-		this.Dirty = true;
 	}
 
 }

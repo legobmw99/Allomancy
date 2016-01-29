@@ -24,12 +24,6 @@ public class ItemCoinBag extends Item{
 
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
-        ArrowNockEvent event = new ArrowNockEvent(par3EntityPlayer, par1ItemStack);
-        MinecraftForge.EVENT_BUS.post(event);
-        if (event.isCanceled())
-        {
-            return event.result;
-        }
 
         if (par3EntityPlayer.capabilities.isCreativeMode || (par3EntityPlayer.inventory.hasItem(Items.gold_nugget) && AllomancyData.forPlayer(par3EntityPlayer).MetalBurning[AllomancyData.matSteel]))
         {

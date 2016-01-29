@@ -41,7 +41,6 @@ public class BecomeMistbornPacket implements IMessage {
 	        		AllomancyData data;
 	        		data = AllomancyData.forPlayer(player);
 	        		data.isMistborn = true;
-	        		data.Dirty = false;
 	            }
 	        });		return null;
 		}
