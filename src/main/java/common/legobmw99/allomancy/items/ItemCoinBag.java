@@ -15,7 +15,6 @@ import common.legobmw99.allomancy.entity.EntityGoldNugget;
 public class ItemCoinBag extends Item{
 	public ItemCoinBag() {
 		super();
-		// TODO Auto-generated constructor stub
 		this.setUnlocalizedName("coinbag");
 		this.setCreativeTab(Registry.tabsAllomancy);
 		this.maxStackSize = 1;

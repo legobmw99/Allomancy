@@ -14,7 +14,6 @@ public class CreativeTabAllomancy extends CreativeTabs {
 		return "Allomancy";
 	}
 
-	// TODO: public ItemStack getIconItemStack()
 	@Override
 	public ItemStack getIconItemStack() {
 		return new ItemStack(Registry.itemVial, 1, 5);
@@ -22,7 +21,6 @@ public class CreativeTabAllomancy extends CreativeTabs {
 
 	@Override
 	public Item getTabIconItem() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

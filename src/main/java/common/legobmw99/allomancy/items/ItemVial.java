@@ -22,8 +22,10 @@ public class ItemVial extends ItemFood {
 			EntityPlayer par3EntityPlayer) {
 		AllomancyData data;
 		data = AllomancyData.forPlayer(par3EntityPlayer);
+		
+		//Don't consume items in creative mode
 		if (par3EntityPlayer.capabilities.isCreativeMode == true) {
-			par1ItemStack.stackSize++;
+			par1ItemStack.stackSize++; 
 		}
 		if (data == null) {
 			return par1ItemStack;
@@ -31,7 +33,8 @@ public class ItemVial extends ItemFood {
 
 		if (par1ItemStack.getItemDamage() == 0)
 			return par1ItemStack;
-		/*This appears to fire twice, but we only want to increase the data by one. Hence we use a simple counter*/
+		
+		//onItemFinishUse to fire twice, but we only want to increase the data by one. Hence we use a simple counter
 		if (fireNumber == 1){
 			if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10) {
 				data.MetalAmounts[par1ItemStack.getItemDamage() - 1]++;
@@ -44,9 +47,6 @@ public class ItemVial extends ItemFood {
 		return super.onItemUseFinish(par1ItemStack, par2World, par3EntityPlayer);
 	}
 
-	public int getHealAmount() {
-		return 0;
-	}
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
@@ -63,6 +63,7 @@ public class ItemVial extends ItemFood {
 			EntityPlayer par3EntityPlayer) {
 		AllomancyData data;
 		data = AllomancyData.forPlayer(par3EntityPlayer);
+		//Checks both the metal amount (we only want to fill up to 10) and the item damage (can't drink empty vials)
 		if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10 && par1ItemStack.getItemDamage() >= 1) {
 			par3EntityPlayer.setItemInUse(par1ItemStack,
 					this.getMaxItemUseDuration(par1ItemStack));
@@ -84,7 +85,6 @@ public class ItemVial extends ItemFood {
 		if ((meta < 0) || (meta >= unlocalName.length)) {
 			meta = 0;
 		}
-
 		return "item.itemVial" + "." + unlocalName[meta];
 	}
 

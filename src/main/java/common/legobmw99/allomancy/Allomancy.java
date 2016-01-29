@@ -32,28 +32,35 @@ public class Allomancy {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		
+		//Load most of the mod's content
 		AllomancyConfig.initProps(event.getSuggestedConfigurationFile());
-		Registry.ModContent();
+		Registry.initBlocks();
+		Registry.initItems();
+		Registry.setupRecipes();
+		Registry.registerPackets();
 	}
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
+		//Register the ATH as both an event handler and a tick handler
 		MinecraftForge.EVENT_BUS.register(new AllomancyTickHandler());
 		FMLCommonHandler.instance().bus().register(new AllomancyTickHandler());
 		
+		//Register world gen
 		GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
-		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(
-				new WeightedRandomChestContent(new ItemStack(
-						Registry.nuggetLerasium), 1, 1, 40));
-		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(
-				new WeightedRandomChestContent(new ItemStack(
-						Registry.nuggetLerasium), 1, 1, 40));
+		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(Registry.nuggetLerasium), 1, 1, 40));
+		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(Registry.nuggetLerasium), 1, 1, 40));
+		
+		//Initialize client-only code like XPC and rendering code
 		if(event.getSide() == Side.CLIENT)
     	{
 			Registry.registerRenders();
 			Allomancy.XPC = new ExternalPowerController();
 			Registry.initKeyBindings();
     		} 
+		
+		//Achievements must come after rendering, otherwise it will crash or not display properly
 		Registry.addAchievements();
 	}
 
