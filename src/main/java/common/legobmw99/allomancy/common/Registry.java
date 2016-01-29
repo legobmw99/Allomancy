@@ -48,28 +48,20 @@ public class Registry {
     public static SimpleNetworkWrapper network;
 	public static ItemGrinder itemAllomancyGrinder;
 	public static Item itemTinIngot;
-	public static Item itemTinFlakes;
 	public static Item itemLeadIngot;
-	public static Item itemLeadFlakes;
 	public static Item itemCopperIngot;
-	public static Item itemCopperFlakes;
 	public static Item itemZincIngot;
-	public static Item itemZincFlakes;
-	public static Item itemBrassFlakes;
-	public static Item itemSteelFlakes;
-	public static Item itemPewterFlakes;
-	public static Item itemIronFlakes;
-	public static Item itemBronzeFlakes;
 	public static Item itemCoinBag;
 	public static Item Mistcloak;
 	public static NuggetLerasium nuggetLerasium;
 	public static ItemVial itemVial;
+	public static String[] flakeMetals = {"Iron","Steel", "Tin", "Pewter", "Zinc","Brass", "Copper", "Bronze", "Lead"};
 	public static Achievement becomeMistborn;
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
 	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool", "allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15);
 
 	public static void addAchievements() {
-		becomeMistborn = new Achievement("achievement.becomeMistborn","becomeMistborn", -5, -2, Registry.nuggetLerasium, null).initIndependentStat().registerStat().setSpecial(); //registerAchievement
+		becomeMistborn = new Achievement("achievement.becomeMistborn","becomeMistborn", -5, -2, Registry.nuggetLerasium, null).initIndependentStat().registerStat().setSpecial();
 	}
 
 	public static void initBlocks() {
@@ -77,91 +69,35 @@ public class Registry {
 	}
 
 	public static void initItems() {
-		itemAllomancyGrinder = new ItemGrinder();
-		GameRegistry.registerItem(itemAllomancyGrinder, "grinder");
-		itemAllomancyGrinder.setUnlocalizedName("handgrinder");
-
-		itemCoinBag = new ItemCoinBag().setUnlocalizedName("coinbag").setCreativeTab(
-				Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemCoinBag, "coinbag");
-
-		itemTinIngot = new Item().setUnlocalizedName("tiningot")
-				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		GameRegistry.registerItem(itemTinIngot, "tiningot");
-
-		itemTinFlakes = new Item().setUnlocalizedName("tinflakes")
-				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemTinFlakes, "tinflakes");
-
-		itemLeadIngot = new Item().setUnlocalizedName("leadingot")
-				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		GameRegistry.registerItem(itemLeadIngot, "leadingot");
-
-		itemLeadFlakes = new Item().setUnlocalizedName("leadflakes")
-				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemLeadFlakes, "leadflakes");
-
-		itemCopperIngot = new Item()
-				.setUnlocalizedName("copperingot")
-				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		GameRegistry.registerItem(itemCopperIngot, "copperingot");
-		
-
-		itemCopperFlakes = new Item().setUnlocalizedName(
-				"copperflakes")
-				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemCopperFlakes, "copperflakes");
-		
-		itemZincIngot = new Item().setUnlocalizedName("zincingot")
-				.setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0);
-		GameRegistry.registerItem(itemZincIngot, "zincingot");
-
-
-		itemZincFlakes = new Item().setUnlocalizedName("zincflakes")
-				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemZincFlakes, "zincflakes");
-		
-		itemIronFlakes = new Item().setUnlocalizedName("ironflakes")
-				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemIronFlakes, "ironflakes");
-		
-		itemSteelFlakes = new Item()
-				.setUnlocalizedName("steelflakes").setCreativeTab(
-						Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemSteelFlakes, "steelflakes");
-		
-		itemBrassFlakes = new Item()
-				.setUnlocalizedName("brassflakes").setCreativeTab(
-						Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemBrassFlakes, "brassflakes");
-		
-		itemPewterFlakes = new Item().setUnlocalizedName(
-				"pewterflakes")
-				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemPewterFlakes, "pewterflakes");
-		
-		itemBronzeFlakes = new Item().setUnlocalizedName(
-				"bronzeflakes")
-				.setCreativeTab(Registry.tabsAllomancy);
-		GameRegistry.registerItem(itemBronzeFlakes, "bronzeflakes");
-		
-		
+		//Register the basic, not-metallic items
+		GameRegistry.registerItem(itemAllomancyGrinder = new ItemGrinder(), "grinder");
+		GameRegistry.registerItem(itemCoinBag = new ItemCoinBag(), "coinbag");
 		GameRegistry.registerItem(Mistcloak = new ItemMistcloak(WoolArmor, 1, 1), "mistcloak");
-		
-		nuggetLerasium = new NuggetLerasium();
-		GameRegistry.registerItem(nuggetLerasium, "lerasium");
-		
-		itemVial = new ItemVial();
-		GameRegistry.registerItem(itemVial, "itemVial");
+		GameRegistry.registerItem(nuggetLerasium = new NuggetLerasium(), "lerasium");
+
+		//Register ItemVial and its subtypes
+		GameRegistry.registerItem(itemVial = new ItemVial(), "itemVial");
 		for (int i = 0; i < ItemVial.unlocalName.length; i++) {
 			ItemStack Item;
 			Item = new ItemStack(itemVial, 1, i);
-			
+		}	
+		
+		
+		//Register ingots and add them to the ore dictionary
+		GameRegistry.registerItem(itemTinIngot = new Item().setUnlocalizedName("tiningot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0), "tiningot");
+		GameRegistry.registerItem(itemLeadIngot = new Item().setUnlocalizedName("leadingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0), "leadingot");
+		GameRegistry.registerItem(itemCopperIngot = new Item().setUnlocalizedName("copperingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0), "copperingot");
+		GameRegistry.registerItem(itemZincIngot = new Item().setUnlocalizedName("zincingot").setCreativeTab(CreativeTabs.tabMaterials).setMaxDamage(0), "zincingot");
+		
 		OreDictionary.registerOre("ingotZinc", itemZincIngot);
 		OreDictionary.registerOre("ingotTin", itemTinIngot);
 		OreDictionary.registerOre("ingotCopper", itemCopperIngot);
 		OreDictionary.registerOre("ingotLead", itemLeadIngot);
-		}
+		
+		//Register flakes
+		for (int i = 0; i < flakeMetals.length; i++) {
+			GameRegistry.registerItem(new Item().setUnlocalizedName(flakeMetals[i].toLowerCase() +"flakes").setCreativeTab(Registry.tabsAllomancy), flakeMetals[i].toLowerCase() + "flakes");
+		}	
 	}
 
 	public static void initKeyBindings(){
@@ -174,12 +110,6 @@ public class Registry {
         ClientRegistry.registerKeyBinding(burnSecond);
 	}
 
-	public static void ModContent() {
-		initBlocks();
-		initItems();
-		setupRecipes();
-		registerPackets();
-	}
 
 	public static void registerPackets() {
 	       network = NetworkRegistry.INSTANCE.newSimpleChannel("allomancy");
@@ -197,47 +127,38 @@ public class Registry {
 	public static void registerRenders() {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		
+		//Call on rendersnowball for gold nugget projectile
 		RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class , new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.gold_nugget, renderItem));
-
+		
+		//Register ore models individually.
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreTin), 0, new ModelResourceLocation("allomancy:tinore", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreZinc), 0, new ModelResourceLocation("allomancy:zincore", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreCopper), 0, new ModelResourceLocation("allomancy:copperore", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreLead), 0, new ModelResourceLocation("allomancy:leadore", "inventory"));
-
+    	
+		//Register ingot models individually
+    	renderItem.getItemModelMesher().register(itemZincIngot, 0, new ModelResourceLocation("allomancy:zincingot", "inventory"));
+    	renderItem.getItemModelMesher().register(itemLeadIngot, 0, new ModelResourceLocation("allomancy:leadingot", "inventory"));
+    	renderItem.getItemModelMesher().register(itemCopperIngot, 0, new ModelResourceLocation("allomancy:copperingot", "inventory"));
+    	renderItem.getItemModelMesher().register(itemTinIngot, 0, new ModelResourceLocation("allomancy:tiningot", "inventory"));
+    	
+    	//Register misc item models individually
     	renderItem.getItemModelMesher().register(nuggetLerasium, 0, new ModelResourceLocation("allomancy:lerasium", "inventory"));
     	renderItem.getItemModelMesher().register(itemAllomancyGrinder, 0, new ModelResourceLocation("allomancy:grinder", "inventory"));
     	renderItem.getItemModelMesher().register(Mistcloak, 0, new ModelResourceLocation("allomancy:mistcloak", "inventory"));
     	renderItem.getItemModelMesher().register(itemCoinBag, 0, new ModelResourceLocation("allomancy:coinbag", "inventory"));
 
-    	renderItem.getItemModelMesher().register(itemZincIngot, 0, new ModelResourceLocation("allomancy:zincingot", "inventory"));
-    	renderItem.getItemModelMesher().register(itemLeadIngot, 0, new ModelResourceLocation("allomancy:leadingot", "inventory"));
-    	renderItem.getItemModelMesher().register(itemCopperIngot, 0, new ModelResourceLocation("allomancy:copperingot", "inventory"));
-    	renderItem.getItemModelMesher().register(itemTinIngot, 0, new ModelResourceLocation("allomancy:tiningot", "inventory"));
-
+    	//Register flake models
+		for (int i = 0; i < flakeMetals.length; i++) {
+	    	renderItem.getItemModelMesher().register(new Item().getByNameOrId("allomancy:" + flakeMetals[i].toLowerCase() + "flakes"), 0, new ModelResourceLocation("allomancy:" + flakeMetals[i].toLowerCase() + "flakes", "inventory"));
+		}
     	
-    	renderItem.getItemModelMesher().register(itemBrassFlakes, 0, new ModelResourceLocation("allomancy:brassflakes", "inventory"));
-    	renderItem.getItemModelMesher().register(itemBronzeFlakes, 0, new ModelResourceLocation("allomancy:bronzeflakes", "inventory"));
-    	renderItem.getItemModelMesher().register(itemIronFlakes, 0, new ModelResourceLocation("allomancy:ironflakes", "inventory"));
-    	renderItem.getItemModelMesher().register(itemSteelFlakes, 0, new ModelResourceLocation("allomancy:steelflakes", "inventory"));
-    	renderItem.getItemModelMesher().register(itemCopperFlakes, 0, new ModelResourceLocation("allomancy:copperflakes", "inventory"));
-    	renderItem.getItemModelMesher().register(itemPewterFlakes, 0, new ModelResourceLocation("allomancy:pewterflakes", "inventory"));
-    	renderItem.getItemModelMesher().register(itemTinFlakes, 0, new ModelResourceLocation("allomancy:tinflakes", "inventory"));
-    	renderItem.getItemModelMesher().register(itemLeadFlakes, 0, new ModelResourceLocation("allomancy:leadflakes", "inventory"));
-    	renderItem.getItemModelMesher().register(itemZincFlakes, 0, new ModelResourceLocation("allomancy:zincflakes", "inventory"));
-    	
+		//Register vial model and all variants
     	ModelBakery.registerItemVariants(itemVial,new ModelResourceLocation("allomancy:itemVial.emptyvial", "inventory"),new ModelResourceLocation("allomancy:itemVial.ironelixer", "inventory"),new ModelResourceLocation("allomancy:itemVial.steelelixer", "inventory"),new ModelResourceLocation("allomancy:itemVial.tinelixer", "inventory"),new ModelResourceLocation("allomancy:itemVial.pewterelixer", "inventory"), new ModelResourceLocation("allomancy:itemVial.zincelixer", "inventory"),new ModelResourceLocation("allomancy:itemVial.brasselixer", "inventory"), new ModelResourceLocation("allomancy:itemVial.copperelixer", "inventory"),new ModelResourceLocation("allomancy:itemVial.bronzeelixer", "inventory"));
-    	renderItem.getItemModelMesher().register(itemVial, 0, new ModelResourceLocation("allomancy:itemVial.emptyvial", "inventory"));
-    	renderItem.getItemModelMesher().register(itemVial, 1, new ModelResourceLocation("allomancy:itemVial.ironelixer", "inventory"));
-    	renderItem.getItemModelMesher().register(itemVial, 2, new ModelResourceLocation("allomancy:itemVial.steelelixer", "inventory"));
-    	renderItem.getItemModelMesher().register(itemVial, 3, new ModelResourceLocation("allomancy:itemVial.tinelixer", "inventory"));
-    	renderItem.getItemModelMesher().register(itemVial, 4, new ModelResourceLocation("allomancy:itemVial.pewterelixer", "inventory"));
-    	renderItem.getItemModelMesher().register(itemVial, 5, new ModelResourceLocation("allomancy:itemVial.zincelixer", "inventory"));
-    	renderItem.getItemModelMesher().register(itemVial, 6, new ModelResourceLocation("allomancy:itemVial.brasselixer", "inventory"));
-    	renderItem.getItemModelMesher().register(itemVial, 7, new ModelResourceLocation("allomancy:itemVial.copperelixer", "inventory"));
-    	renderItem.getItemModelMesher().register(itemVial, 8, new ModelResourceLocation("allomancy:itemVial.bronzeelixer", "inventory"));
+		for (int i = 0; i < ItemVial.unlocalName.length; i++) {
+	    	renderItem.getItemModelMesher().register(itemVial, i, new ModelResourceLocation("allomancy:itemVial." + ItemVial.unlocalName[i], "inventory"));
 
-
-
+		}	
 	}
 	public static void setupRecipes() {
 		
@@ -246,36 +167,21 @@ public class Registry {
 		GameRegistry.addSmelting(OreBlock.oreLead, new ItemStack(itemLeadIngot, 1), 5);
 		GameRegistry.addSmelting(OreBlock.oreZinc, new ItemStack(itemZincIngot, 1), 5);
 		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemTinFlakes, 2), new Object[] {
-			"ingotTin",  new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder))}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemLeadFlakes, 2), new Object[] {
-			"ingotLead",  new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder))}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemZincFlakes, 2), new Object[] {
-			"ingotZinc",  new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder))}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemCopperFlakes, 2), new Object[] {
-			"ingotCopper",  new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder))}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemBronzeFlakes, 2), new Object[] {
-			"ingotBronze",  new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder))}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemBrassFlakes, 2), new Object[] {
-			"ingotBrass",  new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder))}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemSteelFlakes, 2), new Object[] {
-			"ingotSteel",  new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder))}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemIronFlakes, 2), new Object[] {
-			"ingotIron",  new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder))}));
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemSteelFlakes, 2),new ItemStack(itemIronFlakes), new ItemStack(Items.coal));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemBrassFlakes, 2),new ItemStack(itemZincFlakes), new ItemStack(itemCopperFlakes));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemPewterFlakes, 2),new ItemStack(itemTinFlakes), new ItemStack(itemLeadFlakes));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemBronzeFlakes, 2),new ItemStack(itemCopperFlakes), new ItemStack(itemTinFlakes));
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 1),new ItemStack(itemIronFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 2),new ItemStack(itemSteelFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 3),new ItemStack(itemTinFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 4),new ItemStack(itemPewterFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 5),new ItemStack(itemZincFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 6),new ItemStack(itemBrassFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 7),new ItemStack(itemCopperFlakes), new ItemStack(itemVial, 1, 0));
-		GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 8),new ItemStack(itemBronzeFlakes), new ItemStack(itemVial, 1, 0));
+		//Add a recipe for each flake using the ore dictionary
+		for (int i = 0; i < flakeMetals.length; i++) {
+			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(new Item().getByNameOrId("allomancy:" + flakeMetals[i].toLowerCase() + "flakes"), 2), new Object[] {"ingot" + flakeMetals[i],  new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder))}));
+		}
+		
+		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:steelflakes"), 2),new ItemStack(new Item().getByNameOrId("allomancy:ironflakes")), new ItemStack(Items.coal));
+		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:brassflakes"), 2),new ItemStack(new Item().getByNameOrId("allomancy:zincflakes")), new ItemStack(new Item().getByNameOrId("allomancy:copperflakes")));
+		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:pewterflakes"), 2),new ItemStack(new Item().getByNameOrId("allomancy:tinflakes")), new ItemStack(new Item().getByNameOrId("allomancy:leadflakes")));
+		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:bronzeflakes"), 2),new ItemStack(new Item().getByNameOrId("allomancy:copperflakes")), new ItemStack(new Item().getByNameOrId("allomancy:tinflakes")));
+		
+		//Add all the metal vial recipes
+		for (int i = 1; i < ItemVial.unlocalName.length; i++) {
+			GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, i),new ItemStack(new Item().getByNameOrId("allomancy:" + flakeMetals[i-1].toLowerCase() + "flakes")), new ItemStack(itemVial, 1, 0));
+		}	
+		
 
 		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {
 				"W W", "WWW", "WWW", 'W', new ItemStack(Blocks.wool, 1, 7) });

@@ -13,9 +13,12 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import common.legobmw99.allomancy.blocks.OreBlock;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.entity.EntityGoldNugget;
@@ -73,16 +76,8 @@ public class ExternalPowerController{
 		this.metallist.add(Items.golden_apple.getIdFromItem(Items.golden_apple));
 		this.metallist.add(Items.golden_carrot.getIdFromItem(Items.golden_carrot));
 		this.metallist.add(Items.iron_sword.getIdFromItem(Items.iron_sword));
-		this.metallist.add(Registry.itemBrassFlakes.getIdFromItem(Registry.itemBrassFlakes));
-		this.metallist.add(Registry.itemBronzeFlakes.getIdFromItem(Registry.itemBronzeFlakes));
-		this.metallist.add(Registry.itemCopperFlakes.getIdFromItem(Registry.itemCopperFlakes));
 		this.metallist.add(Registry.itemCopperIngot.getIdFromItem(Registry.itemCopperIngot));
-		this.metallist.add(Registry.itemIronFlakes.getIdFromItem(Registry.itemIronFlakes));
-		this.metallist.add(Registry.itemLeadFlakes.getIdFromItem(Registry.itemLeadFlakes));
 		this.metallist.add(Registry.itemLeadIngot.getIdFromItem(Registry.itemLeadIngot));
-		this.metallist.add(Registry.itemPewterFlakes.getIdFromItem(Registry.itemPewterFlakes));
-		this.metallist.add(Registry.itemSteelFlakes.getIdFromItem(Registry.itemSteelFlakes));
-		this.metallist.add(Registry.itemTinFlakes.getIdFromItem(Registry.itemTinFlakes));
 		this.metallist.add(Registry.itemTinIngot.getIdFromItem(Registry.itemTinIngot));
 		this.metallist.add(Registry.nuggetLerasium.getIdFromItem(Registry.nuggetLerasium));
 		this.metallist.add(Blocks.anvil.getStateId(Blocks.anvil.getDefaultState()));
@@ -110,8 +105,11 @@ public class ExternalPowerController{
 		this.metallist.add(OreBlock.oreZinc.getStateId(OreBlock.oreZinc.getDefaultState()));
 		this.metallist.add(OreBlock.oreLead.getStateId(OreBlock.oreLead.getDefaultState()));
 		this.metallist.add(Registry.itemVial.getIdFromItem(Registry.itemVial));
-		this.metallist.add(Registry.itemZincFlakes.getIdFromItem(Registry.itemZincFlakes));
 		this.metallist.add(Registry.itemZincIngot.getIdFromItem(Registry.itemZincIngot));
+		
+		for (int i = 0; i < Registry.flakeMetals.length; i++) {
+			this.metallist.add(new Item().getByNameOrId("allomancy:" + Registry.flakeMetals[i].toLowerCase() + "flakes").getIdFromItem(new Item().getByNameOrId("allomancy:" + Registry.flakeMetals[i].toLowerCase() + "flakes")));
+		}
 
 	}
 
