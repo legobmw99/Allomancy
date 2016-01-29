@@ -9,12 +9,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
 
 public class ItemVial extends ItemFood {
-
+	private int fireNumber = 0;
 	public static String[] unlocalName = { "emptyvial", "ironelixer",
 		"steelelixer", "tinelixer", "pewterelixer", "zincelixer",
 		"brasselixer", "copperelixer", "bronzeelixer", };
@@ -32,9 +31,14 @@ public class ItemVial extends ItemFood {
 
 		if (par1ItemStack.getItemDamage() == 0)
 			return par1ItemStack;
-
-		if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10) {
-			data.MetalAmounts[par1ItemStack.getItemDamage() - 1]++;
+		/*This appears to fire twice, but we only want to increase the data by one. Hence we use a simple counter*/
+		if (fireNumber == 1){
+			if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10) {
+				data.MetalAmounts[par1ItemStack.getItemDamage() - 1]++;
+				fireNumber = 0;
+			}
+		} else {
+			fireNumber++;
 		}
 
 		return super.onItemUseFinish(par1ItemStack, par2World, par3EntityPlayer);
