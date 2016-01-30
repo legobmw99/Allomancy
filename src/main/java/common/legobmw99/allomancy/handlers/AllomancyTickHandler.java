@@ -85,9 +85,8 @@ public class AllomancyTickHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
-		if (event.phase == TickEvent.Phase.END
-				&& (!Minecraft.getMinecraft().isGamePaused() && Minecraft
-						.getMinecraft().thePlayer != null)) {
+		// Run once per tick, only if in game, and only if there is a player
+		if (event.phase == TickEvent.Phase.END&& (!Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().thePlayer != null)) {
 
 			AllomancyData data;
 			EntityPlayerSP player;
@@ -98,7 +97,8 @@ public class AllomancyTickHandler {
 			vector3 vec;
 			
 			if (data.isMistborn == true) {
-				
+				this.updateBurnTime(data, player);
+
 				if (data.MetalBurning[AllomancyData.matIron]
 						|| data.MetalBurning[AllomancyData.matSteel]) {
 					List<Entity> eList;
@@ -137,88 +137,73 @@ public class AllomancyTickHandler {
 				}	else {
 						Allomancy.XPC.particleTargets.clear();
 					}
-					this.updateBurnTime(data, player);
-					if ((player.getCurrentEquippedItem() == null)
-							&& (Minecraft.getMinecraft().gameSettings.keyBindAttack
-									.isKeyDown() == true)) {
+				if ((player.getCurrentEquippedItem() == null)
+						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() == true)) {
+					MovingObjectPosition mov = getMouseOverExtended(20.0F);
 
-						if (data.MetalBurning[AllomancyData.matIron]) {
-							MovingObjectPosition mov = getMouseOverExtended(20.0F);
-							if (mov != null) {
-								if (mov.entityHit != null) {
-									Allomancy.XPC.tryPullEntity(mov.entityHit);
-
-								}
+					if (data.MetalBurning[AllomancyData.matIron]) {
+						if (mov != null) {
+							if (mov.entityHit != null) {
+								Allomancy.XPC.tryPullEntity(mov.entityHit);
 							}
-							ray = player.rayTrace(20.0F, 0.0F);
-							if (ray != null) {
-								if (ray.typeOfHit == MovingObjectType.BLOCK
-										|| ray.typeOfHit == MovingObjectType.MISS) {
-									vec = new vector3(ray.getBlockPos());
-									if (Allomancy.XPC.isBlockMetal(Minecraft
-											.getMinecraft().theWorld
-											.getBlockState(vec.pos))) {
-										Allomancy.XPC.tryPullBlock(vec);
-									}
+						}
+						ray = player.rayTrace(20.0F, 0.0F);
+						if (ray != null) {
+							if (ray.typeOfHit == MovingObjectType.BLOCK || ray.typeOfHit == MovingObjectType.MISS) {
+								vec = new vector3(ray.getBlockPos());
+								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
+									Allomancy.XPC.tryPullBlock(vec);
 								}
-
 							}
 
 						}
 
-						if (data.MetalBurning[AllomancyData.matZinc]) {
-							Entity entity;
-							MovingObjectPosition mov = getMouseOverExtended(20.0F);
-							if ((mov != null)
-									&& (mov.entityHit != null)
-									&& (mov.entityHit instanceof EntityCreature)
-									&& !(mov.entityHit instanceof EntityPlayer)) {
+					}
 
-								entity = mov.entityHit;
-								Registry.network
-										.sendToServer(new ChangeEmotionPacket(
-												entity.getEntityId(), true));
+					if (data.MetalBurning[AllomancyData.matZinc]) {
+						Entity entity;
+						if ((mov != null)
+								&& (mov.entityHit != null)
+								&& (mov.entityHit instanceof EntityCreature)
+								&& !(mov.entityHit instanceof EntityPlayer)) {
+
+							entity = mov.entityHit;
+							Registry.network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), true));
 
 							}
 						}
 
 					}
-					if ((player.getCurrentEquippedItem() == null)
-							&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem
-									.isKeyDown() == true)) {
-						if (data.MetalBurning[AllomancyData.matSteel]) {
-							MovingObjectPosition mov = getMouseOverExtended(20.0F);
-							if (mov != null) {
-								if (mov.entityHit != null) {
-									Allomancy.XPC.tryPushEntity(mov.entityHit);
-
-								}
+				if ((player.getCurrentEquippedItem() == null)
+						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() == true)) {
+					MovingObjectPosition mov = getMouseOverExtended(20.0F);
+					if (data.MetalBurning[AllomancyData.matSteel]) {
+						if (mov != null) {
+							if (mov.entityHit != null) {
+								Allomancy.XPC.tryPushEntity(mov.entityHit);
 							}
-							ray = player.rayTrace(20.0F, 0.0F);
-							if (ray != null) {
-								if (ray.typeOfHit == MovingObjectType.BLOCK
-										|| ray.typeOfHit == MovingObjectType.MISS) {
-									vec = new vector3(ray.getBlockPos());
-									if (Allomancy.XPC.isBlockMetal(Minecraft
-											.getMinecraft().theWorld
-											.getBlockState(vec.pos))) {
-										Allomancy.XPC.tryPushBlock(vec);
-									}
+						}
+						ray = player.rayTrace(20.0F, 0.0F);
+						if (ray != null) {
+							if (ray.typeOfHit == MovingObjectType.BLOCK
+									|| ray.typeOfHit == MovingObjectType.MISS) {
+								vec = new vector3(ray.getBlockPos());
+								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
+									Allomancy.XPC.tryPushBlock(vec);
 								}
-
 							}
 
 						}
-						if (data.MetalBurning[AllomancyData.matBrass]) {
-							Entity entity;
-							MovingObjectPosition mov = getMouseOverExtended(20.0F);
-							if ((mov != null)
-									&& (mov.entityHit != null)
-									&& (mov.entityHit instanceof EntityCreature)
-									&& !(mov.entityHit instanceof EntityPlayer)) {
-								entity = mov.entityHit;
-								Registry.network
-										.sendToServer(new ChangeEmotionPacket(
+
+					}
+					if (data.MetalBurning[AllomancyData.matBrass]) {
+						Entity entity;
+						if ((mov != null)
+								&& (mov.entityHit != null)
+								&& (mov.entityHit instanceof EntityCreature)
+								&& !(mov.entityHit instanceof EntityPlayer)) {
+							entity = mov.entityHit;
+							Registry.network.sendToServer(new ChangeEmotionPacket(
 												entity.getEntityId(), false));
 
 							}

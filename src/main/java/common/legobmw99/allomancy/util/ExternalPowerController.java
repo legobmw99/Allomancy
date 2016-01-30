@@ -119,11 +119,11 @@ public class ExternalPowerController{
 		} else {
 			if (Item.getItem() instanceof ItemBlock){
 				if (this.metallist.contains(Block.getBlockFromItem(Item.getItem()).getDefaultState())){
-			return true;
+					return true;
 
-		}}
+				}
+			}
 			return false;
-
 		}
 	}
 
