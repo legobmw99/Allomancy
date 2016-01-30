@@ -36,6 +36,7 @@ import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -105,6 +106,7 @@ public class AllomancyTickHandler {
 					
 					Entity target;
 					AxisAlignedBB box;
+					//Add entities to metal list
 					box = AxisAlignedBB.fromBounds(player.posX - 10,
 							player.posY - 10, player.posZ - 10,
 							player.posX + 10, player.posY + 10,
@@ -120,7 +122,7 @@ public class AllomancyTickHandler {
 					xLoc = (int) player.posX;
 					zLoc = (int) player.posZ;
 					yLoc = (int) player.posY;
-
+					//Add blocks to metal list
 					for (int x = xLoc - 10; x < (xLoc + 10); x++) {
 						for (int z = zLoc - 10; z < (zLoc + 10); z++) {
 							for (int y = yLoc - 10; y < (yLoc + 10); y++) {
@@ -139,8 +141,9 @@ public class AllomancyTickHandler {
 					}
 				if ((player.getCurrentEquippedItem() == null)
 						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() == true)) {
+					//Ray trace 20 blocks
 					MovingObjectPosition mov = getMouseOverExtended(20.0F);
-
+					//All iron pulling powers
 					if (data.MetalBurning[AllomancyData.matIron]) {
 						if (mov != null) {
 							if (mov.entityHit != null) {
@@ -159,7 +162,7 @@ public class AllomancyTickHandler {
 						}
 
 					}
-
+					//All zinc powers
 					if (data.MetalBurning[AllomancyData.matZinc]) {
 						Entity entity;
 						if ((mov != null)
@@ -176,7 +179,9 @@ public class AllomancyTickHandler {
 					}
 				if ((player.getCurrentEquippedItem() == null)
 						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() == true)) {
+					//Ray trace 20 blocks
 					MovingObjectPosition mov = getMouseOverExtended(20.0F);
+					//All steel pushing powers
 					if (data.MetalBurning[AllomancyData.matSteel]) {
 						if (mov != null) {
 							if (mov.entityHit != null) {
@@ -196,6 +201,7 @@ public class AllomancyTickHandler {
 						}
 
 					}
+					//All brass powers
 					if (data.MetalBurning[AllomancyData.matBrass]) {
 						Entity entity;
 						if ((mov != null)
@@ -211,14 +217,14 @@ public class AllomancyTickHandler {
 
 					}
 				
-
+				//Pewter's speed powers
 				if (data.MetalBurning[AllomancyData.matPewter]) {
 					if ((player.onGround == true)
 							&& (player.isInWater() == false)
 							&& (Minecraft.getMinecraft().gameSettings.keyBindForward
 									.isKeyDown())) {
-						player.motionX *= 1.4;
-						player.motionZ *= 1.4;
+						player.motionX *= 1.2;
+						player.motionZ *= 1.2;
 
 						player.motionX = MathHelper.clamp_float(
 								(float) player.motionX, -2, 2);
@@ -255,7 +261,6 @@ public class AllomancyTickHandler {
 			for (Entity entity : toRemove) {
 				Allomancy.XPC.particleTargets.remove(entity);
 			}
-			// Allomancy.XPC.particleBlockTargets.clear();
 			toRemove.clear();
 		}
 	}
@@ -264,6 +269,7 @@ public class AllomancyTickHandler {
 
 	@SubscribeEvent
 	public void onDamage(LivingHurtEvent event) {
+		//Increase outgoing damage for pewter burners
 		if (event.source.getSourceOfDamage() instanceof EntityPlayerMP) {
 			EntityPlayerMP source = (EntityPlayerMP) event.source
 					.getSourceOfDamage();
@@ -273,6 +279,7 @@ public class AllomancyTickHandler {
 				event.ammount += 2;
 			}
 		}
+		//Reduce incoming damage for pewter burners
 		if (event.entityLiving instanceof EntityPlayerMP) {
 			AllomancyData data = AllomancyData.forPlayer(event.entityLiving);
 			if (data.MetalBurning[AllomancyData.matPewter]) {
@@ -291,17 +298,6 @@ public class AllomancyTickHandler {
 		}
 	}
 
-	@SubscribeEvent
-	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-		if (!event.entity.worldObj.isRemote
-				&& event.entity instanceof EntityPlayer) {
-			NBTTagCompound old = event.entity.getEntityData();
-			if (old.hasKey("Allomancy_Data" + event.entity.getDisplayName())) {
-				event.entity.getEntityData().merge(
-						old.getCompoundTag("Allomancy_Data"));
-			}
-		}
-	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -335,13 +331,18 @@ public class AllomancyTickHandler {
 				switch (data.getSelected()) {
 				case 1:
 					// toggle iron.
-
 					Registry.network.sendToServer(new UpdateBurnPacket(
 							AllomancyData.matIron,
 							!data.MetalBurning[AllomancyData.matIron]));
 
 					if (data.MetalAmounts[AllomancyData.matIron] > 0) {
 						data.MetalBurning[AllomancyData.matIron] = !data.MetalBurning[AllomancyData.matIron];
+					}
+					//play a sound effect
+					if(data.MetalBurning[AllomancyData.matIron]){
+						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					}else{
+						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				case 2:
@@ -353,6 +354,12 @@ public class AllomancyTickHandler {
 					if (data.MetalAmounts[AllomancyData.matTin] > 0) {
 						data.MetalBurning[AllomancyData.matTin] = !data.MetalBurning[AllomancyData.matTin];
 					}
+					//play a sound effect
+					if(data.MetalBurning[AllomancyData.matTin]){
+						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					}else{
+						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+					}
 					break;
 				case 3:
 					// toggle Zinc.
@@ -363,7 +370,12 @@ public class AllomancyTickHandler {
 					if (data.MetalAmounts[AllomancyData.matZinc] > 0) {
 						data.MetalBurning[AllomancyData.matZinc] = !data.MetalBurning[AllomancyData.matZinc];
 					}
-					
+					//play a sound effect
+					if(data.MetalBurning[AllomancyData.matZinc]){
+						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					}else{
+						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+					}
 					break;
 				case 4:
 					// toggle Copper.
@@ -373,6 +385,12 @@ public class AllomancyTickHandler {
 							!data.MetalBurning[AllomancyData.matCopper]));
 					if (data.MetalAmounts[AllomancyData.matCopper] > 0) {
 						data.MetalBurning[AllomancyData.matCopper] = !data.MetalBurning[AllomancyData.matCopper];
+					}
+					//play a sound effect
+					if(data.MetalBurning[AllomancyData.matCopper]){
+						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					}else{
+						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				default:
@@ -401,6 +419,12 @@ public class AllomancyTickHandler {
 					if (data.MetalAmounts[AllomancyData.matSteel] > 0) {
 						data.MetalBurning[AllomancyData.matSteel] = !data.MetalBurning[AllomancyData.matSteel];
 					}
+					//play a sound effect
+					if(data.MetalBurning[AllomancyData.matSteel]){
+						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					}else{
+						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+					}
 					break;
 				case 2:
 					// toggle Pewter.
@@ -410,6 +434,12 @@ public class AllomancyTickHandler {
 							!data.MetalBurning[AllomancyData.matPewter]));
 					if (data.MetalAmounts[AllomancyData.matPewter] > 0) {
 						data.MetalBurning[AllomancyData.matPewter] = !data.MetalBurning[AllomancyData.matPewter];
+					}
+					//play a sound effect
+					if(data.MetalBurning[AllomancyData.matPewter]){
+						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					}else{
+						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				case 3:
@@ -421,7 +451,12 @@ public class AllomancyTickHandler {
 					if (data.MetalAmounts[AllomancyData.matBrass] > 0) {
 						data.MetalBurning[AllomancyData.matBrass] = !data.MetalBurning[AllomancyData.matBrass];
 					}
-					
+					//play a sound effect
+					if(data.MetalBurning[AllomancyData.matBrass]){
+						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					}else{
+						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+					}
 					break;
 				case 4:
 					// toggle Bronze.
@@ -431,6 +466,12 @@ public class AllomancyTickHandler {
 							!data.MetalBurning[AllomancyData.matBronze]));
 					if (data.MetalAmounts[AllomancyData.matBronze] > 0) {
 						data.MetalBurning[AllomancyData.matBronze] = !data.MetalBurning[AllomancyData.matBronze];
+					}
+					//play a sound effect
+					if(data.MetalBurning[AllomancyData.matBronze]){
+						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					}else{
+						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				default:
@@ -470,7 +511,6 @@ public class AllomancyTickHandler {
 			event.player.getEntityData().setTag("Allomancy_Data",
 					old.getCompoundTag("Allomancy_Data"));
 		}
-
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -507,6 +547,7 @@ public class AllomancyTickHandler {
 		int renderX,renderY = 0;
 	   	ScaledResolution res = new ScaledResolution(this.mc);
 
+	   	//Set the offsets of the overlay based on config
 		switch (AllomancyConfig.overlayPosition){
 		case 0:
 			 renderX = 5;
@@ -587,9 +628,7 @@ public class AllomancyTickHandler {
 				10 - bronzeY);
 
 
-		// Draw the gauges second, so that highlights and decorations show
-		// over
-		// the bar.
+		// Draw the gauges second, so that highlights and decorations show over the bar.
 		gig.drawTexturedModalRect(renderX, renderY, 0, 0, 5, 20);
 		gig.drawTexturedModalRect(renderX+7, renderY, 0, 0, 5, 20);
 
@@ -654,6 +693,7 @@ public class AllomancyTickHandler {
 		}
 		
 		double motionX, motionY, motionZ;
+		//Spawn in metal particles
 		if ((this.data.MetalBurning[AllomancyData.matIron] || this.data.MetalBurning[AllomancyData.matSteel]) && (event instanceof RenderGameOverlayEvent.Post)){
 			for (Entity entity : Allomancy.XPC.particleTargets) {
 				motionX = ((player.posX - entity.posX) * -1) * .03;
@@ -696,9 +736,8 @@ public class AllomancyTickHandler {
 		if ((player == null) || (event.entity == null) || ((player.getDistanceToEntity(event.entity) > 20) || (player.getDistanceToEntity(event.entity) < .5))) {
 			return;
 		}
-
-
 		AllomancyData data = AllomancyData.forPlayer(player);
+		//Spawn sound particles
 		if (data.MetalBurning[AllomancyData.matTin]) {
 			if (event.name.contains("step") 
 					|| event.name.contains("mob")
@@ -794,6 +833,7 @@ public class AllomancyTickHandler {
 					Registry.network.sendToServer(new UpdateBurnPacket(i,
 							data.MetalBurning[i]));
 					if (data.MetalAmounts[i] == 0) {
+						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 						data.MetalBurning[i] = false;
 						Registry.network.sendToServer(new UpdateBurnPacket(i,
 								data.MetalBurning[i]));
@@ -803,6 +843,7 @@ public class AllomancyTickHandler {
 			}
 		}
 	}
+	//This code is based almost entirely on the vanilla code. It's not super well documented, but basically it just runs a ray-trace. Edit at your own peril
 	@SideOnly(Side.CLIENT)
 	public static MovingObjectPosition getMouseOverExtended(float dist) {
 		Minecraft mc = FMLClientHandler.instance().getClient();
