@@ -59,9 +59,9 @@ public class NuggetLerasium extends ItemFood {
 		double z = player.posZ;
 		if (AllomancyData.isMistborn == false) {
 			AllomancyData.isMistborn = true;
-			//Registry.network.sendTo(new BecomeMistbornPacket(),(EntityPlayerMP) player);
 
 		}
+		//Fancy shmancy effects
 		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));
 		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(),
 				20, 0, true, false));
@@ -78,6 +78,7 @@ public class NuggetLerasium extends ItemFood {
 
 	@Override
 	public boolean hasEffect(ItemStack par1ItemStack) {
+		//Add enchantment glint
         return true;
 	}
 }

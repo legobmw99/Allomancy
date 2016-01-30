@@ -12,7 +12,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityGoldNugget extends EntityThrowable {
-
 	private boolean dropItem = true;
 	
     public EntityGoldNugget(World par1World)
@@ -44,7 +43,6 @@ public class EntityGoldNugget extends EntityThrowable {
     
 	@Override
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
-		// TODO Auto-generated method stub
 		if (movingobjectposition.entityHit != null)
         {
             byte b0 = 0;

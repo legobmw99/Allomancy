@@ -19,7 +19,7 @@ public class UpdateBurnPacket implements IMessage {
 	
 	public  UpdateBurnPacket(int mat, boolean value){
 		this.mat = mat;
-		this.value = value ? 1 : 0;
+		this.value = value ? 1 : 0; //Convert bool to int
 	}
 	
 	
@@ -47,7 +47,7 @@ public class UpdateBurnPacket implements IMessage {
 	            	EntityPlayerMP player = ctx.getServerHandler().playerEntity;
 	            	AllomancyData data = AllomancyData.forPlayer(player);
 	            	 boolean value;
-	                 if(message.value == 1){
+	                 if(message.value == 1){ //Convert int back to bool
 	                     value = true;
 	                     }
 	                 else{

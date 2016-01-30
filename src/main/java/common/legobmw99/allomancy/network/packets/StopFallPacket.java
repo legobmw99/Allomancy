@@ -22,7 +22,6 @@ public class StopFallPacket implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		// TODO Auto-generated method stub
 		
 	}
 	

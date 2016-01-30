@@ -21,7 +21,6 @@ public class AllomancyData implements IExtendedEntityProperties {
 
 	public static final String IDENTIFIER = "Allomancy_Data";
 	public int selected = 0;
-
 	public int damageStored = 0;
 	public int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
 	public int[] MaxBurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };

@@ -25,14 +25,10 @@ public class vector3 {
 
 	@Override
 	public boolean equals(Object paramObject) {
-		// TODO Auto-generated method stub
-
 		vector3 vec = (vector3) paramObject;
 		if ((vec.X == this.X) && (vec.Y == this.Y) && (vec.Z == this.Z)) {
-			System.out.println("True");
 			return true;
 		}
-		System.out.println("False");
 		return false;
 	}
 }

@@ -71,6 +71,7 @@ public class OreGenerator implements IWorldGenerator {
 		int x, y, z;
 		int numOre;
 		int numCluster;
+		//Only generate in overworld
 		if (world.provider.getDimensionId() != 0) {
 			return;
 		}
@@ -80,7 +81,7 @@ public class OreGenerator implements IWorldGenerator {
 			if ((numCluster == 0) && (data.clusterPerChunk != 0)) {
 				numCluster = 1;
 			}
-			if (data.config){
+			if (data.config){ //Check that you don't have the ore disabled
 				for (int count = 0; count < numCluster; count++) {
 					x = random.nextInt(16);
 					z = random.nextInt(16);

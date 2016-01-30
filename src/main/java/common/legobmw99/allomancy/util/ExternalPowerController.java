@@ -32,6 +32,10 @@ public class ExternalPowerController{
 	//public LinkedList<EntityPlayer> metalBurners;
 
 	public void BuildMetalList() {
+		/*
+		 * Add every single metal object in vanilla and this mod
+		 * Add item ids and default block states
+		 */
 		this.metallist = new LinkedList<Integer>();
 		this.metallist.add(Items.gold_ingot.getIdFromItem(Items.gold_ingot));
 		this.metallist.add(Items.iron_ingot.getIdFromItem(Items.iron_ingot));
@@ -141,7 +145,8 @@ public class ExternalPowerController{
 		//this.metalBurners = new LinkedList<EntityPlayer>();
 		this.BuildMetalList();
 	}
-	/*public void tryAddBurningPlayer(EntityPlayer player){
+	/* Come back in 1.9
+	 * public void tryAddBurningPlayer(EntityPlayer player){
 		this.metalBurners.add(player);
 	}*/
 	public void tryAddMetalEntity(Entity entity) {
@@ -283,9 +288,10 @@ public class ExternalPowerController{
 
 		if (this.isItemMetal(entity.getHeldItem())) {
 			// Pull em towards you.
-			motionX = ((player.posX - entity.posX) * .1);
-			motionY = ((player.posY - entity.posY) * .1);
-			motionZ = ((player.posZ - entity.posZ) * .1);
+			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
+			motionX = ((player.posX - entity.posX) * (1.1)/magnitude);
+			motionY = ((player.posY - entity.posY) * (1.1)/magnitude);
+			motionZ = ((player.posZ - entity.posZ) * (1.1)/magnitude);
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
@@ -316,9 +322,10 @@ public class ExternalPowerController{
 
 		if (this.isItemMetal(entity.getHeldItem())) {
 			// Pull em towards you.
-			motionX = ((player.posX - entity.posX) * .1) * -1;
-			motionY = (player.posY - entity.posY) * .1;
-			motionZ = ((player.posZ - entity.posZ) * .1) * -1;
+			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
+			motionX = ((player.posX - entity.posX) * -(1.1)/magnitude);
+			motionY = ((player.posY - entity.posY) * (1.1)/magnitude);
+			motionZ = ((player.posZ - entity.posZ) * -(1.1)/magnitude);
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;

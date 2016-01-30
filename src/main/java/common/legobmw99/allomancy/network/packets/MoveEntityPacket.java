@@ -26,6 +26,8 @@ public class MoveEntityPacket implements IMessage {
 	}
 	@Override
 	public void fromBytes(ByteBuf buf) {
+		
+		//Because floats aren't applicable, divide to get decimals back
 		motionX = ((double) ByteBufUtils.readVarInt(buf, 5))/100;
 		motionY = ((double) ByteBufUtils.readVarInt(buf, 5))/100;
 		motionZ = ((double) ByteBufUtils.readVarInt(buf, 5))/100;
@@ -35,6 +37,8 @@ public class MoveEntityPacket implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
+		
+		//Because floats aren't applicable, multiply to get some decimals
 		ByteBufUtils.writeVarInt(buf,(int)(motionX*100), 5);
 		ByteBufUtils.writeVarInt(buf,(int)(motionY*100), 5);
 		ByteBufUtils.writeVarInt(buf, (int)(motionZ*100), 5);

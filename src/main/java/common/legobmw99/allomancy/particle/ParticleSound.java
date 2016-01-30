@@ -35,6 +35,7 @@ public class ParticleSound extends EntityFX {
 		entityX = event.entity.posX;
 
 		if( event.name.contains("step")){
+			//Blue
 			this.particleGreen = 0;
 			this.particleBlue = 1F;
 			this.particleRed = 0;
@@ -52,6 +53,7 @@ public class ParticleSound extends EntityFX {
 				|| event.name.contains("villager")
 				|| event.name.contains("golem") 
 				|| event.name.contains("chicken")) {
+			//Green
 			this.particleGreen = 1;
 			this.particleBlue = 0.25F;
 			this.particleRed = 0;
@@ -74,6 +76,7 @@ public class ParticleSound extends EntityFX {
 				|| event.name.contains("silverfish")
 				|| event.name.contains("creeper")
 				|| event.name.contains("bow")) {
+			//Red
 			this.particleGreen = 0.15F;
 			this.particleBlue = 0.15F;
 			this.particleRed = 1;
@@ -100,7 +103,9 @@ public class ParticleSound extends EntityFX {
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 
 	}
-	/*@Override
+	/* Old, antequated code which allowed for custom textures. May come back one day
+	 * 
+	@Override
 	public int getFXLayer() {
 		return 3;
 	}
