@@ -29,7 +29,7 @@ configFile.withReader {
 }
 
 
-version = config.mod_version + ".build_" + config.build_number
+version = config.mod_version + config.build_number
 group= "common.legobmw99.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "allomancy"
 

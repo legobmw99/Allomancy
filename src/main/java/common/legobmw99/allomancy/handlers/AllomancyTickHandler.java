@@ -226,18 +226,22 @@ public class AllomancyTickHandler {
 						player.motionX *= 1.2;
 						player.motionZ *= 1.2;
 
-						player.motionX = MathHelper.clamp_float(
-								(float) player.motionX, -2, 2);
-						player.motionZ = MathHelper.clamp_float(
-								(float) player.motionZ, -2, 2);
+						//Don't allow motion values to get too out of the norm
+						player.motionX = MathHelper.clamp_float((float) player.motionX, -2, 2);
+						player.motionZ = MathHelper.clamp_float((float) player.motionZ, -2, 2);
 					}
 					if (Minecraft.getMinecraft().gameSettings.keyBindJump
 							.isPressed()) {
 						if (player.motionY >= 0) {
 							player.motionY *= 1.6;
+							//Don't allow motion values to get too out of the norm
+							player.motionY = MathHelper.clamp_float((float) player.motionY, -2, 2);
 						}
 						player.motionX *= 1.4;
 						player.motionZ *= 1.4;
+						//Don't allow motion values to get too out of the norm
+						player.motionX = MathHelper.clamp_float((float) player.motionX, -2, 2);
+						player.motionZ = MathHelper.clamp_float((float) player.motionZ, -2, 2);
 					}
 
 				}
@@ -284,6 +288,7 @@ public class AllomancyTickHandler {
 			AllomancyData data = AllomancyData.forPlayer(event.entityLiving);
 			if (data.MetalBurning[AllomancyData.matPewter]) {
 				event.ammount -= 2;
+				//Note that they took damage, will come in to play if they stop burning
 				data.damageStored++;
 			}
 		}
@@ -773,19 +778,19 @@ public class AllomancyTickHandler {
 				data = AllomancyData.forPlayer(curPlayer);
 
 				if (data.isMistborn == true) {
-								
+					//Damage the player if they have stored damage and pewter cuts out
 					if (!data.MetalBurning[AllomancyData.matPewter]
 							&& (data.damageStored > 0)) {
 						data.damageStored--;
 						curPlayer.attackEntityFrom(DamageSource.generic, 2);
 					}
 					if (data.MetalBurning[AllomancyData.matTin]) {
-
-						if (curPlayer
-								.isPotionActive(Potion.nightVision.getId()) == false) {
+						//Add night vision to tin-burners
+						if (curPlayer.isPotionActive(Potion.nightVision.getId()) == false) {
 							curPlayer.addPotionEffect(new PotionEffect(
 									Potion.nightVision.getId(), 300, 0, false, false));
 						}
+						//Remove blindness for tin burners
 						if (curPlayer.isPotionActive(Potion.blindness.getId())) {
 							curPlayer.removePotionEffect(Potion.blindness
 									.getId());
@@ -794,6 +799,7 @@ public class AllomancyTickHandler {
 							PotionEffect eff;
 							eff = curPlayer
 									.getActivePotionEffect(Potion.nightVision);
+							//Fix for the flashing that occurs when night vision effect is about to run out
 							if (eff.getDuration() < 210) {
 								curPlayer.addPotionEffect(new PotionEffect(
 										Potion.nightVision.getId(), 300, 0, false, false));
@@ -801,6 +807,7 @@ public class AllomancyTickHandler {
 						}
 
 					}
+					//Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing
 					if ((data.MetalBurning[AllomancyData.matTin] == false)
 							&& curPlayer.isPotionActive(Potion.nightVision
 									.getId())) {
@@ -823,7 +830,7 @@ public class AllomancyTickHandler {
 	@SideOnly(Side.CLIENT)
 	private void updateBurnTime(AllomancyData data, EntityPlayerSP player) {
 		data = AllomancyData.forPlayer(player);
-
+		//Checks each metal, reduces MetalAmounts by 1 each time BurnTime ticks to 0 
 		for (int i = 0; i < 8; i++) {
 			if (data.MetalBurning[i]) {
 				data.BurnTime[i]--;
