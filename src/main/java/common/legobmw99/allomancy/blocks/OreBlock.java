@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class OreBlock extends Block {
 	public static Block oreTin;
@@ -40,12 +41,17 @@ public class OreBlock extends Block {
 	public static void init() {
 		oreTin = new OreBlock(OreType.TIN);
 		GameRegistry.registerBlock(oreTin, "tinore");
+		OreDictionary.registerOre("oreTin", oreTin);
 		oreLead = new OreBlock(OreType.LEAD);
 		GameRegistry.registerBlock(oreLead, "leadore");
+		OreDictionary.registerOre("oreLead", oreLead);
 		oreCopper = new OreBlock(OreType.COPPER);
 		GameRegistry.registerBlock(oreCopper, "copperore");
+		OreDictionary.registerOre("oreCopper", oreCopper);
 		oreZinc = new OreBlock(OreType.ZINC);
 		GameRegistry.registerBlock(oreZinc, "zincore");
+		OreDictionary.registerOre("oreZinc", oreZinc);
+
 	}
 
 
