@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "allomancy:blocks/leadore"
+        "all": "allomancy:blocks/oreCopper"
     }
 }

@@ -1,12 +1,12 @@
 itemGroup.Allomancy=Allomancy
 
-tile.tinore.name=Tin Ore
-tile.leadore.name=Lead Ore
-tile.copperore.name=Copper Ore
-tile.zincore.name=Zinc Ore
+tile.oreTin.name=Tin Ore
+tile.oreLead.name=Lead Ore
+tile.oreCopper.name=Copper Ore
+tile.oreZinc.name=Zinc Ore
 
 item.handgrinder.name=Hand Grinder
-item.nuggetlerasium.name=Lerasium Nugget
+item.nuggetLerasium.name=Lerasium Nugget
 item.mistcloak.name=Mistcloak
 item.coinbag.name=Coin Bag
 
@@ -27,20 +27,20 @@ item.itemVial.steelelixer.name=Steel Elixer
 item.itemVial.zincelixer.name=Zinc Elixer
 item.itemVial.leadelixer.name=Lead Elixer
 
-item.brassflakes.name=Brass Flakes
-item.bronzeflakes.name=Bronze Flakes
-item.ironflakes.name=Iron Flakes
-item.steelflakes.name=Steel Flakes
-item.pewterflakes.name=Pewter Flakes
-item.copperflakes.name=Copper Flakes
-item.tinflakes.name=Tin Flakes
-item.zincflakes.name=Zinc Flakes
-item.leadflakes.name=Lead Flakes
+item.flakeBrass.name=Brass Flakes
+item.flakeBronze.name=Bronze Flakes
+item.flakeIron.name=Iron Flakes
+item.flakeSteel.name=Steel Flakes
+item.flakePewter.name=Pewter Flakes
+item.flakeCopper.name=Copper Flakes
+item.flakeTin.name=Tin Flakes
+item.flakeZinc.name=Zinc Flakes
+item.flakeLead.name=Lead Flakes
 
-item.zincingot.name=Zinc Ingot
-item.leadingot.name=Lead Ingot
-item.tiningot.name=Tin Ingot
-item.copperingot.name=Copper Ingot
+item.ingotZinc.name=Zinc Ingot
+item.ingotLead.name=Lead Ingot
+item.ingotTin.name=Tin Ingot
+item.ingotCopper.name=Copper Ingot
 
 achievement.becomeMistborn=Become Mistborn!
 achievement.becomeMistborn.desc=You have a power most people envy...

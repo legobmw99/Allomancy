@@ -1,5 +1,5 @@
 {
-    "parent": "allomancy:block/leadore",
+    "parent": "allomancy:block/oreLead",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

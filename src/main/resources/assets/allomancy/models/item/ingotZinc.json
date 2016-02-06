@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "allomancy:items/steelflakes"
+        "layer0": "allomancy:items/ingotZinc"
     },
     "display": {
         "thirdperson": {

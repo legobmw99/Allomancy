@@ -35,8 +35,8 @@ public class Allomancy {
 		
 		//Load most of the mod's content
 		AllomancyConfig.initProps(event.getSuggestedConfigurationFile());
+		Registry.initItems();		
 		Registry.initBlocks();
-		Registry.initItems();
 		Registry.setupRecipes();
 		Registry.registerPackets();
 	}

@@ -22,7 +22,7 @@ public class NuggetLerasium extends ItemFood {
 		super(0, false);
 		this.setAlwaysEdible();
 		this.setHasSubtypes(false);
-		this.setUnlocalizedName("nuggetlerasium");
+		this.setUnlocalizedName("nuggetLerasium");
 		this.setCreativeTab(Registry.tabsAllomancy);
 		this.maxStackSize = 1;
 	}

@@ -1,5 +1,7 @@
 package common.legobmw99.allomancy.blocks;
 
+import common.legobmw99.allomancy.common.Registry;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,33 +25,32 @@ public class OreBlock extends Block {
 		this.setHardness(.5F);
 		this.setStepSound(Block.soundTypeStone);
 		switch (type) {
-			case LEAD: this.setUnlocalizedName("leadore");
+			case LEAD: this.setUnlocalizedName("oreLead");
                 break;
-			case TIN: this.setUnlocalizedName("tinore");
+			case TIN: this.setUnlocalizedName("oreTin");
 				break;
-			case ZINC: this.setUnlocalizedName("zincore");
+			case ZINC: this.setUnlocalizedName("oreZinc");
 				break;
-			case COPPER: this.setUnlocalizedName("copperore");
+			case COPPER: this.setUnlocalizedName("oreCopper");
 				break;
 
 		}
-
-		this.setCreativeTab(CreativeTabs.tabBlock);
+		this.setCreativeTab(Registry.tabsAllomancy);
 		this.setHarvestLevel("pick", 1);
 	}
 
 	public static void init() {
 		oreTin = new OreBlock(OreType.TIN);
-		GameRegistry.registerBlock(oreTin, "tinore");
+		GameRegistry.registerBlock(oreTin, "oreTin");
 		OreDictionary.registerOre("oreTin", oreTin);
 		oreLead = new OreBlock(OreType.LEAD);
-		GameRegistry.registerBlock(oreLead, "leadore");
+		GameRegistry.registerBlock(oreLead, "oreLead");
 		OreDictionary.registerOre("oreLead", oreLead);
 		oreCopper = new OreBlock(OreType.COPPER);
-		GameRegistry.registerBlock(oreCopper, "copperore");
+		GameRegistry.registerBlock(oreCopper, "oreCopper");
 		OreDictionary.registerOre("oreCopper", oreCopper);
 		oreZinc = new OreBlock(OreType.ZINC);
-		GameRegistry.registerBlock(oreZinc, "zincore");
+		GameRegistry.registerBlock(oreZinc, "oreZinc");
 		OreDictionary.registerOre("oreZinc", oreZinc);
 
 	}

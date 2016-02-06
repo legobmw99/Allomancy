@@ -1,5 +1,5 @@
 {
-    "parent": "allomancy:block/zincore",
+    "parent": "allomancy:block/oreCopper",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

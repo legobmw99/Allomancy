@@ -112,7 +112,7 @@ public class ExternalPowerController{
 		this.metallist.add(Registry.itemZincIngot.getIdFromItem(Registry.itemZincIngot));
 		
 		for (int i = 0; i < Registry.flakeMetals.length; i++) {
-			this.metallist.add(new Item().getByNameOrId("allomancy:" + Registry.flakeMetals[i].toLowerCase() + "flakes").getIdFromItem(new Item().getByNameOrId("allomancy:" + Registry.flakeMetals[i].toLowerCase() + "flakes")));
+			this.metallist.add(new Item().getByNameOrId("allomancy:" + "flake"+ Registry.flakeMetals[i] ).getIdFromItem(new Item().getByNameOrId("allomancy:" + "flake"+ Registry.flakeMetals[i] )));
 		}
 
 	}

@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "allomancy:items/leadflakes"
+        "layer0": "allomancy:items/flakeSteel"
     },
     "display": {
         "thirdperson": {

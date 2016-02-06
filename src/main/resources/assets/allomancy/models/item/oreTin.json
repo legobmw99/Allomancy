@@ -1,5 +1,5 @@
 {
-    "parent": "allomancy:block/tinore",
+    "parent": "allomancy:block/oreTin",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],
