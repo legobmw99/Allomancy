@@ -6,13 +6,13 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
 
-public class ItemVial extends ItemFood {
+public class ItemVial extends Item{
 	private int fireNumber = 0;
 	public static String[] unlocalName = { "emptyvial", "ironelixer",
 		"steelelixer", "tinelixer", "pewterelixer", "zincelixer",
@@ -24,8 +24,9 @@ public class ItemVial extends ItemFood {
 		data = AllomancyData.forPlayer(par3EntityPlayer);
 		
 		//Don't consume items in creative mode
-		if (par3EntityPlayer.capabilities.isCreativeMode == true) {
-			par1ItemStack.stackSize++; 
+		if (par3EntityPlayer.capabilities.isCreativeMode != true) {
+			par1ItemStack.stackSize--; 
+            par3EntityPlayer.inventory.addItemStackToInventory(new ItemStack(Registry.itemVial, 1,0));
 		}
 		if (data == null) {
 			return par1ItemStack;
@@ -44,7 +45,7 @@ public class ItemVial extends ItemFood {
 			fireNumber++;
 		}
 
-		return super.onItemUseFinish(par1ItemStack, par2World, par3EntityPlayer);
+		return par1ItemStack;
 	}
 
 
@@ -64,16 +65,16 @@ public class ItemVial extends ItemFood {
 		AllomancyData data;
 		data = AllomancyData.forPlayer(par3EntityPlayer);
 		//Checks both the metal amount (we only want to fill up to 10) and the item damage (can't drink empty vials)
-		if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10 && par1ItemStack.getItemDamage() >= 1) {
-			par3EntityPlayer.setItemInUse(par1ItemStack,
-					this.getMaxItemUseDuration(par1ItemStack));
+		if (par1ItemStack.getItemDamage() > 0){
+			if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10) {
+				par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
+			}
 		}
 		return par1ItemStack;
 	}
+	
 
 	public ItemVial() {
-		super(0, 0, false);
-		this.setAlwaysEdible();
 		this.setHasSubtypes(true);
 		this.setCreativeTab(Registry.tabsAllomancy);
 	}
