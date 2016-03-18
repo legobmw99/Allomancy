@@ -29,6 +29,7 @@ public class ExternalPowerController{
 	public LinkedList<Entity> particleTargets;
 	public LinkedList<vector3> particleBlockTargets;
 	private LinkedList<Integer> metallist;
+	private String[] ores = OreDictionary.getOreNames();
 	//public LinkedList<EntityPlayer> metalBurners;
 
 	public void BuildMetalList() {
@@ -114,7 +115,19 @@ public class ExternalPowerController{
 		for (int i = 0; i < Registry.flakeMetals.length; i++) {
 			this.metallist.add(new Item().getByNameOrId("allomancy:" + "flake"+ Registry.flakeMetals[i] ).getIdFromItem(new Item().getByNameOrId("allomancy:" + "flake"+ Registry.flakeMetals[i] )));
 		}
-
+		
+		for (String s : ores){ 
+			if (s.contains("Copper") || s.contains("Tin") || s.contains("Gold") || s.contains("Iron") || s.contains("Steel") || s.contains("Lead") || s.contains("Silver") || s.contains("Brass")|| s.contains("Bronze")|| s.contains("Aluminum")){ 
+				for (ItemStack i : OreDictionary.getOres(s)){
+					if(i.getItem() != null){
+						if(i.getItem() instanceof ItemBlock){
+							this.metallist.add(Block.getBlockFromItem(i.getItem()).getStateId(Block.getBlockFromItem(i.getItem()).getDefaultState()));
+						} 
+						this.metallist.add(i.getItem().getIdFromItem(i.getItem()));
+					 }
+				 }
+			 }
+		 }
 	}
 
 	public boolean isItemMetal(ItemStack Item) {

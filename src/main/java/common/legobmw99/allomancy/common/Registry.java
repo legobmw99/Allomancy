@@ -55,7 +55,7 @@ public class Registry {
 	public static Item Mistcloak;
 	public static NuggetLerasium nuggetLerasium;
 	public static ItemVial itemVial;
-	public static String[] flakeMetals = {"Iron","Steel", "Tin", "Pewter", "Zinc","Brass", "Copper", "Bronze", "Lead"};
+	public static String[] flakeMetals = {"Iron","Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze", "Lead"};
 	public static Achievement becomeMistborn;
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
 	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool", "allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15);
