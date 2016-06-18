@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -19,24 +19,21 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -78,7 +75,7 @@ public class AllomancyTickHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
-		if(Allomancy.XPC.isBlockMetal(event.state)){
+		if(Allomancy.XPC.isBlockMetal(event.getState())){
 			Allomancy.XPC.particleBlockTargets.clear();
 		}
 	}
@@ -93,8 +90,8 @@ public class AllomancyTickHandler {
 			EntityPlayerSP player;
 			player = Minecraft.getMinecraft().thePlayer;
 			data = AllomancyData.forPlayer(player);
-			MovingObjectPosition ray;
-			MovingObjectPosition mop;
+			RayTraceResult ray;
+			RayTraceResult mop;
 			vector3 vec;
 			
 			if (data.isMistborn == true) {
@@ -107,10 +104,7 @@ public class AllomancyTickHandler {
 					Entity target;
 					AxisAlignedBB box;
 					//Add entities to metal list
-					box = AxisAlignedBB.fromBounds(player.posX - 10,
-							player.posY - 10, player.posZ - 10,
-							player.posX + 10, player.posY + 10,
-							player.posZ + 10);
+					box = new AxisAlignedBB((player.posX - 10),(player.posY - 10), (player.posZ - 10), (player.posX + 10), (player.posY + 10), (player.posZ + 10));
 					eList = player.worldObj.getEntitiesWithinAABB(Entity.class,
 							box);
 					for (Entity curEntity : eList) {
@@ -139,10 +133,10 @@ public class AllomancyTickHandler {
 				}	else {
 						Allomancy.XPC.particleTargets.clear();
 					}
-				if ((player.getCurrentEquippedItem() == null)
+				if ((player.getHeldItemMainhand() == null)
 						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() == true)) {
 					//Ray trace 20 blocks
-					MovingObjectPosition mov = getMouseOverExtended(20.0F);
+					RayTraceResult mov = getMouseOverExtended(20.0F);
 					//All iron pulling powers
 					if (data.MetalBurning[AllomancyData.matIron]) {
 						if (mov != null) {
@@ -152,7 +146,7 @@ public class AllomancyTickHandler {
 						}
 						ray = player.rayTrace(20.0F, 0.0F);
 						if (ray != null) {
-							if (ray.typeOfHit == MovingObjectType.BLOCK || ray.typeOfHit == MovingObjectType.MISS) {
+							if (ray.typeOfHit == RayTraceResult.Type.BLOCK || ray.typeOfHit == RayTraceResult.Type.MISS) {
 								vec = new vector3(ray.getBlockPos());
 								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
 									Allomancy.XPC.tryPullBlock(vec);
@@ -177,10 +171,10 @@ public class AllomancyTickHandler {
 						}
 
 					}
-				if ((player.getCurrentEquippedItem() == null)
+				if ((player.getHeldItemOffhand() == null)
 						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() == true)) {
 					//Ray trace 20 blocks
-					MovingObjectPosition mov = getMouseOverExtended(20.0F);
+					RayTraceResult mov = getMouseOverExtended(20.0F);
 					//All steel pushing powers
 					if (data.MetalBurning[AllomancyData.matSteel]) {
 						if (mov != null) {
@@ -190,8 +184,8 @@ public class AllomancyTickHandler {
 						}
 						ray = player.rayTrace(20.0F, 0.0F);
 						if (ray != null) {
-							if (ray.typeOfHit == MovingObjectType.BLOCK
-									|| ray.typeOfHit == MovingObjectType.MISS) {
+							if (ray.typeOfHit == RayTraceResult.Type.BLOCK
+									|| ray.typeOfHit == RayTraceResult.Type.MISS) {
 								vec = new vector3(ray.getBlockPos());
 								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
 									Allomancy.XPC.tryPushBlock(vec);
@@ -274,34 +268,37 @@ public class AllomancyTickHandler {
 	@SubscribeEvent
 	public void onDamage(LivingHurtEvent event) {
 		//Increase outgoing damage for pewter burners
-		if (event.source.getSourceOfDamage() instanceof EntityPlayerMP) {
-			EntityPlayerMP source = (EntityPlayerMP) event.source
+		if (event.getSource().getSourceOfDamage() instanceof EntityPlayerMP) {
+			EntityPlayerMP source = (EntityPlayerMP) event.getSource()
 					.getSourceOfDamage();
 			AllomancyData data;
 			data = AllomancyData.forPlayer(source);
 			if (data.MetalBurning[AllomancyData.matPewter]) {
-				event.ammount += 2;
+				event.setAmount(event.getAmount() + 2);
 			}
 		}
 		//Reduce incoming damage for pewter burners
-		if (event.entityLiving instanceof EntityPlayerMP) {
-			AllomancyData data = AllomancyData.forPlayer(event.entityLiving);
+		if (event.getEntityLiving() instanceof EntityPlayerMP) {
+			AllomancyData data = AllomancyData.forPlayer(event.getEntityLiving());
 			if (data.MetalBurning[AllomancyData.matPewter]) {
-				event.ammount -= 2;
+				event.setAmount(event.getAmount() - 2);
 				//Note that they took damage, will come in to play if they stop burning
 				data.damageStored++;
 			}
 		}
 	}
 
-	@SubscribeEvent
-	public void onEntityConstructing(EntityConstructing event) {
-		if (event.entity instanceof EntityPlayer
-				&& event.entity.getExtendedProperties(AllomancyData.IDENTIFIER) == null) {
-			event.entity.registerExtendedProperties(AllomancyData.IDENTIFIER,
-					new AllomancyData((EntityPlayer) event.entity));
-		}
-	}
+	/* ded -- use AttachCapabilityEvent and ICapabilitySerializable
+	 * @SubscribeEvent
+	 * public void onEntityConstructing(EntityConstructing event) {
+	 * 		if (event.getEntity() instanceof EntityPlayer
+	 * 			&& event.getEntity().getExtendedProperties(AllomancyData.IDENTIFIER) == null) {
+	 * 			event.getEntity().registerExtendedProperties(AllomancyData.IDENTIFIER,
+	 * 				new AllomancyData((EntityPlayer) event.getEntity()));
+	 * }
+	 * }
+	 */
+	
 
 
 	@SideOnly(Side.CLIENT)
@@ -521,7 +518,7 @@ public class AllomancyTickHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderGameOverlay(RenderGameOverlayEvent event) {
-		if (event.isCancelable() || event.type != ElementType.EXPERIENCE) {
+		if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
 			return;
 		}
 
@@ -738,40 +735,38 @@ public class AllomancyTickHandler {
 		double motionX, motionY, motionZ;
 		EntityPlayerSP player;
 		player = Minecraft.getMinecraft().thePlayer;
-		if ((player == null) || (event.entity == null) || ((player.getDistanceToEntity(event.entity) > 20) || (player.getDistanceToEntity(event.entity) < .5))) {
+		if ((player == null) || (event.getEntity() == null) || ((player.getDistanceToEntity(event.getEntity()) > 20) || (player.getDistanceToEntity(event.getEntity()) < .5))) {
 			return;
 		}
 		AllomancyData data = AllomancyData.forPlayer(player);
 		//Spawn sound particles
-		if (data.MetalBurning[AllomancyData.matTin]) {
-			if (event.name.contains("step") 
-					|| event.name.contains("mob")
-					|| event.name.contains("hostile")
-					|| event.name.contains(".big")
-					|| event.name.contains("scream")
-					|| event.name.contains("bow")) {
-				motionX = ((player.posX - (event.entity.posX + .5)) * -0.7)/ player.getDistanceToEntity(event.entity);
-				motionY = (((player.posY - (event.entity.posY + .2)) * -0.7)/ player.getDistanceToEntity(event.entity));
-				motionZ = ((player.posZ - (event.entity.posZ + .5)) * -0.7) /player.getDistanceToEntity(event.entity);
-				EntityFX particle = new ParticleSound(player.worldObj,
-						player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d),
-						player.posY + .2, 
-						player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),
-						motionX, motionY, motionZ, event);
-				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
-			}
+				if (data.MetalBurning[AllomancyData.matTin]) {
+					if (event.getSound().toString().contains("step") 
+							|| event.getSound().toString().contains("mob")
+							|| event.getSound().toString().contains("hostile")
+							|| event.getSound().toString().contains(".big")
+							|| event.getSound().toString().contains("scream")
+							|| event.getSound().toString().contains("bow")) {
+						motionX = ((player.posX - (event.getEntity().posX + .5)) * -0.7)/ player.getDistanceToEntity(event.getEntity());
+						motionY = (((player.posY - (event.getEntity().posY + .2)) * -0.7)/ player.getDistanceToEntity(event.getEntity()));
+						motionZ = ((player.posZ - (event.getEntity().posZ + .5)) * -0.7) /player.getDistanceToEntity(event.getEntity());
+						Particle particle = new ParticleSound(player.worldObj,
+								player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d),
+								player.posY + .2, 
+								player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),
+								motionX, motionY, motionZ, event);
+						Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+					}
 
-		}
-	}
+				}
+			}
 	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		if (event.phase == TickEvent.Phase.END) {
 
-			MinecraftServer mcs;
-			mcs = MinecraftServer.getServer();
 			World world;
-			world = (World) mcs.getEntityWorld();
+			world = (World) event.world;
 
 			List<EntityPlayer> list = world.playerEntities;
 			for (EntityPlayer curPlayer : list) {
@@ -786,35 +781,32 @@ public class AllomancyTickHandler {
 					}
 					if (data.MetalBurning[AllomancyData.matTin]) {
 						//Add night vision to tin-burners
-						if (curPlayer.isPotionActive(Potion.nightVision.getId()) == false) {
+						if (curPlayer.isPotionActive(Potion.getPotionById(16)) == false) { //Potion 16 = night vision
 							curPlayer.addPotionEffect(new PotionEffect(
-									Potion.nightVision.getId(), 300, 0, false, false));
+									Potion.getPotionById(16), 300, 0, false, false));
 						}
 						//Remove blindness for tin burners
-						if (curPlayer.isPotionActive(Potion.blindness.getId())) {
-							curPlayer.removePotionEffect(Potion.blindness
-									.getId());
+						if (curPlayer.isPotionActive(Potion.getPotionById(15))) { //Potion 15 is blindness
+							curPlayer.removePotionEffect(Potion.getPotionById(15));
 
 						} else {
 							PotionEffect eff;
 							eff = curPlayer
-									.getActivePotionEffect(Potion.nightVision);
+									.getActivePotionEffect(Potion.getPotionById(16));
 							//Fix for the flashing that occurs when night vision effect is about to run out
 							if (eff.getDuration() < 210) {
 								curPlayer.addPotionEffect(new PotionEffect(
-										Potion.nightVision.getId(), 300, 0, false, false));
+										Potion.getPotionById(16), 300, 0, false, false));
 							}
 						}
 
 					}
 					//Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing
 					if ((data.MetalBurning[AllomancyData.matTin] == false)
-							&& curPlayer.isPotionActive(Potion.nightVision
-									.getId())) {
-						if (curPlayer.getActivePotionEffect(Potion.nightVision)
+							&& curPlayer.isPotionActive(Potion.getPotionById(16))) {
+						if (curPlayer.getActivePotionEffect(Potion.getPotionById(16))
 								.getDuration() < 201) {
-							curPlayer.removePotionEffect(Potion.nightVision
-									.getId());
+							curPlayer.removePotionEffect(Potion.getPotionById(16));
 						}
 					}
 					if(data.MetalBurning[AllomancyData.matCopper] == false){
@@ -852,7 +844,7 @@ public class AllomancyTickHandler {
 	}
 	//This code is based almost entirely on the vanilla code. It's not super well documented, but basically it just runs a ray-trace. Edit at your own peril
 	@SideOnly(Side.CLIENT)
-	public static MovingObjectPosition getMouseOverExtended(float dist) {
+	public static RayTraceResult getMouseOverExtended(float dist) {
 		Minecraft mc = FMLClientHandler.instance().getClient();
 		Entity theRenderViewEntity = mc.getRenderViewEntity();
 		AxisAlignedBB theViewBoundingBox = new AxisAlignedBB(
@@ -862,19 +854,19 @@ public class AllomancyTickHandler {
 				theRenderViewEntity.posX + 0.5D,
 				theRenderViewEntity.posY + 1.5D,
 				theRenderViewEntity.posZ + 0.5D);
-		MovingObjectPosition returnMOP = null;
+		RayTraceResult returnMOP = null;
 		if (mc.theWorld != null) {
 			double var2 = dist;
 			returnMOP = theRenderViewEntity.rayTrace(var2, 0);
 			double calcdist = var2;
-			Vec3 pos = theRenderViewEntity.getPositionEyes(0);
+			Vec3d pos = theRenderViewEntity.getPositionEyes(0);
 			var2 = calcdist;
 			if (returnMOP != null) {
 				calcdist = returnMOP.hitVec.distanceTo(pos);
 			}
 
-			Vec3 lookvec = theRenderViewEntity.getLook(0);
-			Vec3 var8 = pos.addVector(lookvec.xCoord * var2, lookvec.yCoord
+			Vec3d lookvec = theRenderViewEntity.getLook(0);
+			Vec3d var8 = pos.addVector(lookvec.xCoord * var2, lookvec.yCoord
 					* var2, lookvec.zCoord * var2);
 			Entity pointedEntity = null;
 			float var9 = 1.0F;
@@ -897,7 +889,7 @@ public class AllomancyTickHandler {
 							entity.posY + entity.height, entity.posZ
 									+ entity.width / 2);
 					aabb.expand(bordersize, bordersize, bordersize);
-					MovingObjectPosition mop0 = aabb.calculateIntercept(pos,
+					RayTraceResult mop0 = aabb.calculateIntercept(pos,
 							var8);
 
 					if (aabb.isVecInside(pos)) {
@@ -917,7 +909,7 @@ public class AllomancyTickHandler {
 			}
 
 			if (pointedEntity != null && (d < calcdist || returnMOP == null)) {
-				returnMOP = new MovingObjectPosition(pointedEntity);
+				returnMOP = new RayTraceResult(pointedEntity);
 			}
 		}
 		return returnMOP;

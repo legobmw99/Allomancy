@@ -1,8 +1,5 @@
 package common.legobmw99.allomancy;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -49,8 +46,12 @@ public class Allomancy {
 		
 		//Register world gen
 		GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
-		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(Registry.nuggetLerasium), 1, 1, 40));
-		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(Registry.nuggetLerasium), 1, 1, 40));
+		
+		/* Depreciated. TODO: figure out loot tables
+		 * ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(Registry.nuggetLerasium), 1, 1, 40));
+		 * ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(Registry.nuggetLerasium), 1, 1, 40));
+		 */
+		
 		
 		//Initialize client-only code like XPC and rendering code
 		if(event.getSide() == Side.CLIENT)

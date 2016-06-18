@@ -16,6 +16,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -38,73 +39,73 @@ public class ExternalPowerController{
 		 * Add item ids and default block states
 		 */
 		this.metallist = new LinkedList<Integer>();
-		this.metallist.add(Items.gold_ingot.getIdFromItem(Items.gold_ingot));
-		this.metallist.add(Items.iron_ingot.getIdFromItem(Items.iron_ingot));
-		this.metallist.add(Items.iron_axe.getIdFromItem(Items.iron_axe));
-		this.metallist.add(Items.golden_axe.getIdFromItem(Items.golden_axe));
-		this.metallist.add(Items.chainmail_boots.getIdFromItem(Items.chainmail_boots));
-		this.metallist.add(Items.golden_boots.getIdFromItem(Items.golden_boots));
-		this.metallist.add(Items.iron_boots.getIdFromItem(Items.iron_boots));
-		this.metallist.add(Items.bucket.getIdFromItem(Items.bucket));
-		this.metallist.add(Items.lava_bucket.getIdFromItem(Items.lava_bucket));
-		this.metallist.add(Items.milk_bucket.getIdFromItem(Items.milk_bucket));
-		this.metallist.add(Items.water_bucket.getIdFromItem(Items.water_bucket));
-		this.metallist.add(Items.cauldron.getIdFromItem(Items.cauldron));
-		this.metallist.add(Items.compass.getIdFromItem(Items.compass));
-		this.metallist.add(Items.flint_and_steel.getIdFromItem(Items.flint_and_steel));
-		this.metallist.add(Items.gold_nugget.getIdFromItem(Items.gold_nugget));
-		this.metallist.add(Items.chainmail_helmet.getIdFromItem(Items.chainmail_helmet));
-		this.metallist.add(Items.golden_helmet.getIdFromItem(Items.golden_helmet));
-		this.metallist.add(Items.iron_helmet.getIdFromItem(Items.iron_helmet));
-		this.metallist.add(Items.golden_hoe.getIdFromItem(Items.golden_hoe));
-		this.metallist.add(Items.iron_hoe.getIdFromItem(Items.iron_hoe));
-		this.metallist.add(Items.golden_horse_armor.getIdFromItem(Items.golden_horse_armor));
-		this.metallist.add(Items.iron_horse_armor.getIdFromItem(Items.iron_horse_armor));
-		this.metallist.add(Items.chainmail_leggings.getIdFromItem(Items.chainmail_leggings));
-		this.metallist.add(Items.golden_leggings.getIdFromItem(Items.golden_leggings));
-		this.metallist.add(Items.iron_leggings.getIdFromItem(Items.iron_leggings));
-		this.metallist.add(Items.minecart.getIdFromItem(Items.minecart));
-		this.metallist.add(Items.chest_minecart.getIdFromItem(Items.chest_minecart));
-		this.metallist.add(Items.hopper_minecart.getIdFromItem(Items.hopper_minecart));
-		this.metallist.add(Items.furnace_minecart.getIdFromItem(Items.furnace_minecart));
-		this.metallist.add(Items.tnt_minecart.getIdFromItem(Items.tnt_minecart));
-		this.metallist.add(Items.iron_pickaxe.getIdFromItem(Items.iron_pickaxe));
-		this.metallist.add(Items.golden_pickaxe.getIdFromItem(Items.golden_pickaxe));
-		this.metallist.add(Items.iron_chestplate.getIdFromItem(Items.iron_chestplate));
-		this.metallist.add(Items.chainmail_chestplate.getIdFromItem(Items.chainmail_chestplate));
-		this.metallist.add(Items.golden_chestplate.getIdFromItem(Items.golden_chestplate));
-		this.metallist.add(Items.clock.getIdFromItem(Items.clock));
-		this.metallist.add(Items.golden_shovel.getIdFromItem(Items.golden_shovel));
-		this.metallist.add(Items.iron_shovel.getIdFromItem(Items.iron_shovel));
-		this.metallist.add(Items.shears.getIdFromItem(Items.shears));
-		this.metallist.add(Items.golden_apple.getIdFromItem(Items.golden_apple));
-		this.metallist.add(Items.golden_apple.getIdFromItem(Items.golden_apple));
-		this.metallist.add(Items.golden_carrot.getIdFromItem(Items.golden_carrot));
-		this.metallist.add(Items.iron_sword.getIdFromItem(Items.iron_sword));
+		this.metallist.add(Items.GOLD_INGOT.getIdFromItem(Items.GOLD_INGOT));
+		this.metallist.add(Items.IRON_INGOT.getIdFromItem(Items.IRON_INGOT));
+		this.metallist.add(Items.IRON_AXE.getIdFromItem(Items.IRON_AXE));
+		this.metallist.add(Items.GOLDEN_AXE.getIdFromItem(Items.GOLDEN_AXE));
+		this.metallist.add(Items.CHAINMAIL_BOOTS.getIdFromItem(Items.CHAINMAIL_BOOTS));
+		this.metallist.add(Items.GOLDEN_BOOTS.getIdFromItem(Items.GOLDEN_BOOTS));
+		this.metallist.add(Items.IRON_BOOTS.getIdFromItem(Items.IRON_BOOTS));
+		this.metallist.add(Items.BUCKET.getIdFromItem(Items.BUCKET));
+		this.metallist.add(Items.LAVA_BUCKET.getIdFromItem(Items.LAVA_BUCKET));
+		this.metallist.add(Items.MILK_BUCKET.getIdFromItem(Items.MILK_BUCKET));
+		this.metallist.add(Items.WATER_BUCKET.getIdFromItem(Items.WATER_BUCKET));
+		this.metallist.add(Items.CAULDRON.getIdFromItem(Items.CAULDRON));
+		this.metallist.add(Items.COMPASS.getIdFromItem(Items.COMPASS));
+		this.metallist.add(Items.FLINT_AND_STEEL.getIdFromItem(Items.FLINT_AND_STEEL));
+		this.metallist.add(Items.GOLD_NUGGET.getIdFromItem(Items.GOLD_NUGGET));
+		this.metallist.add(Items.CHAINMAIL_HELMET.getIdFromItem(Items.CHAINMAIL_HELMET));
+		this.metallist.add(Items.GOLDEN_HELMET.getIdFromItem(Items.GOLDEN_HELMET));
+		this.metallist.add(Items.IRON_HELMET.getIdFromItem(Items.IRON_HELMET));
+		this.metallist.add(Items.GOLDEN_HOE.getIdFromItem(Items.GOLDEN_HOE));
+		this.metallist.add(Items.IRON_HOE.getIdFromItem(Items.IRON_HOE));
+		this.metallist.add(Items.GOLDEN_HORSE_ARMOR.getIdFromItem(Items.GOLDEN_HORSE_ARMOR));
+		this.metallist.add(Items.IRON_HORSE_ARMOR.getIdFromItem(Items.IRON_HORSE_ARMOR));
+		this.metallist.add(Items.CHAINMAIL_LEGGINGS.getIdFromItem(Items.CHAINMAIL_LEGGINGS));
+		this.metallist.add(Items.GOLDEN_LEGGINGS.getIdFromItem(Items.GOLDEN_LEGGINGS));
+		this.metallist.add(Items.IRON_LEGGINGS.getIdFromItem(Items.IRON_LEGGINGS));
+		this.metallist.add(Items.MINECART.getIdFromItem(Items.MINECART));
+		this.metallist.add(Items.CHEST_MINECART.getIdFromItem(Items.CHEST_MINECART));
+		this.metallist.add(Items.HOPPER_MINECART.getIdFromItem(Items.HOPPER_MINECART));
+		this.metallist.add(Items.FURNACE_MINECART.getIdFromItem(Items.FURNACE_MINECART));
+		this.metallist.add(Items.TNT_MINECART.getIdFromItem(Items.TNT_MINECART));
+		this.metallist.add(Items.IRON_PICKAXE.getIdFromItem(Items.IRON_PICKAXE));
+		this.metallist.add(Items.GOLDEN_PICKAXE.getIdFromItem(Items.GOLDEN_PICKAXE));
+		this.metallist.add(Items.IRON_CHESTPLATE.getIdFromItem(Items.IRON_CHESTPLATE));
+		this.metallist.add(Items.CHAINMAIL_CHESTPLATE.getIdFromItem(Items.CHAINMAIL_CHESTPLATE));
+		this.metallist.add(Items.GOLDEN_CHESTPLATE.getIdFromItem(Items.GOLDEN_CHESTPLATE));
+		this.metallist.add(Items.CLOCK.getIdFromItem(Items.CLOCK));
+		this.metallist.add(Items.GOLDEN_SHOVEL.getIdFromItem(Items.GOLDEN_SHOVEL));
+		this.metallist.add(Items.IRON_SHOVEL.getIdFromItem(Items.IRON_SHOVEL));
+		this.metallist.add(Items.SHEARS.getIdFromItem(Items.SHEARS));
+		this.metallist.add(Items.GOLDEN_APPLE.getIdFromItem(Items.GOLDEN_APPLE));
+		this.metallist.add(Items.GOLDEN_APPLE.getIdFromItem(Items.GOLDEN_APPLE));
+		this.metallist.add(Items.GOLDEN_CARROT.getIdFromItem(Items.GOLDEN_CARROT));
+		this.metallist.add(Items.IRON_SWORD.getIdFromItem(Items.IRON_SWORD));
 		this.metallist.add(Registry.itemCopperIngot.getIdFromItem(Registry.itemCopperIngot));
 		this.metallist.add(Registry.itemLeadIngot.getIdFromItem(Registry.itemLeadIngot));
 		this.metallist.add(Registry.itemTinIngot.getIdFromItem(Registry.itemTinIngot));
 		this.metallist.add(Registry.nuggetLerasium.getIdFromItem(Registry.nuggetLerasium));
-		this.metallist.add(Blocks.anvil.getStateId(Blocks.anvil.getDefaultState()));
-		this.metallist.add(Blocks.iron_trapdoor.getStateId(Blocks.iron_trapdoor.getDefaultState()));
-		this.metallist.add(Blocks.iron_door.getStateId(Blocks.iron_door.getDefaultState()));
-		this.metallist.add(Blocks.cauldron.getStateId(Blocks.cauldron.getDefaultState()));
-		this.metallist.add(Blocks.gold_block.getStateId(Blocks.gold_block.getDefaultState()));
-		this.metallist.add(Blocks.iron_block.getStateId(Blocks.iron_block.getDefaultState()));
-		this.metallist.add(Blocks.iron_bars.getStateId(Blocks.iron_bars.getDefaultState()));
-		this.metallist.add(Blocks.hopper.getStateId(Blocks.hopper.getDefaultState()));
-		this.metallist.add(Blocks.gold_ore.getStateId(Blocks.gold_ore.getDefaultState()));
-		this.metallist.add(Blocks.iron_ore.getStateId(Blocks.iron_ore.getDefaultState()));
-		this.metallist.add(Blocks.piston_head.getStateId(Blocks.iron_ore.getDefaultState()));
-		this.metallist.add(Blocks.piston_extension.getStateId(Blocks.piston_extension.getDefaultState()));
-		this.metallist.add(Blocks.sticky_piston.getStateId(Blocks.sticky_piston.getDefaultState()));
-		this.metallist.add(Blocks.piston.getStateId(Blocks.piston.getDefaultState()));
-		this.metallist.add(Blocks.light_weighted_pressure_plate.getStateId(Blocks.light_weighted_pressure_plate.getDefaultState()));
-		this.metallist.add(Blocks.heavy_weighted_pressure_plate.getStateId(Blocks.heavy_weighted_pressure_plate.getDefaultState()));
-		this.metallist.add(Blocks.rail.getStateId(Blocks.rail.getDefaultState()));
-		this.metallist.add(Blocks.activator_rail.getStateId(Blocks.activator_rail.getDefaultState()));
-		this.metallist.add(Blocks.detector_rail.getStateId(Blocks.detector_rail.getDefaultState()));
-		this.metallist.add(Blocks.golden_rail.getStateId(Blocks.golden_rail.getDefaultState()));
+		this.metallist.add(Blocks.ANVIL.getStateId(Blocks.ANVIL.getDefaultState()));
+		this.metallist.add(Blocks.IRON_TRAPDOOR.getStateId(Blocks.IRON_TRAPDOOR.getDefaultState()));
+		this.metallist.add(Blocks.IRON_DOOR.getStateId(Blocks.IRON_DOOR.getDefaultState()));
+		this.metallist.add(Blocks.CAULDRON.getStateId(Blocks.CAULDRON.getDefaultState()));
+		this.metallist.add(Blocks.GOLD_BLOCK.getStateId(Blocks.GOLD_BLOCK.getDefaultState()));
+		this.metallist.add(Blocks.IRON_BLOCK.getStateId(Blocks.IRON_BLOCK.getDefaultState()));
+		this.metallist.add(Blocks.IRON_BARS.getStateId(Blocks.IRON_BARS.getDefaultState()));
+		this.metallist.add(Blocks.HOPPER.getStateId(Blocks.HOPPER.getDefaultState()));
+		this.metallist.add(Blocks.GOLD_ORE.getStateId(Blocks.GOLD_ORE.getDefaultState()));
+		this.metallist.add(Blocks.IRON_ORE.getStateId(Blocks.IRON_ORE.getDefaultState()));
+		this.metallist.add(Blocks.PISTON_HEAD.getStateId(Blocks.IRON_ORE.getDefaultState()));
+		this.metallist.add(Blocks.PISTON_EXTENSION.getStateId(Blocks.PISTON_EXTENSION.getDefaultState()));
+		this.metallist.add(Blocks.STICKY_PISTON.getStateId(Blocks.STICKY_PISTON.getDefaultState()));
+		this.metallist.add(Blocks.PISTON.getStateId(Blocks.PISTON.getDefaultState()));
+		this.metallist.add(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE.getStateId(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE.getDefaultState()));
+		this.metallist.add(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE.getStateId(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE.getDefaultState()));
+		this.metallist.add(Blocks.RAIL.getStateId(Blocks.RAIL.getDefaultState()));
+		this.metallist.add(Blocks.ACTIVATOR_RAIL.getStateId(Blocks.ACTIVATOR_RAIL.getDefaultState()));
+		this.metallist.add(Blocks.DETECTOR_RAIL.getStateId(Blocks.DETECTOR_RAIL.getDefaultState()));
+		this.metallist.add(Blocks.GOLDEN_RAIL.getStateId(Blocks.GOLDEN_RAIL.getDefaultState()));
 		this.metallist.add(OreBlock.oreCopper.getStateId(OreBlock.oreCopper.getDefaultState()));
 		this.metallist.add(OreBlock.oreTin.getStateId(OreBlock.oreTin.getDefaultState()));
 		this.metallist.add(OreBlock.oreZinc.getStateId(OreBlock.oreZinc.getDefaultState()));
@@ -185,7 +186,7 @@ public class ExternalPowerController{
 
 	private void tryAddMetalLiving(EntityLiving entity) {
 		if ((entity instanceof EntityIronGolem)
-				|| ((entity.getHeldItem() != null) && this.metallist.contains(entity.getHeldItem().getItem().getIdFromItem(entity.getHeldItem().getItem())))) {
+				|| (((entity.getHeldItem(EnumHand.MAIN_HAND) != null) || entity.getHeldItem(EnumHand.OFF_HAND) == null) && (this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND)) || this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND))))) {
 			this.particleTargets.add(entity);
 
 		}
@@ -295,11 +296,11 @@ public class ExternalPowerController{
 			// waaaaay too damn heavy to push... you get moved.
 		}
 
-		if (entity.getHeldItem() == null) {
+		if (entity.getHeldItem(EnumHand.OFF_HAND) == null || entity.getHeldItem(EnumHand.MAIN_HAND) == null) {
 			return;
 		}
 
-		if (this.isItemMetal(entity.getHeldItem())) {
+		if (this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND)) || this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND))) {
 			// Pull em towards you.
 			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
 			motionX = ((player.posX - entity.posX) * (1.1)/magnitude);
@@ -329,11 +330,11 @@ public class ExternalPowerController{
 			// waaaaay too damn heavy to push... you get moved.
 		}
 
-		if (entity.getHeldItem() == null) {
+		if (entity.getHeldItem(EnumHand.OFF_HAND) == null || entity.getHeldItem(EnumHand.MAIN_HAND) == null) {
 			return;
 		}
 
-		if (this.isItemMetal(entity.getHeldItem())) {
+		if (this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND)) || this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND))) {
 			// Pull em towards you.
 			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
 			motionX = ((player.posX - entity.posX) * -(1.1)/magnitude);

@@ -4,18 +4,18 @@ import java.util.List;
 
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
 import common.legobmw99.allomancy.common.AllomancyData;
 import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
 
 public class NuggetLerasium extends ItemFood {
 	public NuggetLerasium() {
@@ -42,14 +42,15 @@ public class NuggetLerasium extends ItemFood {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
-		AllomancyData.forPlayer(par3EntityPlayer);
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand){
+		AllomancyData.forPlayer(playerIn);
 		if (!AllomancyData.isMistborn) {
-			par3EntityPlayer.setItemInUse(par1ItemStack,
-					this.getMaxItemUseDuration(par1ItemStack));
+	        playerIn.setActiveHand(hand);
+	        return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);	
+
+		} else {
+        return new ActionResult(EnumActionResult.FAIL, itemStackIn);	
 		}
-		return par1ItemStack;
 	}
 
 	public ItemStack onItemUseFinish(ItemStack item, World world, EntityPlayer player) {
@@ -62,8 +63,8 @@ public class NuggetLerasium extends ItemFood {
 
 		}
 		//Fancy shmancy effects
-		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));
-		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(),
+		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z, true));
+		player.addPotionEffect(new PotionEffect(Potion.getPotionById(12),
 				20, 0, true, false));
 		player.addStat(Registry.becomeMistborn, 1);
 		return super.onItemUseFinish(item, world, player);

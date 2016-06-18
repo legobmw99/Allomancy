@@ -1,6 +1,6 @@
 package common.legobmw99.allomancy.util;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 public class vector3 {
 

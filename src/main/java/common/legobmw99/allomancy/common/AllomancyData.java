@@ -3,6 +3,7 @@ package common.legobmw99.allomancy.common;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
@@ -19,7 +20,7 @@ public class AllomancyData implements IExtendedEntityProperties {
 
 	public static boolean isMistborn = false;
 
-	public static final String IDENTIFIER = "Allomancy_Data";
+	public static final ResourceLocation IDENTIFIER = new ResourceLocation("Allomancy_Data");
 	public int selected = 0;
 	public int damageStored = 0;
 	public int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
