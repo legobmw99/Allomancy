@@ -9,6 +9,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
@@ -59,7 +60,6 @@ public class Registry {
 	public static Achievement becomeMistborn;
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
 	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool", "allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15, null, 0);
-
 	public static void addAchievements() {
 		becomeMistborn = new Achievement("achievement.becomeMistborn","becomeMistborn", -5, -2, Registry.nuggetLerasium, null).initIndependentStat().registerStat().setSpecial();
 	}
@@ -72,7 +72,7 @@ public class Registry {
 		//Register the basic, not-metallic items
 		GameRegistry.registerItem(itemAllomancyGrinder = new ItemGrinder(), "grinder");
 		GameRegistry.registerItem(itemCoinBag = new ItemCoinBag(), "coinbag");
-		GameRegistry.registerItem(Mistcloak = new ItemMistcloak(WoolArmor, 1, 1), "mistcloak");
+		GameRegistry.registerItem(Mistcloak = new ItemMistcloak(WoolArmor, 1, EntityEquipmentSlot.CHEST), "mistcloak");
 		GameRegistry.registerItem(nuggetLerasium = new NuggetLerasium(), "nuggetLerasium");
 
 		//Register ItemVial and its subtypes

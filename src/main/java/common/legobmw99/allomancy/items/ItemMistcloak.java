@@ -10,8 +10,8 @@ import com.google.common.collect.Multimap;
 
 public class ItemMistcloak extends ItemArmor{
 
-	public ItemMistcloak(ArmorMaterial par2EnumArmorMaterial, int par3, EntityEquipmentSlot par4) {
-		super(par2EnumArmorMaterial, par3, par4);
+	public ItemMistcloak(ArmorMaterial par2EnumArmorMaterial, int par3, EntityEquipmentSlot i) {
+		super(par2EnumArmorMaterial, par3, i);
 		this.setUnlocalizedName("mistcloak");
 		this.setCreativeTab(CreativeTabs.COMBAT);
 	}
