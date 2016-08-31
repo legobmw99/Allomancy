@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
@@ -30,7 +31,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	boolean longMemory;
 
 	/** The PathEntity of our entity. */
-	PathEntity entityPathEntity;
+	Path entityPathEntity;
 	Class classTarget;
 	private int field_75445_i;
 

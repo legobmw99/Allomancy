@@ -1,6 +1,8 @@
 package common.legobmw99.allomancy;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -11,6 +13,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
+import common.legobmw99.allomancy.common.AllomancyCapabilites;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.handlers.AllomancyTickHandler;
 import common.legobmw99.allomancy.util.AllomancyConfig;
@@ -25,7 +28,9 @@ public class Allomancy {
 
 	@Instance(value = "allomancy")
 	public static Allomancy instance;
-
+	
+    @CapabilityInject(AllomancyCapabilites.class)
+    public static final Capability<AllomancyCapabilites> PLAYER_CAP = null;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -46,7 +51,7 @@ public class Allomancy {
 		
 		//Register world gen
 		GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
-		
+		AllomancyCapabilites.register();
 		/* Depreciated. TODO: figure out loot tables
 		 * ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(Registry.nuggetLerasium), 1, 1, 40));
 		 * ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(Registry.nuggetLerasium), 1, 1, 40));

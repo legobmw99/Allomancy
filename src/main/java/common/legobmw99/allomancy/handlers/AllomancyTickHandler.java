@@ -46,10 +46,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
 import common.legobmw99.allomancy.Allomancy;
-import common.legobmw99.allomancy.common.AllomancyData;
+import common.legobmw99.allomancy.common.AllomancyCapabilites;
+import common.legobmw99.allomancy.common.AllomancyCapabilites;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.entity.EntityGoldNugget;
-import common.legobmw99.allomancy.network.packets.AllomancyDataPacket;
+import common.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
 import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
@@ -64,7 +65,7 @@ public class AllomancyTickHandler {
 	private Entity pointedEntity;
 	private Minecraft mc;
 	private ResourceLocation meterLoc;
-	private AllomancyData data;
+	private AllomancyCapabilites cap;
 	private int animationCounter = 0;
 	private int currentFrame = 0;
 
@@ -86,19 +87,18 @@ public class AllomancyTickHandler {
 		// Run once per tick, only if in game, and only if there is a player
 		if (event.phase == TickEvent.Phase.END&& (!Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().thePlayer != null)) {
 
-			AllomancyData data;
 			EntityPlayerSP player;
 			player = Minecraft.getMinecraft().thePlayer;
-			data = AllomancyData.forPlayer(player);
+        	AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(player);
 			RayTraceResult ray;
 			RayTraceResult mop;
 			vector3 vec;
 			
-			if (data.isMistborn == true) {
-				this.updateBurnTime(data, player);
+			if (cap.isMistborn == true) {
+				this.updateBurnTime(cap, player);
 
-				if (data.MetalBurning[AllomancyData.matIron]
-						|| data.MetalBurning[AllomancyData.matSteel]) {
+				if (cap.MetalBurning[AllomancyCapabilites.matIron]
+						|| cap.MetalBurning[AllomancyCapabilites.matSteel]) {
 					List<Entity> eList;
 					
 					Entity target;
@@ -138,7 +138,7 @@ public class AllomancyTickHandler {
 					//Ray trace 20 blocks
 					RayTraceResult mov = getMouseOverExtended(20.0F);
 					//All iron pulling powers
-					if (data.MetalBurning[AllomancyData.matIron]) {
+					if (cap.MetalBurning[AllomancyCapabilites.matIron]) {
 						if (mov != null) {
 							if (mov.entityHit != null) {
 								Allomancy.XPC.tryPullEntity(mov.entityHit);
@@ -157,7 +157,7 @@ public class AllomancyTickHandler {
 
 					}
 					//All zinc powers
-					if (data.MetalBurning[AllomancyData.matZinc]) {
+					if (cap.MetalBurning[AllomancyCapabilites.matZinc]) {
 						Entity entity;
 						if ((mov != null)
 								&& (mov.entityHit != null)
@@ -176,7 +176,7 @@ public class AllomancyTickHandler {
 					//Ray trace 20 blocks
 					RayTraceResult mov = getMouseOverExtended(20.0F);
 					//All steel pushing powers
-					if (data.MetalBurning[AllomancyData.matSteel]) {
+					if (cap.MetalBurning[AllomancyCapabilites.matSteel]) {
 						if (mov != null) {
 							if (mov.entityHit != null) {
 								Allomancy.XPC.tryPushEntity(mov.entityHit);
@@ -196,7 +196,7 @@ public class AllomancyTickHandler {
 
 					}
 					//All brass powers
-					if (data.MetalBurning[AllomancyData.matBrass]) {
+					if (cap.MetalBurning[AllomancyCapabilites.matBrass]) {
 						Entity entity;
 						if ((mov != null)
 								&& (mov.entityHit != null)
@@ -212,7 +212,7 @@ public class AllomancyTickHandler {
 					}
 				
 				//Pewter's speed powers
-				if (data.MetalBurning[AllomancyData.matPewter]) {
+				if (cap.MetalBurning[AllomancyCapabilites.matPewter]) {
 					if ((player.onGround == true)
 							&& (player.isInWater() == false)
 							&& (Minecraft.getMinecraft().gameSettings.keyBindForward
@@ -271,19 +271,19 @@ public class AllomancyTickHandler {
 		if (event.getSource().getSourceOfDamage() instanceof EntityPlayerMP) {
 			EntityPlayerMP source = (EntityPlayerMP) event.getSource()
 					.getSourceOfDamage();
-			AllomancyData data;
-			data = AllomancyData.forPlayer(source);
-			if (data.MetalBurning[AllomancyData.matPewter]) {
+        	AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(source);
+
+			if (cap.MetalBurning[AllomancyCapabilites.matPewter]) {
 				event.setAmount(event.getAmount() + 2);
 			}
 		}
 		//Reduce incoming damage for pewter burners
 		if (event.getEntityLiving() instanceof EntityPlayerMP) {
-			AllomancyData data = AllomancyData.forPlayer(event.getEntityLiving());
-			if (data.MetalBurning[AllomancyData.matPewter]) {
+			AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(event.getEntityLiving());
+			if (cap.MetalBurning[AllomancyCapabilites.matPewter]) {
 				event.setAmount(event.getAmount() - 2);
 				//Note that they took damage, will come in to play if they stop burning
-				data.damageStored++;
+				cap.damageStored++;
 			}
 		}
 	}
@@ -292,9 +292,9 @@ public class AllomancyTickHandler {
 	 * @SubscribeEvent
 	 * public void onEntityConstructing(EntityConstructing event) {
 	 * 		if (event.getEntity() instanceof EntityPlayer
-	 * 			&& event.getEntity().getExtendedProperties(AllomancyData.IDENTIFIER) == null) {
-	 * 			event.getEntity().registerExtendedProperties(AllomancyData.IDENTIFIER,
-	 * 				new AllomancyData((EntityPlayer) event.getEntity()));
+	 * 			&& event.getEntity().getExtendedProperties(AllomancyCapabilites.IDENTIFIER) == null) {
+	 * 			event.getEntity().registerExtendedProperties(AllomancyCapabilites.IDENTIFIER,
+	 * 				new AllomancyCapabilites((EntityPlayer) event.getEntity()));
 	 * }
 	 * }
 	 */
@@ -314,85 +314,85 @@ public class AllomancyTickHandler {
 						|| !Minecraft.getMinecraft().inGameHasFocus) {
 					return;
 				}
-				AllomancyData data = AllomancyData.forPlayer(player);
-				Registry.network.sendToServer(new SelectMetalPacket(data
+				AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(player);
+				Registry.network.sendToServer(new SelectMetalPacket(cap
 						.getSelected() + 1));
-				data.setSelected(data.getSelected() + 1);
+				cap.setSelected(cap.getSelected() + 1);
 			}
 		}
 		if (Registry.burnFirst.isPressed()) {
 			EntityPlayerSP player;
 			player = Minecraft.getMinecraft().thePlayer;
-			AllomancyData data;
+			AllomancyCapabilites cap;
 			Minecraft mc = FMLClientHandler.instance().getClient();
 			if (mc.currentScreen == null) {
 				if (player == null) {
 					return;
 				}
-				data = AllomancyData.forPlayer(player);
-				switch (data.getSelected()) {
+				cap = AllomancyCapabilites.forPlayer(player);
+				switch (cap.getSelected()) {
 				case 1:
 					// toggle iron.
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyData.matIron,
-							!data.MetalBurning[AllomancyData.matIron]));
+							AllomancyCapabilites.matIron,
+							!cap.MetalBurning[AllomancyCapabilites.matIron]));
 
-					if (data.MetalAmounts[AllomancyData.matIron] > 0) {
-						data.MetalBurning[AllomancyData.matIron] = !data.MetalBurning[AllomancyData.matIron];
+					if (cap.MetalAmounts[AllomancyCapabilites.matIron] > 0) {
+						cap.MetalBurning[AllomancyCapabilites.matIron] = !cap.MetalBurning[AllomancyCapabilites.matIron];
 					}
 					//play a sound effect
-					if(data.MetalBurning[AllomancyData.matIron]){
-						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					if(cap.MetalBurning[AllomancyCapabilites.matIron]){
+						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
-						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				case 2:
 					// toggle Tin.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyData.matTin,
-							!data.MetalBurning[AllomancyData.matTin]));
-					if (data.MetalAmounts[AllomancyData.matTin] > 0) {
-						data.MetalBurning[AllomancyData.matTin] = !data.MetalBurning[AllomancyData.matTin];
+							AllomancyCapabilites.matTin,
+							!cap.MetalBurning[AllomancyCapabilites.matTin]));
+					if (cap.MetalAmounts[AllomancyCapabilites.matTin] > 0) {
+						cap.MetalBurning[AllomancyCapabilites.matTin] = !cap.MetalBurning[AllomancyCapabilites.matTin];
 					}
 					//play a sound effect
-					if(data.MetalBurning[AllomancyData.matTin]){
-						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					if(cap.MetalBurning[AllomancyCapabilites.matTin]){
+						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
-						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				case 3:
 					// toggle Zinc.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyData.matZinc,
-							!data.MetalBurning[AllomancyData.matZinc]));
-					if (data.MetalAmounts[AllomancyData.matZinc] > 0) {
-						data.MetalBurning[AllomancyData.matZinc] = !data.MetalBurning[AllomancyData.matZinc];
+							AllomancyCapabilites.matZinc,
+							!cap.MetalBurning[AllomancyCapabilites.matZinc]));
+					if (cap.MetalAmounts[AllomancyCapabilites.matZinc] > 0) {
+						cap.MetalBurning[AllomancyCapabilites.matZinc] = !cap.MetalBurning[AllomancyCapabilites.matZinc];
 					}
 					//play a sound effect
-					if(data.MetalBurning[AllomancyData.matZinc]){
-						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					if(cap.MetalBurning[AllomancyCapabilites.matZinc]){
+						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
-						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				case 4:
 					// toggle Copper.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyData.matCopper,
-							!data.MetalBurning[AllomancyData.matCopper]));
-					if (data.MetalAmounts[AllomancyData.matCopper] > 0) {
-						data.MetalBurning[AllomancyData.matCopper] = !data.MetalBurning[AllomancyData.matCopper];
+							AllomancyCapabilites.matCopper,
+							!cap.MetalBurning[AllomancyCapabilites.matCopper]));
+					if (cap.MetalAmounts[AllomancyCapabilites.matCopper] > 0) {
+						cap.MetalBurning[AllomancyCapabilites.matCopper] = !cap.MetalBurning[AllomancyCapabilites.matCopper];
 					}
 					//play a sound effect
-					if(data.MetalBurning[AllomancyData.matCopper]){
-						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					if(cap.MetalBurning[AllomancyCapabilites.matCopper]){
+						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
-						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				default:
@@ -403,77 +403,77 @@ public class AllomancyTickHandler {
 		if (Registry.burnSecond.isPressed()) {
 			EntityPlayerSP player;
 			player = Minecraft.getMinecraft().thePlayer;
-			AllomancyData data;
+			AllomancyCapabilites cap;
 			Minecraft mc = FMLClientHandler.instance().getClient();
 			if (mc.currentScreen == null) {
 				if (player == null) {
 					return;
 				}
 
-				data = AllomancyData.forPlayer(player);
-				switch (data.getSelected()) {
+				cap = AllomancyCapabilites.forPlayer(player);
+				switch (cap.getSelected()) {
 				case 1:
 					// toggle Steel.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyData.matSteel,
-							!data.MetalBurning[AllomancyData.matSteel]));
-					if (data.MetalAmounts[AllomancyData.matSteel] > 0) {
-						data.MetalBurning[AllomancyData.matSteel] = !data.MetalBurning[AllomancyData.matSteel];
+							AllomancyCapabilites.matSteel,
+							!cap.MetalBurning[AllomancyCapabilites.matSteel]));
+					if (cap.MetalAmounts[AllomancyCapabilites.matSteel] > 0) {
+						cap.MetalBurning[AllomancyCapabilites.matSteel] = !cap.MetalBurning[AllomancyCapabilites.matSteel];
 					}
 					//play a sound effect
-					if(data.MetalBurning[AllomancyData.matSteel]){
-						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					if(cap.MetalBurning[AllomancyCapabilites.matSteel]){
+						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
-						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				case 2:
 					// toggle Pewter.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyData.matPewter,
-							!data.MetalBurning[AllomancyData.matPewter]));
-					if (data.MetalAmounts[AllomancyData.matPewter] > 0) {
-						data.MetalBurning[AllomancyData.matPewter] = !data.MetalBurning[AllomancyData.matPewter];
+							AllomancyCapabilites.matPewter,
+							!cap.MetalBurning[AllomancyCapabilites.matPewter]));
+					if (cap.MetalAmounts[AllomancyCapabilites.matPewter] > 0) {
+						cap.MetalBurning[AllomancyCapabilites.matPewter] = !cap.MetalBurning[AllomancyCapabilites.matPewter];
 					}
 					//play a sound effect
-					if(data.MetalBurning[AllomancyData.matPewter]){
-						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					if(cap.MetalBurning[AllomancyCapabilites.matPewter]){
+						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
-						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				case 3:
 					// toggle Brass.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyData.matBrass,
-							!data.MetalBurning[AllomancyData.matBrass]));
-					if (data.MetalAmounts[AllomancyData.matBrass] > 0) {
-						data.MetalBurning[AllomancyData.matBrass] = !data.MetalBurning[AllomancyData.matBrass];
+							AllomancyCapabilites.matBrass,
+							!cap.MetalBurning[AllomancyCapabilites.matBrass]));
+					if (cap.MetalAmounts[AllomancyCapabilites.matBrass] > 0) {
+						cap.MetalBurning[AllomancyCapabilites.matBrass] = !cap.MetalBurning[AllomancyCapabilites.matBrass];
 					}
 					//play a sound effect
-					if(data.MetalBurning[AllomancyData.matBrass]){
-						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					if(cap.MetalBurning[AllomancyCapabilites.matBrass]){
+						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
-						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				case 4:
 					// toggle Bronze.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyData.matBronze,
-							!data.MetalBurning[AllomancyData.matBronze]));
-					if (data.MetalAmounts[AllomancyData.matBronze] > 0) {
-						data.MetalBurning[AllomancyData.matBronze] = !data.MetalBurning[AllomancyData.matBronze];
+							AllomancyCapabilites.matBronze,
+							!cap.MetalBurning[AllomancyCapabilites.matBronze]));
+					if (cap.MetalAmounts[AllomancyCapabilites.matBronze] > 0) {
+						cap.MetalBurning[AllomancyCapabilites.matBronze] = !cap.MetalBurning[AllomancyCapabilites.matBronze];
 					}
 					//play a sound effect
-					if(data.MetalBurning[AllomancyData.matBronze]){
-						Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
+					if(cap.MetalBurning[AllomancyCapabilites.matBronze]){
+						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
-						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+						//.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 					}
 					break;
 				default:
@@ -486,17 +486,17 @@ public class AllomancyTickHandler {
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerLoggedInEvent event) {
 		if (event.player instanceof EntityPlayerMP) {
-			AllomancyData data = AllomancyData.forPlayer(event.player);
+			AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(event.player);
 			for (int i = 0; i < 7; i++) {
-				data.MetalBurning[i] = false;
+				cap.MetalBurning[i] = false;
 			}
-			Registry.network.sendTo(new AllomancyDataPacket(data),
+			Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap),
 					(EntityPlayerMP) event.player);
-			if (data.isMistborn == true) {
+			if (cap.isMistborn == true) {
 				Registry.network.sendTo(new BecomeMistbornPacket(),(EntityPlayerMP) event.player);
 
 				if (event.player.worldObj.isRemote) {
-					data.isMistborn = true;
+					cap.isMistborn = true;
 				}
 			}
 		}
@@ -504,9 +504,9 @@ public class AllomancyTickHandler {
 
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		AllomancyData data = AllomancyData.forPlayer(event.player);
+		AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(event.player);
 		for (int i = 0; i < 8; i++) {
-			data.MetalAmounts[i] = 0;
+			cap.MetalAmounts[i] = 0;
 		}
 		NBTTagCompound old = event.player.getEntityData();
 		if (old.hasKey("Allomancy_Data")) {
@@ -541,7 +541,7 @@ public class AllomancyTickHandler {
 
 		this.animationCounter++;
 
-		this.data = AllomancyData.forPlayer(player);
+		this.cap = AllomancyCapabilites.forPlayer(player);
 		// left hand side.
 		int ironY, steelY, tinY, pewterY;
 		// right hand side
@@ -573,7 +573,7 @@ public class AllomancyTickHandler {
 			 break;
 		
 		}
-		if (!data.isMistborn) {
+		if (!cap.isMistborn) {
 			return;
 		}
 		GuiIngame gig = new GuiIngame(Minecraft.getMinecraft());
@@ -582,7 +582,7 @@ public class AllomancyTickHandler {
 		obj = Minecraft.getMinecraft().renderEngine.getTexture(this.meterLoc);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
-		switch (this.data.getSelected()) {
+		switch (this.cap.getSelected()) {
 		case 0:
 			break;
 		case 1:
@@ -600,32 +600,32 @@ public class AllomancyTickHandler {
 
 		}
 
-		ironY = 9 - this.data.MetalAmounts[AllomancyData.matIron];
+		ironY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matIron];
 		gig.drawTexturedModalRect(renderX+1, renderY + 5 + ironY, 7, 1 + ironY, 3, 10 - ironY);
 
-		steelY = 9 - this.data.MetalAmounts[AllomancyData.matSteel];
+		steelY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matSteel];
 		gig.drawTexturedModalRect(renderX+8, renderY + 5 + steelY, 13, 1 + steelY, 3,
 				10 - steelY);
 
-		tinY = 9 - this.data.MetalAmounts[AllomancyData.matTin];
+		tinY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matTin];
 		gig.drawTexturedModalRect(renderX+26, renderY + 5 + tinY, 19, 1 + tinY, 3, 10 - tinY);
 
-		pewterY = 9 - this.data.MetalAmounts[AllomancyData.matPewter];
+		pewterY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matPewter];
 		gig.drawTexturedModalRect(renderX+33, renderY + 5 + pewterY, 25, 1 + pewterY, 3,
 				10 - pewterY);
 		
-		zincY = 9 - this.data.MetalAmounts[AllomancyData.matZinc];
+		zincY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matZinc];
 		gig.drawTexturedModalRect(renderX+51, renderY + 5 + zincY, 43, 1 + zincY, 3, 10 - zincY);
 
-		brassY = 9 - this.data.MetalAmounts[AllomancyData.matBrass];
+		brassY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matBrass];
 		gig.drawTexturedModalRect(renderX+58, renderY + 5 + brassY, 49, 1 + brassY, 3,
 				10 - brassY);
 		
-		copperY = 9 - this.data.MetalAmounts[AllomancyData.matCopper];
+		copperY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matCopper];
 		gig.drawTexturedModalRect(renderX+76, renderY + 5 + copperY, 31, 1 + copperY, 3,
 				10 - copperY);
 
-		bronzeY = 9 - this.data.MetalAmounts[AllomancyData.matBronze];
+		bronzeY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matBronze];
 		gig.drawTexturedModalRect(renderX+83, renderY + 5 + bronzeY, 37, 1 + bronzeY, 3,
 				10 - bronzeY);
 
@@ -643,42 +643,42 @@ public class AllomancyTickHandler {
 		gig.drawTexturedModalRect(renderX+75, renderY, 0, 0, 5, 20);
 		gig.drawTexturedModalRect(renderX+82, renderY, 0, 0, 5, 20);
 
-		if (this.data.MetalBurning[AllomancyData.matIron]) {
+		if (this.cap.MetalBurning[AllomancyCapabilites.matIron]) {
 			gig.drawTexturedModalRect(renderX, renderY + 5 + ironY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.data.MetalBurning[AllomancyData.matSteel]) {
+		if (this.cap.MetalBurning[AllomancyCapabilites.matSteel]) {
 			gig.drawTexturedModalRect(renderX+7, renderY + 5 + steelY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.data.MetalBurning[AllomancyData.matTin]) {
+		if (this.cap.MetalBurning[AllomancyCapabilites.matTin]) {
 			gig.drawTexturedModalRect(renderX+25, renderY + 5 + tinY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.data.MetalBurning[AllomancyData.matPewter]) {
+		if (this.cap.MetalBurning[AllomancyCapabilites.matPewter]) {
 			gig.drawTexturedModalRect(renderX+32, renderY + 5 + pewterY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.data.MetalBurning[AllomancyData.matZinc]) {
+		if (this.cap.MetalBurning[AllomancyCapabilites.matZinc]) {
 			gig.drawTexturedModalRect(renderX+50, renderY + 5 + zincY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.data.MetalBurning[AllomancyData.matBrass]) {
+		if (this.cap.MetalBurning[AllomancyCapabilites.matBrass]) {
 			gig.drawTexturedModalRect(renderX+57, renderY + 5 + brassY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.data.MetalBurning[AllomancyData.matCopper]) {
+		if (this.cap.MetalBurning[AllomancyCapabilites.matCopper]) {
 			gig.drawTexturedModalRect(renderX+75, renderY + 5 + copperY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.data.MetalBurning[AllomancyData.matBronze]) {
+		if (this.cap.MetalBurning[AllomancyCapabilites.matBronze]) {
 			gig.drawTexturedModalRect(renderX+82, renderY + 5 + bronzeY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
@@ -696,7 +696,7 @@ public class AllomancyTickHandler {
 		
 		double motionX, motionY, motionZ;
 		//Spawn in metal particles
-		if ((this.data.MetalBurning[AllomancyData.matIron] || this.data.MetalBurning[AllomancyData.matSteel]) && (event instanceof RenderGameOverlayEvent.Post)){
+		if ((this.cap.MetalBurning[AllomancyCapabilites.matIron] || this.cap.MetalBurning[AllomancyCapabilites.matSteel]) && (event instanceof RenderGameOverlayEvent.Post)){
 			for (Entity entity : Allomancy.XPC.particleTargets) {
 				motionX = ((player.posX - entity.posX) * -1) * .03;
 				motionY = (((player.posY - entity.posY + 1.2) * -1) * .03) + .021;
@@ -738,9 +738,9 @@ public class AllomancyTickHandler {
 		if ((player == null) || (event.getEntity() == null) || ((player.getDistanceToEntity(event.getEntity()) > 20) || (player.getDistanceToEntity(event.getEntity()) < .5))) {
 			return;
 		}
-		AllomancyData data = AllomancyData.forPlayer(player);
+		AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(player);
 		//Spawn sound particles
-				if (data.MetalBurning[AllomancyData.matTin]) {
+				if (cap.MetalBurning[AllomancyCapabilites.matTin]) {
 					if (event.getSound().toString().contains("step") 
 							|| event.getSound().toString().contains("mob")
 							|| event.getSound().toString().contains("hostile")
@@ -770,16 +770,16 @@ public class AllomancyTickHandler {
 
 			List<EntityPlayer> list = world.playerEntities;
 			for (EntityPlayer curPlayer : list) {
-				data = AllomancyData.forPlayer(curPlayer);
+				cap = AllomancyCapabilites.forPlayer(curPlayer);
 
-				if (data.isMistborn == true) {
+				if (cap.isMistborn == true) {
 					//Damage the player if they have stored damage and pewter cuts out
-					if (!data.MetalBurning[AllomancyData.matPewter]
-							&& (data.damageStored > 0)) {
-						data.damageStored--;
+					if (!cap.MetalBurning[AllomancyCapabilites.matPewter]
+							&& (cap.damageStored > 0)) {
+						cap.damageStored--;
 						curPlayer.attackEntityFrom(DamageSource.generic, 2);
 					}
-					if (data.MetalBurning[AllomancyData.matTin]) {
+					if (cap.MetalBurning[AllomancyCapabilites.matTin]) {
 						//Add night vision to tin-burners
 						if (curPlayer.isPotionActive(Potion.getPotionById(16)) == false) { //Potion 16 = night vision
 							curPlayer.addPotionEffect(new PotionEffect(
@@ -802,15 +802,15 @@ public class AllomancyTickHandler {
 
 					}
 					//Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing
-					if ((data.MetalBurning[AllomancyData.matTin] == false)
+					if ((cap.MetalBurning[AllomancyCapabilites.matTin] == false)
 							&& curPlayer.isPotionActive(Potion.getPotionById(16))) {
 						if (curPlayer.getActivePotionEffect(Potion.getPotionById(16))
 								.getDuration() < 201) {
 							curPlayer.removePotionEffect(Potion.getPotionById(16));
 						}
 					}
-					if(data.MetalBurning[AllomancyData.matCopper] == false){
-						if(data.MetalBurning[AllomancyData.matIron] || data.MetalBurning[AllomancyData.matSteel] || data.MetalBurning[AllomancyData.matTin] || data.MetalBurning[AllomancyData.matPewter] || data.MetalBurning[AllomancyData.matZinc] || data.MetalBurning[AllomancyData.matBrass] || data.MetalBurning[AllomancyData.matBronze]){
+					if(cap.MetalBurning[AllomancyCapabilites.matCopper] == false){
+						if(cap.MetalBurning[AllomancyCapabilites.matIron] || cap.MetalBurning[AllomancyCapabilites.matSteel] || cap.MetalBurning[AllomancyCapabilites.matTin] || cap.MetalBurning[AllomancyCapabilites.matPewter] || cap.MetalBurning[AllomancyCapabilites.matZinc] || cap.MetalBurning[AllomancyCapabilites.matBrass] || cap.MetalBurning[AllomancyCapabilites.matBronze]){
 						//TODO:bronze stuff here, probably a packet
 						}
 					}
@@ -820,19 +820,19 @@ public class AllomancyTickHandler {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private void updateBurnTime(AllomancyData data, EntityPlayerSP player) {
-		data = AllomancyData.forPlayer(player);
+	private void updateBurnTime(AllomancyCapabilites data, EntityPlayerSP player) {
+		cap = AllomancyCapabilites.forPlayer(player);
 		//Checks each metal, reduces MetalAmounts by 1 each time BurnTime ticks to 0 
 		for (int i = 0; i < 8; i++) {
-			if (data.MetalBurning[i]) {
-				data.BurnTime[i]--;
-				if (data.BurnTime[i] == 0) {
-					data.BurnTime[i] = data.MaxBurnTime[i];
-					data.MetalAmounts[i]--;
+			if (cap.MetalBurning[i]) {
+				cap.BurnTime[i]--;
+				if (cap.BurnTime[i] == 0) {
+					cap.BurnTime[i] = data.MaxBurnTime[i];
+					cap.MetalAmounts[i]--;
 					Registry.network.sendToServer(new UpdateBurnPacket(i,
 							data.MetalBurning[i]));
-					if (data.MetalAmounts[i] == 0) {
-						Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
+					if (cap.MetalAmounts[i] == 0) {
+						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
 						data.MetalBurning[i] = false;
 						Registry.network.sendToServer(new UpdateBurnPacket(i,
 								data.MetalBurning[i]));

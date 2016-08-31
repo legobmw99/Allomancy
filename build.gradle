@@ -33,6 +33,11 @@ version = config.mod_version + config.build_number
 group= "common.legobmw99.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "allomancy"
 
+sourceCompatibility = targetCompatibility = "1.6" // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.6"
+}
+
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version
     runDir = "run"

@@ -3,17 +3,18 @@ package common.legobmw99.allomancy.network.packets;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IThreadListener;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import common.legobmw99.allomancy.common.AllomancyCapabilites;
 import common.legobmw99.allomancy.common.AllomancyData;
 
-public class AllomancyDataPacket implements IMessage{
+public class AllomancyCapabiltiesPacket implements IMessage{
 	
-	public AllomancyDataPacket() {}
+	public AllomancyCapabiltiesPacket() {}
 
 	private int iron;
 	private int steel;
@@ -27,7 +28,7 @@ public class AllomancyDataPacket implements IMessage{
 
 
 	
-	public AllomancyDataPacket(AllomancyData data) {
+	public AllomancyCapabiltiesPacket(AllomancyCapabilites data) {
 		this.iron = data.MetalAmounts[0];
 		this.steel = data.MetalAmounts[1];
 		this.tin = data.MetalAmounts[2];
@@ -68,28 +69,28 @@ public class AllomancyDataPacket implements IMessage{
 		
 	}
 
-	public static class Handler implements IMessageHandler<AllomancyDataPacket, IMessage>{
+	public static class Handler implements IMessageHandler<AllomancyCapabiltiesPacket, IMessage>{
 
 		@Override
-		public IMessage onMessage(final AllomancyDataPacket message, final MessageContext ctx) {
+		public IMessage onMessage(final AllomancyCapabiltiesPacket message, final MessageContext ctx) {
 	        IThreadListener mainThread =  Minecraft.getMinecraft();
 	        mainThread.addScheduledTask(new Runnable() {
 	            @Override
 	            public void run() {
 	            	EntityPlayer player =  Minecraft.getMinecraft().thePlayer;
-	        		AllomancyData data = AllomancyData.forPlayer(player);
+	            	AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(player);
 	        		for (int i = 0; i < 8; i++){
-	        			data.MetalBurning[i] = false;
+	        			cap.MetalBurning[i] = false;
 	        			
 	        		}
-	        		data.MetalAmounts[0] = message.iron;
-	        		data.MetalAmounts[1] = message.steel;
-	        		data.MetalAmounts[2] = message.tin;
-	        		data.MetalAmounts[3] = message.pewter;
-	        		data.MetalAmounts[4] = message.zinc;
-	        		data.MetalAmounts[5] = message.brass;
-	        		data.MetalAmounts[6] = message.copper;
-	        		data.MetalAmounts[7] = message.bronze;
+	        		cap.MetalAmounts[0] = message.iron;
+	        		cap.MetalAmounts[1] = message.steel;
+	        		cap.MetalAmounts[2] = message.tin;
+	        		cap.MetalAmounts[3] = message.pewter;
+	        		cap.MetalAmounts[4] = message.zinc;
+	        		cap.MetalAmounts[5] = message.brass;
+	        		cap.MetalAmounts[6] = message.copper;
+	        		cap.MetalAmounts[7] = message.bronze;
 	        		
 	            }
 	        });		return null;
