@@ -3,13 +3,16 @@ package common.legobmw99.allomancy.items;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-
-import common.legobmw99.allomancy.common.AllomancyData;
+import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 
 public class ItemVial extends Item{
@@ -18,34 +21,33 @@ public class ItemVial extends Item{
 		"steelelixer", "tinelixer", "pewterelixer", "zincelixer",
 		"brasselixer", "copperelixer", "bronzeelixer", };
 
-	public ItemStack onItemUseFinish(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
-		AllomancyData data;
-		data = AllomancyData.forPlayer(par3EntityPlayer);
+	@Override
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving){
+		AllomancyCapabilities cap;
+		cap = AllomancyCapabilities.forPlayer(entityLiving);
 		
-		//Don't consume items in creative mode
-		if (par3EntityPlayer.capabilities.isCreativeMode != true) {
-			par1ItemStack.stackSize--; 
-            par3EntityPlayer.inventory.addItemStackToInventory(new ItemStack(Registry.itemVial, 1,0));
+		if (((EntityPlayer)(entityLiving)).capabilities.isCreativeMode != true) {
+			stack.stackSize--; 
+			((EntityPlayer)(entityLiving)).inventory.addItemStackToInventory(new ItemStack(Registry.itemVial, 1,0));
 		}
-		if (data == null) {
-			return par1ItemStack;
+		if (cap == null) {
+			return stack;
 		}
 
-		if (par1ItemStack.getItemDamage() == 0)
-			return par1ItemStack;
+		if (stack.getItemDamage() == 0)
+			return stack;
 		
 		//onItemFinishUse to fire twice, but we only want to increase the data by one. Hence we use a simple counter
 		if (fireNumber == 1){
-			if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10) {
-				data.MetalAmounts[par1ItemStack.getItemDamage() - 1]++;
+			if (cap.MetalAmounts[stack.getItemDamage() - 1] < 10) {
+				cap.MetalAmounts[stack.getItemDamage() - 1]++;
 				fireNumber = 0;
 			}
 		} else {
 			fireNumber++;
 		}
 
-		return par1ItemStack;
+		return stack;
 	}
 
 
@@ -60,18 +62,23 @@ public class ItemVial extends Item{
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
-		AllomancyData data;
-		data = AllomancyData.forPlayer(par3EntityPlayer);
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand){
+
+		AllomancyCapabilities cap;
+		cap = AllomancyCapabilities.forPlayer(playerIn);
 		//Checks both the metal amount (we only want to fill up to 10) and the item damage (can't drink empty vials)
-		if (par1ItemStack.getItemDamage() > 0){
-			if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10) {
-				par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
+		if (itemStackIn.getItemDamage() > 0){
+			if (cap.MetalAmounts[itemStackIn.getItemDamage() - 1] < 10) {
+		        playerIn.setActiveHand(hand);
+		        return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);	
+
+			} else {
+		        return new ActionResult(EnumActionResult.FAIL, itemStackIn);
+			}} else {
+	        return new ActionResult(EnumActionResult.FAIL, itemStackIn);		
 			}
 		}
-		return par1ItemStack;
-	}
+		
 	
 
 	public ItemVial() {

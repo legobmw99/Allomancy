@@ -1,9 +1,9 @@
 package common.legobmw99.allomancy.particle;
 
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
 
-public class ParticleMetal extends EntityFX {
+public class ParticleMetal extends Particle {
 
 	public ParticleMetal(World world, double x, double y,double z, double motionX, double motionY, double motionZ) {
 		
@@ -15,7 +15,6 @@ public class ParticleMetal extends EntityFX {
 		this.motionY = motionY;
 		this.motionZ = motionZ;
 		this.particleMaxAge = 30;
-		this.noClip = true;
 	}
 
 	@Override
@@ -25,7 +24,7 @@ public class ParticleMetal extends EntityFX {
 		this.prevPosZ = this.posZ;
 
 		if (this.particleAge++ >= this.particleMaxAge) {
-			this.setDead();
+			this.setExpired();
 		}
 
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);

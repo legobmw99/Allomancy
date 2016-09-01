@@ -1,12 +1,12 @@
 package common.legobmw99.allomancy.blocks;
 
-import common.legobmw99.allomancy.common.Registry;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+
+import common.legobmw99.allomancy.common.Registry;
 
 public class OreBlock extends Block {
 	public static Block oreTin;
@@ -21,9 +21,8 @@ public class OreBlock extends Block {
 	private OreType type;
 
 	public OreBlock(OreType type) {
-		super(Material.rock);
+		super(Material.ROCK);
 		this.setHardness(.5F);
-		this.setStepSound(Block.soundTypeStone);
 		switch (type) {
 			case LEAD: this.setUnlocalizedName("oreLead");
                 break;

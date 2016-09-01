@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -33,17 +33,22 @@ version = config.mod_version + config.build_number
 group= "common.legobmw99.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "allomancy"
 
+sourceCompatibility = targetCompatibility = "1.6" // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.6"
+}
+
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version
     runDir = "run"
         replaceIn "Allomancy.java"
-        replace "@VERSION@", version        
+        replace "@VERSION@", config.mod_version        
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "stable_20"
+    mappings = "snapshot_20160518"
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
 }

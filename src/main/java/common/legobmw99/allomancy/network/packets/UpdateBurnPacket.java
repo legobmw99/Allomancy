@@ -1,6 +1,5 @@
 package common.legobmw99.allomancy.network.packets;
 
-import common.legobmw99.allomancy.common.AllomancyData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IThreadListener;
@@ -9,6 +8,8 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import common.legobmw99.allomancy.common.AllomancyCapabilities;
 
 public class UpdateBurnPacket implements IMessage {
 	 
@@ -45,7 +46,7 @@ public class UpdateBurnPacket implements IMessage {
 	            public void run() {
 
 	            	EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-	            	AllomancyData data = AllomancyData.forPlayer(player);
+	            	AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
 	            	 boolean value;
 	                 if(message.value == 1){ //Convert int back to bool
 	                     value = true;
@@ -53,10 +54,10 @@ public class UpdateBurnPacket implements IMessage {
 	                 else{
 	                     value = false;
 	                     }
-	     			if (data.MetalAmounts[message.mat] != 0) {
-	     				data.MetalBurning[message.mat] = value;
+	     			if (cap.MetalAmounts[message.mat] != 0) {
+	     				cap.MetalBurning[message.mat] = value;
 	     			} else {
-	     				data.MetalBurning[message.mat] = false;
+	     				cap.MetalBurning[message.mat] = false;
 	     			}
 	     		}
 	        });		return null;

@@ -4,10 +4,10 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -65,14 +65,26 @@ public class OreGenerator implements IWorldGenerator {
 
 	}
 
+
+
+	private void generateOre(World world, Random random, int x, int y, int z,
+			Block block, int ntg) {
+		int lx, ly, lz;
+		lx = x;
+		ly = y;
+		lz = z;
+        BlockPos pos1 = new BlockPos(lx, ly, lz);
+          (new WorldGenMinable(block.getDefaultState(), ntg*2)).generate(world, random, pos1);
+	}
+
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world,
-			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+			IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		int x, y, z;
 		int numOre;
 		int numCluster;
 		//Only generate in overworld
-		if (world.provider.getDimensionId() != 0) {
+		if (world.provider.getDimension() != 0) {
 			return;
 		}
 
@@ -95,15 +107,5 @@ public class OreGenerator implements IWorldGenerator {
 				}
 			}
 		}
-	}
-
-	private void generateOre(World world, Random random, int x, int y, int z,
-			Block block, int ntg) {
-		int lx, ly, lz;
-		lx = x;
-		ly = y;
-		lz = z;
-        BlockPos pos1 = new BlockPos(lx, ly, lz);
-          (new WorldGenMinable(block.getDefaultState(), ntg*2)).generate(world, random, pos1);
 	}
 }

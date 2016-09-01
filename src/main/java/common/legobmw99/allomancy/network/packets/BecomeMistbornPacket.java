@@ -1,15 +1,14 @@
 package common.legobmw99.allomancy.network.packets;
 
-import common.legobmw99.allomancy.common.AllomancyData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import common.legobmw99.allomancy.common.AllomancyCapabilities;
 
 public class BecomeMistbornPacket implements IMessage {
 	
@@ -36,9 +35,9 @@ public class BecomeMistbornPacket implements IMessage {
 	            @Override
 	            public void run() {
 	            	EntityPlayer player =  Minecraft.getMinecraft().thePlayer;
-	        		AllomancyData data;
-	        		data = AllomancyData.forPlayer(player);
-	        		data.isMistborn = true;
+	            	AllomancyCapabilities cap;
+	        		cap = AllomancyCapabilities.forPlayer(player);
+	        		cap.isMistborn = true;
 	            }
 	        });		return null;
 		}

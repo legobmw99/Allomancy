@@ -1,14 +1,15 @@
 package common.legobmw99.allomancy.common;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderSnowball;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
@@ -33,7 +34,7 @@ import common.legobmw99.allomancy.items.ItemGrinder;
 import common.legobmw99.allomancy.items.ItemMistcloak;
 import common.legobmw99.allomancy.items.ItemVial;
 import common.legobmw99.allomancy.items.NuggetLerasium;
-import common.legobmw99.allomancy.network.packets.AllomancyDataPacket;
+import common.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
 import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
@@ -58,8 +59,7 @@ public class Registry {
 	public static String[] flakeMetals = {"Iron","Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze", "Lead"};
 	public static Achievement becomeMistborn;
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
-	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool", "allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15);
-
+	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool", "allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15, null, 0);
 	public static void addAchievements() {
 		becomeMistborn = new Achievement("achievement.becomeMistborn","becomeMistborn", -5, -2, Registry.nuggetLerasium, null).initIndependentStat().registerStat().setSpecial();
 	}
@@ -72,7 +72,7 @@ public class Registry {
 		//Register the basic, not-metallic items
 		GameRegistry.registerItem(itemAllomancyGrinder = new ItemGrinder(), "grinder");
 		GameRegistry.registerItem(itemCoinBag = new ItemCoinBag(), "coinbag");
-		GameRegistry.registerItem(Mistcloak = new ItemMistcloak(WoolArmor, 1, 1), "mistcloak");
+		GameRegistry.registerItem(Mistcloak = new ItemMistcloak(WoolArmor, 1, EntityEquipmentSlot.CHEST), "mistcloak");
 		GameRegistry.registerItem(nuggetLerasium = new NuggetLerasium(), "nuggetLerasium");
 
 		//Register ItemVial and its subtypes
@@ -118,7 +118,7 @@ public class Registry {
 	       network.registerMessage(SelectMetalPacket.Handler.class, SelectMetalPacket.class, 2, Side.SERVER);
 	       network.registerMessage(MoveEntityPacket.Handler.class, MoveEntityPacket.class, 3, Side.SERVER);
 	       network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 4, Side.SERVER);
-	       network.registerMessage(AllomancyDataPacket.Handler.class, AllomancyDataPacket.class, 5, Side.CLIENT);
+	       network.registerMessage(AllomancyCapabiltiesPacket.Handler.class, AllomancyCapabiltiesPacket.class, 5, Side.CLIENT);
 	       network.registerMessage(ChangeEmotionPacket.Handler.class, ChangeEmotionPacket.class, 6, Side.SERVER);
 
 	}
@@ -128,7 +128,7 @@ public class Registry {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		
 		//Call on rendersnowball for gold nugget projectile
-		RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class , new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.gold_nugget, renderItem));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class , new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.GOLD_NUGGET, renderItem));
 		
 		//Register ore models individually.
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreTin), 0, new ModelResourceLocation("allomancy:oreTin", "inventory"));
@@ -172,7 +172,7 @@ public class Registry {
 			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(new Item().getByNameOrId("allomancy:"+"flake" + flakeMetals[i]), 2), new Object[] {"ingot" + flakeMetals[i],  new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder))}));
 		}
 		
-		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:flakeSteel"), 2),new ItemStack(new Item().getByNameOrId("allomancy:flakeIron")), new ItemStack(Items.coal));
+		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:flakeSteel"), 2),new ItemStack(new Item().getByNameOrId("allomancy:flakeIron")), new ItemStack(Items.COAL));
 		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:flakeBrass"), 2),new ItemStack(new Item().getByNameOrId("allomancy:flakeZinc")), new ItemStack(new Item().getByNameOrId("allomancy:flakeCopper")));
 		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:flakePewter"), 2),new ItemStack(new Item().getByNameOrId("allomancy:flakeTin")), new ItemStack(new Item().getByNameOrId("allomancy:flakeLead")));
 		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:flakeBronze"), 2),new ItemStack(new Item().getByNameOrId("allomancy:flakeCopper")), new ItemStack(new Item().getByNameOrId("allomancy:flakeTin")));
@@ -184,20 +184,20 @@ public class Registry {
 		
 
 		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1), new Object[] {
-				"W W", "WWW", "WWW", 'W', new ItemStack(Blocks.wool, 1, 7) });
+				"W W", "WWW", "WWW", 'W', new ItemStack(Blocks.WOOL, 1, 7) });
 		GameRegistry.addRecipe(new ShapedOreRecipe(
 				new ItemStack(itemVial, 3, 0), " x ", "y y", " y ", 'x',
-				"slabWood", 'y', Blocks.glass));
+				"slabWood", 'y', Blocks.GLASS));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 				itemCoinBag, 1, 0), " xy", "l l", " l ", 'l',
-				Items.leather, 'y', Items.gold_nugget, 'x', Items.lead));
+				Items.LEATHER, 'y', Items.GOLD_NUGGET, 'x', Items.LEAD));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(
 				itemAllomancyGrinder, 1, 0), "xxx", "yyy", "xxx", 'x',
-				Items.iron_ingot, 'y', Items.gold_nugget));
+				Items.IRON_INGOT, 'y', Items.GOLD_NUGGET));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(
 				nuggetLerasium), new Object[] {
-				new ItemStack(Blocks.gold_block, 1),
-				new ItemStack(Items.nether_star, 1) }));
+				new ItemStack(Blocks.GOLD_BLOCK, 1),
+				new ItemStack(Items.NETHER_STAR, 1) }));
 
 	}
 

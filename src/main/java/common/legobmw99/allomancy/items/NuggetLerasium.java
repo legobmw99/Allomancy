@@ -2,20 +2,21 @@ package common.legobmw99.allomancy.items;
 
 import java.util.List;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import common.legobmw99.allomancy.common.AllomancyData;
+
+import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
 
 public class NuggetLerasium extends ItemFood {
 	public NuggetLerasium() {
@@ -42,31 +43,33 @@ public class NuggetLerasium extends ItemFood {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
-		AllomancyData.forPlayer(par3EntityPlayer);
-		if (!AllomancyData.isMistborn) {
-			par3EntityPlayer.setItemInUse(par1ItemStack,
-					this.getMaxItemUseDuration(par1ItemStack));
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand){
+		AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(playerIn);
+		if (!cap.isMistborn) {
+	        playerIn.setActiveHand(hand);
+	        return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);	
+
+		} else {
+        return new ActionResult(EnumActionResult.FAIL, itemStackIn);	
 		}
-		return par1ItemStack;
 	}
-
-	public ItemStack onItemUseFinish(ItemStack item, World world, EntityPlayer player) {
-		AllomancyData.forPlayer(player);
-		double x = player.posX;
-		double y = player.posY + 3;
-		double z = player.posZ;
-		if (AllomancyData.isMistborn == false) {
-			AllomancyData.isMistborn = true;
-
+	
+	@Override
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving){
+		AllomancyCapabilities cap = AllomancyCapabilities.forPlayer((EntityPlayer)entityLiving);
+		double x = entityLiving.posX;
+		double y = entityLiving.posY + 3;
+		double z = entityLiving.posZ;
+		if (cap.isMistborn == false) {
+			cap.isMistborn = true;
 		}
 		//Fancy shmancy effects
-		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));
-		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(),
+		worldIn.spawnEntityInWorld(new EntityLightningBolt(worldIn, x, y, z, true));
+		entityLiving.addPotionEffect(new PotionEffect(Potion.getPotionById(12),
 				20, 0, true, false));
-		player.addStat(Registry.becomeMistborn, 1);
-		return super.onItemUseFinish(item, world, player);
+
+		((EntityPlayer) entityLiving).addStat(Registry.becomeMistborn, 1);
+		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
 
 	@Override

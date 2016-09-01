@@ -4,11 +4,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.ArrowNockEvent;
-
-import common.legobmw99.allomancy.common.AllomancyData;
+import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.entity.EntityGoldNugget;
 
@@ -21,24 +21,39 @@ public class ItemCoinBag extends Item{
 		}
 	
 
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
-    {
-
-        if (par3EntityPlayer.capabilities.isCreativeMode || (par3EntityPlayer.inventory.hasItem(Items.gold_nugget) && AllomancyData.forPlayer(par3EntityPlayer).MetalBurning[AllomancyData.matSteel]))
-        {
-            EntityGoldNugget entitygold = new EntityGoldNugget(par2World, par3EntityPlayer);
-            par2World.spawnEntityInWorld(entitygold);
-            
-            if(!par3EntityPlayer.capabilities.isCreativeMode){
-            par3EntityPlayer.inventory.consumeInventoryItem(Items.gold_nugget);
-            }
-        }
-
-        return par1ItemStack;
+	   public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	    {
+	  
+        ItemStack itemstack = this.findArrow(playerIn);
+        if (playerIn.capabilities.isCreativeMode || itemstack != null && AllomancyCapabilities.forPlayer(playerIn).MetalBurning[AllomancyCapabilities.matSteel]){
+        		EntityGoldNugget entitygold = new EntityGoldNugget(worldIn, playerIn);
+        		worldIn.spawnEntityInWorld(entitygold);
+        		if(!playerIn.capabilities.isCreativeMode){
+        			--itemstack.stackSize;
+        		}
+        	}        
+        return new ActionResult(EnumActionResult.PASS, itemStackIn);
     }
 
+	/*
+	 * Finds items in inventory
+	 */
+	  private ItemStack findArrow(EntityPlayer player){
+	            for (int i = 0; i < player.inventory.getSizeInventory(); ++i){
+	                ItemStack itemstack = player.inventory.getStackInSlot(i);
+	                if (this.isArrow(itemstack)){
+	                    return itemstack;
+	                }
+	            }
 
-	   public int getItemEnchantability()
+	            return null;
+	  }
+
+	  protected boolean isArrow(ItemStack stack){
+	        return stack != null && stack.getItem() ==  Items.GOLD_NUGGET;
+	  }
+	  
+	  public int getItemEnchantability()
 	    {
 	        return 0;
 	    }
