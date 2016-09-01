@@ -45,10 +45,8 @@ public class Allomancy {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		//Register the ATH as both an event handler and a tick handler
-		//yes the names are backwards
-		MinecraftForge.EVENT_BUS.register(new AllomancyTickHandler());
-		FMLCommonHandler.instance().bus().register(new AllomancyEventHandler());
+		MinecraftForge.EVENT_BUS.register(new AllomancyEventHandler());
+		FMLCommonHandler.instance().bus().register(new AllomancyTickHandler());
 		
 		//Register world gen
 		GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
