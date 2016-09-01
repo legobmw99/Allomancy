@@ -4,7 +4,7 @@ Allomancy 2.0
 
 This mod adds the basics of [Allomancy](http://coppermind.net/wiki/Allomancy) from Brandon Sanderson's book series *Mistborn*. 
 
-This mod is currently optimized around `Minecraft 1.9.4` and `Forge 12.17.0.1965`
+This mod is currently optimized around `Minecraft 1.10.2` and `Forge 12.18.1.2075`
 
 
-**Warning:** This 1.8 version is extremely broken. Use at your own discretion 
+**Warning:** This 1.10.2 version is untested. Use at your own discretion and report any issues!
