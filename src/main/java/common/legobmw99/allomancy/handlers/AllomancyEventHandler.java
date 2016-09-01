@@ -132,7 +132,7 @@ public class AllomancyEventHandler {
                 AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
                 Registry.network.sendToServer(new SelectMetalPacket(cap
                         .getSelected() + 1));
-                cap.selected = (cap.getSelected() + 1);
+                cap.setSelected(cap.getSelected() + 1); 
             }
         }
         if (Registry.burnFirst.isPressed()) {

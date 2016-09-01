@@ -30,6 +30,9 @@ public class ItemCoinBag extends Item{
         		worldIn.spawnEntityInWorld(entitygold);
         		if(!playerIn.capabilities.isCreativeMode){
         			--itemstack.stackSize;
+        			if(itemstack.stackSize < 1){
+        				itemstack.stackSize = 0;
+        			}
         		}
         	}        
         return new ActionResult(EnumActionResult.PASS, itemStackIn);
@@ -42,6 +45,11 @@ public class ItemCoinBag extends Item{
 	            for (int i = 0; i < player.inventory.getSizeInventory(); ++i){
 	                ItemStack itemstack = player.inventory.getStackInSlot(i);
 	                if (this.isArrow(itemstack)){
+	                	if(itemstack.stackSize == 1){
+	                		player.inventory.removeStackFromSlot(i);
+	                		return itemstack;
+
+	                	}
 	                    return itemstack;
 	                }
 	            }

@@ -24,6 +24,7 @@ public class EntityGoldNugget extends EntityThrowable {
         super(par1World, par2EntityLivingBase);
         if (par2EntityLivingBase instanceof EntityPlayer){
         	EntityPlayer ep = (EntityPlayer) par2EntityLivingBase;
+        	this.setHeadingFromThrower(ep, ep.rotationPitch, ep.rotationYawHead, 2.0F, 7.0F, 0.0F);
         	if (ep.capabilities.isCreativeMode){
         		this.dropItem = false;
         	}
@@ -38,7 +39,7 @@ public class EntityGoldNugget extends EntityThrowable {
     
 	@Override
 	protected void onImpact(RayTraceResult movingobjectposition) {
-		if (movingobjectposition.entityHit != null)
+		if (movingobjectposition.entityHit != null && movingobjectposition.entityHit != this.getThrower())
         {
             byte b0 = 0;
 
@@ -46,7 +47,7 @@ public class EntityGoldNugget extends EntityThrowable {
             {
                 b0 = 3;
             }
-
+            
             movingobjectposition.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), (float) 4);
         }
 
