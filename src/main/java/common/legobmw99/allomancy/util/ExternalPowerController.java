@@ -131,12 +131,15 @@ public class ExternalPowerController{
 		 }
 	}
 
-	public boolean isItemMetal(ItemStack Item) {
-		if (this.metallist.contains(Item.getItem().getIdFromItem(Item.getItem())) ) {
+	public boolean isItemMetal(ItemStack item) {
+		if(item == null){
+			return false;
+		}
+		if (this.metallist.contains(item.getItem().getIdFromItem(item.getItem())) ) {
 			return true;
 		} else {
-			if (Item.getItem() instanceof ItemBlock){
-				if (this.metallist.contains(Block.getBlockFromItem(Item.getItem()).getDefaultState())){
+			if (item.getItem() instanceof ItemBlock){
+				if (this.metallist.contains(Block.getBlockFromItem(item.getItem()).getDefaultState())){
 					return true;
 
 				}
