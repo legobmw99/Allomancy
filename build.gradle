@@ -42,7 +42,7 @@ minecraft {
     version = config.minecraft_version + "-" + config.forge_version
     runDir = "run"
         replaceIn "Allomancy.java"
-        replace "@VERSION@", version        
+        replace "@VERSION@", config.mod_version        
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
