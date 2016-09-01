@@ -2,6 +2,7 @@ package common.legobmw99.allomancy.items;
 
 import java.util.List;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -43,8 +44,8 @@ public class NuggetLerasium extends ItemFood {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand){
-		AllomancyCapabilities.forPlayer(playerIn);
-		if (!AllomancyCapabilities.isMistborn) {
+		AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(playerIn);
+		if (!cap.isMistborn) {
 	        playerIn.setActiveHand(hand);
 	        return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);	
 
@@ -52,22 +53,23 @@ public class NuggetLerasium extends ItemFood {
         return new ActionResult(EnumActionResult.FAIL, itemStackIn);	
 		}
 	}
-
-	public ItemStack onItemUseFinish(ItemStack item, World world, EntityPlayer player) {
-		AllomancyCapabilities.forPlayer(player);
-		double x = player.posX;
-		double y = player.posY + 3;
-		double z = player.posZ;
-		if (AllomancyCapabilities.isMistborn == false) {
-			AllomancyCapabilities.isMistborn = true;
-
+	
+	@Override
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving){
+		AllomancyCapabilities cap = AllomancyCapabilities.forPlayer((EntityPlayer)entityLiving);
+		double x = entityLiving.posX;
+		double y = entityLiving.posY + 3;
+		double z = entityLiving.posZ;
+		if (cap.isMistborn == false) {
+			cap.isMistborn = true;
 		}
 		//Fancy shmancy effects
-		world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z, true));
-		player.addPotionEffect(new PotionEffect(Potion.getPotionById(12),
+		worldIn.spawnEntityInWorld(new EntityLightningBolt(worldIn, x, y, z, true));
+		entityLiving.addPotionEffect(new PotionEffect(Potion.getPotionById(12),
 				20, 0, true, false));
-		player.addStat(Registry.becomeMistborn, 1);
-		return super.onItemUseFinish(item, world, player);
+
+		((EntityPlayer) entityLiving).addStat(Registry.becomeMistborn, 1);
+		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
 
 	@Override

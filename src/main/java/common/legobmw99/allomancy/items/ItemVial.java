@@ -3,6 +3,7 @@ package common.legobmw99.allomancy.items;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -11,7 +12,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-
 import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 
@@ -21,33 +21,33 @@ public class ItemVial extends Item{
 		"steelelixer", "tinelixer", "pewterelixer", "zincelixer",
 		"brasselixer", "copperelixer", "bronzeelixer", };
 
-	public ItemStack onItemUseFinish(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
+	@Override
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving){
 		AllomancyCapabilities cap;
-		cap = AllomancyCapabilities.forPlayer(par3EntityPlayer);
+		cap = AllomancyCapabilities.forPlayer(entityLiving);
 		
-		if (par3EntityPlayer.capabilities.isCreativeMode != true) {
-			par1ItemStack.stackSize--; 
-            par3EntityPlayer.inventory.addItemStackToInventory(new ItemStack(Registry.itemVial, 1,0));
+		if (((EntityPlayer)(entityLiving)).capabilities.isCreativeMode != true) {
+			stack.stackSize--; 
+			((EntityPlayer)(entityLiving)).inventory.addItemStackToInventory(new ItemStack(Registry.itemVial, 1,0));
 		}
 		if (cap == null) {
-			return par1ItemStack;
+			return stack;
 		}
 
-		if (par1ItemStack.getItemDamage() == 0)
-			return par1ItemStack;
+		if (stack.getItemDamage() == 0)
+			return stack;
 		
 		//onItemFinishUse to fire twice, but we only want to increase the data by one. Hence we use a simple counter
 		if (fireNumber == 1){
-			if (cap.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10) {
-				cap.MetalAmounts[par1ItemStack.getItemDamage() - 1]++;
+			if (cap.MetalAmounts[stack.getItemDamage() - 1] < 10) {
+				cap.MetalAmounts[stack.getItemDamage() - 1]++;
 				fireNumber = 0;
 			}
 		} else {
 			fireNumber++;
 		}
 
-		return par1ItemStack;
+		return stack;
 	}
 
 

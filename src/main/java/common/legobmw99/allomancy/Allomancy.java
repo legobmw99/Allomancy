@@ -12,9 +12,9 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-
 import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.handlers.AllomancyEventHandler;
 import common.legobmw99.allomancy.handlers.AllomancyTickHandler;
 import common.legobmw99.allomancy.util.AllomancyConfig;
 import common.legobmw99.allomancy.util.ExternalPowerController;
@@ -46,8 +46,9 @@ public class Allomancy {
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		//Register the ATH as both an event handler and a tick handler
+		//yes the names are backwards
 		MinecraftForge.EVENT_BUS.register(new AllomancyTickHandler());
-		FMLCommonHandler.instance().bus().register(new AllomancyTickHandler());
+		FMLCommonHandler.instance().bus().register(new AllomancyEventHandler());
 		
 		//Register world gen
 		GameRegistry.registerWorldGenerator(new OreGenerator(), 0);

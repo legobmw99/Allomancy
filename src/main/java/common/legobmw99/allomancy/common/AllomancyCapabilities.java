@@ -13,9 +13,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public class AllomancyCapabilities implements ICapabilityProvider, INBTSerializable<NBTTagCompound> {
+public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagCompound>  {
 	
 	public static final int matIron = 0;
 	public static final int matSteel = 1;
@@ -28,7 +29,7 @@ public class AllomancyCapabilities implements ICapabilityProvider, INBTSerializa
 
 	public static boolean isMistborn = false;
 
-	public static final String IDENTIFIER = "Allomancy_Data";
+	public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "Allomancy_Data");
 	public int selected = 0;
 	public int damageStored = 0;
 	public int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
@@ -46,7 +47,11 @@ public class AllomancyCapabilities implements ICapabilityProvider, INBTSerializa
 	public static AllomancyCapabilities forPlayer(Entity player) {
 		return player.getCapability(Allomancy.PLAYER_CAP, null);
 	}
-
+	
+    public AllomancyCapabilities(EntityPlayer player)
+    {
+        this.player = player;
+    }
 	
     public static void register()
     {
@@ -66,7 +71,6 @@ public class AllomancyCapabilities implements ICapabilityProvider, INBTSerializa
 		nbt.setInteger("copper", this.MetalAmounts[6]);
 		nbt.setInteger("brass", this.MetalAmounts[7]);
 		nbt.setInteger("selected", this.selected);
-		nbt.setTag(IDENTIFIER, nbt);
 		return nbt;
 
 	}
@@ -75,7 +79,6 @@ public class AllomancyCapabilities implements ICapabilityProvider, INBTSerializa
 	@Override
 	public void deserializeNBT(NBTTagCompound compound) {
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt = compound.getCompoundTag(IDENTIFIER);
 		isMistborn = nbt.getBoolean("ismistborn");
 		this.MetalAmounts[0] = nbt.getInteger("iron");
 		this.MetalAmounts[1] = nbt.getInteger("steel");
@@ -85,9 +88,10 @@ public class AllomancyCapabilities implements ICapabilityProvider, INBTSerializa
 		this.MetalAmounts[5] = nbt.getInteger("bronze");
 		this.MetalAmounts[6] = nbt.getInteger("copper");
 		this.MetalAmounts[7] = nbt.getInteger("brass");		
+		this.selected = nbt.getInteger("selected");
 	}
 
-	public int getSelected() {
+	/*public int getSelected() {
 		return this.selected;
 	}
 
@@ -96,7 +100,7 @@ public class AllomancyCapabilities implements ICapabilityProvider, INBTSerializa
 		if ((this.selected > 4) || (this.selected < 0)) {
 			this.selected = 0;
 		}
-	}
+	}*/
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -115,13 +119,13 @@ public class AllomancyCapabilities implements ICapabilityProvider, INBTSerializa
 	        @Override
 	        public NBTBase writeNBT(Capability<AllomancyCapabilities> capability, AllomancyCapabilities instance, EnumFacing side)
 	        {
-	            return null;
+	    		return null;
 	        }
 
 	        @Override
 	        public void readNBT(Capability<AllomancyCapabilities> capability, AllomancyCapabilities instance, EnumFacing side, NBTBase nbt)
 	        {
-
+	 
 	        }
 
 	    }
@@ -134,5 +138,17 @@ public class AllomancyCapabilities implements ICapabilityProvider, INBTSerializa
 	            return null;
 	        }
 	    }
+
+	    public int getSelected() {
+			return this.selected;
+		}
+
+		public void setSelected(int selected) {
+			this.selected = selected;
+			if ((this.selected > 4) || (this.selected < 0)) {
+				this.selected = 0;
+			}
+		}
+
 }
 	

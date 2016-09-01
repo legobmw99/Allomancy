@@ -37,7 +37,7 @@ public class SelectMetalPacket implements IMessage{
 	            public void run() {
 	            	EntityPlayerMP player = ctx.getServerHandler().playerEntity;
 	            	AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
-	            	cap.setSelected(message.metal);
+	            	cap.selected = (message.metal);
 	            }
 	        });		return null;
 		}
