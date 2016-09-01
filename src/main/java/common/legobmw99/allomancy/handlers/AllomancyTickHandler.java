@@ -126,7 +126,7 @@ public class AllomancyTickHandler {
 						}
 
 					}
-				if ((player.getHeldItemMainhand()) == null)
+				if ((player.getHeldItemMainhand()) == null
 						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() == true)) {
 					//Ray trace 20 blocks
 					RayTraceResult mov = getMouseOverExtended(20.0F);
