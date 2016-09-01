@@ -107,7 +107,7 @@ public class AllomancyEventHandler {
      @SubscribeEvent
         public void onAttachCapability(AttachCapabilitiesEvent.Entity event)
         {
-            if(event.getEntity() instanceof EntityPlayer)
+            if(event.getEntity() instanceof EntityPlayer && !event.getEntity().hasCapability(Allomancy.PLAYER_CAP, null))
             {
                 event.addCapability(new ResourceLocation(Allomancy.MODID, "Allomancy_Data"), new AllomancyCapabilities(((EntityPlayer) event.getEntity())));
             }

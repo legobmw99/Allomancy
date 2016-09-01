@@ -16,8 +16,9 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagCompound>  {
-	
+public class AllomancyCapabilities implements
+		ICapabilitySerializable<NBTTagCompound> {
+
 	public static final int matIron = 0;
 	public static final int matSteel = 1;
 	public static final int matTin = 2;
@@ -29,7 +30,8 @@ public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagComp
 
 	public static boolean isMistborn = false;
 
-	public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "Allomancy_Data");
+	public static final ResourceLocation IDENTIFIER = new ResourceLocation(
+			Allomancy.MODID, "Allomancy_Data");
 	public int selected = 0;
 	public int damageStored = 0;
 	public int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
@@ -47,17 +49,17 @@ public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagComp
 	public static AllomancyCapabilities forPlayer(Entity player) {
 		return player.getCapability(Allomancy.PLAYER_CAP, null);
 	}
-	
-    public AllomancyCapabilities(EntityPlayer player)
-    {
-        this.player = player;
-    }
-	
-    public static void register()
-    {
-    	CapabilityManager.INSTANCE.register(AllomancyCapabilities.class, new AllomancyCapabilities.Storage(), new AllomancyCapabilities.Factory());    
-    	}
-	
+
+	public AllomancyCapabilities(EntityPlayer player) {
+		this.player = player;
+	}
+
+	public static void register() {
+		CapabilityManager.INSTANCE.register(AllomancyCapabilities.class,
+				new AllomancyCapabilities.Storage(),
+				new AllomancyCapabilities.Factory());
+	}
+
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -75,23 +77,58 @@ public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagComp
 
 	}
 
-    
 	@Override
 	public void deserializeNBT(NBTTagCompound compound) {
-		NBTTagCompound nbt = new NBTTagCompound();
-		isMistborn = nbt.getBoolean("ismistborn");
-		this.MetalAmounts[0] = nbt.getInteger("iron");
-		this.MetalAmounts[1] = nbt.getInteger("steel");
-		this.MetalAmounts[2] = nbt.getInteger("tin");
-		this.MetalAmounts[3] = nbt.getInteger("pewter");
-		this.MetalAmounts[4] = nbt.getInteger("zinc");
-		this.MetalAmounts[5] = nbt.getInteger("bronze");
-		this.MetalAmounts[6] = nbt.getInteger("copper");
-		this.MetalAmounts[7] = nbt.getInteger("brass");		
-		this.selected = nbt.getInteger("selected");
+		isMistborn = compound.getBoolean("ismistborn");
+		this.MetalAmounts[0] = compound.getInteger("iron");
+		this.MetalAmounts[1] = compound.getInteger("steel");
+		this.MetalAmounts[2] = compound.getInteger("tin");
+		this.MetalAmounts[3] = compound.getInteger("pewter");
+		this.MetalAmounts[4] = compound.getInteger("zinc");
+		this.MetalAmounts[5] = compound.getInteger("bronze");
+		this.MetalAmounts[6] = compound.getInteger("copper");
+		this.MetalAmounts[7] = compound.getInteger("brass");
+		this.selected = compound.getInteger("selected");
 	}
 
-	/*public int getSelected() {
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return Allomancy.PLAYER_CAP != null
+				&& capability == Allomancy.PLAYER_CAP;
+
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		return Allomancy.PLAYER_CAP != null
+				&& capability == Allomancy.PLAYER_CAP ? (T) this : null;
+	}
+
+	public static class Storage implements
+			Capability.IStorage<AllomancyCapabilities> {
+
+		@Override
+		public NBTBase writeNBT(Capability<AllomancyCapabilities> capability,
+				AllomancyCapabilities instance, EnumFacing side) {
+			return null;
+		}
+
+		@Override
+		public void readNBT(Capability<AllomancyCapabilities> capability,
+				AllomancyCapabilities instance, EnumFacing side, NBTBase nbt) {
+
+		}
+
+	}
+
+	public static class Factory implements Callable<AllomancyCapabilities> {
+		@Override
+		public AllomancyCapabilities call() throws Exception {
+			return null;
+		}
+	}
+
+	public int getSelected() {
 		return this.selected;
 	}
 
@@ -100,55 +137,6 @@ public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagComp
 		if ((this.selected > 4) || (this.selected < 0)) {
 			this.selected = 0;
 		}
-	}*/
-	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return Allomancy.PLAYER_CAP != null && capability == Allomancy.PLAYER_CAP;
-
 	}
-
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        return Allomancy.PLAYER_CAP != null && capability == Allomancy.PLAYER_CAP ? (T)this : null;
-	}
-
-	 public static class Storage implements Capability.IStorage<AllomancyCapabilities>
-	    {
-
-	        @Override
-	        public NBTBase writeNBT(Capability<AllomancyCapabilities> capability, AllomancyCapabilities instance, EnumFacing side)
-	        {
-	    		return null;
-	        }
-
-	        @Override
-	        public void readNBT(Capability<AllomancyCapabilities> capability, AllomancyCapabilities instance, EnumFacing side, NBTBase nbt)
-	        {
-	 
-	        }
-
-	    }
-
-	    public static class Factory implements Callable<AllomancyCapabilities>
-	    {
-	        @Override
-	        public AllomancyCapabilities call() throws Exception
-	        {
-	            return null;
-	        }
-	    }
-
-	    public int getSelected() {
-			return this.selected;
-		}
-
-		public void setSelected(int selected) {
-			this.selected = selected;
-			if ((this.selected > 4) || (this.selected < 0)) {
-				this.selected = 0;
-			}
-		}
 
 }
-	
