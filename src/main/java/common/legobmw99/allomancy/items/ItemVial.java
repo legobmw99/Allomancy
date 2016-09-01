@@ -12,7 +12,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-import common.legobmw99.allomancy.common.AllomancyData;
+import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 
 public class ItemVial extends Item{
@@ -23,14 +23,14 @@ public class ItemVial extends Item{
 
 	public ItemStack onItemUseFinish(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
-		AllomancyData data;
-		data = AllomancyData.forPlayer(par3EntityPlayer);
+		AllomancyCapabilities cap;
+		cap = AllomancyCapabilities.forPlayer(par3EntityPlayer);
 		
 		if (par3EntityPlayer.capabilities.isCreativeMode != true) {
 			par1ItemStack.stackSize--; 
             par3EntityPlayer.inventory.addItemStackToInventory(new ItemStack(Registry.itemVial, 1,0));
 		}
-		if (data == null) {
+		if (cap == null) {
 			return par1ItemStack;
 		}
 
@@ -39,8 +39,8 @@ public class ItemVial extends Item{
 		
 		//onItemFinishUse to fire twice, but we only want to increase the data by one. Hence we use a simple counter
 		if (fireNumber == 1){
-			if (data.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10) {
-				data.MetalAmounts[par1ItemStack.getItemDamage() - 1]++;
+			if (cap.MetalAmounts[par1ItemStack.getItemDamage() - 1] < 10) {
+				cap.MetalAmounts[par1ItemStack.getItemDamage() - 1]++;
 				fireNumber = 0;
 			}
 		} else {
@@ -64,11 +64,11 @@ public class ItemVial extends Item{
 	@Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand){
 
-		AllomancyData data;
-		data = AllomancyData.forPlayer(playerIn);
+		AllomancyCapabilities cap;
+		cap = AllomancyCapabilities.forPlayer(playerIn);
 		//Checks both the metal amount (we only want to fill up to 10) and the item damage (can't drink empty vials)
 		if (itemStackIn.getItemDamage() > 0){
-			if (data.MetalAmounts[itemStackIn.getItemDamage() - 1] < 10) {
+			if (cap.MetalAmounts[itemStackIn.getItemDamage() - 1] < 10) {
 		        playerIn.setActiveHand(hand);
 		        return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);	
 

@@ -15,7 +15,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public class AllomancyCapabilites implements ICapabilityProvider, INBTSerializable<NBTTagCompound> {
+public class AllomancyCapabilities implements ICapabilityProvider, INBTSerializable<NBTTagCompound> {
 	
 	public static final int matIron = 0;
 	public static final int matSteel = 1;
@@ -43,20 +43,20 @@ public class AllomancyCapabilites implements ICapabilityProvider, INBTSerializab
 		this.player = player;
 	}
 
-	public static AllomancyCapabilites forPlayer(Entity player) {
+	public static AllomancyCapabilities forPlayer(Entity player) {
 		return player.getCapability(Allomancy.PLAYER_CAP, null);
 	}
 
 	
     public static void register()
     {
-    	CapabilityManager.INSTANCE.register(AllomancyCapabilites.class, new AllomancyCapabilites.Storage(), new AllomancyCapabilites.Factory());    
+    	CapabilityManager.INSTANCE.register(AllomancyCapabilities.class, new AllomancyCapabilities.Storage(), new AllomancyCapabilities.Factory());    
     	}
 	
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setBoolean("ismistborn", AllomancyData.isMistborn);
+		nbt.setBoolean("ismistborn", AllomancyCapabilities.isMistborn);
 		nbt.setInteger("iron", this.MetalAmounts[0]);
 		nbt.setInteger("steel", this.MetalAmounts[1]);
 		nbt.setInteger("tin", this.MetalAmounts[2]);
@@ -109,27 +109,27 @@ public class AllomancyCapabilites implements ICapabilityProvider, INBTSerializab
         return Allomancy.PLAYER_CAP != null && capability == Allomancy.PLAYER_CAP ? (T)this : null;
 	}
 
-	 public static class Storage implements Capability.IStorage<AllomancyCapabilites>
+	 public static class Storage implements Capability.IStorage<AllomancyCapabilities>
 	    {
 
 	        @Override
-	        public NBTBase writeNBT(Capability<AllomancyCapabilites> capability, AllomancyCapabilites instance, EnumFacing side)
+	        public NBTBase writeNBT(Capability<AllomancyCapabilities> capability, AllomancyCapabilities instance, EnumFacing side)
 	        {
 	            return null;
 	        }
 
 	        @Override
-	        public void readNBT(Capability<AllomancyCapabilites> capability, AllomancyCapabilites instance, EnumFacing side, NBTBase nbt)
+	        public void readNBT(Capability<AllomancyCapabilities> capability, AllomancyCapabilities instance, EnumFacing side, NBTBase nbt)
 	        {
 
 	        }
 
 	    }
 
-	    public static class Factory implements Callable<AllomancyCapabilites>
+	    public static class Factory implements Callable<AllomancyCapabilities>
 	    {
 	        @Override
-	        public AllomancyCapabilites call() throws Exception
+	        public AllomancyCapabilities call() throws Exception
 	        {
 	            return null;
 	        }

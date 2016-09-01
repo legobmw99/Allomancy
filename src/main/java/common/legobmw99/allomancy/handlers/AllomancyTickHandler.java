@@ -18,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -29,7 +28,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
@@ -46,8 +45,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
 import common.legobmw99.allomancy.Allomancy;
-import common.legobmw99.allomancy.common.AllomancyCapabilites;
-import common.legobmw99.allomancy.common.AllomancyCapabilites;
+import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.entity.EntityGoldNugget;
 import common.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
@@ -65,7 +63,7 @@ public class AllomancyTickHandler {
 	private Entity pointedEntity;
 	private Minecraft mc;
 	private ResourceLocation meterLoc;
-	private AllomancyCapabilites cap;
+	private AllomancyCapabilities cap;
 	private int animationCounter = 0;
 	private int currentFrame = 0;
 
@@ -89,7 +87,7 @@ public class AllomancyTickHandler {
 
 			EntityPlayerSP player;
 			player = Minecraft.getMinecraft().thePlayer;
-        	AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(player);
+        	AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
 			RayTraceResult ray;
 			RayTraceResult mop;
 			vector3 vec;
@@ -97,8 +95,8 @@ public class AllomancyTickHandler {
 			if (cap.isMistborn == true) {
 				this.updateBurnTime(cap, player);
 
-				if (cap.MetalBurning[AllomancyCapabilites.matIron]
-						|| cap.MetalBurning[AllomancyCapabilites.matSteel]) {
+				if (cap.MetalBurning[AllomancyCapabilities.matIron]
+						|| cap.MetalBurning[AllomancyCapabilities.matSteel]) {
 					List<Entity> eList;
 					
 					Entity target;
@@ -138,7 +136,7 @@ public class AllomancyTickHandler {
 					//Ray trace 20 blocks
 					RayTraceResult mov = getMouseOverExtended(20.0F);
 					//All iron pulling powers
-					if (cap.MetalBurning[AllomancyCapabilites.matIron]) {
+					if (cap.MetalBurning[AllomancyCapabilities.matIron]) {
 						if (mov != null) {
 							if (mov.entityHit != null) {
 								Allomancy.XPC.tryPullEntity(mov.entityHit);
@@ -157,7 +155,7 @@ public class AllomancyTickHandler {
 
 					}
 					//All zinc powers
-					if (cap.MetalBurning[AllomancyCapabilites.matZinc]) {
+					if (cap.MetalBurning[AllomancyCapabilities.matZinc]) {
 						Entity entity;
 						if ((mov != null)
 								&& (mov.entityHit != null)
@@ -176,7 +174,7 @@ public class AllomancyTickHandler {
 					//Ray trace 20 blocks
 					RayTraceResult mov = getMouseOverExtended(20.0F);
 					//All steel pushing powers
-					if (cap.MetalBurning[AllomancyCapabilites.matSteel]) {
+					if (cap.MetalBurning[AllomancyCapabilities.matSteel]) {
 						if (mov != null) {
 							if (mov.entityHit != null) {
 								Allomancy.XPC.tryPushEntity(mov.entityHit);
@@ -196,7 +194,7 @@ public class AllomancyTickHandler {
 
 					}
 					//All brass powers
-					if (cap.MetalBurning[AllomancyCapabilites.matBrass]) {
+					if (cap.MetalBurning[AllomancyCapabilities.matBrass]) {
 						Entity entity;
 						if ((mov != null)
 								&& (mov.entityHit != null)
@@ -212,7 +210,7 @@ public class AllomancyTickHandler {
 					}
 				
 				//Pewter's speed powers
-				if (cap.MetalBurning[AllomancyCapabilites.matPewter]) {
+				if (cap.MetalBurning[AllomancyCapabilities.matPewter]) {
 					if ((player.onGround == true)
 							&& (player.isInWater() == false)
 							&& (Minecraft.getMinecraft().gameSettings.keyBindForward
@@ -271,16 +269,16 @@ public class AllomancyTickHandler {
 		if (event.getSource().getSourceOfDamage() instanceof EntityPlayerMP) {
 			EntityPlayerMP source = (EntityPlayerMP) event.getSource()
 					.getSourceOfDamage();
-        	AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(source);
+        	AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(source);
 
-			if (cap.MetalBurning[AllomancyCapabilites.matPewter]) {
+			if (cap.MetalBurning[AllomancyCapabilities.matPewter]) {
 				event.setAmount(event.getAmount() + 2);
 			}
 		}
 		//Reduce incoming damage for pewter burners
 		if (event.getEntityLiving() instanceof EntityPlayerMP) {
-			AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(event.getEntityLiving());
-			if (cap.MetalBurning[AllomancyCapabilites.matPewter]) {
+			AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.getEntityLiving());
+			if (cap.MetalBurning[AllomancyCapabilities.matPewter]) {
 				event.setAmount(event.getAmount() - 2);
 				//Note that they took damage, will come in to play if they stop burning
 				cap.damageStored++;
@@ -292,12 +290,22 @@ public class AllomancyTickHandler {
 	 * @SubscribeEvent
 	 * public void onEntityConstructing(EntityConstructing event) {
 	 * 		if (event.getEntity() instanceof EntityPlayer
-	 * 			&& event.getEntity().getExtendedProperties(AllomancyCapabilites.IDENTIFIER) == null) {
-	 * 			event.getEntity().registerExtendedProperties(AllomancyCapabilites.IDENTIFIER,
-	 * 				new AllomancyCapabilites((EntityPlayer) event.getEntity()));
+	 * 			&& event.getEntity().getExtendedProperties(AllomancyCapabilities.IDENTIFIER) == null) {
+	 * 			event.getEntity().registerExtendedProperties(AllomancyCapabilities.IDENTIFIER,
+	 * 				new AllomancyCapabilities((EntityPlayer) event.getEntity()));
 	 * }
 	 * }
 	 */
+	
+	 @SubscribeEvent
+	    public void onAttachCapability(AttachCapabilitiesEvent.Entity event)
+	    {
+	        if(event.getEntity() instanceof EntityPlayer)
+	        {
+	            event.addCapability(new ResourceLocation(Allomancy.MODID + ":PLAYER_CAP"), new AllomancyCapabilities());
+	        }
+	    }
+	    
 	
 
 
@@ -314,7 +322,7 @@ public class AllomancyTickHandler {
 						|| !Minecraft.getMinecraft().inGameHasFocus) {
 					return;
 				}
-				AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(player);
+				AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
 				Registry.network.sendToServer(new SelectMetalPacket(cap
 						.getSelected() + 1));
 				cap.setSelected(cap.getSelected() + 1);
@@ -323,25 +331,25 @@ public class AllomancyTickHandler {
 		if (Registry.burnFirst.isPressed()) {
 			EntityPlayerSP player;
 			player = Minecraft.getMinecraft().thePlayer;
-			AllomancyCapabilites cap;
+			AllomancyCapabilities cap;
 			Minecraft mc = FMLClientHandler.instance().getClient();
 			if (mc.currentScreen == null) {
 				if (player == null) {
 					return;
 				}
-				cap = AllomancyCapabilites.forPlayer(player);
+				cap = AllomancyCapabilities.forPlayer(player);
 				switch (cap.getSelected()) {
 				case 1:
 					// toggle iron.
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyCapabilites.matIron,
-							!cap.MetalBurning[AllomancyCapabilites.matIron]));
+							AllomancyCapabilities.matIron,
+							!cap.MetalBurning[AllomancyCapabilities.matIron]));
 
-					if (cap.MetalAmounts[AllomancyCapabilites.matIron] > 0) {
-						cap.MetalBurning[AllomancyCapabilites.matIron] = !cap.MetalBurning[AllomancyCapabilites.matIron];
+					if (cap.MetalAmounts[AllomancyCapabilities.matIron] > 0) {
+						cap.MetalBurning[AllomancyCapabilities.matIron] = !cap.MetalBurning[AllomancyCapabilities.matIron];
 					}
 					//play a sound effect
-					if(cap.MetalBurning[AllomancyCapabilites.matIron]){
+					if(cap.MetalBurning[AllomancyCapabilities.matIron]){
 						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
 						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
@@ -351,13 +359,13 @@ public class AllomancyTickHandler {
 					// toggle Tin.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyCapabilites.matTin,
-							!cap.MetalBurning[AllomancyCapabilites.matTin]));
-					if (cap.MetalAmounts[AllomancyCapabilites.matTin] > 0) {
-						cap.MetalBurning[AllomancyCapabilites.matTin] = !cap.MetalBurning[AllomancyCapabilites.matTin];
+							AllomancyCapabilities.matTin,
+							!cap.MetalBurning[AllomancyCapabilities.matTin]));
+					if (cap.MetalAmounts[AllomancyCapabilities.matTin] > 0) {
+						cap.MetalBurning[AllomancyCapabilities.matTin] = !cap.MetalBurning[AllomancyCapabilities.matTin];
 					}
 					//play a sound effect
-					if(cap.MetalBurning[AllomancyCapabilites.matTin]){
+					if(cap.MetalBurning[AllomancyCapabilities.matTin]){
 						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
 						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
@@ -367,13 +375,13 @@ public class AllomancyTickHandler {
 					// toggle Zinc.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyCapabilites.matZinc,
-							!cap.MetalBurning[AllomancyCapabilites.matZinc]));
-					if (cap.MetalAmounts[AllomancyCapabilites.matZinc] > 0) {
-						cap.MetalBurning[AllomancyCapabilites.matZinc] = !cap.MetalBurning[AllomancyCapabilites.matZinc];
+							AllomancyCapabilities.matZinc,
+							!cap.MetalBurning[AllomancyCapabilities.matZinc]));
+					if (cap.MetalAmounts[AllomancyCapabilities.matZinc] > 0) {
+						cap.MetalBurning[AllomancyCapabilities.matZinc] = !cap.MetalBurning[AllomancyCapabilities.matZinc];
 					}
 					//play a sound effect
-					if(cap.MetalBurning[AllomancyCapabilites.matZinc]){
+					if(cap.MetalBurning[AllomancyCapabilities.matZinc]){
 						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
 						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
@@ -383,13 +391,13 @@ public class AllomancyTickHandler {
 					// toggle Copper.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyCapabilites.matCopper,
-							!cap.MetalBurning[AllomancyCapabilites.matCopper]));
-					if (cap.MetalAmounts[AllomancyCapabilites.matCopper] > 0) {
-						cap.MetalBurning[AllomancyCapabilites.matCopper] = !cap.MetalBurning[AllomancyCapabilites.matCopper];
+							AllomancyCapabilities.matCopper,
+							!cap.MetalBurning[AllomancyCapabilities.matCopper]));
+					if (cap.MetalAmounts[AllomancyCapabilities.matCopper] > 0) {
+						cap.MetalBurning[AllomancyCapabilities.matCopper] = !cap.MetalBurning[AllomancyCapabilities.matCopper];
 					}
 					//play a sound effect
-					if(cap.MetalBurning[AllomancyCapabilites.matCopper]){
+					if(cap.MetalBurning[AllomancyCapabilities.matCopper]){
 						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
 						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
@@ -403,26 +411,26 @@ public class AllomancyTickHandler {
 		if (Registry.burnSecond.isPressed()) {
 			EntityPlayerSP player;
 			player = Minecraft.getMinecraft().thePlayer;
-			AllomancyCapabilites cap;
+			AllomancyCapabilities cap;
 			Minecraft mc = FMLClientHandler.instance().getClient();
 			if (mc.currentScreen == null) {
 				if (player == null) {
 					return;
 				}
 
-				cap = AllomancyCapabilites.forPlayer(player);
+				cap = AllomancyCapabilities.forPlayer(player);
 				switch (cap.getSelected()) {
 				case 1:
 					// toggle Steel.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyCapabilites.matSteel,
-							!cap.MetalBurning[AllomancyCapabilites.matSteel]));
-					if (cap.MetalAmounts[AllomancyCapabilites.matSteel] > 0) {
-						cap.MetalBurning[AllomancyCapabilites.matSteel] = !cap.MetalBurning[AllomancyCapabilites.matSteel];
+							AllomancyCapabilities.matSteel,
+							!cap.MetalBurning[AllomancyCapabilities.matSteel]));
+					if (cap.MetalAmounts[AllomancyCapabilities.matSteel] > 0) {
+						cap.MetalBurning[AllomancyCapabilities.matSteel] = !cap.MetalBurning[AllomancyCapabilities.matSteel];
 					}
 					//play a sound effect
-					if(cap.MetalBurning[AllomancyCapabilites.matSteel]){
+					if(cap.MetalBurning[AllomancyCapabilities.matSteel]){
 						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
 						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
@@ -432,13 +440,13 @@ public class AllomancyTickHandler {
 					// toggle Pewter.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyCapabilites.matPewter,
-							!cap.MetalBurning[AllomancyCapabilites.matPewter]));
-					if (cap.MetalAmounts[AllomancyCapabilites.matPewter] > 0) {
-						cap.MetalBurning[AllomancyCapabilites.matPewter] = !cap.MetalBurning[AllomancyCapabilites.matPewter];
+							AllomancyCapabilities.matPewter,
+							!cap.MetalBurning[AllomancyCapabilities.matPewter]));
+					if (cap.MetalAmounts[AllomancyCapabilities.matPewter] > 0) {
+						cap.MetalBurning[AllomancyCapabilities.matPewter] = !cap.MetalBurning[AllomancyCapabilities.matPewter];
 					}
 					//play a sound effect
-					if(cap.MetalBurning[AllomancyCapabilites.matPewter]){
+					if(cap.MetalBurning[AllomancyCapabilities.matPewter]){
 						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
 						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
@@ -448,13 +456,13 @@ public class AllomancyTickHandler {
 					// toggle Brass.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyCapabilites.matBrass,
-							!cap.MetalBurning[AllomancyCapabilites.matBrass]));
-					if (cap.MetalAmounts[AllomancyCapabilites.matBrass] > 0) {
-						cap.MetalBurning[AllomancyCapabilites.matBrass] = !cap.MetalBurning[AllomancyCapabilites.matBrass];
+							AllomancyCapabilities.matBrass,
+							!cap.MetalBurning[AllomancyCapabilities.matBrass]));
+					if (cap.MetalAmounts[AllomancyCapabilities.matBrass] > 0) {
+						cap.MetalBurning[AllomancyCapabilities.matBrass] = !cap.MetalBurning[AllomancyCapabilities.matBrass];
 					}
 					//play a sound effect
-					if(cap.MetalBurning[AllomancyCapabilites.matBrass]){
+					if(cap.MetalBurning[AllomancyCapabilities.matBrass]){
 						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
 						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
@@ -464,13 +472,13 @@ public class AllomancyTickHandler {
 					// toggle Bronze.
 
 					Registry.network.sendToServer(new UpdateBurnPacket(
-							AllomancyCapabilites.matBronze,
-							!cap.MetalBurning[AllomancyCapabilites.matBronze]));
-					if (cap.MetalAmounts[AllomancyCapabilites.matBronze] > 0) {
-						cap.MetalBurning[AllomancyCapabilites.matBronze] = !cap.MetalBurning[AllomancyCapabilites.matBronze];
+							AllomancyCapabilities.matBronze,
+							!cap.MetalBurning[AllomancyCapabilities.matBronze]));
+					if (cap.MetalAmounts[AllomancyCapabilities.matBronze] > 0) {
+						cap.MetalBurning[AllomancyCapabilities.matBronze] = !cap.MetalBurning[AllomancyCapabilities.matBronze];
 					}
 					//play a sound effect
-					if(cap.MetalBurning[AllomancyCapabilites.matBronze]){
+					if(cap.MetalBurning[AllomancyCapabilities.matBronze]){
 						//Minecraft.getMinecraft().thePlayer.playSound("fire.ignite", 1, 5);
 					}else{
 						//.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);
@@ -486,7 +494,7 @@ public class AllomancyTickHandler {
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerLoggedInEvent event) {
 		if (event.player instanceof EntityPlayerMP) {
-			AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(event.player);
+			AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.player);
 			for (int i = 0; i < 7; i++) {
 				cap.MetalBurning[i] = false;
 			}
@@ -504,7 +512,7 @@ public class AllomancyTickHandler {
 
 	@SubscribeEvent
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(event.player);
+		AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.player);
 		for (int i = 0; i < 8; i++) {
 			cap.MetalAmounts[i] = 0;
 		}
@@ -541,7 +549,7 @@ public class AllomancyTickHandler {
 
 		this.animationCounter++;
 
-		this.cap = AllomancyCapabilites.forPlayer(player);
+		this.cap = AllomancyCapabilities.forPlayer(player);
 		// left hand side.
 		int ironY, steelY, tinY, pewterY;
 		// right hand side
@@ -600,32 +608,32 @@ public class AllomancyTickHandler {
 
 		}
 
-		ironY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matIron];
+		ironY = 9 - this.cap.MetalAmounts[AllomancyCapabilities.matIron];
 		gig.drawTexturedModalRect(renderX+1, renderY + 5 + ironY, 7, 1 + ironY, 3, 10 - ironY);
 
-		steelY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matSteel];
+		steelY = 9 - this.cap.MetalAmounts[AllomancyCapabilities.matSteel];
 		gig.drawTexturedModalRect(renderX+8, renderY + 5 + steelY, 13, 1 + steelY, 3,
 				10 - steelY);
 
-		tinY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matTin];
+		tinY = 9 - this.cap.MetalAmounts[AllomancyCapabilities.matTin];
 		gig.drawTexturedModalRect(renderX+26, renderY + 5 + tinY, 19, 1 + tinY, 3, 10 - tinY);
 
-		pewterY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matPewter];
+		pewterY = 9 - this.cap.MetalAmounts[AllomancyCapabilities.matPewter];
 		gig.drawTexturedModalRect(renderX+33, renderY + 5 + pewterY, 25, 1 + pewterY, 3,
 				10 - pewterY);
 		
-		zincY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matZinc];
+		zincY = 9 - this.cap.MetalAmounts[AllomancyCapabilities.matZinc];
 		gig.drawTexturedModalRect(renderX+51, renderY + 5 + zincY, 43, 1 + zincY, 3, 10 - zincY);
 
-		brassY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matBrass];
+		brassY = 9 - this.cap.MetalAmounts[AllomancyCapabilities.matBrass];
 		gig.drawTexturedModalRect(renderX+58, renderY + 5 + brassY, 49, 1 + brassY, 3,
 				10 - brassY);
 		
-		copperY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matCopper];
+		copperY = 9 - this.cap.MetalAmounts[AllomancyCapabilities.matCopper];
 		gig.drawTexturedModalRect(renderX+76, renderY + 5 + copperY, 31, 1 + copperY, 3,
 				10 - copperY);
 
-		bronzeY = 9 - this.cap.MetalAmounts[AllomancyCapabilites.matBronze];
+		bronzeY = 9 - this.cap.MetalAmounts[AllomancyCapabilities.matBronze];
 		gig.drawTexturedModalRect(renderX+83, renderY + 5 + bronzeY, 37, 1 + bronzeY, 3,
 				10 - bronzeY);
 
@@ -643,42 +651,42 @@ public class AllomancyTickHandler {
 		gig.drawTexturedModalRect(renderX+75, renderY, 0, 0, 5, 20);
 		gig.drawTexturedModalRect(renderX+82, renderY, 0, 0, 5, 20);
 
-		if (this.cap.MetalBurning[AllomancyCapabilites.matIron]) {
+		if (this.cap.MetalBurning[AllomancyCapabilities.matIron]) {
 			gig.drawTexturedModalRect(renderX, renderY + 5 + ironY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.cap.MetalBurning[AllomancyCapabilites.matSteel]) {
+		if (this.cap.MetalBurning[AllomancyCapabilities.matSteel]) {
 			gig.drawTexturedModalRect(renderX+7, renderY + 5 + steelY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.cap.MetalBurning[AllomancyCapabilites.matTin]) {
+		if (this.cap.MetalBurning[AllomancyCapabilities.matTin]) {
 			gig.drawTexturedModalRect(renderX+25, renderY + 5 + tinY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.cap.MetalBurning[AllomancyCapabilites.matPewter]) {
+		if (this.cap.MetalBurning[AllomancyCapabilities.matPewter]) {
 			gig.drawTexturedModalRect(renderX+32, renderY + 5 + pewterY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.cap.MetalBurning[AllomancyCapabilites.matZinc]) {
+		if (this.cap.MetalBurning[AllomancyCapabilities.matZinc]) {
 			gig.drawTexturedModalRect(renderX+50, renderY + 5 + zincY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.cap.MetalBurning[AllomancyCapabilites.matBrass]) {
+		if (this.cap.MetalBurning[AllomancyCapabilities.matBrass]) {
 			gig.drawTexturedModalRect(renderX+57, renderY + 5 + brassY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.cap.MetalBurning[AllomancyCapabilites.matCopper]) {
+		if (this.cap.MetalBurning[AllomancyCapabilities.matCopper]) {
 			gig.drawTexturedModalRect(renderX+75, renderY + 5 + copperY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
 		}
-		if (this.cap.MetalBurning[AllomancyCapabilites.matBronze]) {
+		if (this.cap.MetalBurning[AllomancyCapabilities.matBronze]) {
 			gig.drawTexturedModalRect(renderX+82, renderY + 5 + bronzeY,
 					this.Frames[this.currentFrame].getX(),
 					this.Frames[this.currentFrame].getY(), 5, 3);
@@ -696,7 +704,7 @@ public class AllomancyTickHandler {
 		
 		double motionX, motionY, motionZ;
 		//Spawn in metal particles
-		if ((this.cap.MetalBurning[AllomancyCapabilites.matIron] || this.cap.MetalBurning[AllomancyCapabilites.matSteel]) && (event instanceof RenderGameOverlayEvent.Post)){
+		if ((this.cap.MetalBurning[AllomancyCapabilities.matIron] || this.cap.MetalBurning[AllomancyCapabilities.matSteel]) && (event instanceof RenderGameOverlayEvent.Post)){
 			for (Entity entity : Allomancy.XPC.particleTargets) {
 				motionX = ((player.posX - entity.posX) * -1) * .03;
 				motionY = (((player.posY - entity.posY + 1.2) * -1) * .03) + .021;
@@ -738,9 +746,9 @@ public class AllomancyTickHandler {
 		if ((player == null) || (event.getEntity() == null) || ((player.getDistanceToEntity(event.getEntity()) > 20) || (player.getDistanceToEntity(event.getEntity()) < .5))) {
 			return;
 		}
-		AllomancyCapabilites cap = AllomancyCapabilites.forPlayer(player);
+		AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
 		//Spawn sound particles
-				if (cap.MetalBurning[AllomancyCapabilites.matTin]) {
+				if (cap.MetalBurning[AllomancyCapabilities.matTin]) {
 					if (event.getSound().toString().contains("step") 
 							|| event.getSound().toString().contains("mob")
 							|| event.getSound().toString().contains("hostile")
@@ -770,16 +778,16 @@ public class AllomancyTickHandler {
 
 			List<EntityPlayer> list = world.playerEntities;
 			for (EntityPlayer curPlayer : list) {
-				cap = AllomancyCapabilites.forPlayer(curPlayer);
+				cap = AllomancyCapabilities.forPlayer(curPlayer);
 
 				if (cap.isMistborn == true) {
 					//Damage the player if they have stored damage and pewter cuts out
-					if (!cap.MetalBurning[AllomancyCapabilites.matPewter]
+					if (!cap.MetalBurning[AllomancyCapabilities.matPewter]
 							&& (cap.damageStored > 0)) {
 						cap.damageStored--;
 						curPlayer.attackEntityFrom(DamageSource.generic, 2);
 					}
-					if (cap.MetalBurning[AllomancyCapabilites.matTin]) {
+					if (cap.MetalBurning[AllomancyCapabilities.matTin]) {
 						//Add night vision to tin-burners
 						if (curPlayer.isPotionActive(Potion.getPotionById(16)) == false) { //Potion 16 = night vision
 							curPlayer.addPotionEffect(new PotionEffect(
@@ -802,15 +810,15 @@ public class AllomancyTickHandler {
 
 					}
 					//Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing
-					if ((cap.MetalBurning[AllomancyCapabilites.matTin] == false)
+					if ((cap.MetalBurning[AllomancyCapabilities.matTin] == false)
 							&& curPlayer.isPotionActive(Potion.getPotionById(16))) {
 						if (curPlayer.getActivePotionEffect(Potion.getPotionById(16))
 								.getDuration() < 201) {
 							curPlayer.removePotionEffect(Potion.getPotionById(16));
 						}
 					}
-					if(cap.MetalBurning[AllomancyCapabilites.matCopper] == false){
-						if(cap.MetalBurning[AllomancyCapabilites.matIron] || cap.MetalBurning[AllomancyCapabilites.matSteel] || cap.MetalBurning[AllomancyCapabilites.matTin] || cap.MetalBurning[AllomancyCapabilites.matPewter] || cap.MetalBurning[AllomancyCapabilites.matZinc] || cap.MetalBurning[AllomancyCapabilites.matBrass] || cap.MetalBurning[AllomancyCapabilites.matBronze]){
+					if(cap.MetalBurning[AllomancyCapabilities.matCopper] == false){
+						if(cap.MetalBurning[AllomancyCapabilities.matIron] || cap.MetalBurning[AllomancyCapabilities.matSteel] || cap.MetalBurning[AllomancyCapabilities.matTin] || cap.MetalBurning[AllomancyCapabilities.matPewter] || cap.MetalBurning[AllomancyCapabilities.matZinc] || cap.MetalBurning[AllomancyCapabilities.matBrass] || cap.MetalBurning[AllomancyCapabilities.matBronze]){
 						//TODO:bronze stuff here, probably a packet
 						}
 					}
@@ -820,8 +828,8 @@ public class AllomancyTickHandler {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private void updateBurnTime(AllomancyCapabilites data, EntityPlayerSP player) {
-		cap = AllomancyCapabilites.forPlayer(player);
+	private void updateBurnTime(AllomancyCapabilities data, EntityPlayerSP player) {
+		cap = AllomancyCapabilities.forPlayer(player);
 		//Checks each metal, reduces MetalAmounts by 1 each time BurnTime ticks to 0 
 		for (int i = 0; i < 8; i++) {
 			if (cap.MetalBurning[i]) {

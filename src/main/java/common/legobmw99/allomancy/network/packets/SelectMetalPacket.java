@@ -8,7 +8,8 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import common.legobmw99.allomancy.common.AllomancyData;
+
+import common.legobmw99.allomancy.common.AllomancyCapabilities;
 
 public class SelectMetalPacket implements IMessage{
 	private int metal;
@@ -35,8 +36,8 @@ public class SelectMetalPacket implements IMessage{
 	            @Override
 	            public void run() {
 	            	EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-	         		AllomancyData data = AllomancyData.forPlayer(player);
-	        		data.setSelected(message.metal);
+	            	AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
+	            	cap.setSelected(message.metal);
 	            }
 	        });		return null;
 		}

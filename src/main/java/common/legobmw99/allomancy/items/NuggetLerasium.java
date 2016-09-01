@@ -14,7 +14,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-import common.legobmw99.allomancy.common.AllomancyData;
+import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 
 public class NuggetLerasium extends ItemFood {
@@ -43,8 +43,8 @@ public class NuggetLerasium extends ItemFood {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand){
-		AllomancyData.forPlayer(playerIn);
-		if (!AllomancyData.isMistborn) {
+		AllomancyCapabilities.forPlayer(playerIn);
+		if (!AllomancyCapabilities.isMistborn) {
 	        playerIn.setActiveHand(hand);
 	        return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);	
 
@@ -54,12 +54,12 @@ public class NuggetLerasium extends ItemFood {
 	}
 
 	public ItemStack onItemUseFinish(ItemStack item, World world, EntityPlayer player) {
-		AllomancyData.forPlayer(player);
+		AllomancyCapabilities.forPlayer(player);
 		double x = player.posX;
 		double y = player.posY + 3;
 		double z = player.posZ;
-		if (AllomancyData.isMistborn == false) {
-			AllomancyData.isMistborn = true;
+		if (AllomancyCapabilities.isMistborn == false) {
+			AllomancyCapabilities.isMistborn = true;
 
 		}
 		//Fancy shmancy effects
