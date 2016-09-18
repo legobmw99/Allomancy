@@ -5,8 +5,11 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
 
 import com.google.common.collect.Multimap;
+
+import common.legobmw99.allomancy.common.Registry;
 
 public class ItemMistcloak extends ItemArmor{
 
@@ -16,10 +19,11 @@ public class ItemMistcloak extends ItemArmor{
 		this.setCreativeTab(CreativeTabs.COMBAT);
 	}
 
-	//TODO: fix this
-	public Multimap getItemAttributeModifiers() {
-		Multimap multimap = super.getItemAttributeModifiers(armorType.CHEST);
-		multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getAttributeUnlocalizedName(), new AttributeModifier("Speed Modifier", .25, 1));
+	@Override
+	public Multimap getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+		Multimap multimap = super.getAttributeModifiers(slot,  new  ItemStack(Registry.Mistcloak));
+		if(slot  == armorType.CHEST)
+			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getAttributeUnlocalizedName(), new AttributeModifier("Speed Modifier", .25, 1));
 		return multimap;
 	}
 
