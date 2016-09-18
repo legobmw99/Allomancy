@@ -280,24 +280,6 @@ public class AllomancyEventHandler {
         }
     }
 
-    @SubscribeEvent
-    public void onPlayerLogin(PlayerLoggedInEvent event) {
-        if (event.player instanceof EntityPlayerMP) {
-            AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.player);
-            for (int i = 0; i < 7; i++) {
-                cap.MetalBurning[i] = false;
-            }
-            Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, event.player.getEntityId()),
-                    (EntityPlayerMP) event.player);
-            if (cap.isMistborn == true) {
-                Registry.network.sendTo(new BecomeMistbornPacket(),(EntityPlayerMP) event.player);
-
-                if (event.player.worldObj.isRemote) {
-                    cap.isMistborn = true;
-                }
-            }
-        }
-    }
 
     @SubscribeEvent
     public void onPlayerRespawn(PlayerRespawnEvent event) {
@@ -305,6 +287,7 @@ public class AllomancyEventHandler {
         for (int i = 0; i < 8; i++) {
             cap.MetalAmounts[i] = 0;
         }
+        System.out.println("PlayerRespawn and ismistborn = " + cap.isMistborn);
         NBTTagCompound old = event.player.getEntityData();
         if (old.hasKey("Allomancy_Data")) {
             event.player.getEntityData().setTag("Allomancy_Data",
