@@ -16,7 +16,6 @@ import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 
 public class ItemVial extends Item{
-	private int fireNumber = 0;
 	public static String[] unlocalName = { "emptyvial", "ironelixer",
 		"steelelixer", "tinelixer", "pewterelixer", "zincelixer",
 		"brasselixer", "copperelixer", "bronzeelixer", };
@@ -37,16 +36,9 @@ public class ItemVial extends Item{
 		if (stack.getItemDamage() == 0)
 			return stack;
 		
-		//onItemFinishUse to fire twice, but we only want to increase the data by one. Hence we use a simple counter
-		if (fireNumber == 1){
 			if (cap.MetalAmounts[stack.getItemDamage() - 1] < 10) {
 				cap.MetalAmounts[stack.getItemDamage() - 1]++;
-				fireNumber = 0;
 			}
-		} else {
-			fireNumber++;
-		}
-
 		return stack;
 	}
 
