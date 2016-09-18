@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+
 import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.handlers.AllomancyEventHandler;
@@ -63,7 +64,7 @@ public class Allomancy {
 			Registry.registerRenders();
 			Allomancy.XPC = new ExternalPowerController();
 			Registry.initKeyBindings();
-    		} 
+    		}
 		
 		//Achievements must come after rendering, otherwise it will crash or not display properly
 		Registry.addAchievements();

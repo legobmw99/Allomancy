@@ -37,6 +37,7 @@ import common.legobmw99.allomancy.items.NuggetLerasium;
 import common.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
 import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
+import common.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
 import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
 import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
 import common.legobmw99.allomancy.network.packets.StopFallPacket;
@@ -120,6 +121,8 @@ public class Registry {
 	       network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 4, Side.SERVER);
 	       network.registerMessage(AllomancyCapabiltiesPacket.Handler.class, AllomancyCapabiltiesPacket.class, 5, Side.CLIENT);
 	       network.registerMessage(ChangeEmotionPacket.Handler.class, ChangeEmotionPacket.class, 6, Side.SERVER);
+	       network.registerMessage(GetCapabilitiesPacket.Handler.class, GetCapabilitiesPacket.class, 7, Side.SERVER);
+
 
 	}
 	

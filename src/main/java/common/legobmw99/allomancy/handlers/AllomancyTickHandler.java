@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -28,7 +29,9 @@ import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.entity.EntityGoldNugget;
+import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
 import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
+import common.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
 import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import common.legobmw99.allomancy.util.vector3;
 
@@ -54,19 +57,21 @@ public class AllomancyTickHandler {
 
 				if (cap.MetalBurning[AllomancyCapabilities.matIron]
 						|| cap.MetalBurning[AllomancyCapabilities.matSteel]) {
-					List<Entity> eList;
-					
+					List<Entity> eListMetal;
+
+
 					Entity target;
-					AxisAlignedBB box;
+					AxisAlignedBB boxMetal;
+
+
 					//Add entities to metal list
-					box = new AxisAlignedBB((player.posX - 10),(player.posY - 10), (player.posZ - 10), (player.posX + 10), (player.posY + 10), (player.posZ + 10));
-					eList = player.worldObj.getEntitiesWithinAABB(Entity.class,
-							box);
-					for (Entity curEntity : eList) {
-						if (curEntity != null
-								&& (curEntity instanceof EntityItem || curEntity instanceof EntityLiving || curEntity instanceof EntityGoldNugget))
+					boxMetal = new AxisAlignedBB((player.posX - 10),(player.posY - 10), (player.posZ - 10), (player.posX + 10), (player.posY + 10), (player.posZ + 10));
+					eListMetal = player.worldObj.getEntitiesWithinAABB(Entity.class, boxMetal);
+					for (Entity curEntity : eListMetal) {
+						if (curEntity != null && (curEntity instanceof EntityItem || curEntity instanceof EntityLiving || curEntity instanceof EntityGoldNugget))
 							Allomancy.XPC.tryAddMetalEntity(curEntity);
 					}
+					
 					int xLoc, zLoc, yLoc;
 					xLoc = (int) player.posX;
 					zLoc = (int) player.posZ;
@@ -194,29 +199,75 @@ public class AllomancyTickHandler {
 					}
 
 				}
-			}
+				
+				if (cap.MetalBurning[AllomancyCapabilities.matBronze]) {
+					AxisAlignedBB boxBurners;
+					List<Entity> eListBurners;
+					//Add metal burners to a list
+					boxBurners = new AxisAlignedBB((player.posX - 30),(player.posY - 30), (player.posZ - 30), (player.posX + 30), (player.posY + 30), (player.posZ + 30));
+					eListBurners = player.worldObj.getEntitiesWithinAABB(Entity.class, boxBurners);
+					for (Entity curEntity : eListBurners) {
+						if (curEntity != null && (curEntity instanceof EntityPlayer) && curEntity != player) {
+							AllomancyCapabilities capOther = AllomancyCapabilities.forPlayer(curEntity);
+			                Registry.network.sendToServer(new GetCapabilitiesPacket(curEntity.getEntityId(), player.getEntityId()));
+							if(capOther.MetalBurning[AllomancyCapabilities.matCopper] == false){
+								if(capOther.MetalBurning[AllomancyCapabilities.matIron] || capOther.MetalBurning[AllomancyCapabilities.matSteel] || capOther.MetalBurning[AllomancyCapabilities.matTin] || capOther.MetalBurning[AllomancyCapabilities.matPewter] || capOther.MetalBurning[AllomancyCapabilities.matZinc] || capOther.MetalBurning[AllomancyCapabilities.matBrass] || capOther.MetalBurning[AllomancyCapabilities.matBronze]){
+									Allomancy.XPC.tryAddBurningPlayer((EntityPlayer) curEntity);
+								}
+							}
+						}
+					}
+				} 	else {
+					Allomancy.XPC.metalBurners.clear(); 
+				}
 
-			LinkedList<Entity> toRemove = new LinkedList<Entity>();
+			//Remove items from the metal list
+			LinkedList<Entity> toRemoveMetal = new LinkedList<Entity>();
 
 			for (Entity entity : Allomancy.XPC.particleTargets) {
 
 				if (entity.isDead == true) {
-					toRemove.add(entity);
+					toRemoveMetal.add(entity);
 				}
 				if (player == null) {
 					return;
 				}
 				if (player.getDistanceToEntity(entity) > 10) {
-					toRemove.add(entity);
+					toRemoveMetal.add(entity);
 				}
 			}
 
-			for (Entity entity : toRemove) {
+			for (Entity entity : toRemoveMetal) {
 				Allomancy.XPC.particleTargets.remove(entity);
 			}
-			toRemove.clear();
+			toRemoveMetal.clear();
+			
+			//Remove items from burners
+			LinkedList<EntityPlayer> toRemoveBurners = new LinkedList<EntityPlayer>();
+
+			for (EntityPlayer entity : Allomancy.XPC.metalBurners) {
+				AllomancyCapabilities capOther = AllomancyCapabilities.forPlayer(entity);
+                Registry.network.sendToServer(new GetCapabilitiesPacket(entity.getEntityId(), player.getEntityId()));
+				if (entity.isDead == true) {
+					toRemoveBurners.add(entity);
+				}
+
+				if (player != null && player.getDistanceToEntity(entity) > 10) {
+					toRemoveBurners.add(entity);
+				}
+				if(capOther.MetalBurning[AllomancyCapabilities.matCopper] || !(capOther.MetalBurning[AllomancyCapabilities.matIron] || capOther.MetalBurning[AllomancyCapabilities.matSteel] || capOther.MetalBurning[AllomancyCapabilities.matTin] || capOther.MetalBurning[AllomancyCapabilities.matPewter] || capOther.MetalBurning[AllomancyCapabilities.matZinc] || capOther.MetalBurning[AllomancyCapabilities.matBrass] || capOther.MetalBurning[AllomancyCapabilities.matBronze])){
+					toRemoveBurners.add(entity);
+				}
+			}
+
+			for (Entity entity : toRemoveBurners) {
+				Allomancy.XPC.metalBurners.remove(entity);
+			}
+			toRemoveBurners.clear();
+			}
 		}
 	}
+	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		if (event.phase == TickEvent.Phase.END) {
@@ -264,11 +315,6 @@ public class AllomancyTickHandler {
 						if (curPlayer.getActivePotionEffect(Potion.getPotionById(16))
 								.getDuration() < 201) {
 							curPlayer.removePotionEffect(Potion.getPotionById(16));
-						}
-					}
-					if(cap.MetalBurning[AllomancyCapabilities.matCopper] == false){
-						if(cap.MetalBurning[AllomancyCapabilities.matIron] || cap.MetalBurning[AllomancyCapabilities.matSteel] || cap.MetalBurning[AllomancyCapabilities.matTin] || cap.MetalBurning[AllomancyCapabilities.matPewter] || cap.MetalBurning[AllomancyCapabilities.matZinc] || cap.MetalBurning[AllomancyCapabilities.matBrass] || cap.MetalBurning[AllomancyCapabilities.matBronze]){
-						//TODO:bronze stuff here, probably a packet
 						}
 					}
 				}

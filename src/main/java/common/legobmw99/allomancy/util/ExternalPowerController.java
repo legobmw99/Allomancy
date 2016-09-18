@@ -31,7 +31,7 @@ public class ExternalPowerController{
 	public LinkedList<vector3> particleBlockTargets;
 	private LinkedList<Integer> metallist;
 	private String[] ores = OreDictionary.getOreNames();
-	//public LinkedList<EntityPlayer> metalBurners;
+	public LinkedList<EntityPlayer> metalBurners;
 
 	public void BuildMetalList() {
 		/*
@@ -159,13 +159,13 @@ public class ExternalPowerController{
 	public ExternalPowerController() {
 		this.particleTargets = new LinkedList<Entity>();
 		this.particleBlockTargets = new LinkedList<vector3>();
-		//this.metalBurners = new LinkedList<EntityPlayer>();
+		this.metalBurners = new LinkedList<EntityPlayer>();
 		this.BuildMetalList();
 	}
-	/* Come back in 1.9
-	 * public void tryAddBurningPlayer(EntityPlayer player){
+	
+	  public void tryAddBurningPlayer(EntityPlayer player){
 		this.metalBurners.add(player);
-	}*/
+	}
 	public void tryAddMetalEntity(Entity entity) {
 		if (entity == null) {
 			return;

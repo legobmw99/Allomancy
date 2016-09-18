@@ -5,7 +5,7 @@ import net.minecraft.world.World;
 
 public class ParticleMetal extends Particle {
 
-	public ParticleMetal(World world, double x, double y,double z, double motionX, double motionY, double motionZ) {
+	public ParticleMetal(World world, double x, double y,double z, double motionX, double motionY, double motionZ, int type) {
 		
 		super(world, x, y + 1, z, motionX, motionY, motionZ);
 
@@ -15,6 +15,12 @@ public class ParticleMetal extends Particle {
 		this.motionY = motionY;
 		this.motionZ = motionZ;
 		this.particleMaxAge = 30;
+		if(type == 1){
+			this.particleGreen = 0.15F;
+			this.particleBlue = 0.15F;
+			this.particleRed = 1;
+		}
+
 	}
 
 	@Override

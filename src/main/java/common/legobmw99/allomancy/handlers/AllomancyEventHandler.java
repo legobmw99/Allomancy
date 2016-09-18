@@ -1,8 +1,5 @@
 package common.legobmw99.allomancy.handlers;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
@@ -10,22 +7,10 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -37,7 +22,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -47,10 +31,8 @@ import org.lwjgl.util.Point;
 import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.entity.EntityGoldNugget;
 import common.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
-import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
 import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import common.legobmw99.allomancy.particle.ParticleMetal;
@@ -305,7 +287,7 @@ public class AllomancyEventHandler {
             for (int i = 0; i < 7; i++) {
                 cap.MetalBurning[i] = false;
             }
-            Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap),
+            Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, event.player.getEntityId()),
                     (EntityPlayerMP) event.player);
             if (cap.isMistborn == true) {
                 Registry.network.sendTo(new BecomeMistbornPacket(),(EntityPlayerMP) event.player);
@@ -517,13 +499,10 @@ public class AllomancyEventHandler {
                 motionY = (((player.posY - entity.posY + 1.2) * -1) * .03) + .021;
                 motionZ = ((player.posZ - entity.posZ) * -1) * .03;
                 particle = new ParticleMetal(player.worldObj,
-                        player.posX
-                                - (Math.sin(Math.toRadians(player
-                                        .getRotationYawHead())) * .7d),
-                        player.posY - .2, player.posZ
-                                + (Math.cos(Math.toRadians(player
-                                        .getRotationYawHead())) * .7d),
-                        motionX, motionY, motionZ);
+                        player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d),
+                        player.posY - .2, 
+                        player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),
+                        motionX, motionY, motionZ,0);
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle);
             }
             for (vector3 v : Allomancy.XPC.particleBlockTargets) {
@@ -531,17 +510,29 @@ public class AllomancyEventHandler {
                 motionY = (((player.posY - (v.Y + .2)) * -1) * .03);
                 motionZ = ((player.posZ - (v.Z + .5)) * -1) * .03;
                 particle = new ParticleMetal(player.worldObj,
-                        player.posX
-                                - (Math.sin(Math.toRadians(player
-                                        .getRotationYawHead())) * .7d),
-                        player.posY - .7, player.posZ
-                                + (Math.cos(Math.toRadians(player
-                                        .getRotationYawHead())) * .7d),
-                        motionX, motionY, motionZ);
+                        player.posX - (Math.sin(Math.toRadians(player .getRotationYawHead())) * .7d),
+                        player.posY - .7,
+                        player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),
+                        motionX, motionY, motionZ,0);
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle);
             }
             Allomancy.XPC.particleBlockTargets.clear();
         }
+        if ((this.cap.MetalBurning[AllomancyCapabilities.matBronze] && (event instanceof RenderGameOverlayEvent.Post))){
+            for (EntityPlayer entityplayer : Allomancy.XPC.metalBurners) {
+                motionX = ((player.posX - entityplayer.posX) * -1) * .03;
+                motionY = (((player.posY - entityplayer.posY + 1.2) * -1) * .03) + .021;
+                motionZ = ((player.posZ - entityplayer.posZ) * -1) * .03;
+                particle = new ParticleMetal(player.worldObj,
+                        player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .7d),
+                        player.posY - .2, 
+                        player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d),
+                        motionX, motionY, motionZ,1);
+                Minecraft.getMinecraft().effectRenderer.addEffect(particle);            
+                }
+
+        }
+
     }
 
     @SideOnly(Side.CLIENT)
