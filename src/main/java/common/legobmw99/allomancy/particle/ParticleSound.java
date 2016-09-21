@@ -23,6 +23,7 @@ public class ParticleSound extends Particle {
 		this.setParticleTextureIndex(64);
 		this.particleScale *= 1.2F;
 		this.particleMaxAge = 15;
+		this.field_190017_n = false; //canCollide
 		entityX = event.getEntity().posX;
 		entityX = event.getEntity().posX;
 		entityX = event.getEntity().posX;

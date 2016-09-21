@@ -3,9 +3,9 @@ package common.legobmw99.allomancy.particle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
 
-public class ParticleMetal extends Particle {
+public class ParticlePointer extends Particle {
 
-	public ParticleMetal(World world, double x, double y,double z, double motionX, double motionY, double motionZ, int type) {
+	public ParticlePointer(World world, double x, double y,double z, double motionX, double motionY, double motionZ, int type) {
 		
 		super(world, x, y + 1, z, motionX, motionY, motionZ);
 
@@ -15,6 +15,8 @@ public class ParticleMetal extends Particle {
 		this.motionY = motionY;
 		this.motionZ = motionZ;
 		this.particleMaxAge = 30;
+		this.field_190017_n = false; //canCollide
+		
 		if(type == 1){
 			this.particleGreen = 0.15F;
 			this.particleBlue = 0.15F;
