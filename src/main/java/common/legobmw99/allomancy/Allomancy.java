@@ -47,7 +47,6 @@ public class Allomancy {
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new AllomancyEventHandler());
-		FMLCommonHandler.instance().bus().register(new AllomancyTickHandler());
 		
 		//Register world gen
 		GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
