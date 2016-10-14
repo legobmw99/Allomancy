@@ -54,10 +54,10 @@ public class UpdateBurnPacket implements IMessage {
 	                 else{
 	                     value = false;
 	                     }
-	     			if (cap.MetalAmounts[message.mat] != 0) {
-	     				cap.MetalBurning[message.mat] = value;
+	     			if (cap.getMetalAmounts()[message.mat] != 0) {
+	     				cap.getMetalBurning()[message.mat] = value;
 	     			} else {
-	     				cap.MetalBurning[message.mat] = false;
+	     				cap.getMetalBurning()[message.mat] = false;
 	     			}
 	     		}
 	        });		return null;

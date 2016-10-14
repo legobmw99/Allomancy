@@ -37,7 +37,7 @@ public class BecomeMistbornPacket implements IMessage {
 	            	EntityPlayer player =  Minecraft.getMinecraft().thePlayer;
 	            	AllomancyCapabilities cap;
 	        		cap = AllomancyCapabilities.forPlayer(player);
-	        		cap.isMistborn = true;
+	        		cap.setMistborn(true);
 	            }
 	        });		return null;
 		}

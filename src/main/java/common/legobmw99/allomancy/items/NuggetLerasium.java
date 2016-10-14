@@ -45,7 +45,7 @@ public class NuggetLerasium extends ItemFood {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand){
 		AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(playerIn);
-		if (!cap.isMistborn) {
+		if (!cap.isMistborn()) {
 	        playerIn.setActiveHand(hand);
 	        return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);	
 
@@ -60,8 +60,8 @@ public class NuggetLerasium extends ItemFood {
 		double x = entityLiving.posX;
 		double y = entityLiving.posY + 3;
 		double z = entityLiving.posZ;
-		if (cap.isMistborn == false) {
-			cap.isMistborn = true;
+		if (cap.isMistborn() == false) {
+			cap.setMistborn(true);
 		}
 		//Fancy shmancy effects
 		worldIn.spawnEntityInWorld(new EntityLightningBolt(worldIn, x, y, z, true));

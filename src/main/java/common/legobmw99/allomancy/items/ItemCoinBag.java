@@ -25,7 +25,7 @@ public class ItemCoinBag extends Item{
 	    {
 	  
         ItemStack itemstack = this.findArrow(playerIn);
-        if (playerIn.capabilities.isCreativeMode || itemstack != null && AllomancyCapabilities.forPlayer(playerIn).MetalBurning[AllomancyCapabilities.matSteel]){
+        if (playerIn.capabilities.isCreativeMode || itemstack != null && AllomancyCapabilities.forPlayer(playerIn).getMetalBurning()[AllomancyCapabilities.matSteel]){
         		EntityGoldNugget entitygold = new EntityGoldNugget(worldIn, playerIn);
         		worldIn.spawnEntityInWorld(entitygold);
         		if(!playerIn.capabilities.isCreativeMode){

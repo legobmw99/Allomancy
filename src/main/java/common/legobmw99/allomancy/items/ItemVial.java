@@ -36,8 +36,8 @@ public class ItemVial extends Item{
 		if (stack.getItemDamage() == 0)
 			return stack;
 		
-			if (cap.MetalAmounts[stack.getItemDamage() - 1] < 10) {
-				cap.MetalAmounts[stack.getItemDamage() - 1]++;
+			if (cap.getMetalAmounts()[stack.getItemDamage() - 1] < 10) {
+				cap.getMetalAmounts()[stack.getItemDamage() - 1]++;
 			}
 		return stack;
 	}
@@ -60,7 +60,7 @@ public class ItemVial extends Item{
 		cap = AllomancyCapabilities.forPlayer(playerIn);
 		//Checks both the metal amount (we only want to fill up to 10) and the item damage (can't drink empty vials)
 		if (itemStackIn.getItemDamage() > 0){
-			if (cap.MetalAmounts[itemStackIn.getItemDamage() - 1] < 10) {
+			if (cap.getMetalAmounts()[itemStackIn.getItemDamage() - 1] < 10) {
 		        playerIn.setActiveHand(hand);
 		        return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);	
 
