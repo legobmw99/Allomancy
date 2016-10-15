@@ -2,19 +2,17 @@ package common.legobmw99.allomancy.common;
 
 import java.util.concurrent.Callable;
 
-import common.legobmw99.allomancy.Allomancy;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.INBTSerializable;
+
+import common.legobmw99.allomancy.Allomancy;
 
 public class AllomancyCapabilities implements
 		ICapabilitySerializable<NBTTagCompound> {
