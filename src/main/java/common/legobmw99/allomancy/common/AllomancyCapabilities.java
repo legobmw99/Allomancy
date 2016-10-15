@@ -18,7 +18,7 @@ public class AllomancyCapabilities implements
 		ICapabilitySerializable<NBTTagCompound> {
 	
 	public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "Allomancy_Data");
-	public static int[] MaxBurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
+	public static int[] MaxBurnTime = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
 	public static final int matIron = 0;
 	public static final int matSteel = 1;
 	public static final int matTin = 2;
@@ -28,7 +28,7 @@ public class AllomancyCapabilities implements
 	public static final int matCopper = 6;
 	public static final int matBronze = 7;
 
-	private boolean isMistborn = false;
+	private boolean isMistborn;
 
 	private int selected = 0;
 	private int damageStored = 0;
@@ -65,16 +65,16 @@ public class AllomancyCapabilities implements
 		return isMistborn;
 	}
 
-	public void setMistborn(boolean isMistborn) {
-		this.isMistborn = isMistborn;
+	public void setMistborn(boolean ismb) {
+		this.isMistborn = ismb;
 	}
 
-	public boolean[] getMetalBurning() {
-		return MetalBurning;
+	public boolean getMetalBurning(int metal) {
+		return MetalBurning[metal];
 	}
 
-	public void setMetalBurning(boolean[] metalBurning) {
-		MetalBurning = metalBurning;
+	public void setMetalBurning(int metal, boolean metalBurning) {
+		MetalBurning[metal] = metalBurning;
 	}
 
 	public int getDamageStored() {
@@ -85,20 +85,20 @@ public class AllomancyCapabilities implements
 		this.damageStored = damageStored;
 	}
 
-	public int[] getMetalAmounts() {
-		return MetalAmounts;
+	public int getMetalAmounts(int metal) {
+		return MetalAmounts[metal];
 	}
 
-	public void setMetalAmounts(int[] metalAmounts) {
-		MetalAmounts = metalAmounts;
+	public void setMetalAmounts(int metal, int metalAmounts) {
+		MetalAmounts[metal] = metalAmounts;
 	}
 
-	public int[] getBurnTime() {
-		return BurnTime;
+	public int getBurnTime(int metal) {
+		return BurnTime[metal];
 	}
 
-	public void setBurnTime(int[] burnTime) {
-		BurnTime = burnTime;
+	public void setBurnTime(int metal, int burnTime) {
+		BurnTime[metal] = burnTime;
 	}
 	
 	public static void register() {
@@ -111,30 +111,30 @@ public class AllomancyCapabilities implements
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setBoolean("ismistborn", this.isMistborn());
-		nbt.setInteger("iron", this.getMetalAmounts()[0]);
-		nbt.setInteger("steel", this.getMetalAmounts()[1]);
-		nbt.setInteger("tin", this.getMetalAmounts()[2]);
-		nbt.setInteger("pewter", this.getMetalAmounts()[3]);
-		nbt.setInteger("zinc", this.getMetalAmounts()[4]);
-		nbt.setInteger("bronze", this.getMetalAmounts()[5]);
-		nbt.setInteger("copper", this.getMetalAmounts()[6]);
-		nbt.setInteger("brass", this.getMetalAmounts()[7]);
-		nbt.setInteger("selected", this.selected);
+		nbt.setInteger("iron", this.getMetalAmounts(0));
+		nbt.setInteger("steel", this.getMetalAmounts(1));
+		nbt.setInteger("tin", this.getMetalAmounts(2));
+		nbt.setInteger("pewter", this.getMetalAmounts(3));
+		nbt.setInteger("zinc", this.getMetalAmounts(4));
+		nbt.setInteger("bronze", this.getMetalAmounts(5));
+		nbt.setInteger("copper", this.getMetalAmounts(6));
+		nbt.setInteger("brass", this.getMetalAmounts(7));
+		nbt.setInteger("selected", this.getSelected());
 		return nbt;
 
 	}
 
 	@Override
 	public void deserializeNBT(NBTTagCompound compound) {
-		setMistborn(compound.getBoolean("ismistborn"));
-		this.getMetalAmounts()[0] = compound.getInteger("iron");
-		this.getMetalAmounts()[1] = compound.getInteger("steel");
-		this.getMetalAmounts()[2] = compound.getInteger("tin");
-		this.getMetalAmounts()[3] = compound.getInteger("pewter");
-		this.getMetalAmounts()[4] = compound.getInteger("zinc");
-		this.getMetalAmounts()[5] = compound.getInteger("bronze");
-		this.getMetalAmounts()[6] = compound.getInteger("copper");
-		this.getMetalAmounts()[7] = compound.getInteger("brass");
+		this.setMistborn(compound.getBoolean("ismistborn"));
+		this.MetalAmounts[0] = compound.getInteger("iron");
+		this.MetalAmounts[1] = compound.getInteger("steel");
+		this.MetalAmounts[2] = compound.getInteger("tin");
+		this.MetalAmounts[3] = compound.getInteger("pewter");
+		this.MetalAmounts[4] = compound.getInteger("zinc");
+		this.MetalAmounts[5] = compound.getInteger("bronze");
+		this.MetalAmounts[6] = compound.getInteger("copper");
+		this.MetalAmounts[7] = compound.getInteger("brass");
 		this.selected = compound.getInteger("selected");
 	}
 
@@ -176,7 +176,5 @@ public class AllomancyCapabilities implements
 			return null;
 		}
 	}
-
-
 
 }

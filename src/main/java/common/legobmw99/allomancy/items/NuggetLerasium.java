@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -14,9 +15,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-
 import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
 
 public class NuggetLerasium extends ItemFood {
 	public NuggetLerasium() {
@@ -62,6 +63,7 @@ public class NuggetLerasium extends ItemFood {
 		double z = entityLiving.posZ;
 		if (cap.isMistborn() == false) {
 			cap.setMistborn(true);
+			Registry.network.sendTo(new BecomeMistbornPacket(), (EntityPlayerMP) entityLiving);;
 		}
 		//Fancy shmancy effects
 		worldIn.spawnEntityInWorld(new EntityLightningBolt(worldIn, x, y, z, true));

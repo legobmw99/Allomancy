@@ -36,23 +36,23 @@ public class AllomancyCapabiltiesPacket implements IMessage{
 
 
 	public AllomancyCapabiltiesPacket(AllomancyCapabilities data, int entityID) {
-		this.iron = data.getMetalAmounts()[0];
-		this.steel = data.getMetalAmounts()[1];
-		this.tin = data.getMetalAmounts()[2];
-		this.pewter = data.getMetalAmounts()[3];
-		this.zinc = data.getMetalAmounts()[4];
-		this.brass = data.getMetalAmounts()[5];
-		this.copper = data.getMetalAmounts()[6];
-		this.bronze = data.getMetalAmounts()[7];
+		this.iron = data.getMetalAmounts(0);
+		this.steel = data.getMetalAmounts(1);
+		this.tin = data.getMetalAmounts(2);
+		this.pewter = data.getMetalAmounts(3);
+		this.zinc = data.getMetalAmounts(4);
+		this.brass = data.getMetalAmounts(5);
+		this.copper = data.getMetalAmounts(6);
+		this.bronze = data.getMetalAmounts(7);
 		
-		this.biron = data.getMetalBurning()[0] ? 1 : 0;
-		this.bsteel = data.getMetalBurning()[1] ? 1 : 0;
-		this.btin = data.getMetalBurning()[2] ? 1 : 0;
-		this.bpewter = data.getMetalBurning()[3] ? 1 : 0;
-		this.bzinc = data.getMetalBurning()[4] ? 1 : 0;
-		this.bbrass = data.getMetalBurning()[5] ? 1 : 0;
-		this.bcopper = data.getMetalBurning()[6] ? 1 : 0;
-		this.bbronze = data.getMetalBurning()[7] ? 1 : 0;
+		this.biron = data.getMetalBurning(0) ? 1 : 0;
+		this.bsteel = data.getMetalBurning(1) ? 1 : 0;
+		this.btin = data.getMetalBurning(2) ? 1 : 0;
+		this.bpewter = data.getMetalBurning(3) ? 1 : 0;
+		this.bzinc = data.getMetalBurning(4) ? 1 : 0;
+		this.bbrass = data.getMetalBurning(5) ? 1 : 0;
+		this.bcopper = data.getMetalBurning(6) ? 1 : 0;
+		this.bbronze = data.getMetalBurning(7) ? 1 : 0;
 		
 		this.entityID = entityID;
 
@@ -119,24 +119,34 @@ public class AllomancyCapabiltiesPacket implements IMessage{
 					EntityPlayer player =  (EntityPlayer) Minecraft.getMinecraft().thePlayer.worldObj.getEntityByID(message.entityID);
 					AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
 
-					cap.getMetalAmounts()[0] = message.iron;
-					cap.getMetalAmounts()[1] = message.steel;
-					cap.getMetalAmounts()[2] = message.tin;
-					cap.getMetalAmounts()[3] = message.pewter;
-					cap.getMetalAmounts()[4] = message.zinc;
-					cap.getMetalAmounts()[5] = message.brass;
-					cap.getMetalAmounts()[6] = message.copper;
-					cap.getMetalAmounts()[7] = message.bronze;
+					cap.setMetalAmounts(0,message.iron);
+					cap.setMetalAmounts(1,message.steel);
+					cap.setMetalAmounts(2,message.tin);
+					cap.setMetalAmounts(3,message.pewter);
+					cap.setMetalAmounts(4,message.zinc);
+					cap.setMetalAmounts(5,message.brass);
+					cap.setMetalAmounts(6,message.copper);
+					cap.setMetalAmounts(7,message.bronze);
+
+					boolean biron,bsteel,btin,bpewter,bzinc,bbrass,bcopper,bbronze;
+					biron = message.biron == 1 ? true : false;
+					bsteel = message.bsteel == 1 ? true : false;
+					btin = message.btin == 1 ? true : false;
+					bpewter = message.bpewter == 1 ? true : false;
+					bzinc = message.bzinc == 1 ? true : false;
+					bbrass = message.bbrass == 1 ? true : false;
+					bcopper = message.bcopper == 1 ? true : false;
+					bbronze = message.bbronze == 1 ? true : false;
 					
-					cap.getMetalBurning()[0] = message.biron == 1 ? true : false;
-					cap.getMetalBurning()[1] = message.bsteel == 1 ? true : false;
-					cap.getMetalBurning()[2] = message.btin == 1 ? true : false;
-					cap.getMetalBurning()[3] = message.bpewter == 1 ? true : false;
-					cap.getMetalBurning()[4] = message.bzinc == 1 ? true : false;
-					cap.getMetalBurning()[5] = message.bbrass == 1 ? true : false;
-					cap.getMetalBurning()[6] = message.bcopper == 1 ? true : false;
-					cap.getMetalBurning()[7] = message.bbronze == 1 ? true : false;
-					
+					cap.setMetalBurning(0, biron);
+					cap.setMetalBurning(1, bsteel);
+					cap.setMetalBurning(2, btin);
+					cap.setMetalBurning(3, bpewter);
+					cap.setMetalBurning(4, bzinc);
+					cap.setMetalBurning(5, bbrass);
+					cap.setMetalBurning(6, bcopper);
+					cap.setMetalBurning(7, bbronze);
+
 					
 
 				}
