@@ -35,6 +35,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -535,16 +536,24 @@ public class AllomancyEventHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
-        AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.player);
-        for (int i = 0; i < 8; i++) {
-            cap.setMetalAmounts(i,0);
-        }
-        NBTTagCompound old = event.player.getEntityData();
-        if (old.hasKey("Allomancy_Data")) {
-            event.player.getEntityData().setTag("Allomancy_Data",
-                    old.getCompoundTag("Allomancy_Data"));
-        }
+    public void onPlayerClone(PlayerEvent.Clone event){
+    	if(event.isWasDeath()){
+        	AllomancyCapabilities oldCap = AllomancyCapabilities.forPlayer(event.getOriginal()); //the dead player's cap
+        	AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.getEntityPlayer()); //the clone's cap
+    		if(oldCap.isMistborn()){ 
+    			cap.setMistborn(true); //make sure the new player has the same mistborn status
+    			if (event.getEntityPlayer().worldObj.isRemote) {
+    				cap.setMistborn(true);
+    			}
+    			Registry.network.sendTo(new BecomeMistbornPacket(), (EntityPlayerMP) event.getEntityPlayer());
+    		}
+    		if(event.getEntityPlayer().worldObj.getGameRules().getBoolean("keepInventory")){ //if keepInventory is true, allow them to keep their metals, too
+    			for (int i = 0; i < 8; i++) {
+    				cap.setMetalAmounts(i,oldCap.getMetalAmounts(i));
+    			}
+    		}
+    	}
+    	
     }
     @SubscribeEvent
     public void onPlayerLogin(EntityJoinWorldEvent event) {
