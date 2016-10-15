@@ -29,10 +29,16 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootEntryTable;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.RandomValueRange;
+import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -536,6 +542,14 @@ public class AllomancyEventHandler {
         }
     }
 
+    @SubscribeEvent
+    public void onLootTableLoad(LootTableLoadEvent event){
+    	String name = event.getName().toString();
+    	if(name.startsWith("minecraft:chests/simple_dungeon") || name.startsWith("minecraft:chests/desert_pyramid")|| name.startsWith("minecraft:chests/jungle_temple")){
+    		event.getTable().addPool(new LootPool(new LootEntry[]{new LootEntryTable (new ResourceLocation(Allomancy.MODID,"inject/lerasium"), 1, 0, new LootCondition[0], "allomancy_inject_entry")}, new LootCondition[0], new RandomValueRange(1), new RandomValueRange(0, 1), "allomancy_inject_pool"));
+    	}
+    }
+    
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event){
     	if(event.isWasDeath()){
