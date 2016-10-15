@@ -37,6 +37,7 @@ public class ExternalPowerController{
 		/*
 		 * Add every single metal object in vanilla and this mod
 		 * Add item ids and default block states
+		 * This is so ugly and definitely not a good idea, sorry.
 		 */
 		this.metallist = new LinkedList<Integer>();
 		this.metallist.add(Items.GOLD_INGOT.getIdFromItem(Items.GOLD_INGOT));
@@ -296,7 +297,7 @@ public class ExternalPowerController{
 			player.motionZ = motionZ;
 			Registry.network.sendToServer(new StopFallPacket());
 
-			// waaaaay too damn heavy to push... you get moved.
+			// waaaaay too damn heavy to pull... you get moved.
 		}
 
 		if (entity.getHeldItem(EnumHand.OFF_HAND) == null || entity.getHeldItem(EnumHand.MAIN_HAND) == null) {

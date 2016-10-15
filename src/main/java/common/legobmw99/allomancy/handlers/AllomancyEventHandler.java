@@ -31,6 +31,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
@@ -791,30 +792,34 @@ public class AllomancyEventHandler {
                 }
 
         }
-
-    }
-	
-	@SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onSound(PlaySoundAtEntityEvent event) {
-        double motionX, motionY, motionZ;
+	}
+    //TODO: Check up on if this is fixed later
+	/*@SubscribeEvent
+    public void onSound(PlaySoundEvent event) {
+        double motionX, motionY, motionZ, magnitude;
         EntityPlayerSP player;
         player = Minecraft.getMinecraft().thePlayer;
-        if ((player == null) || (event.getEntity() == null) || ((player.getDistanceToEntity(event.getEntity()) > 20) || (player.getDistanceToEntity(event.getEntity()) < .5))) {
+        if ((player == null) || (event.getSound() == null) ) {
             return;
+        }
+		magnitude = Math.sqrt(Math.pow((player.posX - (event.getSound().getXPosF())),2) + Math.pow((player.posY - (event.getSound().getYPosF())),2) + Math.pow((player.posZ - (event.getSound().getYPosF())),2) );
+        if(((magnitude) > 20) || ((magnitude) < .5)){
+        	return;
         }
         AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
         //Spawn sound particles
+        
                 if (cap.getMetalBurning(AllomancyCapabilities.matTin)) {
-                    if (event.getSound().toString().contains("step") 
-                            || event.getSound().toString().contains("mob")
-                            || event.getSound().toString().contains("hostile")
-                            || event.getSound().toString().contains(".big")
-                            || event.getSound().toString().contains("scream")
-                            || event.getSound().toString().contains("bow")) {
-                        motionX = ((player.posX - (event.getEntity().posX + .5)) * -0.7)/ player.getDistanceToEntity(event.getEntity());
-                        motionY = (((player.posY - (event.getEntity().posY + .2)) * -0.7)/ player.getDistanceToEntity(event.getEntity()));
-                        motionZ = ((player.posZ - (event.getEntity().posZ + .5)) * -0.7) /player.getDistanceToEntity(event.getEntity());
+                    if (event.getSound().getSoundLocation().toString().contains("step") 
+                            || event.getSound().getSoundLocation().toString().contains("entity")
+                            || event.getSound().getSoundLocation().toString().contains("hostile")
+                            || event.getSound().getSoundLocation().toString().contains(".big")
+                            || event.getSound().getSoundLocation().toString().contains("scream")
+                            || event.getSound().getSoundLocation().toString().contains("bow")) {
+                    	System.out.println("working 2");
+                        motionX = ((player.posX - (event.getSound().getXPosF() + .5)) * -0.7) / magnitude;
+                        motionY = ((player.posY - (event.getSound().getYPosF() + .2)) * -0.7) / magnitude;
+                        motionZ = ((player.posZ - (event.getSound().getZPosF() + .5)) * -0.7) /magnitude;
                         Particle particle = new ParticleSound(player.worldObj,
                                 player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d),
                                 player.posY + .2, 
@@ -824,7 +829,7 @@ public class AllomancyEventHandler {
                     }
 
                 }
-            }
+            }*/
 
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {

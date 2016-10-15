@@ -2,6 +2,7 @@ package common.legobmw99.allomancy.particle;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -13,7 +14,7 @@ public class ParticleSound extends Particle {
 	double entityX,entityY,entityZ;
 	
 	public ParticleSound(World world, double x, double y, double z,
-			double motionX, double motionY, double motionZ, PlaySoundAtEntityEvent event) {
+			double motionX, double motionY, double motionZ, PlaySoundEvent event) {
 		
 		super(world, x, y, z, motionX, motionY, motionZ);
 
@@ -24,52 +25,50 @@ public class ParticleSound extends Particle {
 		this.particleScale *= 1.2F;
 		this.particleMaxAge = 15;
 		this.field_190017_n = false; //canCollide
-		entityX = event.getEntity().posX;
-		entityX = event.getEntity().posX;
-		entityX = event.getEntity().posX;
 
-		if( event.getSound().toString().contains("step")){
+
+		if( event.getSound().getSoundLocation().toString().contains("step")){
 			//Blue
 			this.particleGreen = 0;
 			this.particleBlue = 1F;
 			this.particleRed = 0;
 		}
 
-		if (event.getSound().toString().contains("pig") 
-				|| event.getSound().toString().contains("rabbit")
-				|| event.getSound().toString().contains("sheep")
-				|| event.getSound().toString().contains("cow") 
-				|| event.getSound().toString().contains("cat")
-				|| event.getSound().toString().contains("bat") 
-				|| event.getSound().toString().contains("horse")
-				 || event.getSound().toString().contains("wolf")
-				|| event.getSound().toString().contains("mooshroom")
-				|| event.getSound().toString().contains("villager")
-				|| event.getSound().toString().contains("golem") 
-				|| event.getSound().toString().contains("chicken")) {
+		if (event.getSound().getSoundLocation().toString().contains("pig") 
+				|| event.getSound().getSoundLocation().toString().contains("rabbit")
+				|| event.getSound().getSoundLocation().toString().contains("sheep")
+				|| event.getSound().getSoundLocation().toString().contains("cow") 
+				|| event.getSound().getSoundLocation().toString().contains("cat")
+				|| event.getSound().getSoundLocation().toString().contains("bat") 
+				|| event.getSound().getSoundLocation().toString().contains("horse")
+				 || event.getSound().getSoundLocation().toString().contains("wolf")
+				|| event.getSound().getSoundLocation().toString().contains("mooshroom")
+				|| event.getSound().getSoundLocation().toString().contains("villager")
+				|| event.getSound().getSoundLocation().toString().contains("golem") 
+				|| event.getSound().getSoundLocation().toString().contains("chicken")) {
 			//Green
 			this.particleGreen = 1;
 			this.particleBlue = 0.25F;
 			this.particleRed = 0;
 		}
 
-		if (event.getSound().toString().contains("skeleton") 
-				|| event.getSound().toString().contains("hostile")
-				|| event.getSound().toString().contains("zombie")
-				|| event.getSound().toString().contains("slime")
-				|| event.getSound().toString().contains("silverfish")
-				|| event.getSound().toString().contains("spider") 
-				|| event.getSound().toString().contains("blaze") 
-				|| event.getSound().toString().contains("witch")
-				|| event.getSound().toString().contains("guardian")
-				|| event.getSound().toString().contains("magmacube")
-				|| event.getSound().toString().contains("endermen")
-				|| event.getSound().toString().contains("enderdragon")
-				|| event.getSound().toString().contains("ghast")
-				|| event.getSound().toString().contains("spider") 
-				|| event.getSound().toString().contains("silverfish")
-				|| event.getSound().toString().contains("creeper")
-				|| event.getSound().toString().contains("bow")) {
+		if (event.getSound().getSoundLocation().toString().contains("skeleton") 
+				|| event.getSound().getSoundLocation().toString().contains("hostile")
+				|| event.getSound().getSoundLocation().toString().contains("zombie")
+				|| event.getSound().getSoundLocation().toString().contains("slime")
+				|| event.getSound().getSoundLocation().toString().contains("silverfish")
+				|| event.getSound().getSoundLocation().toString().contains("spider") 
+				|| event.getSound().getSoundLocation().toString().contains("blaze") 
+				|| event.getSound().getSoundLocation().toString().contains("witch")
+				|| event.getSound().getSoundLocation().toString().contains("guardian")
+				|| event.getSound().getSoundLocation().toString().contains("magmacube")
+				|| event.getSound().getSoundLocation().toString().contains("endermen")
+				|| event.getSound().getSoundLocation().toString().contains("enderdragon")
+				|| event.getSound().getSoundLocation().toString().contains("ghast")
+				|| event.getSound().getSoundLocation().toString().contains("spider") 
+				|| event.getSound().getSoundLocation().toString().contains("silverfish")
+				|| event.getSound().getSoundLocation().toString().contains("creeper")
+				|| event.getSound().getSoundLocation().toString().contains("bow")) {
 			//Red
 			this.particleGreen = 0.15F;
 			this.particleBlue = 0.15F;
