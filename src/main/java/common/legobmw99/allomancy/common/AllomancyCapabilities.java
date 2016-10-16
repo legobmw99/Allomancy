@@ -39,10 +39,6 @@ public class AllomancyCapabilities implements
 
 	private EntityPlayer player;
 
-	public void AllomancyData(EntityPlayer player) {
-		this.player = player;
-	}
-
 	public static AllomancyCapabilities forPlayer(Entity player) {
 		return player.getCapability(Allomancy.PLAYER_CAP, null);
 	}
