@@ -41,13 +41,7 @@ public class EntityGoldNugget extends EntityThrowable {
 	protected void onImpact(RayTraceResult movingobjectposition) {
 		if (movingobjectposition.entityHit != null && movingobjectposition.entityHit != this.getThrower())
         {
-            byte b0 = 0;
 
-            if (movingobjectposition.entityHit instanceof EntityBlaze)
-            {
-                b0 = 3;
-            }
-            
             movingobjectposition.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), (float) 4);
         }
 
