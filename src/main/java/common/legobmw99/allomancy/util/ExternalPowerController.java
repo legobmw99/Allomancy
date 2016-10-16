@@ -263,9 +263,9 @@ public class ExternalPowerController{
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
 
-			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
+			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));
 
-		}
+        }
 	}
 
 	private void tryPushItem(EntityItem entity) {
@@ -278,9 +278,9 @@ public class ExternalPowerController{
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
-			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
+			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));
 
-		}
+        }
 	}
 
 	private void tryPullMob(EntityLiving entity) {
@@ -313,8 +313,8 @@ public class ExternalPowerController{
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
-			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
-		}
+			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));
+        }
 	}
 
 	private void tryPushMob(EntityLiving entity) {
@@ -347,8 +347,8 @@ public class ExternalPowerController{
 			entity.motionX = motionX;
 			entity.motionY = motionY;
 			entity.motionZ = motionZ;
-			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));;
-		}
+			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));
+        }
 	}
 
 }

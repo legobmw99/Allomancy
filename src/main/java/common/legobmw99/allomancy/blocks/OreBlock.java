@@ -15,8 +15,8 @@ public class OreBlock extends Block {
 	public static Block oreZinc;
 	
 	public enum OreType {
-		LEAD, TIN, COPPER, ZINC;
-	}
+		LEAD, TIN, COPPER, ZINC
+    }
 
 	private OreType type;
 

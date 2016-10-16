@@ -120,7 +120,7 @@ public class AllomancyEventHandler {
 			RayTraceResult mop;
 			vector3 vec;
 
-			if (cap.isMistborn() == true) {
+			if (cap.isMistborn()) {
 				this.updateBurnTime(cap, player);
 
 				if (cap.getMetalBurning(AllomancyCapabilities.matIron)
@@ -162,7 +162,7 @@ public class AllomancyEventHandler {
 						Allomancy.XPC.particleTargets.clear();
 					}
 				if ((player.getHeldItemMainhand() == null)
-						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() == true)) {
+						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown())) {
 					//Ray trace 20 blocks
 					RayTraceResult mov = getMouseOverExtended(20.0F);
 					//All iron pulling powers
@@ -200,7 +200,7 @@ public class AllomancyEventHandler {
 
 					}
 				if ((player.getHeldItemMainhand()) == null
-						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() == true)) {
+						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown())) {
 					//Ray trace 20 blocks
 					RayTraceResult mov = getMouseOverExtended(20.0F);
 					//All steel pushing powers
@@ -241,8 +241,8 @@ public class AllomancyEventHandler {
 				
 				//Pewter's speed powers
 				if (cap.getMetalBurning(AllomancyCapabilities.matPewter)) {
-					if ((player.onGround == true)
-							&& (player.isInWater() == false)
+					if ((player.onGround)
+							&& (!player.isInWater())
 							&& (Minecraft.getMinecraft().gameSettings.keyBindForward
 									.isKeyDown())) {
 						player.motionX *= 1.2;
@@ -278,7 +278,7 @@ public class AllomancyEventHandler {
 						if (curEntity != null && (curEntity instanceof EntityPlayer) && curEntity != player) {
 							AllomancyCapabilities capOther = AllomancyCapabilities.forPlayer(curEntity);
 			                Registry.network.sendToServer(new GetCapabilitiesPacket(curEntity.getEntityId(), player.getEntityId()));
-							if(capOther.getMetalBurning(AllomancyCapabilities.matCopper) == false){
+							if(!capOther.getMetalBurning(AllomancyCapabilities.matCopper)){
 								if(capOther.getMetalBurning(AllomancyCapabilities.matIron) || capOther.getMetalBurning(AllomancyCapabilities.matSteel) || capOther.getMetalBurning(AllomancyCapabilities.matTin) || capOther.getMetalBurning(AllomancyCapabilities.matPewter) || capOther.getMetalBurning(AllomancyCapabilities.matZinc) || capOther.getMetalBurning(AllomancyCapabilities.matBrass) || capOther.getMetalBurning(AllomancyCapabilities.matBronze)){
 									Allomancy.XPC.tryAddBurningPlayer((EntityPlayer) curEntity);
 								}
@@ -294,7 +294,7 @@ public class AllomancyEventHandler {
 
 			for (Entity entity : Allomancy.XPC.particleTargets) {
 
-				if (entity.isDead == true) {
+				if (entity.isDead) {
 					toRemoveMetal.add(entity);
 				}
 				if (player == null) {
@@ -316,7 +316,7 @@ public class AllomancyEventHandler {
 			for (EntityPlayer entity : Allomancy.XPC.metalBurners) {
 				AllomancyCapabilities capOther = AllomancyCapabilities.forPlayer(entity);
                 Registry.network.sendToServer(new GetCapabilitiesPacket(entity.getEntityId(), player.getEntityId()));
-				if (entity.isDead == true) {
+				if (entity.isDead) {
 					toRemoveBurners.add(entity);
 				}
 
@@ -574,10 +574,10 @@ public class AllomancyEventHandler {
     public void onPlayerLogin(EntityJoinWorldEvent event) {
 		if (event.getEntity() instanceof EntityPlayerMP) {
 	        AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.getEntity());
-			Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap,event.getEntity().getEntityId()), (EntityPlayerMP) event.getEntity());;
-			if (cap.isMistborn()) {
-				Registry.network.sendTo(new BecomeMistbornPacket(), (EntityPlayerMP) event.getEntity());;
-				cap.setMistborn(true);
+			Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap,event.getEntity().getEntityId()), (EntityPlayerMP) event.getEntity());
+            if (cap.isMistborn()) {
+				Registry.network.sendTo(new BecomeMistbornPacket(), (EntityPlayerMP) event.getEntity());
+                cap.setMistborn(true);
 				if (event.getWorld().isRemote) {
 					cap.setMistborn(true);
 				}
@@ -857,7 +857,7 @@ public class AllomancyEventHandler {
 				cap = AllomancyCapabilities.forPlayer(curPlayer);
 	   
 	            		
-				if (cap.isMistborn() == true) {
+				if (cap.isMistborn()) {
 					//Damage the player if they have stored damage and pewter cuts out
 					if (!cap.getMetalBurning(AllomancyCapabilities.matPewter)
 							&& (cap.getDamageStored() > 0)) {
@@ -866,7 +866,7 @@ public class AllomancyEventHandler {
 					}
 					if (cap.getMetalBurning(AllomancyCapabilities.matTin)) {
 						//Add night vision to tin-burners
-						if (curPlayer.isPotionActive(Potion.getPotionById(16)) == false) { //Potion 16 = night vision
+						if (!curPlayer.isPotionActive(Potion.getPotionById(16))) { //Potion 16 = night vision
 							curPlayer.addPotionEffect(new PotionEffect(
 									Potion.getPotionById(16), 300, 0, false, false));
 						}
@@ -887,7 +887,7 @@ public class AllomancyEventHandler {
 
 					}
 					//Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing
-					if ((cap.getMetalBurning(AllomancyCapabilities.matTin) == false)
+					if ((!cap.getMetalBurning(AllomancyCapabilities.matTin))
 							&& curPlayer.isPotionActive(Potion.getPotionById(16))) {
 						if (curPlayer.getActivePotionEffect(Potion.getPotionById(16))
 								.getDuration() < 201) {
@@ -906,11 +906,11 @@ public class AllomancyEventHandler {
 		for (int i = 0; i < 8; i++) {
 
 			if (cap.getMetalBurning(i)) {
-				cap.setBurnTime(i, cap.getBurnTime(i) - 1);;
-				if (cap.getBurnTime(i) == 0) {
+				cap.setBurnTime(i, cap.getBurnTime(i) - 1);
+                if (cap.getBurnTime(i) == 0) {
 					cap.setBurnTime(i,data.MaxBurnTime[i]);
-					cap.setMetalAmounts(i, cap.getMetalAmounts(i) - 1);;
-					Registry.network.sendToServer(new UpdateBurnPacket(i,
+					cap.setMetalAmounts(i, cap.getMetalAmounts(i) - 1);
+                    Registry.network.sendToServer(new UpdateBurnPacket(i,
 							data.getMetalBurning(i)));
 					if (cap.getMetalAmounts(i) == 0) {
 						//Minecraft.getMinecraft().thePlayer.playSound("random.fizz", 1, 4);

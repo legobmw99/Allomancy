@@ -25,7 +25,7 @@ public class ItemVial extends Item{
 		AllomancyCapabilities cap;
 		cap = AllomancyCapabilities.forPlayer(entityLiving);
 		
-		if (((EntityPlayer)(entityLiving)).capabilities.isCreativeMode != true) {
+		if (!((EntityPlayer) (entityLiving)).capabilities.isCreativeMode) {
 			stack.stackSize--; 
 			((EntityPlayer)(entityLiving)).inventory.addItemStackToInventory(new ItemStack(Registry.itemVial, 1,0));
 		}

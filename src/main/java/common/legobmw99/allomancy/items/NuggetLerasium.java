@@ -61,10 +61,10 @@ public class NuggetLerasium extends ItemFood {
 		double x = entityLiving.posX;
 		double y = entityLiving.posY + 3;
 		double z = entityLiving.posZ;
-		if (cap.isMistborn() == false) {
+		if (!cap.isMistborn()) {
 			cap.setMistborn(true);
-			Registry.network.sendTo(new BecomeMistbornPacket(), (EntityPlayerMP) entityLiving);;
-		}
+			Registry.network.sendTo(new BecomeMistbornPacket(), (EntityPlayerMP) entityLiving);
+        }
 		//Fancy shmancy effects
 		worldIn.spawnEntityInWorld(new EntityLightningBolt(worldIn, x, y, z, true));
 		entityLiving.addPotionEffect(new PotionEffect(Potion.getPotionById(12),
