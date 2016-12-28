@@ -45,11 +45,11 @@ public class EntityGoldNugget extends EntityThrowable {
             movingobjectposition.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), (float) 4);
         }
 
-        if (!this.worldObj.isRemote)
+        if (!this.world.isRemote)
         {
         	ItemStack goldAmmo = new ItemStack(Items.GOLD_NUGGET, 1, 0);
-        	if(this.worldObj.getGameRules().getBoolean("doTileDrops") && movingobjectposition.entityHit == null && this.dropItem){
-				this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, goldAmmo));
+        	if(this.world.getGameRules().getBoolean("doTileDrops") && movingobjectposition.entityHit == null && this.dropItem){
+				this.world.spawnEntity(new EntityItem(this.world, this.posX, this.posY, this.posZ, goldAmmo));
 			}
             this.setDead();
         }

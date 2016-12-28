@@ -7,11 +7,14 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
+import java.util.UUID;
+
 import com.google.common.collect.Multimap;
 
 import common.legobmw99.allomancy.common.Registry;
 
 public class ItemMistcloak extends ItemArmor{
+    private static final UUID[] ARMOR_MODIFIERS = new UUID[] {UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
 
 	public ItemMistcloak(ArmorMaterial par2EnumArmorMaterial, int par3, EntityEquipmentSlot i) {
 		super(par2EnumArmorMaterial, par3, i);
@@ -19,13 +22,21 @@ public class ItemMistcloak extends ItemArmor{
 		this.setCreativeTab(CreativeTabs.COMBAT);
 	}
 
-	@Override
-	public Multimap getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-		Multimap multimap = super.getAttributeModifiers(slot,  new  ItemStack(Registry.Mistcloak));
-		if(slot  == armorType.CHEST)
-			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getAttributeUnlocalizedName(), new AttributeModifier("Speed Modifier", .25, 1));
-		return multimap;
-	}
 
+	@Override
+    public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot)
+    {
+        Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
+
+        if (equipmentSlot == armorType.CHEST)
+        {
+            multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor modifier", (double)this.damageReduceAmount, 0));
+            multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor toughness", (double)this.toughness, 0));
+			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()],"Speed Modifier", .05, 0));
+
+        }
+
+        return multimap;
+    }
 
 }

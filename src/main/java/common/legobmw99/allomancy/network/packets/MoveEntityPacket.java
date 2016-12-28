@@ -49,11 +49,11 @@ public class MoveEntityPacket implements IMessage {
 
 		@Override
 		public IMessage onMessage(final MoveEntityPacket message, final MessageContext ctx) {
-	        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj; // or Minecraft.getMinecraft() on the client
+	        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world; // or Minecraft.getMinecraft() on the client
 	        mainThread.addScheduledTask(new Runnable() {
 	            @Override
 	            public void run() {
-	        		Entity target = ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityID);
+	        		Entity target = ctx.getServerHandler().playerEntity.world.getEntityByID(message.entityID);
 	        		if (target == null) {
 	        			return;
 	        		} else {

@@ -1,5 +1,11 @@
 package common.legobmw99.allomancy;
 
+import common.legobmw99.allomancy.common.AllomancyCapabilities;
+import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.handlers.AllomancyEventHandler;
+import common.legobmw99.allomancy.util.AllomancyConfig;
+import common.legobmw99.allomancy.util.ExternalPowerController;
+import common.legobmw99.allomancy.world.OreGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -11,13 +17,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-
-import common.legobmw99.allomancy.common.AllomancyCapabilities;
-import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.handlers.AllomancyEventHandler;
-import common.legobmw99.allomancy.util.AllomancyConfig;
-import common.legobmw99.allomancy.util.ExternalPowerController;
-import common.legobmw99.allomancy.world.OreGenerator;
 
 @Mod(modid = Allomancy.MODID, version = Allomancy.VERSION)
 public class Allomancy {

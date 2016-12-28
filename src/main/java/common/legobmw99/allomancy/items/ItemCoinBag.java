@@ -27,12 +27,9 @@ public class ItemCoinBag extends Item{
         ItemStack itemstack = this.findArrow(playerIn);
         if (playerIn.capabilities.isCreativeMode || itemstack != null && AllomancyCapabilities.forPlayer(playerIn).getMetalBurning(AllomancyCapabilities.matSteel)){
         		EntityGoldNugget entitygold = new EntityGoldNugget(worldIn, playerIn);
-        		worldIn.spawnEntityInWorld(entitygold);
+        		worldIn.spawnEntity(entitygold);
         		if(!playerIn.capabilities.isCreativeMode){
-        			--itemstack.stackSize;
-        			if(itemstack.stackSize < 1){
-        				itemstack.stackSize = 0;
-        			}
+        			itemstack.shrink(1);
         		}
         	}        
         return new ActionResult(EnumActionResult.PASS, itemStackIn);
@@ -45,7 +42,7 @@ public class ItemCoinBag extends Item{
 	            for (int i = 0; i < player.inventory.getSizeInventory(); ++i){
 	                ItemStack itemstack = player.inventory.getStackInSlot(i);
 	                if (this.isArrow(itemstack)){
-	                	if(itemstack.stackSize == 1){
+	                	if(itemstack.getCount() == 1){
 	                		player.inventory.removeStackFromSlot(i);
 	                		return itemstack;
 

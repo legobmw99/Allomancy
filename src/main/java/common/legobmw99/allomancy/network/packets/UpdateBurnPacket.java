@@ -40,7 +40,7 @@ public class UpdateBurnPacket implements IMessage {
 
 		@Override
 		public IMessage onMessage(final UpdateBurnPacket message, final MessageContext ctx) {
-	        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj; // or Minecraft.getMinecraft() on the client
+	        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world; // or Minecraft.getMinecraft() on the client
 	        mainThread.addScheduledTask(new Runnable() {
 	            @Override
 	            public void run() {

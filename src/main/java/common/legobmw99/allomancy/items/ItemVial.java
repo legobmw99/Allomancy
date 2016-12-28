@@ -11,7 +11,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 
@@ -26,7 +29,7 @@ public class ItemVial extends Item{
 		cap = AllomancyCapabilities.forPlayer(entityLiving);
 		
 		if (!((EntityPlayer) (entityLiving)).capabilities.isCreativeMode) {
-			stack.stackSize--; 
+			stack.shrink(1); 
 			((EntityPlayer)(entityLiving)).inventory.addItemStackToInventory(new ItemStack(Registry.itemVial, 1,0));
 		}
 		if (cap == null) {
@@ -54,10 +57,11 @@ public class ItemVial extends Item{
 	}
 
 	@Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand){
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand){
 
 		AllomancyCapabilities cap;
 		cap = AllomancyCapabilities.forPlayer(playerIn);
+		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		//Checks both the metal amount (we only want to fill up to 10) and the item damage (can't drink empty vials)
 		if (itemStackIn.getItemDamage() > 0){
 			if (cap.getMetalAmounts(itemStackIn.getItemDamage() - 1) < 10) {
@@ -91,9 +95,9 @@ public class ItemVial extends Item{
 	
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (int meta = 0; meta < 9; meta++) {
-			list.add(new ItemStack(item, 1, meta));
+			subItems.add(new ItemStack(item, 1, meta));
 		}
 	}
 }

@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -27,6 +28,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import org.lwjgl.input.Keyboard;
 
+import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.blocks.OreBlock;
 import common.legobmw99.allomancy.entity.EntityGoldNugget;
 import common.legobmw99.allomancy.items.ItemCoinBag;
@@ -71,13 +73,13 @@ public class Registry {
 
 	public static void initItems() {
 		//Register the basic, not-metallic items
-		GameRegistry.registerItem(itemAllomancyGrinder = new ItemGrinder(), "grinder");
-		GameRegistry.registerItem(itemCoinBag = new ItemCoinBag(), "coinbag");
-		GameRegistry.registerItem(Mistcloak = new ItemMistcloak(WoolArmor, 1, EntityEquipmentSlot.CHEST), "mistcloak");
-		GameRegistry.registerItem(nuggetLerasium = new NuggetLerasium(), "nuggetLerasium");
+		GameRegistry.register(itemAllomancyGrinder = new ItemGrinder(),  new ResourceLocation(Allomancy.MODID,"grinder"));
+		GameRegistry.register(itemCoinBag = new ItemCoinBag(),  new ResourceLocation(Allomancy.MODID,"coinbag"));
+		GameRegistry.register(Mistcloak = new ItemMistcloak(WoolArmor, 1, EntityEquipmentSlot.CHEST),  new ResourceLocation(Allomancy.MODID,"mistcloak"));
+		GameRegistry.register(nuggetLerasium = new NuggetLerasium(),  new ResourceLocation(Allomancy.MODID,"nuggetLerasium"));
 
 		//Register ItemVial and its subtypes
-		GameRegistry.registerItem(itemVial = new ItemVial(), "itemVial");
+		GameRegistry.register(itemVial = new ItemVial(), new ResourceLocation(Allomancy.MODID,"itemVial"));
 		for (int i = 0; i < ItemVial.unlocalName.length; i++) {
 			ItemStack Item;
 			Item = new ItemStack(itemVial, 1, i);
@@ -85,10 +87,10 @@ public class Registry {
 		
 		
 		//Register ingots and add them to the ore dictionary
-		GameRegistry.registerItem(itemTinIngot = new Item().setUnlocalizedName("ingotTin").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0), "ingotTin");
-		GameRegistry.registerItem(itemLeadIngot = new Item().setUnlocalizedName("ingotLead").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0), "ingotLead");
-		GameRegistry.registerItem(itemCopperIngot = new Item().setUnlocalizedName("ingotCopper").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0), "ingotCopper");
-		GameRegistry.registerItem(itemZincIngot = new Item().setUnlocalizedName("ingotZinc").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0), "ingotZinc");
+		GameRegistry.register(itemTinIngot = new Item().setUnlocalizedName("ingotTin").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0),  new ResourceLocation(Allomancy.MODID,"ingotTin"));
+		GameRegistry.register(itemLeadIngot = new Item().setUnlocalizedName("ingotLead").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0),  new ResourceLocation(Allomancy.MODID,"ingotLead"));
+		GameRegistry.register(itemCopperIngot = new Item().setUnlocalizedName("ingotCopper").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0),  new ResourceLocation(Allomancy.MODID,"ingotCopper"));
+		GameRegistry.register(itemZincIngot = new Item().setUnlocalizedName("ingotZinc").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0),  new ResourceLocation(Allomancy.MODID,"ingotZinc"));
 		
 		OreDictionary.registerOre("ingotZinc", itemZincIngot);
 		OreDictionary.registerOre("ingotTin", itemTinIngot);
@@ -97,7 +99,7 @@ public class Registry {
 		
 		//Register flakes
 		for (int i = 0; i < flakeMetals.length; i++) {
-			GameRegistry.registerItem(new Item().setUnlocalizedName("flake" + flakeMetals[i]).setCreativeTab(Registry.tabsAllomancy), "flake" + flakeMetals[i]);
+			GameRegistry.register(new Item().setUnlocalizedName("flake" + flakeMetals[i]).setCreativeTab(Registry.tabsAllomancy),  new ResourceLocation(Allomancy.MODID,"flake" + flakeMetals[i]));
 		}	
 	}
 

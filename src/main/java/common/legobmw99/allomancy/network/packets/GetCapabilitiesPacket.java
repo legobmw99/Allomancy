@@ -47,12 +47,12 @@ public class GetCapabilitiesPacket implements IMessage {
 
 		@Override
 		public IMessage onMessage(final GetCapabilitiesPacket message, final MessageContext ctx) {
-	        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj; // or Minecraft.getMinecraft() on the client
+	        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world; // or Minecraft.getMinecraft() on the client
 	        mainThread.addScheduledTask(new Runnable() {
 	            @Override
 	            public void run() {
-	        		Entity target = ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityIDOther);
-	        		EntityPlayer player = (EntityPlayer) ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityIDSender);
+	        		Entity target = ctx.getServerHandler().playerEntity.world.getEntityByID(message.entityIDOther);
+	        		EntityPlayer player = (EntityPlayer) ctx.getServerHandler().playerEntity.world.getEntityByID(message.entityIDSender);
 	        		AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(target);
 	        		
 	                Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, message.entityIDOther),(EntityPlayerMP) player);

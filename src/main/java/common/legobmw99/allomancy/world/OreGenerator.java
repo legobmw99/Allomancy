@@ -101,7 +101,7 @@ public class OreGenerator implements IWorldGenerator {
 					x = x + (16 * chunkX);
 					z = z + (16 * chunkZ);
 					y = y + data.minHeight;
-					numOre = MathHelper.clamp_int(random.nextInt(data.maxCluster), data.minCluster,data.maxCluster);
+					numOre = MathHelper.clamp(random.nextInt(data.maxCluster), data.minCluster,data.maxCluster);
 					this.generateOre(world, random, x, y, z, data.oreType, numOre); 
 				
 				}

@@ -20,7 +20,7 @@ public class CreativeTabAllomancy extends CreativeTabs {
 	}
 
 	@Override
-	public Item getTabIconItem() {
+	public ItemStack getTabIconItem() {
 		return null;
 	}
 }

@@ -116,7 +116,7 @@ public class AllomancyCapabiltiesPacket implements IMessage{
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					EntityPlayer player =  (EntityPlayer) Minecraft.getMinecraft().thePlayer.worldObj.getEntityByID(message.entityID);
+					EntityPlayer player =  (EntityPlayer) Minecraft.getMinecraft().player.world.getEntityByID(message.entityID);
 					AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
 
 					cap.setMetalAmounts(0,message.iron);

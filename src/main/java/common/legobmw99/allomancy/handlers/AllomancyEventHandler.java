@@ -111,10 +111,10 @@ public class AllomancyEventHandler {
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 		// Run once per tick, only if in game, and only if there is a player
-		if (event.phase == TickEvent.Phase.END&& (!Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().thePlayer != null)) {
+		if (event.phase == TickEvent.Phase.END&& (!Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().player != null)) {
 
 			EntityPlayerSP player;
-			player = Minecraft.getMinecraft().thePlayer;
+			player = Minecraft.getMinecraft().player;
         	AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
 			RayTraceResult ray;
 			RayTraceResult mop;
@@ -131,10 +131,9 @@ public class AllomancyEventHandler {
 					Entity target;
 					AxisAlignedBB boxMetal;
 
-
 					//Add entities to metal list
 					boxMetal = new AxisAlignedBB((player.posX - 10),(player.posY - 10), (player.posZ - 10), (player.posX + 10), (player.posY + 10), (player.posZ + 10));
-					eListMetal = player.worldObj.getEntitiesWithinAABB(Entity.class, boxMetal);
+					eListMetal = player.world.getEntitiesWithinAABB(Entity.class, boxMetal);
 					for (Entity curEntity : eListMetal) {
 						if (curEntity != null && (curEntity instanceof EntityItem || curEntity instanceof EntityLiving || curEntity instanceof EntityGoldNugget))
 							Allomancy.XPC.tryAddMetalEntity(curEntity);
@@ -151,7 +150,7 @@ public class AllomancyEventHandler {
 								BlockPos pos1 = new BlockPos(x, y, z);
 								vec = new vector3(pos1);
 								if (Allomancy.XPC.isBlockMetal(Minecraft
-										.getMinecraft().theWorld
+										.getMinecraft().world
 										.getBlockState(vec.pos))) {
 									Allomancy.XPC.particleBlockTargets.add(vec);
 								}
@@ -161,7 +160,7 @@ public class AllomancyEventHandler {
 				}	else {
 						Allomancy.XPC.particleTargets.clear();
 					}
-				if ((player.getHeldItemMainhand() == null)
+				if ((player.getHeldItemMainhand().isEmpty())
 						&& (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown())) {
 					//Ray trace 20 blocks
 					RayTraceResult mov = getMouseOverExtended(20.0F);
@@ -176,7 +175,7 @@ public class AllomancyEventHandler {
 						if (ray != null) {
 							if (ray.typeOfHit == RayTraceResult.Type.BLOCK || ray.typeOfHit == RayTraceResult.Type.MISS) {
 								vec = new vector3(ray.getBlockPos());
-								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
+								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(vec.pos))) {
 									Allomancy.XPC.tryPullBlock(vec);
 								}
 							}
@@ -199,7 +198,7 @@ public class AllomancyEventHandler {
 						}
 
 					}
-				if ((player.getHeldItemMainhand()) == null
+				if ((player.getHeldItemMainhand()).isEmpty()
 						&& (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown())) {
 					//Ray trace 20 blocks
 					RayTraceResult mov = getMouseOverExtended(20.0F);
@@ -212,10 +211,13 @@ public class AllomancyEventHandler {
 						}
 						ray = player.rayTrace(20.0F, 0.0F);
 						if (ray != null) {
+
 							if (ray.typeOfHit == RayTraceResult.Type.BLOCK
 									|| ray.typeOfHit == RayTraceResult.Type.MISS) {
+
 								vec = new vector3(ray.getBlockPos());
-								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().theWorld.getBlockState(vec.pos))) {
+								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(vec.pos))) {
+
 									Allomancy.XPC.tryPushBlock(vec);
 								}
 							}
@@ -249,21 +251,21 @@ public class AllomancyEventHandler {
 						player.motionZ *= 1.2;
 
 						//Don't allow motion values to get too out of the norm
-						player.motionX = MathHelper.clamp_float((float) player.motionX, -2, 2);
-						player.motionZ = MathHelper.clamp_float((float) player.motionZ, -2, 2);
+						player.motionX = MathHelper.clamp((float) player.motionX, -2, 2);
+						player.motionZ = MathHelper.clamp((float) player.motionZ, -2, 2);
 					}
 					if (Minecraft.getMinecraft().gameSettings.keyBindJump
 							.isPressed()) {
 						if (player.motionY >= 0) {
 							player.motionY *= 1.6;
 							//Don't allow motion values to get too out of the norm
-							player.motionY = MathHelper.clamp_float((float) player.motionY, -2, 2);
+							player.motionY = MathHelper.clamp((float) player.motionY, -2, 2);
 						}
 						player.motionX *= 1.4;
 						player.motionZ *= 1.4;
 						//Don't allow motion values to get too out of the norm
-						player.motionX = MathHelper.clamp_float((float) player.motionX, -2, 2);
-						player.motionZ = MathHelper.clamp_float((float) player.motionZ, -2, 2);
+						player.motionX = MathHelper.clamp((float) player.motionX, -2, 2);
+						player.motionZ = MathHelper.clamp((float) player.motionZ, -2, 2);
 					}
 
 				}
@@ -273,7 +275,7 @@ public class AllomancyEventHandler {
 					List<Entity> eListBurners;
 					//Add metal burners to a list
 					boxBurners = new AxisAlignedBB((player.posX - 30),(player.posY - 30), (player.posZ - 30), (player.posX + 30), (player.posY + 30), (player.posZ + 30));
-					eListBurners = player.worldObj.getEntitiesWithinAABB(Entity.class, boxBurners);
+					eListBurners = player.world.getEntitiesWithinAABB(Entity.class, boxBurners);
 					for (Entity curEntity : eListBurners) {
 						if (curEntity != null && (curEntity instanceof EntityPlayer) && curEntity != player) {
 							AllomancyCapabilities capOther = AllomancyCapabilities.forPlayer(curEntity);
@@ -366,7 +368,7 @@ public class AllomancyEventHandler {
         if (Registry.changeGroup.isPressed()) {
 
             EntityPlayerSP player;
-            player = Minecraft.getMinecraft().thePlayer;
+            player = Minecraft.getMinecraft().player;
             Minecraft mc = FMLClientHandler.instance().getClient();
             if (mc.currentScreen == null) {
                 if ((player == null)
@@ -381,7 +383,7 @@ public class AllomancyEventHandler {
         }
         if (Registry.burnFirst.isPressed()) {
             EntityPlayerSP player;
-            player = Minecraft.getMinecraft().thePlayer;
+            player = Minecraft.getMinecraft().player;
             AllomancyCapabilities cap;
             Minecraft mc = FMLClientHandler.instance().getClient();
             if (mc.currentScreen == null) {
@@ -401,9 +403,9 @@ public class AllomancyEventHandler {
                     }
                     //play a sound effect
                     if(cap.getMetalBurning(AllomancyCapabilities.matIron)){
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
                     }else{
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
                     }
                     break;
                 case 2:
@@ -417,9 +419,9 @@ public class AllomancyEventHandler {
                     }
                     //play a sound effect
                     if(cap.getMetalBurning(AllomancyCapabilities.matTin)){
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
                     }else{
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
                     }
                     break;
                 case 3:
@@ -433,9 +435,9 @@ public class AllomancyEventHandler {
                     }
                     //play a sound effect
                     if(cap.getMetalBurning(AllomancyCapabilities.matZinc)){
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
                     }else{
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
                     }
                     break;
                 case 4:
@@ -449,9 +451,9 @@ public class AllomancyEventHandler {
                     }
                     //play a sound effect
                     if(cap.getMetalBurning(AllomancyCapabilities.matCopper)){
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
                     }else{
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
                     }
                     break;
                 default:
@@ -461,7 +463,7 @@ public class AllomancyEventHandler {
         }
         if (Registry.burnSecond.isPressed()) {
             EntityPlayerSP player;
-            player = Minecraft.getMinecraft().thePlayer;
+            player = Minecraft.getMinecraft().player;
             AllomancyCapabilities cap;
             Minecraft mc = FMLClientHandler.instance().getClient();
             if (mc.currentScreen == null) {
@@ -482,9 +484,9 @@ public class AllomancyEventHandler {
                     }
                     //play a sound effect
                     if(cap.getMetalBurning(AllomancyCapabilities.matSteel)){
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
                     }else{
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
                     }
                     break;
                 case 2:
@@ -498,9 +500,9 @@ public class AllomancyEventHandler {
                     }
                     //play a sound effect
                     if(cap.getMetalBurning(AllomancyCapabilities.matPewter)){
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
                     }else{
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
                     }
                     break;
                 case 3:
@@ -514,9 +516,9 @@ public class AllomancyEventHandler {
                     }
                     //play a sound effect
                     if(cap.getMetalBurning(AllomancyCapabilities.matBrass)){
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
                     }else{
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
                     }
                     break;
                 case 4:
@@ -530,9 +532,9 @@ public class AllomancyEventHandler {
                     }
                     //play a sound effect
                     if(cap.getMetalBurning(AllomancyCapabilities.matBronze)){
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
                     }else{
-                        Minecraft.getMinecraft().thePlayer.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
                     }
                     break;
                 default:
@@ -557,12 +559,12 @@ public class AllomancyEventHandler {
         	AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.getEntityPlayer()); //the clone's cap
     		if(oldCap.isMistborn()){ 
     			cap.setMistborn(true); //make sure the new player has the same mistborn status
-    			if (event.getEntityPlayer().worldObj.isRemote) {
+    			if (event.getEntityPlayer().world.isRemote) {
     				cap.setMistborn(true);
     			}
     			Registry.network.sendTo(new BecomeMistbornPacket(), (EntityPlayerMP) event.getEntityPlayer());
     		}
-    		if(event.getEntityPlayer().worldObj.getGameRules().getBoolean("keepInventory")){ //if keepInventory is true, allow them to keep their metals, too
+    		if(event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory")){ //if keepInventory is true, allow them to keep their metals, too
     			for (int i = 0; i < 8; i++) {
     				cap.setMetalAmounts(i,oldCap.getMetalAmounts(i));
     			}
@@ -604,7 +606,7 @@ public class AllomancyEventHandler {
             return;
         }
         EntityPlayerSP player;
-        player = this.mc.thePlayer;
+        player = this.mc.player;
         if (player == null) {
             return;
         }
@@ -772,7 +774,7 @@ public class AllomancyEventHandler {
                 motionX = ((player.posX - entity.posX) * -1) * .03;
                 motionY = (((player.posY - entity.posY + 1.2) * -1) * .03) + .021;
                 motionZ = ((player.posZ - entity.posZ) * -1) * .03;
-                particle = new ParticlePointer(player.worldObj,
+                particle = new ParticlePointer(player.world,
                         player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .3d),
                         player.posY - .2, 
                         player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .3d),
@@ -783,7 +785,7 @@ public class AllomancyEventHandler {
                 motionX = ((player.posX - (v.X + .5)) * -1) * .03;
                 motionY = (((player.posY - (v.Y + .2)) * -1) * .03);
                 motionZ = ((player.posZ - (v.Z + .5)) * -1) * .03;
-                particle = new ParticlePointer(player.worldObj,
+                particle = new ParticlePointer(player.world,
                         player.posX - (Math.sin(Math.toRadians(player .getRotationYawHead())) * .3d),
                         player.posY - .2,
                         player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .3d),
@@ -797,7 +799,7 @@ public class AllomancyEventHandler {
                 motionX = ((player.posX - entityplayer.posX) * -1) * .03;
                 motionY = (((player.posY - entityplayer.posY + 1.2) * -1) * .03) + .021;
                 motionZ = ((player.posZ - entityplayer.posZ) * -1) * .03;
-                particle = new ParticlePointer(player.worldObj,
+                particle = new ParticlePointer(player.world,
                         player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .3d),
                         player.posY - .2, 
                         player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .3d),
@@ -862,7 +864,7 @@ public class AllomancyEventHandler {
 					if (!cap.getMetalBurning(AllomancyCapabilities.matPewter)
 							&& (cap.getDamageStored() > 0)) {
 						cap.setDamageStored(cap.getDamageStored() - 1);
-						curPlayer.attackEntityFrom(DamageSource.generic, 2);
+						curPlayer.attackEntityFrom(DamageSource.GENERIC, 2);
 					}
 					if (cap.getMetalBurning(AllomancyCapabilities.matTin)) {
 						//Add night vision to tin-burners
@@ -936,7 +938,7 @@ public class AllomancyEventHandler {
 				theRenderViewEntity.posY + 1.5D,
 				theRenderViewEntity.posZ + 0.5D);
 		RayTraceResult returnMOP = null;
-		if (mc.theWorld != null) {
+		if (mc.world != null) {
 			double var2 = dist;
 			returnMOP = theRenderViewEntity.rayTrace(var2, 0);
 			double calcdist = var2;
@@ -950,7 +952,7 @@ public class AllomancyEventHandler {
 			Entity pointedEntity = null;
 			float var9 = 1.0F;
 			@SuppressWarnings("unchecked")
-			List<Entity> list = mc.theWorld
+			List<Entity> list = mc.world
 					.getEntitiesWithinAABBExcludingEntity(
 							theRenderViewEntity,
 							theViewBoundingBox.addCoord(lookvec.xCoord * var2, lookvec.yCoord * var2, lookvec.zCoord * var2).expand(var9, var9,var9));

@@ -119,7 +119,7 @@ public class ExternalPowerController{
 		}
 		
 		for (String s : ores){ 
-			if (s.contains("Copper") || s.contains("Tin") || s.contains("Gold") || s.contains("Iron") || s.contains("Steel") || s.contains("Lead") || s.contains("Silver") || s.contains("Brass")|| s.contains("Bronze")|| s.contains("Aluminum")){ 
+			if (s.contains("Copper") || s.contains("Tin") || s.contains("Gold") || s.contains("Iron") || s.contains("Steel") || s.contains("Lead") || s.contains("Silver") || s.contains("Brass")|| s.contains("Bronze")|| s.contains("Aluminum")|| s.contains("Zinc")){ 
 				for (ItemStack i : OreDictionary.getOres(s)){
 					if(i.getItem() != null){
 						if(i.getItem() instanceof ItemBlock){
@@ -204,7 +204,7 @@ public class ExternalPowerController{
 
 	public void tryPushBlock(vector3 vec) {
 		double motionX, motionY, motionZ, magnitude;
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		magnitude = Math.sqrt(Math.pow((player.posX - (double)(vec.X + .5)),2) + Math.pow((player.posY - (double)(vec.Y + .5)),2) + Math.pow((player.posZ - (double)(vec.Z + .5)),2) );
 		motionX = ((player.posX - (double)(vec.X + .5)) * (1.1)/magnitude);
 		motionY = ((player.posY - (double)(vec.Y + .5)) * (1.1)/magnitude);
@@ -218,7 +218,7 @@ public class ExternalPowerController{
 
 	public void tryPullBlock(vector3 vec) {
 		double motionX, motionY, motionZ, magnitude;
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		magnitude = Math.sqrt(Math.pow((player.posX - (double)(vec.X + .5)),2) + Math.pow((player.posY - (double)(vec.Y + .5)),2) + Math.pow((player.posZ - (double)(vec.Z + .5)),2) );
 		motionX = ((player.posX - (double)(vec.X + .5)) * -(1.1)/magnitude);
 		motionY = ((player.posY - (double)(vec.Y + .5)) * -(1.1)/magnitude);
@@ -254,7 +254,7 @@ public class ExternalPowerController{
 
 	private void tryPullItem(EntityItem entity) {
 		double motionX, motionY, motionZ;
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		if (this.metallist.contains(entity.getEntityItem().getItem().getIdFromItem(entity.getEntityItem().getItem()))) {
 			motionX = (player.posX - entity.posX) * .1;
 			motionY = (player.posY - entity.posY) * .1;
@@ -270,7 +270,7 @@ public class ExternalPowerController{
 
 	private void tryPushItem(EntityItem entity) {
 		double motionX, motionY, motionZ;
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		if (this.metallist.contains(entity.getEntityItem().getItem().getIdFromItem(entity.getEntityItem().getItem()))) {
 			motionX = ((player.posX - entity.posX) * .1) * -1;
 			motionY = ((player.posY - entity.posY) * .1);
@@ -286,7 +286,7 @@ public class ExternalPowerController{
 	private void tryPullMob(EntityLiving entity) {
 
 		double motionX, motionY, motionZ,magnitude;
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		if (entity instanceof EntityIronGolem) {
 			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
 			motionX = ((player.posX - entity.posX) * -(1.1)/magnitude);
@@ -320,7 +320,7 @@ public class ExternalPowerController{
 	private void tryPushMob(EntityLiving entity) {
 
 		double motionX, motionY, motionZ,magnitude;
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		if (entity instanceof EntityIronGolem) {
 			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
 			motionX = ((player.posX - entity.posX) * (1.1)/magnitude);

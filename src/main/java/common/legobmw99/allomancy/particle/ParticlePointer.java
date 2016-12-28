@@ -15,7 +15,7 @@ public class ParticlePointer extends Particle {
 		this.motionY = motionY;
 		this.motionZ = motionZ;
 		this.particleMaxAge = 30;
-		this.field_190017_n = false; //canCollide
+		this.canCollide = false; 
 		
 		if(type == 1){
 			this.particleGreen = 0.15F;
@@ -35,7 +35,7 @@ public class ParticlePointer extends Particle {
 			this.setExpired();
 		}
 
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 
 	}
 }

@@ -24,7 +24,7 @@ public class ParticleSound extends Particle {
 		this.setParticleTextureIndex(64);
 		this.particleScale *= 1.2F;
 		this.particleMaxAge = 15;
-		this.field_190017_n = false; //canCollide
+		this.canCollide = false; //canCollide
 
 
 		if( event.getSound().getSoundLocation().toString().contains("step")){
@@ -92,7 +92,7 @@ public class ParticleSound extends Particle {
 			this.setExpired();
 		}
 
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 
 	}
 	/* Old, antequated code which allowed for custom textures. May come back one day

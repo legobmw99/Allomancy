@@ -46,7 +46,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	public AIAttackOnCollideExtended(EntityCreature par1EntityCreature,
 			double par2, boolean par4) {
 		this.attacker = par1EntityCreature;
-		this.worldObj = par1EntityCreature.worldObj;
+		this.worldObj = par1EntityCreature.world;
 		this.speedTowardsTarget = par2;
 		this.longMemory = par4;
 		this.setMutexBits(3);

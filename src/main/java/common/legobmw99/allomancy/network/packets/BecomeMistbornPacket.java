@@ -34,7 +34,7 @@ public class BecomeMistbornPacket implements IMessage {
 	        mainThread.addScheduledTask(new Runnable() {
 	            @Override
 	            public void run() {
-	            	EntityPlayer player =  Minecraft.getMinecraft().thePlayer;
+	            	EntityPlayer player =  Minecraft.getMinecraft().player;
 	            	AllomancyCapabilities cap;
 	        		cap = AllomancyCapabilities.forPlayer(player);
 	        		cap.setMistborn(true);
