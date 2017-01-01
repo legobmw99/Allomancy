@@ -9,9 +9,18 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
+ENV = System.getenv()
 
+if(ENV.DRONE_BUILD_NUMBER)
+buildNum = ".build_" +ENV.DRONE_BUILD_NUMBER
 
-version = "2.4"
+else if (ENV.BUILD_NUMBER)
+buildNum = ".build_" +ENV.BUILD_NUMBER
+
+else
+buildNum = ""
+
+version = "2.4.1" + buildNum
 group= "common.legobmw99.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "allomancy"
 
@@ -23,8 +32,6 @@ compileJava {
 minecraft {
     version = "1.11.2-13.20.0.2201"
     runDir = "run"
-        replaceIn "Allomancy.java"
-        replace "@VERSION@", "2.4.1"       
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
