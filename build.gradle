@@ -9,18 +9,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-ENV = System.getenv()
-
-if(ENV.DRONE_BUILD_NUMBER)
-buildNum = ".build_" +ENV.DRONE_BUILD_NUMBER
-
-else if (ENV.BUILD_NUMBER)
-buildNum = ".build_" +ENV.BUILD_NUMBER
-
-else
-buildNum = ""
-
-version = "2.4.1" + buildNum
+version = "2.4.1"
 group= "common.legobmw99.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "allomancy"
 
