@@ -1,43 +1,37 @@
 package common.legobmw99.allomancy.util;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
+import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.entity.EntityGoldNugget;
+import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
+import common.legobmw99.allomancy.network.packets.StopFallPacket;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-import common.legobmw99.allomancy.blocks.OreBlock;
-import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.entity.EntityGoldNugget;
-import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
-import common.legobmw99.allomancy.network.packets.StopFallPacket;
 
 public class ExternalPowerController{
 	public ArrayList<Entity> particleTargets;
-	public ArrayList<vector3> particleBlockTargets;
+	public ArrayList<BlockPos> particleBlockTargets;
 	private ArrayList<String> metallist;
 	private String[] ores = OreDictionary.getOreNames();
 	public ArrayList<EntityPlayer> metalBurners;
 	
 	public ExternalPowerController() {
 		this.particleTargets = new ArrayList<Entity>();
-		this.particleBlockTargets = new ArrayList<vector3>();
+		this.particleBlockTargets = new ArrayList<BlockPos>();
 		this.metalBurners = new ArrayList<EntityPlayer>();
 		this.BuildMetalList();
 	}
@@ -182,15 +176,15 @@ public class ExternalPowerController{
 	 * Move an entity either toward or away from an anchor point
 	 * @param directionScalar the direction and (possibly) scalar multiple of the magnitude
 	 * @param toMove the entity to move
-	 * @param anchor the point being moved toward or away from
+	 * @param vec the point being moved toward or away from
 	 */
-	private void move(double directionScalar, Entity toMove, vector3 anchor){
+	private void move(double directionScalar, Entity toMove, BlockPos vec){
 		
 		double motionX, motionY, motionZ, magnitude;
-		magnitude = Math.sqrt(Math.pow((toMove.posX - (double)(anchor.X + .5)),2) + Math.pow((toMove.posY - (double)(anchor.Y + .5)),2) + Math.pow((toMove.posZ - (double)(anchor.Z + .5)),2) );
-		motionX = ((toMove.posX - (double)(anchor.X + .5)) * directionScalar * (1.1)/magnitude);
-		motionY = ((toMove.posY - (double)(anchor.Y + .5)) * directionScalar * (1.1)/magnitude);
-		motionZ = ((toMove.posZ - (double)(anchor.Z + .5)) * directionScalar * (1.1)/magnitude);
+		magnitude = Math.sqrt(Math.pow((toMove.posX - (double)(vec.getX() + .5)),2) + Math.pow((toMove.posY - (double)(vec.getY() + .5)),2) + Math.pow((toMove.posZ - (double)(vec.getZ() + .5)),2) );
+		motionX = ((toMove.posX - (double)(vec.getX() + .5)) * directionScalar * (1.1)/magnitude);
+		motionY = ((toMove.posY - (double)(vec.getY() + .5)) * directionScalar * (1.1)/magnitude);
+		motionZ = ((toMove.posZ - (double)(vec.getZ() + .5)) * directionScalar * (1.1)/magnitude);
 		toMove.motionX = motionX;
 		toMove.motionY = motionY;
 		toMove.motionZ = motionZ;
@@ -207,7 +201,7 @@ public class ExternalPowerController{
 	 * Player tries to Push a block
 	 * @param vec the location of the block
 	 */
-	public void tryPushBlock(vector3 vec) {
+	public void tryPushBlock(BlockPos vec) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		this.move(1, player, vec);
 	}
@@ -216,7 +210,7 @@ public class ExternalPowerController{
 	 * Player tries to Pull a block
 	 * @param vec the location of the block
 	 */
-	public void tryPullBlock(vector3 vec) {
+	public void tryPullBlock(BlockPos vec) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		this.move(-1, player, vec);
 	}
@@ -259,7 +253,7 @@ public class ExternalPowerController{
 	private void tryPullItem(EntityItem entity) {
 		if (this.metallist.contains(entity.getEntityItem().getItem().getUnlocalizedName())) {
 			EntityPlayer player = Minecraft.getMinecraft().player;
-			vector3 anchor = new vector3((int)player.posX,(int)player.posY - 1,(int)player.posZ);
+			BlockPos anchor = new BlockPos((int)player.posX,(int)player.posY - 1,(int)player.posZ);
 			this.move(-0.5, entity, anchor);			
         }
 	}
@@ -271,7 +265,7 @@ public class ExternalPowerController{
 	private void tryPushItem(EntityItem entity) {
 		if (this.metallist.contains(entity.getEntityItem().getItem().getUnlocalizedName())) {
 			EntityPlayer player = Minecraft.getMinecraft().player;
-			vector3 anchor = new vector3((int)player.posX,(int)player.posY - 1,(int)player.posZ);
+			BlockPos anchor = new BlockPos((int)player.posX,(int)player.posY - 1,(int)player.posZ);
 			this.move(0.5, entity, anchor);			
         }
 	}
@@ -286,13 +280,13 @@ public class ExternalPowerController{
 		
 		if (entity instanceof EntityIronGolem) {
 			//Pull you toward the entity
-			vector3 anchor = new vector3((int)entity.posX,(int)entity.posY,(int)entity.posZ);
+			BlockPos anchor = new BlockPos((int)entity.posX,(int)entity.posY,(int)entity.posZ);
 			this.move(-1, player, anchor);
 		}
 
 		if ((entity.getHeldItem(EnumHand.OFF_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND))) || (entity.getHeldItem(EnumHand.MAIN_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND)))) {
 			//Pull the entity toward you
-			vector3 anchor = new vector3((int)player.posX,(int)player.posY,(int)player.posZ);
+			BlockPos anchor = new BlockPos((int)player.posX,(int)player.posY,(int)player.posZ);
 			this.move(-1, entity, anchor);		
         }
 	}
@@ -307,13 +301,13 @@ public class ExternalPowerController{
 		
 		if (entity instanceof EntityIronGolem) {
 			//Pull you toward the entity
-			vector3 anchor = new vector3((int)entity.posX,(int)entity.posY,(int)entity.posZ);
+			BlockPos anchor = new BlockPos((int)entity.posX,(int)entity.posY,(int)entity.posZ);
 			this.move(1, player, anchor);
 		}
 
 		if ((entity.getHeldItem(EnumHand.OFF_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND))) || (entity.getHeldItem(EnumHand.MAIN_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND)))) {
 			//Pull the entity toward you
-			vector3 anchor = new vector3((int)player.posX,(int)player.posY,(int)player.posZ);
+			BlockPos anchor = new BlockPos((int)player.posX,(int)player.posY,(int)player.posZ);
 			this.move(1, entity, anchor);		
         }
 	}
