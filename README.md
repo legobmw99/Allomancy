@@ -1,4 +1,4 @@
-Allomancy 2.4
+Allomancy 2.4.1
 =========
 [![Build Status](https://drone.io/github.com/legobmw99/Allomancy/status.png)](https://drone.io/github.com/legobmw99/Allomancy/latest)
 

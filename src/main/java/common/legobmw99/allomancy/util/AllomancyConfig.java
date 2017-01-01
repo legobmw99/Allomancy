@@ -10,13 +10,13 @@ public class AllomancyConfig {
 		Configuration config = new Configuration(confFile);
 		config.load();
 
-		generateCopper = config.get("Worldgen Disabler", "Generate Copper",
+		generateCopper = config.get("Worldgen Disabler", "Generate Copper Ore",
 				true).getBoolean(true);
-		generateTin = config.get("Worldgen Disabler", "Generate Tin", true)
+		generateTin = config.get("Worldgen Disabler", "Generate Tin Ore", true)
 				.getBoolean(true);
-		generateLead = config.get("Worldgen Disabler", "Generate Lead", true)
+		generateLead = config.get("Worldgen Disabler", "Generate Lead Ore", true)
 				.getBoolean(true);
-		generateZinc = config.get("Worldgen Disabler", "Generate Zinc", true)
+		generateZinc = config.get("Worldgen Disabler", "Generate Zinc Ore", true)
 				.getBoolean(true);
 
 		copperDensity = config.get("Worldgen", "Copper Density", 5,
