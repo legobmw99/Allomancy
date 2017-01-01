@@ -99,7 +99,7 @@ public class AllomancyEventHandler {
      @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onBlockBreak(BreakEvent event) {
-        if(Allomancy.XPC.isBlockMetal(event.getState())){
+        if(Allomancy.XPC.isBlockMetal(event.getState().getBlock())){
             Allomancy.XPC.particleBlockTargets.clear();
         }
     }
@@ -149,9 +149,7 @@ public class AllomancyEventHandler {
 							for (int y = yLoc - 10; y < (yLoc + 10); y++) {
 								BlockPos pos1 = new BlockPos(x, y, z);
 								vec = new vector3(pos1);
-								if (Allomancy.XPC.isBlockMetal(Minecraft
-										.getMinecraft().world
-										.getBlockState(vec.pos))) {
+								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(vec.pos).getBlock())) {
 									Allomancy.XPC.particleBlockTargets.add(vec);
 								}
 							}
@@ -175,7 +173,7 @@ public class AllomancyEventHandler {
 						if (ray != null) {
 							if (ray.typeOfHit == RayTraceResult.Type.BLOCK || ray.typeOfHit == RayTraceResult.Type.MISS) {
 								vec = new vector3(ray.getBlockPos());
-								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(vec.pos))) {
+								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(vec.pos).getBlock())) {
 									Allomancy.XPC.tryPullBlock(vec);
 								}
 							}
@@ -216,7 +214,7 @@ public class AllomancyEventHandler {
 									|| ray.typeOfHit == RayTraceResult.Type.MISS) {
 
 								vec = new vector3(ray.getBlockPos());
-								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(vec.pos))) {
+								if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(vec.pos).getBlock())) {
 
 									Allomancy.XPC.tryPushBlock(vec);
 								}
@@ -282,7 +280,7 @@ public class AllomancyEventHandler {
 			                Registry.network.sendToServer(new GetCapabilitiesPacket(curEntity.getEntityId(), player.getEntityId()));
 							if(!capOther.getMetalBurning(AllomancyCapabilities.matCopper)){
 								if(capOther.getMetalBurning(AllomancyCapabilities.matIron) || capOther.getMetalBurning(AllomancyCapabilities.matSteel) || capOther.getMetalBurning(AllomancyCapabilities.matTin) || capOther.getMetalBurning(AllomancyCapabilities.matPewter) || capOther.getMetalBurning(AllomancyCapabilities.matZinc) || capOther.getMetalBurning(AllomancyCapabilities.matBrass) || capOther.getMetalBurning(AllomancyCapabilities.matBronze)){
-									Allomancy.XPC.tryAddBurningPlayer((EntityPlayer) curEntity);
+									Allomancy.XPC.addBurningPlayer((EntityPlayer) curEntity);
 								}
 							}
 						}

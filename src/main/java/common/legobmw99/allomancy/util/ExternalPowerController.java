@@ -1,5 +1,6 @@
 package common.legobmw99.allomancy.util;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import net.minecraft.block.Block;
@@ -8,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,208 +29,202 @@ import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
 import common.legobmw99.allomancy.network.packets.StopFallPacket;
 
 public class ExternalPowerController{
-	public LinkedList<Entity> particleTargets;
-	public LinkedList<vector3> particleBlockTargets;
-	private LinkedList<Integer> metallist;
+	public ArrayList<Entity> particleTargets;
+	public ArrayList<vector3> particleBlockTargets;
+	private ArrayList<String> metallist;
 	private String[] ores = OreDictionary.getOreNames();
-	public LinkedList<EntityPlayer> metalBurners;
+	public ArrayList<EntityPlayer> metalBurners;
+	
+	public ExternalPowerController() {
+		this.particleTargets = new ArrayList<Entity>();
+		this.particleBlockTargets = new ArrayList<vector3>();
+		this.metalBurners = new ArrayList<EntityPlayer>();
+		this.BuildMetalList();
+	}
+	
 
+	/**
+	 * Builds a list of the unlocalized names of every metal item in vanilla and the ore dictionary
+	 */
 	public void BuildMetalList() {
-		/*
-		 * Add every single metal object in vanilla and this mod
-		 * Add item ids and default block states
-		 * This is so ugly and definitely not a good idea, sorry.
-		 */
-		this.metallist = new LinkedList<Integer>();
-		this.metallist.add(Items.GOLD_INGOT.getIdFromItem(Items.GOLD_INGOT));
-		this.metallist.add(Items.IRON_INGOT.getIdFromItem(Items.IRON_INGOT));
-		this.metallist.add(Items.IRON_AXE.getIdFromItem(Items.IRON_AXE));
-		this.metallist.add(Items.GOLDEN_AXE.getIdFromItem(Items.GOLDEN_AXE));
-		this.metallist.add(Items.CHAINMAIL_BOOTS.getIdFromItem(Items.CHAINMAIL_BOOTS));
-		this.metallist.add(Items.GOLDEN_BOOTS.getIdFromItem(Items.GOLDEN_BOOTS));
-		this.metallist.add(Items.IRON_BOOTS.getIdFromItem(Items.IRON_BOOTS));
-		this.metallist.add(Items.BUCKET.getIdFromItem(Items.BUCKET));
-		this.metallist.add(Items.LAVA_BUCKET.getIdFromItem(Items.LAVA_BUCKET));
-		this.metallist.add(Items.MILK_BUCKET.getIdFromItem(Items.MILK_BUCKET));
-		this.metallist.add(Items.WATER_BUCKET.getIdFromItem(Items.WATER_BUCKET));
-		this.metallist.add(Items.CAULDRON.getIdFromItem(Items.CAULDRON));
-		this.metallist.add(Items.COMPASS.getIdFromItem(Items.COMPASS));
-		this.metallist.add(Items.FLINT_AND_STEEL.getIdFromItem(Items.FLINT_AND_STEEL));
-		this.metallist.add(Items.GOLD_NUGGET.getIdFromItem(Items.GOLD_NUGGET));
-		this.metallist.add(Items.CHAINMAIL_HELMET.getIdFromItem(Items.CHAINMAIL_HELMET));
-		this.metallist.add(Items.GOLDEN_HELMET.getIdFromItem(Items.GOLDEN_HELMET));
-		this.metallist.add(Items.IRON_HELMET.getIdFromItem(Items.IRON_HELMET));
-		this.metallist.add(Items.GOLDEN_HOE.getIdFromItem(Items.GOLDEN_HOE));
-		this.metallist.add(Items.IRON_HOE.getIdFromItem(Items.IRON_HOE));
-		this.metallist.add(Items.GOLDEN_HORSE_ARMOR.getIdFromItem(Items.GOLDEN_HORSE_ARMOR));
-		this.metallist.add(Items.IRON_HORSE_ARMOR.getIdFromItem(Items.IRON_HORSE_ARMOR));
-		this.metallist.add(Items.CHAINMAIL_LEGGINGS.getIdFromItem(Items.CHAINMAIL_LEGGINGS));
-		this.metallist.add(Items.GOLDEN_LEGGINGS.getIdFromItem(Items.GOLDEN_LEGGINGS));
-		this.metallist.add(Items.IRON_LEGGINGS.getIdFromItem(Items.IRON_LEGGINGS));
-		this.metallist.add(Items.MINECART.getIdFromItem(Items.MINECART));
-		this.metallist.add(Items.CHEST_MINECART.getIdFromItem(Items.CHEST_MINECART));
-		this.metallist.add(Items.HOPPER_MINECART.getIdFromItem(Items.HOPPER_MINECART));
-		this.metallist.add(Items.FURNACE_MINECART.getIdFromItem(Items.FURNACE_MINECART));
-		this.metallist.add(Items.TNT_MINECART.getIdFromItem(Items.TNT_MINECART));
-		this.metallist.add(Items.IRON_PICKAXE.getIdFromItem(Items.IRON_PICKAXE));
-		this.metallist.add(Items.GOLDEN_PICKAXE.getIdFromItem(Items.GOLDEN_PICKAXE));
-		this.metallist.add(Items.IRON_CHESTPLATE.getIdFromItem(Items.IRON_CHESTPLATE));
-		this.metallist.add(Items.CHAINMAIL_CHESTPLATE.getIdFromItem(Items.CHAINMAIL_CHESTPLATE));
-		this.metallist.add(Items.GOLDEN_CHESTPLATE.getIdFromItem(Items.GOLDEN_CHESTPLATE));
-		this.metallist.add(Items.CLOCK.getIdFromItem(Items.CLOCK));
-		this.metallist.add(Items.GOLDEN_SHOVEL.getIdFromItem(Items.GOLDEN_SHOVEL));
-		this.metallist.add(Items.IRON_SHOVEL.getIdFromItem(Items.IRON_SHOVEL));
-		this.metallist.add(Items.SHEARS.getIdFromItem(Items.SHEARS));
-		this.metallist.add(Items.GOLDEN_APPLE.getIdFromItem(Items.GOLDEN_APPLE));
-		this.metallist.add(Items.GOLDEN_APPLE.getIdFromItem(Items.GOLDEN_APPLE));
-		this.metallist.add(Items.GOLDEN_CARROT.getIdFromItem(Items.GOLDEN_CARROT));
-		this.metallist.add(Items.IRON_SWORD.getIdFromItem(Items.IRON_SWORD));
-		this.metallist.add(Registry.itemCopperIngot.getIdFromItem(Registry.itemCopperIngot));
-		this.metallist.add(Registry.itemLeadIngot.getIdFromItem(Registry.itemLeadIngot));
-		this.metallist.add(Registry.itemTinIngot.getIdFromItem(Registry.itemTinIngot));
-		this.metallist.add(Registry.nuggetLerasium.getIdFromItem(Registry.nuggetLerasium));
-		this.metallist.add(Blocks.ANVIL.getStateId(Blocks.ANVIL.getDefaultState()));
-		this.metallist.add(Blocks.IRON_TRAPDOOR.getStateId(Blocks.IRON_TRAPDOOR.getDefaultState()));
-		this.metallist.add(Blocks.IRON_DOOR.getStateId(Blocks.IRON_DOOR.getDefaultState()));
-		this.metallist.add(Blocks.CAULDRON.getStateId(Blocks.CAULDRON.getDefaultState()));
-		this.metallist.add(Blocks.GOLD_BLOCK.getStateId(Blocks.GOLD_BLOCK.getDefaultState()));
-		this.metallist.add(Blocks.IRON_BLOCK.getStateId(Blocks.IRON_BLOCK.getDefaultState()));
-		this.metallist.add(Blocks.IRON_BARS.getStateId(Blocks.IRON_BARS.getDefaultState()));
-		this.metallist.add(Blocks.HOPPER.getStateId(Blocks.HOPPER.getDefaultState()));
-		this.metallist.add(Blocks.GOLD_ORE.getStateId(Blocks.GOLD_ORE.getDefaultState()));
-		this.metallist.add(Blocks.IRON_ORE.getStateId(Blocks.IRON_ORE.getDefaultState()));
-		this.metallist.add(Blocks.PISTON_HEAD.getStateId(Blocks.IRON_ORE.getDefaultState()));
-		this.metallist.add(Blocks.PISTON_EXTENSION.getStateId(Blocks.PISTON_EXTENSION.getDefaultState()));
-		this.metallist.add(Blocks.STICKY_PISTON.getStateId(Blocks.STICKY_PISTON.getDefaultState()));
-		this.metallist.add(Blocks.PISTON.getStateId(Blocks.PISTON.getDefaultState()));
-		this.metallist.add(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE.getStateId(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE.getDefaultState()));
-		this.metallist.add(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE.getStateId(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE.getDefaultState()));
-		this.metallist.add(Blocks.RAIL.getStateId(Blocks.RAIL.getDefaultState()));
-		this.metallist.add(Blocks.ACTIVATOR_RAIL.getStateId(Blocks.ACTIVATOR_RAIL.getDefaultState()));
-		this.metallist.add(Blocks.DETECTOR_RAIL.getStateId(Blocks.DETECTOR_RAIL.getDefaultState()));
-		this.metallist.add(Blocks.GOLDEN_RAIL.getStateId(Blocks.GOLDEN_RAIL.getDefaultState()));
-		this.metallist.add(OreBlock.oreCopper.getStateId(OreBlock.oreCopper.getDefaultState()));
-		this.metallist.add(OreBlock.oreTin.getStateId(OreBlock.oreTin.getDefaultState()));
-		this.metallist.add(OreBlock.oreZinc.getStateId(OreBlock.oreZinc.getDefaultState()));
-		this.metallist.add(OreBlock.oreLead.getStateId(OreBlock.oreLead.getDefaultState()));
-		this.metallist.add(Registry.itemVial.getIdFromItem(Registry.itemVial));
-		this.metallist.add(Registry.itemZincIngot.getIdFromItem(Registry.itemZincIngot));
+
+		this.metallist = new ArrayList<String>();
+
+		this.metallist.add(Items.IRON_AXE.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_AXE.getUnlocalizedName());
+		this.metallist.add(Items.CHAINMAIL_BOOTS.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_BOOTS.getUnlocalizedName());
+		this.metallist.add(Items.IRON_BOOTS.getUnlocalizedName());
+		this.metallist.add(Items.BUCKET.getUnlocalizedName());
+		this.metallist.add(Items.LAVA_BUCKET.getUnlocalizedName());
+		this.metallist.add(Items.MILK_BUCKET.getUnlocalizedName());
+		this.metallist.add(Items.WATER_BUCKET.getUnlocalizedName());
+		this.metallist.add(Items.CAULDRON.getUnlocalizedName());
+		this.metallist.add(Items.COMPASS.getUnlocalizedName());
+		this.metallist.add(Items.FLINT_AND_STEEL.getUnlocalizedName());
+		this.metallist.add(Items.GOLD_NUGGET.getUnlocalizedName());
+		this.metallist.add(Items.CHAINMAIL_HELMET.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_HELMET.getUnlocalizedName());
+		this.metallist.add(Items.IRON_HELMET.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_HOE.getUnlocalizedName());
+		this.metallist.add(Items.IRON_HOE.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_HORSE_ARMOR.getUnlocalizedName());
+		this.metallist.add(Items.IRON_HORSE_ARMOR.getUnlocalizedName());
+		this.metallist.add(Items.CHAINMAIL_LEGGINGS.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_LEGGINGS.getUnlocalizedName());
+		this.metallist.add(Items.IRON_LEGGINGS.getUnlocalizedName());
+		this.metallist.add(Items.MINECART.getUnlocalizedName());
+		this.metallist.add(Items.CHEST_MINECART.getUnlocalizedName());
+		this.metallist.add(Items.HOPPER_MINECART.getUnlocalizedName());
+		this.metallist.add(Items.FURNACE_MINECART.getUnlocalizedName());
+		this.metallist.add(Items.TNT_MINECART.getUnlocalizedName());
+		this.metallist.add(Items.IRON_PICKAXE.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_PICKAXE.getUnlocalizedName());
+		this.metallist.add(Items.IRON_CHESTPLATE.getUnlocalizedName());
+		this.metallist.add(Items.CHAINMAIL_CHESTPLATE.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_CHESTPLATE.getUnlocalizedName());
+		this.metallist.add(Items.CLOCK.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_SHOVEL.getUnlocalizedName());
+		this.metallist.add(Items.IRON_SHOVEL.getUnlocalizedName());
+		this.metallist.add(Items.SHEARS.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_APPLE.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_APPLE.getUnlocalizedName());
+		this.metallist.add(Items.GOLDEN_CARROT.getUnlocalizedName());
+		this.metallist.add(Items.IRON_SWORD.getUnlocalizedName());
+		this.metallist.add(Registry.nuggetLerasium.getUnlocalizedName());
+		this.metallist.add(Blocks.ANVIL.getUnlocalizedName());
+		this.metallist.add(Blocks.IRON_TRAPDOOR.getUnlocalizedName());
+		this.metallist.add(Blocks.IRON_DOOR.getUnlocalizedName());
+		this.metallist.add(Blocks.CAULDRON.getUnlocalizedName());
+		this.metallist.add(Blocks.IRON_BARS.getUnlocalizedName());
+		this.metallist.add(Blocks.HOPPER.getUnlocalizedName());
+		this.metallist.add(Blocks.PISTON_HEAD.getUnlocalizedName());
+		this.metallist.add(Blocks.PISTON_EXTENSION.getUnlocalizedName());
+		this.metallist.add(Blocks.STICKY_PISTON.getUnlocalizedName());
+		this.metallist.add(Blocks.PISTON.getUnlocalizedName());
+		this.metallist.add(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE.getUnlocalizedName());
+		this.metallist.add(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE.getUnlocalizedName());
+		this.metallist.add(Blocks.RAIL.getUnlocalizedName());
+		this.metallist.add(Blocks.ACTIVATOR_RAIL.getUnlocalizedName());
+		this.metallist.add(Blocks.DETECTOR_RAIL.getUnlocalizedName());
+		this.metallist.add(Blocks.GOLDEN_RAIL.getUnlocalizedName());
+
+		this.metallist.add(Registry.itemVial.getUnlocalizedName());
+
 		
 		for (int i = 0; i < Registry.flakeMetals.length; i++) {
-			this.metallist.add(new Item().getByNameOrId("allomancy:" + "flake"+ Registry.flakeMetals[i] ).getIdFromItem(new Item().getByNameOrId("allomancy:" + "flake"+ Registry.flakeMetals[i] )));
+			this.metallist.add(new Item().getByNameOrId("allomancy:" + "flake"+ Registry.flakeMetals[i] ).getUnlocalizedName());
 		}
 		
 		for (String s : ores){ 
 			if (s.contains("Copper") || s.contains("Tin") || s.contains("Gold") || s.contains("Iron") || s.contains("Steel") || s.contains("Lead") || s.contains("Silver") || s.contains("Brass")|| s.contains("Bronze")|| s.contains("Aluminum")|| s.contains("Zinc")){ 
 				for (ItemStack i : OreDictionary.getOres(s)){
 					if(i.getItem() != null){
-						if(i.getItem() instanceof ItemBlock){
-							this.metallist.add(Block.getBlockFromItem(i.getItem()).getStateId(Block.getBlockFromItem(i.getItem()).getDefaultState()));
-						} 
-						this.metallist.add(i.getItem().getIdFromItem(i.getItem()));
+						this.metallist.add(i.getItem().getUnlocalizedName());
 					 }
 				 }
 			 }
 		 }
 	}
 
+	/**
+	 * Determines if an item is metal or not
+	 * @param item to be checked
+	 * @return Whether or not the item is metal 
+	 */
 	public boolean isItemMetal(ItemStack item) {
-		if(item == null){
-			return false;
-		}
-		if (this.metallist.contains(item.getItem().getIdFromItem(item.getItem())) ) {
-			return true;
-		} else {
-			if (item.getItem() instanceof ItemBlock){
-				if (this.metallist.contains(Block.getBlockFromItem(item.getItem()).getDefaultState())){
-					return true;
-
-				}
-			}
-			return false;
-		}
-	}
-
-	public boolean isBlockMetal(IBlockState state) {
-		if (this.metallist.contains(state.getBlock().getStateId(state.getBlock().getDefaultState()))) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public ExternalPowerController() {
-		this.particleTargets = new LinkedList<Entity>();
-		this.particleBlockTargets = new LinkedList<vector3>();
-		this.metalBurners = new LinkedList<EntityPlayer>();
-		this.BuildMetalList();
+		return (item != null) && this.metallist.contains(item.getUnlocalizedName());
 	}
 	
-	  public void tryAddBurningPlayer(EntityPlayer player){
+	/**
+	 * Determines if a block is metal or not
+	 * @param block to be checked
+	 * @return Whether or not the item is metal 
+	 */
+	public boolean isBlockMetal(Block block) {
+		return this.metallist.contains(block.getUnlocalizedName());		
+	}
+
+	/**
+	 * Adds a player to the list of entities burning metals
+	 * @param player who is burning metal
+	 */
+	public void addBurningPlayer(EntityPlayer player){
 		this.metalBurners.add(player);
 	}
+	
+	/**
+	 * Takes an Entity and determines if it should be added to the list of metallic entities
+	 * @param entity the entity to be checked and added
+	 */
 	public void tryAddMetalEntity(Entity entity) {
-		if (entity == null) {
+		if (entity == null || this.particleTargets.contains(entity)) {
 			return;
 		}
-		if (this.particleTargets.contains(entity)) {
-			return;
-		}
+
 		if (entity instanceof EntityGoldNugget) {
 			this.particleTargets.add(entity);
-
 			return;
 		}
-		if (entity instanceof EntityLiving) {
-			this.tryAddMetalLiving((EntityLiving) entity);
+		
+		if (entity instanceof EntityLiving && (((entity instanceof EntityIronGolem) || (((((EntityLiving) entity).getHeldItem(EnumHand.MAIN_HAND) != null) || ((EntityLiving) entity).getHeldItem(EnumHand.OFF_HAND) == null) && (this.isItemMetal(((EntityLiving) entity).getHeldItem(EnumHand.MAIN_HAND)) || this.isItemMetal(((EntityLiving) entity).getHeldItem(EnumHand.OFF_HAND))))))) {
+			this.particleTargets.add(entity);
 			return;
 		}
-		if (entity instanceof EntityItem) {
-			this.tryAddMetalItem((EntityItem) entity);
-		}
-	}
-
-	private void tryAddMetalLiving(EntityLiving entity) {
-		if ((entity instanceof EntityIronGolem)
-				|| (((entity.getHeldItem(EnumHand.MAIN_HAND) != null) || entity.getHeldItem(EnumHand.OFF_HAND) == null) && (this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND)) || this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND))))) {
+		
+		if (entity instanceof EntityItem && this.isItemMetal(((EntityItem) entity).getEntityItem())) {
 			this.particleTargets.add(entity);
-
+			return;
 		}
 	}
-
-	private void tryAddMetalItem(EntityItem entity) {
-		if (this.isItemMetal(entity.getEntityItem())) {
-			this.particleTargets.add(entity);
+	
+	/**
+	 * Move an entity either toward or away from an anchor point
+	 * @param directionScalar the direction and (possibly) scalar multiple of the magnitude
+	 * @param toMove the entity to move
+	 * @param anchor the point being moved toward or away from
+	 */
+	private void move(double directionScalar, Entity toMove, vector3 anchor){
+		
+		double motionX, motionY, motionZ, magnitude;
+		magnitude = Math.sqrt(Math.pow((toMove.posX - (double)(anchor.X + .5)),2) + Math.pow((toMove.posY - (double)(anchor.Y + .5)),2) + Math.pow((toMove.posZ - (double)(anchor.Z + .5)),2) );
+		motionX = ((toMove.posX - (double)(anchor.X + .5)) * directionScalar * (1.1)/magnitude);
+		motionY = ((toMove.posY - (double)(anchor.Y + .5)) * directionScalar * (1.1)/magnitude);
+		motionZ = ((toMove.posZ - (double)(anchor.Z + .5)) * directionScalar * (1.1)/magnitude);
+		toMove.motionX = motionX;
+		toMove.motionY = motionY;
+		toMove.motionZ = motionZ;
+		
+		if(toMove instanceof EntityPlayer){
+			Registry.network.sendToServer(new StopFallPacket());
+		} else {
+			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,toMove.getEntityId()));
 		}
+	
 	}
 
+	/**
+	 * Player tries to Push a block
+	 * @param vec the location of the block
+	 */
 	public void tryPushBlock(vector3 vec) {
-		double motionX, motionY, motionZ, magnitude;
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		magnitude = Math.sqrt(Math.pow((player.posX - (double)(vec.X + .5)),2) + Math.pow((player.posY - (double)(vec.Y + .5)),2) + Math.pow((player.posZ - (double)(vec.Z + .5)),2) );
-		motionX = ((player.posX - (double)(vec.X + .5)) * (1.1)/magnitude);
-		motionY = ((player.posY - (double)(vec.Y + .5)) * (1.1)/magnitude);
-		motionZ = ((player.posZ - (double)(vec.Z + .5)) * (1.1)/magnitude);
-		player.motionX = motionX;
-		player.motionY = motionY;
-		player.motionZ = motionZ;
-		Registry.network.sendToServer(new StopFallPacket());
-
+		this.move(1, player, vec);
 	}
 
+	/**
+	 * Player tries to Pull a block
+	 * @param vec the location of the block
+	 */
 	public void tryPullBlock(vector3 vec) {
-		double motionX, motionY, motionZ, magnitude;
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		magnitude = Math.sqrt(Math.pow((player.posX - (double)(vec.X + .5)),2) + Math.pow((player.posY - (double)(vec.Y + .5)),2) + Math.pow((player.posZ - (double)(vec.Z + .5)),2) );
-		motionX = ((player.posX - (double)(vec.X + .5)) * -(1.1)/magnitude);
-		motionY = ((player.posY - (double)(vec.Y + .5)) * -(1.1)/magnitude);
-		motionZ = ((player.posZ - (double)(vec.Z + .5)) * -(1.1)/magnitude);
-		player.motionX = motionX;
-		player.motionY = motionY;
-		player.motionZ = motionZ;
-		Registry.network.sendToServer(new StopFallPacket());
+		this.move(-1, player, vec);
 	}
 
+	/**
+	 * Player tries to Push an entity, is sorted into item or creature
+	 * @param entity the entity to try to Push
+	 */
 	public void tryPushEntity(Entity entity) {
 
 		if (entity instanceof EntityItem) {
@@ -242,6 +238,10 @@ public class ExternalPowerController{
 
 	}
 
+	/**
+	 * Player tries to Pull an entity, is sorted into item or creature
+	 * @param entity the entity to try to Pull
+	 */
 	public void tryPullEntity(Entity entity) {
 		if (entity instanceof EntityItem) {
 			this.tryPullItem((EntityItem) entity);
@@ -252,102 +252,69 @@ public class ExternalPowerController{
 
 	}
 
+	/**
+	 * The player has tried to Pull an item
+	 * @param entity the EntityItem to Pull
+	 */
 	private void tryPullItem(EntityItem entity) {
-		double motionX, motionY, motionZ;
-		EntityPlayer player = Minecraft.getMinecraft().player;
-		if (this.metallist.contains(entity.getEntityItem().getItem().getIdFromItem(entity.getEntityItem().getItem()))) {
-			motionX = (player.posX - entity.posX) * .1;
-			motionY = (player.posY - entity.posY) * .1;
-			motionZ = (player.posZ - entity.posZ) * .1;
-			entity.motionX = motionX;
-			entity.motionY = motionY;
-			entity.motionZ = motionZ;
-
-			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));
-
+		if (this.metallist.contains(entity.getEntityItem().getItem().getUnlocalizedName())) {
+			EntityPlayer player = Minecraft.getMinecraft().player;
+			vector3 anchor = new vector3((int)player.posX,(int)player.posY - 1,(int)player.posZ);
+			this.move(-0.5, entity, anchor);			
         }
 	}
 
+	/**
+	 * The player has tried to Push an item
+	 * @param entity the EntityItem to Push
+	 */
 	private void tryPushItem(EntityItem entity) {
-		double motionX, motionY, motionZ;
-		EntityPlayer player = Minecraft.getMinecraft().player;
-		if (this.metallist.contains(entity.getEntityItem().getItem().getIdFromItem(entity.getEntityItem().getItem()))) {
-			motionX = ((player.posX - entity.posX) * .1) * -1;
-			motionY = ((player.posY - entity.posY) * .1);
-			motionZ = ((player.posZ - entity.posZ) * .1) * -1;
-			entity.motionX = motionX;
-			entity.motionY = motionY;
-			entity.motionZ = motionZ;
-			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));
-
+		if (this.metallist.contains(entity.getEntityItem().getItem().getUnlocalizedName())) {
+			EntityPlayer player = Minecraft.getMinecraft().player;
+			vector3 anchor = new vector3((int)player.posX,(int)player.posY - 1,(int)player.posZ);
+			this.move(0.5, entity, anchor);			
         }
 	}
 
+	/**
+	 * The player has tried to Pull a mob
+	 * @param entity the mob to Pull
+	 */
 	private void tryPullMob(EntityLiving entity) {
 
-		double motionX, motionY, motionZ,magnitude;
 		EntityPlayer player = Minecraft.getMinecraft().player;
+		
 		if (entity instanceof EntityIronGolem) {
-			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
-			motionX = ((player.posX - entity.posX) * -(1.1)/magnitude);
-			motionY = ((player.posY - entity.posY) * -(1.1)/magnitude);
-			motionZ = ((player.posZ - entity.posZ) * -(1.1)/magnitude);
-			player.motionX = motionX;
-			player.motionY = motionY;
-			player.motionZ = motionZ;
-			Registry.network.sendToServer(new StopFallPacket());
-
-			// waaaaay too damn heavy to pull... you get moved.
+			//Pull you toward the entity
+			vector3 anchor = new vector3((int)entity.posX,(int)entity.posY,(int)entity.posZ);
+			this.move(-1, player, anchor);
 		}
 
-		if (entity.getHeldItem(EnumHand.OFF_HAND) == null || entity.getHeldItem(EnumHand.MAIN_HAND) == null) {
-			return;
-		}
-
-		if (this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND)) || this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND))) {
-			// Pull em towards you.
-			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
-			motionX = ((player.posX - entity.posX) * (1.1)/magnitude);
-			motionY = ((player.posY - entity.posY) * (1.1)/magnitude);
-			motionZ = ((player.posZ - entity.posZ) * (1.1)/magnitude);
-			entity.motionX = motionX;
-			entity.motionY = motionY;
-			entity.motionZ = motionZ;
-			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));
+		if ((entity.getHeldItem(EnumHand.OFF_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND))) || (entity.getHeldItem(EnumHand.MAIN_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND)))) {
+			//Pull the entity toward you
+			vector3 anchor = new vector3((int)player.posX,(int)player.posY,(int)player.posZ);
+			this.move(-1, entity, anchor);		
         }
 	}
-
+	
+	/**
+	 * The player has tried to Push a mob
+	 * @param entity the mob to Push
+	 */
 	private void tryPushMob(EntityLiving entity) {
 
-		double motionX, motionY, motionZ,magnitude;
 		EntityPlayer player = Minecraft.getMinecraft().player;
+		
 		if (entity instanceof EntityIronGolem) {
-			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
-			motionX = ((player.posX - entity.posX) * (1.1)/magnitude);
-			motionY = ((player.posY - entity.posY) * (1.1)/magnitude);
-			motionZ = ((player.posZ - entity.posZ) * (1.1)/magnitude);
-			player.motionX = motionX;
-			player.motionY = motionY;
-			player.motionZ = motionZ;
-			Registry.network.sendToServer(new StopFallPacket());
-
-			// waaaaay too damn heavy to push... you get moved.
+			//Pull you toward the entity
+			vector3 anchor = new vector3((int)entity.posX,(int)entity.posY,(int)entity.posZ);
+			this.move(1, player, anchor);
 		}
 
-		if (entity.getHeldItem(EnumHand.OFF_HAND) == null || entity.getHeldItem(EnumHand.MAIN_HAND) == null) {
-			return;
-		}
-
-		if (this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND)) || this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND))) {
-			// Pull em towards you.
-			magnitude = Math.sqrt(Math.pow((player.posX - entity.posX),2) + Math.pow((player.posY - entity.posY),2) + Math.pow((player.posZ - entity.posZ),2) );
-			motionX = ((player.posX - entity.posX) * -(1.1)/magnitude);
-			motionY = ((player.posY - entity.posY) * (1.1)/magnitude);
-			motionZ = ((player.posZ - entity.posZ) * -(1.1)/magnitude);
-			entity.motionX = motionX;
-			entity.motionY = motionY;
-			entity.motionZ = motionZ;
-			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,entity.getEntityId()));
+		if ((entity.getHeldItem(EnumHand.OFF_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND))) || (entity.getHeldItem(EnumHand.MAIN_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND)))) {
+			//Pull the entity toward you
+			vector3 anchor = new vector3((int)player.posX,(int)player.posY,(int)player.posZ);
+			this.move(1, entity, anchor);		
         }
 	}
 
