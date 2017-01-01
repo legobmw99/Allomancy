@@ -22,23 +22,23 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class ExternalPowerController{
+public class ExternalPowerController {
 	public ArrayList<Entity> particleTargets;
 	public ArrayList<BlockPos> particleBlockTargets;
 	private ArrayList<String> metallist;
 	private String[] ores = OreDictionary.getOreNames();
 	public ArrayList<EntityPlayer> metalBurners;
-	
+
 	public ExternalPowerController() {
 		this.particleTargets = new ArrayList<Entity>();
 		this.particleBlockTargets = new ArrayList<BlockPos>();
 		this.metalBurners = new ArrayList<EntityPlayer>();
 		this.BuildMetalList();
 	}
-	
 
 	/**
-	 * Builds a list of the unlocalized names of every metal item in vanilla and the ore dictionary
+	 * Builds a list of the unlocalized names of every metal item in vanilla and
+	 * the ore dictionary
 	 */
 	public void BuildMetalList() {
 
@@ -105,51 +105,62 @@ public class ExternalPowerController{
 
 		this.metallist.add(Registry.itemVial.getUnlocalizedName());
 
-		
 		for (int i = 0; i < Registry.flakeMetals.length; i++) {
-			this.metallist.add(new Item().getByNameOrId("allomancy:" + "flake"+ Registry.flakeMetals[i] ).getUnlocalizedName());
+			this.metallist.add(
+					new Item().getByNameOrId("allomancy:" + "flake" + Registry.flakeMetals[i]).getUnlocalizedName());
 		}
-		
-		for (String s : ores){ 
-			if (s.contains("Copper") || s.contains("Tin") || s.contains("Gold") || s.contains("Iron") || s.contains("Steel") || s.contains("Lead") || s.contains("Silver") || s.contains("Brass")|| s.contains("Bronze")|| s.contains("Aluminum")|| s.contains("Zinc")){ 
-				for (ItemStack i : OreDictionary.getOres(s)){
-					if(i.getItem() != null){
+
+		for (String s : ores) {
+			if (s.contains("Copper") || s.contains("Tin") || s.contains("Gold") || s.contains("Iron")
+					|| s.contains("Steel") || s.contains("Lead") || s.contains("Silver") || s.contains("Brass")
+					|| s.contains("Bronze") || s.contains("Aluminum") || s.contains("Zinc")) {
+				for (ItemStack i : OreDictionary.getOres(s)) {
+					if (i.getItem() != null) {
 						this.metallist.add(i.getItem().getUnlocalizedName());
-					 }
-				 }
-			 }
-		 }
+					}
+				}
+			}
+		}
 	}
 
 	/**
 	 * Determines if an item is metal or not
-	 * @param item to be checked
-	 * @return Whether or not the item is metal 
+	 * 
+	 * @param item
+	 *            to be checked
+	 * @return Whether or not the item is metal
 	 */
 	public boolean isItemMetal(ItemStack item) {
 		return (item != null) && this.metallist.contains(item.getUnlocalizedName());
 	}
-	
+
 	/**
 	 * Determines if a block is metal or not
-	 * @param block to be checked
-	 * @return Whether or not the item is metal 
+	 * 
+	 * @param block
+	 *            to be checked
+	 * @return Whether or not the item is metal
 	 */
 	public boolean isBlockMetal(Block block) {
-		return this.metallist.contains(block.getUnlocalizedName());		
+		return this.metallist.contains(block.getUnlocalizedName());
 	}
 
 	/**
 	 * Adds a player to the list of entities burning metals
-	 * @param player who is burning metal
+	 * 
+	 * @param player
+	 *            who is burning metal
 	 */
-	public void addBurningPlayer(EntityPlayer player){
+	public void addBurningPlayer(EntityPlayer player) {
 		this.metalBurners.add(player);
 	}
-	
+
 	/**
-	 * Takes an Entity and determines if it should be added to the list of metallic entities
-	 * @param entity the entity to be checked and added
+	 * Takes an Entity and determines if it should be added to the list of
+	 * metallic entities
+	 * 
+	 * @param entity
+	 *            the entity to be checked and added
 	 */
 	public void tryAddMetalEntity(Entity entity) {
 		if (entity == null || this.particleTargets.contains(entity)) {
@@ -160,46 +171,58 @@ public class ExternalPowerController{
 			this.particleTargets.add(entity);
 			return;
 		}
-		
-		if (entity instanceof EntityLiving && (((entity instanceof EntityIronGolem) || (((((EntityLiving) entity).getHeldItem(EnumHand.MAIN_HAND) != null) || ((EntityLiving) entity).getHeldItem(EnumHand.OFF_HAND) == null) && (this.isItemMetal(((EntityLiving) entity).getHeldItem(EnumHand.MAIN_HAND)) || this.isItemMetal(((EntityLiving) entity).getHeldItem(EnumHand.OFF_HAND))))))) {
+
+		if (entity instanceof EntityLiving && (((entity instanceof EntityIronGolem)
+				|| (((((EntityLiving) entity).getHeldItem(EnumHand.MAIN_HAND) != null)
+						|| ((EntityLiving) entity).getHeldItem(EnumHand.OFF_HAND) == null)
+						&& (this.isItemMetal(((EntityLiving) entity).getHeldItem(EnumHand.MAIN_HAND))
+								|| this.isItemMetal(((EntityLiving) entity).getHeldItem(EnumHand.OFF_HAND))))))) {
 			this.particleTargets.add(entity);
 			return;
 		}
-		
+
 		if (entity instanceof EntityItem && this.isItemMetal(((EntityItem) entity).getEntityItem())) {
 			this.particleTargets.add(entity);
 			return;
 		}
 	}
-	
+
 	/**
 	 * Move an entity either toward or away from an anchor point
-	 * @param directionScalar the direction and (possibly) scalar multiple of the magnitude
-	 * @param toMove the entity to move
-	 * @param vec the point being moved toward or away from
+	 * 
+	 * @param directionScalar
+	 *            the direction and (possibly) scalar multiple of the magnitude
+	 * @param toMove
+	 *            the entity to move
+	 * @param vec
+	 *            the point being moved toward or away from
 	 */
-	private void move(double directionScalar, Entity toMove, BlockPos vec){
-		
+	private void move(double directionScalar, Entity toMove, BlockPos vec) {
+
 		double motionX, motionY, motionZ, magnitude;
-		magnitude = Math.sqrt(Math.pow((toMove.posX - (double)(vec.getX() + .5)),2) + Math.pow((toMove.posY - (double)(vec.getY() + .5)),2) + Math.pow((toMove.posZ - (double)(vec.getZ() + .5)),2) );
-		motionX = ((toMove.posX - (double)(vec.getX() + .5)) * directionScalar * (1.1)/magnitude);
-		motionY = ((toMove.posY - (double)(vec.getY() + .5)) * directionScalar * (1.1)/magnitude);
-		motionZ = ((toMove.posZ - (double)(vec.getZ() + .5)) * directionScalar * (1.1)/magnitude);
+		magnitude = Math.sqrt(Math.pow((toMove.posX - (double) (vec.getX() + .5)), 2)
+				+ Math.pow((toMove.posY - (double) (vec.getY() + .5)), 2)
+				+ Math.pow((toMove.posZ - (double) (vec.getZ() + .5)), 2));
+		motionX = ((toMove.posX - (double) (vec.getX() + .5)) * directionScalar * (1.1) / magnitude);
+		motionY = ((toMove.posY - (double) (vec.getY() + .5)) * directionScalar * (1.1) / magnitude);
+		motionZ = ((toMove.posZ - (double) (vec.getZ() + .5)) * directionScalar * (1.1) / magnitude);
 		toMove.motionX = motionX;
 		toMove.motionY = motionY;
 		toMove.motionZ = motionZ;
-		
-		if(toMove instanceof EntityPlayer){
+
+		if (toMove instanceof EntityPlayer) {
 			Registry.network.sendToServer(new StopFallPacket());
 		} else {
-			Registry.network.sendToServer(new MoveEntityPacket(motionX,motionY,motionZ,toMove.getEntityId()));
+			Registry.network.sendToServer(new MoveEntityPacket(motionX, motionY, motionZ, toMove.getEntityId()));
 		}
-	
+
 	}
 
 	/**
 	 * Player tries to Push a block
-	 * @param vec the location of the block
+	 * 
+	 * @param vec
+	 *            the location of the block
 	 */
 	public void tryPushBlock(BlockPos vec) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
@@ -208,7 +231,9 @@ public class ExternalPowerController{
 
 	/**
 	 * Player tries to Pull a block
-	 * @param vec the location of the block
+	 * 
+	 * @param vec
+	 *            the location of the block
 	 */
 	public void tryPullBlock(BlockPos vec) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
@@ -217,7 +242,9 @@ public class ExternalPowerController{
 
 	/**
 	 * Player tries to Push an entity, is sorted into item or creature
-	 * @param entity the entity to try to Push
+	 * 
+	 * @param entity
+	 *            the entity to try to Push
 	 */
 	public void tryPushEntity(Entity entity) {
 
@@ -234,7 +261,9 @@ public class ExternalPowerController{
 
 	/**
 	 * Player tries to Pull an entity, is sorted into item or creature
-	 * @param entity the entity to try to Pull
+	 * 
+	 * @param entity
+	 *            the entity to try to Pull
 	 */
 	public void tryPullEntity(Entity entity) {
 		if (entity instanceof EntityItem) {
@@ -248,68 +277,80 @@ public class ExternalPowerController{
 
 	/**
 	 * The player has tried to Pull an item
-	 * @param entity the EntityItem to Pull
+	 * 
+	 * @param entity
+	 *            the EntityItem to Pull
 	 */
 	private void tryPullItem(EntityItem entity) {
 		if (this.metallist.contains(entity.getEntityItem().getItem().getUnlocalizedName())) {
 			EntityPlayer player = Minecraft.getMinecraft().player;
-			BlockPos anchor = new BlockPos((int)player.posX,(int)player.posY - 1,(int)player.posZ);
-			this.move(-0.5, entity, anchor);			
-        }
+			BlockPos anchor = new BlockPos((int) player.posX, (int) player.posY - 1, (int) player.posZ);
+			this.move(-0.5, entity, anchor);
+		}
 	}
 
 	/**
 	 * The player has tried to Push an item
-	 * @param entity the EntityItem to Push
+	 * 
+	 * @param entity
+	 *            the EntityItem to Push
 	 */
 	private void tryPushItem(EntityItem entity) {
 		if (this.metallist.contains(entity.getEntityItem().getItem().getUnlocalizedName())) {
 			EntityPlayer player = Minecraft.getMinecraft().player;
-			BlockPos anchor = new BlockPos((int)player.posX,(int)player.posY - 1,(int)player.posZ);
-			this.move(0.5, entity, anchor);			
-        }
+			BlockPos anchor = new BlockPos((int) player.posX, (int) player.posY - 1, (int) player.posZ);
+			this.move(0.5, entity, anchor);
+		}
 	}
 
 	/**
 	 * The player has tried to Pull a mob
-	 * @param entity the mob to Pull
+	 * 
+	 * @param entity
+	 *            the mob to Pull
 	 */
 	private void tryPullMob(EntityLiving entity) {
 
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		
+
 		if (entity instanceof EntityIronGolem) {
-			//Pull you toward the entity
-			BlockPos anchor = new BlockPos((int)entity.posX,(int)entity.posY,(int)entity.posZ);
+			// Pull you toward the entity
+			BlockPos anchor = new BlockPos((int) entity.posX, (int) entity.posY, (int) entity.posZ);
 			this.move(-1, player, anchor);
 		}
 
-		if ((entity.getHeldItem(EnumHand.OFF_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND))) || (entity.getHeldItem(EnumHand.MAIN_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND)))) {
-			//Pull the entity toward you
-			BlockPos anchor = new BlockPos((int)player.posX,(int)player.posY,(int)player.posZ);
-			this.move(-1, entity, anchor);		
-        }
+		if ((entity.getHeldItem(EnumHand.OFF_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND)))
+				|| (entity.getHeldItem(EnumHand.MAIN_HAND) != null
+						&& this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND)))) {
+			// Pull the entity toward you
+			BlockPos anchor = new BlockPos((int) player.posX, (int) player.posY, (int) player.posZ);
+			this.move(-1, entity, anchor);
+		}
 	}
-	
+
 	/**
 	 * The player has tried to Push a mob
-	 * @param entity the mob to Push
+	 * 
+	 * @param entity
+	 *            the mob to Push
 	 */
 	private void tryPushMob(EntityLiving entity) {
 
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		
+
 		if (entity instanceof EntityIronGolem) {
-			//Pull you toward the entity
-			BlockPos anchor = new BlockPos((int)entity.posX,(int)entity.posY,(int)entity.posZ);
+			// Pull you toward the entity
+			BlockPos anchor = new BlockPos((int) entity.posX, (int) entity.posY, (int) entity.posZ);
 			this.move(1, player, anchor);
 		}
 
-		if ((entity.getHeldItem(EnumHand.OFF_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND))) || (entity.getHeldItem(EnumHand.MAIN_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND)))) {
-			//Pull the entity toward you
-			BlockPos anchor = new BlockPos((int)player.posX,(int)player.posY,(int)player.posZ);
-			this.move(1, entity, anchor);		
-        }
+		if ((entity.getHeldItem(EnumHand.OFF_HAND) != null && this.isItemMetal(entity.getHeldItem(EnumHand.MAIN_HAND)))
+				|| (entity.getHeldItem(EnumHand.MAIN_HAND) != null
+						&& this.isItemMetal(entity.getHeldItem(EnumHand.OFF_HAND)))) {
+			// Pull the entity toward you
+			BlockPos anchor = new BlockPos((int) player.posX, (int) player.posY, (int) player.posZ);
+			this.move(1, entity, anchor);
+		}
 	}
 
 }
