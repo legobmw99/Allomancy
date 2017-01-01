@@ -1,8 +1,10 @@
 package common.legobmw99.allomancy.world;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Random;
 
+import common.legobmw99.allomancy.blocks.OreBlock;
+import common.legobmw99.allomancy.util.AllomancyConfig;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -12,11 +14,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
-import common.legobmw99.allomancy.blocks.OreBlock;
-import common.legobmw99.allomancy.util.AllomancyConfig;
-
 public class OreGenerator implements IWorldGenerator {
-
+	
 	public class OreData {
 		public int maxHeight;
 		public int minHeight;
@@ -27,8 +26,26 @@ public class OreGenerator implements IWorldGenerator {
 		public Block curblock;
 		public boolean config;
 
-		public OreData(int MaxHeight, int MinHeight, int MaxCluster,
-				int MinCluster, int PerChunk, Block OreType, boolean Config) {
+		/**
+		 * Construct an OreData with the given parameters
+		 * 
+		 * @param MaxHeight
+		 *            the maximum height it can generate at
+		 * @param MinHeight
+		 *            the minumum height it can generate at
+		 * @param MaxCluster
+		 *            the largest grouping possible
+		 * @param MinCluster
+		 *            the smallest grouping possible
+		 * @param PerChunk
+		 *            number of times it can generate per chunk
+		 * @param OreType
+		 *            the block to generate
+		 * @param Config
+		 *            whether or not it is enabled in the configuration file
+		 */
+		public OreData(int MaxHeight, int MinHeight, int MaxCluster, int MinCluster, int PerChunk, Block OreType,
+				boolean Config) {
 			this.maxHeight = MaxHeight;
 			this.minHeight = MinHeight;
 			this.maxCluster = MaxCluster;
@@ -39,51 +56,34 @@ public class OreGenerator implements IWorldGenerator {
 		}
 	}
 
-	private LinkedList<OreData> oreList;
+	private ArrayList<OreData> oreList;
 
 	public OreGenerator() {
-		this.oreList = new LinkedList<OreData>();
+		this.oreList = new ArrayList<OreData>();
 		OreData data;
 
-		data = new OreData(AllomancyConfig.copperMaxY,
-				AllomancyConfig.copperMinY, 8, 4,
-				AllomancyConfig.copperDensity, OreBlock.oreCopper,
-				AllomancyConfig.generateCopper);
+		data = new OreData(AllomancyConfig.copperMaxY, AllomancyConfig.copperMinY, 8, 4, AllomancyConfig.copperDensity,
+				OreBlock.oreCopper, AllomancyConfig.generateCopper);
 		this.oreList.add(data);
-		data = new OreData(AllomancyConfig.tinMaxY, AllomancyConfig.tinMinY, 8,
-				4, AllomancyConfig.tinDensity, OreBlock.oreTin,
-				AllomancyConfig.generateTin);
+		data = new OreData(AllomancyConfig.tinMaxY, AllomancyConfig.tinMinY, 8, 4, AllomancyConfig.tinDensity,
+				OreBlock.oreTin, AllomancyConfig.generateTin);
 		this.oreList.add(data);
-		data = new OreData(AllomancyConfig.leadMaxY, AllomancyConfig.leadMinY,
-				8, 4, AllomancyConfig.leadDensity, OreBlock.oreLead,
-				AllomancyConfig.generateLead);
+		data = new OreData(AllomancyConfig.leadMaxY, AllomancyConfig.leadMinY, 8, 4, AllomancyConfig.leadDensity,
+				OreBlock.oreLead, AllomancyConfig.generateLead);
 		this.oreList.add(data);
-		data = new OreData(AllomancyConfig.zincMaxY, AllomancyConfig.zincMinY,
-				8, 4, AllomancyConfig.zincDensity, OreBlock.oreZinc,
-				AllomancyConfig.generateZinc);
+		data = new OreData(AllomancyConfig.zincMaxY, AllomancyConfig.zincMinY, 8, 4, AllomancyConfig.zincDensity,
+				OreBlock.oreZinc, AllomancyConfig.generateZinc);
 		this.oreList.add(data);
 
-	}
-
-
-
-	private void generateOre(World world, Random random, int x, int y, int z,
-			Block block, int ntg) {
-		int lx, ly, lz;
-		lx = x;
-		ly = y;
-		lz = z;
-        BlockPos pos1 = new BlockPos(lx, ly, lz);
-          (new WorldGenMinable(block.getDefaultState(), ntg*2)).generate(world, random, pos1);
 	}
 
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world,
-			IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
+			IChunkProvider chunkProvider) {
 		int x, y, z;
 		int numOre;
 		int numCluster;
-		//Only generate in overworld
+		// Only generate in overworld
 		if (world.provider.getDimension() != 0) {
 			return;
 		}
@@ -93,17 +93,18 @@ public class OreGenerator implements IWorldGenerator {
 			if ((numCluster == 0) && (data.clusterPerChunk != 0)) {
 				numCluster = 1;
 			}
-			if (data.config){ //Check that you don't have the ore disabled
+			if (data.config) { // Check that you don't have the ore disabled
 				for (int count = 0; count < numCluster; count++) {
 					x = random.nextInt(16);
 					z = random.nextInt(16);
-					y = random.nextInt(40);
+					y = random.nextInt(data.maxHeight);
 					x = x + (16 * chunkX);
 					z = z + (16 * chunkZ);
 					y = y + data.minHeight;
-					numOre = MathHelper.clamp(random.nextInt(data.maxCluster), data.minCluster,data.maxCluster);
-					this.generateOre(world, random, x, y, z, data.oreType, numOre); 
-				
+					numOre = MathHelper.clamp(random.nextInt(data.maxCluster), data.minCluster, data.maxCluster);
+					BlockPos pos = new BlockPos(x, y, z);
+
+					(new WorldGenMinable(data.oreType.getDefaultState(), numOre * 2)).generate(world, random, pos);
 				}
 			}
 		}

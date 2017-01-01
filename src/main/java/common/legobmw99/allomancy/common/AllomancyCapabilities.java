@@ -2,6 +2,7 @@ package common.legobmw99.allomancy.common;
 
 import java.util.concurrent.Callable;
 
+import common.legobmw99.allomancy.Allomancy;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
@@ -12,14 +13,11 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-import common.legobmw99.allomancy.Allomancy;
+public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagCompound> {
 
-public class AllomancyCapabilities implements
-		ICapabilitySerializable<NBTTagCompound> {
-	
 	public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "Allomancy_Data");
 	public static int[] MaxBurnTime = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
-	public static final int matIron = 0, matSteel = 1, matTin = 2, matPewter = 3, matZinc = 4, matBrass = 5, matCopper = 6, matBronze = 7;
+	public static final int matIron = 0, matSteel = 1, matTin = 2, matPewter = 3, matZinc = 4, matBrass = 5,matCopper = 6, matBronze = 7;
 
 	private boolean isMistborn;
 
@@ -31,17 +29,42 @@ public class AllomancyCapabilities implements
 
 	private EntityPlayer player;
 
+	/**
+	 * Retrieve data for a specific player
+	 * 
+	 * @param player
+	 *            the player you want data for
+	 * @return the AllomancyCapabilites data of the player
+	 */
 	public static AllomancyCapabilities forPlayer(Entity player) {
 		return player.getCapability(Allomancy.PLAYER_CAP, null);
 	}
 
+	/**
+	 * Constructor of the Capability object
+	 * 
+	 * @param player
+	 *            the player to attach a Capability to
+	 */
 	public AllomancyCapabilities(EntityPlayer player) {
 		this.player = player;
 	}
+
+	/**
+	 * Get the selected metal group in an instance of the Capability
+	 * 
+	 * @return the index of the selected group, 0-3
+	 */
 	public int getSelected() {
 		return this.selected;
 	}
 
+	/**
+	 * Set the selected metal group in an instance of the Capability
+	 * 
+	 * @param selected
+	 *            the index, 0-3, of the group to select
+	 */
 	public void setSelected(int selected) {
 		this.selected = selected;
 		if ((this.selected > 4) || (this.selected < 0)) {
@@ -49,51 +72,121 @@ public class AllomancyCapabilities implements
 		}
 	}
 
+	/**
+	 * Check if this instance is a Mistborn
+	 * 
+	 * @return whether or not the player is a Mistborn
+	 */
 	public boolean isMistborn() {
 		return isMistborn;
 	}
 
+	/**
+	 * Set whether or not the player is Mistborn
+	 * 
+	 * @param ismb
+	 *            the value to set
+	 */
 	public void setMistborn(boolean ismb) {
 		this.isMistborn = ismb;
 	}
 
+	/**
+	 * Check if a specific metal is burning
+	 * 
+	 * @param metal
+	 *            the index of the metal to check
+	 * @return whether or not it is burning
+	 */
 	public boolean getMetalBurning(int metal) {
 		return MetalBurning[metal];
 	}
 
+	/**
+	 * Set whether or not a metal is burning
+	 * 
+	 * @param metal
+	 *            the index of the metal to set
+	 * @param metalBurning
+	 *            the value to set
+	 */
 	public void setMetalBurning(int metal, boolean metalBurning) {
 		MetalBurning[metal] = metalBurning;
 	}
 
+	/**
+	 * Get how much damage has been accumulated
+	 * 
+	 * @return the amount of damage
+	 */
 	public int getDamageStored() {
 		return damageStored;
 	}
 
+	/**
+	 * Set the amount of damage stored
+	 * 
+	 * @param damageStored
+	 *            the amount of damage
+	 */
 	public void setDamageStored(int damageStored) {
 		this.damageStored = damageStored;
 	}
 
+	/**
+	 * Get the amount of a specific metal
+	 * 
+	 * @param metal
+	 *            the index of the metal to retrieve
+	 * @return the amount of metal
+	 */
 	public int getMetalAmounts(int metal) {
 		return MetalAmounts[metal];
 	}
 
+	/**
+	 * Set the amount of a specific metal
+	 * 
+	 * @param metal
+	 *            the index of the metal to set
+	 * @param metalAmounts
+	 *            the amount of metal
+	 */
 	public void setMetalAmounts(int metal, int metalAmounts) {
 		MetalAmounts[metal] = metalAmounts;
 	}
 
+	/**
+	 * Get the burn time of a specific metal
+	 * 
+	 * @param metal
+	 *            the index of the metal to retrieve
+	 * @return the burn time
+	 */
 	public int getBurnTime(int metal) {
 		return BurnTime[metal];
 	}
 
+	/**
+	 * Set the burn time of a specific metal
+	 * 
+	 * @param metal
+	 *            the index of the metal to set
+	 * @param burnTime
+	 *            the burn time
+	 */
 	public void setBurnTime(int metal, int burnTime) {
 		BurnTime[metal] = burnTime;
 	}
-	
+
+	/**
+	 * Register the capability
+	 */
 	public static void register() {
-		CapabilityManager.INSTANCE.register(AllomancyCapabilities.class,
-				new AllomancyCapabilities.Storage(),
+		CapabilityManager.INSTANCE.register(AllomancyCapabilities.class, new AllomancyCapabilities.Storage(),
 				new AllomancyCapabilities.Factory());
 	}
+
 
 	@Override
 	public NBTTagCompound serializeNBT() {
@@ -112,6 +205,7 @@ public class AllomancyCapabilities implements
 
 	}
 
+
 	@Override
 	public void deserializeNBT(NBTTagCompound compound) {
 		this.setMistborn(compound.getBoolean("ismistborn"));
@@ -128,31 +222,26 @@ public class AllomancyCapabilities implements
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return Allomancy.PLAYER_CAP != null
-				&& capability == Allomancy.PLAYER_CAP;
+		return Allomancy.PLAYER_CAP != null && capability == Allomancy.PLAYER_CAP;
 
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return Allomancy.PLAYER_CAP != null
-				&& capability == Allomancy.PLAYER_CAP ? (T) this : null;
+		return Allomancy.PLAYER_CAP != null && capability == Allomancy.PLAYER_CAP ? (T) this : null;
 	}
 
-
-
-	public static class Storage implements
-			Capability.IStorage<AllomancyCapabilities> {
+	public static class Storage implements Capability.IStorage<AllomancyCapabilities> {
 
 		@Override
-		public NBTBase writeNBT(Capability<AllomancyCapabilities> capability,
-				AllomancyCapabilities instance, EnumFacing side) {
+		public NBTBase writeNBT(Capability<AllomancyCapabilities> capability, AllomancyCapabilities instance,
+				EnumFacing side) {
 			return null;
 		}
 
 		@Override
-		public void readNBT(Capability<AllomancyCapabilities> capability,
-				AllomancyCapabilities instance, EnumFacing side, NBTBase nbt) {
+		public void readNBT(Capability<AllomancyCapabilities> capability, AllomancyCapabilities instance,
+				EnumFacing side, NBTBase nbt) {
 
 		}
 

@@ -12,22 +12,30 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import common.legobmw99.allomancy.common.AllomancyCapabilities;
 
 public class UpdateBurnPacket implements IMessage {
-	 
-	public  UpdateBurnPacket(){}
+
+	public UpdateBurnPacket() {
+	}
 
 	private int mat;
 	private int value;
-	
-	public  UpdateBurnPacket(int mat, boolean value){
+
+	/**
+	 * Takes data, makes it transmittable
+	 * 
+	 * @param mat
+	 *            the index of the metal
+	 * @param value
+	 *            whether or not it is burning
+	 */
+	public UpdateBurnPacket(int mat, boolean value) {
 		this.mat = mat;
-		this.value = value ? 1 : 0; //Convert bool to int
+		this.value = value ? 1 : 0; // Convert bool to int
 	}
-	
-	
+
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		mat = ByteBufUtils.readVarInt(buf, 5);
-		value = ByteBufUtils.readVarInt(buf,1);
+		value = ByteBufUtils.readVarInt(buf, 1);
 	}
 
 	@Override
@@ -35,32 +43,32 @@ public class UpdateBurnPacket implements IMessage {
 		ByteBufUtils.writeVarInt(buf, mat, 5);
 		ByteBufUtils.writeVarInt(buf, value, 1);
 	}
-	
-	public static class Handler implements IMessageHandler<UpdateBurnPacket, IMessage>{
+
+	public static class Handler implements IMessageHandler<UpdateBurnPacket, IMessage> {
 
 		@Override
 		public IMessage onMessage(final UpdateBurnPacket message, final MessageContext ctx) {
-	        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world; // or Minecraft.getMinecraft() on the client
-	        mainThread.addScheduledTask(new Runnable() {
-	            @Override
-	            public void run() {
+			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world; // or Minecraft.getMinecraft() on the client
+			mainThread.addScheduledTask(new Runnable() {
+				@Override
+				public void run() {
 
-	            	EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-	            	AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
-	            	 boolean value;
-	                 if(message.value == 1){ //Convert int back to bool
-	                     value = true;
-	                     }
-	                 else{
-	                     value = false;
-	                     }
-	     			if (cap.getMetalAmounts(message.mat) != 0) {
-	     				cap.setMetalBurning(message.mat,value);
-	     			} else {
-	     				cap.setMetalBurning(message.mat,false);
-	     			}
-	     		}
-	        });		return null;
+					EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+					AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
+					boolean value;
+					if (message.value == 1) { // Convert int back to bool
+						value = true;
+					} else {
+						value = false;
+					}
+					if (cap.getMetalAmounts(message.mat) != 0) {
+						cap.setMetalBurning(message.mat, value);
+					} else {
+						cap.setMetalBurning(message.mat, false);
+					}
+				}
+			});
+			return null;
 		}
 	}
 }

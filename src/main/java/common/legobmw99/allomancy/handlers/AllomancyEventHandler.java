@@ -103,7 +103,7 @@ public class AllomancyEventHandler {
 			BlockPos bp;
 
 			if (cap.isMistborn()) {
-				this.updateBurnTime(cap, player);
+				this.updateBurnTime(cap);
 
 				if (cap.getMetalBurning(AllomancyCapabilities.matIron)
 						|| cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
@@ -233,8 +233,7 @@ public class AllomancyEventHandler {
 					if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed()) {
 						if (player.motionY >= 0) {
 							player.motionY *= 1.6;
-							// Don't allow motion values to get too out of the
-							// norm
+							// Don't allow motion values to get too out of the norm
 							player.motionY = MathHelper.clamp((float) player.motionY, -2, 2);
 						}
 						player.motionX *= 1.4;
@@ -392,11 +391,9 @@ public class AllomancyEventHandler {
 					}
 					// play a sound effect
 					if (cap.getMetalBurning(AllomancyCapabilities.matIron)) {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
 					} else {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
 					}
 					break;
 				case 2:
@@ -410,11 +407,9 @@ public class AllomancyEventHandler {
 					}
 					// play a sound effect
 					if (cap.getMetalBurning(AllomancyCapabilities.matTin)) {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
 					} else {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
 					}
 					break;
 				case 3:
@@ -428,11 +423,9 @@ public class AllomancyEventHandler {
 					}
 					// play a sound effect
 					if (cap.getMetalBurning(AllomancyCapabilities.matZinc)) {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
 					} else {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
 					}
 					break;
 				case 4:
@@ -446,11 +439,9 @@ public class AllomancyEventHandler {
 					}
 					// play a sound effect
 					if (cap.getMetalBurning(AllomancyCapabilities.matCopper)) {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
 					} else {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
 					}
 					break;
 				default:
@@ -481,11 +472,9 @@ public class AllomancyEventHandler {
 					}
 					// play a sound effect
 					if (cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
 					} else {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
 					}
 					break;
 				case 2:
@@ -499,11 +488,9 @@ public class AllomancyEventHandler {
 					}
 					// play a sound effect
 					if (cap.getMetalBurning(AllomancyCapabilities.matPewter)) {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
 					} else {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
 					}
 					break;
 				case 3:
@@ -517,11 +504,9 @@ public class AllomancyEventHandler {
 					}
 					// play a sound effect
 					if (cap.getMetalBurning(AllomancyCapabilities.matBrass)) {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
 					} else {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
 					}
 					break;
 				case 4:
@@ -535,11 +520,9 @@ public class AllomancyEventHandler {
 					}
 					// play a sound effect
 					if (cap.getMetalBurning(AllomancyCapabilities.matBronze)) {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
 					} else {
-						Minecraft.getMinecraft().player
-								.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
 					}
 					break;
 				default:
@@ -565,32 +548,16 @@ public class AllomancyEventHandler {
 	@SubscribeEvent
 	public void onPlayerClone(PlayerEvent.Clone event) {
 		if (event.isWasDeath()) {
-			AllomancyCapabilities oldCap = AllomancyCapabilities.forPlayer(event.getOriginal()); // the
-																									// dead
-																									// player's
-																									// cap
-			AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.getEntityPlayer()); // the
-																									// clone's
-																									// cap
+			AllomancyCapabilities oldCap = AllomancyCapabilities.forPlayer(event.getOriginal()); // the dead player's cap
+			AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.getEntityPlayer()); // the clone's cap
 			if (oldCap.isMistborn()) {
-				cap.setMistborn(true); // make sure the new player has the same
-										// mistborn status
+				cap.setMistborn(true); // make sure the new player has the same mistborn status
 				if (event.getEntityPlayer().world.isRemote) {
 					cap.setMistborn(true);
 				}
 				Registry.network.sendTo(new BecomeMistbornPacket(), (EntityPlayerMP) event.getEntityPlayer());
 			}
-			if (event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory")) { // if
-																							// keepInventory
-																							// is
-																							// true,
-																							// allow
-																							// them
-																							// to
-																							// keep
-																							// their
-																							// metals,
-																							// too
+			if (event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory")) { // if keepInventory is true, allow them to keep their metals, too
 				for (int i = 0; i < 8; i++) {
 					cap.setMetalAmounts(i, oldCap.getMetalAmounts(i));
 				}
@@ -877,18 +844,11 @@ public class AllomancyEventHandler {
 					}
 					if (cap.getMetalBurning(AllomancyCapabilities.matTin)) {
 						// Add night vision to tin-burners
-						if (!curPlayer.isPotionActive(Potion.getPotionById(16))) { // Potion
-																					// 16
-																					// =
-																					// night
-																					// vision
+						if (!curPlayer.isPotionActive(Potion.getPotionById(16))) { // Potion 16 = night vision
 							curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(16), 300, 0, false, false));
 						}
 						// Remove blindness for tin burners
-						if (curPlayer.isPotionActive(Potion.getPotionById(15))) { // Potion
-																					// 15
-																					// is
-																					// blindness
+						if (curPlayer.isPotionActive(Potion.getPotionById(15))) { // Potion 15 is blindness
 							curPlayer.removePotionEffect(Potion.getPotionById(15));
 
 						} else {
@@ -915,23 +875,26 @@ public class AllomancyEventHandler {
 			}
 		}
 	}
-
+	
+	/**
+	 * Ticks down BurnTime and then decrements MetalAmounts
+	 * 
+	 * @param 
+	 * 			data the AllomancyCapability data for the player 
+	 * 
+	 */
 	@SideOnly(Side.CLIENT)
-	private void updateBurnTime(AllomancyCapabilities data, EntityPlayerSP player) {
-		cap = AllomancyCapabilities.forPlayer(player);
-		// Checks each metal, reduces MetalAmounts by 1 each time BurnTime ticks
-		// to 0
+	private void updateBurnTime(AllomancyCapabilities data) {
 		for (int i = 0; i < 8; i++) {
 
-			if (cap.getMetalBurning(i)) {
-				cap.setBurnTime(i, cap.getBurnTime(i) - 1);
-				if (cap.getBurnTime(i) == 0) {
-					cap.setBurnTime(i, data.MaxBurnTime[i]);
-					cap.setMetalAmounts(i, cap.getMetalAmounts(i) - 1);
+			if (data.getMetalBurning(i)) {
+				data.setBurnTime(i, data.getBurnTime(i) - 1);
+				if (data.getBurnTime(i) == 0) {
+					data.setBurnTime(i, data.MaxBurnTime[i]);
+					data.setMetalAmounts(i, data.getMetalAmounts(i) - 1);
 					Registry.network.sendToServer(new UpdateBurnPacket(i, data.getMetalBurning(i)));
-					if (cap.getMetalAmounts(i) == 0) {
-						// Minecraft.getMinecraft().thePlayer.playSound("random.fizz",
-						// 1, 4);
+					if (data.getMetalAmounts(i) == 0) {
+						Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
 						data.setMetalBurning(i, false);
 						Registry.network.sendToServer(new UpdateBurnPacket(i, data.getMetalBurning(i)));
 					}
@@ -941,9 +904,10 @@ public class AllomancyEventHandler {
 		}
 	}
 
-	// This code is based almost entirely on the vanilla code. It's not super
-	// well documented, but basically it just runs a ray-trace. Edit at your own
-	// peril
+	/* 
+	 * This code is based almost entirely on the vanilla code. It's not super
+	 * well documented, but basically it just runs a ray-trace. Edit at your own peril
+	 */
 	@SideOnly(Side.CLIENT)
 	public static RayTraceResult getMouseOverExtended(float dist) {
 		Minecraft mc = FMLClientHandler.instance().getClient();

@@ -11,12 +11,15 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import common.legobmw99.allomancy.common.AllomancyCapabilities;
 
-public class SelectMetalPacket implements IMessage{
+public class SelectMetalPacket implements IMessage {
 	private int metal;
-	public SelectMetalPacket(){}
-	public SelectMetalPacket(int metal){
+
+	public SelectMetalPacket() {}
+
+	public SelectMetalPacket(int metal) {
 		this.metal = metal;
 	}
+
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		metal = ByteBufUtils.readVarInt(buf, 5);
@@ -26,20 +29,25 @@ public class SelectMetalPacket implements IMessage{
 	public void toBytes(ByteBuf buf) {
 		ByteBufUtils.writeVarInt(buf, metal, 5);
 	}
-	
-	public static class Handler implements IMessageHandler<SelectMetalPacket, IMessage>{
+
+	public static class Handler implements IMessageHandler<SelectMetalPacket, IMessage> {
 
 		@Override
 		public IMessage onMessage(final SelectMetalPacket message, final MessageContext ctx) {
-	        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world; // or Minecraft.getMinecraft() on the client
-	        mainThread.addScheduledTask(new Runnable() {
-	            @Override
-	            public void run() {
-	            	EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-	            	AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
-	            	cap.setSelected((message.metal));
-	            }
-	        });		return null;
+			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world; // or
+																									// Minecraft.getMinecraft()
+																									// on
+																									// the
+																									// client
+			mainThread.addScheduledTask(new Runnable() {
+				@Override
+				public void run() {
+					EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+					AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
+					cap.setSelected((message.metal));
+				}
+			});
+			return null;
 		}
 	}
 }
