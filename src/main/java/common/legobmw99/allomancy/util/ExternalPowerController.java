@@ -86,6 +86,8 @@ public class ExternalPowerController {
 		this.metallist.add(Items.GOLDEN_CARROT.getUnlocalizedName());
 		this.metallist.add(Items.IRON_SWORD.getUnlocalizedName());
 		this.metallist.add(Registry.nuggetLerasium.getUnlocalizedName());
+		this.metallist.add(Registry.itemAllomancyGrinder.getUnlocalizedName());
+		this.metallist.add(Registry.itemCoinBag.getUnlocalizedName());
 		this.metallist.add(Blocks.ANVIL.getUnlocalizedName());
 		this.metallist.add(Blocks.IRON_TRAPDOOR.getUnlocalizedName());
 		this.metallist.add(Blocks.IRON_DOOR.getUnlocalizedName());
