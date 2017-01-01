@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod(modid = Allomancy.MODID, version = Allomancy.VERSION)
 public class Allomancy {
 	public static final String MODID = "allomancy";
-	public static final String VERSION = "@VERSION@";
+	public static final String VERSION = "2.4";
 	public static ExternalPowerController XPC;
 
 	@Instance(value = "allomancy")

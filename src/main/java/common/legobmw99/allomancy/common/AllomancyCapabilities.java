@@ -19,14 +19,7 @@ public class AllomancyCapabilities implements
 	
 	public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "Allomancy_Data");
 	public static int[] MaxBurnTime = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
-	public static final int matIron = 0;
-	public static final int matSteel = 1;
-	public static final int matTin = 2;
-	public static final int matPewter = 3;
-	public static final int matZinc = 4;
-	public static final int matBrass = 5;
-	public static final int matCopper = 6;
-	public static final int matBronze = 7;
+	public static final int matIron = 0, matSteel = 1, matTin = 2, matPewter = 3, matZinc = 4, matBrass = 5, matCopper = 6, matBronze = 7;
 
 	private boolean isMistborn;
 
@@ -34,8 +27,7 @@ public class AllomancyCapabilities implements
 	private int damageStored = 0;
 	private int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
 	private int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0 };
-	private boolean[] MetalBurning = { false, false, false, false, false, false,
-			false, false };
+	private boolean[] MetalBurning = { false, false, false, false, false, false, false, false };
 
 	private EntityPlayer player;
 
