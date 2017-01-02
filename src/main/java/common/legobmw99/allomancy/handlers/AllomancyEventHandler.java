@@ -75,8 +75,6 @@ public class AllomancyEventHandler {
 
     private int currentFrame = 0;
 
-    @SideOnly(Side.CLIENT)
-
     @SubscribeEvent
     public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof EntityPlayer && !event.getObject().hasCapability(Allomancy.PLAYER_CAP, null)) {
