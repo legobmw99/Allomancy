@@ -1,5 +1,23 @@
 package common.legobmw99.allomancy.common;
 
+import org.lwjgl.input.Keyboard;
+
+import common.legobmw99.allomancy.Allomancy;
+import common.legobmw99.allomancy.blocks.OreBlock;
+import common.legobmw99.allomancy.entity.EntityGoldNugget;
+import common.legobmw99.allomancy.items.ItemCoinBag;
+import common.legobmw99.allomancy.items.ItemGrinder;
+import common.legobmw99.allomancy.items.ItemMistcloak;
+import common.legobmw99.allomancy.items.ItemVial;
+import common.legobmw99.allomancy.items.NuggetLerasium;
+import common.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
+import common.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
+import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
+import common.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
+import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
+import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
+import common.legobmw99.allomancy.network.packets.StopFallPacket;
+import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -25,25 +43,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import org.lwjgl.input.Keyboard;
-
-import common.legobmw99.allomancy.Allomancy;
-import common.legobmw99.allomancy.blocks.OreBlock;
-import common.legobmw99.allomancy.entity.EntityGoldNugget;
-import common.legobmw99.allomancy.items.ItemCoinBag;
-import common.legobmw99.allomancy.items.ItemGrinder;
-import common.legobmw99.allomancy.items.ItemMistcloak;
-import common.legobmw99.allomancy.items.ItemVial;
-import common.legobmw99.allomancy.items.NuggetLerasium;
-import common.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
-import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
-import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
-import common.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
-import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
-import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
-import common.legobmw99.allomancy.network.packets.StopFallPacket;
-import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 
 public class Registry {
 	public static KeyBinding changeGroup;
@@ -137,7 +136,7 @@ public class Registry {
 	public static void registerPackets() {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel("allomancy");
 		network.registerMessage(StopFallPacket.Handler.class, StopFallPacket.class, 0, Side.SERVER);
-		network.registerMessage(BecomeMistbornPacket.Handler.class, BecomeMistbornPacket.class, 1, Side.CLIENT);
+		network.registerMessage(AllomancyPowerPacket.Handler.class, AllomancyPowerPacket.class, 1, Side.CLIENT);
 		network.registerMessage(SelectMetalPacket.Handler.class, SelectMetalPacket.class, 2, Side.SERVER);
 		network.registerMessage(MoveEntityPacket.Handler.class, MoveEntityPacket.class, 3, Side.SERVER);
 		network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 4, Side.SERVER);
