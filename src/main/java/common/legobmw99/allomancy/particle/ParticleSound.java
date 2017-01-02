@@ -23,8 +23,8 @@ public class ParticleSound extends Particle {
         this.particleMaxAge = 15;
         this.canCollide = false; // canCollide
         String soundName = sound.getSoundLocation().toString();
-        System.out.println(soundName);
-        if (soundName.contains("step")) {
+
+        if (soundName.contains("step") || soundName.contains("pickup")) {
             // Blue
             this.particleGreen = 0;
             this.particleBlue = 1F;

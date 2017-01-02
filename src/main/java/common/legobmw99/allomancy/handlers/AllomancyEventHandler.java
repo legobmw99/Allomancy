@@ -75,7 +75,7 @@ public class AllomancyEventHandler {
 
     private int currentFrame = 0;
 
-    private Point[] Frames = { new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12) };
+    @SideOnly(Side.CLIENT)
 
     @SubscribeEvent
     public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
@@ -529,6 +529,8 @@ public class AllomancyEventHandler {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
+        Point[] Frames = { new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12) };
+
         if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
             return;
         }
@@ -650,28 +652,28 @@ public class AllomancyEventHandler {
         gig.drawTexturedModalRect(renderX + 82, renderY, 0, 0, 5, 20);
 
         if (this.cap.getMetalBurning(AllomancyCapabilities.matIron)) {
-            gig.drawTexturedModalRect(renderX, renderY + 5 + ironY, this.Frames[this.currentFrame].getX(), this.Frames[this.currentFrame].getY(), 5, 3);
+            gig.drawTexturedModalRect(renderX, renderY + 5 + ironY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
         }
         if (this.cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
-            gig.drawTexturedModalRect(renderX + 7, renderY + 5 + steelY, this.Frames[this.currentFrame].getX(), this.Frames[this.currentFrame].getY(), 5, 3);
+            gig.drawTexturedModalRect(renderX + 7, renderY + 5 + steelY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
         }
         if (this.cap.getMetalBurning(AllomancyCapabilities.matTin)) {
-            gig.drawTexturedModalRect(renderX + 25, renderY + 5 + tinY, this.Frames[this.currentFrame].getX(), this.Frames[this.currentFrame].getY(), 5, 3);
+            gig.drawTexturedModalRect(renderX + 25, renderY + 5 + tinY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
         }
         if (this.cap.getMetalBurning(AllomancyCapabilities.matPewter)) {
-            gig.drawTexturedModalRect(renderX + 32, renderY + 5 + pewterY, this.Frames[this.currentFrame].getX(), this.Frames[this.currentFrame].getY(), 5, 3);
+            gig.drawTexturedModalRect(renderX + 32, renderY + 5 + pewterY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
         }
         if (this.cap.getMetalBurning(AllomancyCapabilities.matZinc)) {
-            gig.drawTexturedModalRect(renderX + 50, renderY + 5 + zincY, this.Frames[this.currentFrame].getX(), this.Frames[this.currentFrame].getY(), 5, 3);
+            gig.drawTexturedModalRect(renderX + 50, renderY + 5 + zincY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
         }
         if (this.cap.getMetalBurning(AllomancyCapabilities.matBrass)) {
-            gig.drawTexturedModalRect(renderX + 57, renderY + 5 + brassY, this.Frames[this.currentFrame].getX(), this.Frames[this.currentFrame].getY(), 5, 3);
+            gig.drawTexturedModalRect(renderX + 57, renderY + 5 + brassY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
         }
         if (this.cap.getMetalBurning(AllomancyCapabilities.matCopper)) {
-            gig.drawTexturedModalRect(renderX + 75, renderY + 5 + copperY, this.Frames[this.currentFrame].getX(), this.Frames[this.currentFrame].getY(), 5, 3);
+            gig.drawTexturedModalRect(renderX + 75, renderY + 5 + copperY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
         }
         if (this.cap.getMetalBurning(AllomancyCapabilities.matBronze)) {
-            gig.drawTexturedModalRect(renderX + 82, renderY + 5 + bronzeY, this.Frames[this.currentFrame].getX(), this.Frames[this.currentFrame].getY(), 5, 3);
+            gig.drawTexturedModalRect(renderX + 82, renderY + 5 + bronzeY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
         }
 
         if (this.animationCounter > 6) // Draw the burning symbols...
@@ -717,26 +719,26 @@ public class AllomancyEventHandler {
         }
     }
 
-
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onSound(PlaySoundEvent event) {
         double motionX, motionY, motionZ, magnitude;
-        
+
         EntityPlayerSP player = Minecraft.getMinecraft().player;
-        ISound sound =  event.getSound();
+        ISound sound = event.getSound();
         if ((player == null) || (sound == null)) {
             return;
         }
-        
-        magnitude = Math.sqrt( Math.pow((player.posX - sound.getXPosF()), 2) + Math.pow((player.posY - sound.getYPosF()), 2) + Math.pow((player.posZ - sound.getZPosF()), 2));
+
+        magnitude = Math.sqrt(Math.pow((player.posX - sound.getXPosF()), 2) + Math.pow((player.posY - sound.getYPosF()), 2) + Math.pow((player.posZ - sound.getZPosF()), 2));
         if (((magnitude) > 20) || ((magnitude) < .5)) {
             return;
         }
         AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
         // Spawn sound particles
         if (cap.getMetalBurning(AllomancyCapabilities.matTin)) {
-            if (sound.getSoundLocation().toString().contains("step") || sound.getSoundLocation().toString().contains("entity") || sound.getSoundLocation().toString().contains("hostile")
-                    || sound.getSoundLocation().toString().contains(".big") || sound.getSoundLocation().toString().contains("scream") || sound.getSoundLocation().toString().contains("bow")) {
+            if (sound.getSoundLocation().toString().contains("step") || sound.getSoundLocation().toString().contains("entity") || sound.getSoundLocation().toString().contains("hostile") || sound.getSoundLocation().toString().contains(".big")
+                    || sound.getSoundLocation().toString().contains("scream") || sound.getSoundLocation().toString().contains("bow")) {
                 motionX = ((player.posX - (event.getSound().getXPosF() + .5)) * -0.7) / magnitude;
                 motionY = ((player.posY - (event.getSound().getYPosF() + .2)) * -0.7) / magnitude;
                 motionZ = ((player.posZ - (event.getSound().getZPosF() + .5)) * -0.7) / magnitude;
