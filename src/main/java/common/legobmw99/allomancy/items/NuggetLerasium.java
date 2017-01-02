@@ -2,6 +2,9 @@ package common.legobmw99.allomancy.items;
 
 import java.util.List;
 
+import common.legobmw99.allomancy.common.AllomancyCapabilities;
+import common.legobmw99.allomancy.common.Registry;
+import common.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,9 +18,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import common.legobmw99.allomancy.common.AllomancyCapabilities;
-import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
 
 public class NuggetLerasium extends ItemFood {
 	public NuggetLerasium() {
@@ -47,7 +47,7 @@ public class NuggetLerasium extends ItemFood {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand){
 		AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(playerIn);
 		ItemStack itemStackIn = playerIn.getHeldItem(hand);
-		if (!cap.isMistborn()) {
+		if (cap.getAllomancyPower() != 8) {
 	        playerIn.setActiveHand(hand);
 	        return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);	
 
@@ -62,9 +62,9 @@ public class NuggetLerasium extends ItemFood {
 		double x = entityLiving.posX;
 		double y = entityLiving.posY + 3;
 		double z = entityLiving.posZ;
-		if (!cap.isMistborn()) {
-			cap.setMistborn(true);
-			Registry.network.sendTo(new BecomeMistbornPacket(), (EntityPlayerMP) entityLiving);
+		if (cap.getAllomancyPower() != 8) {
+			cap.setAllomancyPower(8);
+			Registry.network.sendTo(new AllomancyPowerPacket(8), (EntityPlayerMP) entityLiving);
         }
 		//Fancy shmancy effects
 		worldIn.spawnEntity(new EntityLightningBolt(worldIn, x, y, z, true));

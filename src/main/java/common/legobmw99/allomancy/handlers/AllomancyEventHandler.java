@@ -11,7 +11,7 @@ import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.entity.EntityGoldNugget;
 import common.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
-import common.legobmw99.allomancy.network.packets.BecomeMistbornPacket;
+import common.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import common.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
 import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
@@ -21,7 +21,6 @@ import common.legobmw99.allomancy.particle.ParticleSound;
 import common.legobmw99.allomancy.util.AllomancyConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
@@ -33,6 +32,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -103,7 +104,7 @@ public class AllomancyEventHandler {
             RayTraceResult mop;
             BlockPos bp;
 
-            if (cap.isMistborn()) {
+            if (cap.getAllomancyPower() >= 0) {
                 this.updateBurnTime(cap);
 
                 if (cap.getMetalBurning(AllomancyCapabilities.matIron) || cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
@@ -220,7 +221,7 @@ public class AllomancyEventHandler {
                     }
                 }
 
-                if (cap.getMetalBurning(AllomancyCapabilities.matBronze)) {
+                if (cap.getMetalBurning(AllomancyCapabilities.matBronze) && !cap.getMetalBurning(AllomancyCapabilities.matCopper)) {
                     AxisAlignedBB boxBurners;
                     List<Entity> eListBurners;
                     // Add metal burners to a list
@@ -228,9 +229,12 @@ public class AllomancyEventHandler {
                     eListBurners = player.world.getEntitiesWithinAABB(Entity.class, boxBurners);
                     for (Entity curEntity : eListBurners) {
                         if (curEntity != null && (curEntity instanceof EntityPlayer) && curEntity != player) {
-                            AllomancyCapabilities capOther = AllomancyCapabilities.forPlayer(curEntity);
                             Registry.network.sendToServer(new GetCapabilitiesPacket(curEntity.getEntityId(), player.getEntityId()));
-                            if (!capOther.getMetalBurning(AllomancyCapabilities.matCopper)) {
+                            AllomancyCapabilities capOther = AllomancyCapabilities.forPlayer(curEntity);
+
+                            if (capOther.getMetalBurning(AllomancyCapabilities.matCopper)) {
+                                Allomancy.XPC.metalBurners.clear();
+                            }else{
                                 if (capOther.getMetalBurning(AllomancyCapabilities.matIron) || capOther.getMetalBurning(AllomancyCapabilities.matSteel) || capOther.getMetalBurning(AllomancyCapabilities.matTin)
                                         || capOther.getMetalBurning(AllomancyCapabilities.matPewter) || capOther.getMetalBurning(AllomancyCapabilities.matZinc) || capOther.getMetalBurning(AllomancyCapabilities.matBrass)
                                         || capOther.getMetalBurning(AllomancyCapabilities.matBronze)) {
@@ -315,11 +319,32 @@ public class AllomancyEventHandler {
         }
     }
 
+    /**
+     * Used to toggle a metal's burn state and play a sound effect
+     * 
+     * @param metal
+     *            the index of the metal to toggle
+     * @param capability
+     *            the capability being handled
+     */
+    public void toggleMetalBurn(int metal, AllomancyCapabilities capability) {
+        Registry.network.sendToServer(new UpdateBurnPacket(metal, !capability.getMetalBurning(metal)));
+
+        if (capability.getMetalAmounts(metal) > 0) {
+            capability.setMetalBurning(metal, !capability.getMetalBurning(metal));
+        }
+        // play a sound effect
+        if (capability.getMetalBurning(metal)) {
+            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+        } else {
+            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+        }
+    }
+
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
         if (Registry.changeGroup.isPressed()) {
-
             EntityPlayerSP player;
             player = Minecraft.getMinecraft().player;
             Minecraft mc = FMLClientHandler.instance().getClient();
@@ -328,8 +353,12 @@ public class AllomancyEventHandler {
                     return;
                 }
                 AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
-                Registry.network.sendToServer(new SelectMetalPacket(cap.getSelected() + 1));
-                cap.setSelected(cap.getSelected() + 1);
+                // Only applicable if the player is a full Mistborn
+                if (cap.getAllomancyPower() == 8) {
+                    Registry.network.sendToServer(new SelectMetalPacket(cap.getSelected() + 1));
+                    cap.setSelected(cap.getSelected() + 1);
+                    Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("ui.button.click")), 0.1F, 2.0F);
+                }
             }
         }
         if (Registry.burnFirst.isPressed()) {
@@ -342,65 +371,39 @@ public class AllomancyEventHandler {
                     return;
                 }
                 cap = AllomancyCapabilities.forPlayer(player);
-                switch (cap.getSelected()) {
-                    case 1:
-                        // toggle iron.
-                        Registry.network.sendToServer(new UpdateBurnPacket(AllomancyCapabilities.matIron, !cap.getMetalBurning(AllomancyCapabilities.matIron)));
+                /*
+                 * Mistings only have one metal, so toggle that one
+                 */
+                if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 8) {
+                    this.toggleMetalBurn(cap.getAllomancyPower(), cap);
+                }
 
-                        if (cap.getMetalAmounts(AllomancyCapabilities.matIron) > 0) {
-                            cap.setMetalBurning(AllomancyCapabilities.matIron, !cap.getMetalBurning(AllomancyCapabilities.matIron));
-                        }
-                        // play a sound effect
-                        if (cap.getMetalBurning(AllomancyCapabilities.matIron)) {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
-                        } else {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
-                        }
-                        break;
-                    case 2:
-                        // toggle Tin.
+                /*
+                 * If the player is a full Mistborn, it matters what they have selected
+                 */
+                if (cap.getAllomancyPower() == 8) {
+                    switch (cap.getSelected()) {
+                        case 1:
+                            // toggle iron.
+                            this.toggleMetalBurn(AllomancyCapabilities.matIron, cap);
+                            break;
+                        case 2:
+                            // toggle Tin.
 
-                        Registry.network.sendToServer(new UpdateBurnPacket(AllomancyCapabilities.matTin, !cap.getMetalBurning(AllomancyCapabilities.matTin)));
-                        if (cap.getMetalAmounts(AllomancyCapabilities.matTin) > 0) {
-                            cap.setMetalBurning(AllomancyCapabilities.matTin, !cap.getMetalBurning(AllomancyCapabilities.matTin));
-                        }
-                        // play a sound effect
-                        if (cap.getMetalBurning(AllomancyCapabilities.matTin)) {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
-                        } else {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
-                        }
-                        break;
-                    case 3:
-                        // toggle Zinc.
+                            this.toggleMetalBurn(AllomancyCapabilities.matTin, cap);
+                            break;
+                        case 3:
+                            // toggle Zinc.
 
-                        Registry.network.sendToServer(new UpdateBurnPacket(AllomancyCapabilities.matZinc, !cap.getMetalBurning(AllomancyCapabilities.matZinc)));
-                        if (cap.getMetalAmounts(AllomancyCapabilities.matZinc) > 0) {
-                            cap.setMetalBurning(AllomancyCapabilities.matZinc, !cap.getMetalBurning(AllomancyCapabilities.matZinc));
-                        }
-                        // play a sound effect
-                        if (cap.getMetalBurning(AllomancyCapabilities.matZinc)) {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
-                        } else {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
-                        }
-                        break;
-                    case 4:
-                        // toggle Copper.
-
-                        Registry.network.sendToServer(new UpdateBurnPacket(AllomancyCapabilities.matCopper, !cap.getMetalBurning(AllomancyCapabilities.matCopper)));
-                        if (cap.getMetalAmounts(AllomancyCapabilities.matCopper) > 0) {
-                            cap.setMetalBurning(AllomancyCapabilities.matCopper, !cap.getMetalBurning(AllomancyCapabilities.matCopper));
-                        }
-                        // play a sound effect
-                        if (cap.getMetalBurning(AllomancyCapabilities.matCopper)) {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
-                        } else {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
-                        }
-                        break;
-                    default:
-                        break;
+                            this.toggleMetalBurn(AllomancyCapabilities.matZinc, cap);
+                            break;
+                        case 4:
+                            // toggle Copper.
+                            this.toggleMetalBurn(AllomancyCapabilities.matCopper, cap);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
@@ -413,67 +416,41 @@ public class AllomancyEventHandler {
                 if (player == null) {
                     return;
                 }
-
                 cap = AllomancyCapabilities.forPlayer(player);
-                switch (cap.getSelected()) {
-                    case 1:
-                        // toggle Steel.
+                /*
+                 * Mistings only have one metal, so toggle that one
+                 */
+                if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 8) {
+                    this.toggleMetalBurn(cap.getAllomancyPower(), cap);
+                }
 
-                        Registry.network.sendToServer(new UpdateBurnPacket(AllomancyCapabilities.matSteel, !cap.getMetalBurning(AllomancyCapabilities.matSteel)));
-                        if (cap.getMetalAmounts(AllomancyCapabilities.matSteel) > 0) {
-                            cap.setMetalBurning(AllomancyCapabilities.matSteel, !cap.getMetalBurning(AllomancyCapabilities.matSteel));
-                        }
-                        // play a sound effect
-                        if (cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
-                        } else {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
-                        }
-                        break;
-                    case 2:
-                        // toggle Pewter.
+                /*
+                 * If the player is a full Mistborn, it matters what they have selected
+                 */
+                if (cap.getAllomancyPower() == 8) {
+                    switch (cap.getSelected()) {
+                        case 1:
+                            // toggle Steel.
+                            this.toggleMetalBurn(AllomancyCapabilities.matSteel, cap);
 
-                        Registry.network.sendToServer(new UpdateBurnPacket(AllomancyCapabilities.matPewter, !cap.getMetalBurning(AllomancyCapabilities.matPewter)));
-                        if (cap.getMetalAmounts(AllomancyCapabilities.matPewter) > 0) {
-                            cap.setMetalBurning(AllomancyCapabilities.matPewter, !cap.getMetalBurning(AllomancyCapabilities.matPewter));
-                        }
-                        // play a sound effect
-                        if (cap.getMetalBurning(AllomancyCapabilities.matPewter)) {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
-                        } else {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
-                        }
-                        break;
-                    case 3:
-                        // toggle Brass.
+                            break;
+                        case 2:
+                            // toggle Pewter.
+                            this.toggleMetalBurn(AllomancyCapabilities.matPewter, cap);
 
-                        Registry.network.sendToServer(new UpdateBurnPacket(AllomancyCapabilities.matBrass, !cap.getMetalBurning(AllomancyCapabilities.matBrass)));
-                        if (cap.getMetalAmounts(AllomancyCapabilities.matBrass) > 0) {
-                            cap.setMetalBurning(AllomancyCapabilities.matBrass, !cap.getMetalBurning(AllomancyCapabilities.matBrass));
-                        }
-                        // play a sound effect
-                        if (cap.getMetalBurning(AllomancyCapabilities.matBrass)) {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
-                        } else {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
-                        }
-                        break;
-                    case 4:
-                        // toggle Bronze.
+                            break;
+                        case 3:
+                            // toggle Brass.
+                            this.toggleMetalBurn(AllomancyCapabilities.matBrass, cap);
 
-                        Registry.network.sendToServer(new UpdateBurnPacket(AllomancyCapabilities.matBronze, !cap.getMetalBurning(AllomancyCapabilities.matBronze)));
-                        if (cap.getMetalAmounts(AllomancyCapabilities.matBronze) > 0) {
-                            cap.setMetalBurning(AllomancyCapabilities.matBronze, !cap.getMetalBurning(AllomancyCapabilities.matBronze));
-                        }
-                        // play a sound effect
-                        if (cap.getMetalBurning(AllomancyCapabilities.matBronze)) {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
-                        } else {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
-                        }
-                        break;
-                    default:
-                        break;
+                            break;
+                        case 4:
+                            // toggle Bronze.
+                            this.toggleMetalBurn(AllomancyCapabilities.matBronze, cap);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
@@ -493,12 +470,12 @@ public class AllomancyEventHandler {
         if (event.isWasDeath()) {
             AllomancyCapabilities oldCap = AllomancyCapabilities.forPlayer(event.getOriginal()); // the dead player's cap
             AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.getEntityPlayer()); // the clone's cap
-            if (oldCap.isMistborn()) {
-                cap.setMistborn(true); // make sure the new player has the same mistborn status
-                if (event.getEntityPlayer().world.isRemote) {
-                    cap.setMistborn(true);
-                }
-                Registry.network.sendTo(new BecomeMistbornPacket(), (EntityPlayerMP) event.getEntityPlayer());
+            if (oldCap.getAllomancyPower() >= 0) {
+                cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
+                /*
+                 * TODO investigate this: if (event.getEntityPlayer().world.isRemote) { cap.setMistborn(); }
+                 */
+                Registry.network.sendTo(new AllomancyPowerPacket(oldCap.getAllomancyPower()), (EntityPlayerMP) event.getEntity());
             }
             if (event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory")) { // if keepInventory is true, allow them to keep their metals, too
                 for (int i = 0; i < 8; i++) {
@@ -512,14 +489,28 @@ public class AllomancyEventHandler {
     @SubscribeEvent
     public void onPlayerLogin(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof EntityPlayerMP) {
-            AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.getEntity());
-            Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, event.getEntity().getEntityId()), (EntityPlayerMP) event.getEntity());
-            if (cap.isMistborn()) {
-                Registry.network.sendTo(new BecomeMistbornPacket(), (EntityPlayerMP) event.getEntity());
-                cap.setMistborn(true);
-                if (event.getWorld().isRemote) {
-                    cap.setMistborn(true);
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+            AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
+            Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, event.getEntity().getEntityId()), player);
+            if (cap.getAllomancyPower() >= 0) {
+                Registry.network.sendTo(new AllomancyPowerPacket(cap.getAllomancyPower()), player);
+                /*
+                 * TODO investigate this: cap.setMistborn(); if (event.getWorld().isRemote) { cap.setMistborn(); }
+                 */
+            } else if(AllomancyConfig.randomizeMistings && cap.getAllomancyPower() == -1){
+
+                int randomMisting = (int)(Math.random() * 8);
+                
+                cap.setAllomancyPower(randomMisting);
+                Registry.network.sendTo(new AllomancyPowerPacket(randomMisting), player);
+                ItemStack dust = new ItemStack(Item.getByNameOrId("allomancy:flake" + Registry.flakeMetals[randomMisting]));
+                //Give the player one flake of their metal
+                if (!player.inventory.addItemStackToInventory(dust)) {
+                    EntityItem entity = new EntityItem(event.getEntity().getEntityWorld(), player.posX, player.posY, player.posZ, dust);
+                    event.getEntity().getEntityWorld().spawnEntity(entity);
                 }
+                System.out.println(cap.getAllomancyPower());
+
             }
         }
     }
@@ -549,13 +540,19 @@ public class AllomancyEventHandler {
             return;
         }
 
-        this.animationCounter++;
-
         cap = AllomancyCapabilities.forPlayer(player);
+
+        if (cap.getAllomancyPower() < 0) {
+            return;
+        }
+
+        this.animationCounter++;
         // left hand side.
         int ironY, steelY, tinY, pewterY;
         // right hand side
         int copperY, bronzeY, zincY, brassY;
+        // single metal
+        int singleMetalY;
         int renderX, renderY = 0;
         ScaledResolution res = new ScaledResolution(this.mc);
 
@@ -581,105 +578,130 @@ public class AllomancyEventHandler {
                 renderX = 5;
                 renderY = 10;
                 break;
-
         }
 
-        if (!cap.isMistborn()) {
-            return;
-        }
         GuiIngame gig = new GuiIngame(Minecraft.getMinecraft());
         Minecraft.getMinecraft().renderEngine.bindTexture(this.meterLoc);
         ITextureObject obj;
         obj = Minecraft.getMinecraft().renderEngine.getTexture(this.meterLoc);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
-        switch (cap.getSelected()) {
-            case 0:
-                break;
-            case 1:
-                gig.drawTexturedModalRect(renderX - 2, renderY - 2, 54, 0, 16, 24);
-                break;
-            case 2:
-                gig.drawTexturedModalRect(renderX + 23, renderY - 2, 54, 0, 16, 24);
-                break;
-            case 3:
-                gig.drawTexturedModalRect(renderX + 48, renderY - 2, 54, 0, 16, 24);
-                break;
-            case 4:
-                gig.drawTexturedModalRect(renderX + 73, renderY - 2, 54, 0, 16, 24);
-                break;
+        /*
+         * Misting overlay
+         */
+        if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 8) {
+
+            gig.drawTexturedModalRect(renderX - 3, renderY - 2, 54, 24, 12, 24);
+
+            singleMetalY = 9 - cap.getMetalAmounts(cap.getAllomancyPower());
+            gig.drawTexturedModalRect(renderX + 1, renderY + 5 + singleMetalY, 7 + 6 * cap.getAllomancyPower(), 1 + singleMetalY, 3, 10 - singleMetalY);
+            gig.drawTexturedModalRect(renderX, renderY, 0, 0, 5, 20);
+            if (this.cap.getMetalBurning(this.cap.getAllomancyPower())) {
+                gig.drawTexturedModalRect(renderX, renderY + 5 + singleMetalY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+            if (this.animationCounter > 6) // Draw the burning symbols...
+            {
+                this.animationCounter = 0;
+                this.currentFrame++;
+                if (this.currentFrame > 3) {
+                    this.currentFrame = 0;
+                }
+            }
 
         }
 
-        ironY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matIron);
-        gig.drawTexturedModalRect(renderX + 1, renderY + 5 + ironY, 7, 1 + ironY, 3, 10 - ironY);
+        /*
+         * The rendering for a the overlay of a full Mistborn
+         */
+        if (cap.getAllomancyPower() == 8) {
+            switch (cap.getSelected()) {
+                case 0:
+                    break;
+                case 1:
+                    gig.drawTexturedModalRect(renderX - 2, renderY - 2, 54, 0, 16, 24);
+                    break;
+                case 2:
+                    gig.drawTexturedModalRect(renderX + 23, renderY - 2, 54, 0, 16, 24);
+                    break;
+                case 3:
+                    gig.drawTexturedModalRect(renderX + 48, renderY - 2, 54, 0, 16, 24);
+                    break;
+                case 4:
+                    gig.drawTexturedModalRect(renderX + 73, renderY - 2, 54, 0, 16, 24);
+                    break;
 
-        steelY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matSteel);
-        gig.drawTexturedModalRect(renderX + 8, renderY + 5 + steelY, 13, 1 + steelY, 3, 10 - steelY);
+            }
 
-        tinY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matTin);
-        gig.drawTexturedModalRect(renderX + 26, renderY + 5 + tinY, 19, 1 + tinY, 3, 10 - tinY);
+            ironY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matIron);
+            gig.drawTexturedModalRect(renderX + 1, renderY + 5 + ironY, 7, 1 + ironY, 3, 10 - ironY);
 
-        pewterY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matPewter);
-        gig.drawTexturedModalRect(renderX + 33, renderY + 5 + pewterY, 25, 1 + pewterY, 3, 10 - pewterY);
+            steelY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matSteel);
+            gig.drawTexturedModalRect(renderX + 8, renderY + 5 + steelY, 13, 1 + steelY, 3, 10 - steelY);
 
-        zincY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matZinc);
-        gig.drawTexturedModalRect(renderX + 51, renderY + 5 + zincY, 43, 1 + zincY, 3, 10 - zincY);
+            tinY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matTin);
+            gig.drawTexturedModalRect(renderX + 26, renderY + 5 + tinY, 19, 1 + tinY, 3, 10 - tinY);
 
-        brassY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matBrass);
-        gig.drawTexturedModalRect(renderX + 58, renderY + 5 + brassY, 49, 1 + brassY, 3, 10 - brassY);
+            pewterY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matPewter);
+            gig.drawTexturedModalRect(renderX + 33, renderY + 5 + pewterY, 25, 1 + pewterY, 3, 10 - pewterY);
 
-        copperY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matCopper);
-        gig.drawTexturedModalRect(renderX + 76, renderY + 5 + copperY, 31, 1 + copperY, 3, 10 - copperY);
+            zincY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matZinc);
+            gig.drawTexturedModalRect(renderX + 51, renderY + 5 + zincY, 31, 1 + zincY, 3, 10 - zincY);
 
-        bronzeY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matBronze);
-        gig.drawTexturedModalRect(renderX + 83, renderY + 5 + bronzeY, 37, 1 + bronzeY, 3, 10 - bronzeY);
+            brassY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matBrass);
+            gig.drawTexturedModalRect(renderX + 58, renderY + 5 + brassY, 37, 1 + brassY, 3, 10 - brassY);
 
-        // Draw the gauges second, so that highlights and decorations show over
-        // the bar.
-        gig.drawTexturedModalRect(renderX, renderY, 0, 0, 5, 20);
-        gig.drawTexturedModalRect(renderX + 7, renderY, 0, 0, 5, 20);
+            copperY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matCopper);
+            gig.drawTexturedModalRect(renderX + 76, renderY + 5 + copperY, 43, 1 + copperY, 3, 10 - copperY);
 
-        gig.drawTexturedModalRect(renderX + 25, renderY, 0, 0, 5, 20);
-        gig.drawTexturedModalRect(renderX + 32, renderY, 0, 0, 5, 20);
+            bronzeY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matBronze);
+            gig.drawTexturedModalRect(renderX + 83, renderY + 5 + bronzeY, 49, 1 + bronzeY, 3, 10 - bronzeY);
 
-        gig.drawTexturedModalRect(renderX + 50, renderY, 0, 0, 5, 20);
-        gig.drawTexturedModalRect(renderX + 57, renderY, 0, 0, 5, 20);
+            // Draw the gauges second, so that highlights and decorations show over
+            // the bar.
+            gig.drawTexturedModalRect(renderX, renderY, 0, 0, 5, 20);
+            gig.drawTexturedModalRect(renderX + 7, renderY, 0, 0, 5, 20);
 
-        gig.drawTexturedModalRect(renderX + 75, renderY, 0, 0, 5, 20);
-        gig.drawTexturedModalRect(renderX + 82, renderY, 0, 0, 5, 20);
+            gig.drawTexturedModalRect(renderX + 25, renderY, 0, 0, 5, 20);
+            gig.drawTexturedModalRect(renderX + 32, renderY, 0, 0, 5, 20);
 
-        if (this.cap.getMetalBurning(AllomancyCapabilities.matIron)) {
-            gig.drawTexturedModalRect(renderX, renderY + 5 + ironY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
-        }
-        if (this.cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
-            gig.drawTexturedModalRect(renderX + 7, renderY + 5 + steelY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
-        }
-        if (this.cap.getMetalBurning(AllomancyCapabilities.matTin)) {
-            gig.drawTexturedModalRect(renderX + 25, renderY + 5 + tinY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
-        }
-        if (this.cap.getMetalBurning(AllomancyCapabilities.matPewter)) {
-            gig.drawTexturedModalRect(renderX + 32, renderY + 5 + pewterY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
-        }
-        if (this.cap.getMetalBurning(AllomancyCapabilities.matZinc)) {
-            gig.drawTexturedModalRect(renderX + 50, renderY + 5 + zincY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
-        }
-        if (this.cap.getMetalBurning(AllomancyCapabilities.matBrass)) {
-            gig.drawTexturedModalRect(renderX + 57, renderY + 5 + brassY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
-        }
-        if (this.cap.getMetalBurning(AllomancyCapabilities.matCopper)) {
-            gig.drawTexturedModalRect(renderX + 75, renderY + 5 + copperY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
-        }
-        if (this.cap.getMetalBurning(AllomancyCapabilities.matBronze)) {
-            gig.drawTexturedModalRect(renderX + 82, renderY + 5 + bronzeY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
-        }
+            gig.drawTexturedModalRect(renderX + 50, renderY, 0, 0, 5, 20);
+            gig.drawTexturedModalRect(renderX + 57, renderY, 0, 0, 5, 20);
 
-        if (this.animationCounter > 6) // Draw the burning symbols...
-        {
-            this.animationCounter = 0;
-            this.currentFrame++;
-            if (this.currentFrame > 3) {
-                this.currentFrame = 0;
+            gig.drawTexturedModalRect(renderX + 75, renderY, 0, 0, 5, 20);
+            gig.drawTexturedModalRect(renderX + 82, renderY, 0, 0, 5, 20);
+
+            if (this.cap.getMetalBurning(AllomancyCapabilities.matIron)) {
+                gig.drawTexturedModalRect(renderX, renderY + 5 + ironY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+            if (this.cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
+                gig.drawTexturedModalRect(renderX + 7, renderY + 5 + steelY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+            if (this.cap.getMetalBurning(AllomancyCapabilities.matTin)) {
+                gig.drawTexturedModalRect(renderX + 25, renderY + 5 + tinY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+            if (this.cap.getMetalBurning(AllomancyCapabilities.matPewter)) {
+                gig.drawTexturedModalRect(renderX + 32, renderY + 5 + pewterY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+            if (this.cap.getMetalBurning(AllomancyCapabilities.matZinc)) {
+                gig.drawTexturedModalRect(renderX + 50, renderY + 5 + zincY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+            if (this.cap.getMetalBurning(AllomancyCapabilities.matBrass)) {
+                gig.drawTexturedModalRect(renderX + 57, renderY + 5 + brassY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+            if (this.cap.getMetalBurning(AllomancyCapabilities.matCopper)) {
+                gig.drawTexturedModalRect(renderX + 75, renderY + 5 + copperY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+            if (this.cap.getMetalBurning(AllomancyCapabilities.matBronze)) {
+                gig.drawTexturedModalRect(renderX + 82, renderY + 5 + bronzeY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+
+            if (this.animationCounter > 6) // Draw the burning symbols...
+            {
+                this.animationCounter = 0;
+                this.currentFrame++;
+                if (this.currentFrame > 3) {
+                    this.currentFrame = 0;
+                }
             }
         }
 
@@ -759,7 +781,7 @@ public class AllomancyEventHandler {
             for (EntityPlayer curPlayer : list) {
                 cap = AllomancyCapabilities.forPlayer(curPlayer);
 
-                if (cap.isMistborn()) {
+                if (cap.getAllomancyPower() >= 0) {
                     // Damage the player if they have stored damage and pewter cuts out
                     if (!cap.getMetalBurning(AllomancyCapabilities.matPewter) && (cap.getDamageStored() > 0)) {
                         cap.setDamageStored(cap.getDamageStored() - 1);
@@ -809,18 +831,26 @@ public class AllomancyEventHandler {
      */
     @SideOnly(Side.CLIENT)
     private void updateBurnTime(AllomancyCapabilities data) {
+        
         for (int i = 0; i < 8; i++) {
-
             if (data.getMetalBurning(i)) {
-                data.setBurnTime(i, data.getBurnTime(i) - 1);
-                if (data.getBurnTime(i) == 0) {
-                    data.setBurnTime(i, data.MaxBurnTime[i]);
-                    data.setMetalAmounts(i, data.getMetalAmounts(i) - 1);
+                
+                if (data.getAllomancyPower() != i && data.getAllomancyPower() != 8) {
+                    //put out any metals that the player shouldn't be able to burn
+                    data.setMetalBurning(i, false);
                     Registry.network.sendToServer(new UpdateBurnPacket(i, data.getMetalBurning(i)));
-                    if (data.getMetalAmounts(i) == 0) {
-                        Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
-                        data.setMetalBurning(i, false);
+                } else {
+                    
+                    data.setBurnTime(i, data.getBurnTime(i) - 1);
+                    if (data.getBurnTime(i) == 0) {
+                        data.setBurnTime(i, data.MaxBurnTime[i]);
+                        data.setMetalAmounts(i, data.getMetalAmounts(i) - 1);
                         Registry.network.sendToServer(new UpdateBurnPacket(i, data.getMetalBurning(i)));
+                        if (data.getMetalAmounts(i) == 0) {
+                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+                            data.setMetalBurning(i, false);
+                            Registry.network.sendToServer(new UpdateBurnPacket(i, data.getMetalBurning(i)));
+                        }
                     }
                 }
 

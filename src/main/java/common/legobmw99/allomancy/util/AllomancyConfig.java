@@ -35,6 +35,8 @@ public class AllomancyConfig {
 		zincMaxY = config.get("Worldgen", "Zinc Max Y", 40).getInt(40);
 		
 		overlayPosition = config.get("Display", "Screen Overlay Position", 0).getInt(0);
+		
+		randomizeMistings = config.get("Gameplay","Spawn players as a random Misting",true).getBoolean(true);
 
 		config.save();
 	}
@@ -43,6 +45,8 @@ public class AllomancyConfig {
 	public static boolean generateTin;
 	public static boolean generateLead;
 	public static boolean generateZinc;
+	
+	public static boolean randomizeMistings;
 	
 	public static int overlayPosition;
 
