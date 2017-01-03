@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ExternalPowerController {
@@ -202,15 +203,19 @@ public class ExternalPowerController {
 	private void move(double directionScalar, Entity toMove, BlockPos vec) {
 
 		double motionX, motionY, motionZ, magnitude;
+		//Calculate the length of the vector between the entity and anchor
 		magnitude = Math.sqrt(Math.pow((toMove.posX - (double) (vec.getX() + .5)), 2)
 				+ Math.pow((toMove.posY - (double) (vec.getY() + .5)), 2)
 				+ Math.pow((toMove.posZ - (double) (vec.getZ() + .5)), 2));
+		//Get a unit(-ish) vector in the direction of motion
 		motionX = ((toMove.posX - (double) (vec.getX() + .5)) * directionScalar * (1.1) / magnitude);
 		motionY = ((toMove.posY - (double) (vec.getY() + .5)) * directionScalar * (1.1) / magnitude);
 		motionZ = ((toMove.posZ - (double) (vec.getZ() + .5)) * directionScalar * (1.1) / magnitude);
-		toMove.motionX = motionX;
-		toMove.motionY = motionY;
-		toMove.motionZ = motionZ;
+		System.out.println(toMove.motionY);
+		//Move along that vector, additively increasing motion until you max out at the above values
+		toMove.motionX = MathHelper.clamp(toMove.motionX + motionX, -Math.abs(motionX), motionX);
+		toMove.motionY = MathHelper.clamp(toMove.motionY + motionY, -Math.abs(motionY), motionY);
+		toMove.motionZ = MathHelper.clamp(toMove.motionZ + motionZ, -Math.abs(motionZ), motionZ);
 
 		if (toMove instanceof EntityPlayer) {
 			Registry.network.sendToServer(new StopFallPacket());

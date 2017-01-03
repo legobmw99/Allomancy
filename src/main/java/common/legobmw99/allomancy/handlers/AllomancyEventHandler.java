@@ -710,17 +710,17 @@ public class AllomancyEventHandler {
         if ((this.cap.getMetalBurning(AllomancyCapabilities.matIron) || this.cap.getMetalBurning(AllomancyCapabilities.matSteel)) && (event instanceof RenderGameOverlayEvent.Post)) {
             for (Entity entity : Allomancy.XPC.particleTargets) {
                 motionX = ((player.posX - entity.posX) * -1) * .03;
-                motionY = (((player.posY - entity.posY + 1.2) * -1) * .03) + .021;
+                motionY = (((player.posY - entity.posY + 1.4) * -1) * .03) + .021;
                 motionZ = ((player.posZ - entity.posZ) * -1) * .03;
-                particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .3d), player.posY - .2, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .3d), motionX, motionY,
+                particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .1d), player.posY + .1, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .1d), motionX, motionY,
                         motionZ, 0);
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle);
             }
             for (BlockPos v : Allomancy.XPC.particleBlockTargets) {
                 motionX = ((player.posX - (v.getX() + .5)) * -1) * .03;
-                motionY = (((player.posY - (v.getY() + .2)) * -1) * .03);
+                motionY = (((player.posY - (v.getY() - .1)) * -1) * .03);
                 motionZ = ((player.posZ - (v.getZ() + .5)) * -1) * .03;
-                particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .3d), player.posY - .2, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .3d), motionX, motionY,
+                particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .1d), player.posY + .1, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .1d), motionX, motionY,
                         motionZ, 0);
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle);
             }
@@ -729,9 +729,9 @@ public class AllomancyEventHandler {
         if ((this.cap.getMetalBurning(AllomancyCapabilities.matBronze) && (event instanceof RenderGameOverlayEvent.Post))) {
             for (EntityPlayer entityplayer : Allomancy.XPC.metalBurners) {
                 motionX = ((player.posX - entityplayer.posX) * -1) * .03;
-                motionY = (((player.posY - entityplayer.posY + 1.2) * -1) * .03) + .021;
+                motionY = (((player.posY - entityplayer.posY + 1.4) * -1) * .03) + .021;
                 motionZ = ((player.posZ - entityplayer.posZ) * -1) * .03;
-                particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .3d), player.posY - .2, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .3d), motionX, motionY,
+                particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .1d), player.posY + .1, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .1d), motionX, motionY,
                         motionZ, 1);
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle);
             }
@@ -821,7 +821,10 @@ public class AllomancyEventHandler {
             }
         }
     }
-
+    
+    
+    //TODO investigate why this does not appear to work/ why am i running it on the client. 
+    //Perhaps ditch update burn, run in worldTick, and use AlloCapPacket?
     /**
      * Ticks down BurnTime and then decrements MetalAmounts
      * 
