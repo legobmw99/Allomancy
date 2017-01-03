@@ -105,7 +105,6 @@ public class AllomancyEventHandler {
             BlockPos bp;
 
             if (cap.getAllomancyPower() >= 0) {
-                this.updateBurnTime(cap);
 
                 if (cap.getMetalBurning(AllomancyCapabilities.matIron) || cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
                     List<Entity> eListMetal;
@@ -234,7 +233,7 @@ public class AllomancyEventHandler {
 
                             if (capOther.getMetalBurning(AllomancyCapabilities.matCopper)) {
                                 Allomancy.XPC.metalBurners.clear();
-                            }else{
+                            } else {
                                 if (capOther.getMetalBurning(AllomancyCapabilities.matIron) || capOther.getMetalBurning(AllomancyCapabilities.matSteel) || capOther.getMetalBurning(AllomancyCapabilities.matTin)
                                         || capOther.getMetalBurning(AllomancyCapabilities.matPewter) || capOther.getMetalBurning(AllomancyCapabilities.matZinc) || capOther.getMetalBurning(AllomancyCapabilities.matBrass)
                                         || capOther.getMetalBurning(AllomancyCapabilities.matBronze)) {
@@ -497,14 +496,14 @@ public class AllomancyEventHandler {
                 /*
                  * TODO investigate this: cap.setMistborn(); if (event.getWorld().isRemote) { cap.setMistborn(); }
                  */
-            } else if(AllomancyConfig.randomizeMistings && cap.getAllomancyPower() == -1){
+            } else if (AllomancyConfig.randomizeMistings && cap.getAllomancyPower() == -1) {
 
-                int randomMisting = (int)(Math.random() * 8);
-                
+                int randomMisting = (int) (Math.random() * 8);
+
                 cap.setAllomancyPower(randomMisting);
                 Registry.network.sendTo(new AllomancyPowerPacket(randomMisting), player);
                 ItemStack dust = new ItemStack(Item.getByNameOrId("allomancy:flake" + Registry.flakeMetals[randomMisting]));
-                //Give the player one flake of their metal
+                // Give the player one flake of their metal
                 if (!player.inventory.addItemStackToInventory(dust)) {
                     EntityItem entity = new EntityItem(event.getEntity().getEntityWorld(), player.posX, player.posY, player.posZ, dust);
                     event.getEntity().getEntityWorld().spawnEntity(entity);
@@ -782,6 +781,10 @@ public class AllomancyEventHandler {
                 cap = AllomancyCapabilities.forPlayer(curPlayer);
 
                 if (cap.getAllomancyPower() >= 0) {
+                    //Run the necessary updates on the player's metals
+                    if (curPlayer instanceof EntityPlayerMP) {
+                        this.updateMetalBurnTime(cap, (EntityPlayerMP) curPlayer);
+                    }
                     // Damage the player if they have stored damage and pewter cuts out
                     if (!cap.getMetalBurning(AllomancyCapabilities.matPewter) && (cap.getDamageStored() > 0)) {
                         cap.setDamageStored(cap.getDamageStored() - 1);
@@ -821,38 +824,33 @@ public class AllomancyEventHandler {
             }
         }
     }
-    
-    
-    //TODO investigate why this does not appear to work/ why am i running it on the client. 
-    //Perhaps ditch update burn, run in worldTick, and use AlloCapPacket?
+
+
     /**
-     * Ticks down BurnTime and then decrements MetalAmounts
+     * Runs each worldTick, checking the burn times, abilities, and metal amounts. Then syncs with the client to make sure everyone is on the same page
      * 
-     * @param data
-     *            the AllomancyCapability data for the player
-     * 
+     * @param cap
+     *            the AllomancyCapabilities data
+     * @param player
+     *            the player being checked
      */
-    @SideOnly(Side.CLIENT)
-    private void updateBurnTime(AllomancyCapabilities data) {
-        
+    private void updateMetalBurnTime(AllomancyCapabilities cap, EntityPlayerMP player) {
         for (int i = 0; i < 8; i++) {
-            if (data.getMetalBurning(i)) {
-                
-                if (data.getAllomancyPower() != i && data.getAllomancyPower() != 8) {
-                    //put out any metals that the player shouldn't be able to burn
-                    data.setMetalBurning(i, false);
-                    Registry.network.sendToServer(new UpdateBurnPacket(i, data.getMetalBurning(i)));
+            if (cap.getMetalBurning(i)) {
+                if (cap.getAllomancyPower() != i && cap.getAllomancyPower() != 8) {
+                    // put out any metals that the player shouldn't be able to burn
+                    cap.setMetalBurning(i, false);
+                    Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, player.getEntityId()), player);
                 } else {
-                    
-                    data.setBurnTime(i, data.getBurnTime(i) - 1);
-                    if (data.getBurnTime(i) == 0) {
-                        data.setBurnTime(i, data.MaxBurnTime[i]);
-                        data.setMetalAmounts(i, data.getMetalAmounts(i) - 1);
-                        Registry.network.sendToServer(new UpdateBurnPacket(i, data.getMetalBurning(i)));
-                        if (data.getMetalAmounts(i) == 0) {
+                    cap.setBurnTime(i, cap.getBurnTime(i) - 1);
+                    if (cap.getBurnTime(i) == 0) {
+                        cap.setBurnTime(i, cap.MaxBurnTime[i]);
+                        cap.setMetalAmounts(i, cap.getMetalAmounts(i) - 1);
+                        Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, player.getEntityId()), player);
+                        if (cap.getMetalAmounts(i) == 0) {
                             Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
-                            data.setMetalBurning(i, false);
-                            Registry.network.sendToServer(new UpdateBurnPacket(i, data.getMetalBurning(i)));
+                            cap.setMetalBurning(i, false);
+                            Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, player.getEntityId()), player);
                         }
                     }
                 }
