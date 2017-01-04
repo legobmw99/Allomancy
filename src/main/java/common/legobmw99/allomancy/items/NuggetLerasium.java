@@ -18,6 +18,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class NuggetLerasium extends ItemFood {
 	public NuggetLerasium() {
@@ -27,10 +29,6 @@ public class NuggetLerasium extends ItemFood {
 		this.setUnlocalizedName("nuggetLerasium");
 		this.setCreativeTab(Registry.tabsAllomancy);
 		this.maxStackSize = 1;
-	}
-
-	public int getHealAmount() {
-		return 0;
 	}
 
 	@Override
@@ -82,9 +80,9 @@ public class NuggetLerasium extends ItemFood {
 		par3List.add("\u00A75Perhaps you should ingest it?");
 	}
 
-	@Override
-	public boolean hasEffect(ItemStack par1ItemStack) {
-		//Add enchantment glint
+    @Override
+    public boolean hasEffect(ItemStack par1ItemStack) {
+        //Add enchantment glint
         return true;
-	}
+    }
 }

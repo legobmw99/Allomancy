@@ -200,7 +200,8 @@ public class Registry {
 				new ModelResourceLocation("allomancy:itemVial.zincelixer", "inventory"),
 				new ModelResourceLocation("allomancy:itemVial.brasselixer", "inventory"),
 				new ModelResourceLocation("allomancy:itemVial.copperelixer", "inventory"),
-				new ModelResourceLocation("allomancy:itemVial.bronzeelixer", "inventory"));
+				new ModelResourceLocation("allomancy:itemVial.bronzeelixer", "inventory"),
+				new ModelResourceLocation("allomancy:itemVial.ultimateelixer", "inventory"));
 		for (int i = 0; i < ItemVial.unlocalName.length; i++) {
 			renderItem.getItemModelMesher().register(itemVial, i,
 					new ModelResourceLocation("allomancy:itemVial." + ItemVial.unlocalName[i], "inventory"));
@@ -235,12 +236,23 @@ public class Registry {
 				new ItemStack(new Item().getByNameOrId("allomancy:flakeCopper")),
 				new ItemStack(new Item().getByNameOrId("allomancy:flakeTin")));
 
-		// Add all the metal vial recipes
-		for (int i = 1; i < ItemVial.unlocalName.length; i++) {
+		// Add the basic eight metal vial recipes 
+		for (int i = 1; i < ItemVial.unlocalName.length - 1; i++) {
 			GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, i),
 					new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[i - 1])),
 					new ItemStack(itemVial, 1, 0));
 		}
+		// Add the ultimate vial recipe 
+	      GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 9),
+                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[0])),
+                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[1])),
+                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[2])),
+                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[3])),
+                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[4])),
+                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[5])),
+                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[6])),
+                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[7])),
+                  new ItemStack(itemVial, 1, 0));
 
 		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1),
 				new Object[] { "W W", "WWW", "WWW", 'W', new ItemStack(Blocks.WOOL, 1, 7) });
