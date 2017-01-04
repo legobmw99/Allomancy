@@ -211,7 +211,6 @@ public class ExternalPowerController {
 		motionX = ((toMove.posX - (double) (vec.getX() + .5)) * directionScalar * (1.1) / magnitude);
 		motionY = ((toMove.posY - (double) (vec.getY() + .5)) * directionScalar * (1.1) / magnitude);
 		motionZ = ((toMove.posZ - (double) (vec.getZ() + .5)) * directionScalar * (1.1) / magnitude);
-		System.out.println(toMove.motionY);
 		//Move along that vector, additively increasing motion until you max out at the above values
 		toMove.motionX = MathHelper.clamp(toMove.motionX + motionX, -Math.abs(motionX), motionX);
 		toMove.motionY = MathHelper.clamp(toMove.motionY + motionY, -Math.abs(motionY), motionY);
