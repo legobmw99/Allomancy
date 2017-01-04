@@ -17,15 +17,15 @@ key.changeGroup=Select Next Group
 
 
 item.itemVial.emptyvial.name=Empty Vial
-item.itemVial.brasselixer.name=Brass Elixer
-item.itemVial.bronzeelixer.name=Bronze Elixer
-item.itemVial.copperelixer.name=Copper Elixer
-item.itemVial.pewterelixer.name=Pewter Elixer
-item.itemVial.tinelixer.name=Tin Elixer
-item.itemVial.ironelixer.name=Iron Elixer
-item.itemVial.steelelixer.name=Steel Elixer
-item.itemVial.zincelixer.name=Zinc Elixer
-item.itemVial.ultimateelixer.name=Ultimate Elixer
+item.itemVial.brasselixer.name=Brass Elixir
+item.itemVial.bronzeelixer.name=Bronze Elixir
+item.itemVial.copperelixer.name=Copper Elixir
+item.itemVial.pewterelixer.name=Pewter Elixir
+item.itemVial.tinelixer.name=Tin Elixir
+item.itemVial.ironelixer.name=Iron Elixir
+item.itemVial.steelelixer.name=Steel Elixir
+item.itemVial.zincelixer.name=Zinc Elixir
+item.itemVial.ultimateelixer.name=Ultimate Elixir
 
 item.flakeBrass.name=Brass Flakes
 item.flakeBronze.name=Bronze Flakes
