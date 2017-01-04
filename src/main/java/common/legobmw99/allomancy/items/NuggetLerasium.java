@@ -10,6 +10,7 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -79,6 +80,12 @@ public class NuggetLerasium extends ItemFood {
 		par3List.add("\u00A75This item is endowed with strange powers");
 		par3List.add("\u00A75Perhaps you should ingest it?");
 	}
+	
+	@Override
+    public EnumRarity getRarity(ItemStack stack)
+    {
+        return EnumRarity.EPIC;
+    }
 
     @Override
     public boolean hasEffect(ItemStack par1ItemStack) {

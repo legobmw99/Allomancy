@@ -6,6 +6,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -109,6 +110,12 @@ public class ItemVial extends Item {
         return "item.itemVial" + "." + unlocalName[meta];
     }
 
+    @Override
+    public EnumRarity getRarity(ItemStack stack)
+    {
+        return stack.getItemDamage() == 9 ? EnumRarity.RARE : EnumRarity.COMMON;
+    }
+    
     @Override
     public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         for (int meta = 0; meta < ItemVial.unlocalName.length; meta++) {
