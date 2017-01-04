@@ -326,7 +326,7 @@ public class AllomancyEventHandler {
      * @param capability
      *            the capability being handled
      */
-    public void toggleMetalBurn(int metal, AllomancyCapabilities capability) {
+    private void toggleMetalBurn(int metal, AllomancyCapabilities capability) {
         Registry.network.sendToServer(new UpdateBurnPacket(metal, !capability.getMetalBurning(metal)));
 
         if (capability.getMetalAmounts(metal) > 0) {
@@ -863,7 +863,7 @@ public class AllomancyEventHandler {
      * This code is based almost entirely on the vanilla code. It's not super well documented, but basically it just runs a ray-trace. Edit at your own peril
      */
     @SideOnly(Side.CLIENT)
-    public static RayTraceResult getMouseOverExtended(float dist) {
+    private static RayTraceResult getMouseOverExtended(float dist) {
         Minecraft mc = FMLClientHandler.instance().getClient();
         Entity theRenderViewEntity = mc.getRenderViewEntity();
         AxisAlignedBB theViewBoundingBox = new AxisAlignedBB(theRenderViewEntity.posX - 0.5D, theRenderViewEntity.posY - 0.0D, theRenderViewEntity.posZ - 0.5D, theRenderViewEntity.posX + 0.5D, theRenderViewEntity.posY + 1.5D,
