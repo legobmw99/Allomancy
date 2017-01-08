@@ -5,6 +5,7 @@ import org.lwjgl.input.Keyboard;
 import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.blocks.OreBlock;
 import common.legobmw99.allomancy.entity.EntityGoldNugget;
+import common.legobmw99.allomancy.entity.EntityIronNugget;
 import common.legobmw99.allomancy.items.ItemCoinBag;
 import common.legobmw99.allomancy.items.ItemGrinder;
 import common.legobmw99.allomancy.items.ItemMistcloak;
@@ -150,9 +151,12 @@ public class Registry {
 	public static void registerRenders() {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
-		// Call on rendersnowball for gold nugget projectile
+		// Call on rendersnowball for nugget projectiles
 		RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class,
 				new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.GOLD_NUGGET, renderItem));
+		
+	      RenderingRegistry.registerEntityRenderingHandler(EntityIronNugget.class,
+	                new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.field_191525_da, renderItem));
 
 		// Register ore models individually.
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreTin), 0,

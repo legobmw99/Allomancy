@@ -10,6 +10,7 @@ import common.legobmw99.allomancy.Allomancy;
 import common.legobmw99.allomancy.common.AllomancyCapabilities;
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.entity.EntityGoldNugget;
+import common.legobmw99.allomancy.entity.EntityIronNugget;
 import common.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import common.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
@@ -116,7 +117,7 @@ public class AllomancyEventHandler {
                     boxMetal = new AxisAlignedBB((player.posX - 10), (player.posY - 10), (player.posZ - 10), (player.posX + 10), (player.posY + 10), (player.posZ + 10));
                     eListMetal = player.world.getEntitiesWithinAABB(Entity.class, boxMetal);
                     for (Entity curEntity : eListMetal) {
-                        if (curEntity != null && (curEntity instanceof EntityItem || curEntity instanceof EntityLiving || curEntity instanceof EntityGoldNugget))
+                        if (curEntity != null && (curEntity instanceof EntityItem || curEntity instanceof EntityLiving || curEntity instanceof EntityGoldNugget || curEntity instanceof EntityIronNugget))
                             Allomancy.XPC.tryAddMetalEntity(curEntity);
                     }
 
