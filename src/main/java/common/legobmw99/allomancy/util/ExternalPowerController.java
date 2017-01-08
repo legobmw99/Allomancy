@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import common.legobmw99.allomancy.common.Registry;
 import common.legobmw99.allomancy.entity.EntityGoldNugget;
+import common.legobmw99.allomancy.entity.EntityIronNugget;
 import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
 import common.legobmw99.allomancy.network.packets.StopFallPacket;
 import net.minecraft.block.Block;
@@ -58,6 +59,7 @@ public class ExternalPowerController {
 		this.metallist.add(Items.COMPASS.getUnlocalizedName());
 		this.metallist.add(Items.FLINT_AND_STEEL.getUnlocalizedName());
 		this.metallist.add(Items.GOLD_NUGGET.getUnlocalizedName());
+	    this.metallist.add(Items.field_191525_da.getUnlocalizedName()); //IRON_NUGGET
 		this.metallist.add(Items.CHAINMAIL_HELMET.getUnlocalizedName());
 		this.metallist.add(Items.GOLDEN_HELMET.getUnlocalizedName());
 		this.metallist.add(Items.IRON_HELMET.getUnlocalizedName());
@@ -170,7 +172,7 @@ public class ExternalPowerController {
 			return;
 		}
 
-		if (entity instanceof EntityGoldNugget) {
+		if (entity instanceof EntityGoldNugget || entity instanceof EntityIronNugget) {
 			this.particleTargets.add(entity);
 			return;
 		}
@@ -212,9 +214,9 @@ public class ExternalPowerController {
 		motionY = ((toMove.posY - (double) (vec.getY() + .5)) * directionScalar * (1.1) / magnitude);
 		motionZ = ((toMove.posZ - (double) (vec.getZ() + .5)) * directionScalar * (1.1) / magnitude);
 		//Move along that vector, additively increasing motion until you max out at the above values
-		toMove.motionX = MathHelper.clamp(toMove.motionX + motionX, -Math.abs(motionX), motionX);
-		toMove.motionY = MathHelper.clamp(toMove.motionY + motionY, -Math.abs(motionY), motionY);
-		toMove.motionZ = MathHelper.clamp(toMove.motionZ + motionZ, -Math.abs(motionZ), motionZ);
+		toMove.motionX = Math.abs(toMove.motionX + motionX) > 0.01 ? MathHelper.clamp(toMove.motionX + motionX, -Math.abs(motionX), motionX) : 0;
+	    toMove.motionY = Math.abs(toMove.motionY + motionY) > 0.01 ? MathHelper.clamp(toMove.motionY + motionY, -Math.abs(motionY), motionY) : 0;
+	    toMove.motionZ = Math.abs(toMove.motionZ + motionZ) > 0.01 ? MathHelper.clamp(toMove.motionZ + motionZ, -Math.abs(motionZ), motionZ) : 0;
 
 		if (toMove instanceof EntityPlayer) {
 			Registry.network.sendToServer(new StopFallPacket());
