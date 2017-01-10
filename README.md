@@ -7,4 +7,4 @@ This mod adds the basics of [Allomancy](http://coppermind.net/wiki/Allomancy) fr
 This mod is currently updated for `Minecraft 1.11.2` and `Forge 13.20.0.2201`
 
 
-**Warning:** This 1.11.2 version is untested. Use at your own discretion and report any issues!
+Please verify and report any issues!
