@@ -1,6 +1,6 @@
 Allomancy 2.5.2
 =========
-[![Build Status](https://drone.io/github.com/legobmw99/Allomancy/status.png)](https://drone.io/github.com/legobmw99/Allomancy/latest)
+[![Build Status](https://drone.io/github.com/legobmw99/Allomancy/status.png)](https://drone.io/github.com/legobmw99/Allomancy/latest) [![](http://cf.way2muchnoise.eu/256282.svg)]
 
 This mod adds the basics of [Allomancy](http://coppermind.net/wiki/Allomancy) from Brandon Sanderson's book series *Mistborn*. 
 
