@@ -36,7 +36,7 @@ public class OreBlock extends Block {
 
 		}
 		this.setCreativeTab(Registry.tabsAllomancy);
-		this.setHarvestLevel("pick", 1);
+		this.setHarvestLevel("pickaxe", 1);
 	}
 
 	public static void init() {
