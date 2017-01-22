@@ -1,4 +1,4 @@
-Allomancy 2.5.2
+Allomancy 2.5.3
 =========
 [![Build Status](https://drone.io/github.com/legobmw99/Allomancy/status.png)](https://drone.io/github.com/legobmw99/Allomancy/latest) [![ CurseForge](http://cf.way2muchnoise.eu/256282.svg)](https://minecraft.curseforge.com/projects/allomancy)
 

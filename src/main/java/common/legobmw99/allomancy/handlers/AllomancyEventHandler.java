@@ -849,7 +849,6 @@ public class AllomancyEventHandler {
                         cap.setMetalAmounts(i, cap.getMetalAmounts(i) - 1);
                         Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, player.getEntityId()), player);
                         if (cap.getMetalAmounts(i) == 0) {
-                            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
                             cap.setMetalBurning(i, false);
                             Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, player.getEntityId()), player);
                         }
