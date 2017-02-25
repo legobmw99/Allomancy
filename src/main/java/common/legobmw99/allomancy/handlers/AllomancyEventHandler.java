@@ -139,7 +139,6 @@ public class AllomancyEventHandler {
                 } else {
                     Allomancy.XPC.particleTargets.clear();
                     Allomancy.XPC.particleBlockTargets.clear();
-                    Allomancy.XPC.particleBlobTargets.clear();
                 }
 
                 if ((player.getHeldItemMainhand().isEmpty()) && (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown())) {
