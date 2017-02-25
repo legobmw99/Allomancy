@@ -35,14 +35,14 @@ public class ExternalPowerController {
 		this.particleTargets = new ArrayList<Entity>();
 		this.particleBlockTargets = new ArrayList<BlockPos>();
 		this.metalBurners = new ArrayList<EntityPlayer>();
-		this.BuildMetalList();
+		this.buildMetalList();
 	}
 
 	/**
 	 * Builds a list of the unlocalized names of every metal item in vanilla and
 	 * the ore dictionary
 	 */
-	public void BuildMetalList() {
+	public void buildMetalList() {
 
 		this.metallist = new ArrayList<String>();
 

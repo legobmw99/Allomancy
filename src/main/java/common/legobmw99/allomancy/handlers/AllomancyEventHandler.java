@@ -38,10 +38,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -106,39 +108,40 @@ public class AllomancyEventHandler {
             BlockPos bp;
 
             if (cap.getAllomancyPower() >= 0) {
-
+                // Populate the metal lists
                 if (cap.getMetalBurning(AllomancyCapabilities.matIron) || cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
-                    List<Entity> eListMetal;
 
-                    Entity target;
-                    AxisAlignedBB boxMetal;
+                    List<Entity> eListMetal;
+                    Iterable<MutableBlockPos> blocks;
+
+                    int xLoc = (int) player.posX;
+                    int yLoc = (int) player.posY;
+                    int zLoc = (int) player.posZ;
+                    BlockPos negative = new BlockPos(xLoc - 10, yLoc - 10, zLoc - 10);
+                    BlockPos positive = new BlockPos(xLoc + 10, yLoc + 10, zLoc + 10);
 
                     // Add entities to metal list
-                    boxMetal = new AxisAlignedBB((player.posX - 10), (player.posY - 10), (player.posZ - 10), (player.posX + 10), (player.posY + 10), (player.posZ + 10));
-                    eListMetal = player.world.getEntitiesWithinAABB(Entity.class, boxMetal);
+                    eListMetal = player.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(negative, positive));
                     for (Entity curEntity : eListMetal) {
                         if (curEntity != null && (curEntity instanceof EntityItem || curEntity instanceof EntityLiving || curEntity instanceof EntityGoldNugget || curEntity instanceof EntityIronNugget))
                             Allomancy.XPC.tryAddMetalEntity(curEntity);
                     }
 
-                    int xLoc, zLoc, yLoc;
-                    xLoc = (int) player.posX;
-                    zLoc = (int) player.posZ;
-                    yLoc = (int) player.posY;
-                    // Add blocks to metal list
-                    for (int x = xLoc - 10; x < (xLoc + 10); x++) {
-                        for (int z = zLoc - 10; z < (zLoc + 10); z++) {
-                            for (int y = yLoc - 10; y < (yLoc + 10); y++) {
-                                bp = new BlockPos(x, y, z);
-                                if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
-                                    Allomancy.XPC.particleBlockTargets.add(bp);
-                                }
-                            }
+                    // Add metal blocks to metal list
+                    blocks = BlockPos.getAllInBoxMutable(negative, positive);
+                    for (MutableBlockPos block : blocks) {
+                        BlockPos imBlock = block.toImmutable();
+                        if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(imBlock).getBlock())) {
+                            Allomancy.XPC.particleBlockTargets.add(imBlock);
                         }
                     }
+
                 } else {
                     Allomancy.XPC.particleTargets.clear();
+                    Allomancy.XPC.particleBlockTargets.clear();
+                    Allomancy.XPC.particleBlobTargets.clear();
                 }
+
                 if ((player.getHeldItemMainhand().isEmpty()) && (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown())) {
                     // Ray trace 20 blocks
                     RayTraceResult mov = getMouseOverExtended(20.0F);
@@ -782,7 +785,7 @@ public class AllomancyEventHandler {
                 cap = AllomancyCapabilities.forPlayer(curPlayer);
 
                 if (cap.getAllomancyPower() >= 0) {
-                    //Run the necessary updates on the player's metals
+                    // Run the necessary updates on the player's metals
                     if (curPlayer instanceof EntityPlayerMP) {
                         this.updateMetalBurnTime(cap, (EntityPlayerMP) curPlayer);
                     }
@@ -825,7 +828,6 @@ public class AllomancyEventHandler {
             }
         }
     }
-
 
     /**
      * Runs each worldTick, checking the burn times, abilities, and metal amounts. Then syncs with the client to make sure everyone is on the same page
