@@ -38,7 +38,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -521,6 +520,7 @@ public class AllomancyEventHandler {
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
         Point[] Frames = { new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12) };
+        String[] Groups = {"Iron and Steel", "Tin and Pewter", "Zinc and Brass","Copper and Bronze"};
 
         if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
             return;
@@ -559,7 +559,7 @@ public class AllomancyEventHandler {
         ScaledResolution res = new ScaledResolution(this.mc);
 
         // Set the offsets of the overlay based on config
-        switch (AllomancyConfig.overlayPosition) {
+        switch (AllomancyConfig.overlayPosition % 4) {
             case 0:
                 renderX = 5;
                 renderY = 10;
@@ -570,11 +570,11 @@ public class AllomancyEventHandler {
                 break;
             case 2:
                 renderX = res.getScaledWidth() - 95;
-                renderY = res.getScaledHeight() - 30;
+                renderY = res.getScaledHeight() - 40;
                 break;
             case 3:
                 renderX = 5;
-                renderY = res.getScaledHeight() - 30;
+                renderY = res.getScaledHeight() - 40;
                 break;
             default:
                 renderX = 5;
@@ -695,6 +695,13 @@ public class AllomancyEventHandler {
             }
             if (this.cap.getMetalBurning(AllomancyCapabilities.matBronze)) {
                 gig.drawTexturedModalRect(renderX + 82, renderY + 5 + bronzeY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+            
+            if(AllomancyConfig.overlayWithText){ //Display text on the overlay if selected
+                if(cap.getSelected() != 0){
+                    String toRender = Groups[cap.getSelected() - 1];
+                    Minecraft.getMinecraft().fontRendererObj.drawString(toRender, renderX - 4, renderY + 25, 0xeeeeee);
+                }
             }
 
             if (this.animationCounter > 6) // Draw the burning symbols...
