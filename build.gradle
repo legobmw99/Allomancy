@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 
 version = "2.5.4" 
-group= "common.legobmw99.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "com.legobmw99.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "allomancy"
 
 if (System.getenv().DRONE_BUILD_NUMBER != null) {//adds the build number to the end of the version string if on a build server
