@@ -520,7 +520,7 @@ public class AllomancyEventHandler {
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
         Point[] Frames = { new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12) };
-        String[] Groups = {"Iron and Steel", "Tin and Pewter", "Zinc and Brass","Copper and Bronze"};
+        String[] Groups = { "Iron and Steel", "Tin and Pewter", "Zinc and Brass", "Copper and Bronze" };
 
         if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
             return;
@@ -696,9 +696,9 @@ public class AllomancyEventHandler {
             if (this.cap.getMetalBurning(AllomancyCapabilities.matBronze)) {
                 gig.drawTexturedModalRect(renderX + 82, renderY + 5 + bronzeY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
             }
-            
-            if(AllomancyConfig.overlayWithText){ //Display text on the overlay if selected
-                if(cap.getSelected() != 0){
+
+            if (AllomancyConfig.overlayWithText) { // Display text on the overlay if selected
+                if (cap.getSelected() != 0) {
                     String toRender = Groups[cap.getSelected() - 1];
                     Minecraft.getMinecraft().fontRendererObj.drawString(toRender, renderX - 4, renderY + 25, 0xeeeeee);
                 }
