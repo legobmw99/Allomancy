@@ -1,7 +1,8 @@
-package common.legobmw99.allomancy.network.packets;
+package com.legobmw99.allomancy.network.packets;
 
-import common.legobmw99.allomancy.common.AllomancyCapabilities;
-import common.legobmw99.allomancy.common.Registry;
+import com.legobmw99.allomancy.common.AllomancyCapabilities;
+import com.legobmw99.allomancy.common.Registry;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

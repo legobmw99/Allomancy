@@ -1,8 +1,9 @@
-package common.legobmw99.allomancy.common;
+package com.legobmw99.allomancy.common;
 
 import java.util.concurrent.Callable;
 
-import common.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.Allomancy;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;

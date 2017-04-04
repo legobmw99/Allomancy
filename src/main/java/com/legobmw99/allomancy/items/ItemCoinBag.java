@@ -1,9 +1,10 @@
-package common.legobmw99.allomancy.items;
+package com.legobmw99.allomancy.items;
 
-import common.legobmw99.allomancy.common.AllomancyCapabilities;
-import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.entity.EntityGoldNugget;
-import common.legobmw99.allomancy.entity.EntityIronNugget;
+import com.legobmw99.allomancy.common.AllomancyCapabilities;
+import com.legobmw99.allomancy.common.Registry;
+import com.legobmw99.allomancy.entity.EntityGoldNugget;
+import com.legobmw99.allomancy.entity.EntityIronNugget;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;

@@ -1,4 +1,4 @@
-package common.legobmw99.allomancy.handlers;
+package com.legobmw99.allomancy.handlers;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,20 +6,21 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
-import common.legobmw99.allomancy.Allomancy;
-import common.legobmw99.allomancy.common.AllomancyCapabilities;
-import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.entity.EntityGoldNugget;
-import common.legobmw99.allomancy.entity.EntityIronNugget;
-import common.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
-import common.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
-import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
-import common.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
-import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
-import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
-import common.legobmw99.allomancy.particle.ParticlePointer;
-import common.legobmw99.allomancy.particle.ParticleSound;
-import common.legobmw99.allomancy.util.AllomancyConfig;
+import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.common.AllomancyCapabilities;
+import com.legobmw99.allomancy.common.Registry;
+import com.legobmw99.allomancy.entity.EntityGoldNugget;
+import com.legobmw99.allomancy.entity.EntityIronNugget;
+import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
+import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
+import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
+import com.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
+import com.legobmw99.allomancy.network.packets.SelectMetalPacket;
+import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
+import com.legobmw99.allomancy.particle.ParticlePointer;
+import com.legobmw99.allomancy.particle.ParticleSound;
+import com.legobmw99.allomancy.util.AllomancyConfig;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.entity.EntityPlayerSP;

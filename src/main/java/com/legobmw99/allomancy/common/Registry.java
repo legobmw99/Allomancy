@@ -1,24 +1,25 @@
-package common.legobmw99.allomancy.common;
+package com.legobmw99.allomancy.common;
 
 import org.lwjgl.input.Keyboard;
 
-import common.legobmw99.allomancy.Allomancy;
-import common.legobmw99.allomancy.blocks.OreBlock;
-import common.legobmw99.allomancy.entity.EntityGoldNugget;
-import common.legobmw99.allomancy.entity.EntityIronNugget;
-import common.legobmw99.allomancy.items.ItemCoinBag;
-import common.legobmw99.allomancy.items.ItemGrinder;
-import common.legobmw99.allomancy.items.ItemMistcloak;
-import common.legobmw99.allomancy.items.ItemVial;
-import common.legobmw99.allomancy.items.NuggetLerasium;
-import common.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
-import common.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
-import common.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
-import common.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
-import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
-import common.legobmw99.allomancy.network.packets.SelectMetalPacket;
-import common.legobmw99.allomancy.network.packets.StopFallPacket;
-import common.legobmw99.allomancy.network.packets.UpdateBurnPacket;
+import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.blocks.OreBlock;
+import com.legobmw99.allomancy.entity.EntityGoldNugget;
+import com.legobmw99.allomancy.entity.EntityIronNugget;
+import com.legobmw99.allomancy.items.ItemCoinBag;
+import com.legobmw99.allomancy.items.ItemGrinder;
+import com.legobmw99.allomancy.items.ItemMistcloak;
+import com.legobmw99.allomancy.items.ItemVial;
+import com.legobmw99.allomancy.items.NuggetLerasium;
+import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
+import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
+import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
+import com.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
+import com.legobmw99.allomancy.network.packets.MoveEntityPacket;
+import com.legobmw99.allomancy.network.packets.SelectMetalPacket;
+import com.legobmw99.allomancy.network.packets.StopFallPacket;
+import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelBakery;

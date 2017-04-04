@@ -1,12 +1,13 @@
-package common.legobmw99.allomancy;
+package com.legobmw99.allomancy;
 
-import common.legobmw99.allomancy.common.AllomancyCapabilities;
-import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.handlers.AllomancyEventHandler;
-import common.legobmw99.allomancy.util.AllomancyConfig;
-import common.legobmw99.allomancy.util.ExternalPowerController;
-import common.legobmw99.allomancy.util.PowerCommand;
-import common.legobmw99.allomancy.world.OreGenerator;
+import com.legobmw99.allomancy.common.AllomancyCapabilities;
+import com.legobmw99.allomancy.common.Registry;
+import com.legobmw99.allomancy.handlers.AllomancyEventHandler;
+import com.legobmw99.allomancy.util.AllomancyConfig;
+import com.legobmw99.allomancy.util.ExternalPowerController;
+import com.legobmw99.allomancy.util.PowerCommand;
+import com.legobmw99.allomancy.world.OreGenerator;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;

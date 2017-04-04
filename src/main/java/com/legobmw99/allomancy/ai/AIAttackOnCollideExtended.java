@@ -1,4 +1,4 @@
-package common.legobmw99.allomancy.ai;
+package com.legobmw99.allomancy.ai;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;

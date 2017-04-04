@@ -1,10 +1,11 @@
-package common.legobmw99.allomancy.items;
+package com.legobmw99.allomancy.items;
 
 import java.util.List;
 
-import common.legobmw99.allomancy.common.AllomancyCapabilities;
-import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
+import com.legobmw99.allomancy.common.AllomancyCapabilities;
+import com.legobmw99.allomancy.common.Registry;
+import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,8 +20,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class NuggetLerasium extends ItemFood {
 	public NuggetLerasium() {

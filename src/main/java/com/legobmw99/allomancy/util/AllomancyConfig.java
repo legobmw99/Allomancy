@@ -1,4 +1,4 @@
-package common.legobmw99.allomancy.util;
+package com.legobmw99.allomancy.util;
 
 import java.io.File;
 

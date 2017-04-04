@@ -1,6 +1,7 @@
-package common.legobmw99.allomancy.network.packets;
+package com.legobmw99.allomancy.network.packets;
 
-import common.legobmw99.allomancy.ai.AIAttackOnCollideExtended;
+import com.legobmw99.allomancy.ai.AIAttackOnCollideExtended;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAICreeperSwell;
@@ -8,7 +9,6 @@ import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAIRunAroundLikeCrazy;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;

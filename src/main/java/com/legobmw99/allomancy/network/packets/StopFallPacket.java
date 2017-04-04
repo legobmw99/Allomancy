@@ -1,4 +1,4 @@
-package common.legobmw99.allomancy.network.packets;
+package com.legobmw99.allomancy.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;

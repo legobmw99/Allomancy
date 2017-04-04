@@ -1,6 +1,7 @@
-package common.legobmw99.allomancy.items;
+package com.legobmw99.allomancy.items;
 
-import java.util.List;
+import com.legobmw99.allomancy.common.AllomancyCapabilities;
+import com.legobmw99.allomancy.common.Registry;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,10 +15,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import common.legobmw99.allomancy.common.AllomancyCapabilities;
-import common.legobmw99.allomancy.common.Registry;
 
 public class ItemVial extends Item {
     public static String[] unlocalName = { "emptyvial", "ironelixer", "steelelixer", "tinelixer", "pewterelixer", "zincelixer", "brasselixer", "copperelixer", "bronzeelixer", "ultimateelixer" };

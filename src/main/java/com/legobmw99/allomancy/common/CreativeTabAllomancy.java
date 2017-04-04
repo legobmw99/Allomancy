@@ -1,7 +1,6 @@
-package common.legobmw99.allomancy.common;
+package com.legobmw99.allomancy.common;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class CreativeTabAllomancy extends CreativeTabs {

@@ -1,12 +1,13 @@
-package common.legobmw99.allomancy.util;
+package com.legobmw99.allomancy.util;
 
 import java.util.ArrayList;
 
-import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.entity.EntityGoldNugget;
-import common.legobmw99.allomancy.entity.EntityIronNugget;
-import common.legobmw99.allomancy.network.packets.MoveEntityPacket;
-import common.legobmw99.allomancy.network.packets.StopFallPacket;
+import com.legobmw99.allomancy.common.Registry;
+import com.legobmw99.allomancy.entity.EntityGoldNugget;
+import com.legobmw99.allomancy.entity.EntityIronNugget;
+import com.legobmw99.allomancy.network.packets.MoveEntityPacket;
+import com.legobmw99.allomancy.network.packets.StopFallPacket;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

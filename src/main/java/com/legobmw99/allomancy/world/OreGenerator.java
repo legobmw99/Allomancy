@@ -1,10 +1,11 @@
-package common.legobmw99.allomancy.world;
+package com.legobmw99.allomancy.world;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import common.legobmw99.allomancy.blocks.OreBlock;
-import common.legobmw99.allomancy.util.AllomancyConfig;
+import com.legobmw99.allomancy.blocks.OreBlock;
+import com.legobmw99.allomancy.util.AllomancyConfig;
+
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;

@@ -1,8 +1,8 @@
-package common.legobmw99.allomancy.items;
+package com.legobmw99.allomancy.items;
+
+import com.legobmw99.allomancy.common.Registry;
 
 import net.minecraft.item.Item;
-
-import common.legobmw99.allomancy.common.Registry;
 
 public class ItemGrinder extends Item {
 

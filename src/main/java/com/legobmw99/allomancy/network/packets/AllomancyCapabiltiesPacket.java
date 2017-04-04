@@ -1,4 +1,6 @@
-package common.legobmw99.allomancy.network.packets;
+package com.legobmw99.allomancy.network.packets;
+
+import com.legobmw99.allomancy.common.AllomancyCapabilities;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -8,8 +10,6 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import common.legobmw99.allomancy.common.AllomancyCapabilities;
 
 public class AllomancyCapabiltiesPacket implements IMessage {
 

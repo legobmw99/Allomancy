@@ -1,15 +1,15 @@
-package common.legobmw99.allomancy.util;
+package com.legobmw99.allomancy.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import common.legobmw99.allomancy.common.AllomancyCapabilities;
-import common.legobmw99.allomancy.common.Registry;
-import common.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
+import com.legobmw99.allomancy.common.AllomancyCapabilities;
+import com.legobmw99.allomancy.common.Registry;
+import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
