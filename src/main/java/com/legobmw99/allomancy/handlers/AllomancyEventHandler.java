@@ -37,6 +37,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -126,7 +127,7 @@ public class AllomancyEventHandler {
                     // Add entities to metal list
                     eListMetal = player.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(negative, positive));
                     for (Entity curEntity : eListMetal) {
-                        if (curEntity != null && (curEntity instanceof EntityItem || curEntity instanceof EntityLiving || curEntity instanceof EntityGoldNugget || curEntity instanceof EntityIronNugget))
+                        if (curEntity != null && (curEntity instanceof EntityItem || curEntity instanceof EntityLiving || curEntity instanceof EntityGoldNugget || curEntity instanceof EntityIronNugget || curEntity instanceof EntityItemFrame))
                             Allomancy.XPC.tryAddMetalEntity(curEntity);
                     }
 
@@ -744,7 +745,7 @@ public class AllomancyEventHandler {
             }
             
             for (BlockPos v : Allomancy.XPC.particleBlockTargets) {
-                drawMetalLine(playerX, playerY, playerZ, v.getX(), v.getY(), v.getZ(), 1, 0F, 0.6F, 1F);
+                drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY() + 0.5, v.getZ() + 0.5, 1, 0F, 0.6F, 1F);
             }
         }
 
@@ -776,7 +777,7 @@ public class AllomancyEventHandler {
         GL11.glBegin(GL11.GL_LINE_STRIP);
 
         GL11.glVertex3d(pX, pY + 1.2, pZ);
-        GL11.glVertex3d(oX + 0.5, oY + .5, oZ + 0.5);
+        GL11.glVertex3d(oX , oY , oZ);
 
         GL11.glEnd();
         GL11.glPopAttrib();
