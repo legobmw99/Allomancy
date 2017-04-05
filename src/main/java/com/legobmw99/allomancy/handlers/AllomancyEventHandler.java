@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.handlers;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +28,11 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -53,8 +58,10 @@ import net.minecraft.world.storage.loot.LootEntryTable;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
@@ -79,6 +86,8 @@ public class AllomancyEventHandler {
 
     private int currentFrame = 0;
 
+    private final int max = 12;
+
     @SubscribeEvent
     public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof EntityPlayer && !event.getObject().hasCapability(Allomancy.PLAYER_CAP, null)) {
@@ -86,13 +95,6 @@ public class AllomancyEventHandler {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onBlockBreak(BreakEvent event) {
-        if (Allomancy.XPC.isBlockMetal(event.getState().getBlock())) {
-            Allomancy.XPC.particleBlockTargets.clear();
-        }
-    }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
@@ -110,15 +112,17 @@ public class AllomancyEventHandler {
             if (cap.getAllomancyPower() >= 0) {
                 // Populate the metal lists
                 if (cap.getMetalBurning(AllomancyCapabilities.matIron) || cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
+                    Allomancy.XPC.particleBlockTargets.clear();
+                    Allomancy.XPC.particleTargets.clear();
 
                     List<Entity> eListMetal;
-                    Iterable<MutableBlockPos> blocks;
+                    Iterable<BlockPos> blocks;
 
                     int xLoc = (int) player.posX;
                     int yLoc = (int) player.posY;
                     int zLoc = (int) player.posZ;
-                    BlockPos negative = new BlockPos(xLoc - 10, yLoc - 10, zLoc - 10);
-                    BlockPos positive = new BlockPos(xLoc + 10, yLoc + 10, zLoc + 10);
+                    BlockPos negative = new BlockPos(xLoc - max, yLoc - max, zLoc - max);
+                    BlockPos positive = new BlockPos(xLoc + max, yLoc + max, zLoc + max);
 
                     // Add entities to metal list
                     eListMetal = player.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(negative, positive));
@@ -128,17 +132,14 @@ public class AllomancyEventHandler {
                     }
 
                     // Add metal blocks to metal list
-                    blocks = BlockPos.getAllInBoxMutable(negative, positive);
-                    for (MutableBlockPos block : blocks) {
+                    blocks = BlockPos.getAllInBox(negative, positive);
+                    for (BlockPos block : blocks) {
                         BlockPos imBlock = block.toImmutable();
                         if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(imBlock).getBlock())) {
                             Allomancy.XPC.particleBlockTargets.add(imBlock);
                         }
                     }
 
-                } else {
-                    Allomancy.XPC.particleTargets.clear();
-                    Allomancy.XPC.particleBlockTargets.clear();
                 }
 
                 if ((player.getHeldItemMainhand().isEmpty()) && (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown())) {
@@ -530,7 +531,6 @@ public class AllomancyEventHandler {
         this.mc = Minecraft.getMinecraft();
         this.meterLoc = new ResourceLocation("allomancy", "textures/overlay/meter.png");
 
-        ParticlePointer particle;
         if (!Minecraft.getMinecraft().inGameHasFocus) {
             return;
         }
@@ -715,38 +715,73 @@ public class AllomancyEventHandler {
             }
         }
 
-        double motionX, motionY, motionZ;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onRenderWorldLast(RenderWorldLastEvent event) {
+        this.mc = Minecraft.getMinecraft();
+        EntityPlayerSP player = this.mc.player;
+        if (player == null) {
+            return;
+        }
+
+        cap = AllomancyCapabilities.forPlayer(player);
+
+        if (cap.getAllomancyPower() < 0) {
+            return;
+        }
+        
+        double playerX = player.prevPosX + (player.posX - player.prevPosX) * event.getPartialTicks();
+        double playerY = player.prevPosY + (player.posY - player.prevPosY) * event.getPartialTicks();
+        double playerZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.getPartialTicks();
+
         // Spawn in metal particles
-        if ((this.cap.getMetalBurning(AllomancyCapabilities.matIron) || this.cap.getMetalBurning(AllomancyCapabilities.matSteel)) && (event instanceof RenderGameOverlayEvent.Post)) {
+        if ((this.cap.getMetalBurning(AllomancyCapabilities.matIron) || this.cap.getMetalBurning(AllomancyCapabilities.matSteel))) {
+
+            
+
+            List<BlockPos> toRemove = new ArrayList<BlockPos>();
+
             for (Entity entity : Allomancy.XPC.particleTargets) {
-                motionX = ((player.posX - entity.posX) * -1) * .03;
-                motionY = (((player.posY - entity.posY + 1.4) * -1) * .03) + .021;
-                motionZ = ((player.posZ - entity.posZ) * -1) * .03;
-                particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .1d), player.posY + .1, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .1d), motionX, motionY,
-                        motionZ, 0);
-                Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+                drawMetalLine(playerX, playerY, playerZ, entity.posX, entity.posY, entity.posZ);
             }
             for (BlockPos v : Allomancy.XPC.particleBlockTargets) {
-                motionX = ((player.posX - (v.getX() + .5)) * -1) * .03;
-                motionY = (((player.posY - (v.getY() - .1)) * -1) * .03);
-                motionZ = ((player.posZ - (v.getZ() + .5)) * -1) * .03;
-                particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .1d), player.posY + .1, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .1d), motionX, motionY,
-                        motionZ, 0);
-                Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+                drawMetalLine(playerX, playerY, playerZ, v.getX(), v.getY(), v.getZ());
             }
-            Allomancy.XPC.particleBlockTargets.clear();
         }
-        if ((this.cap.getMetalBurning(AllomancyCapabilities.matBronze) && (event instanceof RenderGameOverlayEvent.Post))) {
+        
+        double x, y, z; // TODO: update this as well
+        if ((this.cap.getMetalBurning(AllomancyCapabilities.matBronze))) {
             for (EntityPlayer entityplayer : Allomancy.XPC.metalBurners) {
-                motionX = ((player.posX - entityplayer.posX) * -1) * .03;
-                motionY = (((player.posY - entityplayer.posY + 1.4) * -1) * .03) + .021;
-                motionZ = ((player.posZ - entityplayer.posZ) * -1) * .03;
-                particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .1d), player.posY + .1, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .1d), motionX, motionY,
-                        motionZ, 1);
+                x = ((player.posX - entityplayer.posX) * -1) * .03;
+                y = (((player.posY - entityplayer.posY + 1.4) * -1) * .03) + .021;
+                z = ((player.posZ - entityplayer.posZ) * -1) * .03;
+                ParticlePointer particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .1d), player.posY + .1, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .1d), x, y,
+                        z, 1);
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle);
             }
-
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void drawMetalLine(double pX, double pY, double pZ, double oX, double oY, double oZ) {
+        GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glTranslated(-pX, -pY, -pZ);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+        GL11.glColor3f(0F, 0.6F, 1F);
+
+        GL11.glBegin(GL11.GL_LINE_STRIP);
+
+        GL11.glVertex3d(pX, pY + 1.2, pZ);
+        GL11.glVertex3d(oX + 0.5, oY + .5, oZ + 0.5);
+
+        GL11.glEnd();
+        GL11.glPopAttrib();
+        GL11.glPopMatrix();
     }
 
     @SideOnly(Side.CLIENT)
