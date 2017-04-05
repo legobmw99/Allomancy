@@ -95,7 +95,6 @@ public class AllomancyEventHandler {
         }
     }
 
-
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -227,6 +226,7 @@ public class AllomancyEventHandler {
                 if (cap.getMetalBurning(AllomancyCapabilities.matBronze) && !cap.getMetalBurning(AllomancyCapabilities.matCopper)) {
                     AxisAlignedBB boxBurners;
                     List<Entity> eListBurners;
+                    Allomancy.XPC.metalBurners.clear();
                     // Add metal burners to a list
                     boxBurners = new AxisAlignedBB((player.posX - 30), (player.posY - 30), (player.posZ - 30), (player.posX + 30), (player.posY + 30), (player.posZ + 30));
                     eListBurners = player.world.getEntitiesWithinAABB(Entity.class, boxBurners);
@@ -236,7 +236,7 @@ public class AllomancyEventHandler {
                             AllomancyCapabilities capOther = AllomancyCapabilities.forPlayer(curEntity);
 
                             if (capOther.getMetalBurning(AllomancyCapabilities.matCopper)) {
-                                Allomancy.XPC.metalBurners.clear();
+                                Allomancy.XPC.metalBurners.remove((EntityPlayer) curEntity);
                             } else {
                                 if (capOther.getMetalBurning(AllomancyCapabilities.matIron) || capOther.getMetalBurning(AllomancyCapabilities.matSteel) || capOther.getMetalBurning(AllomancyCapabilities.matTin)
                                         || capOther.getMetalBurning(AllomancyCapabilities.matPewter) || capOther.getMetalBurning(AllomancyCapabilities.matZinc) || capOther.getMetalBurning(AllomancyCapabilities.matBrass)
@@ -731,48 +731,47 @@ public class AllomancyEventHandler {
         if (cap.getAllomancyPower() < 0) {
             return;
         }
-        
+
         double playerX = player.prevPosX + (player.posX - player.prevPosX) * event.getPartialTicks();
         double playerY = player.prevPosY + (player.posY - player.prevPosY) * event.getPartialTicks();
         double playerZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.getPartialTicks();
 
-        // Spawn in metal particles
+        // Iron and Steel lines
         if ((this.cap.getMetalBurning(AllomancyCapabilities.matIron) || this.cap.getMetalBurning(AllomancyCapabilities.matSteel))) {
 
-            
-
-            List<BlockPos> toRemove = new ArrayList<BlockPos>();
-
             for (Entity entity : Allomancy.XPC.particleTargets) {
-                drawMetalLine(playerX, playerY, playerZ, entity.posX, entity.posY, entity.posZ);
+                drawMetalLine(playerX, playerY, playerZ, entity.posX, entity.posY, entity.posZ, 1, 0F, 0.6F, 1F);
             }
+            
             for (BlockPos v : Allomancy.XPC.particleBlockTargets) {
-                drawMetalLine(playerX, playerY, playerZ, v.getX(), v.getY(), v.getZ());
+                drawMetalLine(playerX, playerY, playerZ, v.getX(), v.getY(), v.getZ(), 1, 0F, 0.6F, 1F);
             }
         }
-        
-        double x, y, z; // TODO: update this as well
-        if ((this.cap.getMetalBurning(AllomancyCapabilities.matBronze))) {
+
+        if ((cap.getMetalBurning(AllomancyCapabilities.matBronze))) {
             for (EntityPlayer entityplayer : Allomancy.XPC.metalBurners) {
-                x = ((player.posX - entityplayer.posX) * -1) * .03;
-                y = (((player.posY - entityplayer.posY + 1.4) * -1) * .03) + .021;
-                z = ((player.posZ - entityplayer.posZ) * -1) * .03;
+
+                drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY, entityplayer.posZ, 1, 1F, 0.15F, 0.15F);
+                double x = ((player.posX - entityplayer.posX) * -1) * .03;
+                double y = (((player.posY - entityplayer.posY + 1.4) * -1) * .03) + .021;
+                double z = ((player.posZ - entityplayer.posZ) * -1) * .03;
                 ParticlePointer particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .1d), player.posY + .1, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .1d), x, y,
-                        z, 1);
+                        z);
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle);
             }
         }
     }
 
     @SideOnly(Side.CLIENT)
-    private void drawMetalLine(double pX, double pY, double pZ, double oX, double oY, double oZ) {
+    private void drawMetalLine(double pX, double pY, double pZ, double oX, double oY, double oZ, float width, float r, float g, float b) {
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glTranslated(-pX, -pY, -pZ);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-        GL11.glColor3f(0F, 0.6F, 1F);
+        // GL11.glLineWidth(width);
+        GL11.glColor3f(r, g, b);
 
         GL11.glBegin(GL11.GL_LINE_STRIP);
 

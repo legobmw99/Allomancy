@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 
 
-version = "2.5.4" 
+version = "2.6.0" 
 group= "com.legobmw99.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "allomancy"
 

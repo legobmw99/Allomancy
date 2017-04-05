@@ -5,37 +5,35 @@ import net.minecraft.world.World;
 
 public class ParticlePointer extends Particle {
 
-	public ParticlePointer(World world, double x, double y,double z, double motionX, double motionY, double motionZ, int type) {
-		
-		super(world, x, y + 1, z, motionX, motionY, motionZ);
+    public ParticlePointer(World world, double x, double y, double z, double motionX, double motionY, double motionZ) {
 
-		this.particleScale = .5f;
-		this.setParticleTextureIndex(97);
-		this.motionX = motionX;
-		this.motionY = motionY;
-		this.motionZ = motionZ;
-		this.particleMaxAge = 30;
-		this.canCollide = false; 
-		
-		if(type == 1){
-			this.particleGreen = 0.15F;
-			this.particleBlue = 0.15F;
-			this.particleRed = 1;
-		}
+        super(world, x, y + 1, z, motionX, motionY, motionZ);
 
-	}
+        this.particleScale = .5f;
+        this.setParticleTextureIndex(97);
+        this.motionX = motionX;
+        this.motionY = motionY;
+        this.motionZ = motionZ;
+        this.particleMaxAge = 30;
+        this.canCollide = false;
 
-	@Override
-	public void onUpdate() {
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
+        this.particleGreen = 0.15F;
+        this.particleBlue = 0.15F;
+        this.particleRed = 1;
 
-		if (this.particleAge++ >= this.particleMaxAge) {
-			this.setExpired();
-		}
+    }
 
-		this.move(this.motionX, this.motionY, this.motionZ);
+    @Override
+    public void onUpdate() {
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
 
-	}
+        if (this.particleAge++ >= this.particleMaxAge) {
+            this.setExpired();
+        }
+
+        this.move(this.motionX, this.motionY, this.motionZ);
+
+    }
 }
