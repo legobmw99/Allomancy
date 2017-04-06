@@ -31,6 +31,9 @@ public class AllomancyConfig {
 
         overlayPosition = config.get("Display", "Screen Overlay Position", 0).getInt(0);
         overlayWithText = config.get("Display", "Add Text to Overlay", false).getBoolean(false);
+        
+        maxDrawLine = config.get("Graphics", "Max iron/steelsight distance", 12).getInt(12);
+
 
         randomizeMistings = config.get("Gameplay", "Spawn players as a random Misting", true).getBoolean(true);
 
@@ -41,6 +44,8 @@ public class AllomancyConfig {
     public static boolean generateTin;
     public static boolean generateLead;
     public static boolean generateZinc;
+    
+    public static int maxDrawLine;
 
     public static boolean randomizeMistings;
 

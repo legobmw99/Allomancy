@@ -87,8 +87,6 @@ public class AllomancyEventHandler {
 
     private int currentFrame = 0;
 
-    private final int max = 12;
-
     @SubscribeEvent
     public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof EntityPlayer && !event.getObject().hasCapability(Allomancy.PLAYER_CAP, null)) {
@@ -102,12 +100,10 @@ public class AllomancyEventHandler {
         // Run once per tick, only if in game, and only if there is a player
         if (event.phase == TickEvent.Phase.END && (!Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().player != null)) {
 
-            EntityPlayerSP player;
-            player = Minecraft.getMinecraft().player;
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
             AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
-            RayTraceResult ray;
-            RayTraceResult mop;
-            BlockPos bp;
+
+            int max = AllomancyConfig.maxDrawLine;
 
             if (cap.getAllomancyPower() >= 0) {
                 // Populate the metal lists
@@ -152,10 +148,10 @@ public class AllomancyEventHandler {
                                 Allomancy.XPC.tryPullEntity(mov.entityHit);
                             }
                         }
-                        ray = player.rayTrace(20.0F, 0.0F);
+                        RayTraceResult ray = player.rayTrace(20.0F, 0.0F);
                         if (ray != null) {
                             if (ray.typeOfHit == RayTraceResult.Type.BLOCK || ray.typeOfHit == RayTraceResult.Type.MISS) {
-                                bp = ray.getBlockPos();
+                               BlockPos bp = ray.getBlockPos();
                                 if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
                                     Allomancy.XPC.tryPullBlock(bp);
                                 }
@@ -186,12 +182,12 @@ public class AllomancyEventHandler {
                                 Allomancy.XPC.tryPushEntity(mov.entityHit);
                             }
                         }
-                        ray = player.rayTrace(20.0F, 0.0F);
+                        RayTraceResult ray = player.rayTrace(20.0F, 0.0F);
                         if (ray != null) {
 
                             if (ray.typeOfHit == RayTraceResult.Type.BLOCK || ray.typeOfHit == RayTraceResult.Type.MISS) {
 
-                                bp = ray.getBlockPos();
+                                BlockPos bp = ray.getBlockPos();
                                 if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
                                     Allomancy.XPC.tryPushBlock(bp);
                                 }
@@ -476,9 +472,6 @@ public class AllomancyEventHandler {
             AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.getEntityPlayer()); // the clone's cap
             if (oldCap.getAllomancyPower() >= 0) {
                 cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
-                /*
-                 * TODO investigate this: if (event.getEntityPlayer().world.isRemote) { cap.setMistborn(); }
-                 */
                 Registry.network.sendTo(new AllomancyPowerPacket(oldCap.getAllomancyPower()), (EntityPlayerMP) event.getEntity());
             }
             if (event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory")) { // if keepInventory is true, allow them to keep their metals, too
@@ -498,9 +491,6 @@ public class AllomancyEventHandler {
             Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, event.getEntity().getEntityId()), player);
             if (cap.getAllomancyPower() >= 0) {
                 Registry.network.sendTo(new AllomancyPowerPacket(cap.getAllomancyPower()), player);
-                /*
-                 * TODO investigate this: cap.setMistborn(); if (event.getWorld().isRemote) { cap.setMistborn(); }
-                 */
             } else if (AllomancyConfig.randomizeMistings && cap.getAllomancyPower() == -1) {
 
                 int randomMisting = (int) (Math.random() * 8);
@@ -741,18 +731,18 @@ public class AllomancyEventHandler {
         if ((this.cap.getMetalBurning(AllomancyCapabilities.matIron) || this.cap.getMetalBurning(AllomancyCapabilities.matSteel))) {
 
             for (Entity entity : Allomancy.XPC.particleTargets) {
-                drawMetalLine(playerX, playerY, playerZ, entity.posX, entity.posY, entity.posZ, 1, 0F, 0.6F, 1F);
+                drawMetalLine(playerX, playerY, playerZ, entity.posX, entity.posY, entity.posZ, 1F, 0F, 0.6F, 1F);
             }
-            
+
             for (BlockPos v : Allomancy.XPC.particleBlockTargets) {
-                drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY() + 0.5, v.getZ() + 0.5, 1, 0F, 0.6F, 1F);
+                drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY() + 0.5, v.getZ() + 0.5, 1F, 0F, 0.6F, 1F);
             }
         }
 
         if ((cap.getMetalBurning(AllomancyCapabilities.matBronze))) {
             for (EntityPlayer entityplayer : Allomancy.XPC.metalBurners) {
 
-                drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY, entityplayer.posZ, 1, 1F, 0.15F, 0.15F);
+                //drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY, entityplayer.posZ, 1, 1F, 0.15F, 0.15F);
                 double x = ((player.posX - entityplayer.posX) * -1) * .03;
                 double y = (((player.posY - entityplayer.posY + 1.4) * -1) * .03) + .021;
                 double z = ((player.posZ - entityplayer.posZ) * -1) * .03;
@@ -771,13 +761,13 @@ public class AllomancyEventHandler {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-        // GL11.glLineWidth(width);
+        GL11.glLineWidth(width);
         GL11.glColor3f(r, g, b);
 
         GL11.glBegin(GL11.GL_LINE_STRIP);
 
         GL11.glVertex3d(pX, pY + 1.2, pZ);
-        GL11.glVertex3d(oX , oY , oZ);
+        GL11.glVertex3d(oX, oY, oZ);
 
         GL11.glEnd();
         GL11.glPopAttrib();
