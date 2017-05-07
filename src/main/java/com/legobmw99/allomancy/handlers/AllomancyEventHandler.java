@@ -151,7 +151,7 @@ public class AllomancyEventHandler {
                         RayTraceResult ray = player.rayTrace(20.0F, 0.0F);
                         if (ray != null) {
                             if (ray.typeOfHit == RayTraceResult.Type.BLOCK || ray.typeOfHit == RayTraceResult.Type.MISS) {
-                               BlockPos bp = ray.getBlockPos();
+                                BlockPos bp = ray.getBlockPos();
                                 if (Allomancy.XPC.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
                                     Allomancy.XPC.tryPullBlock(bp);
                                 }
@@ -467,17 +467,16 @@ public class AllomancyEventHandler {
 
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event) {
-        if (event.isWasDeath()) {
-            AllomancyCapabilities oldCap = AllomancyCapabilities.forPlayer(event.getOriginal()); // the dead player's cap
-            AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.getEntityPlayer()); // the clone's cap
-            if (oldCap.getAllomancyPower() >= 0) {
-                cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
-                Registry.network.sendTo(new AllomancyPowerPacket(oldCap.getAllomancyPower()), (EntityPlayerMP) event.getEntity());
-            }
-            if (event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory")) { // if keepInventory is true, allow them to keep their metals, too
-                for (int i = 0; i < 8; i++) {
-                    cap.setMetalAmounts(i, oldCap.getMetalAmounts(i));
-                }
+
+        AllomancyCapabilities oldCap = AllomancyCapabilities.forPlayer(event.getOriginal()); // the dead player's cap
+        AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(event.getEntityPlayer()); // the clone's cap
+        if (oldCap.getAllomancyPower() >= 0) {
+            cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
+            Registry.network.sendTo(new AllomancyPowerPacket(oldCap.getAllomancyPower()), (EntityPlayerMP) event.getEntity());
+        }
+        if (event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory")) { // if keepInventory is true, allow them to keep their metals, too
+            for (int i = 0; i < 8; i++) {
+                cap.setMetalAmounts(i, oldCap.getMetalAmounts(i));
             }
         }
 
@@ -742,7 +741,7 @@ public class AllomancyEventHandler {
         if ((cap.getMetalBurning(AllomancyCapabilities.matBronze))) {
             for (EntityPlayer entityplayer : Allomancy.XPC.metalBurners) {
 
-                //drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY, entityplayer.posZ, 1, 1F, 0.15F, 0.15F);
+                // drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY, entityplayer.posZ, 1, 1F, 0.15F, 0.15F);
                 double x = ((player.posX - entityplayer.posX) * -1) * .03;
                 double y = (((player.posY - entityplayer.posY + 1.4) * -1) * .03) + .021;
                 double z = ((player.posZ - entityplayer.posZ) * -1) * .03;
@@ -753,6 +752,12 @@ public class AllomancyEventHandler {
         }
     }
 
+    /**
+     * Draws a line from the player (denoted pX,Y,Z) to the given set of coordinates (oX,Y,Z) in a certain color (r,g,b)
+     * 
+     * @param width
+     *            the width of the line
+     */
     @SideOnly(Side.CLIENT)
     private void drawMetalLine(double pX, double pY, double pZ, double oX, double oY, double oZ, float width, float r, float g, float b) {
         GL11.glPushMatrix();
