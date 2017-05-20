@@ -25,6 +25,7 @@ import com.legobmw99.allomancy.common.AllomancyCapabilities;
 import com.legobmw99.allomancy.common.Registry;
 import com.legobmw99.allomancy.handlers.AllomancyEventHandler;
 import com.legobmw99.allomancy.network.packets.SelectMetalPacket;
+import com.legobmw99.allomancy.util.AllomancyConfig;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -37,8 +38,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
 public class GUIMetalSelect  extends GuiScreen {
-
-
 
     public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze" };
     public static final String GUI_SIGN = "allomancy:textures/gui/signs/sign%d.png";
@@ -54,10 +53,8 @@ public class GUIMetalSelect  extends GuiScreen {
     };
 
 
-    int timeIn = 0;
+    int timeIn = AllomancyConfig.animateSelection ? 0 : 10; //Config setting for whether the wheel animates open or instantly appears
     int slotSelected = -1;
-
-    int controlSlot;
 
     List<Integer> slots;
 
@@ -186,7 +183,6 @@ public class GUIMetalSelect  extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-
     }
 
     @Override
@@ -235,7 +231,4 @@ public class GUIMetalSelect  extends GuiScreen {
         float ang = (float) (Math.acos(Vector2f.dot(baseVec, mouseVec) / (baseVec.length() * mouseVec.length())) * (180F / Math.PI));
         return my < y ? 360F - ang : ang;
     }
-    
-    
-
 }

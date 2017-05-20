@@ -426,6 +426,9 @@ public class AllomancyEventHandler {
         }
     }
     
+    /**
+     * Draws the overlay for the metals
+     */
     private void drawMetalOverlay(){
         Point[] Frames = { new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12) };
         String[] Groups = { "Iron and Steel", "Tin and Pewter", "Zinc and Brass", "Copper and Bronze" };
@@ -612,8 +615,8 @@ public class AllomancyEventHandler {
     
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void onRenderGUIScreen(GuiScreenEvent event){
-        if(event.getGui() instanceof GUIMetalSelect){
+    public void onRenderGUIScreen(GuiScreenEvent.DrawScreenEvent event){
+        if(event.getGui() instanceof GUIMetalSelect && !event.isCancelable()){
             drawMetalOverlay();
         }
     }
