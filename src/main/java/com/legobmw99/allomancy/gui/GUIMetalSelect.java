@@ -106,8 +106,12 @@ public class GUIMetalSelect  extends GuiScreen {
             GL11.glBegin(GL11.GL_TRIANGLE_FAN);
 
             float gs =  0.3F;
+            
             if(seg % 2 == 1)
                 gs += 0.25F;
+            
+            gs = cap.getMetalAmounts((seg + 4)%8) == 0 ? 0 : gs;
+            
             float r = cap.getMetalBurning((seg + 4) % 8) ? 1.0F : gs;
             float g = gs;
             float b = gs;
@@ -126,6 +130,8 @@ public class GUIMetalSelect  extends GuiScreen {
                 double yp = y + Math.sin(rad) * radius;
                 if(i == (int) (degPer / 2)){
                     stringPositions.add(new int[] { seg, (int) xp, (int) yp, mouseInSector ? 'n' : 'r' });
+                    stringPositions.add(new int[] { seg, (int) xp, (int) yp, cap.getMetalAmounts((seg + 4)%8) == 0 ? '7' : 'f' }); //Mark unused ones as disabled
+
                 }
                 GL11.glVertex2d(xp, yp);
             }
