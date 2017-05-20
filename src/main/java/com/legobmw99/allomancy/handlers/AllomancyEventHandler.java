@@ -12,6 +12,7 @@ import com.legobmw99.allomancy.common.AllomancyCapabilities;
 import com.legobmw99.allomancy.common.Registry;
 import com.legobmw99.allomancy.entity.EntityGoldNugget;
 import com.legobmw99.allomancy.entity.EntityIronNugget;
+import com.legobmw99.allomancy.gui.GUIMetalSelect;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
@@ -60,6 +61,7 @@ import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -327,7 +329,7 @@ public class AllomancyEventHandler {
      * @param capability
      *            the capability being handled
      */
-    private void toggleMetalBurn(int metal, AllomancyCapabilities capability) {
+    public static void toggleMetalBurn(int metal, AllomancyCapabilities capability) {
         Registry.network.sendToServer(new UpdateBurnPacket(metal, !capability.getMetalBurning(metal)));
 
         if (capability.getMetalAmounts(metal) > 0) {
@@ -344,30 +346,13 @@ public class AllomancyEventHandler {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
-        if (Registry.changeGroup.isPressed()) {
-            EntityPlayerSP player;
-            player = Minecraft.getMinecraft().player;
-            Minecraft mc = FMLClientHandler.instance().getClient();
-            if (mc.currentScreen == null) {
-                if ((player == null) || !Minecraft.getMinecraft().inGameHasFocus) {
-                    return;
-                }
-                AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
-                // Only applicable if the player is a full Mistborn
-                if (cap.getAllomancyPower() == 8) {
-                    Registry.network.sendToServer(new SelectMetalPacket(cap.getSelected() + 1));
-                    cap.setSelected(cap.getSelected() + 1);
-                    Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("ui.button.click")), 0.1F, 2.0F);
-                }
-            }
-        }
-        if (Registry.burnFirst.isPressed()) {
+        if (Registry.burn.isPressed()) {
             EntityPlayerSP player;
             player = Minecraft.getMinecraft().player;
             AllomancyCapabilities cap;
             Minecraft mc = FMLClientHandler.instance().getClient();
             if (mc.currentScreen == null) {
-                if (player == null) {
+                if (player == null || !Minecraft.getMinecraft().inGameHasFocus) {
                     return;
                 }
                 cap = AllomancyCapabilities.forPlayer(player);
@@ -379,78 +364,11 @@ public class AllomancyEventHandler {
                 }
 
                 /*
-                 * If the player is a full Mistborn, it matters what they have selected
+                 * If the player is a full Mistborn, display the GUI
                  */
                 if (cap.getAllomancyPower() == 8) {
-                    switch (cap.getSelected()) {
-                        case 1:
-                            // toggle iron.
-                            this.toggleMetalBurn(AllomancyCapabilities.matIron, cap);
-                            break;
-                        case 2:
-                            // toggle Tin.
+                    mc.displayGuiScreen(new GUIMetalSelect());
 
-                            this.toggleMetalBurn(AllomancyCapabilities.matTin, cap);
-                            break;
-                        case 3:
-                            // toggle Zinc.
-
-                            this.toggleMetalBurn(AllomancyCapabilities.matZinc, cap);
-                            break;
-                        case 4:
-                            // toggle Copper.
-                            this.toggleMetalBurn(AllomancyCapabilities.matCopper, cap);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-        if (Registry.burnSecond.isPressed()) {
-            EntityPlayerSP player;
-            player = Minecraft.getMinecraft().player;
-            AllomancyCapabilities cap;
-            Minecraft mc = FMLClientHandler.instance().getClient();
-            if (mc.currentScreen == null) {
-                if (player == null) {
-                    return;
-                }
-                cap = AllomancyCapabilities.forPlayer(player);
-                /*
-                 * Mistings only have one metal, so toggle that one
-                 */
-                if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 8) {
-                    this.toggleMetalBurn(cap.getAllomancyPower(), cap);
-                }
-
-                /*
-                 * If the player is a full Mistborn, it matters what they have selected
-                 */
-                if (cap.getAllomancyPower() == 8) {
-                    switch (cap.getSelected()) {
-                        case 1:
-                            // toggle Steel.
-                            this.toggleMetalBurn(AllomancyCapabilities.matSteel, cap);
-
-                            break;
-                        case 2:
-                            // toggle Pewter.
-                            this.toggleMetalBurn(AllomancyCapabilities.matPewter, cap);
-
-                            break;
-                        case 3:
-                            // toggle Brass.
-                            this.toggleMetalBurn(AllomancyCapabilities.matBrass, cap);
-
-                            break;
-                        case 4:
-                            // toggle Bronze.
-                            this.toggleMetalBurn(AllomancyCapabilities.matBronze, cap);
-                            break;
-                        default:
-                            break;
-                    }
                 }
             }
         }
@@ -474,7 +392,7 @@ public class AllomancyEventHandler {
             cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
             Registry.network.sendTo(new AllomancyPowerPacket(oldCap.getAllomancyPower()), (EntityPlayerMP) event.getEntity());
         }
-        if (event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory")) { // if keepInventory is true, allow them to keep their metals, too
+        if (event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory") || !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
             for (int i = 0; i < 8; i++) {
                 cap.setMetalAmounts(i, oldCap.getMetalAmounts(i));
             }
@@ -507,26 +425,12 @@ public class AllomancyEventHandler {
             }
         }
     }
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onRenderGameOverlay(RenderGameOverlayEvent event) {
+    
+    private void drawMetalOverlay(){
         Point[] Frames = { new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12) };
         String[] Groups = { "Iron and Steel", "Tin and Pewter", "Zinc and Brass", "Copper and Bronze" };
-
-        if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
-            return;
-        }
-
         this.mc = Minecraft.getMinecraft();
         this.meterLoc = new ResourceLocation("allomancy", "textures/overlay/meter.png");
-
-        if (!Minecraft.getMinecraft().inGameHasFocus) {
-            return;
-        }
-        if (FMLClientHandler.instance().getClient().currentScreen != null) {
-            return;
-        }
         EntityPlayerSP player;
         player = this.mc.player;
         if (player == null) {
@@ -704,6 +608,33 @@ public class AllomancyEventHandler {
                 }
             }
         }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onRenderGUIScreen(GuiScreenEvent event){
+        if(event.getGui() instanceof GUIMetalSelect){
+            drawMetalOverlay();
+        }
+    }
+       
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onRenderGameOverlay(RenderGameOverlayEvent event) {
+       
+        if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
+            return;
+        }
+        if (!Minecraft.getMinecraft().inGameHasFocus) {
+            return;
+        }
+        if (FMLClientHandler.instance().getClient().currentScreen != null && !(FMLClientHandler.instance().getClient().currentScreen instanceof GUIMetalSelect)) {
+            System.out.println(FMLClientHandler.instance().getClient().currentScreen);
+            return;
+        }
+        
+        drawMetalOverlay();
 
     }
 

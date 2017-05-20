@@ -47,9 +47,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class Registry {
-	public static KeyBinding changeGroup;
-	public static KeyBinding burnFirst;
-	public static KeyBinding burnSecond;
+	public static KeyBinding burn;
 	public static SimpleNetworkWrapper network;
 	public static ItemGrinder itemAllomancyGrinder;
 	public static Item itemTinIngot;
@@ -60,7 +58,7 @@ public class Registry {
 	public static Item Mistcloak;
 	public static Item nuggetLerasium;
 	public static ItemVial itemVial;
-	public static String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
+	public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
 			"Lead" };
 	public static Achievement becomeMistborn;
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
@@ -126,13 +124,9 @@ public class Registry {
 	}
 
 	public static void initKeyBindings() {
-		changeGroup = new KeyBinding("key.changeGroup", Keyboard.KEY_R, "key.categories.allomancy");
-		burnFirst = new KeyBinding("key.burnFirst", Keyboard.KEY_F, "key.categories.allomancy");
-		burnSecond = new KeyBinding("key.burnSecond", Keyboard.KEY_G, "key.categories.allomancy");
+		burn = new KeyBinding("key.burn", Keyboard.KEY_F, "key.categories.allomancy");
 
-		ClientRegistry.registerKeyBinding(changeGroup);
-		ClientRegistry.registerKeyBinding(burnFirst);
-		ClientRegistry.registerKeyBinding(burnSecond);
+		ClientRegistry.registerKeyBinding(burn);
 	}
 
 	public static void registerPackets() {

@@ -4,6 +4,9 @@ import com.legobmw99.allomancy.ai.AIAttackOnCollideExtended;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIAttackRangedBow;
 import net.minecraft.entity.ai.EntityAICreeperSwell;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -12,9 +15,14 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IThreadListener;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -77,6 +85,9 @@ public class ChangeEmotionPacket implements IMessage {
                         if (target instanceof EntityCreeper) {
                             target.tasks.addTask(2, new EntityAICreeperSwell((EntityCreeper) target));
                         }
+                        if(target instanceof EntityRabbit){
+                            target.tasks.addTask(4, new AIEvilAttack((EntityRabbit)target));
+                        }
 
                         return;
                     }
@@ -86,7 +97,7 @@ public class ChangeEmotionPacket implements IMessage {
                         target.setLastAttacker(target);
                         target.setRevengeTarget(target);
                         target.tasks.addTask(0, new EntityAISwimming(target));
-                        target.tasks.addTask(0, new EntityAIPanic(target, 2.0D));
+                        target.tasks.addTask(0, new EntityAIPanic(target, 0.5D));
                         target.tasks.addTask(5, new EntityAIWander(target, 1.0D));
                         target.tasks.addTask(6, new EntityAIWatchClosest(target, EntityPlayer.class, 6.0F));
                         target.tasks.addTask(7, new EntityAILookIdle(target));
@@ -97,6 +108,19 @@ public class ChangeEmotionPacket implements IMessage {
                 }
             });
             return null;
+        }
+    }
+    
+    static class AIEvilAttack extends EntityAIAttackMelee
+    {
+        public AIEvilAttack(EntityRabbit rabbit)
+        {
+            super(rabbit, 1.4D, true);
+        }
+
+        protected double getAttackReachSqr(EntityLivingBase attackTarget)
+        {
+            return (double)(4.0F + attackTarget.width);
         }
     }
 }
