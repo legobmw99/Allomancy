@@ -41,6 +41,7 @@ public class GUIMetalSelect  extends GuiScreen {
 
     public static final String[] metalNames = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze" };
     public static final String GUI_METAL = "allomancy:textures/gui/metals/sign%d.png";
+
     
     private static final ResourceLocation[] metals = new ResourceLocation[] {
             new ResourceLocation(String.format(GUI_METAL, 0)),
@@ -56,10 +57,15 @@ public class GUIMetalSelect  extends GuiScreen {
 
     int timeIn = AllomancyConfig.animateSelection ? 0 : 10; //Config setting for whether the wheel animates open or instantly appears
     int slotSelected = -1;
-
+    AllomancyCapabilities cap;
     List<Integer> slots;
 
     public GUIMetalSelect() {
+        EntityPlayerSP player;
+        player = Minecraft.getMinecraft().player;
+        cap = AllomancyCapabilities.forPlayer(player);
+        
+        
         slots = new ArrayList();
         for(int i = 0; i < 8; i++){
                 slots.add(i);
@@ -99,13 +105,13 @@ public class GUIMetalSelect  extends GuiScreen {
             
             GL11.glBegin(GL11.GL_TRIANGLE_FAN);
 
-            float gs = 0.35F;
+            float gs =  0.3F;
             if(seg % 2 == 1)
                 gs += 0.2F;
-            float r = gs;
+            float r = cap.getMetalBurning((seg + 4) % 8) ? 1.0F : gs;
             float g = gs;
             float b = gs;
-            float a = 0.4F;
+            float a = 0.6F;
             if(mouseInSector) {
                 slotSelected = seg;
 
@@ -118,9 +124,9 @@ public class GUIMetalSelect  extends GuiScreen {
                 float rad = (float) ((i + totalDeg) / 180F * Math.PI);
                 double xp = x + Math.cos(rad) * radius;
                 double yp = y + Math.sin(rad) * radius;
-                if(i == (int) (degPer / 2))
+                if(i == (int) (degPer / 2)){
                     stringPositions.add(new int[] { seg, (int) xp, (int) yp, mouseInSector ? 'n' : 'r' });
-
+                }
                 GL11.glVertex2d(xp, yp);
             }
             totalDeg += degPer;
@@ -210,10 +216,6 @@ public class GUIMetalSelect  extends GuiScreen {
         if(slotSelected != -1) {
             int slot = slots.get(slotSelected);
             slot = (slot + 4) % 8; //Make the slot the one I actually want
-            
-            EntityPlayerSP player;
-            player = Minecraft.getMinecraft().player;
-            AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
             AllomancyEventHandler.toggleMetalBurn(slot, cap);
             Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("ui.button.click")), 0.1F, 2.0F);
         }
