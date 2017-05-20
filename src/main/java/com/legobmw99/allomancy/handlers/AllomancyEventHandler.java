@@ -431,9 +431,8 @@ public class AllomancyEventHandler {
      */
     private void drawMetalOverlay(){
         Point[] Frames = { new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12) };
-        String[] Groups = { "Iron and Steel", "Tin and Pewter", "Zinc and Brass", "Copper and Bronze" };
         this.mc = Minecraft.getMinecraft();
-        this.meterLoc = new ResourceLocation("allomancy", "textures/overlay/meter.png");
+        this.meterLoc = new ResourceLocation("allomancy", "textures/gui/overlay/meter.png");
         EntityPlayerSP player;
         player = this.mc.player;
         if (player == null) {
@@ -491,8 +490,6 @@ public class AllomancyEventHandler {
          */
         if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 8) {
 
-            gig.drawTexturedModalRect(renderX - 3, renderY - 2, 54, 24, 12, 24);
-
             singleMetalY = 9 - cap.getMetalAmounts(cap.getAllomancyPower());
             gig.drawTexturedModalRect(renderX + 1, renderY + 5 + singleMetalY, 7 + 6 * cap.getAllomancyPower(), 1 + singleMetalY, 3, 10 - singleMetalY);
             gig.drawTexturedModalRect(renderX, renderY, 0, 0, 5, 20);
@@ -514,24 +511,7 @@ public class AllomancyEventHandler {
          * The rendering for a the overlay of a full Mistborn
          */
         if (cap.getAllomancyPower() == 8) {
-            switch (cap.getSelected()) {
-                case 0:
-                    break;
-                case 1:
-                    gig.drawTexturedModalRect(renderX - 2, renderY - 2, 54, 0, 16, 24);
-                    break;
-                case 2:
-                    gig.drawTexturedModalRect(renderX + 23, renderY - 2, 54, 0, 16, 24);
-                    break;
-                case 3:
-                    gig.drawTexturedModalRect(renderX + 48, renderY - 2, 54, 0, 16, 24);
-                    break;
-                case 4:
-                    gig.drawTexturedModalRect(renderX + 73, renderY - 2, 54, 0, 16, 24);
-                    break;
-
-            }
-
+      
             ironY = 9 - this.cap.getMetalAmounts(AllomancyCapabilities.matIron);
             gig.drawTexturedModalRect(renderX + 1, renderY + 5 + ironY, 7, 1 + ironY, 3, 10 - ironY);
 
@@ -593,13 +573,6 @@ public class AllomancyEventHandler {
             }
             if (this.cap.getMetalBurning(AllomancyCapabilities.matBronze)) {
                 gig.drawTexturedModalRect(renderX + 82, renderY + 5 + bronzeY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
-            }
-
-            if (AllomancyConfig.overlayWithText) { // Display text on the overlay if selected
-                if (cap.getSelected() != 0) {
-                    String toRender = Groups[cap.getSelected() - 1];
-                    Minecraft.getMinecraft().fontRendererObj.drawString(toRender, renderX - 4, renderY + 25, 0xeeeeee);
-                }
             }
 
             if (this.animationCounter > 6) // Draw the burning symbols...

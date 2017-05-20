@@ -39,17 +39,18 @@ import net.minecraft.util.SoundEvent;
 
 public class GUIMetalSelect  extends GuiScreen {
 
-    public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze" };
-    public static final String GUI_SIGN = "allomancy:textures/gui/signs/sign%d.png";
-    private static final ResourceLocation[] signs = new ResourceLocation[] {
-            new ResourceLocation(String.format(GUI_SIGN, 0)),
-            new ResourceLocation(String.format(GUI_SIGN, 1)),
-            new ResourceLocation(String.format(GUI_SIGN, 2)),
-            new ResourceLocation(String.format(GUI_SIGN, 3)),
-            new ResourceLocation(String.format(GUI_SIGN, 4)),
-            new ResourceLocation(String.format(GUI_SIGN, 5)),
-            new ResourceLocation(String.format(GUI_SIGN, 6)),
-            new ResourceLocation(String.format(GUI_SIGN, 7)),
+    public static final String[] metalNames = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze" };
+    public static final String GUI_METAL = "allomancy:textures/gui/metals/sign%d.png";
+    
+    private static final ResourceLocation[] metals = new ResourceLocation[] {
+            new ResourceLocation(String.format(GUI_METAL, 0)),
+            new ResourceLocation(String.format(GUI_METAL, 1)),
+            new ResourceLocation(String.format(GUI_METAL, 2)),
+            new ResourceLocation(String.format(GUI_METAL, 3)),
+            new ResourceLocation(String.format(GUI_METAL, 4)),
+            new ResourceLocation(String.format(GUI_METAL, 5)),
+            new ResourceLocation(String.format(GUI_METAL, 6)),
+            new ResourceLocation(String.format(GUI_METAL, 7)),
     };
 
 
@@ -98,9 +99,9 @@ public class GUIMetalSelect  extends GuiScreen {
             
             GL11.glBegin(GL11.GL_TRIANGLE_FAN);
 
-            float gs = 0.25F;
-            if(seg % 2 == 0)
-                gs += 0.1F;
+            float gs = 0.35F;
+            if(seg % 2 == 1)
+                gs += 0.2F;
             float r = gs;
             float g = gs;
             float b = gs;
@@ -141,7 +142,7 @@ public class GUIMetalSelect  extends GuiScreen {
 
                 int xsp = xp - 4;
                 int ysp = yp;
-                String name = "\u00a7" + c + flakeMetals[(slot + 4) % 8]; // add four and mod by eight to get #1 where I want it to be
+                String name = "\u00a7" + c + metalNames[(slot + 4) % 8]; // add four and mod by eight to get #1 where I want it to be
                 int width = fontRendererObj.getStringWidth(name);
 
                 double mod = 0.6;
@@ -160,7 +161,7 @@ public class GUIMetalSelect  extends GuiScreen {
                 xdp = (int) ((xp - x) * mod + x);
                 ydp = (int) ((yp - y) * mod + y);
 
-                mc.renderEngine.bindTexture(signs[slot]);
+                mc.renderEngine.bindTexture(metals[(slot + 4) % 8]);
                 drawModalRectWithCustomSizedTexture(xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
             
         }
@@ -183,6 +184,7 @@ public class GUIMetalSelect  extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
+        toggleSelected();
     }
 
     @Override
@@ -191,16 +193,7 @@ public class GUIMetalSelect  extends GuiScreen {
 
         if(!isKeyDown(Registry.burn)) {
             mc.displayGuiScreen(null);
-            if(slotSelected != -1) {
-                int slot = slots.get(slotSelected);
-                slot = (slot + 4) % 8; //Make the slot the one I actually want
-                
-                EntityPlayerSP player;
-                player = Minecraft.getMinecraft().player;
-                AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
-                AllomancyEventHandler.toggleMetalBurn(slot, cap);
-                Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("ui.button.click")), 0.1F, 2.0F);
-            }
+           // toggleSelected(); //probably not necessary to change it on exit anymore
         }
 
         ImmutableSet<KeyBinding> set = ImmutableSet.of(mc.gameSettings.keyBindForward, mc.gameSettings.keyBindLeft, mc.gameSettings.keyBindBack, mc.gameSettings.keyBindRight, mc.gameSettings.keyBindSneak, mc.gameSettings.keyBindSprint, mc.gameSettings.keyBindJump);
@@ -208,6 +201,23 @@ public class GUIMetalSelect  extends GuiScreen {
             KeyBinding.setKeyBindState(k.getKeyCode(), isKeyDown(k));
 
         timeIn++;
+    }
+    
+    /**
+     * Toggles the metal the mouse is currently over
+     */
+    private void toggleSelected(){
+        if(slotSelected != -1) {
+            int slot = slots.get(slotSelected);
+            slot = (slot + 4) % 8; //Make the slot the one I actually want
+            
+            EntityPlayerSP player;
+            player = Minecraft.getMinecraft().player;
+            AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
+            AllomancyEventHandler.toggleMetalBurn(slot, cap);
+            Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("ui.button.click")), 0.1F, 2.0F);
+        }
+    
     }
 
     public boolean isKeyDown(KeyBinding keybind) {
