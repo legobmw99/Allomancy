@@ -107,7 +107,7 @@ public class GUIMetalSelect  extends GuiScreen {
 
             float gs =  0.3F;
             if(seg % 2 == 1)
-                gs += 0.2F;
+                gs += 0.25F;
             float r = cap.getMetalBurning((seg + 4) % 8) ? 1.0F : gs;
             float g = gs;
             float b = gs;
