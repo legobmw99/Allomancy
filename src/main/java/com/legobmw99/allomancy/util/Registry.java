@@ -1,11 +1,11 @@
-package com.legobmw99.allomancy.common;
+package com.legobmw99.allomancy.util;
 
 import org.lwjgl.input.Keyboard;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.blocks.OreBlock;
-import com.legobmw99.allomancy.entity.EntityGoldNugget;
-import com.legobmw99.allomancy.entity.EntityIronNugget;
+import com.legobmw99.allomancy.entities.EntityGoldNugget;
+import com.legobmw99.allomancy.entities.EntityIronNugget;
 import com.legobmw99.allomancy.items.ItemCoinBag;
 import com.legobmw99.allomancy.items.ItemGrinder;
 import com.legobmw99.allomancy.items.ItemMistcloak;

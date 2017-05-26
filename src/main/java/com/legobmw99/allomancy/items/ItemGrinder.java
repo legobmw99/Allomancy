@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.items;
 
-import com.legobmw99.allomancy.common.Registry;
+import com.legobmw99.allomancy.util.Registry;
 
 import net.minecraft.item.Item;
 

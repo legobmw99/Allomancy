@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.legobmw99.allomancy.common.AllomancyCapabilities;
-import com.legobmw99.allomancy.common.Registry;
 import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 
 import net.minecraft.command.CommandBase;

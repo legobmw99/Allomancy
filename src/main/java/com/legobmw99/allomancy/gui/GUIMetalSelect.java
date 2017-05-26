@@ -10,7 +10,6 @@
  */
 package com.legobmw99.allomancy.gui;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +20,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
 import com.google.common.collect.ImmutableSet;
-import com.legobmw99.allomancy.common.AllomancyCapabilities;
-import com.legobmw99.allomancy.common.Registry;
-import com.legobmw99.allomancy.handlers.AllomancyEventHandler;
-import com.legobmw99.allomancy.network.packets.SelectMetalPacket;
+import com.legobmw99.allomancy.util.AllomancyCapabilities;
 import com.legobmw99.allomancy.util.AllomancyConfig;
+import com.legobmw99.allomancy.util.AllomancyUtils;
+import com.legobmw99.allomancy.util.Registry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -33,7 +31,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
@@ -222,7 +219,7 @@ public class GUIMetalSelect  extends GuiScreen {
         if(slotSelected != -1) {
             int slot = slots.get(slotSelected);
             slot = (slot + 4) % 8; //Make the slot the one I actually want
-            AllomancyEventHandler.toggleMetalBurn(slot, cap);
+            AllomancyUtils.toggleMetalBurn(slot, cap);
             Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("ui.button.click")), 0.1F, 2.0F);
         }
     

@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.common;
+package com.legobmw99.allomancy.util;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
