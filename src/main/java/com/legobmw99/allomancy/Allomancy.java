@@ -1,11 +1,10 @@
 package com.legobmw99.allomancy;
 
-import com.legobmw99.allomancy.common.AllomancyCapabilities;
-import com.legobmw99.allomancy.common.Registry;
 import com.legobmw99.allomancy.handlers.AllomancyEventHandler;
+import com.legobmw99.allomancy.util.AllomancyCapabilities;
 import com.legobmw99.allomancy.util.AllomancyConfig;
-import com.legobmw99.allomancy.util.ExternalPowerController;
 import com.legobmw99.allomancy.util.PowerCommand;
+import com.legobmw99.allomancy.util.Registry;
 import com.legobmw99.allomancy.world.OreGenerator;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -25,7 +24,6 @@ import net.minecraftforge.fml.relauncher.Side;
 public class Allomancy {
     public static final String MODID = "allomancy";
     public static final String VERSION = "@VERSION@";
-    public static ExternalPowerController XPC;
 
     @Instance(value = "allomancy")
     public static Allomancy instance;
@@ -52,7 +50,7 @@ public class Allomancy {
 
     @EventHandler
     public void load(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(new AllomancyEventHandler());
+        MinecraftForge.EVENT_BUS.register(new AllomancyEventHandler(event));
 
         // Register world gen
         GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
@@ -61,7 +59,6 @@ public class Allomancy {
         // Initialize client-only code like XPC and rendering code
         if (event.getSide() == Side.CLIENT) {
             Registry.registerRenders();
-            Allomancy.XPC = new ExternalPowerController();
             Registry.initKeyBindings();
         }
 

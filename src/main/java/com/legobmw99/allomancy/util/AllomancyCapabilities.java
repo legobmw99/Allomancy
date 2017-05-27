@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.common;
+package com.legobmw99.allomancy.util;
 
 import java.util.concurrent.Callable;
 

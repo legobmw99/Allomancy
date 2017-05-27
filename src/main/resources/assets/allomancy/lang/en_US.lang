@@ -11,9 +11,8 @@ item.mistcloak.name=Mistcloak
 item.coinbag.name=Coin Bag
 
 key.categories.allomancy=Allomancy
-key.burnFirst=Burn First Metal
-key.burnSecond=Burn Second Metal
-key.changeGroup=Select Next Group
+key.burn=Burn Metals
+
 
 
 item.itemVial.emptyvial.name=Empty Vial

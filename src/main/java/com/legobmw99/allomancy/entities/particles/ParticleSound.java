@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.particle;
+package com.legobmw99.allomancy.entities.particles;
 
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.particle.Particle;

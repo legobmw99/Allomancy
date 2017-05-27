@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.blocks;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.common.Registry;
+import com.legobmw99.allomancy.util.Registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
