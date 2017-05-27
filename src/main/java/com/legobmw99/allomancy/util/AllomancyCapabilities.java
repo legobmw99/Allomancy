@@ -17,12 +17,11 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagCompound> {
 
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "Allomancy_Data");
-    public static int[] MaxBurnTime = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
+    public static final int[] MaxBurnTime = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
     public static final int matIron = 0, matSteel = 1, matTin = 2, matPewter = 3, matZinc = 4, matBrass = 5, matCopper = 6, matBronze = 7;
 
     private int allomancyPower = -1;
 
-    private int selected = 0;
     private int damageStored = 0;
     private int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
     private int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -51,27 +50,6 @@ public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagComp
         this.player = player;
     }
 
-    /**
-     * Get the selected metal group in an instance of the Capability
-     * 
-     * @return the index of the selected group, 0-3
-     */
-    public int getSelected() {
-        return this.selected;
-    }
-
-    /**
-     * Set the selected metal group in an instance of the Capability
-     * 
-     * @param selected
-     *            the index, 0-3, of the group to select
-     */
-    public void setSelected(int selected) {
-        this.selected = selected;
-        if ((this.selected > 4) || (this.selected < 0)) {
-            this.selected = 0;
-        }
-    }
 
     /**
      * Get the player's allomancy power -1 is none, 0-7 are each misting, 8 is full Mistborn
@@ -199,7 +177,6 @@ public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagComp
         nbt.setInteger("brass", this.getMetalAmounts(5));
         nbt.setInteger("copper", this.getMetalAmounts(6));
         nbt.setInteger("bronze", this.getMetalAmounts(7));
-        nbt.setInteger("selected", this.getSelected());
         return nbt;
 
     }
@@ -215,7 +192,6 @@ public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagComp
         this.MetalAmounts[5] = compound.getInteger("brass");
         this.MetalAmounts[6] = compound.getInteger("copper");
         this.MetalAmounts[7] = compound.getInteger("bronze");
-        this.selected = compound.getInteger("selected");
         if (compound.getBoolean("ismistborn")) {
             this.setAllomancyPower(8);
         }
