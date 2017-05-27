@@ -3,7 +3,6 @@ package com.legobmw99.allomancy;
 import com.legobmw99.allomancy.handlers.AllomancyEventHandler;
 import com.legobmw99.allomancy.util.AllomancyCapabilities;
 import com.legobmw99.allomancy.util.AllomancyConfig;
-import com.legobmw99.allomancy.util.AllomancyUtils;
 import com.legobmw99.allomancy.util.PowerCommand;
 import com.legobmw99.allomancy.util.Registry;
 import com.legobmw99.allomancy.world.OreGenerator;

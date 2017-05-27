@@ -421,37 +421,4 @@ public class AllomancyUtils {
             move(1, entity, anchor);
         }
     }
-
-    /**
-     * Runs each worldTick, checking the burn times, abilities, and metal amounts. Then syncs with the client to make sure everyone is on the same page
-     * 
-     * @param cap
-     *            the AllomancyCapabilities data
-     * @param player
-     *            the player being checked
-     */
-    public static void updateMetalBurnTime(AllomancyCapabilities cap, EntityPlayerMP player) {
-        for (int i = 0; i < 8; i++) {
-            if (cap.getMetalBurning(i)) {
-                if (cap.getAllomancyPower() != i && cap.getAllomancyPower() != 8) {
-                    // put out any metals that the player shouldn't be able to burn
-                    cap.setMetalBurning(i, false);
-                    Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, player.getEntityId()), player);
-                } else {
-                    cap.setBurnTime(i, cap.getBurnTime(i) - 1);
-                    if (cap.getBurnTime(i) == 0) {
-                        cap.setBurnTime(i, cap.MaxBurnTime[i]);
-                        cap.setMetalAmounts(i, cap.getMetalAmounts(i) - 1);
-                        Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, player.getEntityId()), player);
-                        if (cap.getMetalAmounts(i) == 0) {
-                            cap.setMetalBurning(i, false);
-                            Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, player.getEntityId()), player);
-                        }
-                    }
-                }
-
-            }
-        }
-    }
-
 }
