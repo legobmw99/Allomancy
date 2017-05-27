@@ -10,9 +10,6 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.legobmw99.allomancy.entities.EntityGoldNugget;
-import com.legobmw99.allomancy.entities.EntityIronNugget;
-import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import com.legobmw99.allomancy.network.packets.MoveEntityPacket;
 import com.legobmw99.allomancy.network.packets.StopFallPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
@@ -23,10 +20,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -378,7 +373,6 @@ public class AllomancyUtils {
         }
 
         if (entity instanceof EntityCreature) {
-
             tryPushMob((EntityCreature) entity);
         }
 
