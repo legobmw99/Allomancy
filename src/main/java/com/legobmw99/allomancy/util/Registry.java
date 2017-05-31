@@ -16,7 +16,6 @@ import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import com.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
 import com.legobmw99.allomancy.network.packets.MoveEntityPacket;
-import com.legobmw99.allomancy.network.packets.SelectMetalPacket;
 import com.legobmw99.allomancy.network.packets.StopFallPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 
@@ -133,7 +132,6 @@ public class Registry {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel("allomancy");
 		network.registerMessage(StopFallPacket.Handler.class, StopFallPacket.class, 0, Side.SERVER);
 		network.registerMessage(AllomancyPowerPacket.Handler.class, AllomancyPowerPacket.class, 1, Side.CLIENT);
-		network.registerMessage(SelectMetalPacket.Handler.class, SelectMetalPacket.class, 2, Side.SERVER);
 		network.registerMessage(MoveEntityPacket.Handler.class, MoveEntityPacket.class, 3, Side.SERVER);
 		network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 4, Side.SERVER);
 		network.registerMessage(AllomancyCapabiltiesPacket.Handler.class, AllomancyCapabiltiesPacket.class, 5,Side.CLIENT);

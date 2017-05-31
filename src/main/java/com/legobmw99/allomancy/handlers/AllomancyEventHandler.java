@@ -74,7 +74,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AllomancyEventHandler {
     
-    private static final Point[] Frames = { new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12) };
     private static final ResourceLocation meterLoc  = new ResourceLocation("allomancy", "textures/gui/overlay/meter.png");
     
     private Minecraft mc;
@@ -104,6 +103,7 @@ public class AllomancyEventHandler {
      */
     @SideOnly(Side.CLIENT)
     private void drawMetalOverlay() {
+        Point[] Frames = { new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12) };
         this.mc = Minecraft.getMinecraft();
         EntityPlayerSP player;
         player = this.mc.player;
