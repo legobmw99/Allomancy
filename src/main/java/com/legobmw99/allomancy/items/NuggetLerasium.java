@@ -2,10 +2,13 @@ package com.legobmw99.allomancy.items;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import com.legobmw99.allomancy.util.AllomancyCapabilities;
 import com.legobmw99.allomancy.util.Registry;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,15 +72,15 @@ public class NuggetLerasium extends ItemFood {
 		entityLiving.addPotionEffect(new PotionEffect(Potion.getPotionById(12),
 				20, 0, true, false));
 
-		((EntityPlayer) entityLiving).addStat(Registry.becomeMistborn, 1);
+		//((EntityPlayer) entityLiving).addStat(Registry.becomeMistborn, 1);
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
 
 	@Override
-	public void addInformation(ItemStack par1ItemStack,
-			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		par3List.add("\u00A75This item is endowed with strange powers");
-		par3List.add("\u00A75Perhaps you should ingest it?");
+    public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced){
+
+		tooltip.add("\u00A75This item is endowed with strange powers");
+		tooltip.add("\u00A75Perhaps you should ingest it?");
 	}
 	
 	@Override

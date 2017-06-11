@@ -32,7 +32,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -59,14 +58,14 @@ public class Registry {
 	public static ItemVial itemVial;
 	public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
 			"Lead" };
-	public static Achievement becomeMistborn;
+	//TODO: this
+	//public static Advancement becomeMistborn;
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
 	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool",
 			"allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15, null, 0);
 
-	public static void addAchievements() {
-		becomeMistborn = new Achievement("achievement.becomeMistborn", "becomeMistborn", -5, -2,
-				Registry.nuggetLerasium, null).initIndependentStat().registerStat().setSpecial();
+	public static void addAdvancement() {
+		//becomeMistborn = new Achievement("achievement.becomeMistborn", "becomeMistborn", -5, -2,Registry.nuggetLerasium, null).initIndependentStat().registerStat().setSpecial();
 	}
 
 	public static void initBlocks() {
