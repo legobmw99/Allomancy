@@ -4,14 +4,14 @@ buildscript {
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
 
-version = "2.7.0" 
+version = "2.7.1" 
 group= "com.legobmw99.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "allomancy"
 
@@ -19,13 +19,13 @@ if (System.getenv().DRONE_BUILD_NUMBER != null) {//adds the build number to the 
     project.version += ".${System.getenv().DRONE_BUILD_NUMBER}"
 }
 
-sourceCompatibility = targetCompatibility = "1.6" // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
 compileJava {
-    sourceCompatibility = targetCompatibility = "1.6"
+    sourceCompatibility = targetCompatibility = "1.8"
 }
 
 minecraft {
-    version = "1.11.2-13.20.0.2201"
+    version = "1.12-14.21.0.2321"
     runDir = "run"
     mappings = "snapshot_20161220"
     makeObfSourceJar = false 
@@ -56,9 +56,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
 }
-
-processResources
-{
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -71,15 +69,8 @@ processResources
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
         
-    // copy everything else, thats not the mcmod.info
+    // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
-}
-
-idea 
-{ 
-    module {
-        inheritOutputDirs = true 
-    } 
 }
