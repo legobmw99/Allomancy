@@ -33,7 +33,7 @@ public class ItemCoinBag extends Item {
                 worldIn.spawnEntity(entitygold);
             }
             
-            if (itemstack.getItem() == Items.field_191525_da) {
+            if (itemstack.getItem() == Items.IRON_NUGGET) {
                 EntityIronNugget entityiron = new EntityIronNugget(worldIn, playerIn);
                 worldIn.spawnEntity(entityiron);
             }
@@ -65,7 +65,7 @@ public class ItemCoinBag extends Item {
     }
 
     protected boolean isArrow(ItemStack stack) {
-        return stack != null && (stack.getItem() == Items.GOLD_NUGGET || stack.getItem() == Items.field_191525_da /* IRON_NUGGET */);
+        return stack != null && (stack.getItem() == Items.GOLD_NUGGET || stack.getItem() == Items.IRON_NUGGET /* IRON_NUGGET */);
     }
 
     public int getItemEnchantability() {

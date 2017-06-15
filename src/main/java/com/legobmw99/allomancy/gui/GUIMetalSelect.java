@@ -152,7 +152,7 @@ public class GUIMetalSelect  extends GuiScreen {
                 int xsp = xp - 4;
                 int ysp = yp;
                 String name = "\u00a7" + c + metalNames[(slot + 4) % 8]; // add four and mod by eight to get #1 where I want it to be
-                int width = fontRendererObj.getStringWidth(name);
+                int width = fontRenderer.getStringWidth(name);
 
                 double mod = 0.6;
                 int xdp = (int) ((xp - x) * mod + x);
@@ -164,7 +164,7 @@ public class GUIMetalSelect  extends GuiScreen {
                 if(ysp < y)
                     ysp -= 9;
 
-                fontRendererObj.drawStringWithShadow(name, xsp, ysp, 0xFFFFFF);
+                fontRenderer.drawStringWithShadow(name, xsp, ysp, 0xFFFFFF);
 
                 mod = 0.8;
                 xdp = (int) ((xp - x) * mod + x);

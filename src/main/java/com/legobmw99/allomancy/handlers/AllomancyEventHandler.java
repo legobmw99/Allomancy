@@ -334,7 +334,7 @@ public class AllomancyEventHandler {
                                     && (((curEntity instanceof EntityIronGolem) || (((((EntityLiving) curEntity).getHeldItem(EnumHand.MAIN_HAND) != null) || ((EntityLiving) curEntity).getHeldItem(EnumHand.OFF_HAND) == null)
                                             && (AllomancyUtils.isItemMetal(((EntityLiving) curEntity).getHeldItem(EnumHand.MAIN_HAND)) || AllomancyUtils.isItemMetal(((EntityLiving) curEntity).getHeldItem(EnumHand.OFF_HAND))))))) {
                                 particleTargets.add(curEntity);
-                            } else if (curEntity instanceof EntityItem && AllomancyUtils.isItemMetal(((EntityItem) curEntity).getEntityItem())) {
+                            } else if (curEntity instanceof EntityItem && AllomancyUtils.isItemMetal(((EntityItem) curEntity).getItem())) {
                                 particleTargets.add(curEntity);
                             } else if (curEntity instanceof EntityItemFrame && AllomancyUtils.isItemMetal(((EntityItemFrame) curEntity).getDisplayedItem())) {
                                 particleTargets.add(curEntity);
@@ -516,8 +516,8 @@ public class AllomancyEventHandler {
     @SubscribeEvent
     public void onDamage(LivingHurtEvent event) {
         // Increase outgoing damage for pewter burners
-        if (event.getSource().getSourceOfDamage() instanceof EntityPlayerMP) {
-            EntityPlayerMP source = (EntityPlayerMP) event.getSource().getSourceOfDamage();
+        if (event.getSource().getTrueSource() instanceof EntityPlayerMP) {
+            EntityPlayerMP source = (EntityPlayerMP) event.getSource().getTrueSource();
             AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(source);
 
             if (cap.getMetalBurning(AllomancyCapabilities.matPewter)) {

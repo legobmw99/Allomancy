@@ -6,6 +6,7 @@ This mod adds the basics of [Allomancy](http://coppermind.net/wiki/Allomancy) fr
 
 This mod is currently updated for `Minecraft 1.12` and `Forge 14.21.0.2321`
 
+*Note: This update is unfinished any many features (including crafting) are absent*
 
 Please verify and report any issues!
 

@@ -83,7 +83,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		
 		EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 		if (entitylivingbase == null) {
@@ -138,8 +138,8 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 						.getPath().getFinalPathPoint();
 				if ((finalPathPoint != null)
 						&& (entitylivingbase.getDistanceSq(
-								finalPathPoint.xCoord, finalPathPoint.yCoord,
-								finalPathPoint.zCoord) < 1)) {
+								finalPathPoint.x, finalPathPoint.y,
+								finalPathPoint.z) < 1)) {
 					this.failedPathFindingPenalty = 0;
 				} else {
 					this.failedPathFindingPenalty += 10;

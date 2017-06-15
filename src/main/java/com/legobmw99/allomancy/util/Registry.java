@@ -146,7 +146,7 @@ public class Registry {
 				new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.GOLD_NUGGET, renderItem));
 		
 	      RenderingRegistry.registerEntityRenderingHandler(EntityIronNugget.class,
-	                new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.field_191525_da, renderItem));
+	                new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.IRON_NUGGET, renderItem));
 
 		// Register ore models individually.
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreTin), 0,

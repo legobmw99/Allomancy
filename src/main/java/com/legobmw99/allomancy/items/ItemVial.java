@@ -115,7 +115,7 @@ public class ItemVial extends Item {
     
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if (func_194125_a(tab)){ //This is a method in Item, I assume it checks if the tab is correct. It is called in the super getSubItems
+        if (isInCreativeTab(tab)){ //This is a method in Item, I assume it checks if the tab is correct. It is called in the super getSubItems
         	for (int meta = 0; meta < ItemVial.unlocalName.length; meta++) {
         		subItems.add(new ItemStack(this, 1, meta));
         	}

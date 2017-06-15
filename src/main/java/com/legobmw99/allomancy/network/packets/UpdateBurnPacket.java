@@ -48,12 +48,12 @@ public class UpdateBurnPacket implements IMessage {
 
 		@Override
 		public IMessage onMessage(final UpdateBurnPacket message, final MessageContext ctx) {
-			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world; // or Minecraft.getMinecraft() on the client
+			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world; // or Minecraft.getMinecraft() on the client
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
 
-					EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+					EntityPlayerMP player = ctx.getServerHandler().player;
 					AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
 					boolean value;
 					if (message.value == 1) { // Convert int back to bool

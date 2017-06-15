@@ -29,11 +29,11 @@ public class StopFallPacket implements IMessage {
 
 		@Override
 		public IMessage onMessage(StopFallPacket message, final MessageContext ctx) {
-	        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world; // or Minecraft.getMinecraft() on the client
+	        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world; // or Minecraft.getMinecraft() on the client
 	        mainThread.addScheduledTask(new Runnable() {
 	            @Override
 	            public void run() {
-	            	 ctx.getServerHandler().playerEntity.fallDistance = 0;
+	            	 ctx.getServerHandler().player.fallDistance = 0;
 	            }
 	        });		return null;
 		}

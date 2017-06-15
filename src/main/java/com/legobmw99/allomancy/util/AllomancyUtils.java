@@ -62,7 +62,7 @@ public class AllomancyUtils {
         metallist.add(Items.COMPASS.getUnlocalizedName());
         metallist.add(Items.FLINT_AND_STEEL.getUnlocalizedName());
         metallist.add(Items.GOLD_NUGGET.getUnlocalizedName());
-        metallist.add(Items.field_191525_da.getUnlocalizedName()); // IRON_NUGGET
+        metallist.add(Items.IRON_NUGGET.getUnlocalizedName()); 
         metallist.add(Items.CHAINMAIL_HELMET.getUnlocalizedName());
         metallist.add(Items.GOLDEN_HELMET.getUnlocalizedName());
         metallist.add(Items.IRON_HELMET.getUnlocalizedName());
@@ -178,18 +178,18 @@ public class AllomancyUtils {
                 calcdist = returnMOP.hitVec.distanceTo(pos);
             }
             Vec3d lookvec = theRenderViewEntity.getLook(0);
-            Vec3d var8 = pos.addVector(lookvec.xCoord * var2, lookvec.yCoord * var2, lookvec.zCoord * var2);
+            Vec3d var8 = pos.addVector(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2);
             Entity pointedEntity = null;
             float var9 = 1.0F;
             @SuppressWarnings("unchecked")
-            List<Entity> list = mc.world.getEntitiesWithinAABBExcludingEntity(theRenderViewEntity, theViewBoundingBox.addCoord(lookvec.xCoord * var2, lookvec.yCoord * var2, lookvec.zCoord * var2).expand(var9, var9, var9));
+            List<Entity> list = mc.world.getEntitiesWithinAABBExcludingEntity(theRenderViewEntity, theViewBoundingBox.offset(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2).expand(var9, var9, var9));
             double d = calcdist;
             for (Entity entity : list) {
                 float bordersize = entity.getCollisionBorderSize();
                 AxisAlignedBB aabb = new AxisAlignedBB(entity.posX - entity.width / 2, entity.posY, entity.posZ - entity.width / 2, entity.posX + entity.width / 2, entity.posY + entity.height, entity.posZ + entity.width / 2);
                 aabb.expand(bordersize, bordersize, bordersize);
                 RayTraceResult mop0 = aabb.calculateIntercept(pos, var8);
-                if (aabb.isVecInside(pos)) {
+                if (aabb.contains(pos)) {
                     if (0.0D < d || d == 0.0D) {
                         pointedEntity = entity;
                         d = 0.0D;
@@ -319,7 +319,7 @@ public class AllomancyUtils {
      *            the EntityItem to Pull
      */
     private static void tryPullItem(EntityItem entity) {
-        if (metallist.contains(entity.getEntityItem().getItem().getUnlocalizedName())) {
+        if (metallist.contains(entity.getItem().getItem().getUnlocalizedName())) {
             EntityPlayer player = Minecraft.getMinecraft().player;
             BlockPos anchor = new BlockPos((int) player.posX, (int) player.posY - 1, (int) player.posZ);
             move(-0.5, entity, anchor);
@@ -385,7 +385,7 @@ public class AllomancyUtils {
      *            the EntityItem to Push
      */
     private static void tryPushItem(EntityItem entity) {
-        if (metallist.contains(entity.getEntityItem().getItem().getUnlocalizedName())) {
+        if (metallist.contains(entity.getItem().getItem().getUnlocalizedName())) {
             EntityPlayer player = Minecraft.getMinecraft().player;
             BlockPos anchor = new BlockPos((int) player.posX, (int) player.posY - 1, (int) player.posZ);
             move(0.5, entity, anchor);
