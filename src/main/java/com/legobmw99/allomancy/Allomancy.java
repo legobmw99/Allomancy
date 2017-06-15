@@ -33,7 +33,7 @@ public class Allomancy {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-
+    	
         // Load most of the mod's content
         AllomancyConfig.initProps(event.getSuggestedConfigurationFile());
         Registry.initItems();
@@ -56,14 +56,14 @@ public class Allomancy {
         GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
         AllomancyCapabilities.register();
 
-        // Initialize client-only code like XPC and rendering code
+        // Initialize client-only code like keys and rendering code
         if (event.getSide() == Side.CLIENT) {
             Registry.registerRenders();
             Registry.initKeyBindings();
         }
 
         // Achievements must come after rendering, otherwise it will crash or not display properly
-        Registry.addAchievements();
+        Registry.addAdvancement();
     }
 
     @EventHandler

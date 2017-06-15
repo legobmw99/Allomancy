@@ -1,0 +1,28 @@
+{
+    "display": {
+        "icon": {
+            "item": "allomancy:nuggetLerasium"
+        },
+        "title": {
+            "translate": "advancements.becomeMistborn.title"
+        },
+        "description": {
+            "translate": "advancements.becomeMistborn.desc"
+        },
+        "frame": "challenge"
+    },
+    "parent": "minecraft:adventure/root",
+    "rewards": {
+        "experience": 100
+    },
+    "criteria": {
+        "nuggetLerasium": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "item": "allomancy:nuggetLerasium"
+                }
+            }
+        }
+    }
+}

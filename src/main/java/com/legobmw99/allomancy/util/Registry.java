@@ -32,6 +32,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -85,10 +86,7 @@ public class Registry {
 
 		// Register ItemVial and its subtypes
 		GameRegistry.register(itemVial = new ItemVial(), new ResourceLocation(Allomancy.MODID, "itemVial"));
-		for (int i = 0; i < ItemVial.unlocalName.length; i++) {
-			ItemStack Item;
-			Item = new ItemStack(itemVial, 1, i);
-		}
+
 
 		// Register ingots and add them to the ore dictionary
 		GameRegistry.register(
@@ -206,12 +204,12 @@ public class Registry {
 	}
 
 	public static void setupRecipes() {
-
+		
 		GameRegistry.addSmelting(OreBlock.oreTin, new ItemStack(itemTinIngot, 1), 5);
 		GameRegistry.addSmelting(OreBlock.oreCopper, new ItemStack(itemCopperIngot, 1), 5);
 		GameRegistry.addSmelting(OreBlock.oreLead, new ItemStack(itemLeadIngot, 1), 5);
 		GameRegistry.addSmelting(OreBlock.oreZinc, new ItemStack(itemZincIngot, 1), 5);
-
+	/*
 		// Add a recipe for each flake using the ore dictionary
 		for (int i = 0; i < flakeMetals.length; i++) {
 			GameRegistry.addRecipe(new ShapelessOreRecipe(
@@ -234,6 +232,7 @@ public class Registry {
 
 		// Add the basic eight metal vial recipes 
 		for (int i = 1; i < ItemVial.unlocalName.length - 1; i++) {
+			
 			GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, i),
 					new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[i - 1])),
 					new ItemStack(itemVial, 1, 0));
@@ -260,7 +259,7 @@ public class Registry {
 				Items.IRON_INGOT, 'y', Items.GOLD_NUGGET));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(nuggetLerasium),
 				new Object[] { new ItemStack(Blocks.GOLD_BLOCK, 1), new ItemStack(Items.NETHER_STAR, 1) }));
-
+	*/
 	}
 
 }

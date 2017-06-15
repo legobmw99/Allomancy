@@ -1,0 +1,18 @@
+﻿{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "# #",
+        "###",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:wool",
+            "data": 7
+        }
+    },
+    "result": {
+        "item": "allomancy:mistcloak",
+        "count": 1
+    }
+}

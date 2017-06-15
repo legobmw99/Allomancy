@@ -25,9 +25,9 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12-14.21.0.2321"
+    version = "1.12-14.21.0.2327"
     runDir = "run"
-    mappings = "snapshot_20161220"
+    mappings = "snapshot_20170614"
     makeObfSourceJar = false 
     replaceIn "Allomancy.java"
     replace "@VERSION@", project.version

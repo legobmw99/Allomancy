@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:mistcloack"
+    ]
+  },
+  "criteria": {
+    "has_gray_wool": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:wool",
+            "data": 7
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:mistcloak"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_gray_wool",
+      "has_the_recipe"
+    ]
+  ]
+}
