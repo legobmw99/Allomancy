@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "allomancy:nuggetlerasium"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:gold_block"
+    },
+    {
+      "item": "minecraft:nether_star"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

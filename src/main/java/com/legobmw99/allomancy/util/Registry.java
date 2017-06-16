@@ -204,62 +204,10 @@ public class Registry {
 	}
 
 	public static void setupRecipes() {
-		
 		GameRegistry.addSmelting(OreBlock.oreTin, new ItemStack(itemTinIngot, 1), 5);
 		GameRegistry.addSmelting(OreBlock.oreCopper, new ItemStack(itemCopperIngot, 1), 5);
 		GameRegistry.addSmelting(OreBlock.oreLead, new ItemStack(itemLeadIngot, 1), 5);
 		GameRegistry.addSmelting(OreBlock.oreZinc, new ItemStack(itemZincIngot, 1), 5);
-	/*
-		// Add a recipe for each flake using the ore dictionary
-		for (int i = 0; i < flakeMetals.length; i++) {
-			GameRegistry.addRecipe(new ShapelessOreRecipe(
-					new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[i]), 2),
-					new Object[] { "ingot" + flakeMetals[i],
-							new ItemStack(itemAllomancyGrinder.setContainerItem(itemAllomancyGrinder)) }));
-		}
-
-		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:flakeSteel"), 2),
-				new ItemStack(new Item().getByNameOrId("allomancy:flakeIron")), new ItemStack(Items.COAL));
-		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:flakeBrass"), 2),
-				new ItemStack(new Item().getByNameOrId("allomancy:flakeZinc")),
-				new ItemStack(new Item().getByNameOrId("allomancy:flakeCopper")));
-		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:flakePewter"), 2),
-				new ItemStack(new Item().getByNameOrId("allomancy:flakeTin")),
-				new ItemStack(new Item().getByNameOrId("allomancy:flakeLead")));
-		GameRegistry.addShapelessRecipe(new ItemStack(new Item().getByNameOrId("allomancy:flakeBronze"), 2),
-				new ItemStack(new Item().getByNameOrId("allomancy:flakeCopper")),
-				new ItemStack(new Item().getByNameOrId("allomancy:flakeTin")));
-
-		// Add the basic eight metal vial recipes 
-		for (int i = 1; i < ItemVial.unlocalName.length - 1; i++) {
-			
-			GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, i),
-					new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[i - 1])),
-					new ItemStack(itemVial, 1, 0));
-		}
-		// Add the ultimate vial recipe 
-	      GameRegistry.addShapelessRecipe(new ItemStack(itemVial, 1, 9),
-                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[0])),
-                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[1])),
-                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[2])),
-                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[3])),
-                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[4])),
-                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[5])),
-                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[6])),
-                  new ItemStack(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[7])),
-                  new ItemStack(itemVial, 1, 0));
-
-		GameRegistry.addRecipe(new ItemStack(Mistcloak, 1),
-				new Object[] { "W W", "WWW", "WWW", 'W', new ItemStack(Blocks.WOOL, 1, 7) });
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemVial, 3, 0), " x ", "y y", " y ", 'x', "slabWood",
-				'y', Blocks.GLASS));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemCoinBag, 1, 0), " xy", "l l", " l ", 'l',
-				Items.LEATHER, 'y', Items.GOLD_NUGGET, 'x', Items.LEAD));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemAllomancyGrinder, 1, 0), "xxx", "yyy", "xxx", 'x',
-				Items.IRON_INGOT, 'y', Items.GOLD_NUGGET));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(nuggetLerasium),
-				new Object[] { new ItemStack(Blocks.GOLD_BLOCK, 1), new ItemStack(Items.NETHER_STAR, 1) }));
-	*/
 	}
 
 }

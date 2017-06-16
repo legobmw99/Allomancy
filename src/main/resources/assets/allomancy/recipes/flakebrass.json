@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "allomancy:flakebrass",
+    "count": 2
+  },
+  "ingredients": [
+    {
+      "item": "#ingotBrass"
+    },
+    {
+      "item": "allomancy:grinder"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

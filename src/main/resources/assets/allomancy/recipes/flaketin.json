@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "allomancy:flaketin",
+    "count": 2
+  },
+  "ingredients": [
+    {
+      "item": "#ingotTin"
+    },
+    {
+      "item": "allomancy:grinder"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}
