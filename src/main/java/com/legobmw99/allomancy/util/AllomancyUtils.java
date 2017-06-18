@@ -40,15 +40,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class AllomancyUtils {
-    private static ArrayList<String> metallist = buildMetalList();
+    private static final ArrayList<String> metallist = new ArrayList<String>();
 
     /**
      * Builds a list of the unlocalized names of every metal item in vanilla and the ore dictionary
      */
-    private static ArrayList<String> buildMetalList() {
-
-       ArrayList<String> metallist = new ArrayList<String>();
-
+    static {
         metallist.add(Items.IRON_AXE.getUnlocalizedName());
         metallist.add(Items.GOLDEN_AXE.getUnlocalizedName());
         metallist.add(Items.CHAINMAIL_BOOTS.getUnlocalizedName());
@@ -128,7 +125,6 @@ public class AllomancyUtils {
                 }
             }
         }
-        return metallist;
     }
 
     /**

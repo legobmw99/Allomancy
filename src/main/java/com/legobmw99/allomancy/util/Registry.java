@@ -55,8 +55,10 @@ public class Registry {
 	public static ItemVial itemVial;
 	public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
 			"Lead" };
+	
 	//TODO: this
 	//public static Advancement becomeMistborn;
+	
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
 	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool",
 			"allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15, null, 0);
@@ -125,11 +127,11 @@ public class Registry {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel("allomancy");
 		network.registerMessage(StopFallPacket.Handler.class, StopFallPacket.class, 0, Side.SERVER);
 		network.registerMessage(AllomancyPowerPacket.Handler.class, AllomancyPowerPacket.class, 1, Side.CLIENT);
-		network.registerMessage(MoveEntityPacket.Handler.class, MoveEntityPacket.class, 3, Side.SERVER);
-		network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 4, Side.SERVER);
-		network.registerMessage(AllomancyCapabiltiesPacket.Handler.class, AllomancyCapabiltiesPacket.class, 5,Side.CLIENT);
-		network.registerMessage(ChangeEmotionPacket.Handler.class, ChangeEmotionPacket.class, 6, Side.SERVER);
-		network.registerMessage(GetCapabilitiesPacket.Handler.class, GetCapabilitiesPacket.class, 7, Side.SERVER);
+		network.registerMessage(MoveEntityPacket.Handler.class, MoveEntityPacket.class, 2, Side.SERVER);
+		network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 3, Side.SERVER);
+		network.registerMessage(AllomancyCapabiltiesPacket.Handler.class, AllomancyCapabiltiesPacket.class, 4,Side.CLIENT);
+		network.registerMessage(ChangeEmotionPacket.Handler.class, ChangeEmotionPacket.class, 5, Side.SERVER);
+		network.registerMessage(GetCapabilitiesPacket.Handler.class, GetCapabilitiesPacket.class, 6, Side.SERVER);
 
 	}
 
