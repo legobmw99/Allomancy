@@ -30,6 +30,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -200,14 +201,14 @@ public class GUIMetalSelect  extends GuiScreen {
     public void updateScreen() {
         super.updateScreen();
 
-        if(!isKeyDown(Registry.burn)) {
+        if(!GameSettings.isKeyDown(Registry.burn)) {
             mc.displayGuiScreen(null);
            // toggleSelected(); //probably not necessary to change it on exit anymore
         }
 
         ImmutableSet<KeyBinding> set = ImmutableSet.of(mc.gameSettings.keyBindForward, mc.gameSettings.keyBindLeft, mc.gameSettings.keyBindBack, mc.gameSettings.keyBindRight, mc.gameSettings.keyBindSneak, mc.gameSettings.keyBindSprint, mc.gameSettings.keyBindJump);
         for(KeyBinding k : set)
-            KeyBinding.setKeyBindState(k.getKeyCode(), isKeyDown(k));
+            KeyBinding.setKeyBindState(k.getKeyCode(), GameSettings.isKeyDown(k));
 
         timeIn++;
     }
@@ -223,15 +224,6 @@ public class GUIMetalSelect  extends GuiScreen {
             Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("ui.button.click")), 0.1F, 2.0F);
         }
     
-    }
-
-    public boolean isKeyDown(KeyBinding keybind) {
-        int key = keybind.getKeyCode();
-        if(key < 0) {
-            int button = 100 + key;
-            return Mouse.isButtonDown(button);
-        }
-        return Keyboard.isKeyDown(key);
     }
 
     @Override
