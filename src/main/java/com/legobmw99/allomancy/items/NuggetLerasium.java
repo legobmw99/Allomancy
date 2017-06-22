@@ -65,14 +65,12 @@ public class NuggetLerasium extends ItemFood {
 		double z = entityLiving.posZ;
 		if (cap.getAllomancyPower() != 8) {
 			cap.setAllomancyPower(8);
-			Registry.network.sendTo(new AllomancyPowerPacket(8), (EntityPlayerMP) ((EntityPlayer)entityLiving));
         }
 		//Fancy shmancy effects
 		worldIn.spawnEntity(new EntityLightningBolt(worldIn, x, y, z, true));
 		entityLiving.addPotionEffect(new PotionEffect(Potion.getPotionById(12),
 				20, 0, true, false));
 
-		//((EntityPlayer) entityLiving).addStat(Registry.becomeMistborn, 1);
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
 
