@@ -154,8 +154,11 @@ public class AllomancyUtils {
         GL11.glPopMatrix();
     }
     
-    /*
-     * This code is based almost entirely on the vanilla code. It's not super well documented, but basically it just runs a ray-trace. Edit at your own peril
+    /**
+     * Copied mostly from vanilla, this gets what the mouse is over
+     * @param dist
+     * 				distance
+     * @return the result of the raytrace
      */
     @SideOnly(Side.CLIENT)
     public static RayTraceResult getMouseOverExtended(float dist) {
@@ -178,7 +181,7 @@ public class AllomancyUtils {
             Entity pointedEntity = null;
             float var9 = 1.0F;
             @SuppressWarnings("unchecked")
-            List<Entity> list = mc.world.getEntitiesWithinAABBExcludingEntity(theRenderViewEntity, theViewBoundingBox.offset(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2).expand(var9, var9, var9));
+            List<Entity> list = mc.world.getEntitiesWithinAABBExcludingEntity(theRenderViewEntity, addCoord(theViewBoundingBox,lookvec.x * dist, lookvec.y * dist, lookvec.z * dist).expand(var9, var9, var9));
             double d = calcdist;
             for (Entity entity : list) {
                 float bordersize = entity.getCollisionBorderSize();
@@ -204,6 +207,54 @@ public class AllomancyUtils {
         }
         return returnMOP;
     }
+    
+    /**
+     * Replacement for the old addCoord in AxisAlignedBB.class, necessary for getMouseOverExtended
+     * @param a 
+     * 			the original box
+     * @param x 
+     * @param y
+     * @param z
+     * @return Adds a coordinate to the bounding box, extending it if the point lies outside the current ranges.
+     */
+    public static AxisAlignedBB addCoord(AxisAlignedBB a, double x, double y, double z)
+    {
+        double d0 = a.minX;
+        double d1 = a.minY;
+        double d2 = a.minZ;
+        double d3 = a.maxX;
+        double d4 = a.maxY;
+        double d5 = a.maxZ;
+
+        if (x < 0.0D)
+        {
+            d0 += x;
+        }
+        else if (x > 0.0D)
+        {
+            d3 += x;
+        }
+
+        if (y < 0.0D)
+        {
+            d1 += y;
+        }
+        else if (y > 0.0D)
+        {
+            d4 += y;
+        }
+
+        if (z < 0.0D)
+        {
+            d2 += z;
+        }
+        else if (z > 0.0D)
+        {
+            d5 += z;
+        }
+
+        return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
+    }
 
     /**
      * Determines if a block is metal or not
@@ -215,7 +266,7 @@ public class AllomancyUtils {
     public static boolean isBlockMetal(Block block) {
         return metallist.contains(block.getUnlocalizedName());
     }
-
+    
     /**
      * Determines if an item is metal or not
      * 

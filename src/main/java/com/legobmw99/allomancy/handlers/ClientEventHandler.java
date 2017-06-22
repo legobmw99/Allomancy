@@ -292,11 +292,8 @@ public class ClientEventHandler {
                             if (mov.entityHit != null) {
                                 AllomancyUtils.tryPullEntity(mov.entityHit);
                             }
-                        }
-                        RayTraceResult ray = player.rayTrace(20.0F, 0.0F);
-                        if (ray != null) {
-                            if (ray.typeOfHit == RayTraceResult.Type.BLOCK || ray.typeOfHit == RayTraceResult.Type.MISS) {
-                                BlockPos bp = ray.getBlockPos();
+                            if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
+                                BlockPos bp = mov.getBlockPos();
                                 if (AllomancyUtils.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
                                     AllomancyUtils.tryPullBlock(bp);
                                 }
@@ -323,19 +320,13 @@ public class ClientEventHandler {
                     // All steel pushing powers
                     if (cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
                         if (mov != null) {
-                            System.out.println(mov);
-
                             if (mov.entityHit != null) {
                                 AllomancyUtils.tryPushEntity(mov.entityHit);
 
                             }
-                        }
-                        RayTraceResult ray = player.rayTrace(20.0F, 0.0F);
-                        if (ray != null) {
+                            if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
 
-                            if (ray.typeOfHit == RayTraceResult.Type.BLOCK || ray.typeOfHit == RayTraceResult.Type.MISS) {
-
-                                BlockPos bp = ray.getBlockPos();
+                                BlockPos bp = mov.getBlockPos();
                                 if (AllomancyUtils.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
                                     AllomancyUtils.tryPushBlock(bp);
                                 }
@@ -485,7 +476,6 @@ public class ClientEventHandler {
             return;
         }
         if (FMLClientHandler.instance().getClient().currentScreen != null && !(FMLClientHandler.instance().getClient().currentScreen instanceof GUIMetalSelect)) {
-            System.out.println(FMLClientHandler.instance().getClient().currentScreen);
             return;
         }
 
