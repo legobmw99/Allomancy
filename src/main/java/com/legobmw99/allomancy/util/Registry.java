@@ -56,16 +56,11 @@ public class Registry {
 	public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
 			"Lead" };
 	
-	//TODO: this
-	//public static Advancement becomeMistborn;
+	//TODO: advancement?
 	
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
 	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool",
 			"allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15, null, 0);
-
-	public static void addAdvancement() {
-		//becomeMistborn = new Achievement("achievement.becomeMistborn", "becomeMistborn", -5, -2,Registry.nuggetLerasium, null).initIndependentStat().registerStat().setSpecial();
-	}
 
 	public static void initBlocks() {
 		OreBlock.init();
