@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -48,6 +49,11 @@ public class Allomancy {
 	public void init(FMLInitializationEvent event) {
 		proxy.init(event);
 	}
+	
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
+		proxy.postInit(event);
+	}
 
 	public static class CommonProxy {
 		public void preInit(FMLPreInitializationEvent e) {
@@ -55,6 +61,10 @@ public class Allomancy {
 			MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
 			AllomancyConfig.initProps(e.getSuggestedConfigurationFile());
 			Registry.registerPackets();
+		}
+
+		public void postInit(FMLPostInitializationEvent e) {
+			
 		}
 
 		public void serverInit(FMLServerStartingEvent e) {
@@ -73,8 +83,12 @@ public class Allomancy {
 		public void init(FMLInitializationEvent e) {
 			super.init(e);
 			MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-			Registry.registerRenders();
 			Registry.initKeyBindings();
+		}
+		@Override
+		public void postInit(FMLPostInitializationEvent e) {
+			Registry.registerRenders();
+;
 		}
 	}
 
