@@ -109,7 +109,7 @@ public class ItemVial extends Item {
         if ((meta < 0) || (meta >= unlocalName.length)) {
             meta = 0;
         }
-        return "item.itemVial" + "." + unlocalName[meta];
+        return "allomancy:itemVial" + "." + unlocalName[meta];
     }
 
     @Override
