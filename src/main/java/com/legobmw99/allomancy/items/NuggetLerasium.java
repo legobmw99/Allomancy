@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.util.AllomancyCapabilities;
 import com.legobmw99.allomancy.util.Registry;
 
@@ -12,7 +12,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemFood;
@@ -22,6 +21,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class NuggetLerasium extends ItemFood {
@@ -31,6 +31,7 @@ public class NuggetLerasium extends ItemFood {
 		this.setHasSubtypes(false);
 		this.setUnlocalizedName("nuggetLerasium");
 		this.setCreativeTab(Registry.tabsAllomancy);
+		this.setRegistryName(new ResourceLocation(Allomancy.MODID, "nuggetLerasium"));
 		this.maxStackSize = 1;
 	}
 

@@ -9,6 +9,7 @@ import com.legobmw99.allomancy.util.AllomancyCapabilities;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.Registry;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +28,7 @@ import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -146,6 +148,17 @@ public class CommonEventHandler {
                 }
             }
         }
+    }
+    
+    @SubscribeEvent
+    public void onRegisterItems(RegistryEvent.Register<Item> event){
+    	Registry.initItems(event);
+    }
+    
+    @SubscribeEvent
+    public void onRegisterBlocks(RegistryEvent.Register<Block> event){
+    	Registry.initBlocks(event);
+
     }
     
     @SubscribeEvent

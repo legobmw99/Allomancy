@@ -3,7 +3,6 @@ package com.legobmw99.allomancy.util;
 import org.lwjgl.input.Keyboard;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.blocks.OreBlock;
 import com.legobmw99.allomancy.entities.EntityGoldNugget;
 import com.legobmw99.allomancy.entities.EntityIronNugget;
 import com.legobmw99.allomancy.items.ItemCoinBag;
@@ -19,6 +18,8 @@ import com.legobmw99.allomancy.network.packets.MoveEntityPacket;
 import com.legobmw99.allomancy.network.packets.StopFallPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -30,8 +31,10 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -53,6 +56,10 @@ public class Registry {
 	public static Item Mistcloak;
 	public static Item nuggetLerasium;
 	public static ItemVial itemVial;
+	public static Block oreTin;
+	public static Block oreLead;
+	public static Block oreCopper;
+	public static Block oreZinc;
 	public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
 			"Lead" };
 	
@@ -62,54 +69,59 @@ public class Registry {
 	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool",
 			"allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15, null, 0);
 
-	public static void initBlocks() {
-		OreBlock.init();
+	public static void initBlocks(Register event) {
+		oreTin = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreTin").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreTin"));
+		oreTin.setHarvestLevel("pickaxe", 1);
+		oreLead = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreLead").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreLead"));
+		oreLead.setHarvestLevel("pickaxe", 1);
+		oreCopper = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreCopper").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreCopper"));
+		oreCopper.setHarvestLevel("pickaxe", 1);
+		oreZinc = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreZinc").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreZinc"));
+		oreZinc.setHarvestLevel("pickaxe", 1);
+		
+		event.getRegistry().registerAll(oreTin,oreLead,oreCopper,oreZinc);
 	}
 
-	public static void initItems() {
+	public static void initItems(Register event) {
 		// Register the basic, not-metallic items
-		GameRegistry.register(itemAllomancyGrinder = new ItemGrinder(),
-				new ResourceLocation(Allomancy.MODID, "grinder"));
-		GameRegistry.register(itemCoinBag = new ItemCoinBag(),
-				new ResourceLocation(Allomancy.MODID, "coinbag"));
-		GameRegistry.register(Mistcloak = new ItemMistcloak(WoolArmor, 1, EntityEquipmentSlot.CHEST),
-				new ResourceLocation(Allomancy.MODID, "mistcloak"));
-		GameRegistry.register(nuggetLerasium = new NuggetLerasium(),
-				new ResourceLocation(Allomancy.MODID, "nuggetLerasium"));
+		event.getRegistry().registerAll(
+				itemAllomancyGrinder = new ItemGrinder(),
+				itemCoinBag = new ItemCoinBag(),
+				Mistcloak = new ItemMistcloak(WoolArmor, 1, EntityEquipmentSlot.CHEST),
+				nuggetLerasium = new NuggetLerasium(),
+				// Register ItemVial and its subtypes
+				itemVial = new ItemVial(),
+				// Register ingots and add them to the ore dictionary
+				itemTinIngot = new Item().setUnlocalizedName("ingotTin").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotTin")),
+				itemLeadIngot = new Item().setUnlocalizedName("ingotLead").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotLead")),		
+				itemCopperIngot = new Item().setUnlocalizedName("ingotCopper").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotCopper")),
+				itemZincIngot = new Item().setUnlocalizedName("ingotZinc").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotZinc"))
+				);
 
-		// Register ItemVial and its subtypes
-		GameRegistry.register(itemVial = new ItemVial(), new ResourceLocation(Allomancy.MODID, "itemVial"));
 
 
-		// Register ingots and add them to the ore dictionary
-		GameRegistry.register(
-						itemTinIngot = new Item().setUnlocalizedName("ingotTin")
-							.setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0),
-						new ResourceLocation(Allomancy.MODID, "ingotTin"));
-		GameRegistry.register(
-						itemLeadIngot = new Item().setUnlocalizedName("ingotLead")
-								.setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0),
-						new ResourceLocation(Allomancy.MODID, "ingotLead"));
-		GameRegistry.register(
-						itemCopperIngot = new Item().setUnlocalizedName("ingotCopper")
-								.setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0),
-						new ResourceLocation(Allomancy.MODID, "ingotCopper"));
-		GameRegistry.register(
-						itemZincIngot = new Item().setUnlocalizedName("ingotZinc")
-								.setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0),
-						new ResourceLocation(Allomancy.MODID, "ingotZinc"));
-
+		// Register flakes
+		for (int i = 0; i < flakeMetals.length; i++) {
+			event.getRegistry().register(new Item().setUnlocalizedName("flake" + flakeMetals[i]).setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID, "flake" + flakeMetals[i])));
+		}
+		
+		//Register ore block items
+		event.getRegistry().registerAll(
+				new ItemBlock(oreTin).setRegistryName(oreTin.getRegistryName()),
+				new ItemBlock(oreLead).setRegistryName(oreLead.getRegistryName()),
+				new ItemBlock(oreCopper).setRegistryName(oreCopper.getRegistryName()),
+				new ItemBlock(oreZinc).setRegistryName(oreZinc.getRegistryName())
+				);
+		
+				
 		OreDictionary.registerOre("ingotZinc", itemZincIngot);
 		OreDictionary.registerOre("ingotTin", itemTinIngot);
 		OreDictionary.registerOre("ingotCopper", itemCopperIngot);
 		OreDictionary.registerOre("ingotLead", itemLeadIngot);
-
-		// Register flakes
-		for (int i = 0; i < flakeMetals.length; i++) {
-			GameRegistry.register(
-					new Item().setUnlocalizedName("flake" + flakeMetals[i]).setCreativeTab(Registry.tabsAllomancy),
-					new ResourceLocation(Allomancy.MODID, "flake" + flakeMetals[i]));
-		}
+		OreDictionary.registerOre("oreZinc", oreZinc);
+		OreDictionary.registerOre("oreTin", oreTin);
+		OreDictionary.registerOre("oreCopper", oreCopper);
+		OreDictionary.registerOre("oreLead", oreLead);
 	}
 
 	public static void initKeyBindings() {
@@ -142,13 +154,13 @@ public class Registry {
 	                new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.IRON_NUGGET, renderItem));
 
 		// Register ore models individually.
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreTin), 0,
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreTin), 0,
 				new ModelResourceLocation("allomancy:oreTin", "inventory"));
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreZinc), 0,
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreZinc), 0,
 				new ModelResourceLocation("allomancy:oreZinc", "inventory"));
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreCopper), 0,
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreCopper), 0,
 				new ModelResourceLocation("allomancy:oreCopper", "inventory"));
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(OreBlock.oreLead), 0,
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreLead), 0,
 				new ModelResourceLocation("allomancy:oreLead", "inventory"));
 
 		// Register ingot models individually
@@ -198,10 +210,10 @@ public class Registry {
 	
 	//only does furnace recipes, rest are handled in JSON
 	public static void setupRecipes() {
-		GameRegistry.addSmelting(OreBlock.oreTin, new ItemStack(itemTinIngot, 1), 5);
-		GameRegistry.addSmelting(OreBlock.oreCopper, new ItemStack(itemCopperIngot, 1), 5);
-		GameRegistry.addSmelting(OreBlock.oreLead, new ItemStack(itemLeadIngot, 1), 5);
-		GameRegistry.addSmelting(OreBlock.oreZinc, new ItemStack(itemZincIngot, 1), 5);
+		GameRegistry.addSmelting(oreTin, new ItemStack(itemTinIngot, 1), 5);
+		GameRegistry.addSmelting(oreCopper, new ItemStack(itemCopperIngot, 1), 5);
+		GameRegistry.addSmelting(oreLead, new ItemStack(itemLeadIngot, 1), 5);
+		GameRegistry.addSmelting(oreZinc, new ItemStack(itemZincIngot, 1), 5);
 	}
 
 }

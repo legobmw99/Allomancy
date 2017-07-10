@@ -52,10 +52,8 @@ public class Allomancy {
 	public static class CommonProxy {
 		public void preInit(FMLPreInitializationEvent e) {
 			// Load most of the mod's content
+			MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
 			AllomancyConfig.initProps(e.getSuggestedConfigurationFile());
-			Registry.initItems();
-			Registry.initBlocks();
-			Registry.setupRecipes();
 			Registry.registerPackets();
 		}
 
@@ -64,8 +62,8 @@ public class Allomancy {
 		}
 
 		public void init(FMLInitializationEvent e) {
-			MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
 			GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
+			Registry.setupRecipes();
 			AllomancyCapabilities.register();
 		}
 	}

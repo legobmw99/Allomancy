@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.items;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.entities.EntityGoldNugget;
 import com.legobmw99.allomancy.entities.EntityIronNugget;
 import com.legobmw99.allomancy.util.AllomancyCapabilities;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class ItemCoinBag extends Item {
@@ -19,6 +21,7 @@ public class ItemCoinBag extends Item {
         super();
         this.setUnlocalizedName("coinbag");
         this.setCreativeTab(Registry.tabsAllomancy);
+        this.setRegistryName(new ResourceLocation(Allomancy.MODID, "coinbag"));
         this.maxStackSize = 1;
     }
 
