@@ -84,11 +84,11 @@ public class Allomancy {
 			super.init(e);
 			MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 			Registry.initKeyBindings();
+			Registry.registerRenders();
+
 		}
 		@Override
 		public void postInit(FMLPostInitializationEvent e) {
-			Registry.registerRenders();
-;
 		}
 	}
 

@@ -63,7 +63,6 @@ public class Registry {
 	public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
 			"Lead" };
 	
-	//TODO: advancement?
 	
 	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
 	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool",
@@ -206,6 +205,9 @@ public class Registry {
 					new ModelResourceLocation("allomancy:itemVial." + ItemVial.unlocalName[i], "inventory"));
 
 		}
+		
+		//Hacky, TODO: investigate other solutions to the vials-not-loading problem
+		Minecraft.getMinecraft().refreshResources();
 	}
 	
 	//only does furnace recipes, rest are handled in JSON

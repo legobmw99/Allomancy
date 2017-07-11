@@ -7,6 +7,7 @@ import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import com.legobmw99.allomancy.util.AllomancyCapabilities;
 import com.legobmw99.allomancy.util.AllomancyConfig;
+import com.legobmw99.allomancy.util.AllomancyUtils;
 import com.legobmw99.allomancy.util.Registry;
 
 import net.minecraft.block.Block;
@@ -36,39 +37,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class CommonEventHandler {
-    
-    //TODO: for some reason this does not function if moved into the Utils class
-    /**
-     * Runs each worldTick, checking the burn times, abilities, and metal amounts. Then syncs with the client to make sure everyone is on the same page
-     * 
-     * @param cap
-     *            the AllomancyCapabilities data
-     * @param player
-     *            the player being checked
-     */
-    private static void updateMetalBurnTime(AllomancyCapabilities cap1, EntityPlayerMP player) {
-        for (int i = 0; i < 8; i++) {
-            if (cap1.getMetalBurning(i)) {
-                if (cap1.getAllomancyPower() != i && cap1.getAllomancyPower() != 8) {
-                    // put out any metals that the player shouldn't be able to burn
-                    cap1.setMetalBurning(i, false);
-                    Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
-                } else {
-                    cap1.setBurnTime(i, cap1.getBurnTime(i) - 1);
-                    if (cap1.getBurnTime(i) == 0) {
-                        cap1.setBurnTime(i, cap1.MaxBurnTime[i]);
-                        cap1.setMetalAmounts(i, cap1.getMetalAmounts(i) - 1);
-                        Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
-                        if (cap1.getMetalAmounts(i) == 0) {
-                            cap1.setMetalBurning(i, false);
-                            Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
-                        }
-                    }
-                }
-
-            }
-        }
-    }
     
     @SubscribeEvent
     public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
@@ -173,7 +141,7 @@ public class CommonEventHandler {
                 if (cap.getAllomancyPower() >= 0) {
                     // Run the necessary updates on the player's metals
                     if (curPlayer instanceof EntityPlayerMP) {
-                        updateMetalBurnTime(cap,(EntityPlayerMP) curPlayer);
+                        AllomancyUtils.updateMetalBurnTime(cap,(EntityPlayerMP) curPlayer);
                     }
                     // Damage the player if they have stored damage and pewter cuts out
                     if (!cap.getMetalBurning(AllomancyCapabilities.matPewter) && (cap.getDamageStored() > 0)) {

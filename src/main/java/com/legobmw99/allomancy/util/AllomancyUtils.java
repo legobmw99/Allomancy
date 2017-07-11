@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import com.legobmw99.allomancy.network.packets.MoveEntityPacket;
 import com.legobmw99.allomancy.network.packets.StopFallPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
@@ -22,6 +23,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -126,7 +128,7 @@ public class AllomancyUtils {
             }
         }
     }
-
+    
     /**
      * Draws a line from the player (denoted pX,Y,Z) to the given set of coordinates (oX,Y,Z) in a certain color (r,g,b)
      * 
@@ -460,6 +462,38 @@ public class AllomancyUtils {
             // Pull the entity toward you
             BlockPos anchor = new BlockPos((int) player.posX, (int) player.posY, (int) player.posZ);
             move(1, entity, anchor);
+        }
+    }
+    
+    /**
+     * Runs each worldTick, checking the burn times, abilities, and metal amounts. Then syncs with the client to make sure everyone is on the same page
+     * 
+     * @param cap
+     *            the AllomancyCapabilities data
+     * @param player
+     *            the player being checked
+     */
+    public static void updateMetalBurnTime(AllomancyCapabilities cap1, EntityPlayerMP player) {
+        for (int i = 0; i < 8; i++) {
+            if (cap1.getMetalBurning(i)) {
+                if (cap1.getAllomancyPower() != i && cap1.getAllomancyPower() != 8) {
+                    // put out any metals that the player shouldn't be able to burn
+                    cap1.setMetalBurning(i, false);
+                    Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
+                } else {
+                    cap1.setBurnTime(i, cap1.getBurnTime(i) - 1);
+                    if (cap1.getBurnTime(i) == 0) {
+                        cap1.setBurnTime(i, cap1.MaxBurnTime[i]);
+                        cap1.setMetalAmounts(i, cap1.getMetalAmounts(i) - 1);
+                        Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
+                        if (cap1.getMetalAmounts(i) == 0) {
+                            cap1.setMetalBurning(i, false);
+                            Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
+                        }
+                    }
+                }
+
+            }
         }
     }
 }

@@ -475,7 +475,7 @@ public class ClientEventHandler {
         if (!Minecraft.getMinecraft().inGameHasFocus) {
             return;
         }
-        if (FMLClientHandler.instance().getClient().currentScreen != null && !(FMLClientHandler.instance().getClient().currentScreen instanceof GUIMetalSelect)) {
+        if (FMLClientHandler.instance().getClient().currentScreen != null ) {
             return;
         }
 
@@ -487,7 +487,6 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onRenderGUIScreen(GuiScreenEvent.DrawScreenEvent event) {
         if (event.getGui() instanceof GUIMetalSelect && !event.isCancelable()) {
-            //TODO: investigate this more and maybe make it work
             drawMetalOverlay();
         }
     }

@@ -1,15 +1,14 @@
 {
     "display": {
         "icon": {
-            "item": "allomancy:nuggetLerasium"
+            "item": "allomancy:mistcloak"
         },
         "title": {
             "translate": "advancements.becomeMistborn.title"
         },
         "description": {
             "translate": "advancements.becomeMistborn.desc"
-        },
-        "frame": "challenge"
+        }
     },
     "parent": "minecraft:adventure/root",
     "rewards": {
