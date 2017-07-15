@@ -14,8 +14,9 @@ import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import com.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
-import com.legobmw99.allomancy.network.packets.MoveEntityPacket;
-import com.legobmw99.allomancy.network.packets.StopFallPacket;
+import com.legobmw99.allomancy.network.packets.MovePlayerPacket;
+import com.legobmw99.allomancy.network.packets.TryPushPullBlock;
+import com.legobmw99.allomancy.network.packets.TryPushPullEntity;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 
 import net.minecraft.block.Block;
@@ -131,13 +132,15 @@ public class Registry {
 
 	public static void registerPackets() {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel("allomancy");
-		network.registerMessage(StopFallPacket.Handler.class, StopFallPacket.class, 0, Side.SERVER);
-		network.registerMessage(AllomancyPowerPacket.Handler.class, AllomancyPowerPacket.class, 1, Side.CLIENT);
-		network.registerMessage(MoveEntityPacket.Handler.class, MoveEntityPacket.class, 2, Side.SERVER);
-		network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 3, Side.SERVER);
-		network.registerMessage(AllomancyCapabiltiesPacket.Handler.class, AllomancyCapabiltiesPacket.class, 4,Side.CLIENT);
-		network.registerMessage(ChangeEmotionPacket.Handler.class, ChangeEmotionPacket.class, 5, Side.SERVER);
-		network.registerMessage(GetCapabilitiesPacket.Handler.class, GetCapabilitiesPacket.class, 6, Side.SERVER);
+		network.registerMessage(AllomancyPowerPacket.Handler.class, AllomancyPowerPacket.class, 0, Side.CLIENT);
+		network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 1, Side.SERVER);
+		network.registerMessage(AllomancyCapabiltiesPacket.Handler.class, AllomancyCapabiltiesPacket.class, 2,Side.CLIENT);
+		network.registerMessage(ChangeEmotionPacket.Handler.class, ChangeEmotionPacket.class, 3, Side.SERVER);
+		network.registerMessage(GetCapabilitiesPacket.Handler.class, GetCapabilitiesPacket.class, 4, Side.SERVER);
+		network.registerMessage(TryPushPullEntity.Handler.class, TryPushPullEntity.class, 5, Side.SERVER);
+		network.registerMessage(TryPushPullBlock.Handler.class, TryPushPullBlock.class, 6, Side.SERVER);
+		network.registerMessage(MovePlayerPacket.Handler.class, MovePlayerPacket.class, 7, Side.CLIENT);
+
 
 	}
 

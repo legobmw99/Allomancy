@@ -290,12 +290,12 @@ public class ClientEventHandler {
                     if (cap.getMetalBurning(AllomancyCapabilities.matIron)) {
                         if (mov != null) {
                             if (mov.entityHit != null) {
-                                AllomancyUtils.tryPullEntity(mov.entityHit);
+                                AllomancyUtils.tryMoveOffEntity(mov.entityHit, AllomancyUtils.PULL);
                             }
                             if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
                                 BlockPos bp = mov.getBlockPos();
                                 if (AllomancyUtils.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
-                                    AllomancyUtils.tryPullBlock(bp);
+                                    AllomancyUtils.tryMoveOffBlock(bp, AllomancyUtils.PULL);
                                 }
                             }
 
@@ -321,14 +321,14 @@ public class ClientEventHandler {
                     if (cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
                         if (mov != null) {
                             if (mov.entityHit != null) {
-                                AllomancyUtils.tryPushEntity(mov.entityHit);
+                                AllomancyUtils.tryMoveOffEntity(mov.entityHit,AllomancyUtils.PUSH);
 
                             }
                             if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
 
                                 BlockPos bp = mov.getBlockPos();
                                 if (AllomancyUtils.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
-                                    AllomancyUtils.tryPushBlock(bp);
+                                    AllomancyUtils.tryMoveOffBlock(bp, AllomancyUtils.PUSH);
                                 }
                             }
 

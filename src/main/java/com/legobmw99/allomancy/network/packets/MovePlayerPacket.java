@@ -1,22 +1,24 @@
 package com.legobmw99.allomancy.network.packets;
 
+import com.legobmw99.allomancy.util.AllomancyCapabilities;
+
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class MoveEntityPacket implements IMessage {
-	public MoveEntityPacket() {
+public class MovePlayerPacket implements IMessage {
+	
+	public MovePlayerPacket(){
+		
 	}
-
 	private double motionX;
 	private double motionY;
 	private double motionZ;
-	private int entityID;
 
 	/**
 	 * 
@@ -29,11 +31,10 @@ public class MoveEntityPacket implements IMessage {
 	 * @param entityID
 	 *            the entity to be moved
 	 */
-	public MoveEntityPacket(double motionX, double motionY, double motionZ, int entityID) {
+	public MovePlayerPacket(double motionX, double motionY, double motionZ) {
 		this.motionX = motionX;
 		this.motionY = motionY;
 		this.motionZ = motionZ;
-		this.entityID = entityID;
 	}
 
 	@Override
@@ -43,7 +44,6 @@ public class MoveEntityPacket implements IMessage {
 		motionX = ((double) ByteBufUtils.readVarInt(buf, 5)) / 100;
 		motionY = ((double) ByteBufUtils.readVarInt(buf, 5)) / 100;
 		motionZ = ((double) ByteBufUtils.readVarInt(buf, 5)) / 100;
-		entityID = ByteBufUtils.readVarInt(buf, 5);
 
 	}
 
@@ -54,28 +54,24 @@ public class MoveEntityPacket implements IMessage {
 		ByteBufUtils.writeVarInt(buf, (int) (motionX * 100), 5);
 		ByteBufUtils.writeVarInt(buf, (int) (motionY * 100), 5);
 		ByteBufUtils.writeVarInt(buf, (int) (motionZ * 100), 5);
-		ByteBufUtils.writeVarInt(buf, entityID, 5);
 	}
 
-	public static class Handler implements IMessageHandler<MoveEntityPacket, IMessage> {
+
+	public static class Handler implements IMessageHandler<MovePlayerPacket, IMessage>{
 
 		@Override
-		public IMessage onMessage(final MoveEntityPacket message, final MessageContext ctx) {
-			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
-			mainThread.addScheduledTask(new Runnable() {
-				@Override
-				public void run() {
-					Entity target = ctx.getServerHandler().player.world.getEntityByID(message.entityID);
-					if (target == null) {
-						return;
-					} else {
-						target.motionX = message.motionX;
-						target.motionY = message.motionY;
-						target.motionZ = message.motionZ;
-					}
-				}
-			});
-			return null;
+		public IMessage onMessage(final MovePlayerPacket message, final MessageContext ctx) {
+	        IThreadListener mainThread = Minecraft.getMinecraft();
+	        mainThread.addScheduledTask(new Runnable() {
+	            @Override
+	            public void run() {
+	            	EntityPlayer player =  Minecraft.getMinecraft().player;
+	            	player.motionX = message.motionX;
+	            	player.motionY = message.motionY;
+	            	player.motionZ = message.motionZ;
+
+	            }
+	        });		return null;
 		}
 	}
 }
