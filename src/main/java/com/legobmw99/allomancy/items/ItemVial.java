@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.items;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.util.AllomancyCapabilities;
 import com.legobmw99.allomancy.util.Registry;
 
@@ -14,6 +15,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class ItemVial extends Item {
@@ -84,7 +86,7 @@ public class ItemVial extends Item {
      *            the player's Allomancy Capability
      * @return whether or not all metals are full
      */
-    private boolean checkFullCapacity(AllomancyCapabilities cap) {
+    private static boolean checkFullCapacity(AllomancyCapabilities cap) {
         for (int i = 0; i < 8; i++) {
             if (cap.getMetalAmounts(i) < 10) {
                 return false;
@@ -94,9 +96,12 @@ public class ItemVial extends Item {
     }
 
     public ItemVial() {
-        this.setHasSubtypes(true);
         this.setCreativeTab(Registry.tabsAllomancy);
+        this.setRegistryName(new ResourceLocation(Allomancy.MODID, "itemVial"));
+        this.setHasSubtypes(true);
     }
+    
+
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
@@ -114,9 +119,11 @@ public class ItemVial extends Item {
     }
     
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        for (int meta = 0; meta < ItemVial.unlocalName.length; meta++) {
-            subItems.add(new ItemStack(item, 1, meta));
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+        if (isInCreativeTab(tab)){ 
+        	for (int meta = 0; meta < ItemVial.unlocalName.length; meta++) {
+        		subItems.add(new ItemStack(this, 1, meta));
+        	}
         }
     }
 }

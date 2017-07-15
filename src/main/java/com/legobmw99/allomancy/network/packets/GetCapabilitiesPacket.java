@@ -49,12 +49,12 @@ public class GetCapabilitiesPacket implements IMessage {
 	public static class Handler implements IMessageHandler<GetCapabilitiesPacket, IMessage> {
 		@Override
 		public IMessage onMessage(final GetCapabilitiesPacket message, final MessageContext ctx) {
-			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world;
+			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					Entity target = ctx.getServerHandler().playerEntity.world.getEntityByID(message.entityIDOther);
-					EntityPlayer player = (EntityPlayer) ctx.getServerHandler().playerEntity.world.getEntityByID(message.entityIDSender);
+					Entity target = ctx.getServerHandler().player.world.getEntityByID(message.entityIDOther);
+					EntityPlayer player = (EntityPlayer) ctx.getServerHandler().player.world.getEntityByID(message.entityIDSender);
 					AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(target);
 					
 					Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, message.entityIDOther),(EntityPlayerMP) player);

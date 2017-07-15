@@ -65,12 +65,12 @@ public class ChangeEmotionPacket implements IMessage {
 
         @Override
         public IMessage onMessage(final ChangeEmotionPacket message, final MessageContext ctx) {
-            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world;
+            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
             mainThread.addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
                     EntityCreature target;
-                    target = (EntityCreature) ctx.getServerHandler().playerEntity.world.getEntityByID(message.entityID);
+                    target = (EntityCreature) ctx.getServerHandler().player.world.getEntityByID(message.entityID);
 
                     if ((target != null) && message.aggro == 1) {
                         target.tasks.taskEntries.clear();
@@ -94,7 +94,7 @@ public class ChangeEmotionPacket implements IMessage {
                     if ((target != null) && (message.aggro == 0)) {
                         target.tasks.taskEntries.clear();
                         target.setAttackTarget(target);
-                        target.setLastAttacker(target);
+                        target.setRevengeTarget(target);
                         target.setRevengeTarget(target);
                         target.tasks.addTask(0, new EntityAISwimming(target));
                         target.tasks.addTask(0, new EntityAIPanic(target, 0.5D));

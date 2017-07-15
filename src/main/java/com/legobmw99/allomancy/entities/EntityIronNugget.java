@@ -46,7 +46,7 @@ public class EntityIronNugget extends EntityThrowable {
 
         if (!this.world.isRemote)
         {
-        	ItemStack goldAmmo = new ItemStack(Items.field_191525_da, 1, 0);
+        	ItemStack goldAmmo = new ItemStack(Items.IRON_NUGGET, 1, 0);
         	if(this.world.getGameRules().getBoolean("doTileDrops") && movingobjectposition.entityHit == null && this.dropItem){
 				this.world.spawnEntity(new EntityItem(this.world, this.posX, this.posY, this.posZ, goldAmmo));
 			}

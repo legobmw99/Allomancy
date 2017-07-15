@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "allomancy:flakepewter",
+    "count": 2
+  },
+  "ingredients": [
+    {
+      "item": "#ingotPewter"
+    },
+    {
+      "item": "allomancy:grinder"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

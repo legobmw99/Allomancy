@@ -2,14 +2,16 @@ package com.legobmw99.allomancy.items;
 
 import java.util.List;
 
-import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
+import javax.annotation.Nullable;
+
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.util.AllomancyCapabilities;
 import com.legobmw99.allomancy.util.Registry;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemFood;
@@ -19,6 +21,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class NuggetLerasium extends ItemFood {
@@ -28,6 +31,7 @@ public class NuggetLerasium extends ItemFood {
 		this.setHasSubtypes(false);
 		this.setUnlocalizedName("nuggetLerasium");
 		this.setCreativeTab(Registry.tabsAllomancy);
+		this.setRegistryName(new ResourceLocation(Allomancy.MODID, "nuggetLerasium"));
 		this.maxStackSize = 1;
 	}
 
@@ -62,22 +66,20 @@ public class NuggetLerasium extends ItemFood {
 		double z = entityLiving.posZ;
 		if (cap.getAllomancyPower() != 8) {
 			cap.setAllomancyPower(8);
-			Registry.network.sendTo(new AllomancyPowerPacket(8), (EntityPlayerMP) ((EntityPlayer)entityLiving));
         }
 		//Fancy shmancy effects
 		worldIn.spawnEntity(new EntityLightningBolt(worldIn, x, y, z, true));
 		entityLiving.addPotionEffect(new PotionEffect(Potion.getPotionById(12),
 				20, 0, true, false));
 
-		((EntityPlayer) entityLiving).addStat(Registry.becomeMistborn, 1);
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
 
 	@Override
-	public void addInformation(ItemStack par1ItemStack,
-			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		par3List.add("\u00A75This item is endowed with strange powers");
-		par3List.add("\u00A75Perhaps you should ingest it?");
+    public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced){
+
+		tooltip.add("\u00A75This item is endowed with strange powers");
+		tooltip.add("\u00A75Perhaps you should ingest it?");
 	}
 	
 	@Override

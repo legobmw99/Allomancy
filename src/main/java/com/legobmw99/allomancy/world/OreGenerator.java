@@ -3,14 +3,13 @@ package com.legobmw99.allomancy.world;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.legobmw99.allomancy.blocks.OreBlock;
 import com.legobmw99.allomancy.util.AllomancyConfig;
+import com.legobmw99.allomancy.util.Registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -64,22 +63,22 @@ public class OreGenerator implements IWorldGenerator {
 		OreData data;
 
 		data = new OreData(AllomancyConfig.copperMaxY, AllomancyConfig.copperMinY, 8, 4, AllomancyConfig.copperDensity,
-				OreBlock.oreCopper, AllomancyConfig.generateCopper);
+				Registry.oreCopper, AllomancyConfig.generateCopper);
 		this.oreList.add(data);
 		data = new OreData(AllomancyConfig.tinMaxY, AllomancyConfig.tinMinY, 8, 4, AllomancyConfig.tinDensity,
-				OreBlock.oreTin, AllomancyConfig.generateTin);
+				Registry.oreTin, AllomancyConfig.generateTin);
 		this.oreList.add(data);
 		data = new OreData(AllomancyConfig.leadMaxY, AllomancyConfig.leadMinY, 8, 4, AllomancyConfig.leadDensity,
-				OreBlock.oreLead, AllomancyConfig.generateLead);
+				Registry.oreLead, AllomancyConfig.generateLead);
 		this.oreList.add(data);
 		data = new OreData(AllomancyConfig.zincMaxY, AllomancyConfig.zincMinY, 8, 4, AllomancyConfig.zincDensity,
-				OreBlock.oreZinc, AllomancyConfig.generateZinc);
+				Registry.oreZinc, AllomancyConfig.generateZinc);
 		this.oreList.add(data);
 
 	}
 
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
+	public void generate(Random random, int chunkX, int chunkZ, World world, net.minecraft.world.gen.IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
 		int x, y, z;
 		int numOre;
@@ -110,4 +109,5 @@ public class OreGenerator implements IWorldGenerator {
 			}
 		}
 	}
+
 }

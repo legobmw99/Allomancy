@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.items;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.entities.EntityGoldNugget;
 import com.legobmw99.allomancy.entities.EntityIronNugget;
 import com.legobmw99.allomancy.util.AllomancyCapabilities;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class ItemCoinBag extends Item {
@@ -19,6 +21,7 @@ public class ItemCoinBag extends Item {
         super();
         this.setUnlocalizedName("coinbag");
         this.setCreativeTab(Registry.tabsAllomancy);
+        this.setRegistryName(new ResourceLocation(Allomancy.MODID, "coinbag"));
         this.maxStackSize = 1;
     }
 
@@ -33,7 +36,7 @@ public class ItemCoinBag extends Item {
                 worldIn.spawnEntity(entitygold);
             }
             
-            if (itemstack.getItem() == Items.field_191525_da) {
+            if (itemstack.getItem() == Items.IRON_NUGGET) {
                 EntityIronNugget entityiron = new EntityIronNugget(worldIn, playerIn);
                 worldIn.spawnEntity(entityiron);
             }
@@ -65,7 +68,7 @@ public class ItemCoinBag extends Item {
     }
 
     protected boolean isArrow(ItemStack stack) {
-        return stack != null && (stack.getItem() == Items.GOLD_NUGGET || stack.getItem() == Items.field_191525_da /* IRON_NUGGET */);
+        return stack != null && (stack.getItem() == Items.GOLD_NUGGET || stack.getItem() == Items.IRON_NUGGET /* IRON_NUGGET */);
     }
 
     public int getItemEnchantability() {

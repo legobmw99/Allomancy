@@ -1,0 +1,72 @@
+[
+    {
+        "name": "ingotTin",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "ingotTin"
+        }
+    },
+    {
+        "name": "ingotCopper",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "ingotCopper"
+        }
+    },
+    {
+        "name": "ingotZinc",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "ingotZinc"
+        }
+    },
+    {
+        "name": "ingotPewter",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "ingotPewter"
+        }
+    },
+    {
+        "name": "ingotIron",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        }
+    },
+    {
+        "name": "ingotSteel",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "ingotSteel"
+        }
+    },
+    {
+        "name": "ingotBronze",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "ingotBronze"
+        }
+    },
+    {
+        "name": "ingotLead",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "ingotLead"
+        }
+    },
+    {
+        "name": "ingotBrass",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "ingotBrass"
+        }
+    },
+    {
+        "name": "slabWood",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "slabWood"
+        }
+    }
+]

@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "allomancy:itemvial",
+    "data": 1
+  },
+  "ingredients": [
+    {
+      "item": "allomancy:flakeiron"
+    },
+    {
+      "item": "allomancy:itemvial",
+      "data": 0
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

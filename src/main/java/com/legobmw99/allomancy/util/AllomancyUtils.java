@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import com.legobmw99.allomancy.network.packets.MoveEntityPacket;
 import com.legobmw99.allomancy.network.packets.StopFallPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
@@ -22,6 +23,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -40,15 +42,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class AllomancyUtils {
-    private static ArrayList<String> metallist = buildMetalList();
+    private static final ArrayList<String> metallist = new ArrayList<String>();
 
     /**
      * Builds a list of the unlocalized names of every metal item in vanilla and the ore dictionary
      */
-    private static ArrayList<String> buildMetalList() {
-
-       ArrayList<String> metallist = new ArrayList<String>();
-
+    static {
         metallist.add(Items.IRON_AXE.getUnlocalizedName());
         metallist.add(Items.GOLDEN_AXE.getUnlocalizedName());
         metallist.add(Items.CHAINMAIL_BOOTS.getUnlocalizedName());
@@ -62,7 +61,7 @@ public class AllomancyUtils {
         metallist.add(Items.COMPASS.getUnlocalizedName());
         metallist.add(Items.FLINT_AND_STEEL.getUnlocalizedName());
         metallist.add(Items.GOLD_NUGGET.getUnlocalizedName());
-        metallist.add(Items.field_191525_da.getUnlocalizedName()); // IRON_NUGGET
+        metallist.add(Items.IRON_NUGGET.getUnlocalizedName()); 
         metallist.add(Items.CHAINMAIL_HELMET.getUnlocalizedName());
         metallist.add(Items.GOLDEN_HELMET.getUnlocalizedName());
         metallist.add(Items.IRON_HELMET.getUnlocalizedName());
@@ -128,9 +127,8 @@ public class AllomancyUtils {
                 }
             }
         }
-        return metallist;
     }
-
+    
     /**
      * Draws a line from the player (denoted pX,Y,Z) to the given set of coordinates (oX,Y,Z) in a certain color (r,g,b)
      * 
@@ -158,8 +156,11 @@ public class AllomancyUtils {
         GL11.glPopMatrix();
     }
     
-    /*
-     * This code is based almost entirely on the vanilla code. It's not super well documented, but basically it just runs a ray-trace. Edit at your own peril
+    /**
+     * Copied mostly from vanilla, this gets what the mouse is over
+     * @param dist
+     * 				distance
+     * @return the result of the raytrace
      */
     @SideOnly(Side.CLIENT)
     public static RayTraceResult getMouseOverExtended(float dist) {
@@ -178,18 +179,18 @@ public class AllomancyUtils {
                 calcdist = returnMOP.hitVec.distanceTo(pos);
             }
             Vec3d lookvec = theRenderViewEntity.getLook(0);
-            Vec3d var8 = pos.addVector(lookvec.xCoord * var2, lookvec.yCoord * var2, lookvec.zCoord * var2);
+            Vec3d var8 = pos.addVector(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2);
             Entity pointedEntity = null;
             float var9 = 1.0F;
             @SuppressWarnings("unchecked")
-            List<Entity> list = mc.world.getEntitiesWithinAABBExcludingEntity(theRenderViewEntity, theViewBoundingBox.addCoord(lookvec.xCoord * var2, lookvec.yCoord * var2, lookvec.zCoord * var2).expand(var9, var9, var9));
+            List<Entity> list = mc.world.getEntitiesWithinAABBExcludingEntity(theRenderViewEntity, addCoord(theViewBoundingBox,lookvec.x * dist, lookvec.y * dist, lookvec.z * dist).expand(var9, var9, var9));
             double d = calcdist;
             for (Entity entity : list) {
                 float bordersize = entity.getCollisionBorderSize();
                 AxisAlignedBB aabb = new AxisAlignedBB(entity.posX - entity.width / 2, entity.posY, entity.posZ - entity.width / 2, entity.posX + entity.width / 2, entity.posY + entity.height, entity.posZ + entity.width / 2);
                 aabb.expand(bordersize, bordersize, bordersize);
                 RayTraceResult mop0 = aabb.calculateIntercept(pos, var8);
-                if (aabb.isVecInside(pos)) {
+                if (aabb.contains(pos)) {
                     if (0.0D < d || d == 0.0D) {
                         pointedEntity = entity;
                         d = 0.0D;
@@ -208,6 +209,54 @@ public class AllomancyUtils {
         }
         return returnMOP;
     }
+    
+    /**
+     * Replacement for the old addCoord in AxisAlignedBB.class, necessary for getMouseOverExtended
+     * @param a 
+     * 			the original box
+     * @param x 
+     * @param y
+     * @param z
+     * @return Adds a coordinate to the bounding box, extending it if the point lies outside the current ranges.
+     */
+    public static AxisAlignedBB addCoord(AxisAlignedBB a, double x, double y, double z)
+    {
+        double d0 = a.minX;
+        double d1 = a.minY;
+        double d2 = a.minZ;
+        double d3 = a.maxX;
+        double d4 = a.maxY;
+        double d5 = a.maxZ;
+
+        if (x < 0.0D)
+        {
+            d0 += x;
+        }
+        else if (x > 0.0D)
+        {
+            d3 += x;
+        }
+
+        if (y < 0.0D)
+        {
+            d1 += y;
+        }
+        else if (y > 0.0D)
+        {
+            d4 += y;
+        }
+
+        if (z < 0.0D)
+        {
+            d2 += z;
+        }
+        else if (z > 0.0D)
+        {
+            d5 += z;
+        }
+
+        return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
+    }
 
     /**
      * Determines if a block is metal or not
@@ -219,7 +268,7 @@ public class AllomancyUtils {
     public static boolean isBlockMetal(Block block) {
         return metallist.contains(block.getUnlocalizedName());
     }
-
+    
     /**
      * Determines if an item is metal or not
      * 
@@ -319,7 +368,7 @@ public class AllomancyUtils {
      *            the EntityItem to Pull
      */
     private static void tryPullItem(EntityItem entity) {
-        if (metallist.contains(entity.getEntityItem().getItem().getUnlocalizedName())) {
+        if (metallist.contains(entity.getItem().getItem().getUnlocalizedName())) {
             EntityPlayer player = Minecraft.getMinecraft().player;
             BlockPos anchor = new BlockPos((int) player.posX, (int) player.posY - 1, (int) player.posZ);
             move(-0.5, entity, anchor);
@@ -385,7 +434,7 @@ public class AllomancyUtils {
      *            the EntityItem to Push
      */
     private static void tryPushItem(EntityItem entity) {
-        if (metallist.contains(entity.getEntityItem().getItem().getUnlocalizedName())) {
+        if (metallist.contains(entity.getItem().getItem().getUnlocalizedName())) {
             EntityPlayer player = Minecraft.getMinecraft().player;
             BlockPos anchor = new BlockPos((int) player.posX, (int) player.posY - 1, (int) player.posZ);
             move(0.5, entity, anchor);
@@ -413,6 +462,38 @@ public class AllomancyUtils {
             // Pull the entity toward you
             BlockPos anchor = new BlockPos((int) player.posX, (int) player.posY, (int) player.posZ);
             move(1, entity, anchor);
+        }
+    }
+    
+    /**
+     * Runs each worldTick, checking the burn times, abilities, and metal amounts. Then syncs with the client to make sure everyone is on the same page
+     * 
+     * @param cap
+     *            the AllomancyCapabilities data
+     * @param player
+     *            the player being checked
+     */
+    public static void updateMetalBurnTime(AllomancyCapabilities cap1, EntityPlayerMP player) {
+        for (int i = 0; i < 8; i++) {
+            if (cap1.getMetalBurning(i)) {
+                if (cap1.getAllomancyPower() != i && cap1.getAllomancyPower() != 8) {
+                    // put out any metals that the player shouldn't be able to burn
+                    cap1.setMetalBurning(i, false);
+                    Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
+                } else {
+                    cap1.setBurnTime(i, cap1.getBurnTime(i) - 1);
+                    if (cap1.getBurnTime(i) == 0) {
+                        cap1.setBurnTime(i, cap1.MaxBurnTime[i]);
+                        cap1.setMetalAmounts(i, cap1.getMetalAmounts(i) - 1);
+                        Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
+                        if (cap1.getMetalAmounts(i) == 0) {
+                            cap1.setMetalBurning(i, false);
+                            Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
+                        }
+                    }
+                }
+
+            }
         }
     }
 }
