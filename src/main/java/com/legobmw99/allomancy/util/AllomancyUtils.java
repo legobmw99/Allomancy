@@ -428,34 +428,6 @@ public class AllomancyUtils {
 	}
 
 	/**
-	 * Player tries to move off a block
-	 * 
-	 * @param vec
-	 *            the location of the block
-	 * @param direction
-	 *            the direction (1 for push, -1 for pull)
-	 */
-	@SideOnly(Side.CLIENT)
-	public static void tryMoveOffBlock(BlockPos vec, int direction) {
-		EntityPlayer player = Minecraft.getMinecraft().player;
-		Registry.network.sendToServer(new TryPushPullBlock(vec, player.getEntityId(), direction));
-	}
-
-	/**
-	 * Player tries to Pull an entity, is sorted into item or creature
-	 * 
-	 * @param entity
-	 *            the entity to try to Pull
-	 * @param direction
-	 *            the direction (1 for push, -1 for pull)
-	 */
-	@SideOnly(Side.CLIENT)
-	public static void tryMoveOffEntity(Entity entity, int direction) {
-		EntityPlayer player = Minecraft.getMinecraft().player;
-		Registry.network.sendToServer(new TryPushPullEntity(entity.getEntityId(), player.getEntityId(), direction));
-	}
-
-	/**
 	 * Runs each worldTick, checking the burn times, abilities, and metal
 	 * amounts. Then syncs with the client to make sure everyone is on the same
 	 * page
