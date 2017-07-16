@@ -289,7 +289,7 @@ public class ClientEventHandler {
                     // All iron pulling powers
                     if (cap.getMetalBurning(AllomancyCapabilities.matIron)) {
                         if (mov != null) {
-                            if (mov.entityHit != null) {
+                            if (mov.entityHit != null && AllomancyUtils.isEntityMetal(mov.entityHit)) {
                                 AllomancyUtils.tryMoveOffEntity(mov.entityHit, AllomancyUtils.PULL);
                             }
                             if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
@@ -320,7 +320,7 @@ public class ClientEventHandler {
                     // All steel pushing powers
                     if (cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
                         if (mov != null) {
-                            if (mov.entityHit != null) {
+                            if (mov.entityHit != null && AllomancyUtils.isEntityMetal(mov.entityHit)) {
                                 AllomancyUtils.tryMoveOffEntity(mov.entityHit,AllomancyUtils.PUSH);
 
                             }
