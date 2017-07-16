@@ -1,9 +1,12 @@
 package com.legobmw99.allomancy;
 
+import java.io.File;
+
 import com.legobmw99.allomancy.handlers.ClientEventHandler;
 import com.legobmw99.allomancy.handlers.CommonEventHandler;
 import com.legobmw99.allomancy.util.AllomancyCapabilities;
 import com.legobmw99.allomancy.util.AllomancyConfig;
+import com.legobmw99.allomancy.util.AllomancyUtils;
 import com.legobmw99.allomancy.util.PowerCommand;
 import com.legobmw99.allomancy.util.Registry;
 import com.legobmw99.allomancy.world.OreGenerator;
@@ -25,6 +28,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class Allomancy {
 	public static final String MODID = "allomancy";
 	public static final String VERSION = "@VERSION@";
+	public static File configDirectory;
 
 	@SidedProxy
 	public static CommonProxy proxy;
@@ -60,11 +64,13 @@ public class Allomancy {
 			// Load most of the mod's content
 			MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
 			AllomancyConfig.initProps(e.getSuggestedConfigurationFile());
+			configDirectory = e.getModConfigurationDirectory();
 			Registry.registerPackets();
 		}
 
 		public void postInit(FMLPostInitializationEvent e) {
-			
+			AllomancyUtils.init();
+
 		}
 
 		public void serverInit(FMLServerStartingEvent e) {
@@ -89,6 +95,7 @@ public class Allomancy {
 		}
 		@Override
 		public void postInit(FMLPostInitializationEvent e) {
+			super.postInit(e);
 		}
 	}
 

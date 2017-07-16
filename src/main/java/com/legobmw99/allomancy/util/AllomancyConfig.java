@@ -1,15 +1,16 @@
 package com.legobmw99.allomancy.util;
 
 import java.io.File;
+import java.util.ArrayList;
 
+import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 
 public class AllomancyConfig {
 
     public static void initProps(File confFile) {
-        Configuration config = new Configuration(confFile);
+        config = new Configuration(confFile);
         config.load();
-
         generateCopper = config.get("Worldgen Disabler", "Generate Copper Ore", true).getBoolean(true);
         generateTin = config.get("Worldgen Disabler", "Generate Tin Ore", true).getBoolean(true);
         generateLead = config.get("Worldgen Disabler", "Generate Lead Ore", true).getBoolean(true);
@@ -35,10 +36,11 @@ public class AllomancyConfig {
         animateSelection = config.get("Graphics", "Animate the selection wheel", true).getBoolean(true);
 
         randomizeMistings = config.get("Gameplay", "Spawn players as a random Misting", true).getBoolean(true);
-
+        
         config.save();
     }
-
+    
+    public static Configuration config;
     public static boolean generateCopper;
     public static boolean generateTin;
     public static boolean generateLead;

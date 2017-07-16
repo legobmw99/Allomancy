@@ -14,6 +14,8 @@ import com.legobmw99.allomancy.entities.particles.ParticleSound;
 import com.legobmw99.allomancy.gui.GUIMetalSelect;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import com.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
+import com.legobmw99.allomancy.network.packets.TryPushPullBlock;
+import com.legobmw99.allomancy.network.packets.TryPushPullEntity;
 import com.legobmw99.allomancy.util.AllomancyCapabilities;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.AllomancyUtils;
@@ -289,13 +291,14 @@ public class ClientEventHandler {
                     // All iron pulling powers
                     if (cap.getMetalBurning(AllomancyCapabilities.matIron)) {
                         if (mov != null) {
-                            if (mov.entityHit != null) {
-                                AllomancyUtils.tryPullEntity(mov.entityHit);
+                            if (mov.entityHit != null && AllomancyUtils.isEntityMetal(mov.entityHit)) {
+                        		Registry.network.sendToServer(new TryPushPullEntity(mov.entityHit.getEntityId(), player.getEntityId(), AllomancyUtils.PULL));
                             }
+                            
                             if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
                                 BlockPos bp = mov.getBlockPos();
                                 if (AllomancyUtils.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
-                                    AllomancyUtils.tryPullBlock(bp);
+                            		Registry.network.sendToServer(new TryPushPullBlock(bp, player.getEntityId(), AllomancyUtils.PULL));
                                 }
                             }
 
@@ -306,7 +309,6 @@ public class ClientEventHandler {
                     if (cap.getMetalBurning(AllomancyCapabilities.matZinc)) {
                         Entity entity;
                         if ((mov != null) && (mov.entityHit != null) && (mov.entityHit instanceof EntityCreature) && !(mov.entityHit instanceof EntityPlayer)) {
-
                             entity = mov.entityHit;
                             Registry.network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), true));
 
@@ -320,15 +322,17 @@ public class ClientEventHandler {
                     // All steel pushing powers
                     if (cap.getMetalBurning(AllomancyCapabilities.matSteel)) {
                         if (mov != null) {
-                            if (mov.entityHit != null) {
-                                AllomancyUtils.tryPushEntity(mov.entityHit);
+                            if (mov.entityHit != null && AllomancyUtils.isEntityMetal(mov.entityHit)) {
+                        		Registry.network.sendToServer(new TryPushPullEntity(mov.entityHit.getEntityId(), player.getEntityId(), AllomancyUtils.PUSH));
+
 
                             }
                             if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
 
                                 BlockPos bp = mov.getBlockPos();
                                 if (AllomancyUtils.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
-                                    AllomancyUtils.tryPushBlock(bp);
+                            		Registry.network.sendToServer(new TryPushPullBlock(bp, player.getEntityId(), AllomancyUtils.PUSH));
+
                                 }
                             }
 
