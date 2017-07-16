@@ -14,7 +14,6 @@ import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
 import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import com.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
-import com.legobmw99.allomancy.network.packets.MovePlayerPacket;
 import com.legobmw99.allomancy.network.packets.TryPushPullBlock;
 import com.legobmw99.allomancy.network.packets.TryPushPullEntity;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
@@ -139,9 +138,6 @@ public class Registry {
 		network.registerMessage(GetCapabilitiesPacket.Handler.class, GetCapabilitiesPacket.class, 4, Side.SERVER);
 		network.registerMessage(TryPushPullEntity.Handler.class, TryPushPullEntity.class, 5, Side.SERVER);
 		network.registerMessage(TryPushPullBlock.Handler.class, TryPushPullBlock.class, 6, Side.SERVER);
-		network.registerMessage(MovePlayerPacket.Handler.class, MovePlayerPacket.class, 7, Side.CLIENT);
-
-
 	}
 
 	@SideOnly(Side.CLIENT)

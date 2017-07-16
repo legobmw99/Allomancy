@@ -18,7 +18,6 @@ import org.lwjgl.opengl.GL11;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
-import com.legobmw99.allomancy.network.packets.MovePlayerPacket;
 import com.legobmw99.allomancy.network.packets.TryPushPullBlock;
 import com.legobmw99.allomancy.network.packets.TryPushPullEntity;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
@@ -26,9 +25,7 @@ import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -404,10 +401,11 @@ public class AllomancyUtils {
 				? MathHelper.clamp(toMove.motionY + motionY, -Math.abs(motionY), motionY) : 0;
 		toMove.motionZ = Math.abs(toMove.motionZ + motionZ) > 0.01
 				? MathHelper.clamp(toMove.motionZ + motionZ, -Math.abs(motionZ), motionZ) : 0;
+		toMove.velocityChanged = true;
 
+		//Only save players from fall damage
 		if (toMove instanceof EntityPlayerMP) {
 			toMove.fallDistance = 0;
-			Registry.network.sendTo(new MovePlayerPacket(toMove.motionX,toMove.motionY,toMove.motionZ), (EntityPlayerMP) toMove);
 		}
 
 	}
