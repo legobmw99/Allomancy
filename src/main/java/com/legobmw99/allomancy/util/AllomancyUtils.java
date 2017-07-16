@@ -3,12 +3,6 @@ package com.legobmw99.allomancy.util;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-
-/**
- * Contains all static, common methods in one place
- * 
- */
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,6 +41,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
+/**
+ * Contains all static, common methods in one place
+ * 
+ */
+
 public class AllomancyUtils {
 	private static final ArrayList<String> metallist = new ArrayList<String>();
 
@@ -63,20 +62,12 @@ public class AllomancyUtils {
 	/*
 	 * This code was based off the similar methods found in CoFHCore
 	 */
-	public static void generateWhitelist() {
+	private static void generateWhitelist() {
 		BufferedWriter output = null;
 		whitelist = new File(Allomancy.configDirectory, "allomancy-whitelist.txt");
 		if (!whitelist.exists()) {
-			try {
-				whitelist.createNewFile();
-				output = new BufferedWriter(new FileWriter(whitelist));
-				output.write("# Add the registry names of blocks or items to the list below for them to be treated as metals \n");
-
-			} catch (Throwable t) {
-				t.printStackTrace();
-			}
+			
 			ArrayList<String> defaultList = new ArrayList<>();
-
 			defaultList.add(Items.IRON_AXE.getRegistryName().toString());
 			defaultList.add(Items.GOLDEN_AXE.getRegistryName().toString());
 			defaultList.add(Items.CHAINMAIL_BOOTS.getRegistryName().toString());
@@ -138,12 +129,10 @@ public class AllomancyUtils {
 			defaultList.add(Blocks.ACTIVATOR_RAIL.getRegistryName().toString());
 			defaultList.add(Blocks.DETECTOR_RAIL.getRegistryName().toString());
 			defaultList.add(Blocks.GOLDEN_RAIL.getRegistryName().toString());
-
 			defaultList.add(Registry.itemVial.getRegistryName().toString());
 
 			for (int i = 0; i < Registry.flakeMetals.length; i++) {
-				defaultList.add(new Item().getByNameOrId("allomancy:" + "flake" + Registry.flakeMetals[i])
-						.getRegistryName().toString());
+				defaultList.add(new Item().getByNameOrId("allomancy:" + "flake" + Registry.flakeMetals[i]).getRegistryName().toString());
 			}
 
 			String[] ores = OreDictionary.getOreNames();
@@ -162,6 +151,10 @@ public class AllomancyUtils {
 			Collections.sort(defaultList);
 
 			try {
+				whitelist.createNewFile();
+				output = new BufferedWriter(new FileWriter(whitelist));
+				output.write("# Add the registry names of blocks or items to the list below for them to be treated as metals \n");
+				
 				for (String item : defaultList) {
 					output.write(item + "\n");
 				}
@@ -442,6 +435,7 @@ public class AllomancyUtils {
 	 * @param direction
 	 *            the direction (1 for push, -1 for pull)
 	 */
+	@SideOnly(Side.CLIENT)
 	public static void tryMoveOffBlock(BlockPos vec, int direction) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		Registry.network.sendToServer(new TryPushPullBlock(vec, player.getEntityId(), direction));
@@ -455,6 +449,7 @@ public class AllomancyUtils {
 	 * @param direction
 	 *            the direction (1 for push, -1 for pull)
 	 */
+	@SideOnly(Side.CLIENT)
 	public static void tryMoveOffEntity(Entity entity, int direction) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		Registry.network.sendToServer(new TryPushPullEntity(entity.getEntityId(), player.getEntityId(), direction));
