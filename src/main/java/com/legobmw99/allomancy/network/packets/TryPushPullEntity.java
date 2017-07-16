@@ -70,16 +70,16 @@ public class TryPushPullEntity implements IMessage {
 						return;
 					} else {
 						if (AllomancyUtils.isEntityMetal(target)) {
-							 if (target instanceof EntityIronGolem) {
-								// Pull you toward the entity
+							// Pull you toward the entity
+							if (target instanceof EntityIronGolem) {
 								anchor = new BlockPos((int) target.posX, (int) target.posY, (int) target.posZ);
 								AllomancyUtils.move(message.direction, player, anchor);
-								
-							} else {
-								if(target instanceof EntityItem){
-									message.direction /= 2;
-								}
+
 								// Pull the entity toward you
+							} else if (target instanceof EntityItem) {
+								anchor = new BlockPos((int) player.posX, (int) player.posY - 1, (int) player.posZ);
+								AllomancyUtils.move(message.direction / 2.0, target, anchor);
+							} else {
 								anchor = new BlockPos((int) player.posX, (int) player.posY, (int) player.posZ);
 								AllomancyUtils.move(message.direction, target, anchor);
 							}
