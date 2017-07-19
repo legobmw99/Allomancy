@@ -12,8 +12,6 @@ import org.lwjgl.opengl.GL11;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
-import com.legobmw99.allomancy.network.packets.TryPushPullBlock;
-import com.legobmw99.allomancy.network.packets.TryPushPullEntity;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 
 import net.minecraft.block.Block;
@@ -22,7 +20,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -429,7 +426,7 @@ public class AllomancyUtils {
 
 	/**
 	 * Runs each worldTick, checking the burn times, abilities, and metal
-	 * amounts. Then syncs with the client to make sure everyone is on the same
+	 * amounts. Then syncs to the client to make sure everyone is on the same
 	 * page
 	 * 
 	 * @param cap
