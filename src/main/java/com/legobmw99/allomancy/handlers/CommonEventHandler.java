@@ -144,7 +144,7 @@ public class CommonEventHandler {
                     // Damage the player if they have stored damage and pewter cuts out
                     if (!cap.getMetalBurning(AllomancyCapability.PEWTER) && (cap.getDamageStored() > 0)) {
                         cap.setDamageStored(cap.getDamageStored() - 1);
-                        curPlayer.attackEntityFrom(DamageSource.GENERIC, 2);
+                        curPlayer.attackEntityFrom(DamageSource.MAGIC, 2);
                     }
                     if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
                     	//Add jump boost and speed to pewter burners
