@@ -52,14 +52,14 @@ public class CommonEventHandler {
             EntityPlayerMP source = (EntityPlayerMP) event.getSource().getTrueSource();
             AllomancyCapability cap = AllomancyCapability.forPlayer(source);
 
-            if (cap.getMetalBurning(AllomancyCapability.matPewter)) {
+            if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
                 event.setAmount(event.getAmount() + 2);
             }
         }
         // Reduce incoming damage for pewter burners
         if (event.getEntityLiving() instanceof EntityPlayerMP) {
             AllomancyCapability cap = AllomancyCapability.forPlayer(event.getEntityLiving());
-            if (cap.getMetalBurning(AllomancyCapability.matPewter)) {
+            if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
                 event.setAmount(event.getAmount() - 2);
                 // Note that they took damage, will come in to play if they stop
                 // burning
@@ -144,14 +144,14 @@ public class CommonEventHandler {
                         AllomancyUtils.updateMetalBurnTime(cap,(EntityPlayerMP) curPlayer);
                     }
                     // Damage the player if they have stored damage and pewter cuts out
-                    if (!cap.getMetalBurning(AllomancyCapability.matPewter) && (cap.getDamageStored() > 0)) {
+                    if (!cap.getMetalBurning(AllomancyCapability.PEWTER) && (cap.getDamageStored() > 0)) {
                         cap.setDamageStored(cap.getDamageStored() - 1);
                         curPlayer.attackEntityFrom(DamageSource.GENERIC, 2);
                     }
-                    if (cap.getMetalBurning(AllomancyCapability.matPewter)) {
+                    if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
                         curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(8), 30, 1, false, false));
                     }
-                    if (cap.getMetalBurning(AllomancyCapability.matTin)) {
+                    if (cap.getMetalBurning(AllomancyCapability.TIN)) {
                         // Add night vision to tin-burners
                         if (!curPlayer.isPotionActive(Potion.getPotionById(16))) {
                             curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(16), 300, 0, false, false));
@@ -173,7 +173,7 @@ public class CommonEventHandler {
                     }
                     // Remove night vision from non-tin burners if duration < 10
                     // seconds. Related to the above issue with flashing
-                    if ((!cap.getMetalBurning(AllomancyCapability.matTin)) && curPlayer.isPotionActive(Potion.getPotionById(16))) {
+                    if ((!cap.getMetalBurning(AllomancyCapability.TIN)) && curPlayer.isPotionActive(Potion.getPotionById(16))) {
                         if (curPlayer.getActivePotionEffect(Potion.getPotionById(16)).getDuration() < 201) {
                             curPlayer.removePotionEffect(Potion.getPotionById(16));
                         }

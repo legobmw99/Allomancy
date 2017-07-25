@@ -47,7 +47,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class Registry {
 	public static KeyBinding burn;
 	public static SimpleNetworkWrapper network;
-	public static ItemGrinder itemAllomancyGrinder;
+	public static Item itemAllomancyGrinder;
 	public static Item itemTinIngot;
 	public static Item itemLeadIngot;
 	public static Item itemCopperIngot;
@@ -55,11 +55,12 @@ public class Registry {
 	public static Item itemCoinBag;
 	public static Item Mistcloak;
 	public static Item nuggetLerasium;
-	public static ItemVial itemVial;
+	public static Item itemVial;
 	public static Block oreTin;
 	public static Block oreLead;
 	public static Block oreCopper;
 	public static Block oreZinc;
+	
 	public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
 			"Lead" };
 	
@@ -68,6 +69,7 @@ public class Registry {
 	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool",
 			"allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15, null, 0);
 
+	
 	public static void initBlocks(Register event) {
 		oreTin = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreTin").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreTin"));
 		oreTin.setHarvestLevel("pickaxe", 1);

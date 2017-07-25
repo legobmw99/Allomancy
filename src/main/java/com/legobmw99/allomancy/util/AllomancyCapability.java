@@ -17,8 +17,8 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompound> {
 
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "Allomancy_Data");
-    public static final int[] MaxBurnTime = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
-    public static final int matIron = 0, matSteel = 1, matTin = 2, matPewter = 3, matZinc = 4, matBrass = 5, matCopper = 6, matBronze = 7;
+    public static final int[] MAX_BURN_TIME = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
+    public static final int IRON = 0, STEEL = 1, TIN = 2, PEWTER = 3, ZINC = 4, BRASS = 5, COPPER = 6, BRONZE = 7;
 
     private int allomancyPower = -1;
 

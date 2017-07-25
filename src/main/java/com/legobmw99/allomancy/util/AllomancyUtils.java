@@ -45,7 +45,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class AllomancyUtils {
 	private static final ArrayList<String> metallist = new ArrayList<String>();
-
 	private static File whitelist;
 
 	public static final int PUSH = 1;
@@ -446,7 +445,7 @@ public class AllomancyUtils {
 				} else {
 					cap1.setBurnTime(i, cap1.getBurnTime(i) - 1);
 					if (cap1.getBurnTime(i) == 0) {
-						cap1.setBurnTime(i, cap1.MaxBurnTime[i]);
+						cap1.setBurnTime(i, cap1.MAX_BURN_TIME[i]);
 						cap1.setMetalAmounts(i, cap1.getMetalAmounts(i) - 1);
 						Registry.network.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
 						if (cap1.getMetalAmounts(i) == 0) {

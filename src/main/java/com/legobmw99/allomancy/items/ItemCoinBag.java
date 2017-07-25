@@ -29,7 +29,7 @@ public class ItemCoinBag extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
 
         ItemStack itemstack = playerIn.capabilities.isCreativeMode && this.findArrow(playerIn) == null ? new ItemStack(Items.GOLD_NUGGET) : this.findArrow(playerIn); //Get the item to be fired. If in creative mode,
-        if (itemstack != null && AllomancyCapability.forPlayer(playerIn).getMetalBurning(AllomancyCapability.matSteel)) {                                         // make sure there is always an item available
+        if (itemstack != null && AllomancyCapability.forPlayer(playerIn).getMetalBurning(AllomancyCapability.STEEL)) {                                         // make sure there is always an item available
             
             if (itemstack.getItem() == Items.GOLD_NUGGET) {
                 EntityGoldNugget entitygold = new EntityGoldNugget(worldIn, playerIn);

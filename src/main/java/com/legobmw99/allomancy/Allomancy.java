@@ -28,6 +28,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class Allomancy {
 	public static final String MODID = "allomancy";
 	public static final String VERSION = "@VERSION@";
+	
 	public static File configDirectory;
 
 	@SidedProxy

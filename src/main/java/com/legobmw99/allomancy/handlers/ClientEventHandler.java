@@ -157,28 +157,28 @@ public class ClientEventHandler {
          */
         if (cap.getAllomancyPower() == 8) {
 
-            ironY = 9 - this.cap.getMetalAmounts(AllomancyCapability.matIron);
+            ironY = 9 - this.cap.getMetalAmounts(AllomancyCapability.IRON);
             gig.drawTexturedModalRect(renderX + 1, renderY + 5 + ironY, 7, 1 + ironY, 3, 10 - ironY);
 
-            steelY = 9 - this.cap.getMetalAmounts(AllomancyCapability.matSteel);
+            steelY = 9 - this.cap.getMetalAmounts(AllomancyCapability.STEEL);
             gig.drawTexturedModalRect(renderX + 8, renderY + 5 + steelY, 13, 1 + steelY, 3, 10 - steelY);
 
-            tinY = 9 - this.cap.getMetalAmounts(AllomancyCapability.matTin);
+            tinY = 9 - this.cap.getMetalAmounts(AllomancyCapability.TIN);
             gig.drawTexturedModalRect(renderX + 26, renderY + 5 + tinY, 19, 1 + tinY, 3, 10 - tinY);
 
-            pewterY = 9 - this.cap.getMetalAmounts(AllomancyCapability.matPewter);
+            pewterY = 9 - this.cap.getMetalAmounts(AllomancyCapability.PEWTER);
             gig.drawTexturedModalRect(renderX + 33, renderY + 5 + pewterY, 25, 1 + pewterY, 3, 10 - pewterY);
 
-            zincY = 9 - this.cap.getMetalAmounts(AllomancyCapability.matZinc);
+            zincY = 9 - this.cap.getMetalAmounts(AllomancyCapability.ZINC);
             gig.drawTexturedModalRect(renderX + 51, renderY + 5 + zincY, 31, 1 + zincY, 3, 10 - zincY);
 
-            brassY = 9 - this.cap.getMetalAmounts(AllomancyCapability.matBrass);
+            brassY = 9 - this.cap.getMetalAmounts(AllomancyCapability.BRASS);
             gig.drawTexturedModalRect(renderX + 58, renderY + 5 + brassY, 37, 1 + brassY, 3, 10 - brassY);
 
-            copperY = 9 - this.cap.getMetalAmounts(AllomancyCapability.matCopper);
+            copperY = 9 - this.cap.getMetalAmounts(AllomancyCapability.COPPER);
             gig.drawTexturedModalRect(renderX + 76, renderY + 5 + copperY, 43, 1 + copperY, 3, 10 - copperY);
 
-            bronzeY = 9 - this.cap.getMetalAmounts(AllomancyCapability.matBronze);
+            bronzeY = 9 - this.cap.getMetalAmounts(AllomancyCapability.BRONZE);
             gig.drawTexturedModalRect(renderX + 83, renderY + 5 + bronzeY, 49, 1 + bronzeY, 3, 10 - bronzeY);
 
             // Draw the gauges second, so that highlights and decorations show over
@@ -195,28 +195,28 @@ public class ClientEventHandler {
             gig.drawTexturedModalRect(renderX + 75, renderY, 0, 0, 5, 20);
             gig.drawTexturedModalRect(renderX + 82, renderY, 0, 0, 5, 20);
 
-            if (this.cap.getMetalBurning(AllomancyCapability.matIron)) {
+            if (this.cap.getMetalBurning(AllomancyCapability.IRON)) {
                 gig.drawTexturedModalRect(renderX, renderY + 5 + ironY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
             }
-            if (this.cap.getMetalBurning(AllomancyCapability.matSteel)) {
+            if (this.cap.getMetalBurning(AllomancyCapability.STEEL)) {
                 gig.drawTexturedModalRect(renderX + 7, renderY + 5 + steelY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
             }
-            if (this.cap.getMetalBurning(AllomancyCapability.matTin)) {
+            if (this.cap.getMetalBurning(AllomancyCapability.TIN)) {
                 gig.drawTexturedModalRect(renderX + 25, renderY + 5 + tinY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
             }
-            if (this.cap.getMetalBurning(AllomancyCapability.matPewter)) {
+            if (this.cap.getMetalBurning(AllomancyCapability.PEWTER)) {
                 gig.drawTexturedModalRect(renderX + 32, renderY + 5 + pewterY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
             }
-            if (this.cap.getMetalBurning(AllomancyCapability.matZinc)) {
+            if (this.cap.getMetalBurning(AllomancyCapability.ZINC)) {
                 gig.drawTexturedModalRect(renderX + 50, renderY + 5 + zincY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
             }
-            if (this.cap.getMetalBurning(AllomancyCapability.matBrass)) {
+            if (this.cap.getMetalBurning(AllomancyCapability.BRASS)) {
                 gig.drawTexturedModalRect(renderX + 57, renderY + 5 + brassY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
             }
-            if (this.cap.getMetalBurning(AllomancyCapability.matCopper)) {
+            if (this.cap.getMetalBurning(AllomancyCapability.COPPER)) {
                 gig.drawTexturedModalRect(renderX + 75, renderY + 5 + copperY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
             }
-            if (this.cap.getMetalBurning(AllomancyCapability.matBronze)) {
+            if (this.cap.getMetalBurning(AllomancyCapability.BRONZE)) {
                 gig.drawTexturedModalRect(renderX + 82, renderY + 5 + bronzeY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
             }
 
@@ -244,7 +244,7 @@ public class ClientEventHandler {
 
             if (cap.getAllomancyPower() >= 0) {
                 // Populate the metal lists
-                if (cap.getMetalBurning(AllomancyCapability.matIron) || cap.getMetalBurning(AllomancyCapability.matSteel)) {
+                if (cap.getMetalBurning(AllomancyCapability.IRON) || cap.getMetalBurning(AllomancyCapability.STEEL)) {
                     particleBlockTargets.clear();
                     particleTargets.clear();
 
@@ -290,7 +290,7 @@ public class ClientEventHandler {
                     // Ray trace 20 blocks
                     RayTraceResult mov = AllomancyUtils.getMouseOverExtended(20.0F);
                     // All iron pulling powers
-                    if (cap.getMetalBurning(AllomancyCapability.matIron)) {
+                    if (cap.getMetalBurning(AllomancyCapability.IRON)) {
                         if (mov != null) {
                             if (mov.entityHit != null && AllomancyUtils.isEntityMetal(mov.entityHit)) {
                         		Registry.network.sendToServer(new TryPushPullEntity(mov.entityHit.getEntityId(), player.getEntityId(), AllomancyUtils.PULL));
@@ -307,7 +307,7 @@ public class ClientEventHandler {
 
                     }
                     // All zinc powers
-                    if (cap.getMetalBurning(AllomancyCapability.matZinc)) {
+                    if (cap.getMetalBurning(AllomancyCapability.ZINC)) {
                         Entity entity;
                         if ((mov != null) && (mov.entityHit != null) && (mov.entityHit instanceof EntityCreature) && !(mov.entityHit instanceof EntityPlayer)) {
                             entity = mov.entityHit;
@@ -321,7 +321,7 @@ public class ClientEventHandler {
                     // Ray trace 20 blocks
                     RayTraceResult mov = AllomancyUtils.getMouseOverExtended(20.0F);
                     // All steel pushing powers
-                    if (cap.getMetalBurning(AllomancyCapability.matSteel)) {
+                    if (cap.getMetalBurning(AllomancyCapability.STEEL)) {
                         if (mov != null) {
                             if (mov.entityHit != null && AllomancyUtils.isEntityMetal(mov.entityHit)) {
                         		Registry.network.sendToServer(new TryPushPullEntity(mov.entityHit.getEntityId(), player.getEntityId(), AllomancyUtils.PUSH));
@@ -341,7 +341,7 @@ public class ClientEventHandler {
 
                     }
                     // All brass powers
-                    if (cap.getMetalBurning(AllomancyCapability.matBrass)) {
+                    if (cap.getMetalBurning(AllomancyCapability.BRASS)) {
                         Entity entity;
                         if ((mov != null) && (mov.entityHit != null) && (mov.entityHit instanceof EntityCreature) && !(mov.entityHit instanceof EntityPlayer)) {
                             entity = mov.entityHit;
@@ -353,7 +353,7 @@ public class ClientEventHandler {
                 }
 
                 // Pewter's speed powers
-                if (cap.getMetalBurning(AllomancyCapability.matPewter)) {
+                if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
                     if ((player.onGround) && (!player.isInWater()) && (Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())) {
                         player.motionX *= 1.2;
                         player.motionZ *= 1.2;
@@ -364,7 +364,7 @@ public class ClientEventHandler {
                     }
                 }
 
-                if (cap.getMetalBurning(AllomancyCapability.matBronze) && !cap.getMetalBurning(AllomancyCapability.matCopper)) {
+                if (cap.getMetalBurning(AllomancyCapability.BRONZE) && !cap.getMetalBurning(AllomancyCapability.COPPER)) {
                     AxisAlignedBB boxBurners;
                     List<Entity> eListBurners;
                     metalBurners.clear();
@@ -375,11 +375,11 @@ public class ClientEventHandler {
                         if (curEntity != null && (curEntity instanceof EntityPlayer) && curEntity != player && curEntity.hasCapability(Allomancy.PLAYER_CAP, null)) {
                             Registry.network.sendToServer(new GetCapabilitiesPacket(curEntity.getEntityId()));
                             AllomancyCapability capOther = AllomancyCapability.forPlayer(curEntity);
-                            if (capOther.getMetalBurning(AllomancyCapability.matCopper)) {
+                            if (capOther.getMetalBurning(AllomancyCapability.COPPER)) {
                                 metalBurners.remove((EntityPlayer) curEntity);
-                            } else if (capOther.getMetalBurning(AllomancyCapability.matIron) || capOther.getMetalBurning(AllomancyCapability.matSteel) || capOther.getMetalBurning(AllomancyCapability.matTin)
-                                        || capOther.getMetalBurning(AllomancyCapability.matPewter) || capOther.getMetalBurning(AllomancyCapability.matZinc) || capOther.getMetalBurning(AllomancyCapability.matBrass)
-                                        || capOther.getMetalBurning(AllomancyCapability.matBronze)) {
+                            } else if (capOther.getMetalBurning(AllomancyCapability.IRON) || capOther.getMetalBurning(AllomancyCapability.STEEL) || capOther.getMetalBurning(AllomancyCapability.TIN)
+                                        || capOther.getMetalBurning(AllomancyCapability.PEWTER) || capOther.getMetalBurning(AllomancyCapability.ZINC) || capOther.getMetalBurning(AllomancyCapability.BRASS)
+                                        || capOther.getMetalBurning(AllomancyCapability.BRONZE)) {
                                     metalBurners.add((EntityPlayer) curEntity);
                             }
                         }
@@ -422,9 +422,9 @@ public class ClientEventHandler {
                     if (player != null && player.getDistanceToEntity(entity) > 10) {
                         toRemoveBurners.add(entity);
                     }
-                    if (capOther.getMetalBurning(AllomancyCapability.matCopper) || !(capOther.getMetalBurning(AllomancyCapability.matIron) || capOther.getMetalBurning(AllomancyCapability.matSteel)
-                            || capOther.getMetalBurning(AllomancyCapability.matTin) || capOther.getMetalBurning(AllomancyCapability.matPewter) || capOther.getMetalBurning(AllomancyCapability.matZinc)
-                            || capOther.getMetalBurning(AllomancyCapability.matBrass) || capOther.getMetalBurning(AllomancyCapability.matBronze))) {
+                    if (capOther.getMetalBurning(AllomancyCapability.COPPER) || !(capOther.getMetalBurning(AllomancyCapability.IRON) || capOther.getMetalBurning(AllomancyCapability.STEEL)
+                            || capOther.getMetalBurning(AllomancyCapability.TIN) || capOther.getMetalBurning(AllomancyCapability.PEWTER) || capOther.getMetalBurning(AllomancyCapability.ZINC)
+                            || capOther.getMetalBurning(AllomancyCapability.BRASS) || capOther.getMetalBurning(AllomancyCapability.BRONZE))) {
                         toRemoveBurners.add(entity);
                     }
                 }
@@ -513,7 +513,7 @@ public class ClientEventHandler {
         double playerZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.getPartialTicks();
 
         // Iron and Steel lines
-        if ((this.cap.getMetalBurning(AllomancyCapability.matIron) || this.cap.getMetalBurning(AllomancyCapability.matSteel))) {
+        if ((this.cap.getMetalBurning(AllomancyCapability.IRON) || this.cap.getMetalBurning(AllomancyCapability.STEEL))) {
 
             for (Entity entity : particleTargets) {
                 AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, entity.posX, entity.posY, entity.posZ, 1F, 0F, 0.6F, 1F);
@@ -524,7 +524,7 @@ public class ClientEventHandler {
             }
         }
 
-        if ((cap.getMetalBurning(AllomancyCapability.matBronze))) {
+        if ((cap.getMetalBurning(AllomancyCapability.BRONZE))) {
             for (EntityPlayer entityplayer : metalBurners) {
 
                 // drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY, entityplayer.posZ, 1, 1F, 0.15F, 0.15F);
@@ -555,7 +555,7 @@ public class ClientEventHandler {
         }
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
         // Spawn sound particles
-        if (cap.getMetalBurning(AllomancyCapability.matTin)) {
+        if (cap.getMetalBurning(AllomancyCapability.TIN)) {
             if (sound.getSoundLocation().toString().contains("step") || sound.getSoundLocation().toString().contains("entity") || sound.getSoundLocation().toString().contains("hostile") || sound.getSoundLocation().toString().contains(".big")
                     || sound.getSoundLocation().toString().contains("scream") || sound.getSoundLocation().toString().contains("bow")) {
                 motionX = ((player.posX - (event.getSound().getXPosF() + .5)) * -0.7) / magnitude;
