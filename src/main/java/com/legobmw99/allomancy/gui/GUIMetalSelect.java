@@ -35,10 +35,10 @@ import net.minecraft.util.SoundEvent;
 
 public class GUIMetalSelect extends GuiScreen {
 
-	public static final String[] metalNames = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze" };
-	public static final String GUI_METAL = "allomancy:textures/gui/metals/sign%d.png";
+	private static final String[] METAL_NAMES = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze" };
+	private static final String GUI_METAL = "allomancy:textures/gui/metals/sign%d.png";
 
-	private static final ResourceLocation[] metals = new ResourceLocation[] {
+	private static final ResourceLocation[] METAL_ICONS = new ResourceLocation[] {
 			new ResourceLocation(String.format(GUI_METAL, 0)), new ResourceLocation(String.format(GUI_METAL, 1)),
 			new ResourceLocation(String.format(GUI_METAL, 2)), new ResourceLocation(String.format(GUI_METAL, 3)),
 			new ResourceLocation(String.format(GUI_METAL, 4)), new ResourceLocation(String.format(GUI_METAL, 5)),
@@ -140,7 +140,7 @@ public class GUIMetalSelect extends GuiScreen {
 
 			int xsp = xp - 4;
 			int ysp = yp;
-			String name = "\u00a7" + c + metalNames[(slot + 4) % 8];
+			String name = "\u00a7" + c + METAL_NAMES[(slot + 4) % 8];
 			// add four and mod by eight to get #1 where I want it to be
 			int width = fontRenderer.getStringWidth(name);
 
@@ -159,7 +159,7 @@ public class GUIMetalSelect extends GuiScreen {
 			xdp = (int) ((xp - x) * mod + x);
 			ydp = (int) ((yp - y) * mod + y);
 
-			mc.renderEngine.bindTexture(metals[(slot + 4) % 8]);
+			mc.renderEngine.bindTexture(METAL_ICONS[(slot + 4) % 8]);
 			drawModalRectWithCustomSizedTexture(xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
 		}

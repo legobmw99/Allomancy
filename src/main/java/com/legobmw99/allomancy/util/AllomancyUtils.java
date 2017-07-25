@@ -11,6 +11,8 @@ import java.util.Scanner;
 import org.lwjgl.opengl.GL11;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.entities.EntityGoldNugget;
+import com.legobmw99.allomancy.entities.EntityIronNugget;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 
@@ -19,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -62,7 +65,7 @@ public class AllomancyUtils {
 		BufferedWriter output = null;
 		whitelist = new File(Allomancy.configDirectory, "allomancy-whitelist.txt");
 		if (!whitelist.exists()) {
-			
+
 			ArrayList<String> defaultList = new ArrayList<>();
 			defaultList.add(Items.IRON_AXE.getRegistryName().toString());
 			defaultList.add(Items.GOLDEN_AXE.getRegistryName().toString());
@@ -150,7 +153,7 @@ public class AllomancyUtils {
 				whitelist.createNewFile();
 				output = new BufferedWriter(new FileWriter(whitelist));
 				output.write("# Add the registry names of blocks or items to the list below for them to be treated as metals \n");
-				
+
 				for (String item : defaultList) {
 					output.write(item + "\n");
 				}
@@ -348,17 +351,23 @@ public class AllomancyUtils {
 		if (entity == null) {
 			return false;
 		}
+		
 		if (entity instanceof EntityItem) {
 			return isItemMetal(((EntityItem) entity).getItem());
-		} else if (entity instanceof EntityLiving) {
+		} 
+		if (entity instanceof EntityItemFrame){ 
+			return isItemMetal(((EntityItemFrame) entity).getDisplayedItem());
+		} 
+		if(entity instanceof EntityIronNugget || entity instanceof EntityGoldNugget) {
+			return true;
+		} 
+		if (entity instanceof EntityLiving) {
 			EntityLiving ent = (EntityLiving) entity;
 			return (ent instanceof EntityIronGolem)
-					|| ((ent.getHeldItem(EnumHand.OFF_HAND) != null && isItemMetal(ent.getHeldItem(EnumHand.MAIN_HAND)))
-							|| (ent.getHeldItem(EnumHand.MAIN_HAND) != null
-									&& isItemMetal(ent.getHeldItem(EnumHand.OFF_HAND))));
-		} else {
-			return false;
-		}
+				|| ((ent.getHeldItem(EnumHand.OFF_HAND) != null && isItemMetal(ent.getHeldItem(EnumHand.MAIN_HAND))) || (ent.getHeldItem(EnumHand.MAIN_HAND) != null && isItemMetal(ent.getHeldItem(EnumHand.OFF_HAND))));
+		} 
+		
+		return false;
 	}
 
 	/**
@@ -390,10 +399,10 @@ public class AllomancyUtils {
 				? MathHelper.clamp(toMove.motionY + motionY, -Math.abs(motionY), motionY) : 0;
 		toMove.motionZ = Math.abs(toMove.motionZ + motionZ) > 0.01
 				? MathHelper.clamp(toMove.motionZ + motionZ, -Math.abs(motionZ), motionZ) : 0;
-				
+
 		toMove.velocityChanged = true;
 
-		//Only save players from fall damage
+		// Only save players from fall damage
 		if (toMove instanceof EntityPlayerMP) {
 			toMove.fallDistance = 0;
 		}

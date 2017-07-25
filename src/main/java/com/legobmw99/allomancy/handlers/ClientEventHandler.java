@@ -261,17 +261,9 @@ public class ClientEventHandler {
                     eListMetal = player.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(negative, positive));
                     for (Entity curEntity : eListMetal) {
                         if (curEntity != null && !particleTargets.contains(curEntity)) {
-                            if (curEntity instanceof EntityGoldNugget || curEntity instanceof EntityIronNugget) {
+                        	if(AllomancyUtils.isEntityMetal(curEntity)){
                                 particleTargets.add(curEntity);
-                            } else if (curEntity instanceof EntityLiving
-                                    && (((curEntity instanceof EntityIronGolem) || (((((EntityLiving) curEntity).getHeldItem(EnumHand.MAIN_HAND) != null) || ((EntityLiving) curEntity).getHeldItem(EnumHand.OFF_HAND) == null)
-                                            && (AllomancyUtils.isItemMetal(((EntityLiving) curEntity).getHeldItem(EnumHand.MAIN_HAND)) || AllomancyUtils.isItemMetal(((EntityLiving) curEntity).getHeldItem(EnumHand.OFF_HAND))))))) {
-                                particleTargets.add(curEntity);
-                            } else if (curEntity instanceof EntityItem && AllomancyUtils.isItemMetal(((EntityItem) curEntity).getItem())) {
-                                particleTargets.add(curEntity);
-                            } else if (curEntity instanceof EntityItemFrame && AllomancyUtils.isItemMetal(((EntityItemFrame) curEntity).getDisplayedItem())) {
-                                particleTargets.add(curEntity);
-                            }
+                        	}
                         }
                     }
 
@@ -352,27 +344,20 @@ public class ClientEventHandler {
 
                 }
 
-                // Pewter's speed powers
-                if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
-                    if ((player.onGround) && (!player.isInWater()) && (Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())) {
-                        player.motionX *= 1.2;
-                        player.motionZ *= 1.2;
-
-                        // Don't allow motion values to get too out of the norm
-                        player.motionX = MathHelper.clamp((float) player.motionX, -2, 2);
-                        player.motionZ = MathHelper.clamp((float) player.motionZ, -2, 2);
-                    }
-                }
-
                 if (cap.getMetalBurning(AllomancyCapability.BRONZE) && !cap.getMetalBurning(AllomancyCapability.COPPER)) {
-                    AxisAlignedBB boxBurners;
                     List<Entity> eListBurners;
                     metalBurners.clear();
                     // Add metal burners to a list
-                    boxBurners = new AxisAlignedBB((player.posX - 30), (player.posY - 30), (player.posZ - 30), (player.posX + 30), (player.posY + 30), (player.posZ + 30));
-                    eListBurners = player.world.getEntitiesWithinAABB(Entity.class, boxBurners);
+                    int xLoc = (int) player.posX;
+                    int yLoc = (int) player.posY;
+                    int zLoc = (int) player.posZ;
+                    BlockPos negative = new BlockPos(xLoc - 30, yLoc - 30, zLoc - 30);
+                    BlockPos positive = new BlockPos(xLoc + 30, yLoc + 30, zLoc + 30);
+                    // Add entities to metal list
+                    eListBurners = player.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(negative, positive));
+                    
                     for (Entity curEntity : eListBurners) {
-                        if (curEntity != null && (curEntity instanceof EntityPlayer) && curEntity != player && curEntity.hasCapability(Allomancy.PLAYER_CAP, null)) {
+                        if (curEntity != null && curEntity != player && curEntity.hasCapability(Allomancy.PLAYER_CAP, null)) {
                             Registry.network.sendToServer(new GetCapabilitiesPacket(curEntity.getEntityId()));
                             AllomancyCapability capOther = AllomancyCapability.forPlayer(curEntity);
                             if (capOther.getMetalBurning(AllomancyCapability.COPPER)) {
@@ -390,16 +375,14 @@ public class ClientEventHandler {
 
                 // Remove items from the metal list
                 LinkedList<Entity> toRemoveMetal = new LinkedList<Entity>();
-
                 for (Entity entity : particleTargets) {
-
                     if (entity.isDead) {
                         toRemoveMetal.add(entity);
                     }
                     if (player == null) {
                         return;
                     }
-                    if (player.getDistanceToEntity(entity) > 10) {
+                    if (player.getDistanceToEntity(entity) > max) {
                         toRemoveMetal.add(entity);
                     }
                 }
@@ -411,15 +394,13 @@ public class ClientEventHandler {
 
                 // Remove items from burners
                 LinkedList<EntityPlayer> toRemoveBurners = new LinkedList<EntityPlayer>();
-
                 for (EntityPlayer entity : metalBurners) {
                     AllomancyCapability capOther = AllomancyCapability.forPlayer(entity);
                     Registry.network.sendToServer(new GetCapabilitiesPacket(entity.getEntityId()));
                     if (entity.isDead) {
                         toRemoveBurners.add(entity);
                     }
-
-                    if (player != null && player.getDistanceToEntity(entity) > 10) {
+                    if (player != null && player.getDistanceToEntity(entity) > 30) {
                         toRemoveBurners.add(entity);
                     }
                     if (capOther.getMetalBurning(AllomancyCapability.COPPER) || !(capOther.getMetalBurning(AllomancyCapability.IRON) || capOther.getMetalBurning(AllomancyCapability.STEEL)
@@ -461,7 +442,6 @@ public class ClientEventHandler {
                  */
                 if (cap.getAllomancyPower() == 8) {
                     mc.displayGuiScreen(new GUIMetalSelect());
-
                 }
             }
         }

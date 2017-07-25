@@ -127,7 +127,6 @@ public class Registry {
 
 	public static void initKeyBindings() {
 		burn = new KeyBinding("key.burn", Keyboard.KEY_F, "key.categories.allomancy");
-
 		ClientRegistry.registerKeyBinding(burn);
 	}
 
