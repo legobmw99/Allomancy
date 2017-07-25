@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.network.packets;
 
-import com.legobmw99.allomancy.util.AllomancyCapabilities;
+import com.legobmw99.allomancy.util.AllomancyCapability;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -42,8 +42,8 @@ public class AllomancyPowerPacket implements IMessage {
 	            @Override
 	            public void run() {
 	            	EntityPlayer player =  Minecraft.getMinecraft().player;
-	            	AllomancyCapabilities cap;
-	        		cap = AllomancyCapabilities.forPlayer(player);
+	            	AllomancyCapability cap;
+	        		cap = AllomancyCapability.forPlayer(player);
 	        		cap.setAllomancyPower(message.power);
 	            }
 	        });		return null;

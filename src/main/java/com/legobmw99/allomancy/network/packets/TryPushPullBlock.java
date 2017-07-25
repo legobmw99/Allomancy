@@ -76,8 +76,8 @@ public class TryPushPullBlock implements IMessage {
 					if (player == null) {
 						return;
 					} else {
-						//Sanity check to make sure server has same configs
-						if(AllomancyUtils.isBlockMetal(ctx.getServerHandler().player.world.getBlockState(block).getBlock())){
+						//Sanity check to make sure server has same configs and that the block is loaded in the server
+						if(ctx.getServerHandler().player.getEntityWorld().isBlockLoaded(block) && AllomancyUtils.isBlockMetal(ctx.getServerHandler().player.world.getBlockState(block).getBlock())){
 							AllomancyUtils.move(message.direction, player, block);
 						}
 					}

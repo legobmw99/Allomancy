@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
 import com.google.common.collect.ImmutableSet;
-import com.legobmw99.allomancy.util.AllomancyCapabilities;
+import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.AllomancyUtils;
 import com.legobmw99.allomancy.util.Registry;
@@ -46,13 +46,13 @@ public class GUIMetalSelect extends GuiScreen {
 
 	int timeIn = AllomancyConfig.animateSelection ? 0 : 10; // Config setting for whether the wheel animates open or instantly appears
 	int slotSelected = -1;
-	AllomancyCapabilities cap;
+	AllomancyCapability cap;
 	List<Integer> slots;
 
 	public GUIMetalSelect() {
 		EntityPlayerSP player;
 		player = Minecraft.getMinecraft().player;
-		cap = AllomancyCapabilities.forPlayer(player);
+		cap = AllomancyCapability.forPlayer(player);
 
 		slots = new ArrayList();
 		for (int i = 0; i < 8; i++) {

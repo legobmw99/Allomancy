@@ -4,7 +4,7 @@ import java.io.File;
 
 import com.legobmw99.allomancy.handlers.ClientEventHandler;
 import com.legobmw99.allomancy.handlers.CommonEventHandler;
-import com.legobmw99.allomancy.util.AllomancyCapabilities;
+import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.AllomancyUtils;
 import com.legobmw99.allomancy.util.PowerCommand;
@@ -36,8 +36,8 @@ public class Allomancy {
 	@Instance(value = "allomancy")
 	public static Allomancy instance;
 
-	@CapabilityInject(AllomancyCapabilities.class)
-	public static final Capability<AllomancyCapabilities> PLAYER_CAP = null;
+	@CapabilityInject(AllomancyCapability.class)
+	public static final Capability<AllomancyCapability> PLAYER_CAP = null;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -59,6 +59,8 @@ public class Allomancy {
 		proxy.postInit(event);
 	}
 
+	
+	
 	public static class CommonProxy {
 		public void preInit(FMLPreInitializationEvent e) {
 			// Load most of the mod's content
@@ -80,7 +82,7 @@ public class Allomancy {
 		public void init(FMLInitializationEvent e) {
 			GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
 			Registry.setupRecipes();
-			AllomancyCapabilities.register();
+			AllomancyCapability.register();
 		}
 	}
 

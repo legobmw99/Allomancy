@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.network.packets;
 
-import com.legobmw99.allomancy.util.AllomancyCapabilities;
+import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.Registry;
 
 import io.netty.buffer.ByteBuf;
@@ -18,7 +18,6 @@ public class GetCapabilitiesPacket implements IMessage {
 	public GetCapabilitiesPacket() {
 	}
 
-	private int entityIDSender;
 	private int entityIDOther;
 
 	/**
@@ -29,38 +28,39 @@ public class GetCapabilitiesPacket implements IMessage {
 	 * @param entityIDSender
 	 *            the entity that is requesting
 	 */
-	public GetCapabilitiesPacket(int entityIDOther, int entityIDSender) {
+	public GetCapabilitiesPacket(int entityIDOther) {
 		this.entityIDOther = entityIDOther;
-		this.entityIDSender = entityIDSender;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		entityIDSender = ByteBufUtils.readVarInt(buf, 5);
 		entityIDOther = ByteBufUtils.readVarInt(buf, 5);
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeVarInt(buf, entityIDSender, 5);
 		ByteBufUtils.writeVarInt(buf, entityIDOther, 5);
 	}
 
-	public static class Handler implements IMessageHandler<GetCapabilitiesPacket, IMessage> {
+	public static class Handler implements IMessageHandler<GetCapabilitiesPacket, AllomancyCapabilityPacket> {
+		private AllomancyCapability cap;
+
 		@Override
-		public IMessage onMessage(final GetCapabilitiesPacket message, final MessageContext ctx) {
+		public AllomancyCapabilityPacket onMessage(final GetCapabilitiesPacket message, final MessageContext ctx) {
 			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					Entity target = ctx.getServerHandler().player.world.getEntityByID(message.entityIDOther);
-					EntityPlayer player = (EntityPlayer) ctx.getServerHandler().player.world.getEntityByID(message.entityIDSender);
-					AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(target);
 					
-					Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap, message.entityIDOther),(EntityPlayerMP) player);
+					Entity target = ctx.getServerHandler().player.world.getEntityByID(message.entityIDOther);
+					if(target != null){
+						cap = AllomancyCapability.forPlayer(target);
+					} else {
+						cap = null;
+					}
 				}
 			});
-			return null;
+			return new AllomancyCapabilityPacket(cap, message.entityIDOther);
 		}
 	}
 }

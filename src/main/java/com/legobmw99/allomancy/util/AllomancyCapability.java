@@ -14,7 +14,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagCompound> {
+public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompound> {
 
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "Allomancy_Data");
     public static final int[] MaxBurnTime = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
@@ -36,7 +36,7 @@ public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagComp
      *            the player you want data for
      * @return the AllomancyCapabilites data of the player
      */
-    public static AllomancyCapabilities forPlayer(Entity player) {
+    public static AllomancyCapability forPlayer(Entity player) {
         return player.getCapability(Allomancy.PLAYER_CAP, null);
     }
 
@@ -46,7 +46,7 @@ public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagComp
      * @param player
      *            the player to attach a Capability to
      */
-    public AllomancyCapabilities(EntityPlayer player) {
+    public AllomancyCapability(EntityPlayer player) {
         this.player = player;
     }
 
@@ -162,7 +162,7 @@ public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagComp
      * Register the capability
      */
     public static void register() {
-        CapabilityManager.INSTANCE.register(AllomancyCapabilities.class, new AllomancyCapabilities.Storage(), new AllomancyCapabilities.Factory());
+        CapabilityManager.INSTANCE.register(AllomancyCapability.class, new AllomancyCapability.Storage(), new AllomancyCapability.Factory());
     }
 
     @Override
@@ -208,23 +208,23 @@ public class AllomancyCapabilities implements ICapabilitySerializable<NBTTagComp
         return Allomancy.PLAYER_CAP != null && capability == Allomancy.PLAYER_CAP ? (T) this : null;
     }
 
-    public static class Storage implements Capability.IStorage<AllomancyCapabilities> {
+    public static class Storage implements Capability.IStorage<AllomancyCapability> {
 
         @Override
-        public NBTBase writeNBT(Capability<AllomancyCapabilities> capability, AllomancyCapabilities instance, EnumFacing side) {
+        public NBTBase writeNBT(Capability<AllomancyCapability> capability, AllomancyCapability instance, EnumFacing side) {
             return null;
         }
 
         @Override
-        public void readNBT(Capability<AllomancyCapabilities> capability, AllomancyCapabilities instance, EnumFacing side, NBTBase nbt) {
+        public void readNBT(Capability<AllomancyCapability> capability, AllomancyCapability instance, EnumFacing side, NBTBase nbt) {
 
         }
 
     }
 
-    public static class Factory implements Callable<AllomancyCapabilities> {
+    public static class Factory implements Callable<AllomancyCapability> {
         @Override
-        public AllomancyCapabilities call() throws Exception {
+        public AllomancyCapability call() throws Exception {
             return null;
         }
     }

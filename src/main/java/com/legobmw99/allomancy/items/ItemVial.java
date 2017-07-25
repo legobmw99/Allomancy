@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.items;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.util.AllomancyCapabilities;
+import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.Registry;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,8 +23,8 @@ public class ItemVial extends Item {
 
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-        AllomancyCapabilities cap;
-        cap = AllomancyCapabilities.forPlayer(entityLiving);
+        AllomancyCapability cap;
+        cap = AllomancyCapability.forPlayer(entityLiving);
 
         if (!((EntityPlayer) (entityLiving)).capabilities.isCreativeMode) {
             stack.shrink(1);
@@ -62,8 +62,8 @@ public class ItemVial extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
-        AllomancyCapabilities cap;
-        cap = AllomancyCapabilities.forPlayer(playerIn);
+        AllomancyCapability cap;
+        cap = AllomancyCapability.forPlayer(playerIn);
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         // Checks both the metal amount (we only want to fill up to 10) and the item damage (can't drink empty vials)
         if (itemStackIn.getItemDamage() > 0) {
@@ -86,7 +86,7 @@ public class ItemVial extends Item {
      *            the player's Allomancy Capability
      * @return whether or not all metals are full
      */
-    private static boolean checkFullCapacity(AllomancyCapabilities cap) {
+    private static boolean checkFullCapacity(AllomancyCapability cap) {
         for (int i = 0; i < 8; i++) {
             if (cap.getMetalAmounts(i) < 10) {
                 return false;

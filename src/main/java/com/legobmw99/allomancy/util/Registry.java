@@ -10,7 +10,7 @@ import com.legobmw99.allomancy.items.ItemGrinder;
 import com.legobmw99.allomancy.items.ItemMistcloak;
 import com.legobmw99.allomancy.items.ItemVial;
 import com.legobmw99.allomancy.items.NuggetLerasium;
-import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
+import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import com.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
@@ -133,7 +133,7 @@ public class Registry {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel("allomancy");
 		network.registerMessage(AllomancyPowerPacket.Handler.class, AllomancyPowerPacket.class, 0, Side.CLIENT);
 		network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 1, Side.SERVER);
-		network.registerMessage(AllomancyCapabiltiesPacket.Handler.class, AllomancyCapabiltiesPacket.class, 2,Side.CLIENT);
+		network.registerMessage(AllomancyCapabilityPacket.Handler.class, AllomancyCapabilityPacket.class, 2,Side.CLIENT);
 		network.registerMessage(ChangeEmotionPacket.Handler.class, ChangeEmotionPacket.class, 3, Side.SERVER);
 		network.registerMessage(GetCapabilitiesPacket.Handler.class, GetCapabilitiesPacket.class, 4, Side.SERVER);
 		network.registerMessage(TryPushPullEntity.Handler.class, TryPushPullEntity.class, 5, Side.SERVER);

@@ -11,7 +11,7 @@ import java.util.Scanner;
 import org.lwjgl.opengl.GL11;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.network.packets.AllomancyCapabiltiesPacket;
+import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 
 import net.minecraft.block.Block;
@@ -391,6 +391,7 @@ public class AllomancyUtils {
 				? MathHelper.clamp(toMove.motionY + motionY, -Math.abs(motionY), motionY) : 0;
 		toMove.motionZ = Math.abs(toMove.motionZ + motionZ) > 0.01
 				? MathHelper.clamp(toMove.motionZ + motionZ, -Math.abs(motionZ), motionZ) : 0;
+				
 		toMove.velocityChanged = true;
 
 		//Only save players from fall damage
@@ -408,7 +409,7 @@ public class AllomancyUtils {
 	 * @param capability
 	 *            the capability being handled
 	 */
-	public static void toggleMetalBurn(int metal, AllomancyCapabilities capability) {
+	public static void toggleMetalBurn(int metal, AllomancyCapability capability) {
 		Registry.network.sendToServer(new UpdateBurnPacket(metal, !capability.getMetalBurning(metal)));
 
 		if (capability.getMetalAmounts(metal) > 0) {
@@ -434,23 +435,23 @@ public class AllomancyUtils {
 	 * @param player
 	 *            the player being checked
 	 */
-	public static void updateMetalBurnTime(AllomancyCapabilities cap1, EntityPlayerMP player) {
+	public static void updateMetalBurnTime(AllomancyCapability cap1, EntityPlayerMP player) {
 		for (int i = 0; i < 8; i++) {
 			if (cap1.getMetalBurning(i)) {
 				if (cap1.getAllomancyPower() != i && cap1.getAllomancyPower() != 8) {
 					// put out any metals that the player shouldn't be able to
 					// burn
 					cap1.setMetalBurning(i, false);
-					Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
+					Registry.network.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
 				} else {
 					cap1.setBurnTime(i, cap1.getBurnTime(i) - 1);
 					if (cap1.getBurnTime(i) == 0) {
 						cap1.setBurnTime(i, cap1.MaxBurnTime[i]);
 						cap1.setMetalAmounts(i, cap1.getMetalAmounts(i) - 1);
-						Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
+						Registry.network.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
 						if (cap1.getMetalAmounts(i) == 0) {
 							cap1.setMetalBurning(i, false);
-							Registry.network.sendTo(new AllomancyCapabiltiesPacket(cap1, player.getEntityId()), player);
+							Registry.network.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
 						}
 					}
 				}

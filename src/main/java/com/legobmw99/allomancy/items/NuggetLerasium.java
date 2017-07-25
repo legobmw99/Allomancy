@@ -5,7 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.util.AllomancyCapabilities;
+import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.Registry;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -47,7 +47,7 @@ public class NuggetLerasium extends ItemFood {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand){
-		AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(playerIn);
+		AllomancyCapability cap = AllomancyCapability.forPlayer(playerIn);
 		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		if (cap.getAllomancyPower() != 8) {
 	        playerIn.setActiveHand(hand);
@@ -60,7 +60,7 @@ public class NuggetLerasium extends ItemFood {
 	
 	@Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving){
-		AllomancyCapabilities cap = AllomancyCapabilities.forPlayer((EntityPlayer)entityLiving);
+		AllomancyCapability cap = AllomancyCapability.forPlayer((EntityPlayer)entityLiving);
 		double x = entityLiving.posX;
 		double y = entityLiving.posY + 3;
 		double z = entityLiving.posZ;

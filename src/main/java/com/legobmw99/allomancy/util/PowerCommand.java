@@ -66,7 +66,7 @@ public class PowerCommand extends CommandBase {
 
                 if (entityplayer != null) {
 
-                    AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(entityplayer);
+                    AllomancyCapability cap = AllomancyCapability.forPlayer(entityplayer);
                     cap.setAllomancyPower(level);
 
                     Registry.network.sendTo(new AllomancyPowerPacket(level), (EntityPlayerMP) entityplayer);

@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.network.packets;
 
-import com.legobmw99.allomancy.util.AllomancyCapabilities;
+import com.legobmw99.allomancy.util.AllomancyCapability;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -48,19 +48,15 @@ public class UpdateBurnPacket implements IMessage {
 
 		@Override
 		public IMessage onMessage(final UpdateBurnPacket message, final MessageContext ctx) {
-			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world; // or Minecraft.getMinecraft() on the client
+			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world; 
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
 
 					EntityPlayerMP player = ctx.getServerHandler().player;
-					AllomancyCapabilities cap = AllomancyCapabilities.forPlayer(player);
-					boolean value;
-					if (message.value == 1) { // Convert int back to bool
-						value = true;
-					} else {
-						value = false;
-					}
+					AllomancyCapability cap = AllomancyCapability.forPlayer(player);
+					boolean value = message.value == 1;
+
 					if (cap.getMetalAmounts(message.mat) != 0) {
 						cap.setMetalBurning(message.mat, value);
 					} else {
