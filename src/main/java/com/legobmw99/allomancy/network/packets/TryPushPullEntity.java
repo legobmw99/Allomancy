@@ -5,6 +5,7 @@ import com.legobmw99.allomancy.util.AllomancyUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
@@ -60,23 +61,23 @@ public class TryPushPullEntity implements IMessage {
 				public void run() {
 					Entity target = ctx.getServerHandler().player.world.getEntityByID(message.entityIDOther);
 					Entity player = ctx.getServerHandler().player;
-					BlockPos anchor;
 					if (target == null) {
 						return;
 					} else {
 						if (AllomancyUtils.isEntityMetal(target)) {
-							// Pull you toward the entity
-							if (target instanceof EntityIronGolem) {
-								anchor = new BlockPos((int) target.posX, (int) target.posY, (int) target.posZ);
-								AllomancyUtils.move(message.direction, player, anchor);
+							// The player moves
+							if (target instanceof EntityIronGolem || target instanceof EntityItemFrame) {
+								AllomancyUtils.move(message.direction, player, target.getPosition());
 
-								// Pull the entity toward you
+								// The target moves
 							} else if (target instanceof EntityItem) {
-								anchor = new BlockPos((int) player.posX, (int) player.posY - 1, (int) player.posZ);
-								AllomancyUtils.move(message.direction / 2.0, target, anchor);
+								AllomancyUtils.move(message.direction / 2.0, target,player.getPosition().down());
+								
+								//Split the difference
 							} else {
-								anchor = new BlockPos((int) player.posX, (int) player.posY, (int) player.posZ);
-								AllomancyUtils.move(message.direction, target, anchor);
+								AllomancyUtils.move(message.direction / 2.0, target, player.getPosition());
+								
+								AllomancyUtils.move(message.direction / 2.0, player, target.getPosition());
 							}
 						}
 					}
