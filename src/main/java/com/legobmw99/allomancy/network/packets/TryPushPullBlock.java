@@ -22,15 +22,10 @@ public class TryPushPullBlock implements IMessage {
 	private int direction;
 
 	/**
+	 * Send a request to the server to use iron or steel on a block
 	 * 
-	 * @param X
-	 *            the x-coordinate of the block
-	 * @param Y
-	 *            the y-coordinate of the block
-	 * @param Z
-	 *            the z-coordinate of the block
-	 * @param entityID
-	 *            the player's entityID
+	 * @param block
+	 * 			  the block
 	 * @param direction
 	 *            the direction (1 for push, -1 for pull)
 	 */

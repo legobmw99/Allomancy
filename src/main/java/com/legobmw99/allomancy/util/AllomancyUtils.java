@@ -61,6 +61,9 @@ public class AllomancyUtils {
 	/*
 	 * This code was based off the similar methods found in CoFHCore
 	 */
+	/**
+	 * Generate a text file containing all the blocks and items considered 'metal' (if it doesn't already exist)
+	 */
 	private static void generateWhitelist() {
 		BufferedWriter output = null;
 		whitelist = new File(Allomancy.configDirectory, "allomancy-whitelist.txt");
@@ -167,6 +170,9 @@ public class AllomancyUtils {
 		}
 	}
 
+	/**
+	 * Reads in the whitelist of metal blocks and items
+	 */
 	private static void populateMetalList() {
 		try {
 			if (!whitelist.exists()) {
@@ -457,8 +463,7 @@ public class AllomancyUtils {
 		for (int i = 0; i < 8; i++) {
 			if (cap1.getMetalBurning(i)) {
 				if (cap1.getAllomancyPower() != i && cap1.getAllomancyPower() != 8) {
-					// put out any metals that the player shouldn't be able to
-					// burn
+					// put out any metals that the player shouldn't be able to burn
 					cap1.setMetalBurning(i, false);
 					Registry.network.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
 				} else {

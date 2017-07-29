@@ -23,11 +23,10 @@ public class TryPushPullEntity implements IMessage {
 	private int direction;
 
 	/**
+	 * Send a request to the server to use iron or steel on an entity
 	 * 
 	 * @param entityIDOther
 	 *            the entity you are requesting the data of
-	 * @param entityIDSender
-	 *            the entity that is requesting
 	 * @param direction
 	 *            the direction (1 for push, -1 for pull)
 	 */

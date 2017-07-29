@@ -26,22 +26,22 @@ public class BlockIronLever extends BlockLever implements IAllomanticallyActivat
 	public BlockIronLever() {
 		super();
 		this.setHarvestLevel("pickaxe", 2);
-		this.setRegistryName(Allomancy.MODID,"iron_lever");
+		this.setRegistryName(Allomancy.MODID, "iron_lever");
 		this.setUnlocalizedName("iron_lever");
 		this.setHardness(1.0F);
 	}
-	
+
 	@Override
-	public boolean onBlockActivatedAllomantically(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, boolean isPush){
+	public boolean onBlockActivatedAllomantically(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			boolean isPush) {
 		if (worldIn.isRemote) {
 			return true;
 		}
-		if ((!isPush && isLeverPointedAway(state,playerIn)) || 
-			(isPush && !isLeverPointedAway(state,playerIn))) {
+		if ((!isPush && isLeverPointedAway(state, playerIn)) || (isPush && !isLeverPointedAway(state, playerIn))) {
 			state = state.cycleProperty(POWERED);
 			worldIn.setBlockState(pos, state, 3);
 			float f = ((Boolean) state.getValue(POWERED)).booleanValue() ? 0.6F : 0.5F;
-			worldIn.playSound((EntityPlayer) null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F,f);
+			worldIn.playSound((EntityPlayer) null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, f);
 			worldIn.notifyNeighborsOfStateChange(pos, this, false);
 			EnumFacing enumfacing = ((BlockLever.EnumOrientation) state.getValue(FACING)).getFacing();
 			worldIn.notifyNeighborsOfStateChange(pos.offset(enumfacing.getOpposite()), this, false);
@@ -49,8 +49,14 @@ public class BlockIronLever extends BlockLever implements IAllomanticallyActivat
 		}
 		return false;
 	}
-	
-	public boolean isLeverPointedAway(IBlockState state,EntityPlayer player){
+
+	/**
+	 * <strong>Currently not functional</strong> Determines if the lever is
+	 * facing away from the player
+	 * 
+	 * @return true if the lever should be treated as facing away
+	 */
+	public boolean isLeverPointedAway(IBlockState state, EntityPlayer player) {
 //		TODO: Maybe reconsider this one day
 //		switch(state.getValue(FACING)){
 //		case UP_Z: case UP_X: case DOWN_Z: case DOWN_X: //Lever is placed with the stick pointing SOUTH or EAST
@@ -67,11 +73,10 @@ public class BlockIronLever extends BlockLever implements IAllomanticallyActivat
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		return false;
 	}
-	
+
 	@Override
-    public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced){
+	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add("\u00A77" + I18n.translateToLocal("tile.iron_lever.lore"));
 	}
-	
 
 }

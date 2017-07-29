@@ -21,7 +21,7 @@ public class AllomancyCapabilityPacket implements IMessage {
 	private int entityID;
 
 	/**
-	 * Takes the data and transcribes it into transmittable data
+	 * Packet for sending Allomancy player data to a client
 	 * 
 	 * @param data
 	 *            the AllomancyCapabiltiy data for the player

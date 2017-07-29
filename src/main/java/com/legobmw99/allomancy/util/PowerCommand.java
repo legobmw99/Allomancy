@@ -9,6 +9,7 @@ import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.NumberInvalidException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -30,12 +31,12 @@ public class PowerCommand extends CommandBase {
 
     @Override
     public String getName() {
-        return "allomancy_power";
+        return "allomancy";
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/allomancy_power <number> [player] \nNumber is the player's allomancy power, 0 through 9";
+        return "commands.allomancy.usage";
     }
 
     @Override
@@ -59,10 +60,13 @@ public class PowerCommand extends CommandBase {
 
                 EntityPlayer entityplayer = args.length > 1 ? getPlayer(server, sender, args[1]) : getCommandSenderAsPlayer(sender);
 
-                if (level < -1 || level > 8) {
-                    sender.sendMessage(new TextComponentString("Level must be between 0 and 9"));
-                    return;
+                if (level < -1){
+                	throw new NumberInvalidException("commands.generic.num.tooSmall", new Object[] {level+1,0});
                 }
+                if(level > 8) {
+                	throw new NumberInvalidException("commands.generic.num.tooBig", new Object[] {level+1,9});
+                }
+                
 
                 if (entityplayer != null) {
 
@@ -71,7 +75,7 @@ public class PowerCommand extends CommandBase {
 
                     Registry.network.sendTo(new AllomancyPowerPacket(level), (EntityPlayerMP) entityplayer);
 
-                    notifyCommandListener(sender, this, "Setting " + entityplayer.getName() + " to " + names[level + 1], new Object[] { Integer.valueOf(level), entityplayer.getName() });
+                    notifyCommandListener(sender, this, "commands.allomancy.success", new Object[] { entityplayer.getName(), names[(level + 1)]});
 
                 } else {
                     sender.sendMessage(new TextComponentString("Player not found"));

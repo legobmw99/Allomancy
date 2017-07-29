@@ -17,10 +17,10 @@ public class UpdateBurnPacket implements IMessage {
 	}
 
 	private int mat;
-	private int value;
+	private boolean value;
 
 	/**
-	 * Takes data, makes it transmittable
+	 * Send request to the server to change the burning state of a metal
 	 * 
 	 * @param mat
 	 *            the index of the metal
@@ -29,19 +29,19 @@ public class UpdateBurnPacket implements IMessage {
 	 */
 	public UpdateBurnPacket(int mat, boolean value) {
 		this.mat = mat;
-		this.value = value ? 1 : 0; // Convert bool to int
+		this.value = value; // Convert bool to int
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		mat = ByteBufUtils.readVarInt(buf, 5);
-		value = ByteBufUtils.readVarInt(buf, 1);
+		value = buf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		ByteBufUtils.writeVarInt(buf, mat, 5);
-		ByteBufUtils.writeVarInt(buf, value, 1);
+		buf.writeBoolean(value);
 	}
 
 	public static class Handler implements IMessageHandler<UpdateBurnPacket, IMessage> {
@@ -55,10 +55,9 @@ public class UpdateBurnPacket implements IMessage {
 
 					EntityPlayerMP player = ctx.getServerHandler().player;
 					AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-					boolean value = message.value == 1;
 
 					if (cap.getMetalAmounts(message.mat) != 0) {
-						cap.setMetalBurning(message.mat, value);
+						cap.setMetalBurning(message.mat, message.value);
 					} else {
 						cap.setMetalBurning(message.mat, false);
 					}

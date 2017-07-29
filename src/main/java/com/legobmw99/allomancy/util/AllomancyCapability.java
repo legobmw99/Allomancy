@@ -42,8 +42,6 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
     /**
      * Constructor of the Capability object
      * 
-     * @param player
-     *            the player to attach a Capability to
      */
     public AllomancyCapability() {
     }
