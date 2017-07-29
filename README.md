@@ -1,4 +1,4 @@
-Allomancy 2.8.0
+Allomancy 2.8.1
 =========
 [![ CurseForge](http://cf.way2muchnoise.eu/256282.svg)](https://minecraft.curseforge.com/projects/allomancy)
 
