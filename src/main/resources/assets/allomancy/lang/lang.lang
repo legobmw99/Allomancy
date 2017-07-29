@@ -16,7 +16,8 @@ item.coinbag.name=Coin Bag
 key.categories.allomancy=Allomancy
 key.burn=Burn Metals
 
-
+commands.allomancy.usage=/allomancy <power level> [player]
+commands.allomancy.success=Setting %s to %s
 
 item.itemVial.emptyvial.name=Empty Vial
 item.itemVial.brasselixer.name=Brass Elixir
