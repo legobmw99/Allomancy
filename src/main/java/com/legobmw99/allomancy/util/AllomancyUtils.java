@@ -363,8 +363,17 @@ public class AllomancyUtils {
 		} 
 		if (entity instanceof EntityLiving) {
 			EntityLiving ent = (EntityLiving) entity;
-			return (ent instanceof EntityIronGolem)
-				|| ((ent.getHeldItem(EnumHand.OFF_HAND) != null && isItemMetal(ent.getHeldItem(EnumHand.MAIN_HAND))) || (ent.getHeldItem(EnumHand.MAIN_HAND) != null && isItemMetal(ent.getHeldItem(EnumHand.OFF_HAND))));
+			if(ent instanceof EntityIronGolem){
+				return true;
+			}
+			if(isItemMetal(ent.getHeldItem(EnumHand.MAIN_HAND)) || isItemMetal(ent.getHeldItem(EnumHand.OFF_HAND))){
+				return true;
+			}
+			for(ItemStack i: ent.getArmorInventoryList()){
+				if(isItemMetal(i)){
+					return true;
+				}
+			}
 		} 
 		
 		return false;
