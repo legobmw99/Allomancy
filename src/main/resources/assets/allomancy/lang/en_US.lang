@@ -4,6 +4,8 @@ tile.oreTin.name=Tin Ore
 tile.oreLead.name=Lead Ore
 tile.oreCopper.name=Copper Ore
 tile.oreZinc.name=Zinc Ore
+tile.iron_lever.name=Iron Lever
+tile.iron_lever.lore=This lever seems to heavy to move by ordinary means
 
 item.handgrinder.name=Hand Grinder
 item.nuggetLerasium.name=Lerasium Nugget

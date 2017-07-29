@@ -8,7 +8,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.entities.particles.ParticlePointer;
 import com.legobmw99.allomancy.entities.particles.ParticleSound;
 import com.legobmw99.allomancy.gui.GUIMetalSelect;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
@@ -223,6 +222,7 @@ public class ClientEventHandler {
         }
     }
     
+    
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -230,7 +230,7 @@ public class ClientEventHandler {
         if (event.phase == TickEvent.Phase.END && (!Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().player != null)) {
 
             player = Minecraft.getMinecraft().player;
-            AllomancyCapability cap = AllomancyCapability.forPlayer(player);
+            cap = AllomancyCapability.forPlayer(player);
 
             int max = AllomancyConfig.maxDrawLine;
 
