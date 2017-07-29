@@ -27,7 +27,6 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
     private int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0 };
     private boolean[] MetalBurning = { false, false, false, false, false, false, false, false };
 
-    private EntityPlayer player;
 
     /**
      * Retrieve data for a specific player
@@ -46,8 +45,7 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
      * @param player
      *            the player to attach a Capability to
      */
-    public AllomancyCapability(EntityPlayer player) {
-        this.player = player;
+    public AllomancyCapability() {
     }
 
 

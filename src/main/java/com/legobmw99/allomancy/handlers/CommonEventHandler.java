@@ -41,7 +41,7 @@ public class CommonEventHandler {
     @SubscribeEvent
     public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof EntityPlayer && !event.getObject().hasCapability(Allomancy.PLAYER_CAP, null)) {
-            event.addCapability(new ResourceLocation(Allomancy.MODID, "Allomancy_Data"), new AllomancyCapability(((EntityPlayer) event.getObject())));
+            event.addCapability(new ResourceLocation(Allomancy.MODID, "Allomancy_Data"), new AllomancyCapability());
         }
     }
 
@@ -78,7 +78,6 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event) {
-
         AllomancyCapability oldCap = AllomancyCapability.forPlayer(event.getOriginal()); // the dead player's cap
         AllomancyCapability cap = AllomancyCapability.forPlayer(event.getEntityPlayer()); // the clone's cap
         if (oldCap.getAllomancyPower() >= 0) {

@@ -16,9 +16,7 @@ public class TryPushPullBlock implements IMessage {
 	public TryPushPullBlock() {
 	}
 
-	private int X;
-	private int Y;
-	private int Z;
+	private long blockPos;
 	private int entityID;
 	private int direction;
 
@@ -33,21 +31,17 @@ public class TryPushPullBlock implements IMessage {
 	 * @param entityID
 	 *            the player's entityID
 	 * @param direction
-	 * 			  the direction (1 for push, -1 for pull)
+	 *            the direction (1 for push, -1 for pull)
 	 */
 	public TryPushPullBlock(BlockPos block, int entityID, int direction) {
-		this.X = block.getX();
-		this.Y = block.getY();
-		this.Z = block.getZ();
+		this.blockPos = block.toLong();
 		this.entityID = entityID;
 		this.direction = direction;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		X = ByteBufUtils.readVarInt(buf, 5);
-		Y = ByteBufUtils.readVarInt(buf, 5);
-		Z = ByteBufUtils.readVarInt(buf, 5);
+		blockPos = buf.readLong();
 		entityID = ByteBufUtils.readVarInt(buf, 5);
 		direction = ByteBufUtils.readVarInt(buf, 5);
 
@@ -55,9 +49,7 @@ public class TryPushPullBlock implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeVarInt(buf, X, 5);
-		ByteBufUtils.writeVarInt(buf, Y, 5);
-		ByteBufUtils.writeVarInt(buf, Z, 5);
+		buf.writeLong(blockPos);
 		ByteBufUtils.writeVarInt(buf, entityID, 5);
 		ByteBufUtils.writeVarInt(buf, direction, 5);
 
@@ -71,15 +63,12 @@ public class TryPushPullBlock implements IMessage {
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					Entity player = ctx.getServerHandler().player.world.getEntityByID(message.entityID);
-					BlockPos block = new BlockPos(message.X,message.Y,message.Z);
-					if (player == null) {
-						return;
-					} else {
-						//Sanity check to make sure server has same configs and that the block is loaded in the server
-						if(ctx.getServerHandler().player.getEntityWorld().isBlockLoaded(block) && AllomancyUtils.isBlockMetal(ctx.getServerHandler().player.world.getBlockState(block).getBlock())){
-							AllomancyUtils.move(message.direction, player, block);
-						}
+					Entity player = ctx.getServerHandler().player;
+					BlockPos block = BlockPos.fromLong(message.blockPos);
+					// Sanity check to make sure server has same configs and that the block is loaded in the server
+					if (ctx.getServerHandler().player.getEntityWorld().isBlockLoaded(block) && 
+							AllomancyUtils.isBlockMetal(ctx.getServerHandler().player.world.getBlockState(block).getBlock())) {
+						AllomancyUtils.move(message.direction, player, block);
 					}
 				}
 			});

@@ -6,7 +6,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
@@ -19,7 +18,6 @@ public class TryPushPullEntity implements IMessage {
 	public TryPushPullEntity() {
 	}
 
-	private int entityIDSender;
 	private int entityIDOther;
 	private int direction;
 
@@ -32,16 +30,14 @@ public class TryPushPullEntity implements IMessage {
 	 * @param direction
 	 *            the direction (1 for push, -1 for pull)
 	 */
-	public TryPushPullEntity(int entityIDOther, int entityIDSender, int direction) {
+	public TryPushPullEntity(int entityIDOther, int direction) {
 		this.entityIDOther = entityIDOther;
-		this.entityIDSender = entityIDSender;
 		this.direction = direction;
 
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		entityIDSender = ByteBufUtils.readVarInt(buf, 5);
 		entityIDOther = ByteBufUtils.readVarInt(buf, 5);
 		direction = ByteBufUtils.readVarInt(buf, 5);
 
@@ -49,7 +45,6 @@ public class TryPushPullEntity implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeVarInt(buf, entityIDSender, 5);
 		ByteBufUtils.writeVarInt(buf, entityIDOther, 5);
 		ByteBufUtils.writeVarInt(buf, direction, 5);
 
@@ -64,9 +59,9 @@ public class TryPushPullEntity implements IMessage {
 				@Override
 				public void run() {
 					Entity target = ctx.getServerHandler().player.world.getEntityByID(message.entityIDOther);
-					Entity player = ctx.getServerHandler().player.world.getEntityByID(message.entityIDSender);
+					Entity player = ctx.getServerHandler().player;
 					BlockPos anchor;
-					if (target == null || player == null) {
+					if (target == null) {
 						return;
 					} else {
 						if (AllomancyUtils.isEntityMetal(target)) {

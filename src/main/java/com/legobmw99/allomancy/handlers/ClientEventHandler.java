@@ -8,8 +8,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.entities.EntityGoldNugget;
-import com.legobmw99.allomancy.entities.EntityIronNugget;
 import com.legobmw99.allomancy.entities.particles.ParticlePointer;
 import com.legobmw99.allomancy.entities.particles.ParticleSound;
 import com.legobmw99.allomancy.gui.GUIMetalSelect;
@@ -31,16 +29,10 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -285,7 +277,7 @@ public class ClientEventHandler {
                     if (cap.getMetalBurning(AllomancyCapability.IRON)) {
                         if (mov != null) {
                             if (mov.entityHit != null && AllomancyUtils.isEntityMetal(mov.entityHit)) {
-                        		Registry.network.sendToServer(new TryPushPullEntity(mov.entityHit.getEntityId(), player.getEntityId(), AllomancyUtils.PULL));
+                        		Registry.network.sendToServer(new TryPushPullEntity(mov.entityHit.getEntityId(), AllomancyUtils.PULL));
                             }
                             
                             if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
@@ -316,7 +308,7 @@ public class ClientEventHandler {
                     if (cap.getMetalBurning(AllomancyCapability.STEEL)) {
                         if (mov != null) {
                             if (mov.entityHit != null && AllomancyUtils.isEntityMetal(mov.entityHit)) {
-                        		Registry.network.sendToServer(new TryPushPullEntity(mov.entityHit.getEntityId(), player.getEntityId(), AllomancyUtils.PUSH));
+                        		Registry.network.sendToServer(new TryPushPullEntity(mov.entityHit.getEntityId(), AllomancyUtils.PUSH));
 
 
                             }
