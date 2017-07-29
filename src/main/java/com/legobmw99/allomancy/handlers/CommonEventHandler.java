@@ -168,9 +168,7 @@ public class CommonEventHandler {
                     }
                     // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing, only if the amplifier is 5
                     if ((!cap.getMetalBurning(AllomancyCapability.TIN)) && (curPlayer.getActivePotionEffect(Potion.getPotionById(16)) != null && curPlayer.getActivePotionEffect(Potion.getPotionById(16)).getAmplifier() == 5)) {
-                        if (curPlayer.getActivePotionEffect(Potion.getPotionById(16)).getDuration() < 201) {
                             curPlayer.removePotionEffect(Potion.getPotionById(16));
-                        }
                     }
                 }
             }
