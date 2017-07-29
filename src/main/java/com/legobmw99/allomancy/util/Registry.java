@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.util;
 import org.lwjgl.input.Keyboard;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.block.BlockIronLever;
 import com.legobmw99.allomancy.entities.EntityGoldNugget;
 import com.legobmw99.allomancy.entities.EntityIronNugget;
 import com.legobmw99.allomancy.items.ItemCoinBag;
@@ -60,6 +61,7 @@ public class Registry {
 	public static Block oreLead;
 	public static Block oreCopper;
 	public static Block oreZinc;
+	public static Block blockIronLever;
 	
 	public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
 			"Lead" };
@@ -79,8 +81,9 @@ public class Registry {
 		oreCopper.setHarvestLevel("pickaxe", 1);
 		oreZinc = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreZinc").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreZinc"));
 		oreZinc.setHarvestLevel("pickaxe", 1);
+		blockIronLever = new BlockIronLever();
 		
-		event.getRegistry().registerAll(oreTin,oreLead,oreCopper,oreZinc);
+		event.getRegistry().registerAll(oreTin,oreLead,oreCopper,oreZinc, blockIronLever);
 	}
 
 	public static void initItems(Register event) {
@@ -111,7 +114,8 @@ public class Registry {
 				new ItemBlock(oreTin).setRegistryName(oreTin.getRegistryName()),
 				new ItemBlock(oreLead).setRegistryName(oreLead.getRegistryName()),
 				new ItemBlock(oreCopper).setRegistryName(oreCopper.getRegistryName()),
-				new ItemBlock(oreZinc).setRegistryName(oreZinc.getRegistryName())
+				new ItemBlock(oreZinc).setRegistryName(oreZinc.getRegistryName()),
+				new ItemBlock(blockIronLever).setRegistryName(blockIronLever.getRegistryName())
 				);
 		
 				
@@ -161,6 +165,8 @@ public class Registry {
 				new ModelResourceLocation("allomancy:oreCopper", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreLead), 0,
 				new ModelResourceLocation("allomancy:oreLead", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(blockIronLever), 0,
+				new ModelResourceLocation("allomancy:iron_lever", "inventory"));
 
 		// Register ingot models individually
 		renderItem.getItemModelMesher().register(itemZincIngot, 0,

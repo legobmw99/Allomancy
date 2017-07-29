@@ -1,9 +1,11 @@
 package com.legobmw99.allomancy.network.packets;
 
+import com.legobmw99.allomancy.block.BlockIronLever;
+import com.legobmw99.allomancy.block.IAllomanticallyActivatedBlock;
 import com.legobmw99.allomancy.util.AllomancyUtils;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
@@ -59,12 +61,16 @@ public class TryPushPullBlock implements IMessage {
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					Entity player = ctx.getServerHandler().player;
+					EntityPlayerMP player = ctx.getServerHandler().player;
 					BlockPos block = BlockPos.fromLong(message.blockPos);
 					// Sanity check to make sure server has same configs and that the block is loaded in the server
-					if (ctx.getServerHandler().player.getEntityWorld().isBlockLoaded(block) && 
-							AllomancyUtils.isBlockMetal(ctx.getServerHandler().player.world.getBlockState(block).getBlock())) {
-						AllomancyUtils.move(message.direction, player, block);
+					if (player.getEntityWorld().isBlockLoaded(block) && AllomancyUtils.isBlockMetal(ctx.getServerHandler().player.world.getBlockState(block).getBlock())) {
+						if(player.world.getBlockState(block).getBlock() instanceof IAllomanticallyActivatedBlock){
+							((IAllomanticallyActivatedBlock)player.world.getBlockState(block).getBlock())
+								.onBlockActivatedAllomantically(player.world, block, player.world.getBlockState(block), player, message.direction == AllomancyUtils.PUSH);
+						} else {
+							AllomancyUtils.move(message.direction, player, block);
+						}
 					}
 				}
 			});

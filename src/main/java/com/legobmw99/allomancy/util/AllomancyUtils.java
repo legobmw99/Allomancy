@@ -129,6 +129,7 @@ public class AllomancyUtils {
 			defaultList.add(Blocks.DETECTOR_RAIL.getRegistryName().toString());
 			defaultList.add(Blocks.GOLDEN_RAIL.getRegistryName().toString());
 			defaultList.add(Registry.itemVial.getRegistryName().toString());
+			defaultList.add(Registry.blockIronLever.getRegistryName().toString());
 
 			for (int i = 0; i < Registry.flakeMetals.length; i++) {
 				defaultList.add(new Item().getByNameOrId("allomancy:" + "flake" + Registry.flakeMetals[i]).getRegistryName().toString());

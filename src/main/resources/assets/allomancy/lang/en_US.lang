@@ -9,6 +9,7 @@ tile.iron_lever.lore=This lever seems to heavy to move by ordinary means
 
 item.handgrinder.name=Hand Grinder
 item.nuggetLerasium.name=Lerasium Nugget
+item.nuggetLerasium.lore=This item is endowed with strange powers, perhaps you should ingest it?
 item.mistcloak.name=Mistcloak
 item.coinbag.name=Coin Bag
 

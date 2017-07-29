@@ -22,6 +22,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
 public class NuggetLerasium extends ItemFood {
@@ -78,8 +79,7 @@ public class NuggetLerasium extends ItemFood {
 	@Override
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced){
 
-		tooltip.add("\u00A75This item is endowed with strange powers");
-		tooltip.add("\u00A75Perhaps you should ingest it?");
+		tooltip.add("\u00A75" + I18n.translateToLocal("item.nuggetLerasium.lore"));
 	}
 	
 	@Override
