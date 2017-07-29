@@ -283,7 +283,7 @@ public class ClientEventHandler {
                             if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
                                 BlockPos bp = mov.getBlockPos();
                                 if (AllomancyUtils.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
-                            		Registry.network.sendToServer(new TryPushPullBlock(bp, player.getEntityId(), AllomancyUtils.PULL));
+                            		Registry.network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
                                 }
                             }
 
@@ -316,7 +316,7 @@ public class ClientEventHandler {
 
                                 BlockPos bp = mov.getBlockPos();
                                 if (AllomancyUtils.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
-                            		Registry.network.sendToServer(new TryPushPullBlock(bp, player.getEntityId(), AllomancyUtils.PUSH));
+                            		Registry.network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
 
                                 }
                             }
@@ -387,8 +387,8 @@ public class ClientEventHandler {
                 // Remove items from burners
                 LinkedList<EntityPlayer> toRemoveBurners = new LinkedList<EntityPlayer>();
                 for (EntityPlayer entity : metalBurners) {
-                    AllomancyCapability capOther = AllomancyCapability.forPlayer(entity);
                     Registry.network.sendToServer(new GetCapabilitiesPacket(entity.getEntityId()));
+                    AllomancyCapability capOther = AllomancyCapability.forPlayer(entity);
                     if (entity.isDead) {
                         toRemoveBurners.add(entity);
                     }
@@ -488,24 +488,17 @@ public class ClientEventHandler {
         if ((this.cap.getMetalBurning(AllomancyCapability.IRON) || this.cap.getMetalBurning(AllomancyCapability.STEEL))) {
 
             for (Entity entity : particleTargets) {
-                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, entity.posX, entity.posY, entity.posZ, 1F, 0F, 0.6F, 1F);
+                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, entity.posX, entity.posY, entity.posZ, 1.5F, 0F, 0.6F, 1F);
             }
 
             for (BlockPos v : particleBlockTargets) {
-                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY() + 0.5, v.getZ() + 0.5, 1F, 0F, 0.6F, 1F);
+                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY() + 0.5, v.getZ() + 0.5, 1.5F, 0F, 0.6F, 1F);
             }
         }
 
         if ((cap.getMetalBurning(AllomancyCapability.BRONZE))) {
             for (EntityPlayer entityplayer : metalBurners) {
-
-                // drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY, entityplayer.posZ, 1, 1F, 0.15F, 0.15F);
-                double x = ((player.posX - entityplayer.posX) * -1) * .03;
-                double y = (((player.posY - entityplayer.posY + 1.4) * -1) * .03) + .021;
-                double z = ((player.posZ - entityplayer.posZ) * -1) * .03;
-                ParticlePointer particle = new ParticlePointer(player.world, player.posX - (Math.sin(Math.toRadians(player.getRotationYawHead())) * .1d), player.posY + .1, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .1d), x, y,
-                        z);
-                Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY+0.5, entityplayer.posZ, 2.5F, 0.5F, 0.15F, 0.15F);
             }
         }
     }

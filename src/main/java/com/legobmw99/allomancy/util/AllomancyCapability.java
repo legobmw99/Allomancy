@@ -175,6 +175,14 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
         nbt.setInteger("brass", this.getMetalAmounts(5));
         nbt.setInteger("copper", this.getMetalAmounts(6));
         nbt.setInteger("bronze", this.getMetalAmounts(7));
+        nbt.setBoolean("iron_b", this.getMetalBurning(0));
+        nbt.setBoolean("steel_b", this.getMetalBurning(1));
+        nbt.setBoolean("tin_b", this.getMetalBurning(2));
+        nbt.setBoolean("pewter_b", this.getMetalBurning(3));
+        nbt.setBoolean("zinc_b", this.getMetalBurning(4));
+        nbt.setBoolean("brass_b", this.getMetalBurning(5));
+        nbt.setBoolean("copper_b", this.getMetalBurning(6));
+        nbt.setBoolean("bronze_b", this.getMetalBurning(7));
         return nbt;
 
     }
@@ -190,6 +198,14 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
         this.MetalAmounts[5] = compound.getInteger("brass");
         this.MetalAmounts[6] = compound.getInteger("copper");
         this.MetalAmounts[7] = compound.getInteger("bronze");
+        this.MetalBurning[0] = compound.getBoolean("iron_b");
+        this.MetalBurning[1] = compound.getBoolean("steel_b");
+        this.MetalBurning[2] = compound.getBoolean("tin_b");
+        this.MetalBurning[3] = compound.getBoolean("pewter_b");
+        this.MetalBurning[4] = compound.getBoolean("zinc_b");
+        this.MetalBurning[5] = compound.getBoolean("brass_b");
+        this.MetalBurning[6] = compound.getBoolean("copper_b");
+        this.MetalBurning[7] = compound.getBoolean("bronze_b");
         if (compound.getBoolean("ismistborn")) {
             this.setAllomancyPower(8);
         }

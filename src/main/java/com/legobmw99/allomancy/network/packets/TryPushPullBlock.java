@@ -17,7 +17,6 @@ public class TryPushPullBlock implements IMessage {
 	}
 
 	private long blockPos;
-	private int entityID;
 	private int direction;
 
 	/**
@@ -33,16 +32,14 @@ public class TryPushPullBlock implements IMessage {
 	 * @param direction
 	 *            the direction (1 for push, -1 for pull)
 	 */
-	public TryPushPullBlock(BlockPos block, int entityID, int direction) {
+	public TryPushPullBlock(BlockPos block, int direction) {
 		this.blockPos = block.toLong();
-		this.entityID = entityID;
 		this.direction = direction;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		blockPos = buf.readLong();
-		entityID = ByteBufUtils.readVarInt(buf, 5);
 		direction = ByteBufUtils.readVarInt(buf, 5);
 
 	}
@@ -50,7 +47,6 @@ public class TryPushPullBlock implements IMessage {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeLong(blockPos);
-		ByteBufUtils.writeVarInt(buf, entityID, 5);
 		ByteBufUtils.writeVarInt(buf, direction, 5);
 
 	}

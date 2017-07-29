@@ -87,9 +87,10 @@ public class CommonEventHandler {
         if (event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory") || !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
             for (int i = 0; i < 8; i++) {
                 cap.setMetalAmounts(i, oldCap.getMetalAmounts(i));
+                Registry.network.sendTo(new AllomancyCapabilityPacket(cap, event.getEntity().getEntityId()), (EntityPlayerMP) event.getEntity());
+
             }
         }
-
     }
 
     @SubscribeEvent
@@ -99,7 +100,7 @@ public class CommonEventHandler {
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
             Registry.network.sendTo(new AllomancyCapabilityPacket(cap, event.getEntity().getEntityId()), player);
             if (cap.getAllomancyPower() >= 0) {
-                Registry.network.sendTo(new AllomancyPowerPacket(cap.getAllomancyPower()), player);
+                Registry.network.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
             } else if (AllomancyConfig.randomizeMistings && cap.getAllomancyPower() == -1) {
 
                 int randomMisting = (int) (Math.random() * 8);
@@ -153,7 +154,7 @@ public class CommonEventHandler {
                     }
                     if (cap.getMetalBurning(AllomancyCapability.TIN)) {
                         // Add night vision to tin-burners
-                        curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(16), 210, 5, true, false));
+                        curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(16), Short.MAX_VALUE, 5, true, false));
                         // Remove blindness for tin burners
                         if (curPlayer.isPotionActive(Potion.getPotionById(15))) {
                             curPlayer.removePotionEffect(Potion.getPotionById(15));
