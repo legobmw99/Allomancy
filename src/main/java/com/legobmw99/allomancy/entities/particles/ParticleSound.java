@@ -54,7 +54,7 @@ public class ParticleSound extends Particle {
     public void onUpdate() {
         if (((this.posX - entityX) < 1.7) && ((this.posY - entityY) < 2.5) && ((this.posZ - entityZ) < 1.7)) {
             this.setExpired();
-        }
+        } 
 
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
@@ -67,11 +67,4 @@ public class ParticleSound extends Particle {
         this.move(this.motionX, this.motionY, this.motionZ);
 
     }
-    /*
-     * Old, antequated code which allowed for custom textures. May come back one day
-     * @Override public int getFXLayer() { return 3; }
-     * @Override public void func_180434_a(WorldRenderer wr, Entity e, float p3, float p4, float p5, float p6, float p7, float p8) { Minecraft.getMinecraft().getTextureManager().bindTexture(loc); wr.startDrawingQuads(); super.func_180434_a(wr, e, p3, p4,
-     * p5, p6, p7, p8); Tessellator.getInstance().draw(); GlStateManager.disableBlend(); GlStateManager.enableLighting(); }
-     */
-
 }
