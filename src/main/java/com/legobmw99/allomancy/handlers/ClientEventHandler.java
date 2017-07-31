@@ -50,12 +50,14 @@ public class ClientEventHandler {
     private static final Point[] Frames = { new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12) };
     private static final ResourceLocation meterLoc  = new ResourceLocation("allomancy", "textures/gui/overlay/meter.png");
 
-    private Minecraft mc;
+    private Minecraft mc = Minecraft.getMinecraft();
     private AllomancyCapability cap;
     private EntityPlayerSP player;
     
 	private int animationCounter = 0;
     private int currentFrame = 0;
+    private int max = AllomancyConfig.maxDrawLine;
+
 		
     private ArrayList<Entity> particleTargets = new ArrayList<Entity>();
     private ArrayList<BlockPos> particleBlockTargets = new ArrayList<BlockPos>();
@@ -68,7 +70,6 @@ public class ClientEventHandler {
      */
     @SideOnly(Side.CLIENT)
     private void drawMetalOverlay() {
-        this.mc = Minecraft.getMinecraft();
 
         player = this.mc.player;
         if (player == null) {
@@ -115,10 +116,10 @@ public class ClientEventHandler {
                 break;
         }
 
-        GuiIngame gig = new GuiIngame(Minecraft.getMinecraft());
-        Minecraft.getMinecraft().renderEngine.bindTexture(this.meterLoc);
+        GuiIngame gig = new GuiIngame(this.mc);
+        this.mc.renderEngine.bindTexture(this.meterLoc);
         ITextureObject obj;
-        obj = Minecraft.getMinecraft().renderEngine.getTexture(this.meterLoc);
+        obj = this.mc.renderEngine.getTexture(this.meterLoc);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
         /*
@@ -227,12 +228,10 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         // Run once per tick, only if in game, and only if there is a player
-        if (event.phase == TickEvent.Phase.END && (!Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().player != null)) {
+        if (event.phase == TickEvent.Phase.END && (!this.mc.isGamePaused() && this.mc.player != null)) {
 
-            player = Minecraft.getMinecraft().player;
+            player = this.mc.player;
             cap = AllomancyCapability.forPlayer(player);
-
-            int max = AllomancyConfig.maxDrawLine;
 
             if (cap.getAllomancyPower() >= 0) {
                 // Populate the metal lists
@@ -263,14 +262,14 @@ public class ClientEventHandler {
                     blocks = BlockPos.getAllInBox(negative, positive);
                     for (BlockPos block : blocks) {
                         BlockPos imBlock = block.toImmutable();
-                        if (AllomancyUtils.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(imBlock).getBlock())) {
+                        if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(imBlock).getBlock())) {
                             particleBlockTargets.add(imBlock);
                         }
                     }
 
                 }
 
-                if ((player.getHeldItemMainhand().isEmpty()) && (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown())) {
+                if ((player.getHeldItemMainhand().isEmpty()) && (this.mc.gameSettings.keyBindAttack.isKeyDown())) {
                     // Ray trace 20 blocks
                     RayTraceResult mov = AllomancyUtils.getMouseOverExtended(20.0F);
                     // All iron pulling powers
@@ -282,7 +281,7 @@ public class ClientEventHandler {
                             
                             if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
                                 BlockPos bp = mov.getBlockPos();
-                                if (AllomancyUtils.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
+                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock())) {
                             		Registry.network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
                                 }
                             }
@@ -301,7 +300,7 @@ public class ClientEventHandler {
                     }
 
                 }
-                if ((player.getHeldItemMainhand()).isEmpty() && (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown())) {
+                if ((player.getHeldItemMainhand()).isEmpty() && (this.mc.gameSettings.keyBindUseItem.isKeyDown())) {
                     // Ray trace 20 blocks
                     RayTraceResult mov = AllomancyUtils.getMouseOverExtended(20.0F);
                     // All steel pushing powers
@@ -315,7 +314,7 @@ public class ClientEventHandler {
                             if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
 
                                 BlockPos bp = mov.getBlockPos();
-                                if (AllomancyUtils.isBlockMetal(Minecraft.getMinecraft().world.getBlockState(bp).getBlock())) {
+                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock())) {
                             		Registry.network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
 
                                 }
@@ -414,11 +413,11 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
         if (Registry.burn.isPressed()) {
-            player = Minecraft.getMinecraft().player;
+            player = this.mc.player;
             AllomancyCapability cap;
             Minecraft mc = FMLClientHandler.instance().getClient();
             if (mc.currentScreen == null) {
-                if (player == null || !Minecraft.getMinecraft().inGameHasFocus) {
+                if (player == null || !this.mc.inGameHasFocus) {
                     return;
                 }
                 cap = AllomancyCapability.forPlayer(player);
@@ -446,7 +445,7 @@ public class ClientEventHandler {
         if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
             return;
         }
-        if (!Minecraft.getMinecraft().inGameHasFocus) {
+        if (!this.mc.inGameHasFocus) {
             return;
         }
         if (FMLClientHandler.instance().getClient().currentScreen != null ) {
@@ -468,7 +467,6 @@ public class ClientEventHandler {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        this.mc = Minecraft.getMinecraft();
         player = this.mc.player;
         if (player == null) {
             return;
@@ -508,7 +506,7 @@ public class ClientEventHandler {
     public void onSound(PlaySoundEvent event) {
         double motionX, motionY, motionZ, magnitude;
 
-        player = Minecraft.getMinecraft().player;
+        player = this.mc.player;
         ISound sound = event.getSound();
         if ((player == null) || (sound == null)) {
             return;
@@ -528,7 +526,7 @@ public class ClientEventHandler {
                 motionZ = ((player.posZ - (event.getSound().getZPosF() + .5)) * -0.7) / magnitude;
                 Particle particle = new ParticleSound(player.world, player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), player.posY + .2, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
                         motionY, motionZ, sound);
-                Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+                this.mc.effectRenderer.addEffect(particle);
             }
 
         }
