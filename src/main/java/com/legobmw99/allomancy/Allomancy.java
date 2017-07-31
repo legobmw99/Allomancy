@@ -89,11 +89,16 @@ public class Allomancy {
 
 	public static class ClientProxy extends CommonProxy {
 		@Override
+		public void preInit(FMLPreInitializationEvent e){
+			super.preInit(e);
+			Registry.registerEntityRenders();
+		}
+		@Override
 		public void init(FMLInitializationEvent e) {
 			super.init(e);
 			MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 			Registry.initKeyBindings();
-			Registry.registerRenders();
+			Registry.registerItemRenders();
 
 		}
 		@Override

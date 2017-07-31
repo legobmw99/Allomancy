@@ -6,6 +6,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.block.BlockIronLever;
 import com.legobmw99.allomancy.entities.EntityGoldNugget;
 import com.legobmw99.allomancy.entities.EntityIronNugget;
+import com.legobmw99.allomancy.entities.EntityRenderFactories;
 import com.legobmw99.allomancy.items.ItemCoinBag;
 import com.legobmw99.allomancy.items.ItemGrinder;
 import com.legobmw99.allomancy.items.ItemMistcloak;
@@ -25,10 +26,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -144,18 +143,18 @@ public class Registry {
 		network.registerMessage(TryPushPullEntity.Handler.class, TryPushPullEntity.class, 5, Side.SERVER);
 		network.registerMessage(TryPushPullBlock.Handler.class, TryPushPullBlock.class, 6, Side.SERVER);
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void registerEntityRenders(){
+		//Use renderSnowball for nugget projectiles
+		RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class,EntityRenderFactories.GOLD_FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityIronNugget.class,EntityRenderFactories.IRON_FACTORY);
+	}
 
 	@SideOnly(Side.CLIENT)
-	public static void registerRenders() {
+	public static void registerItemRenders() {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-
-		// Call on rendersnowball for nugget projectiles
-		RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class,
-				new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.GOLD_NUGGET, renderItem));
 		
-	      RenderingRegistry.registerEntityRenderingHandler(EntityIronNugget.class,
-	                new RenderSnowball((Minecraft.getMinecraft().getRenderManager()), Items.IRON_NUGGET, renderItem));
-
 		// Register ore models individually.
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreTin), 0,
 				new ModelResourceLocation("allomancy:oreTin", "inventory"));
