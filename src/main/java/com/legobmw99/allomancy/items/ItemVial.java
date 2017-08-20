@@ -74,7 +74,7 @@ public class ItemVial extends Item {
         	for(int i = 0; i < 8; i++){
         		if(itemStackIn.getTagCompound().hasKey(Registry.flakeMetals[i]) && itemStackIn.getTagCompound().getBoolean(Registry.flakeMetals[i])){
         			filling++;
-        			if(cap.getMetalAmounts(i) > 10){
+        			if(cap.getMetalAmounts(i) >= 10){
         				full++;
         			}
         		}
