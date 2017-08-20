@@ -51,10 +51,10 @@ public class ItemCoinBag extends Item {
     /**
      * Finds ammunition items
      */
-    private ItemStack findArrow(EntityPlayer player) {
+    public static ItemStack findArrow(EntityPlayer player) {
         for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
             ItemStack itemstack = player.inventory.getStackInSlot(i);
-            if (this.isArrow(itemstack)) {
+            if (isArrow(itemstack)) {
                 if (itemstack.getCount() == 1) {
                     player.inventory.removeStackFromSlot(i);
                     return itemstack;
@@ -67,7 +67,7 @@ public class ItemCoinBag extends Item {
         return null;
     }
 
-    protected boolean isArrow(ItemStack stack) {
+    protected static boolean isArrow(ItemStack stack) {
         return stack != null && (stack.getItem() == Items.GOLD_NUGGET || stack.getItem() == Items.IRON_NUGGET /* IRON_NUGGET */);
     }
 

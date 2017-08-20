@@ -279,7 +279,7 @@ public class ClientEventHandler {
                         		Registry.network.sendToServer(new TryPushPullEntity(mov.entityHit.getEntityId(), AllomancyUtils.PULL));
                             }
                             
-                            if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
+                            if (mov.typeOfHit == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = mov.getBlockPos();
                                 if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock())) {
                             		Registry.network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
@@ -311,10 +311,10 @@ public class ClientEventHandler {
 
 
                             }
-                            if (mov.typeOfHit == RayTraceResult.Type.BLOCK || mov.typeOfHit == RayTraceResult.Type.MISS) {
+                            if (mov.typeOfHit == RayTraceResult.Type.BLOCK ) {
 
                                 BlockPos bp = mov.getBlockPos();
-                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock())) {
+                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == Registry.itemCoinBag && player.isSneaking())) {
                             		Registry.network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
 
                                 }

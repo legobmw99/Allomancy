@@ -1,8 +1,9 @@
 package com.legobmw99.allomancy.network.packets;
 
-import com.legobmw99.allomancy.block.BlockIronLever;
 import com.legobmw99.allomancy.block.IAllomanticallyActivatedBlock;
+import com.legobmw99.allomancy.items.ItemCoinBag;
 import com.legobmw99.allomancy.util.AllomancyUtils;
+import com.legobmw99.allomancy.util.Registry;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -59,7 +60,8 @@ public class TryPushPullBlock implements IMessage {
 					EntityPlayerMP player = ctx.getServerHandler().player;
 					BlockPos block = BlockPos.fromLong(message.blockPos);
 					// Sanity check to make sure server has same configs and that the block is loaded in the server
-					if (player.getEntityWorld().isBlockLoaded(block) && AllomancyUtils.isBlockMetal(ctx.getServerHandler().player.world.getBlockState(block).getBlock())) {
+					if (player.getEntityWorld().isBlockLoaded(block) && (AllomancyUtils.isBlockMetal(ctx.getServerHandler().player.world.getBlockState(block).getBlock()) //Standard check
+							|| (player.getHeldItemMainhand().getItem() == Registry.itemCoinBag && (ItemCoinBag.findArrow(player) != null || player.isCreative()) && message.direction == AllomancyUtils.PUSH))) { // Check for the coin bag
 						if(player.world.getBlockState(block).getBlock() instanceof IAllomanticallyActivatedBlock){
 							((IAllomanticallyActivatedBlock)player.world.getBlockState(block).getBlock())
 								.onBlockActivatedAllomantically(player.world, block, player.world.getBlockState(block), player, message.direction == AllomancyUtils.PUSH);
