@@ -53,6 +53,8 @@ public class Registry {
 	public static Item itemLeadIngot;
 	public static Item itemCopperIngot;
 	public static Item itemZincIngot;
+	public static Item itemBronzeIngot;
+	public static Item itemBrassIngot;
 	public static Item itemCoinBag;
 	public static Item Mistcloak;
 	public static Item nuggetLerasium;
@@ -99,7 +101,9 @@ public class Registry {
 				itemTinIngot = new Item().setUnlocalizedName("ingotTin").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotTin")),
 				itemLeadIngot = new Item().setUnlocalizedName("ingotLead").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotLead")),		
 				itemCopperIngot = new Item().setUnlocalizedName("ingotCopper").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotCopper")),
-				itemZincIngot = new Item().setUnlocalizedName("ingotZinc").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotZinc"))
+				itemZincIngot = new Item().setUnlocalizedName("ingotZinc").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotZinc")),
+				itemBrassIngot = new Item().setUnlocalizedName("ingotBrass").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotBrass")),
+				itemBronzeIngot = new Item().setUnlocalizedName("ingotBronze").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotBronze"))
 				);
 
 
@@ -123,6 +127,8 @@ public class Registry {
 		OreDictionary.registerOre("ingotTin", itemTinIngot);
 		OreDictionary.registerOre("ingotCopper", itemCopperIngot);
 		OreDictionary.registerOre("ingotLead", itemLeadIngot);
+		OreDictionary.registerOre("ingotBronze", itemBronzeIngot);
+		OreDictionary.registerOre("ingotBrass", itemBrassIngot);
 		OreDictionary.registerOre("oreZinc", oreZinc);
 		OreDictionary.registerOre("oreTin", oreTin);
 		OreDictionary.registerOre("oreCopper", oreCopper);
@@ -177,6 +183,10 @@ public class Registry {
 				new ModelResourceLocation("allomancy:ingotCopper", "inventory"));
 		renderItem.getItemModelMesher().register(itemTinIngot, 0,
 				new ModelResourceLocation("allomancy:ingotTin", "inventory"));
+		renderItem.getItemModelMesher().register(itemBrassIngot, 0,
+				new ModelResourceLocation("allomancy:ingotBrass", "inventory"));
+		renderItem.getItemModelMesher().register(itemBronzeIngot, 0,
+				new ModelResourceLocation("allomancy:ingotBronze", "inventory"));
 
 		// Register misc item models individually
 		renderItem.getItemModelMesher().register(nuggetLerasium, 0,
