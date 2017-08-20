@@ -82,7 +82,6 @@ public class Allomancy {
 
 		public void init(FMLInitializationEvent e) {
 			GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
-			Registry.setupRecipes();
 			AllomancyCapability.register();
 		}
 	}

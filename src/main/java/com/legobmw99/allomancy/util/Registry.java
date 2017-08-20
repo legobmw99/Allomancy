@@ -33,6 +33,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -192,31 +193,14 @@ public class Registry {
 			renderItem.getItemModelMesher().register(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[i]),
 					0, new ModelResourceLocation("allomancy:" + "flake" + flakeMetals[i], "inventory"));
 		}
-
-		// Register vial model and all variants
-		ModelBakery.registerItemVariants(itemVial,
-				new ModelResourceLocation("allomancy:itemVial.emptyvial", "inventory"),
-				new ModelResourceLocation("allomancy:itemVial.ironelixer", "inventory"),
-				new ModelResourceLocation("allomancy:itemVial.steelelixer", "inventory"),
-				new ModelResourceLocation("allomancy:itemVial.tinelixer", "inventory"),
-				new ModelResourceLocation("allomancy:itemVial.pewterelixer", "inventory"),
-				new ModelResourceLocation("allomancy:itemVial.zincelixer", "inventory"),
-				new ModelResourceLocation("allomancy:itemVial.brasselixer", "inventory"),
-				new ModelResourceLocation("allomancy:itemVial.copperelixer", "inventory"),
-				new ModelResourceLocation("allomancy:itemVial.bronzeelixer", "inventory"),
-				new ModelResourceLocation("allomancy:itemVial.ultimateelixer", "inventory"));
-		for (int i = 0; i < ItemVial.unlocalName.length; i++) {
-			renderItem.getItemModelMesher().register(itemVial, i,
-					new ModelResourceLocation("allomancy:itemVial." + ItemVial.unlocalName[i], "inventory"));
-
-		}
 		
-		//Hacky, TODO: investigate other solutions to the vials-not-loading problem
-		Minecraft.getMinecraft().refreshResources();
+		renderItem.getItemModelMesher().register(itemVial, 0,
+				new ModelResourceLocation("allomancy:itemVial", "inventory"));
 	}
 	
 	//only does furnace recipes, rest are handled in JSON
-	public static void setupRecipes() {
+	public static void setupRecipes(Register event) {
+		event.getRegistry().register(new RecipeItemVial());
 		GameRegistry.addSmelting(oreTin, new ItemStack(itemTinIngot, 1), 5);
 		GameRegistry.addSmelting(oreCopper, new ItemStack(itemCopperIngot, 1), 5);
 		GameRegistry.addSmelting(oreLead, new ItemStack(itemLeadIngot, 1), 5);

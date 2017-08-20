@@ -269,7 +269,7 @@ public class ClientEventHandler {
 
                 }
 
-                if ((player.getHeldItemMainhand().isEmpty()) && (this.mc.gameSettings.keyBindAttack.isKeyDown())) {
+                if (this.mc.gameSettings.keyBindAttack.isKeyDown()) {
                     // Ray trace 20 blocks
                     RayTraceResult mov = AllomancyUtils.getMouseOverExtended(20.0F);
                     // All iron pulling powers
@@ -300,7 +300,7 @@ public class ClientEventHandler {
                     }
 
                 }
-                if ((player.getHeldItemMainhand()).isEmpty() && (this.mc.gameSettings.keyBindUseItem.isKeyDown())) {
+                if (this.mc.gameSettings.keyBindUseItem.isKeyDown()) {
                     // Ray trace 20 blocks
                     RayTraceResult mov = AllomancyUtils.getMouseOverExtended(20.0F);
                     // All steel pushing powers

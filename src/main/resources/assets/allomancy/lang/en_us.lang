@@ -19,16 +19,8 @@ key.burn=Burn Metals
 commands.allomancy.usage=/allomancy <power level> [player]
 commands.allomancy.success=Setting %s to %s
 
-item.itemVial.emptyvial.name=Empty Vial
-item.itemVial.brasselixer.name=Brass Elixir
-item.itemVial.bronzeelixer.name=Bronze Elixir
-item.itemVial.copperelixer.name=Copper Elixir
-item.itemVial.pewterelixer.name=Pewter Elixir
-item.itemVial.tinelixer.name=Tin Elixir
-item.itemVial.ironelixer.name=Iron Elixir
-item.itemVial.steelelixer.name=Steel Elixir
-item.itemVial.zincelixer.name=Zinc Elixir
-item.itemVial.ultimateelixer.name=Ultimate Elixir
+item.itemVial.name=Allomantic Vial
+
 
 item.flakeBrass.name=Brass Flakes
 item.flakeBronze.name=Bronze Flakes

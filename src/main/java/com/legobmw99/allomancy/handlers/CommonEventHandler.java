@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -125,6 +126,11 @@ public class CommonEventHandler {
     @SubscribeEvent
     public void onRegisterBlocks(RegistryEvent.Register<Block> event){
     	Registry.initBlocks(event);
+    }
+    
+    @SubscribeEvent
+    public void onRegisterRecipes(RegistryEvent.Register<IRecipe> event){
+    	Registry.setupRecipes(event);
     }
     
     @SubscribeEvent

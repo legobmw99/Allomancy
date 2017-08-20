@@ -1,10 +1,14 @@
 package com.legobmw99.allomancy.items;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.Registry;
 
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -14,39 +18,38 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class ItemVial extends Item {
-    public static String[] unlocalName = { "emptyvial", "ironelixer", "steelelixer", "tinelixer", "pewterelixer", "zincelixer", "brasselixer", "copperelixer", "bronzeelixer", "ultimateelixer" };
 
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
         AllomancyCapability cap;
         cap = AllomancyCapability.forPlayer(entityLiving);
 
-        if (!((EntityPlayer) (entityLiving)).capabilities.isCreativeMode) {
-            stack.shrink(1);
-            ((EntityPlayer) (entityLiving)).inventory.addItemStackToInventory(new ItemStack(Registry.itemVial, 1, 0));
-        }
+
         if (cap == null) {
             return stack;
         }
 
-        if (stack.getItemDamage() == 0) {
+        if (!stack.hasTagCompound()) {
             return stack;
         }
-
-        if (stack.getItemDamage() < 9) {
-            cap.setMetalAmounts(stack.getItemDamage() - 1, cap.getMetalAmounts(stack.getItemDamage() - 1) + 1);
-        } else if (stack.getItemDamage() < 10) {
-            for (int i = 0; i < 8; i++) {
-                if (cap.getMetalAmounts(i) < 10) {
-                    cap.setMetalAmounts(i, cap.getMetalAmounts(i) + 1);
-                }
-            }
+        
+    	for(int i = 0; i < 8; i++){
+    		if(stack.getTagCompound().hasKey(Registry.flakeMetals[i]) && stack.getTagCompound().getBoolean(Registry.flakeMetals[i])){
+    			if(cap.getMetalAmounts(i) < 10){
+    				cap.setMetalAmounts(i, cap.getMetalAmounts(i) + 1);
+    			}
+    		}
+    	}
+    	
+        if (!((EntityPlayer) (entityLiving)).capabilities.isCreativeMode) {
+            stack.shrink(1);
+            ((EntityPlayer) (entityLiving)).inventory.addItemStackToInventory(new ItemStack(Registry.itemVial, 1));
         }
+    	
         return stack;
     }
 
@@ -64,66 +67,54 @@ public class ItemVial extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         AllomancyCapability cap;
         cap = AllomancyCapability.forPlayer(playerIn);
+        //If all the ones being filled are full, don't allow
+        int filling = 0, full = 0; 
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        // Checks both the metal amount (we only want to fill up to 10) and the item damage (can't drink empty vials)
-        if (itemStackIn.getItemDamage() > 0) {
-            if ((itemStackIn.getItemDamage() == 9 && !checkFullCapacity(cap)) // Check to see if it is the ultimate vial and that there is space for at least one metal
-                    || (itemStackIn.getItemDamage() < 9 && cap.getMetalAmounts(itemStackIn.getItemDamage() - 1) < 10)) { // If it is just a normal vial, make sure that there is space for that one specific metal
-                playerIn.setActiveHand(hand);
-                return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
-            } else {
-                return new ActionResult(EnumActionResult.FAIL, itemStackIn);
-            }
-        } else {
+        if (itemStackIn.getTagCompound() != null) {
+        	for(int i = 0; i < 8; i++){
+        		if(itemStackIn.getTagCompound().hasKey(Registry.flakeMetals[i]) && itemStackIn.getTagCompound().getBoolean(Registry.flakeMetals[i])){
+        			filling++;
+        			if(cap.getMetalAmounts(i) > 10){
+        				full++;
+        			}
+        		}
+        	}
+        	
+        	if(filling == full){
+	            return new ActionResult(EnumActionResult.FAIL, itemStackIn);
+        	} 
+        	
+            playerIn.setActiveHand(hand);
+            return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+        } 
             return new ActionResult(EnumActionResult.FAIL, itemStackIn);
-        }
     }
 
-    /**
-     * Checks to see if every single metal is full. Used for ultimate vial
-     * 
-     * @param cap
-     *            the player's Allomancy Capability
-     * @return whether or not all metals are full
-     */
-    private static boolean checkFullCapacity(AllomancyCapability cap) {
-        for (int i = 0; i < 8; i++) {
-            if (cap.getMetalAmounts(i) < 10) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     public ItemVial() {
         this.setCreativeTab(Registry.tabsAllomancy);
         this.setRegistryName(new ResourceLocation(Allomancy.MODID, "itemVial"));
-        this.setHasSubtypes(true);
+		this.setUnlocalizedName("itemVial");
+
     }
     
+	@Override
+    public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced){
+		if(stack.getTagCompound() != null){
+			for(int i = 0; i < 8; i++){
+				if(stack.getTagCompound().getBoolean(Registry.flakeMetals[i])){
+					tooltip.add(Registry.flakeMetals[i]);
+				}
+			}
+		}
+	}
 
-
-    @Override
-    public String getUnlocalizedName(ItemStack itemStack) {
-        int meta = itemStack.getItemDamage();
-        if ((meta < 0) || (meta >= unlocalName.length)) {
-            meta = 0;
-        }
-        return "item.itemVial" + "." + unlocalName[meta];
-    }
 
     @Override
     public EnumRarity getRarity(ItemStack stack)
     {
-        return stack.getItemDamage() == 9 ? EnumRarity.RARE : EnumRarity.COMMON;
+        return stack.hasTagCompound() ? EnumRarity.UNCOMMON : EnumRarity.COMMON;
     }
     
-    @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if (isInCreativeTab(tab)){ 
-        	for (int meta = 0; meta < ItemVial.unlocalName.length; meta++) {
-        		subItems.add(new ItemStack(this, 1, meta));
-        	}
-        }
-    }
+ 
 }

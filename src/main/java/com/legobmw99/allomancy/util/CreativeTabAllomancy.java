@@ -15,7 +15,7 @@ public class CreativeTabAllomancy extends CreativeTabs {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(Registry.itemVial, 1, 5);
+		return new ItemStack(Registry.itemVial, 1);
 	}
 
 	@Override
