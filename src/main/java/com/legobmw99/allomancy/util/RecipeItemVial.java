@@ -29,7 +29,6 @@ public class RecipeItemVial extends  net.minecraftforge.registries.IForgeRegistr
 
             if (!itemstack.isEmpty()){
             	if(!itemstack.getItem().getRegistryName().toString().contains("allomancy:flake") && !itemstack.getItem().getRegistryName().toString().equals("allomancy:itemvial")){
-            		System.out.println("1");
             		return false;
             	}
             	for(int j = 0; j < 8; j++){
