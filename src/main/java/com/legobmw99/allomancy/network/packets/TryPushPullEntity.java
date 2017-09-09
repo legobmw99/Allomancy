@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
@@ -68,14 +69,26 @@ public class TryPushPullEntity implements IMessage {
 							if (target instanceof EntityIronGolem || target instanceof EntityItemFrame) {
 								AllomancyUtils.move(message.direction, player, target.getPosition());
 
+								// Depends if the minecart is filled
+							} else if (target instanceof EntityMinecart) {
+								if (target.isBeingRidden()) {
+									if (target.isRidingOrBeingRiddenBy(player)) {
+										//no op
+									} else {
+										AllomancyUtils.move(message.direction / 2.0, target, player.getPosition());
+										AllomancyUtils.move(message.direction / 2.0, player, target.getPosition());
+									}
+								} else {
+									AllomancyUtils.move(message.direction, target, player.getPosition());
+								}
 								// The target moves
 							} else if (target instanceof EntityItem) {
-								AllomancyUtils.move(message.direction / 2.0, target,player.getPosition().down());
-								
-								//Split the difference
+								AllomancyUtils.move(message.direction / 2.0, target, player.getPosition().down());
+
+								// Split the difference
 							} else {
 								AllomancyUtils.move(message.direction / 2.0, target, player.getPosition());
-								
+
 								AllomancyUtils.move(message.direction / 2.0, player, target.getPosition());
 							}
 						}

@@ -20,8 +20,10 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -368,6 +370,9 @@ public class AllomancyUtils {
 		if(entity instanceof EntityIronNugget || entity instanceof EntityGoldNugget) {
 			return true;
 		} 
+		if(entity instanceof EntityMinecart) {
+			return true;
+		} 
 		if (entity instanceof EntityLiving) {
 			EntityLiving ent = (EntityLiving) entity;
 			if(ent instanceof EntityIronGolem){
@@ -399,6 +404,9 @@ public class AllomancyUtils {
 	public static void move(double directionScalar, Entity toMove, BlockPos vec) {
 
 		double motionX, motionY, motionZ, magnitude;
+		if(toMove.isRiding()){
+			toMove = toMove.getRidingEntity();
+		}
 		// Calculate the length of the vector between the entity and anchor
 		magnitude = Math.sqrt(Math.pow((toMove.posX - (double) (vec.getX() + .5)), 2)
 				+ Math.pow((toMove.posY - (double) (vec.getY() + .5)), 2)
