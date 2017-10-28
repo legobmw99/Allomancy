@@ -11,13 +11,10 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 
 
-version = "2.9.0" 
+version = "2.9.1" 
 group= "com.legobmw99.allomancy" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "allomancy"
 
-if (System.getenv().DRONE_BUILD_NUMBER != null) {//adds the build number to the end of the version string if on a build server
-    project.version += ".${System.getenv().DRONE_BUILD_NUMBER}"
-}
 
 sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
 compileJava {
@@ -25,7 +22,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.1-14.22.0.2446"
+    version = "1.12.2-14.23.0.2495"
     runDir = "run"
     mappings = "snapshot_20170624"
     makeObfSourceJar = false 
