@@ -156,6 +156,12 @@ public class CommonEventHandler {
                     	//Add jump boost and speed to pewter burners
                         curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(8), 30, 1, true, false));
                         curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(1), 30, 0, true, false));
+                        
+                        if(cap.getDamageStored() > 0){
+                        	if(world.rand.nextInt(200) == 0){
+                        		cap.setDamageStored(cap.getDamageStored() - 1);
+                        	}
+                        }
 
                     }
                     if (cap.getMetalBurning(AllomancyCapability.TIN)) {
