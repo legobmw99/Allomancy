@@ -74,8 +74,6 @@ public class GUIMetalSelect extends GuiScreen {
 		boolean mouseIn = true;
 		float angle = mouseAngle(x, y, mx, my);
 
-		int highlight = 5;
-
 		GlStateManager.enableBlend();
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		int segments = slots.size();
@@ -126,8 +124,6 @@ public class GUIMetalSelect extends GuiScreen {
 			GL11.glVertex2i(x, y);
 			GL11.glEnd();
 
-			if (mouseInSector)
-				radius -= highlight;
 		}
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.enableTexture2D();
