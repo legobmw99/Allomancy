@@ -82,7 +82,7 @@ public class RecipeItemVial extends  net.minecraftforge.registries.IForgeRegistr
 	}
 	
 	@Override
-	public boolean isHidden(){
+	public boolean isDynamic(){
 		return true;
 	}
 

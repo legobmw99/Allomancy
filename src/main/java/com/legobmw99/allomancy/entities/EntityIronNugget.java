@@ -23,7 +23,7 @@ public class EntityIronNugget extends EntityThrowable {
         super(par1World, par2EntityLivingBase);
         if (par2EntityLivingBase instanceof EntityPlayer){
         	EntityPlayer ep = (EntityPlayer) par2EntityLivingBase;
-        	this.setHeadingFromThrower(ep, ep.rotationPitch, ep.rotationYawHead, 2.0F, 4.5F, 3.5F);
+        	this.shoot(ep, ep.rotationPitch, ep.rotationYawHead, 2.0F, 4.5F, 3.5F);
         	if (ep.capabilities.isCreativeMode){
         		this.dropItem = false;
         	}

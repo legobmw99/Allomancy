@@ -373,7 +373,7 @@ public class ClientEventHandler {
                     if (player == null) {
                         return;
                     }
-                    if (player.getDistanceToEntity(entity) > max) {
+                    if (player.getDistance(entity) > max) {
                         toRemoveMetal.add(entity);
                     }
                 }
@@ -391,7 +391,7 @@ public class ClientEventHandler {
                     if (entity.isDead) {
                         toRemoveBurners.add(entity);
                     }
-                    if (player != null && player.getDistanceToEntity(entity) > 30) {
+                    if (player != null && player.getDistance(entity) > 30) {
                         toRemoveBurners.add(entity);
                     }
                     if (capOther.getMetalBurning(AllomancyCapability.COPPER) || !(capOther.getMetalBurning(AllomancyCapability.IRON) || capOther.getMetalBurning(AllomancyCapability.STEEL)

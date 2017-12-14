@@ -111,7 +111,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	 */
 	@Override
 	public void resetTask() {
-		this.attacker.getNavigator().clearPathEntity();
+		this.attacker.getNavigator().clearPath();
 	}
 
 	/**

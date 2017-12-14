@@ -23,7 +23,7 @@ public class EntityGoldNugget extends EntityThrowable {
         super(par1World, par2EntityLivingBase);
         if (par2EntityLivingBase instanceof EntityPlayer){
         	EntityPlayer ep = (EntityPlayer) par2EntityLivingBase;
-        	this.setHeadingFromThrower(ep, ep.rotationPitch, ep.rotationYawHead, 2.0F, 7.0F, 0.0F);
+        	this.shoot(ep, ep.rotationPitch, ep.rotationYawHead, 2.0F, 7.0F, 0.0F);
         	if (ep.capabilities.isCreativeMode){
         		this.dropItem = false;
         	}
