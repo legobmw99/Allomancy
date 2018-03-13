@@ -147,7 +147,10 @@ public class AllomancyUtils {
 						|| s.contains("Bronze") || s.contains("Aluminum") || s.contains("Zinc")) {
 					for (ItemStack i : OreDictionary.getOres(s)) {
 						if (i.getItem() != null) {
-							defaultList.add(i.getItem().getRegistryName().toString());
+							String name = i.getItem().getRegistryName().toString();
+							if(!defaultList.contains(name)){
+								defaultList.add(name);
+							}
 						}
 					}
 				}
