@@ -94,10 +94,6 @@ public class ClientEventHandler {
 
         // Set the offsets of the overlay based on config
         switch (AllomancyConfig.overlayPosition % 4) {
-            case 0:
-                renderX = 5;
-                renderY = 10;
-                break;
             case 1:
                 renderX = res.getScaledWidth() - 95;
                 renderY = 10;
@@ -117,9 +113,9 @@ public class ClientEventHandler {
         }
 
         GuiIngame gig = new GuiIngame(this.mc);
-        this.mc.renderEngine.bindTexture(this.meterLoc);
+        this.mc.renderEngine.bindTexture(meterLoc);
         ITextureObject obj;
-        obj = this.mc.renderEngine.getTexture(this.meterLoc);
+        obj = this.mc.renderEngine.getTexture(meterLoc);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
         /*
