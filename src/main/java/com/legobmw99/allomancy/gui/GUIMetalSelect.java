@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -24,8 +25,7 @@ import com.legobmw99.allomancy.util.AllomancyUtils;
 import com.legobmw99.allomancy.util.Registry;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.settings.GameSettings;
@@ -33,7 +33,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
-public class GUIMetalSelect extends GuiScreen {
+public class GUIMetalSelect extends Screen {
 
 	private static final String[] METAL_NAMES = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze" };
 	private static final String GUI_METAL = "allomancy:textures/gui/metals/sign%d.png";
@@ -50,7 +50,7 @@ public class GUIMetalSelect extends GuiScreen {
 	List<Integer> slots;
 
 	public GUIMetalSelect() {
-		EntityPlayerSP player;
+		ClientPlayerEntity player;
 		player = Minecraft.getMinecraft().player;
 		cap = AllomancyCapability.forPlayer(player);
 

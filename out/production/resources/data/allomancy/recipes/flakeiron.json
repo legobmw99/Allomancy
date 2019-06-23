@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "allomancy:flakeiron",
+    "count": 2
+  },
+  "ingredients": [
+    {
+      "item": "#ingotIron"
+    },
+    {
+      "item": "allomancy:grinder"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

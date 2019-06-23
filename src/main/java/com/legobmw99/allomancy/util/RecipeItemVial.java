@@ -2,11 +2,11 @@ package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.Allomancy;
 
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -18,7 +18,7 @@ public class RecipeItemVial extends  net.minecraftforge.registries.IForgeRegistr
 	}
 	
 	@Override
-	public boolean matches(InventoryCrafting inv, World worldIn) {
+	public boolean matches(CraftingInventory inv, World worldIn) {
         this.resultItem = ItemStack.EMPTY;
 
         boolean[] metals = {false,false,false,false,false,false,false,false};
@@ -32,12 +32,12 @@ public class RecipeItemVial extends  net.minecraftforge.registries.IForgeRegistr
             		return false;
             	}
             	for(int j = 0; j < 8; j++){
-            		if(itemstack.getItem() == Item.getByNameOrId("allomancy:flake" + Registry.flakeMetals[j])){
+            		if(itemstack.getItem() == Item.getByNameOrId("allomancy:flake" + Registry.flake_metals[j])){
             			ingredients[1] = true;
             			metals[j] = true;
             		}
             	}
-            	if(itemstack.getItem() == Registry.itemVial){
+            	if(itemstack.getItem() == Registry.vial){
             		ingredients[0] = true;
             	}
             }
@@ -48,15 +48,15 @@ public class RecipeItemVial extends  net.minecraftforge.registries.IForgeRegistr
         for (int i = 0; i < inv.getSizeInventory(); ++i){
             ItemStack itemstack = inv.getStackInSlot(i);
             if (!itemstack.isEmpty()){
-            	if(itemstack.getItem() == Registry.itemVial){
+            	if(itemstack.getItem() == Registry.vial){
             		for(int j = 0; j < metals.length; j++){
             			if(itemstack.getTagCompound() == null){
                     		
-            			} else if(itemstack.getTagCompound().hasKey(Registry.flakeMetals[j])){
-            				if(metals[j] == true && itemstack.getTagCompound().getBoolean(Registry.flakeMetals[j]) == metals[j]){
+            			} else if(itemstack.getTagCompound().hasKey(Registry.flake_metals[j])){
+            				if(metals[j] == true && itemstack.getTagCompound().getBoolean(Registry.flake_metals[j]) == metals[j]){
             					return false;
             				} else {
-            					metals[j] = metals[j] || itemstack.getTagCompound().getBoolean(Registry.flakeMetals[j]);
+            					metals[j] = metals[j] || itemstack.getTagCompound().getBoolean(Registry.flake_metals[j]);
             				}
             			}
             		}
@@ -64,10 +64,10 @@ public class RecipeItemVial extends  net.minecraftforge.registries.IForgeRegistr
             }
         }
         if(ingredients[0] && ingredients[1]){
-        	this.resultItem = new ItemStack(Registry.itemVial, 1);
-        	NBTTagCompound nbt = new NBTTagCompound();
+        	this.resultItem = new ItemStack(Registry.vial, 1);
+        	CompoundNBT nbt = new CompoundNBT();
         	for(int i = 0; i < metals.length; i++){
-        		nbt.setBoolean(Registry.flakeMetals[i], metals[i]);
+        		nbt.setBoolean(Registry.flake_metals[i], metals[i]);
         	}
         	this.resultItem.setTagCompound(nbt);
         	return true;
@@ -77,7 +77,7 @@ public class RecipeItemVial extends  net.minecraftforge.registries.IForgeRegistr
     }
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inv) {
+	public ItemStack getCraftingResult(CraftingInventory inv) {
 		return this.resultItem.copy();
 	}
 	

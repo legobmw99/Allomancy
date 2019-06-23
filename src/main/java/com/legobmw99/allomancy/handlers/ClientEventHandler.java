@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.IngameGui;
+import net.minecraft.entity.player.PlayerEntity;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
@@ -21,14 +24,11 @@ import com.legobmw99.allomancy.util.Registry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -52,7 +52,7 @@ public class ClientEventHandler {
 
     private Minecraft mc = Minecraft.getMinecraft();
     private AllomancyCapability cap;
-    private EntityPlayerSP player;
+    private ClientPlayerEntity player;
     
 	private int animationCounter = 0;
     private int currentFrame = 0;
@@ -61,7 +61,7 @@ public class ClientEventHandler {
 		
     private ArrayList<Entity> particleTargets = new ArrayList<Entity>();
     private ArrayList<BlockPos> particleBlockTargets = new ArrayList<BlockPos>();
-    private ArrayList<EntityPlayer> metalBurners = new ArrayList<EntityPlayer>();
+    private ArrayList<PlayerEntity> metalBurners = new ArrayList<PlayerEntity>();
 
     private Entity pointedEntity;
     
@@ -116,7 +116,7 @@ public class ClientEventHandler {
                 break;
         }
 
-        GuiIngame gig = new GuiIngame(this.mc);
+        IngameGui gig = new IngameGui(this.mc);
         this.mc.renderEngine.bindTexture(this.meterLoc);
         ITextureObject obj;
         obj = this.mc.renderEngine.getTexture(this.meterLoc);
@@ -292,7 +292,7 @@ public class ClientEventHandler {
                     // All zinc powers
                     if (cap.getMetalBurning(AllomancyCapability.ZINC)) {
                         Entity entity;
-                        if ((mov != null) && (mov.entityHit != null) && (mov.entityHit instanceof EntityCreature) && !(mov.entityHit instanceof EntityPlayer)) {
+                        if ((mov != null) && (mov.entityHit != null) && (mov.entityHit instanceof CreatureEntity) && !(mov.entityHit instanceof PlayerEntity)) {
                             entity = mov.entityHit;
                             Registry.network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), true));
 
@@ -314,7 +314,7 @@ public class ClientEventHandler {
                             if (mov.typeOfHit == RayTraceResult.Type.BLOCK ) {
 
                                 BlockPos bp = mov.getBlockPos();
-                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == Registry.itemCoinBag && player.isSneaking())) {
+                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == Registry.coin_bag && player.isSneaking())) {
                             		Registry.network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
 
                                 }
@@ -326,7 +326,7 @@ public class ClientEventHandler {
                     // All brass powers
                     if (cap.getMetalBurning(AllomancyCapability.BRASS)) {
                         Entity entity;
-                        if ((mov != null) && (mov.entityHit != null) && (mov.entityHit instanceof EntityCreature) && !(mov.entityHit instanceof EntityPlayer)) {
+                        if ((mov != null) && (mov.entityHit != null) && (mov.entityHit instanceof CreatureEntity) && !(mov.entityHit instanceof PlayerEntity)) {
                             entity = mov.entityHit;
                             Registry.network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), false));
 
@@ -345,18 +345,18 @@ public class ClientEventHandler {
                     BlockPos negative = new BlockPos(xLoc - 30, yLoc - 30, zLoc - 30);
                     BlockPos positive = new BlockPos(xLoc + 30, yLoc + 30, zLoc + 30);
                     // Add entities to metal list
-                    eListBurners = player.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(negative, positive));
+                    eListBurners = player.world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(negative, positive));
                     
                     for (Entity curEntity : eListBurners) {
                         if (curEntity != null && curEntity != player && curEntity.hasCapability(Allomancy.PLAYER_CAP, null)) {
                             Registry.network.sendToServer(new GetCapabilitiesPacket(curEntity.getEntityId()));
                             AllomancyCapability capOther = AllomancyCapability.forPlayer(curEntity);
                             if (capOther.getMetalBurning(AllomancyCapability.COPPER)) {
-                                metalBurners.remove((EntityPlayer) curEntity);
+                                metalBurners.remove((PlayerEntity) curEntity);
                             } else if (capOther.getMetalBurning(AllomancyCapability.IRON) || capOther.getMetalBurning(AllomancyCapability.STEEL) || capOther.getMetalBurning(AllomancyCapability.TIN)
                                         || capOther.getMetalBurning(AllomancyCapability.PEWTER) || capOther.getMetalBurning(AllomancyCapability.ZINC) || capOther.getMetalBurning(AllomancyCapability.BRASS)
                                         || capOther.getMetalBurning(AllomancyCapability.BRONZE)) {
-                                    metalBurners.add((EntityPlayer) curEntity);
+                                    metalBurners.add((PlayerEntity) curEntity);
                             }
                         }
                     }
@@ -384,8 +384,8 @@ public class ClientEventHandler {
                 toRemoveMetal.clear();
 
                 // Remove items from burners
-                LinkedList<EntityPlayer> toRemoveBurners = new LinkedList<EntityPlayer>();
-                for (EntityPlayer entity : metalBurners) {
+                LinkedList<PlayerEntity> toRemoveBurners = new LinkedList<PlayerEntity>();
+                for (PlayerEntity entity : metalBurners) {
                     Registry.network.sendToServer(new GetCapabilitiesPacket(entity.getEntityId()));
                     AllomancyCapability capOther = AllomancyCapability.forPlayer(entity);
                     if (entity.isDead) {
@@ -495,7 +495,7 @@ public class ClientEventHandler {
         }
 
         if ((cap.getMetalBurning(AllomancyCapability.BRONZE))) {
-            for (EntityPlayer entityplayer : metalBurners) {
+            for (PlayerEntity entityplayer : metalBurners) {
                 AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY+0.5, entityplayer.posZ, 2.5F, 0.5F, 0.15F, 0.15F);
             }
         }

@@ -8,6 +8,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.item.ItemFrameEntity;
+import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.item.Items;
+import net.minecraft.util.Hand;
 import org.lwjgl.opengl.GL11;
 
 import com.legobmw99.allomancy.Allomancy;
@@ -19,18 +27,9 @@ import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -114,9 +113,9 @@ public class AllomancyUtils {
 			defaultList.add(Items.GOLDEN_APPLE.getRegistryName().toString());
 			defaultList.add(Items.GOLDEN_CARROT.getRegistryName().toString());
 			defaultList.add(Items.IRON_SWORD.getRegistryName().toString());
-			defaultList.add(Registry.nuggetLerasium.getRegistryName().toString());
-			defaultList.add(Registry.itemAllomancyGrinder.getRegistryName().toString());
-			defaultList.add(Registry.itemCoinBag.getRegistryName().toString());
+			defaultList.add(Registry.lerasium_nugget.getRegistryName().toString());
+			defaultList.add(Registry.allomantic_grinder.getRegistryName().toString());
+			defaultList.add(Registry.coin_bag.getRegistryName().toString());
 			defaultList.add(Blocks.ANVIL.getRegistryName().toString());
 			defaultList.add(Blocks.IRON_TRAPDOOR.getRegistryName().toString());
 			defaultList.add(Blocks.IRON_DOOR.getRegistryName().toString());
@@ -133,11 +132,11 @@ public class AllomancyUtils {
 			defaultList.add(Blocks.ACTIVATOR_RAIL.getRegistryName().toString());
 			defaultList.add(Blocks.DETECTOR_RAIL.getRegistryName().toString());
 			defaultList.add(Blocks.GOLDEN_RAIL.getRegistryName().toString());
-			defaultList.add(Registry.itemVial.getRegistryName().toString());
+			defaultList.add(Registry.vial.getRegistryName().toString());
 			defaultList.add(Registry.blockIronLever.getRegistryName().toString());
 
-			for (int i = 0; i < Registry.flakeMetals.length; i++) {
-				defaultList.add(new Item().getByNameOrId("allomancy:" + "flake" + Registry.flakeMetals[i]).getRegistryName().toString());
+			for (int i = 0; i < Registry.flake_metals.length; i++) {
+				defaultList.add(new Item().getByNameOrId("allomancy:" + "flake" + Registry.flake_metals[i]).getRegistryName().toString());
 			}
 
 			String[] ores = OreDictionary.getOreNames();
@@ -364,24 +363,24 @@ public class AllomancyUtils {
 			return false;
 		}
 		
-		if (entity instanceof EntityItem) {
-			return isItemMetal(((EntityItem) entity).getItem());
+		if (entity instanceof ItemEntity) {
+			return isItemMetal(((ItemEntity) entity).getItem());
 		} 
-		if (entity instanceof EntityItemFrame){ 
-			return isItemMetal(((EntityItemFrame) entity).getDisplayedItem());
+		if (entity instanceof ItemFrameEntity){
+			return isItemMetal(((ItemFrameEntity) entity).getDisplayedItem());
 		} 
 		if(entity instanceof EntityIronNugget || entity instanceof EntityGoldNugget) {
 			return true;
 		} 
-		if(entity instanceof EntityMinecart) {
+		if(entity instanceof AbstractMinecartEntity) {
 			return true;
 		} 
-		if (entity instanceof EntityLiving) {
-			EntityLiving ent = (EntityLiving) entity;
-			if(ent instanceof EntityIronGolem){
+		if (entity instanceof MobEntity) {
+			MobEntity ent = (MobEntity) entity;
+			if(ent instanceof IronGolemEntity){
 				return true;
 			}
-			if(isItemMetal(ent.getHeldItem(EnumHand.MAIN_HAND)) || isItemMetal(ent.getHeldItem(EnumHand.OFF_HAND))){
+			if(isItemMetal(ent.getHeldItem(Hand.MAIN_HAND)) || isItemMetal(ent.getHeldItem(Hand.OFF_HAND))){
 				return true;
 			}
 			for(ItemStack i: ent.getArmorInventoryList()){
@@ -430,7 +429,7 @@ public class AllomancyUtils {
 		toMove.velocityChanged = true;
 
 		// Only save players from fall damage
-		if (toMove instanceof EntityPlayerMP) {
+		if (toMove instanceof ServerPlayerEntity) {
 			toMove.fallDistance = 0;
 		}
 
@@ -470,7 +469,7 @@ public class AllomancyUtils {
 	 * @param player
 	 *            the player being checked
 	 */
-	public static void updateMetalBurnTime(AllomancyCapability cap1, EntityPlayerMP player) {
+	public static void updateMetalBurnTime(AllomancyCapability cap1, ServerPlayerEntity player) {
 		for (int i = 0; i < 8; i++) {
 			if (cap1.getMetalBurning(i)) {
 				if (cap1.getAllomancyPower() != i && cap1.getAllomancyPower() != 8) {

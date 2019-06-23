@@ -11,11 +11,11 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 public class PowerCommand extends CommandBase {
@@ -58,7 +58,7 @@ public class PowerCommand extends CommandBase {
 
                 level = parseInt(args[0]) - 1;
 
-                EntityPlayer entityplayer = args.length > 1 ? getPlayer(server, sender, args[1]) : getCommandSenderAsPlayer(sender);
+                PlayerEntity entityplayer = args.length > 1 ? getPlayer(server, sender, args[1]) : getCommandSenderAsPlayer(sender);
 
                 if (level < -1){
                 	throw new NumberInvalidException("commands.generic.num.tooSmall", new Object[] {level+1,0});
@@ -73,12 +73,12 @@ public class PowerCommand extends CommandBase {
                     AllomancyCapability cap = AllomancyCapability.forPlayer(entityplayer);
                     cap.setAllomancyPower(level);
 
-                    Registry.network.sendTo(new AllomancyPowerPacket(level), (EntityPlayerMP) entityplayer);
+                    Registry.network.sendTo(new AllomancyPowerPacket(level), (ServerPlayerEntity) entityplayer);
 
                     notifyCommandListener(sender, this, "commands.allomancy.success", new Object[] { entityplayer.getName(), names[(level + 1)]});
 
                 } else {
-                    sender.sendMessage(new TextComponentString("Player not found"));
+                    sender.sendMessage(new StringTextComponent("Player not found"));
                 }
             }
         }

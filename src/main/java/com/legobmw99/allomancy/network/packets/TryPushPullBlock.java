@@ -1,15 +1,15 @@
 package com.legobmw99.allomancy.network.packets;
 
 import com.legobmw99.allomancy.block.IAllomanticallyActivatedBlock;
-import com.legobmw99.allomancy.items.ItemCoinBag;
+import com.legobmw99.allomancy.items.CoinBagItem;
 import com.legobmw99.allomancy.util.AllomancyUtils;
 import com.legobmw99.allomancy.util.Registry;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -53,15 +53,15 @@ public class TryPushPullBlock implements IMessage {
 
 		@Override
 		public IMessage onMessage(final TryPushPullBlock message, final MessageContext ctx) {
-			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
+			IThreadListener mainThread = (ServerWorld) ctx.getServerHandler().player.world;
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					EntityPlayerMP player = ctx.getServerHandler().player;
+					ServerPlayerEntity player = ctx.getServerHandler().player;
 					BlockPos block = BlockPos.fromLong(message.blockPos);
 					// Sanity check to make sure server has same configs and that the block is loaded in the server
 					if (player.getEntityWorld().isBlockLoaded(block) && (AllomancyUtils.isBlockMetal(ctx.getServerHandler().player.world.getBlockState(block).getBlock()) //Standard check
-							|| (player.getHeldItemMainhand().getItem() == Registry.itemCoinBag && (ItemCoinBag.findArrow(player) != null || player.isCreative()) && message.direction == AllomancyUtils.PUSH))) { // Check for the coin bag
+							|| (player.getHeldItemMainhand().getItem() == Registry.coin_bag && (CoinBagItem.findArrow(player) != null || player.isCreative()) && message.direction == AllomancyUtils.PUSH))) { // Check for the coin bag
 						if(player.world.getBlockState(block).getBlock() instanceof IAllomanticallyActivatedBlock){
 							((IAllomanticallyActivatedBlock)player.world.getBlockState(block).getBlock())
 								.onBlockActivatedAllomantically(player.world, block, player.world.getBlockState(block), player, message.direction == AllomancyUtils.PUSH);

@@ -3,27 +3,21 @@ package com.legobmw99.allomancy.network.packets;
 import com.legobmw99.allomancy.ai.AIAttackOnCollideExtended;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.entity.ai.EntityAIAttackRangedBow;
-import net.minecraft.entity.ai.EntityAICreeperSwell;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.monster.AbstractSkeleton;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.PanicGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.monster.CreeperEntity;
+import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.IThreadListener;
-import net.minecraft.world.EnumDifficulty;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -65,28 +59,28 @@ public class ChangeEmotionPacket implements IMessage {
 
         @Override
         public IMessage onMessage(final ChangeEmotionPacket message, final MessageContext ctx) {
-            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
+            IThreadListener mainThread = (ServerWorld) ctx.getServerHandler().player.world;
             mainThread.addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
-                    EntityCreature target;
-                    target = (EntityCreature) ctx.getServerHandler().player.world.getEntityByID(message.entityID);
+                    CreatureEntity target;
+                    target = (CreatureEntity) ctx.getServerHandler().player.world.getEntityByID(message.entityID);
 
                     if ((target != null) && message.aggro == 1) {
                         target.tasks.taskEntries.clear();
 
-                        target.tasks.addTask(1, new EntityAISwimming(target));
+                        target.tasks.addTask(1, new SwimGoal(target));
                         target.tasks.addTask(5, new AIAttackOnCollideExtended(target, 1d, false));
-                        target.targetTasks.addTask(5, new EntityAINearestAttackableTarget(target, EntityPlayer.class, false));
-                        target.tasks.addTask(5, new EntityAIWander(target, 0.8D));
-                        target.tasks.addTask(6, new EntityAIWatchClosest(target, EntityPlayer.class, 8.0F));
-                        target.tasks.addTask(6, new EntityAILookIdle(target));
-                        target.targetTasks.addTask(2, new EntityAIHurtByTarget(target, false));
-                        if (target instanceof EntityCreeper) {
-                            target.tasks.addTask(2, new EntityAICreeperSwell((EntityCreeper) target));
+                        target.targetTasks.addTask(5, new NearestAttackableTargetGoal(target, PlayerEntity.class, false));
+                        target.tasks.addTask(5, new RandomWalkingGoal(target, 0.8D));
+                        target.tasks.addTask(6, new LookAtGoal(target, PlayerEntity.class, 8.0F));
+                        target.tasks.addTask(6, new LookRandomlyGoal(target));
+                        target.targetTasks.addTask(2, new HurtByTargetGoal(target, false));
+                        if (target instanceof CreeperEntity) {
+                            target.tasks.addTask(2, new CreeperSwellGoal((CreeperEntity) target));
                         }
-                        if(target instanceof EntityRabbit){
-                            target.tasks.addTask(4, new AIEvilAttack((EntityRabbit)target));
+                        if(target instanceof RabbitEntity){
+                            target.tasks.addTask(4, new AIEvilAttack((RabbitEntity)target));
                         }
 
                         return;
@@ -96,11 +90,11 @@ public class ChangeEmotionPacket implements IMessage {
                         target.setAttackTarget(target);
                         target.setRevengeTarget(target);
                         target.setRevengeTarget(target);
-                        target.tasks.addTask(0, new EntityAISwimming(target));
-                        target.tasks.addTask(0, new EntityAIPanic(target, 0.5D));
-                        target.tasks.addTask(5, new EntityAIWander(target, 1.0D));
-                        target.tasks.addTask(6, new EntityAIWatchClosest(target, EntityPlayer.class, 6.0F));
-                        target.tasks.addTask(7, new EntityAILookIdle(target));
+                        target.tasks.addTask(0, new SwimGoal(target));
+                        target.tasks.addTask(0, new PanicGoal(target, 0.5D));
+                        target.tasks.addTask(5, new RandomWalkingGoal(target, 1.0D));
+                        target.tasks.addTask(6, new LookAtGoal(target, PlayerEntity.class, 6.0F));
+                        target.tasks.addTask(7, new LookRandomlyGoal(target));
 
                         return;
                     }
@@ -111,14 +105,14 @@ public class ChangeEmotionPacket implements IMessage {
         }
     }
     
-    static class AIEvilAttack extends EntityAIAttackMelee
+    static class AIEvilAttack extends MeleeAttackGoal
     {
-        public AIEvilAttack(EntityRabbit rabbit)
+        public AIEvilAttack(RabbitEntity rabbit)
         {
             super(rabbit, 1.4D, true);
         }
 
-        protected double getAttackReachSqr(EntityLivingBase attackTarget)
+        protected double getAttackReachSqr(LivingEntity attackTarget)
         {
             return (double)(4.0F + attackTarget.width);
         }

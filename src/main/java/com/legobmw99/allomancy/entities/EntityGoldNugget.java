@@ -1,16 +1,16 @@
 package com.legobmw99.allomancy.entities;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.init.Items;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityGoldNugget extends EntityThrowable {
+public class EntityGoldNugget extends ThrowableEntity {
 	private boolean dropItem = true;
 	
     public EntityGoldNugget(World par1World)
@@ -18,11 +18,11 @@ public class EntityGoldNugget extends EntityThrowable {
         super(par1World);
     }
 
-    public EntityGoldNugget(World par1World, EntityLivingBase par2EntityLivingBase)
+    public EntityGoldNugget(World par1World, LivingEntity par2EntityLivingBase)
     {
         super(par1World, par2EntityLivingBase);
-        if (par2EntityLivingBase instanceof EntityPlayer){
-        	EntityPlayer ep = (EntityPlayer) par2EntityLivingBase;
+        if (par2EntityLivingBase instanceof PlayerEntity){
+        	PlayerEntity ep = (PlayerEntity) par2EntityLivingBase;
         	this.shoot(ep, ep.rotationPitch, ep.rotationYawHead, 2.0F, 7.0F, 0.0F);
         	if (ep.capabilities.isCreativeMode){
         		this.dropItem = false;
@@ -48,7 +48,7 @@ public class EntityGoldNugget extends EntityThrowable {
         {
         	ItemStack goldAmmo = new ItemStack(Items.GOLD_NUGGET, 1, 0);
         	if(this.world.getGameRules().getBoolean("doTileDrops") && movingobjectposition.entityHit == null && this.dropItem){
-				this.world.spawnEntity(new EntityItem(this.world, this.posX, this.posY, this.posZ, goldAmmo));
+				this.world.spawnEntity(new ItemEntity(this.world, this.posX, this.posY, this.posZ, goldAmmo));
 			}
             this.setDead();
         }

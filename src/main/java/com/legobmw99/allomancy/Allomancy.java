@@ -1,112 +1,59 @@
 package com.legobmw99.allomancy;
 
-import java.io.File;
-
-import com.legobmw99.allomancy.handlers.ClientEventHandler;
-import com.legobmw99.allomancy.handlers.CommonEventHandler;
 import com.legobmw99.allomancy.util.AllomancyCapability;
-import com.legobmw99.allomancy.util.AllomancyConfig;
-import com.legobmw99.allomancy.util.AllomancyUtils;
-import com.legobmw99.allomancy.util.PowerCommand;
-import com.legobmw99.allomancy.util.Registry;
-import com.legobmw99.allomancy.world.OreGenerator;
-
-import net.minecraftforge.common.MinecraftForge;
+import com.legobmw99.allomancy.util.proxy.ClientProxy;
+import com.legobmw99.allomancy.util.proxy.CommonProxy;
+import com.legobmw99.allomancy.util.proxy.ServerProxy;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Mod(modid = Allomancy.MODID, version = Allomancy.VERSION)
+import java.io.File;
+
+@Mod(Allomancy.MODID)
 public class Allomancy {
 	public static final String MODID = "allomancy";
-	public static final String VERSION = "@VERSION@";
-	
+
 	public static File configDirectory;
 
-	@SidedProxy
-	public static CommonProxy proxy;
+	public static CommonProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());;
 
-	@Instance(value = "allomancy")
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	public static Allomancy instance;
 
 	@CapabilityInject(AllomancyCapability.class)
 	public static final Capability<AllomancyCapability> PLAYER_CAP = null;
 
-	@EventHandler
+
+	public Allomancy(){
+		instance = this;
+		//FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
+
+	}
+
 	public void preInit(FMLPreInitializationEvent event) {
 		proxy.preInit(event);
 	}
 
-	@EventHandler
 	public void serverInit(FMLServerStartingEvent event) {
 		proxy.serverInit(event);
 	}
 
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
+	public void init(final FMLCommonSetupEvent event) {
 		proxy.init(event);
 	}
 	
-	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit(event);
 	}
 
 	
 	
-	public static class CommonProxy {
-		public void preInit(FMLPreInitializationEvent e) {
-			// Load most of the mod's content
-			MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
-			AllomancyConfig.initProps(e.getSuggestedConfigurationFile());
-			configDirectory = e.getModConfigurationDirectory();
-			Registry.registerPackets();
-		}
 
-		public void postInit(FMLPostInitializationEvent e) {
-			AllomancyUtils.init();
-
-		}
-
-		public void serverInit(FMLServerStartingEvent e) {
-			e.registerServerCommand(new PowerCommand());
-		}
-
-		public void init(FMLInitializationEvent e) {
-			GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
-			AllomancyCapability.register();
-		}
-	}
-
-	public static class ClientProxy extends CommonProxy {
-		@Override
-		public void preInit(FMLPreInitializationEvent e){
-			super.preInit(e);
-			Registry.registerEntityRenders();
-		}
-		@Override
-		public void init(FMLInitializationEvent e) {
-			super.init(e);
-			MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-			Registry.initKeyBindings();
-			Registry.registerItemRenders();
-
-		}
-		@Override
-		public void postInit(FMLPostInitializationEvent e) {
-			super.postInit(e);
-		}
-	}
-
-	public static class ServerProxy extends CommonProxy {
-
-	}
 }

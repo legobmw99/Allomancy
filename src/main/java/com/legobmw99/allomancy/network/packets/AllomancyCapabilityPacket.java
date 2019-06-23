@@ -1,66 +1,53 @@
 package com.legobmw99.allomancy.network.packets;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.util.AllomancyCapability;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IThreadListener;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import java.util.function.Supplier;
 
-public class AllomancyCapabilityPacket implements IMessage {
+public class AllomancyCapabilityPacket {
 
-	public AllomancyCapabilityPacket() {
-	}
+    private CompoundNBT nbt;
+    private int entityID;
 
-	private NBTTagCompound nbt;
-	private int entityID;
+    /**
+     * Packet for sending Allomancy player data to a client
+     *
+     * @param data     the AllomancyCapabiltiy data for the player
+     * @param entityID the player's ID
+     */
+    public AllomancyCapabilityPacket(AllomancyCapability data, int entityID) {
+        this(data.serializeNBT() != null ? data.serializeNBT() : new AllomancyCapability().serializeNBT(), entityID);
+    }
 
-	/**
-	 * Packet for sending Allomancy player data to a client
-	 * 
-	 * @param data
-	 *            the AllomancyCapabiltiy data for the player
-	 * @param entityID
-	 *            the player's ID
-	 */
-	public AllomancyCapabilityPacket(AllomancyCapability data, int entityID) {
-		this.nbt = data.serializeNBT() != null ? data.serializeNBT() : new AllomancyCapability().serializeNBT();
-		this.entityID = entityID;
-	}
+    private AllomancyCapabilityPacket(CompoundNBT data, int entityID) {
+        this.nbt = data;
+        this.entityID = entityID;
+    }
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		nbt = ByteBufUtils.readTag(buf);
-		entityID = ByteBufUtils.readVarInt(buf, 5);
-	}
+    public static void encode(AllomancyCapabilityPacket pkt, PacketBuffer buf) {
+        buf.writeCompoundTag(pkt.nbt);
+        buf.writeInt(pkt.entityID);
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeTag(buf, nbt);
-		ByteBufUtils.writeVarInt(buf, entityID, 5);
-	}
+    public static AllomancyCapabilityPacket decode(PacketBuffer buf) {
+        return new AllomancyCapabilityPacket(buf.readCompoundTag(), buf.readInt());
+    }
 
-	public static class Handler implements IMessageHandler<AllomancyCapabilityPacket, IMessage> {
+    public static class Handler {
 
-		@Override
-		public IMessage onMessage(final AllomancyCapabilityPacket message, final MessageContext ctx) {
-			IThreadListener mainThread = Minecraft.getMinecraft();
-			mainThread.addScheduledTask(new Runnable() {
-				@Override
-				public void run() {
-					EntityPlayer player = (EntityPlayer) Minecraft.getMinecraft().player.world.getEntityByID(message.entityID);
-					if (player != null) {
-						AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
-						playerCap.deserializeNBT(message.nbt);
-					}
-				}
-			});
-			return null;
-		}
-	}
+        public static void handle(final AllomancyCapabilityPacket message, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                PlayerEntity player = (PlayerEntity) Allomancy.proxy.getClientWorld().getEntityByID(message.entityID);
+                if (player != null) {
+                    AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
+                    playerCap.deserializeNBT(message.nbt);
+                }
+            });
+        }
+    }
 }

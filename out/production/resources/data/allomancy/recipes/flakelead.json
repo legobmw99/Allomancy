@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "allomancy:flakelead",
+    "count": 2
+  },
+  "ingredients": [
+    {
+      "item": "#ingotLead"
+    },
+    {
+      "item": "allomancy:grinder"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

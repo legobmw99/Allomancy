@@ -4,13 +4,12 @@ import com.legobmw99.allomancy.util.AllomancyUtils;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.item.ItemFrameEntity;
+import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.util.IThreadListener;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -55,7 +54,7 @@ public class TryPushPullEntity implements IMessage {
 
 		@Override
 		public IMessage onMessage(final TryPushPullEntity message, final MessageContext ctx) {
-			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
+			IThreadListener mainThread = (ServerWorld) ctx.getServerHandler().player.world;
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
@@ -66,11 +65,11 @@ public class TryPushPullEntity implements IMessage {
 					} else {
 						if (AllomancyUtils.isEntityMetal(target)) {
 							// The player moves
-							if (target instanceof EntityIronGolem || target instanceof EntityItemFrame) {
+							if (target instanceof IronGolemEntity || target instanceof ItemFrameEntity) {
 								AllomancyUtils.move(message.direction, player, target.getPosition());
 
 								// Depends if the minecart is filled
-							} else if (target instanceof EntityMinecart) {
+							} else if (target instanceof AbstractMinecartEntity) {
 								if (target.isBeingRidden()) {
 									if (target.isRidingOrBeingRiddenBy(player)) {
 										//no op
@@ -82,7 +81,7 @@ public class TryPushPullEntity implements IMessage {
 									AllomancyUtils.move(message.direction, target, player.getPosition());
 								}
 								// The target moves
-							} else if (target instanceof EntityItem) {
+							} else if (target instanceof ItemEntity) {
 								AllomancyUtils.move(message.direction / 2.0, target, player.getPosition().down());
 
 								// Split the difference

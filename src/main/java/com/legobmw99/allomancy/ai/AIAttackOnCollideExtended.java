@@ -1,19 +1,19 @@
 package com.legobmw99.allomancy.ai;
 
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class AIAttackOnCollideExtended extends EntityAIBase {
+public class AIAttackOnCollideExtended extends Goal {
 	World worldObj;
-	EntityCreature attacker;
+	CreatureEntity attacker;
 
 	/**
 	 * An amount of decrementing ticks that allows the entity to attack once the
@@ -37,14 +37,14 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 
 	private int failedPathFindingPenalty;
 
-	public AIAttackOnCollideExtended(EntityCreature par1EntityCreature,
-			Class par2Class, double par3, boolean par5) {
+	public AIAttackOnCollideExtended(CreatureEntity par1EntityCreature,
+                                     Class par2Class, double par3, boolean par5) {
 		this(par1EntityCreature, par3, par5);
 		this.classTarget = par2Class;
 	}
 
-	public AIAttackOnCollideExtended(EntityCreature par1EntityCreature,
-			double par2, boolean par4) {
+	public AIAttackOnCollideExtended(CreatureEntity par1EntityCreature,
+                                     double par2, boolean par4) {
 		this.attacker = par1EntityCreature;
 		this.worldObj = par1EntityCreature.world;
 		this.speedTowardsTarget = par2;
@@ -57,7 +57,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	 */
 	@Override
 	public boolean shouldExecute() {
-		EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
+		LivingEntity entitylivingbase = this.attacker.getAttackTarget();
 
 		if (entitylivingbase == null) {
 			return false;
@@ -85,7 +85,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	@Override
 	public boolean shouldContinueExecuting() {
 		
-		EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
+		LivingEntity entitylivingbase = this.attacker.getAttackTarget();
 		if (entitylivingbase == null) {
 			return false;
 		}
@@ -119,7 +119,7 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 	 */
 	@Override
 	public void updateTask() {
-		EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
+		LivingEntity entitylivingbase = this.attacker.getAttackTarget();
 		if (entitylivingbase == null) {
 			return;
 		}
@@ -158,10 +158,10 @@ public class AIAttackOnCollideExtended extends EntityAIBase {
 				this.attackTick = 20;
 
 				if (this.attacker.getHeldItemMainhand() != null) {
-					this.attacker.swingArm(EnumHand.MAIN_HAND);
+					this.attacker.swingArm(Hand.MAIN_HAND);
 				}
 
-				if (this.attacker instanceof EntityAnimal) {
+				if (this.attacker instanceof AnimalEntity) {
 					entitylivingbase.attackEntityFrom(
 							DamageSource.causeMobDamage(this.attacker), 3);
 				} else {

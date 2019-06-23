@@ -5,16 +5,14 @@ import java.util.concurrent.Callable;
 import com.legobmw99.allomancy.Allomancy;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompound> {
+public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT> {
 
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "Allomancy_Data");
     public static final int[] MAX_BURN_TIME = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
@@ -36,7 +34,7 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
      * @return the AllomancyCapabilites data of the player
      */
     public static AllomancyCapability forPlayer(Entity player) {
-        return player.getCapability(Allomancy.PLAYER_CAP, null);
+        return player.getCapability(Allomancy.PLAYER_CAP, null).cast(AllomancyCapability);
     }
 
     /**
@@ -162,8 +160,8 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound nbt = new NBTTagCompound();
+    public CompoundNBT serializeNBT() {
+        CompoundNBT nbt = new CompoundNBT();
         nbt.setInteger("allomancyPower", this.getAllomancyPower());
         nbt.setInteger("iron", this.getMetalAmounts(0));
         nbt.setInteger("steel", this.getMetalAmounts(1));
@@ -186,7 +184,7 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound compound) {
+    public void deserializeNBT(CompoundNBT compound) {
         this.allomancyPower = compound.getInteger("allomancyPower");
         this.MetalAmounts[0] = compound.getInteger("iron");
         this.MetalAmounts[1] = compound.getInteger("steel");
@@ -210,25 +208,25 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, Direction facing) {
         return Allomancy.PLAYER_CAP != null && capability == Allomancy.PLAYER_CAP;
 
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, Direction facing) {
         return Allomancy.PLAYER_CAP != null && capability == Allomancy.PLAYER_CAP ? (T) this : null;
     }
 
     public static class Storage implements Capability.IStorage<AllomancyCapability> {
 
         @Override
-        public NBTBase writeNBT(Capability<AllomancyCapability> capability, AllomancyCapability instance, EnumFacing side) {
+        public NBTBase writeNBT(Capability<AllomancyCapability> capability, AllomancyCapability instance, Direction side) {
             return null;
         }
 
         @Override
-        public void readNBT(Capability<AllomancyCapability> capability, AllomancyCapability instance, EnumFacing side, NBTBase nbt) {
+        public void readNBT(Capability<AllomancyCapability> capability, AllomancyCapability instance, Direction side, NBTBase nbt) {
 
         }
 

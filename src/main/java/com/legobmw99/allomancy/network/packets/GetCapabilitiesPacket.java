@@ -1,14 +1,11 @@
 package com.legobmw99.allomancy.network.packets;
 
 import com.legobmw99.allomancy.util.AllomancyCapability;
-import com.legobmw99.allomancy.util.Registry;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -47,7 +44,7 @@ public class GetCapabilitiesPacket implements IMessage {
 
 		@Override
 		public AllomancyCapabilityPacket onMessage(final GetCapabilitiesPacket message, final MessageContext ctx) {
-			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
+			IThreadListener mainThread = (ServerWorld) ctx.getServerHandler().player.world;
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {

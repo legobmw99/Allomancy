@@ -3,13 +3,10 @@ package com.legobmw99.allomancy.network.packets;
 import com.legobmw99.allomancy.util.AllomancyCapability;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
 
 public class UpdateBurnPacket implements IMessage {
 
@@ -48,12 +45,12 @@ public class UpdateBurnPacket implements IMessage {
 
 		@Override
 		public IMessage onMessage(final UpdateBurnPacket message, final MessageContext ctx) {
-			IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world; 
+			IThreadListener mainThread = (ServerWorld) ctx.getServerHandler().player.world;
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
 
-					EntityPlayerMP player = ctx.getServerHandler().player;
+					ServerPlayerEntity player = ctx.getServerHandler().player;
 					AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
 					if (cap.getMetalAmounts(message.mat) != 0) {

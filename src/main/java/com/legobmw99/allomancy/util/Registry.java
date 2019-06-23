@@ -1,220 +1,208 @@
 package com.legobmw99.allomancy.util;
 
-import org.lwjgl.input.Keyboard;
-
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.block.BlockIronLever;
+import com.legobmw99.allomancy.block.IronLeverBlock;
 import com.legobmw99.allomancy.entities.EntityGoldNugget;
 import com.legobmw99.allomancy.entities.EntityIronNugget;
 import com.legobmw99.allomancy.entities.EntityRenderFactories;
-import com.legobmw99.allomancy.items.ItemCoinBag;
-import com.legobmw99.allomancy.items.ItemGrinder;
-import com.legobmw99.allomancy.items.ItemMistcloak;
-import com.legobmw99.allomancy.items.ItemVial;
-import com.legobmw99.allomancy.items.NuggetLerasium;
-import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
-import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
-import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
-import com.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
-import com.legobmw99.allomancy.network.packets.TryPushPullBlock;
-import com.legobmw99.allomancy.network.packets.TryPushPullEntity;
-import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
-
+import com.legobmw99.allomancy.items.CoinBagItem;
+import com.legobmw99.allomancy.items.LerasiumItem;
+import com.legobmw99.allomancy.items.MistcloakItem;
+import com.legobmw99.allomancy.items.VialItem;
+import com.legobmw99.allomancy.network.packets.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.*;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.RegistryEvent.Register;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.registries.ObjectHolder;
 
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Registry {
-	public static KeyBinding burn;
-	public static SimpleNetworkWrapper network;
-	public static Item itemAllomancyGrinder;
-	public static Item itemTinIngot;
-	public static Item itemLeadIngot;
-	public static Item itemCopperIngot;
-	public static Item itemZincIngot;
-	public static Item itemBronzeIngot;
-	public static Item itemBrassIngot;
-	public static Item itemCoinBag;
-	public static Item Mistcloak;
-	public static Item nuggetLerasium;
-	public static Item itemVial;
-	public static Block oreTin;
-	public static Block oreLead;
-	public static Block oreCopper;
-	public static Block oreZinc;
-	public static Block blockIronLever;
-	
-	public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
-			"Lead" };
-	
-	
-	public static CreativeTabs tabsAllomancy = new CreativeTabAllomancy(CreativeTabs.getNextID(), "allomancy");
-	public static ArmorMaterial WoolArmor = net.minecraftforge.common.util.EnumHelper.addArmorMaterial("Wool",
-			"allomancy:wool", 5, new int[] { 0, 4, 0, 0 }, 15, null, 0);
 
-	
-	public static void initBlocks(Register event) {
-		oreTin = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreTin").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreTin"));
-		oreTin.setHarvestLevel("pickaxe", 1);
-		oreLead = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreLead").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreLead"));
-		oreLead.setHarvestLevel("pickaxe", 1);
-		oreCopper = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreCopper").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreCopper"));
-		oreCopper.setHarvestLevel("pickaxe", 1);
-		oreZinc = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreZinc").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreZinc"));
-		oreZinc.setHarvestLevel("pickaxe", 1);
-		blockIronLever = new BlockIronLever();
-		
-		event.getRegistry().registerAll(oreTin,oreLead,oreCopper,oreZinc, blockIronLever);
-	}
+    // Item Holders
+    @ObjectHolder("allomancy:allomantic_grinder")
+    public static Item allomantic_grinder;
+    @ObjectHolder("allomancy:tin_ingot")
+    public static Item tin_ingot;
+    @ObjectHolder("allomancy:lead_ingot")
+    public static Item lead_ingot;
+    @ObjectHolder("allomancy:copper_ingot")
+    public static Item copper_ingot;
+    @ObjectHolder("allomancy:zinc_ingot")
+    public static Item zinc_ingot;
+    @ObjectHolder("allomancy:bronze_ingot")
+    public static Item bronze_ingot;
+    @ObjectHolder("allomancy:brass_ingot")
+    public static Item brass_ingot;
+    @ObjectHolder("allomancy:coin_bag")
+    public static Item coin_bag;
+    @ObjectHolder("allomancy:mistcloak")
+    public static MistcloakItem mistcloak;
+    @ObjectHolder("allomancy:lerasium_nugget")
+    public static LerasiumItem lerasium_nugget;
+    @ObjectHolder("allomancy:vial")
+    public static VialItem vial;
 
-	public static void initItems(Register event) {
-		// Register the basic, not-metallic items
-		event.getRegistry().registerAll(
-				itemAllomancyGrinder = new ItemGrinder(),
-				itemCoinBag = new ItemCoinBag(),
-				Mistcloak = new ItemMistcloak(WoolArmor, 1, EntityEquipmentSlot.CHEST),
-				nuggetLerasium = new NuggetLerasium(),
-				// Register ItemVial and its subtypes
-				itemVial = new ItemVial(),
-				// Register ingots and add them to the ore dictionary
-				itemTinIngot = new Item().setUnlocalizedName("ingotTin").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotTin")),
-				itemLeadIngot = new Item().setUnlocalizedName("ingotLead").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotLead")),		
-				itemCopperIngot = new Item().setUnlocalizedName("ingotCopper").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotCopper")),
-				itemZincIngot = new Item().setUnlocalizedName("ingotZinc").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotZinc")),
-				itemBrassIngot = new Item().setUnlocalizedName("ingotBrass").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotBrass")),
-				itemBronzeIngot = new Item().setUnlocalizedName("ingotBronze").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotBronze"))
-				);
+    // Block Holders
+    @ObjectHolder("allomancy:tin_ore")
+    public static Block tin_ore;
+    @ObjectHolder("allomancy:lead_ore")
+    public static Block lead_ore;
+    @ObjectHolder("allomancy:copper_ore")
+    public static Block copper_ore;
+    @ObjectHolder("allomancy:zinc_ore")
+    public static Block zinc_ore;
+    @ObjectHolder("allomancy:iron_lever")
+    public static IronLeverBlock iron_lever;
 
 
+    public static final String[] flake_metals = {"Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
+            "Lead"};
 
-		// Register flakes
-		for (int i = 0; i < flakeMetals.length; i++) {
-			event.getRegistry().register(new Item().setUnlocalizedName("flake" + flakeMetals[i]).setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID, "flake" + flakeMetals[i])));
-		}
-		
-		//Register ore block items
-		event.getRegistry().registerAll(
-				new ItemBlock(oreTin).setRegistryName(oreTin.getRegistryName()),
-				new ItemBlock(oreLead).setRegistryName(oreLead.getRegistryName()),
-				new ItemBlock(oreCopper).setRegistryName(oreCopper.getRegistryName()),
-				new ItemBlock(oreZinc).setRegistryName(oreZinc.getRegistryName()),
-				new ItemBlock(blockIronLever).setRegistryName(blockIronLever.getRegistryName())
-				);
-		
-				
-		OreDictionary.registerOre("ingotZinc", itemZincIngot);
-		OreDictionary.registerOre("ingotTin", itemTinIngot);
-		OreDictionary.registerOre("ingotCopper", itemCopperIngot);
-		OreDictionary.registerOre("ingotLead", itemLeadIngot);
-		OreDictionary.registerOre("ingotBronze", itemBronzeIngot);
-		OreDictionary.registerOre("ingotBrass", itemBrassIngot);
-		OreDictionary.registerOre("oreZinc", oreZinc);
-		OreDictionary.registerOre("oreTin", oreTin);
-		OreDictionary.registerOre("oreCopper", oreCopper);
-		OreDictionary.registerOre("oreLead", oreLead);
-	}
+    public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Allomancy.MODID, "networking"))
+            .clientAcceptedVersions(s -> true)
+            .serverAcceptedVersions(s -> true)
+            .networkProtocolVersion(() -> "1.0.0")
+            .simpleChannel();
 
-	public static void initKeyBindings() {
-		burn = new KeyBinding("key.burn", Keyboard.KEY_F, "key.categories.allomancy");
-		ClientRegistry.registerKeyBinding(burn);
-	}
+    public static ItemGroup allomancy_group = new ItemGroup(Allomancy.MODID) {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(Registry.mistcloak);
+        }
+    };
 
-	public static void registerPackets() {
-		network = NetworkRegistry.INSTANCE.newSimpleChannel("allomancy");
-		network.registerMessage(AllomancyPowerPacket.Handler.class, AllomancyPowerPacket.class, 0, Side.CLIENT);
-		network.registerMessage(UpdateBurnPacket.Handler.class, UpdateBurnPacket.class, 1, Side.SERVER);
-		network.registerMessage(AllomancyCapabilityPacket.Handler.class, AllomancyCapabilityPacket.class, 2,Side.CLIENT);
-		network.registerMessage(ChangeEmotionPacket.Handler.class, ChangeEmotionPacket.class, 3, Side.SERVER);
-		network.registerMessage(GetCapabilitiesPacket.Handler.class, GetCapabilitiesPacket.class, 4, Side.SERVER);
-		network.registerMessage(TryPushPullEntity.Handler.class, TryPushPullEntity.class, 5, Side.SERVER);
-		network.registerMessage(TryPushPullBlock.Handler.class, TryPushPullBlock.class, 6, Side.SERVER);
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static void registerEntityRenders(){
-		//Use renderSnowball for nugget projectiles
-		RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class,EntityRenderFactories.GOLD_FACTORY);
-		RenderingRegistry.registerEntityRenderingHandler(EntityIronNugget.class,EntityRenderFactories.IRON_FACTORY);
-	}
+    public static KeyBinding burn;
 
-	@SideOnly(Side.CLIENT)
-	public static void registerItemRenders() {
-		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-		
-		// Register ore models individually.
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreTin), 0,
-				new ModelResourceLocation("allomancy:oreTin", "inventory"));
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreZinc), 0,
-				new ModelResourceLocation("allomancy:oreZinc", "inventory"));
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreCopper), 0,
-				new ModelResourceLocation("allomancy:oreCopper", "inventory"));
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreLead), 0,
-				new ModelResourceLocation("allomancy:oreLead", "inventory"));
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(blockIronLever), 0,
-				new ModelResourceLocation("allomancy:iron_lever", "inventory"));
+    public static IArmorMaterial WoolArmor = new IArmorMaterial() {
+        @Override
+        public int getDurability(EquipmentSlotType slotIn) {
+            return 50;
+        }
 
-		// Register ingot models individually
-		renderItem.getItemModelMesher().register(itemZincIngot, 0,
-				new ModelResourceLocation("allomancy:ingotZinc", "inventory"));
-		renderItem.getItemModelMesher().register(itemLeadIngot, 0,
-				new ModelResourceLocation("allomancy:ingotLead", "inventory"));
-		renderItem.getItemModelMesher().register(itemCopperIngot, 0,
-				new ModelResourceLocation("allomancy:ingotCopper", "inventory"));
-		renderItem.getItemModelMesher().register(itemTinIngot, 0,
-				new ModelResourceLocation("allomancy:ingotTin", "inventory"));
-		renderItem.getItemModelMesher().register(itemBrassIngot, 0,
-				new ModelResourceLocation("allomancy:ingotBrass", "inventory"));
-		renderItem.getItemModelMesher().register(itemBronzeIngot, 0,
-				new ModelResourceLocation("allomancy:ingotBronze", "inventory"));
+        @Override
+        public int getDamageReductionAmount(EquipmentSlotType slotIn) {
+            return slotIn == EquipmentSlotType.CHEST ? 4 : 0;
+        }
 
-		// Register misc item models individually
-		renderItem.getItemModelMesher().register(nuggetLerasium, 0,
-				new ModelResourceLocation("allomancy:nuggetLerasium", "inventory"));
-		renderItem.getItemModelMesher().register(itemAllomancyGrinder, 0,
-				new ModelResourceLocation("allomancy:grinder", "inventory"));
-		renderItem.getItemModelMesher().register(Mistcloak, 0,
-				new ModelResourceLocation("allomancy:mistcloak", "inventory"));
-		renderItem.getItemModelMesher().register(itemCoinBag, 0,
-				new ModelResourceLocation("allomancy:coinbag", "inventory"));
+        @Override
+        public int getEnchantability() {
+            return 15;
+        }
 
-		// Register flake models
-		for (int i = 0; i < flakeMetals.length; i++) {
-			renderItem.getItemModelMesher().register(new Item().getByNameOrId("allomancy:" + "flake" + flakeMetals[i]),
-					0, new ModelResourceLocation("allomancy:" + "flake" + flakeMetals[i], "inventory"));
-		}
-		
-		renderItem.getItemModelMesher().register(itemVial, 0,
-				new ModelResourceLocation("allomancy:itemVial", "inventory"));
-	}
-	
-	//only does furnace recipes, rest are handled in JSON
-	public static void setupRecipes(Register event) {
-		event.getRegistry().register(new RecipeItemVial());
-		GameRegistry.addSmelting(oreTin, new ItemStack(itemTinIngot, 1), 5);
-		GameRegistry.addSmelting(oreCopper, new ItemStack(itemCopperIngot, 1), 5);
-		GameRegistry.addSmelting(oreLead, new ItemStack(itemLeadIngot, 1), 5);
-		GameRegistry.addSmelting(oreZinc, new ItemStack(itemZincIngot, 1), 5);
-	}
+        @Override
+        public SoundEvent getSoundEvent() {
+            return SoundEvents.ITEM_ARMOR_EQUIP_LEATHER;
+        }
+
+        @Override
+        public Ingredient getRepairMaterial() {
+            return Ingredient.fromItems(Items.GRAY_WOOL);
+        }
+
+        @Override
+        public String getName() {
+            return "wool";
+        }
+
+        @Override
+        public float getToughness() {
+            return 0;
+        }
+    };
+
+
+    public static void initKeyBindings() {
+        burn = new KeyBinding("key.burn", 70, "key.categories.allomancy");
+        ClientRegistry.registerKeyBinding(burn);
+    }
+
+    public static void registerPackets() {
+        int index = 0;
+        NETWORK.registerMessage(index++, AllomancyPowerPacket.class, AllomancyPowerPacket::encode, AllomancyPowerPacket::read, RepairItemPacket.Handler::handle);
+        NETWORK.registerMessage(index++, UpdateBurnPacket.class, UpdateBurnPacket::encode, UpdateBurnPacket::decode, UpdateBurnPacket.Handler::handle);
+        NETWORK.registerMessage(index++, AllomancyCapabilityPacket.class, AllomancyCapabilityPacket::encode, AllomancyCapabilityPacket::decode, AllomancyCapabilityPacket.Handler::handle);
+        NETWORK.registerMessage(index++, ChangeEmotionPacket.class, ChangeEmotionPacket::encode, ChangeEmotionPacket::decode, ChangeEmotionPacket.Handler::handle);
+        NETWORK.registerMessage(index++, GetCapabilitiesPacket.class, GetCapabilitiesPacket::encode, GetCapabilitiesPacket::decode, GetCapabilitiesPacket.Handler::handle);
+        NETWORK.registerMessage(index++, TryPushPullEntity.class, TryPushPullEntity::encode, TryPushPullEntity::decode, TryPushPullEntity.Handler::handle);
+        NETWORK.registerMessage(index, TryPushPullBlock.class, TryPushPullBlock::encode, TryPushPullBlock::decode, TryPushPullBlock.Handler::handle);
+
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void registerEntityRenders() {
+        //Use renderSnowball for nugget projectiles
+        RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class, EntityRenderFactories.GOLD_FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(EntityIronNugget.class, EntityRenderFactories.IRON_FACTORY);
+    }
+
+
+    //only does furnace recipes, rest are handled in JSON
+    //public static void setupRecipes(Register<IRecipe> event) {
+    //    event.getRegistry().register(new RecipeItemVial());
+    //}
+
+    @SubscribeEvent
+    public void onRegisterItems(final RegistryEvent.Register<Item> event) {
+        Item.Properties prop_generic = new Item.Properties().group(allomancy_group);
+        Item.Properties prop_single = new Item.Properties().group(allomancy_group).maxStackSize(1);
+
+        event.getRegistry().registerAll(
+                new Item(new Item.Properties().group(allomancy_group).maxStackSize(1).containerItem(allomantic_grinder).).setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder")),
+                new CoinBagItem(prop_single),
+                new MistcloakItem(WoolArmor, EquipmentSlotType.CHEST, new Item.Properties().group(ItemGroup.COMBAT)),
+                new LerasiumItem(),
+                // Register VialItem and its subtypes
+                new VialItem(),
+                // Register ingots and add them to the ore dictionary
+                new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "tin_ingot")),
+                new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "lead_ingot")),
+                new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "copper_ingot")),
+                new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "zinc_ingot")),
+                new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "bronze_ingot"))
+        );
+
+
+        // Register flakes
+        for (int i = 0; i < flake_metals.length; i++) {
+            event.getRegistry().register(
+                    new Item(new Item.Properties().group(allomancy_group).maxDamage(0)).setRegistryName(new ResourceLocation(Allomancy.MODID, flake_metals + "_flakes")));
+        }
+
+        //Register ore block items
+        event.getRegistry().registerAll(
+                new BlockItem(tin_ore, prop_generic).setRegistryName(tin_ore.getRegistryName()),
+                new BlockItem(lead_ore, prop_generic).setRegistryName(lead_ore.getRegistryName()),
+                new BlockItem(copper_ore, prop_generic).setRegistryName(copper_ore.getRegistryName()),
+                new BlockItem(zinc_ore, prop_generic).setRegistryName(zinc_ore.getRegistryName()),
+                new BlockItem(iron_lever, prop_generic).setRegistryName(iron_lever.getRegistryName())
+        );
+    }
+
+    @SubscribeEvent
+    public void onRegisterBlocks(final RegistryEvent.Register<Block> event) {
+        event.getRegistry().registerAll(
+                new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "tin_ore")),
+                new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "lead_ore")),
+                new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "copper_ore")),
+                new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "zinc_ore")),
+                new IronLeverBlock()
+        );
+
+    }
 
 }

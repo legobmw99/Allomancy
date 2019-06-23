@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.util.AllomancyCapability;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.IThreadListener;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -49,7 +49,7 @@ public class AllomancyPowerPacket implements IMessage {
 			mainThread.addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					EntityPlayer player = Minecraft.getMinecraft().player;
+					PlayerEntity player = Minecraft.getMinecraft().player;
 					AllomancyCapability cap;
 					cap = AllomancyCapability.forPlayer(player);
 					cap.setAllomancyPower(message.power);
