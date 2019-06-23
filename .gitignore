@@ -2,13 +2,10 @@
 /.gradle
 /.settings
 /build
-/eclipse
 .classpath
 .project
 /run
-Allomancy_Server.launch
 *.launch
 /.idea
 /doc
-Setup.bat
 TODO.txt
