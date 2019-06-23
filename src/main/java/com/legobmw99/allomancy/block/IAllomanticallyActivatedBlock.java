@@ -1,9 +1,7 @@
 package com.legobmw99.allomancy.block;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -11,7 +9,7 @@ import net.minecraft.world.World;
  * This interface can be used to signify if a block should react to being pushed
  * or pulled, rather than moving the pusher
  * 
- * @see BlockIronLever
+ * @see IronLeverBlock
  * @author legobmw99
  *
  */
@@ -24,5 +22,5 @@ public interface IAllomanticallyActivatedBlock {
 	 *            whether or not the activation is Steel
 	 * @return whether or not the block was activated
 	 */
-	boolean onBlockActivatedAllomantically(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, boolean isPush);
+	boolean onBlockActivatedAllomantically(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, boolean isPush);
 }
