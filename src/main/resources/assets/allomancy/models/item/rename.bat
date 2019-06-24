@@ -1,1 +1,0 @@
-FOR %I IN (flake*) DO @ECHO %I:~5,10%

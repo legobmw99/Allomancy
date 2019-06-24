@@ -1,7 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "allomancy:block/iron_lever"
+        "layer0": "allomancy:item/lerasium_nugget"
     }
 }
-s
