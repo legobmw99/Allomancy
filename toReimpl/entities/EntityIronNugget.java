@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.entities;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,7 +16,7 @@ public class EntityIronNugget extends ThrowableEntity {
 	
     public EntityIronNugget(World par1World)
     {
-        super(par1World);
+        super(EntityType.EGG,par1World);
     }
 
     public EntityIronNugget(World par1World, LivingEntity par2EntityLivingBase)
@@ -55,7 +56,8 @@ public class EntityIronNugget extends ThrowableEntity {
 	}
 
 
-    
- 
+    @Override
+    protected void registerData() {
 
+    }
 }

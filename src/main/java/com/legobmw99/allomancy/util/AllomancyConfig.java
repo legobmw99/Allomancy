@@ -1,68 +1,142 @@
 package com.legobmw99.allomancy.util;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import java.io.File;
+import org.apache.commons.lang3.tuple.Pair;
+
 
 public class AllomancyConfig {
 
+    public static final ServerConfig SERVER;
+    public static final ForgeConfigSpec SERVER_SPEC;
 
-    public static void initProps(File confFile) {
-        config = new Configuration(confFile);
-        config.load();
-        generateCopper = config.get("Worldgen Disabler", "Generate Copper Ore", true).getBoolean(true);
-        generateTin = config.get("Worldgen Disabler", "Generate Tin Ore", true).getBoolean(true);
-        generateLead = config.get("Worldgen Disabler", "Generate Lead Ore", true).getBoolean(true);
-        generateZinc = config.get("Worldgen Disabler", "Generate Zinc Ore", true).getBoolean(true);
-
-        copperDensity = config.get("Worldgen", "Copper Density", 5, "Density: Chances per chunk").getInt(5);
-        tinDensity = config.get("Worldgen", "Tin Density", 5).getInt(5);
-        leadDensity = config.get("Worldgen", "Lead Density", 5).getInt(5);
-        zincDensity = config.get("Worldgen", "Zinc Density", 5).getInt(5);
-
-        copperMinY = config.get("Worldgen", "Copper Min Y", 30).getInt(30);
-        copperMaxY = config.get("Worldgen", "Copper Max Y", 50).getInt(50);
-        tinMinY = config.get("Worldgen", "Tin Min Y", 40).getInt(40);
-        tinMaxY = config.get("Worldgen", "Tin Max Y", 64).getInt(64);
-        leadMinY = config.get("Worldgen", "Lead Min Y", 20).getInt(20);
-        leadMaxY = config.get("Worldgen", "Lead Max Y", 40).getInt(40);
-        zincMinY = config.get("Worldgen", "Zinc Min Y", 20).getInt(20);
-        zincMaxY = config.get("Worldgen", "Zinc Max Y", 40).getInt(40);
-
-        overlayPosition = config.get("Display", "Screen Overlay Position", 0).getInt(0);
-        
-        maxDrawLine = config.get("Graphics", "Max iron/steelsight distance", 12).getInt(12);
-        animateSelection = config.get("Graphics", "Animate the selection wheel", true).getBoolean(true);
-
-        randomizeMistings = config.get("Gameplay", "Spawn players as a random Misting", true).getBoolean(true);
-        
-        config.save();
+    static {
+        final Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
+        SERVER_SPEC = specPair.getRight();
+        SERVER = specPair.getLeft();
     }
-    
-    public static Configuration config;
-    public static boolean generateCopper;
-    public static boolean generateTin;
-    public static boolean generateLead;
-    public static boolean generateZinc;
-    
-    public static int maxDrawLine;
-    public static boolean animateSelection;
-    
-    public static boolean randomizeMistings;
 
-    public static int overlayPosition;
+    public static final ClientConfig CLIENT;
+    public static final ForgeConfigSpec CLIENT_SPEC;
 
-    public static int copperDensity;
-    public static int tinDensity;
-    public static int leadDensity;
-    public static int zincDensity;
+    static {
+        final Pair<ClientConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
+        CLIENT_SPEC = specPair.getRight();
+        CLIENT = specPair.getLeft();
+    }
 
-    public static int copperMinY;
-    public static int copperMaxY;
-    public static int tinMinY;
-    public static int tinMaxY;
-    public static int leadMinY;
-    public static int leadMaxY;
-    public static int zincMinY;
-    public static int zincMaxY;
 
+    public static boolean random_mistings;
+    public static boolean generate_copper;
+    public static boolean generate_tin;
+    public static boolean generate_lead;
+    public static boolean generate_zinc;
+    public static int copper_density;
+    public static int tin_density;
+    public static int lead_density;
+    public static int zinc_density;
+    public static int copper_min_y;
+    public static int copper_max_y;
+    public static int tin_min_y;
+    public static int tin_max_y;
+    public static int lead_min_y;
+    public static int lead_max_y;
+    public static int zinc_min_y;
+    public static int zinc_max_y;
+
+
+    public static int max_metal_detection;
+    public static boolean animate_selection;
+    public static SCREEN_LOC overlay_position;
+
+    public static class ServerConfig {
+        public final ForgeConfigSpec.BooleanValue random_mistings;
+        public final ForgeConfigSpec.BooleanValue generate_copper;
+        public final ForgeConfigSpec.BooleanValue generate_tin;
+        public final ForgeConfigSpec.BooleanValue generate_lead;
+        public final ForgeConfigSpec.BooleanValue generate_zinc;
+        public final ForgeConfigSpec.IntValue copper_density;
+        public final ForgeConfigSpec.IntValue tin_density;
+        public final ForgeConfigSpec.IntValue lead_density;
+        public final ForgeConfigSpec.IntValue zinc_density;
+        public final ForgeConfigSpec.IntValue copper_min_y;
+        public final ForgeConfigSpec.IntValue copper_max_y;
+        public final ForgeConfigSpec.IntValue tin_min_y;
+        public final ForgeConfigSpec.IntValue tin_max_y;
+        public final ForgeConfigSpec.IntValue lead_min_y;
+        public final ForgeConfigSpec.IntValue lead_max_y;
+        public final ForgeConfigSpec.IntValue zinc_min_y;
+        public final ForgeConfigSpec.IntValue zinc_max_y;
+
+        ServerConfig(ForgeConfigSpec.Builder builder) {
+            builder.push("Gameplay");
+            random_mistings = builder.comment("Spawn players as a random Misting").define("random_mistings", true);
+            //todo investigate whitelist here
+            builder.pop();
+            builder.push("World Gen");
+            generate_copper = builder.comment("Generate Copper Ore").define("generate_copper", true);
+            generate_tin = builder.comment("Generate Tin Ore").define("generate_tin", true);
+            generate_lead = builder.comment("Generate Lead Ore").define("generate_lead", true);
+            generate_zinc = builder.comment("Generate Zinc Ore").define("generate_zinc", true);
+            copper_density = builder.comment("Density of Copper Ore").defineInRange("copper_density", 5, 1, 20);
+            tin_density = builder.comment("Density of Copper Ore").defineInRange("copper_density", 5, 1, 20);
+            lead_density = builder.comment("Density of Copper Ore").defineInRange("copper_density", 5, 1, 20);
+            zinc_density = builder.comment("Density of Copper Ore").defineInRange("copper_density", 5, 1, 20);
+            copper_min_y = builder.comment("Minimum Y Level to Generate Copper").defineInRange("copper_min_y", 30, 1, 128);
+            copper_max_y = builder.comment("Maximum Y Level to Generate Copper").defineInRange("copper_max_y", 50, 1, 128);
+            tin_min_y = builder.comment("Minimum Y Level to Generate Tin").defineInRange("tin_min_y", 40, 1, 128);
+            tin_max_y = builder.comment("Maximum Y Level to Generate Tin").defineInRange("tin_max_y", 64, 1, 128);
+            lead_min_y = builder.comment("Minimum Y Level to Generate Lead").defineInRange("lead_min_y", 20, 1, 128);
+            lead_max_y = builder.comment("Maximum Y Level to Generate Lead").defineInRange("lead_max_y", 40, 1, 128);
+            zinc_min_y = builder.comment("Minimum Y Level to Generate Zinc").defineInRange("zinc_min_y", 20, 1, 128);
+            zinc_max_y = builder.comment("Maximum Y Level to Generate Zinc").defineInRange("zinc_max_y", 40, 1, 128);
+            builder.pop();
+        }
+    }
+
+    public static void refreshServer() {
+        random_mistings = SERVER.random_mistings.get();
+        generate_copper = SERVER.generate_copper.get();
+        generate_tin = SERVER.generate_tin.get();
+        generate_lead = SERVER.generate_lead.get();
+        generate_zinc = SERVER.generate_zinc.get();
+        copper_density = SERVER.copper_density.get();
+        tin_density = SERVER.tin_density.get();
+        lead_density = SERVER.lead_density.get();
+        zinc_density = SERVER.zinc_density.get();
+        copper_min_y = SERVER.copper_min_y.get();
+        copper_max_y = SERVER.copper_max_y.get();
+        tin_min_y = SERVER.tin_min_y.get();
+        tin_max_y = SERVER.tin_max_y.get();
+        lead_min_y = SERVER.lead_min_y.get();
+        lead_max_y = SERVER.lead_max_y.get();
+        zinc_min_y = SERVER.zinc_min_y.get();
+        zinc_max_y = SERVER.zinc_max_y.get();
+    }
+
+    public static class ClientConfig {
+        public final ForgeConfigSpec.IntValue max_metal_detection;
+        public final ForgeConfigSpec.BooleanValue animate_selection;
+        public final ForgeConfigSpec.EnumValue<SCREEN_LOC> overlay_position;
+
+        ClientConfig(ForgeConfigSpec.Builder builder){
+            builder.push("Graphics");
+            max_metal_detection = builder.comment("Maximum iron/steelsight distance").defineInRange("max_metal_distance",12,3,30);
+            animate_selection = builder.comment("Animate the selection wheel").define("animate_selection", true);
+            overlay_position = builder.comment("Screen Overlay Position").defineEnum("overlay_position", SCREEN_LOC.TOP_LEFT);
+            builder.pop();
+        }
+    }
+
+    public static void refreshClient(){
+        max_metal_detection = CLIENT.max_metal_detection.get();
+        animate_selection = CLIENT.animate_selection.get();
+        overlay_position = CLIENT.overlay_position.get();
+    }
+
+    public enum SCREEN_LOC{
+        TOP_RIGHT,
+        BOTTOM_RIGHT,
+        TOP_LEFT,
+        BOTTOM_LEFT
+    }
 }

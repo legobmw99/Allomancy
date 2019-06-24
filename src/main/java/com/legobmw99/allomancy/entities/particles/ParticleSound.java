@@ -1,13 +1,14 @@
 package com.legobmw99.allomancy.entities.particles;
 
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
-public class ParticleSound extends Particle {
+@OnlyIn(Dist.CLIENT)
+public class ParticleSound extends SpriteTexturedParticle {
 
     double entityX, entityY, entityZ;
 
@@ -18,9 +19,8 @@ public class ParticleSound extends Particle {
         this.motionX = motionX;
         this.motionY = motionY + 0.009D;
         this.motionZ = motionZ;
-        this.setParticleTextureIndex(64);
         this.particleScale *= 1.2F;
-        this.particleMaxAge = 15;
+        this.maxAge = 15;
         this.canCollide = false; // canCollide
         String soundName = sound.getSoundLocation().toString();
 
@@ -50,8 +50,10 @@ public class ParticleSound extends Particle {
 
     }
 
+
+
     @Override
-    public void onUpdate() {
+    public void tick() {
         if (((this.posX - entityX) < 1.7) && ((this.posY - entityY) < 2.5) && ((this.posZ - entityZ) < 1.7)) {
             this.setExpired();
         } 
@@ -60,11 +62,17 @@ public class ParticleSound extends Particle {
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
 
-        if (this.particleAge++ >= this.particleMaxAge) {
+        if (this.age++ >= this.maxAge) {
             this.setExpired();
         }
 
         this.move(this.motionX, this.motionY, this.motionZ);
 
     }
+
+    @Override
+    public IParticleRenderType getRenderType() {
+        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    }
+
 }

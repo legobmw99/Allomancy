@@ -2,9 +2,6 @@ package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.block.IronLeverBlock;
-import com.legobmw99.allomancy.entities.EntityGoldNugget;
-import com.legobmw99.allomancy.entities.EntityIronNugget;
-import com.legobmw99.allomancy.entities.EntityRenderFactories;
 import com.legobmw99.allomancy.items.CoinBagItem;
 import com.legobmw99.allomancy.items.LerasiumItem;
 import com.legobmw99.allomancy.items.MistcloakItem;
@@ -19,12 +16,9 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -70,8 +64,8 @@ public class Registry {
     public static IronLeverBlock iron_lever;
 
 
-    public static final String[] flake_metals = {"Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
-            "Lead"};
+    public static final String[] flake_metals = {"iron", "steel", "tin", "pewter", "zinc", "brass", "copper", "bronze",
+            "lead"};
 
     public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Allomancy.MODID, "networking"))
             .clientAcceptedVersions(s -> true)
@@ -143,7 +137,7 @@ public class Registry {
 
     }
 
-    @OnlyIn(Dist.CLIENT)
+    /*@OnlyIn(Dist.CLIENT)
     public static void registerEntityRenders() {
         //Use renderSnowball for nugget projectiles
         RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class, EntityRenderFactories.GOLD_FACTORY);
@@ -152,12 +146,13 @@ public class Registry {
 
 
     //only does furnace recipes, rest are handled in JSON
-    //public static void setupRecipes(Register<IRecipe> event) {
-    //    event.getRegistry().register(new RecipeItemVial());
-    //}
+    public static void setupRecipes(Register<IRecipe> event) {
+        event.getRegistry().register(new RecipeItemVial());
+    }*/
 
     @SubscribeEvent
-    public void onRegisterItems(final RegistryEvent.Register<Item> event) {
+    public static void onRegisterItems(final RegistryEvent.Register<Item> event) {
+        Allomancy.LOGGER.debug("Registering items");
         Item.Properties prop_generic = new Item.Properties().group(allomancy_group);
         Item.Properties prop_single = new Item.Properties().group(allomancy_group).maxStackSize(1);
 
@@ -180,7 +175,7 @@ public class Registry {
         // Register flakes
         for (int i = 0; i < flake_metals.length; i++) {
             event.getRegistry().register(
-                    new Item(new Item.Properties().group(allomancy_group).maxDamage(0)).setRegistryName(new ResourceLocation(Allomancy.MODID, flake_metals + "_flakes")));
+                    new Item(new Item.Properties().group(allomancy_group).maxDamage(0)).setRegistryName(new ResourceLocation(Allomancy.MODID, flake_metals[i] + "_flakes")));
         }
 
         //Register ore block items
@@ -194,7 +189,8 @@ public class Registry {
     }
 
     @SubscribeEvent
-    public void onRegisterBlocks(final RegistryEvent.Register<Block> event) {
+    public static void onRegisterBlocks(final RegistryEvent.Register<Block> event) {
+        Allomancy.LOGGER.info("Registering Blocks");
         event.getRegistry().registerAll(
                 new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "tin_ore")),
                 new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "lead_ore")),

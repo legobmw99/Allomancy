@@ -6,29 +6,27 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 public abstract class CommonProxy {
-    public void preInit(FMLPreInitializationEvent e) {
+
+    public void loadComplete(final FMLLoadCompleteEvent e) {
+        // no-op
+    }
+
+    public abstract void clientInit( final FMLClientSetupEvent e);
+
+    public abstract void serverInit(final FMLServerStartingEvent e);
+
+    public void init(final FMLCommonSetupEvent e) {
         // Load most of the mod's content
-        MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
-        AllomancyConfig.initProps(e.getSuggestedConfigurationFile());
-        configDirectory = e.getModConfigurationDirectory();
-        Registry.registerPackets();
-    }
-
-    public void postInit(FMLPostInitializationEvent e) {
-        AllomancyUtils.init();
-
-    }
-
-    public void serverInit(FMLServerStartingEvent e) {
-        e.registerServerCommand(new PowerCommand());
-    }
-
-    public void init(FMLCommonSetupEvent  e) {
         //GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
         AllomancyCapability.register();
+        MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
+        Registry.registerPackets();
     }
 
     //todo javadoc

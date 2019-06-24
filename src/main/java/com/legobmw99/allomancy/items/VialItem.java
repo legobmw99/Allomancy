@@ -6,8 +6,10 @@ import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -122,6 +124,7 @@ public class VialItem extends Item {
 
 
 
+   /* todo investigate
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
         if (isInCreativeTab(tab)) {
@@ -136,6 +139,6 @@ public class VialItem extends Item {
             subItems.add(resultItem);
 
         }
-    }
+    }*/
  
 }

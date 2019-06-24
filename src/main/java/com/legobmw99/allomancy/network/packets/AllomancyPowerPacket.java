@@ -10,24 +10,24 @@ import java.util.function.Supplier;
 
 public class AllomancyPowerPacket {
 
-    private int power;
+    private byte power;
 
     /**
      * Packet for sending just an Allomancy power number to a client
      *
      * @param pow the power
      */
-    public AllomancyPowerPacket(int pow) {
+    public AllomancyPowerPacket(byte pow) {
         this.power = pow;
     }
 
 
     public static void encode(AllomancyPowerPacket pkt, PacketBuffer buf) {
-        buf.writeInt(pkt.power);
+        buf.writeByte(pkt.power);
     }
 
     public static AllomancyPowerPacket decode(PacketBuffer buf) {
-        return new AllomancyPowerPacket(buf.readInt());
+        return new AllomancyPowerPacket(buf.readByte());
     }
 
 

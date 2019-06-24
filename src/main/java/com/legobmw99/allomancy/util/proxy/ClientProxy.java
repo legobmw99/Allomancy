@@ -7,25 +7,34 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 public class ClientProxy extends CommonProxy {
+
     @Override
-    public void preInit(FMLPreInitializationEvent e){
-        super.preInit(e);
-        Registry.registerEntityRenders();
+    public void clientInit(final FMLClientSetupEvent e){
+       // Registry.registerEntityRenders();
     }
+
+    @Override
+    public void serverInit(FMLServerStartingEvent e) {
+        // no-op
+    }
+
+
     @Override
     public void init(FMLCommonSetupEvent e) {
         super.init(e);
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-        Registry.initKeyBindings();
-        Registry.registerItemRenders();
-
     }
+
     @Override
-    public void postInit(FMLPostInitializationEvent e) {
-        super.postInit(e);
+    public void loadComplete(FMLLoadCompleteEvent e) {
+        super.loadComplete(e);
+        Registry.initKeyBindings();
     }
 
     @Override

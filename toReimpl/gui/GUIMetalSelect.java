@@ -10,21 +10,13 @@
  */
 package com.legobmw99.allomancy.gui;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector2f;
-
 import com.google.common.collect.ImmutableSet;
 import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.AllomancyUtils;
 import com.legobmw99.allomancy.util.Registry;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -32,6 +24,13 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.ITextComponent;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector2f;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GUIMetalSelect extends Screen {
 
@@ -44,14 +43,14 @@ public class GUIMetalSelect extends Screen {
 			new ResourceLocation(String.format(GUI_METAL, 4)), new ResourceLocation(String.format(GUI_METAL, 5)),
 			new ResourceLocation(String.format(GUI_METAL, 6)), new ResourceLocation(String.format(GUI_METAL, 7)), };
 
-	int timeIn = AllomancyConfig.animateSelection ? 0 : 10; // Config setting for whether the wheel animates open or instantly appears
+	int timeIn = AllomancyConfig.animate_selection ? 0 : 10; // Config setting for whether the wheel animates open or instantly appears
 	int slotSelected = -1;
 	AllomancyCapability cap;
 	List<Integer> slots;
 
-	public GUIMetalSelect() {
+	public GUIMetalSelect(ITextComponent titlein) {
 		ClientPlayerEntity player;
-		player = Minecraft.getMinecraft().player;
+		player = Minecraft.getInstance().player;
 		cap = AllomancyCapability.forPlayer(player);
 
 		slots = new ArrayList();

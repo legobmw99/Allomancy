@@ -1,13 +1,10 @@
 package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.entities.EntityGoldNugget;
-import com.legobmw99.allomancy.entities.EntityIronNugget;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -15,181 +12,28 @@ import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * Contains all static, common methods in one place
  */
 
 public class AllomancyUtils {
-    private static final ArrayList<String> metal_list = new ArrayList<String>();
-    private static File whitelist;
+
 
     public static final byte PUSH = 1;
     public static final byte PULL = -1;
 
-    public static void init() {
-        generateWhitelist();
-        populateMetalList();
-    }
-
-    /*
-     * This code was based off the similar methods found in CoFHCore
-     */
-
-    /**
-     * Generate a text file containing all the blocks and items considered 'metal' (if it doesn't already exist)
-     */
-    private static void generateWhitelist() {
-        BufferedWriter output = null;
-        whitelist = new File(Allomancy.configDirectory, "allomancy-whitelist.txt");
-        if (!whitelist.exists()) {
-
-            ArrayList<String> defaultList = new ArrayList<>();
-            defaultList.add(Items.IRON_AXE.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_AXE.getRegistryName().toString());
-            defaultList.add(Items.CHAINMAIL_BOOTS.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_BOOTS.getRegistryName().toString());
-            defaultList.add(Items.IRON_BOOTS.getRegistryName().toString());
-            defaultList.add(Items.BUCKET.getRegistryName().toString());
-            defaultList.add(Items.LAVA_BUCKET.getRegistryName().toString());
-            defaultList.add(Items.MILK_BUCKET.getRegistryName().toString());
-            defaultList.add(Items.WATER_BUCKET.getRegistryName().toString());
-            defaultList.add(Items.CAULDRON.getRegistryName().toString());
-            defaultList.add(Items.COMPASS.getRegistryName().toString());
-            defaultList.add(Items.FLINT_AND_STEEL.getRegistryName().toString());
-            defaultList.add(Items.GOLD_NUGGET.getRegistryName().toString());
-            defaultList.add(Items.IRON_NUGGET.getRegistryName().toString());
-            defaultList.add(Items.CHAINMAIL_HELMET.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_HELMET.getRegistryName().toString());
-            defaultList.add(Items.IRON_HELMET.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_HOE.getRegistryName().toString());
-            defaultList.add(Items.IRON_HOE.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_HORSE_ARMOR.getRegistryName().toString());
-            defaultList.add(Items.IRON_HORSE_ARMOR.getRegistryName().toString());
-            defaultList.add(Items.CHAINMAIL_LEGGINGS.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_LEGGINGS.getRegistryName().toString());
-            defaultList.add(Items.IRON_LEGGINGS.getRegistryName().toString());
-            defaultList.add(Items.MINECART.getRegistryName().toString());
-            defaultList.add(Items.CHEST_MINECART.getRegistryName().toString());
-            defaultList.add(Items.HOPPER_MINECART.getRegistryName().toString());
-            defaultList.add(Items.FURNACE_MINECART.getRegistryName().toString());
-            defaultList.add(Items.TNT_MINECART.getRegistryName().toString());
-            defaultList.add(Items.IRON_PICKAXE.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_PICKAXE.getRegistryName().toString());
-            defaultList.add(Items.IRON_CHESTPLATE.getRegistryName().toString());
-            defaultList.add(Items.CHAINMAIL_CHESTPLATE.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_CHESTPLATE.getRegistryName().toString());
-            defaultList.add(Items.CLOCK.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_SHOVEL.getRegistryName().toString());
-            defaultList.add(Items.IRON_SHOVEL.getRegistryName().toString());
-            defaultList.add(Items.SHEARS.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_APPLE.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_APPLE.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_CARROT.getRegistryName().toString());
-            defaultList.add(Items.IRON_SWORD.getRegistryName().toString());
-            defaultList.add(Registry.lerasium_nugget.getRegistryName().toString());
-            defaultList.add(Registry.allomantic_grinder.getRegistryName().toString());
-            defaultList.add(Registry.coin_bag.getRegistryName().toString());
-            defaultList.add(Blocks.ANVIL.getRegistryName().toString());
-            defaultList.add(Blocks.IRON_TRAPDOOR.getRegistryName().toString());
-            defaultList.add(Blocks.IRON_DOOR.getRegistryName().toString());
-            defaultList.add(Blocks.CAULDRON.getRegistryName().toString());
-            defaultList.add(Blocks.IRON_BARS.getRegistryName().toString());
-            defaultList.add(Blocks.HOPPER.getRegistryName().toString());
-            defaultList.add(Blocks.PISTON_HEAD.getRegistryName().toString());
-            defaultList.add(Blocks.PISTON_EXTENSION.getRegistryName().toString());
-            defaultList.add(Blocks.STICKY_PISTON.getRegistryName().toString());
-            defaultList.add(Blocks.PISTON.getRegistryName().toString());
-            defaultList.add(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE.getRegistryName().toString());
-            defaultList.add(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE.getRegistryName().toString());
-            defaultList.add(Blocks.RAIL.getRegistryName().toString());
-            defaultList.add(Blocks.ACTIVATOR_RAIL.getRegistryName().toString());
-            defaultList.add(Blocks.DETECTOR_RAIL.getRegistryName().toString());
-            defaultList.add(Blocks.GOLDEN_RAIL.getRegistryName().toString());
-            defaultList.add(Registry.vial.getRegistryName().toString());
-            defaultList.add(Registry.blockIronLever.getRegistryName().toString());
-
-            for (int i = 0; i < Registry.flake_metals.length; i++) {
-                defaultList.add(new Item().getByNameOrId("allomancy:" + "flake" + Registry.flake_metals[i]).getRegistryName().toString());
-            }
-
-            String[] ores = OreDictionary.getOreNames();
-            for (String s : ores) {
-                if (s.contains("Copper") || s.contains("Tin") || s.contains("Gold") || s.contains("Iron")
-                        || s.contains("Steel") || s.contains("Lead") || s.contains("Silver") || s.contains("Brass")
-                        || s.contains("Bronze") || s.contains("Aluminum") || s.contains("Zinc")) {
-                    for (ItemStack i : OreDictionary.getOres(s)) {
-                        if (i.getItem() != null) {
-                            String name = i.getItem().getRegistryName().toString();
-                            if (!defaultList.contains(name)) {
-                                defaultList.add(name);
-                            }
-                        }
-                    }
-                }
-            }
-
-            Collections.sort(defaultList);
-
-            try {
-                whitelist.createNewFile();
-                output = new BufferedWriter(new FileWriter(whitelist));
-                output.write("# Add the registry names of blocks or items to the list below for them to be treated as metals \n");
-
-                for (String item : defaultList) {
-                    output.write(item + "\n");
-                }
-                output.close();
-                defaultList.clear();
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-
-        }
-    }
-
-    /**
-     * Reads in the whitelist of metal blocks and items
-     */
-    private static void populateMetalList() {
-        try {
-            if (!whitelist.exists()) {
-                return;
-            }
-
-            Scanner scanner = new Scanner(whitelist);
-            String[] line;
-            String[] tokens;
-            while (scanner.hasNext()) {
-                line = scanner.next().split("\\n");
-                tokens = line[0].split("#");
-                if (tokens.length == 1) {
-                    metal_list.add(line[0]);
-                }
-            }
-            scanner.close();
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-    }
 
     /**
      * Draws a line from the player (denoted pX,Y,Z) to the given set of
@@ -219,65 +63,6 @@ public class AllomancyUtils {
         GL11.glPopMatrix();
     }
 
-    /**
-     * Copied mostly from vanilla, this gets what the mouse is over
-     *
-     * @param dist distance
-     * @return the result of the raytrace
-     */
-
-    @OnlyIn(Dist.CLIENT)
-    public static RayTraceResult getMouseOverExtended(float dist) {
-        Minecraft mc = FMLClientHandler.instance().getClient();
-        Entity theRenderViewEntity = mc.getRenderViewEntity();
-        AxisAlignedBB theViewBoundingBox = new AxisAlignedBB(theRenderViewEntity.posX - 0.5D,
-                theRenderViewEntity.posY - 0.0D, theRenderViewEntity.posZ - 0.5D, theRenderViewEntity.posX + 0.5D,
-                theRenderViewEntity.posY + 1.5D, theRenderViewEntity.posZ + 0.5D);
-        RayTraceResult returnMOP = null;
-        if (mc.world != null) {
-            double var2 = dist;
-            returnMOP = theRenderViewEntity.rayTrace(var2, 0);
-            double calcdist = var2;
-            Vec3d pos = theRenderViewEntity.getPositionEyes(0);
-            var2 = calcdist;
-            if (returnMOP != null) {
-                calcdist = returnMOP.hitVec.distanceTo(pos);
-            }
-            Vec3d lookvec = theRenderViewEntity.getLook(0);
-            Vec3d var8 = pos.addVector(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2);
-            Entity pointedEntity = null;
-            float var9 = 1.0F;
-            @SuppressWarnings("unchecked")
-            List<Entity> list = mc.world.getEntitiesWithinAABBExcludingEntity(theRenderViewEntity,
-                    addCoord(theViewBoundingBox, lookvec.x * dist, lookvec.y * dist, lookvec.z * dist).expand(var9,
-                            var9, var9));
-            double d = calcdist;
-            for (Entity entity : list) {
-                float bordersize = entity.getCollisionBorderSize();
-                AxisAlignedBB aabb = new AxisAlignedBB(entity.posX - entity.width / 2, entity.posY,
-                        entity.posZ - entity.width / 2, entity.posX + entity.width / 2, entity.posY + entity.height,
-                        entity.posZ + entity.width / 2);
-                aabb.expand(bordersize, bordersize, bordersize);
-                RayTraceResult mop0 = aabb.calculateIntercept(pos, var8);
-                if (aabb.contains(pos)) {
-                    if (0.0D < d || d == 0.0D) {
-                        pointedEntity = entity;
-                        d = 0.0D;
-                    }
-                } else if (mop0 != null) {
-                    double d1 = pos.distanceTo(mop0.hitVec);
-                    if (d1 < d || d == 0.0D) {
-                        pointedEntity = entity;
-                        d = d1;
-                    }
-                }
-            }
-            if (pointedEntity != null && (d < calcdist || returnMOP == null)) {
-                returnMOP = new RayTraceResult(pointedEntity);
-            }
-        }
-        return returnMOP;
-    }
 
     /**
      * Replacement for the old addCoord in AxisAlignedBB.class, necessary for
@@ -326,7 +111,7 @@ public class AllomancyUtils {
      * @return Whether or not the item is metal
      */
     public static boolean isBlockMetal(Block block) {
-        return metal_list.contains(block.getRegistryName().toString());
+        return block == Blocks.IRON_BLOCK; // metal_list.contains(block.getRegistryName().toString());
     }
 
     /**
@@ -336,7 +121,7 @@ public class AllomancyUtils {
      * @return Whether or not the item is metal
      */
     public static boolean isItemMetal(ItemStack item) {
-        return (item != null) && metal_list.contains(item.getItem().getRegistryName().toString());
+        return (item != null) && item.getItem() == Items.IRON_INGOT;//metal_list.contains(item.getItem().getRegistryName().toString());
     }
 
     /**
@@ -356,9 +141,9 @@ public class AllomancyUtils {
         if (entity instanceof ItemFrameEntity) {
             return isItemMetal(((ItemFrameEntity) entity).getDisplayedItem());
         }
-        if (entity instanceof EntityIronNugget || entity instanceof EntityGoldNugget) {
-            return true;
-        }
+        //if (entity instanceof EntityIronNugget || entity instanceof EntityGoldNugget) {
+        //    return true;
+        //}
         if (entity instanceof AbstractMinecartEntity) {
             return true;
         }
@@ -449,22 +234,22 @@ public class AllomancyUtils {
      * @param cap    the AllomancyCapabilities data
      * @param player the player being checked
      */
-    public static void updateMetalBurnTime(AllomancyCapability cap1, ServerPlayerEntity player) {
+    public static void updateMetalBurnTime(AllomancyCapability cap, ServerPlayerEntity player) {
         for (int i = 0; i < 8; i++) {
-            if (cap1.getMetalBurning(i)) {
-                if (cap1.getAllomancyPower() != i && cap1.getAllomancyPower() != 8) {
+            if (cap.getMetalBurning(i)) {
+                if (cap.getAllomancyPower() != i && cap.getAllomancyPower() != 8) {
                     // put out any metals that the player shouldn't be able to burn
-                    cap1.setMetalBurning(i, false);
-                    Allomancy.proxy.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
+                    cap.setMetalBurning(i, false);
+                    Allomancy.proxy.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
                 } else {
-                    cap1.setBurnTime(i, cap1.getBurnTime(i) - 1);
-                    if (cap1.getBurnTime(i) == 0) {
-                        cap1.setBurnTime(i, cap1.MAX_BURN_TIME[i]);
-                        cap1.setMetalAmounts(i, cap1.getMetalAmounts(i) - 1);
-                        Allomancy.proxy.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
-                        if (cap1.getMetalAmounts(i) == 0) {
-                            cap1.setMetalBurning(i, false);
-                            sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
+                    cap.setBurnTime(i, cap.getBurnTime(i) - 1);
+                    if (cap.getBurnTime(i) == 0) {
+                        cap.setBurnTime(i, cap.MAX_BURN_TIME[i]);
+                        cap.setMetalAmounts(i, cap.getMetalAmounts(i) - 1);
+                        Allomancy.proxy.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
+                        if (cap.getMetalAmounts(i) == 0) {
+                            cap.setMetalBurning(i, false);
+                            Allomancy.proxy.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
                         }
                     }
                 }

@@ -1,19 +1,18 @@
 package com.legobmw99.allomancy.world;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.Registry;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class OreGenerator implements IWorldGenerator {
 	
@@ -63,17 +62,17 @@ public class OreGenerator implements IWorldGenerator {
 		this.oreList = new ArrayList<OreData>();
 		OreData data;
 
-		data = new OreData(AllomancyConfig.copperMaxY, AllomancyConfig.copperMinY, 8, 4, AllomancyConfig.copperDensity,
-				Registry.oreCopper, AllomancyConfig.generateCopper);
+		data = new OreData(AllomancyConfig.copper_max_y, AllomancyConfig.copper_min_y, 8, 4, AllomancyConfig.copper_density,
+				Registry.copper_ore, AllomancyConfig.generate_copper);
 		this.oreList.add(data);
-		data = new OreData(AllomancyConfig.tinMaxY, AllomancyConfig.tinMinY, 8, 4, AllomancyConfig.tinDensity,
-				Registry.oreTin, AllomancyConfig.generateTin);
+		data = new OreData(AllomancyConfig.tin_max_y, AllomancyConfig.tin_min_y, 8, 4, AllomancyConfig.tin_density,
+				Registry.tin_ore, AllomancyConfig.generate_tin);
 		this.oreList.add(data);
-		data = new OreData(AllomancyConfig.leadMaxY, AllomancyConfig.leadMinY, 8, 4, AllomancyConfig.leadDensity,
-				Registry.oreLead, AllomancyConfig.generateLead);
+		data = new OreData(AllomancyConfig.lead_max_y, AllomancyConfig.lead_min_y, 8, 4, AllomancyConfig.lead_density,
+				Registry.lead_ore, AllomancyConfig.generate_lead);
 		this.oreList.add(data);
-		data = new OreData(AllomancyConfig.zincMaxY, AllomancyConfig.zincMinY, 8, 4, AllomancyConfig.zincDensity,
-				Registry.oreZinc, AllomancyConfig.generateZinc);
+		data = new OreData(AllomancyConfig.zinc_max_y, AllomancyConfig.zinc_min_y, 8, 4, AllomancyConfig.zinc_density,
+				Registry.zinc_ore, AllomancyConfig.generate_zinc);
 		this.oreList.add(data);
 
 	}
@@ -85,7 +84,7 @@ public class OreGenerator implements IWorldGenerator {
 		int numOre;
 		int numCluster;
 		// Only generate in overworld
-		if (world.provider.getDimension() != 0) {
+		if (world.getDimension().getType() != DimensionType.OVERWORLD) {
 			return;
 		}
 
@@ -105,7 +104,7 @@ public class OreGenerator implements IWorldGenerator {
 					numOre = MathHelper.clamp(random.nextInt(data.maxCluster), data.minCluster, data.maxCluster);
 					BlockPos pos = new BlockPos(x, y, z);
 
-					(new WorldGenMinable(data.oreType.getDefaultState(), numOre * 2)).generate(world, random, pos);
+					//todo (new IWorldGenerator(data.oreType.getDefaultState(), numOre * 2)).generate(world, random, pos);
 				}
 			}
 		}

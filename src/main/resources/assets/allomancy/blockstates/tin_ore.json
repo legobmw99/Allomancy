@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "allomancy:tin_ore" }
+        "": { "model": "allomancy:block/tin_ore" }
     }
 }

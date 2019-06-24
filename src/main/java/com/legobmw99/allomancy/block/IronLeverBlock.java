@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -73,7 +74,7 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyActivat
     @Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new StringTextComponent("block.iron_lever.lore"));
+        tooltip.add(new StringTextComponent(String.format(LanguageMap.getInstance().translateKey("block.allomancy.iron_lever.lore"))));
     }
 
     private void updateNeighbors(BlockState state, World world, BlockPos pos) {

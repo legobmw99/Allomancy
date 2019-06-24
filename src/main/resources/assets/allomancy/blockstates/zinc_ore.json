@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "allomancy:zinc_ore" }
+        "": { "model": "allomancy:block/zinc_ore" }
     }
 }

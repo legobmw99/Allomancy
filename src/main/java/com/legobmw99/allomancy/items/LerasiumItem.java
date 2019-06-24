@@ -15,6 +15,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -54,7 +55,7 @@ public class LerasiumItem extends Item {
 		double y = player.posY + 3;
 		double z = player.posZ;
 		if (cap.getAllomancyPower() != 8) {
-			cap.setAllomancyPower(8);
+			cap.setAllomancyPower((byte) 8);
 		}
 		//Fancy shmancy effects
 		context.getWorld().addEntity(new LightningBoltEntity(context.getWorld(), x, y, z, true));
@@ -67,7 +68,7 @@ public class LerasiumItem extends Item {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-		tooltip.add(new StringTextComponent("item.lerasium_nugget.lore"));
+		tooltip.add(new StringTextComponent(String.format(LanguageMap.getInstance().translateKey("item.allomancy.lerasium_nugget.lore"))));
 
 	}
 
