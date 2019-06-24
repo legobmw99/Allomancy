@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.util.proxy;
 
 import com.legobmw99.allomancy.handlers.CommonEventHandler;
 import com.legobmw99.allomancy.util.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -30,5 +31,6 @@ public abstract class CommonProxy {
     }
 
     public abstract World getClientWorld();
+    public abstract PlayerEntity getClientPlayer();
 }
 

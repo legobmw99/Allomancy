@@ -1,61 +1,45 @@
 package com.legobmw99.allomancy.network.packets;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.util.AllomancyCapability;
-
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.IThreadListener;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class AllomancyPowerPacket implements IMessage {
+import java.util.function.Supplier;
 
-	private int power;
+public class AllomancyPowerPacket {
 
-	public AllomancyPowerPacket() {
+    private int power;
 
-	}
+    /**
+     * Packet for sending just an Allomancy power number to a client
+     *
+     * @param pow the power
+     */
+    public AllomancyPowerPacket(int pow) {
+        this.power = pow;
+    }
 
-	/**
-	 * Packet for sending just an Allomancy power number to a client
-	 * 
-	 * @param pow
-	 *            the power
-	 */
-	public AllomancyPowerPacket(int pow) {
-		this.power = pow;
-	}
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		power = ByteBufUtils.readVarInt(buf, 5);
+    public static void encode(AllomancyPowerPacket pkt, PacketBuffer buf) {
+        buf.writeInt(pkt.power);
+    }
 
-	}
+    public static AllomancyPowerPacket decode(PacketBuffer buf) {
+        return new AllomancyPowerPacket(buf.readInt());
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeVarInt(buf, power, 5);
 
-	}
+    public static class Handler {
 
-	public static class Handler implements IMessageHandler<AllomancyPowerPacket, IMessage> {
-
-		@Override
-		public IMessage onMessage(final AllomancyPowerPacket message, final MessageContext ctx) {
-			IThreadListener mainThread = Minecraft.getMinecraft();
-			mainThread.addScheduledTask(new Runnable() {
-				@Override
-				public void run() {
-					PlayerEntity player = Minecraft.getMinecraft().player;
-					AllomancyCapability cap;
-					cap = AllomancyCapability.forPlayer(player);
-					cap.setAllomancyPower(message.power);
-				}
-			});
-			return null;
-		}
-	}
+        public static void handle(final AllomancyPowerPacket message, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                PlayerEntity player = Allomancy.proxy.getClientPlayer();
+                AllomancyCapability cap;
+                cap = AllomancyCapability.forPlayer(player);
+                cap.setAllomancyPower(message.power);
+            });
+        }
+    }
 }

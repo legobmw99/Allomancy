@@ -11,6 +11,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.EnumSet;
+
 public class AIAttackOnCollideExtended extends Goal {
 	World worldObj;
 	CreatureEntity attacker;
@@ -49,7 +51,7 @@ public class AIAttackOnCollideExtended extends Goal {
 		this.worldObj = par1EntityCreature.world;
 		this.speedTowardsTarget = par2;
 		this.longMemory = par4;
-		this.setMutexBits(3);
+		this.setMutexFlags(EnumSet.of(Flag.TARGET));
 	}
 
 	/**
@@ -57,20 +59,20 @@ public class AIAttackOnCollideExtended extends Goal {
 	 */
 	@Override
 	public boolean shouldExecute() {
-		LivingEntity entitylivingbase = this.attacker.getAttackTarget();
+		LivingEntity livingEntity = this.attacker.getAttackTarget();
 
-		if (entitylivingbase == null) {
+		if (livingEntity == null) {
 			return false;
-		} else if (!entitylivingbase.isEntityAlive()) {
+		} else if (!livingEntity.isAlive()) {
 			return false;
 		} else if ((this.classTarget != null)
-				&& !this.classTarget.isAssignableFrom(entitylivingbase
+				&& !this.classTarget.isAssignableFrom(livingEntity
 						.getClass())) {
 			return false;
 		} else {
 			if (--this.field_75445_i <= 0) {
 				this.entityPathEntity = this.attacker.getNavigator()
-						.getPathToEntityLiving(entitylivingbase);
+						.getPathToEntityLiving(livingEntity);
 				this.field_75445_i = 4 + this.attacker.getRNG().nextInt(7);
 				return this.entityPathEntity != null;
 			} else {
@@ -85,19 +87,19 @@ public class AIAttackOnCollideExtended extends Goal {
 	@Override
 	public boolean shouldContinueExecuting() {
 		
-		LivingEntity entitylivingbase = this.attacker.getAttackTarget();
-		if (entitylivingbase == null) {
+		LivingEntity livingEntity = this.attacker.getAttackTarget();
+		if (livingEntity == null) {
 			return false;
 		}
-		BlockPos pos1 = new BlockPos(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ);
+		BlockPos pos1 = new BlockPos(livingEntity.posX, livingEntity.posY, livingEntity.posZ);
 
-		return (entitylivingbase == null) ? false : (!entitylivingbase
-				.isEntityAlive() ? false : (!this.longMemory ? !this.attacker
+		return  (livingEntity
+				.isAlive() && (!this.longMemory ? !this.attacker
 				.getNavigator().noPath() : this.attacker.isWithinHomeDistanceFromPosition(pos1)));
 	}
 
 	/**
-	 * Execute a one shot task or start executing a continuous task
+	 * Execute a one shot goal or start executing a continuous goal
 	 */
 	@Override
 	public void startExecuting() {
@@ -107,7 +109,7 @@ public class AIAttackOnCollideExtended extends Goal {
 	}
 
 	/**
-	 * Resets the task
+	 * Resets the goal
 	 */
 	@Override
 	public void resetTask() {
@@ -115,29 +117,29 @@ public class AIAttackOnCollideExtended extends Goal {
 	}
 
 	/**
-	 * Updates the task
+	 * Ticks the goal
 	 */
 	@Override
-	public void updateTask() {
-		LivingEntity entitylivingbase = this.attacker.getAttackTarget();
-		if (entitylivingbase == null) {
+	public void tick() {
+		LivingEntity livingEntity = this.attacker.getAttackTarget();
+		if (livingEntity == null) {
 			return;
 		}
-		this.attacker.getLookHelper().setLookPositionWithEntity(
-				entitylivingbase, 30.0F, 30.0F);
+		this.attacker.getLookController().setLookPositionWithEntity(
+				livingEntity, 30.0F, 30.0F);
 
 		if ((this.longMemory || this.attacker.getEntitySenses().canSee(
-				entitylivingbase))
+				livingEntity))
 				&& (--this.field_75445_i <= 0)) {
 			this.field_75445_i = this.failedPathFindingPenalty + 4
 					+ this.attacker.getRNG().nextInt(7);
 			this.attacker.getNavigator().tryMoveToEntityLiving(
-					entitylivingbase, this.speedTowardsTarget);
+					livingEntity, this.speedTowardsTarget);
 			if (this.attacker.getNavigator().getPath() != null) {
 				PathPoint finalPathPoint = this.attacker.getNavigator()
 						.getPath().getFinalPathPoint();
 				if ((finalPathPoint != null)
-						&& (entitylivingbase.getDistanceSq(
+						&& (livingEntity.getDistanceSq(
 								finalPathPoint.x, finalPathPoint.y,
 								finalPathPoint.z) < 1)) {
 					this.failedPathFindingPenalty = 0;
@@ -150,10 +152,10 @@ public class AIAttackOnCollideExtended extends Goal {
 		}
 
 		this.attackTick = Math.max(this.attackTick - 1, 0);
-		double d0 = (this.attacker.width * 2.0F * this.attacker.width * 2.0F)
-				+ entitylivingbase.width;
+		double d0 = (this.attacker.getWidth() * 2.0F * this.attacker.getWidth() * 2.0F)
+				+ livingEntity.getWidth();
 
-		if (this.attacker.getDistanceSq(entitylivingbase.posX,entitylivingbase.posY, entitylivingbase.posZ) <= d0) {
+		if (this.attacker.getDistanceSq(livingEntity.posX,livingEntity.posY, livingEntity.posZ) <= d0) {
 			if (this.attackTick <= 0) {
 				this.attackTick = 20;
 
@@ -162,10 +164,10 @@ public class AIAttackOnCollideExtended extends Goal {
 				}
 
 				if (this.attacker instanceof AnimalEntity) {
-					entitylivingbase.attackEntityFrom(
+					livingEntity.attackEntityFrom(
 							DamageSource.causeMobDamage(this.attacker), 3);
 				} else {
-					this.attacker.attackEntityAsMob(entitylivingbase);
+					this.attacker.attackEntityAsMob(livingEntity);
 				}
 			}
 		}

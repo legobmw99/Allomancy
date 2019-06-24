@@ -1,77 +1,61 @@
 package com.legobmw99.allomancy.network.packets;
 
 import com.legobmw99.allomancy.block.IAllomanticallyActivatedBlock;
-import com.legobmw99.allomancy.items.CoinBagItem;
 import com.legobmw99.allomancy.util.AllomancyUtils;
 import com.legobmw99.allomancy.util.Registry;
-
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.IThreadListener;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ServerWorld;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class TryPushPullBlock implements IMessage {
-	public TryPushPullBlock() {
-	}
+import java.util.function.Supplier;
 
-	private long blockPos;
-	private int direction;
+public class TryPushPullBlock {
 
-	/**
-	 * Send a request to the server to use iron or steel on a block
-	 * 
-	 * @param block
-	 * 			  the block
-	 * @param direction
-	 *            the direction (1 for push, -1 for pull)
-	 */
-	public TryPushPullBlock(BlockPos block, int direction) {
-		this.blockPos = block.toLong();
-		this.direction = direction;
-	}
+    private BlockPos blockPos;
+    private byte direction;
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		blockPos = buf.readLong();
-		direction = ByteBufUtils.readVarInt(buf, 5);
+    /**
+     * Send a request to the server to use iron or steel on a block
+     *
+     * @param block     the block
+     * @param direction the direction (1 for push, -1 for pull)
+     */
+    public TryPushPullBlock(BlockPos block, byte direction) {
+        this.blockPos = block;
+        this.direction = direction;
+    }
 
-	}
+    public static void encode(TryPushPullBlock pkt, PacketBuffer buf) {
+        buf.writeBlockPos(pkt.blockPos);
+        buf.writeByte(pkt.direction);
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeLong(blockPos);
-		ByteBufUtils.writeVarInt(buf, direction, 5);
+    public static TryPushPullBlock decode(PacketBuffer buf) {
+        return new TryPushPullBlock(buf.readBlockPos(), buf.readByte());
+    }
 
-	}
 
-	public static class Handler implements IMessageHandler<TryPushPullBlock, IMessage> {
+    public static class Handler {
 
-		@Override
-		public IMessage onMessage(final TryPushPullBlock message, final MessageContext ctx) {
-			IThreadListener mainThread = (ServerWorld) ctx.getServerHandler().player.world;
-			mainThread.addScheduledTask(new Runnable() {
-				@Override
-				public void run() {
-					ServerPlayerEntity player = ctx.getServerHandler().player;
-					BlockPos block = BlockPos.fromLong(message.blockPos);
-					// Sanity check to make sure server has same configs and that the block is loaded in the server
-					if (player.getEntityWorld().isBlockLoaded(block) && (AllomancyUtils.isBlockMetal(ctx.getServerHandler().player.world.getBlockState(block).getBlock()) //Standard check
-							|| (player.getHeldItemMainhand().getItem() == Registry.coin_bag && (CoinBagItem.findArrow(player) != null || player.isCreative()) && message.direction == AllomancyUtils.PUSH))) { // Check for the coin bag
-						if(player.world.getBlockState(block).getBlock() instanceof IAllomanticallyActivatedBlock){
-							((IAllomanticallyActivatedBlock)player.world.getBlockState(block).getBlock())
-								.onBlockActivatedAllomantically(player.world, block, player.world.getBlockState(block), player, message.direction == AllomancyUtils.PUSH);
-						} else {
-							AllomancyUtils.move(message.direction, player, block);
-						}
-					}
-				}
-			});
-			return null;
-		}
-	}
+        public static void handle(final TryPushPullBlock message, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                        ServerPlayerEntity player = ctx.get().getSender();
+                        BlockPos block = message.blockPos;
+                        // Sanity check to make sure server has same configs and that the block is loaded in the server
+                        if ((player.world.isBlockLoaded(block) && (AllomancyUtils.isBlockMetal(player.world.getBlockState(block).getBlock()))) // Check Block
+                                || player.getHeldItemMainhand().getItem() == Registry.coin_bag && (!player.func_213356_f(player.getHeldItemMainhand()).isEmpty()) /*some sort of find ammo func*/ &&
+                                message.direction == AllomancyUtils.PUSH) {
+                            // Check for the coin bag
+                            if (player.world.getBlockState(block).getBlock() instanceof IAllomanticallyActivatedBlock) {
+                                ((IAllomanticallyActivatedBlock) player.world.getBlockState(block).getBlock())
+                                        .onBlockActivatedAllomantically(player.world, block, player.world.getBlockState(block), player, message.direction == AllomancyUtils.PUSH);
+                            } else {
+                                AllomancyUtils.move(message.direction, player, block);
+                            }
+                        }
+                    }
+            );
+        }
+    }
 }

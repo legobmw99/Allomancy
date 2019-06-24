@@ -21,7 +21,7 @@ public class AllomancyCapabilityPacket {
      * @param entityID the player's ID
      */
     public AllomancyCapabilityPacket(AllomancyCapability data, int entityID) {
-        this(data.serializeNBT() != null ? data.serializeNBT() : new AllomancyCapability().serializeNBT(), entityID);
+        this(data != null ? data.serializeNBT() : new AllomancyCapability().serializeNBT(), entityID);
     }
 
     private AllomancyCapabilityPacket(CompoundNBT data, int entityID) {

@@ -48,11 +48,11 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 
 public class AllomancyUtils {
-	private static final ArrayList<String> metallist = new ArrayList<String>();
+	private static final ArrayList<String> metal_list = new ArrayList<String>();
 	private static File whitelist;
 
-	public static final int PUSH = 1;
-	public static final int PULL = -1;
+	public static final byte PUSH = 1;
+	public static final byte PULL = -1;
 
 	public static void init() {
 		generateWhitelist();
@@ -190,7 +190,7 @@ public class AllomancyUtils {
 				line = scanner.next().split("\\n");
 				tokens = line[0].split("#");
 				if (tokens.length == 1) {
-					metallist.add(line[0]);
+					metal_list.add(line[0]);
 				}
 			}
 			scanner.close();
@@ -337,7 +337,7 @@ public class AllomancyUtils {
 	 * @return Whether or not the item is metal
 	 */
 	public static boolean isBlockMetal(Block block) {
-		return metallist.contains(block.getRegistryName().toString());
+		return metal_list.contains(block.getRegistryName().toString());
 	}
 
 	/**
@@ -348,7 +348,7 @@ public class AllomancyUtils {
 	 * @return Whether or not the item is metal
 	 */
 	public static boolean isItemMetal(ItemStack item) {
-		return (item != null) && metallist.contains(item.getItem().getRegistryName().toString());
+		return (item != null) && metal_list.contains(item.getItem().getRegistryName().toString());
 	}
 
 	/**

@@ -1,63 +1,49 @@
 package com.legobmw99.allomancy.network.packets;
 
 import com.legobmw99.allomancy.util.AllomancyCapability;
-
-import io.netty.buffer.ByteBuf;
+import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.ServerWorld;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class GetCapabilitiesPacket implements IMessage {
-	public GetCapabilitiesPacket() {
-	}
+import java.util.function.Supplier;
 
-	private int entityIDOther;
+public class GetCapabilitiesPacket {
 
-	/**
-	 * Request the capabilities of another player
-	 * 
-	 * @param entityIDOther
-	 *            the entity you are requesting the data of
-	 * @param entityIDSender
-	 *            the entity that is requesting
-	 */
-	public GetCapabilitiesPacket(int entityIDOther) {
-		this.entityIDOther = entityIDOther;
-	}
+    private int entityIDOther;
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		entityIDOther = ByteBufUtils.readVarInt(buf, 5);
-	}
+    /**
+     * Request the capabilities of another player
+     *
+     * @param entityIDOther  the entity you are requesting the data of
+     */
+    public GetCapabilitiesPacket(int entityIDOther) {
+        this.entityIDOther = entityIDOther;
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeVarInt(buf, entityIDOther, 5);
-	}
+    public static void encode(GetCapabilitiesPacket pkt, PacketBuffer buf) {
+        buf.writeInt(pkt.entityIDOther);
+    }
 
-	public static class Handler implements IMessageHandler<GetCapabilitiesPacket, AllomancyCapabilityPacket> {
-		private AllomancyCapability cap;
+    public static GetCapabilitiesPacket decode(PacketBuffer buf) {
+        return new GetCapabilitiesPacket(buf.readInt());
+    }
 
-		@Override
-		public AllomancyCapabilityPacket onMessage(final GetCapabilitiesPacket message, final MessageContext ctx) {
-			IThreadListener mainThread = (ServerWorld) ctx.getServerHandler().player.world;
-			mainThread.addScheduledTask(new Runnable() {
-				@Override
-				public void run() {
-					
-					Entity target = ctx.getServerHandler().player.world.getEntityByID(message.entityIDOther);
-					if(target != null){
-						cap = AllomancyCapability.forPlayer(target);
-					} else {
-						cap = null;
-					}
-				}
-			});
-			return new AllomancyCapabilityPacket(cap, message.entityIDOther);
-		}
-	}
+
+    public static class Handler {
+
+        public static void handle(final GetCapabilitiesPacket message, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().enqueueWork(() -> {
+                        AllomancyCapability cap;
+                        Entity target = ctx.get().getSender().world.getEntityByID(message.entityIDOther);
+                        if (target != null) {
+                            cap = AllomancyCapability.forPlayer(target);
+                        } else {
+                            cap = null;
+                        }
+                        Registry.NETWORK.reply(new AllomancyCapabilityPacket(cap, message.entityIDOther), ctx.get());
+                    }
+            );
+        }
+    }
 }
