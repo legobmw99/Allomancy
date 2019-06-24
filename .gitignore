@@ -8,4 +8,5 @@
 *.launch
 /.idea
 /doc
+/out
 TODO.txt

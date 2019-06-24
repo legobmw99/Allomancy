@@ -1,12 +1,10 @@
 package com.legobmw99.allomancy.util;
 
+import net.minecraftforge.common.ForgeConfigSpec;
 import java.io.File;
-import java.util.ArrayList;
-
-import net.minecraft.item.Item;
-import net.minecraftforge.common.config.Configuration;
 
 public class AllomancyConfig {
+
 
     public static void initProps(File confFile) {
         config = new Configuration(confFile);

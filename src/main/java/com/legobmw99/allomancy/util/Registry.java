@@ -133,7 +133,7 @@ public class Registry {
 
     public static void registerPackets() {
         int index = 0;
-        NETWORK.registerMessage(index++, AllomancyPowerPacket.class, AllomancyPowerPacket::encode, AllomancyPowerPacket::read, RepairItemPacket.Handler::handle);
+        NETWORK.registerMessage(index++, AllomancyPowerPacket.class, AllomancyPowerPacket::encode, AllomancyPowerPacket::decode, AllomancyPowerPacket.Handler::handle);
         NETWORK.registerMessage(index++, UpdateBurnPacket.class, UpdateBurnPacket::encode, UpdateBurnPacket::decode, UpdateBurnPacket.Handler::handle);
         NETWORK.registerMessage(index++, AllomancyCapabilityPacket.class, AllomancyCapabilityPacket::encode, AllomancyCapabilityPacket::decode, AllomancyCapabilityPacket.Handler::handle);
         NETWORK.registerMessage(index++, ChangeEmotionPacket.class, ChangeEmotionPacket::encode, ChangeEmotionPacket::decode, ChangeEmotionPacket.Handler::handle);
@@ -162,7 +162,7 @@ public class Registry {
         Item.Properties prop_single = new Item.Properties().group(allomancy_group).maxStackSize(1);
 
         event.getRegistry().registerAll(
-                new Item(new Item.Properties().group(allomancy_group).maxStackSize(1).containerItem(allomantic_grinder).).setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder")),
+                new Item(new Item.Properties().group(allomancy_group).maxStackSize(1).containerItem(allomantic_grinder)).setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder")),
                 new CoinBagItem(prop_single),
                 new MistcloakItem(WoolArmor, EquipmentSlotType.CHEST, new Item.Properties().group(ItemGroup.COMBAT)),
                 new LerasiumItem(),

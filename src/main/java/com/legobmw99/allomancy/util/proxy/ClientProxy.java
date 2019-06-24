@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.handlers.ClientEventHandler;
 import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -35,5 +36,16 @@ public class ClientProxy extends CommonProxy {
     @Override
     public PlayerEntity getClientPlayer() {
         return Minecraft.getInstance().player;
+    }
+
+    @Override
+    public void sendToServer(Object msg) {
+        Registry.NETWORK.sendToServer(msg);
+    }
+
+    @Override
+    public void sendTo(Object msg, ServerPlayerEntity player) {
+        throw new IllegalStateException("Only run this on the server!");
+
     }
 }
