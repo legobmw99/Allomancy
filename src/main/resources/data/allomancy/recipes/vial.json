@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x ",
+    "y y",
+    " y "
+  ],
+  "key": {
+    "x": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "y": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "allomancy:vial",
+    "count": 3
+  }
+}

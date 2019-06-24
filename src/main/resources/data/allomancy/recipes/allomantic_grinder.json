@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "yyy",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "forge:ingots/iron"
+    },
+    "y": {
+      "tag": "forge:nuggets/gold"
+    }
+  },
+  "result": {
+    "item": "allomancy:allomantic_grinder"
+  }
+}

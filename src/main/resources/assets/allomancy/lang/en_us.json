@@ -1,18 +1,18 @@
 {
     "itemGroup.Allomancy": "Allomancy",
 
-    "block.oreTin": "Tin Ore",
-    "block.oreLead": "Lead Ore",
-    "block.oreCopper": "Copper Ore",
-    "block.oreZinc": "Zinc Ore",
+    "block.tin_ore": "Tin Ore",
+    "block.lead_ore": "Lead Ore",
+    "block.copper_ore": "Copper Ore",
+    "block.zinc_ore": "Zinc Ore",
     "block.iron_lever": "Iron Lever",
     "block.iron_lever.lore": "This lever seems too heavy to move by ordinary means",
 
-    "item.handgrinder": "Hand Grinder",
-    "item.nuggetLerasium": "Lerasium Nugget",
-    "item.nuggetLerasium.lore": "This item is endowed with strange powers, perhaps you should ingest it?",
+    "item.allomantic_grinder": "Hand Grinder",
+    "item.lerasium_nugget": "Lerasium Nugget",
+    "item.lerasium_nugget.lore": "This item is endowed with strange powers, perhaps you should ingest it?",
     "item.mistcloak": "Mistcloak",
-    "item.coinbag": "Coin Bag",
+    "item.coin_bag": "Coin Bag",
 
     "key.categories.allomancy": "Allomancy",
     "key.burn": "Burn Metals",
@@ -20,26 +20,26 @@
     "commands.allomancy.usage": "/allomancy <power level> [player]",
     "commands.allomancy.success": "Setting %s to %s",
 
-    "item.itemVial": "Allomantic Vial",
+    "item.vial": "Allomantic Vial",
 
 
-    "item.flakeBrass": "Brass Flakes",
-    "item.flakeBronze": "Bronze Flakes",
-    "item.flakeIron": "Iron Flakes",
-    "item.flakeSteel": "Steel Flakes",
-    "item.flakePewter": "Pewter Flakes",
-    "item.flakeCopper": "Copper Flakes",
-    "item.flakeTin": "Tin Flakes",
-    "item.flakeZinc": "Zinc Flakes",
-    "item.flakeLead": "Lead Flakes",
+    "item.brass_flakes": "Brass Flakes",
+    "item.bronze_flakes": "Bronze Flakes",
+    "item.iron_flakes": "Iron Flakes",
+    "item.steel_flakes": "Steel Flakes",
+    "item.pewter_flakes": "Pewter Flakes",
+    "item.copper_flakes": "Copper Flakes",
+    "item.tin_flakes": "Tin Flakes",
+    "item.zinc_flakes": "Zinc Flakes",
+    "item.lead_flakes": "Lead Flakes",
 
-    "item.ingotZinc": "Zinc Ingot",
-    "item.ingotLead": "Lead Ingot",
-    "item.ingotTin": "Tin Ingot",
-    "item.ingotCopper": "Copper Ingot",
-    "item.ingotBrass": "Brass Ingot",
-    "item.ingotBronze": "Bronze Ingot",
+    "item.zinc_ingot": "Zinc Ingot",
+    "item.lead_ingot": "Lead Ingot",
+    "item.tin_ingot": "Tin Ingot",
+    "item.copper_ingot": "Copper Ingot",
+    "item.brass_ingot": "Brass Ingot",
+    "item.bronze_ingot": "Bronze Ingot",
 
-    "advancements.becomeMistborn.title": "Become Mistborn!",
-    "advancements.becomeMistborn.desc": "You have a power most people envy..."
+    "advancements.become_mistborn.title": "Become Mistborn!",
+    "advancements.become_mistborn.desc": "You have a power most people envy..."
 }

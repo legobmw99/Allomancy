@@ -1,17 +1,17 @@
 {
-  "result": {
-    "item": "allomancy:mistcloak"
-  },
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "W W",
     "WWW",
     "WWW"
   ],
-  "type": "minecraft:crafting_shaped",
   "key": {
     "W": {
       "item": "minecraft:wool",
       "data": 7
     }
+  },
+  "result": {
+    "item": "allomancy:mistcloak"
   }
 }

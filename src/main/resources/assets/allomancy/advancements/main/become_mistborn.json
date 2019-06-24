@@ -4,10 +4,10 @@
             "item": "allomancy:mistcloak"
         },
         "title": {
-            "translate": "advancements.becomeMistborn.title"
+            "translate": "advancements.become_mistborn.title"
         },
         "description": {
-            "translate": "advancements.becomeMistborn.desc"
+            "translate": "advancements.become_mistborn.desc"
         }
     },
     "parent": "minecraft:adventure/root",
@@ -15,11 +15,11 @@
         "experience": 100
     },
     "criteria": {
-        "nuggetLerasium": {
+        "lerasium_nugget": {
             "trigger": "consume_item",
             "conditions": {
                 "item": {
-                    "item": "allomancy:nuggetLerasium"
+                    "item": "allomancy:lerasium_nugget"
                 }
             }
         }

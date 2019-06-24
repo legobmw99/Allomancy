@@ -1,13 +1,10 @@
 {
-  "result": {
-    "item": "allomancy:coinbag"
-  },
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     " xy",
     "l l",
     " l "
   ],
-  "type": "minecraft:crafting_shaped",
   "key": {
     "x": {
       "item": "minecraft:lead"
@@ -18,5 +15,8 @@
     "l": {
       "item": "minecraft:leather"
     }
+  },
+  "result": {
+    "item": "allomancy:coin_bag"
   }
 }
