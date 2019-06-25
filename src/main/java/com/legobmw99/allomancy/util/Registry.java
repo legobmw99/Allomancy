@@ -144,7 +144,7 @@ public class Registry {
         RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class, EntityRenderFactories.GOLD_FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityIronNugget.class, EntityRenderFactories.IRON_FACTORY);
     }*/
-    
+
     @SubscribeEvent
     public static void onRegisterRecipes(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
         event.getRegistry().register(new VialItemRecipe.Serializer());

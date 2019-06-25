@@ -65,7 +65,6 @@ public class ClientEventHandler {
     /**
      * Draws the overlay for the metals
      */
-    // todo investigate
     @OnlyIn(Dist.CLIENT)
     private void drawMetalOverlay() {
 
@@ -520,6 +519,7 @@ public class ClientEventHandler {
                 Particle particle = new SoundParticle(player.world, player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), player.posY + .2, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
                         motionY, motionZ, sound);
                 this.mc.particles.addEffect(particle);
+                //todo investigate
                 Allomancy.LOGGER.debug("Created Sound Particle for sound " + sound.getSoundLocation().toString());
             }
 

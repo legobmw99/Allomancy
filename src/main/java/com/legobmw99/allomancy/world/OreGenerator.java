@@ -3,111 +3,74 @@ package com.legobmw99.allomancy.world;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.AbstractChunkProvider;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 import java.util.ArrayList;
-import java.util.Random;
 
-public class OreGenerator implements IWorldGenerator {
-	
-	public class OreData {
-		public int maxHeight;
-		public int minHeight;
-		public int maxCluster;
-		public int minCluster;
-		public int clusterPerChunk;
-		public Block oreType;
-		public Block curblock;
-		public boolean config;
+public class OreGenerator {
 
-		/**
-		 * Construct an OreData with the given parameters
-		 * 
-		 * @param MaxHeight
-		 *            the maximum height it can generate at
-		 * @param MinHeight
-		 *            the minumum height it can generate at
-		 * @param MaxCluster
-		 *            the largest grouping possible
-		 * @param MinCluster
-		 *            the smallest grouping possible
-		 * @param PerChunk
-		 *            number of times it can generate per chunk
-		 * @param OreType
-		 *            the block to generate
-		 * @param Config
-		 *            whether or not it is enabled in the configuration file
-		 */
-		public OreData(int MaxHeight, int MinHeight, int MaxCluster, int MinCluster, int PerChunk, Block OreType,
-				boolean Config) {
-			this.maxHeight = MaxHeight;
-			this.minHeight = MinHeight;
-			this.maxCluster = MaxCluster;
-			this.minCluster = MinCluster;
-			this.clusterPerChunk = PerChunk;
-			this.oreType = OreType;
-			this.config = Config;
-		}
-	}
+    private static class OreData {
+        public int max_height;
+        public int min_height;
+        public int vein_size;
+        public int ores_per_chunk;
+        public Block ore_block;
+        public boolean config_enabled;
 
-	private ArrayList<OreData> oreList;
+        /**
+         * Construct an OreData with the given parameters
+         *
+         * @param max_height     the maximum height it can generate at
+         * @param min_height     the minumum height it can generate at
+         * @param vein_size      the vien size
+         * @param ores_per_chunk number of times it can generate per chunk
+         * @param ore_block      the block to generate
+         * @param config_enabled whether or not it is enabled in the configuration file
+         */
+        protected OreData(int max_height, int min_height, int vein_size, int ores_per_chunk, Block ore_block,
+                          boolean config_enabled) {
+            this.max_height = max_height;
+            this.min_height = min_height;
+            this.vein_size = vein_size;
+            this.ores_per_chunk = ores_per_chunk;
+            this.ore_block = ore_block;
+            this.config_enabled = config_enabled;
+        }
+    }
 
-	public OreGenerator() {
-		this.oreList = new ArrayList<OreData>();
-		OreData data;
+    private static ArrayList<OreData> ores = new ArrayList<>();
 
-		data = new OreData(AllomancyConfig.copper_max_y, AllomancyConfig.copper_min_y, 8, 4, AllomancyConfig.copper_density,
-				Registry.copper_ore, AllomancyConfig.generate_copper);
-		this.oreList.add(data);
-		data = new OreData(AllomancyConfig.tin_max_y, AllomancyConfig.tin_min_y, 8, 4, AllomancyConfig.tin_density,
-				Registry.tin_ore, AllomancyConfig.generate_tin);
-		this.oreList.add(data);
-		data = new OreData(AllomancyConfig.lead_max_y, AllomancyConfig.lead_min_y, 8, 4, AllomancyConfig.lead_density,
-				Registry.lead_ore, AllomancyConfig.generate_lead);
-		this.oreList.add(data);
-		data = new OreData(AllomancyConfig.zinc_max_y, AllomancyConfig.zinc_min_y, 8, 4, AllomancyConfig.zinc_density,
-				Registry.zinc_ore, AllomancyConfig.generate_zinc);
-		this.oreList.add(data);
+    static {
+        ores.add(new OreData(AllomancyConfig.copper_max_y, AllomancyConfig.copper_min_y, 8, AllomancyConfig.copper_density,
+                Registry.copper_ore, AllomancyConfig.generate_copper));
+        ores.add(new OreData(AllomancyConfig.tin_max_y, AllomancyConfig.tin_min_y, 8, AllomancyConfig.tin_density,
+                Registry.tin_ore, AllomancyConfig.generate_tin));
+        ores.add(new OreData(AllomancyConfig.lead_max_y, AllomancyConfig.lead_min_y, 8, AllomancyConfig.lead_density,
+                Registry.lead_ore, AllomancyConfig.generate_lead));
+        ores.add(new OreData(AllomancyConfig.zinc_max_y, AllomancyConfig.zinc_min_y, 8, AllomancyConfig.zinc_density,
+                Registry.zinc_ore, AllomancyConfig.generate_zinc));
+    }
 
-	}
 
-	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, ChunkGenerator chunkGenerator,
-			AbstractChunkProvider chunkProvider) {
-		int x, y, z;
-		int numOre;
-		int numCluster;
-		// Only generate in overworld
-		if (world.getDimension().getType() != DimensionType.OVERWORLD) {
-			return;
-		}
-
-		for (OreData data : this.oreList) {
-			numCluster = random.nextInt(5);
-			if ((numCluster == 0) && (data.clusterPerChunk != 0)) {
-				numCluster = 1;
-			}
-			if (data.config) { // Check that you don't have the ore disabled
-				for (int count = 0; count < numCluster; count++) {
-					x = random.nextInt(16);
-					z = random.nextInt(16);
-					y = random.nextInt(data.maxHeight);
-					x = x + (16 * chunkX);
-					z = z + (16 * chunkZ);
-					y = y + data.minHeight;
-					numOre = MathHelper.clamp(random.nextInt(data.maxCluster), data.minCluster, data.maxCluster);
-					BlockPos pos = new BlockPos(x, y, z);
-
-					//todo (new IWorldGenerator(data.oreType.getDefaultState(), numOre * 2)).generate(world, random, pos);
-				}
-			}
-		}
-	}
-
+    public static void generationSetup() {
+        for (Biome biome : Biome.BIOMES) {
+            if (biome.getRegistryName().toString().matches(".*end.*|.*nether.*")) {
+                continue;
+            }
+            for (OreData ore : ores) {
+                if (ore.config_enabled) {
+                    biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
+                            Biome.createDecoratedFeature(Feature.ORE,
+                                    new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.ore_block.getDefaultState(), ore.vein_size),
+                                    Placement.COUNT_RANGE,
+                                    new CountRangeConfig(ore.ores_per_chunk, ore.max_height, 1, ore.max_height)));
+                }
+            }
+        }
+    }
 }

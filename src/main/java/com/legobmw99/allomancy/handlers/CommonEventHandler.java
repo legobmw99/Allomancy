@@ -37,7 +37,7 @@ public class CommonEventHandler {
 
 
     @SubscribeEvent
-    public void onJoinWorld(final PlayerLoggedInEvent  event) {
+    public void onJoinWorld(final PlayerLoggedInEvent event) {
         if (!event.getPlayer().world.isRemote()) {
             if (event.getPlayer() instanceof ServerPlayerEntity) {
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
@@ -104,15 +104,19 @@ public class CommonEventHandler {
     }
 
 
-    /*todo investigate
-     @SubscribeEvent
-     public void onLootTableLoad(LootTableLoadEvent event) {
-         String name = event.getName().toString();
-         if (name.startsWith("minecraft:chests/simple_dungeon") || name.startsWith("minecraft:chests/desert_pyramid") || name.startsWith("minecraft:chests/jungle_temple")) {
-             event.getTable().addPool(new LootPool(new ILootGenerator[]{new TableLootEntry(new ResourceLocation(Allomancy.MODID, "inject/lerasium"), 1, 0, new ILootCondition[0], "allomancy_inject_entry")}, new ILootCondition[0], new RandomValueRange(1),
-                     new RandomValueRange(0, 1), "allomancy_inject_pool"));
-         }
-     }*/
+    /*@SubscribeEvent
+    public void onLootTableLoad(final LootTableLoadEvent event) {
+        String name = event.getName().toString();
+        if (name.startsWith("minecraft:chests/simple_dungeon") || name.startsWith("minecraft:chests/desert_pyramid") || name.startsWith("minecraft:chests/jungle_temple")) {
+            event.getTable().addPool(LootPool.builder().addEntry(new Loot));
+            event.getTable().addPool(new LootPool(new ILootGenerator[]{
+                     TableLootEntry.Serializer().func_212829_b_(new ResourceLocation(Allomancy.MODID, "inject/lerasium"),
+                            1, 0, new ILootCondition[0], "allomancy_inject_entry")
+            }, new ILootCondition[0],
+                    new RandomValueRange(1),
+                    new RandomValueRange(0, 1), "allomancy_inject_pool"));
+        }
+    }*/
 
 
     @SubscribeEvent

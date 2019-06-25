@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.util.proxy;
 import com.legobmw99.allomancy.handlers.CommonEventHandler;
 import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.Registry;
+import com.legobmw99.allomancy.world.OreGenerator;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,13 +24,12 @@ public abstract class CommonProxy {
 
     public void init(final FMLCommonSetupEvent e) {
         // Load most of the mod's content
-        //GameRegistry.registerWorldGenerator(new OreGenerator(), 0);
+        OreGenerator.generationSetup();
         AllomancyCapability.register();
         MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
         Registry.registerPackets();
     }
 
-    //todo javadoc
     public abstract World getClientWorld();
     public abstract PlayerEntity getClientPlayer();
 
