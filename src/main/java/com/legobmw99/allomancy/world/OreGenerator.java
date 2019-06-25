@@ -46,13 +46,13 @@ public class OreGenerator {
     private static ArrayList<OreData> ores = new ArrayList<>();
 
     static {
-        ores.add(new OreData(AllomancyConfig.copper_max_y, AllomancyConfig.copper_min_y, 8, AllomancyConfig.copper_density,
+        ores.add(new OreData(AllomancyConfig.copper_max_y, AllomancyConfig.copper_min_y, 9, AllomancyConfig.copper_density,
                 Registry.copper_ore, AllomancyConfig.generate_copper));
-        ores.add(new OreData(AllomancyConfig.tin_max_y, AllomancyConfig.tin_min_y, 8, AllomancyConfig.tin_density,
+        ores.add(new OreData(AllomancyConfig.tin_max_y, AllomancyConfig.tin_min_y, 9, AllomancyConfig.tin_density,
                 Registry.tin_ore, AllomancyConfig.generate_tin));
-        ores.add(new OreData(AllomancyConfig.lead_max_y, AllomancyConfig.lead_min_y, 8, AllomancyConfig.lead_density,
+        ores.add(new OreData(AllomancyConfig.lead_max_y, AllomancyConfig.lead_min_y, 9, AllomancyConfig.lead_density,
                 Registry.lead_ore, AllomancyConfig.generate_lead));
-        ores.add(new OreData(AllomancyConfig.zinc_max_y, AllomancyConfig.zinc_min_y, 8, AllomancyConfig.zinc_density,
+        ores.add(new OreData(AllomancyConfig.zinc_max_y, AllomancyConfig.zinc_min_y, 9, AllomancyConfig.zinc_density,
                 Registry.zinc_ore, AllomancyConfig.generate_zinc));
     }
 

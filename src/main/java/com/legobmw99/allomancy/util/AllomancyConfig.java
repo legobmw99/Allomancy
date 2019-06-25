@@ -81,10 +81,10 @@ public class AllomancyConfig {
             generate_tin = builder.comment("Generate Tin Ore").define("generate_tin", true);
             generate_lead = builder.comment("Generate Lead Ore").define("generate_lead", true);
             generate_zinc = builder.comment("Generate Zinc Ore").define("generate_zinc", true);
-            copper_density = builder.comment("Density of Copper Ore").defineInRange("copper_density", 5, 1, 20);
-            tin_density = builder.comment("Density of Copper Ore").defineInRange("copper_density", 5, 1, 20);
-            lead_density = builder.comment("Density of Copper Ore").defineInRange("copper_density", 5, 1, 20);
-            zinc_density = builder.comment("Density of Copper Ore").defineInRange("copper_density", 5, 1, 20);
+            copper_density = builder.comment("Density of Copper Ore").defineInRange("copper_density", 15, 1, 40);
+            tin_density = builder.comment("Density of Tin Ore").defineInRange("tin_density", 15, 1, 40);
+            lead_density = builder.comment("Density of Lead Ore").defineInRange("lead_density", 15, 1, 40);
+            zinc_density = builder.comment("Density of Zinc Ore").defineInRange("zinc_density", 12, 1, 40);
             copper_min_y = builder.comment("Minimum Y Level to Generate Copper").defineInRange("copper_min_y", 30, 1, 128);
             copper_max_y = builder.comment("Maximum Y Level to Generate Copper").defineInRange("copper_max_y", 50, 1, 128);
             tin_min_y = builder.comment("Minimum Y Level to Generate Tin").defineInRange("tin_min_y", 40, 1, 128);
