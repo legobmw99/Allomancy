@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.handlers;
 
 import com.legobmw99.allomancy.entities.particles.ParticleSound;
+import com.legobmw99.allomancy.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import com.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
@@ -257,17 +258,16 @@ public class ClientEventHandler {
 
                 if (this.mc.gameSettings.keyBindAttack.isKeyDown()) {
                     // Ray trace 20 blocks
-                    RayTraceResult mov = this.mc.objectMouseOver; //todo investigate making longer
+                    RayTraceResult trace = AllomancyUtils.getMouseOverExtended(20F);
                     // All iron pulling powers
                     if (cap.getMetalBurning(AllomancyCapability.IRON)) {
-                        if (mov != null) {
-                            if (mov.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) mov).getEntity())) {
-                                NetworkHelper.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) mov).getEntity().getEntityId(), AllomancyUtils.PULL));
+                        if (trace != null) {
+                            if (trace.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
+                                NetworkHelper.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), AllomancyUtils.PULL));
                             }
 
-                            if (mov.getType() == RayTraceResult.Type.BLOCK) {
-                                BlockRayTraceResult bmov = (BlockRayTraceResult) mov;
-                                BlockPos bp = bmov.getPos();
+                            if (trace.getType() == RayTraceResult.Type.BLOCK) {
+                                BlockPos bp = ((BlockRayTraceResult) trace).getPos();
                                 if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock())) {
                                     NetworkHelper.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
                                 }
@@ -279,8 +279,8 @@ public class ClientEventHandler {
                     // All zinc powers
                     if (cap.getMetalBurning(AllomancyCapability.ZINC)) {
                         Entity entity;
-                        if ((mov != null) && (mov.getType() == RayTraceResult.Type.ENTITY)) {
-                            entity = ((EntityRayTraceResult) mov).getEntity();
+                        if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
+                            entity = ((EntityRayTraceResult) trace).getEntity();
                             if (entity instanceof CreatureEntity) {
                                 NetworkHelper.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), true));
                             }
@@ -290,17 +290,16 @@ public class ClientEventHandler {
                 }
                 if (this.mc.gameSettings.keyBindUseItem.isKeyDown()) {
                     // Ray trace 20 blocks
-                    RayTraceResult mov = this.mc.objectMouseOver;
+                    RayTraceResult trace = AllomancyUtils.getMouseOverExtended(20F);
                     // All steel pushing powers
                     if (cap.getMetalBurning(AllomancyCapability.STEEL)) {
-                        if (mov != null) {
-                            if (mov.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) mov).getEntity())) {
-                                NetworkHelper.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) mov).getEntity().getEntityId(), AllomancyUtils.PUSH));
+                        if (trace != null) {
+                            if (trace.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
+                                NetworkHelper.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), AllomancyUtils.PUSH));
                             }
 
-                            if (mov.getType() == RayTraceResult.Type.BLOCK) {
-                                BlockRayTraceResult bmov = (BlockRayTraceResult) mov;
-                                BlockPos bp = bmov.getPos();
+                            if (trace.getType() == RayTraceResult.Type.BLOCK) {
+                                BlockPos bp = ((BlockRayTraceResult) trace).getPos();
                                 if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock())) {
                                     NetworkHelper.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
                                 }
@@ -312,8 +311,8 @@ public class ClientEventHandler {
                     // All brass powers
                     if (cap.getMetalBurning(AllomancyCapability.BRASS)) {
                         Entity entity;
-                        if ((mov != null) && (mov.getType() == RayTraceResult.Type.ENTITY)) {
-                            entity = ((EntityRayTraceResult) mov).getEntity();
+                        if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
+                            entity = ((EntityRayTraceResult) trace).getEntity();
                             if (entity instanceof CreatureEntity) {
                                 NetworkHelper.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), false));
                             }
@@ -425,7 +424,7 @@ public class ClientEventHandler {
                  * If the player is a full Mistborn, display the GUI
                  */
                 if (cap.getAllomancyPower() == 8) {
-                    // todo reimpl mc.displayGuiScreen(new GUIMetalSelect());
+                    mc.displayGuiScreen(new MetalSelectScreen());
                 }
             }
         }
@@ -452,9 +451,9 @@ public class ClientEventHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderGUIScreen(GuiScreenEvent.DrawScreenEvent event) {
-      //  if (event.getGui() instanceof GUIMetalSelect && !event.isCancelable()) {
-       // drawMetalOverlay();
-       // }
+        if (event.getGui() instanceof MetalSelectScreen && !event.isCancelable()) {
+            drawMetalOverlay();
+        }
     }
 
     @OnlyIn(Dist.CLIENT)

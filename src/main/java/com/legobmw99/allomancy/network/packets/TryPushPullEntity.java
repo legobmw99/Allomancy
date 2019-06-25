@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.network.packets;
 
 import com.legobmw99.allomancy.util.AllomancyUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
@@ -64,7 +65,7 @@ public class TryPushPullEntity {
                                 AllomancyUtils.move(message.direction, target, player.getPosition());
                             }
                             // The target moves
-                        } else if (target instanceof ItemEntity) {
+                        } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity) {
                             AllomancyUtils.move(message.direction / 2.0, target, player.getPosition().down());
 
                             // Split the difference

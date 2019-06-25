@@ -5,23 +5,26 @@ import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
 
 /**
  * Contains all static, common methods in one place
@@ -54,7 +57,7 @@ public class AllomancyUtils {
 
         GL11.glBegin(GL11.GL_LINE_STRIP);
 
-        GL11.glVertex3d(pX, pY -1 , pZ);
+        GL11.glVertex3d(pX, pY - 1, pZ);
         GL11.glVertex3d(oX, oY, oZ);
 
         GL11.glEnd();
@@ -139,6 +142,10 @@ public class AllomancyUtils {
         }
         if (entity instanceof ItemFrameEntity) {
             return isItemMetal(((ItemFrameEntity) entity).getDisplayedItem());
+        }
+
+        if (entity instanceof FallingBlockEntity){
+            return isBlockMetal(((FallingBlockEntity)entity).getBlockState().getBlock());
         }
         //if (entity instanceof EntityIronNugget || entity instanceof EntityGoldNugget) {
         //    return true;
@@ -255,5 +262,46 @@ public class AllomancyUtils {
 
             }
         }
+    }
+
+    @Nullable
+    public static RayTraceResult getMouseOverExtended(float dist) {
+        Minecraft mc = Minecraft.getInstance();
+        float partialTicks = mc.getRenderPartialTicks();
+        RayTraceResult objectMouseOver = null;
+        Entity pointedEntity;
+        Entity entity = mc.getRenderViewEntity();
+        if (entity != null) {
+            if (mc.world != null) {
+                objectMouseOver = entity.func_213324_a(dist, partialTicks, false);
+                Vec3d vec3d = entity.getEyePosition(partialTicks);
+                boolean flag = false;
+                int i = 3;
+                double d1 = dist * dist;
+
+                if (objectMouseOver != null) {
+                    d1 = objectMouseOver.getHitVec().squareDistanceTo(vec3d);
+                }
+
+                Vec3d vec3d1 = entity.getLook(1.0F);
+                Vec3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
+                float f = 1.0F;
+                AxisAlignedBB axisalignedbb = entity.getBoundingBox().expand(vec3d1.scale(dist)).grow(1.0D, 1.0D, 1.0D);
+                EntityRayTraceResult entityraytraceresult = ProjectileHelper.func_221273_a(entity, vec3d, vec3d2, axisalignedbb, (e) -> {
+                    return true;
+                }, d1);
+                if (entityraytraceresult != null) {
+                    Entity entity1 = entityraytraceresult.getEntity();
+                    Vec3d vec3d3 = entityraytraceresult.getHitVec();
+                    double d2 = vec3d.squareDistanceTo(vec3d3);
+                    if (d2 < d1) {
+                        objectMouseOver = entityraytraceresult;
+                    }
+                }
+
+            }
+        }
+        return objectMouseOver;
+
     }
 }
