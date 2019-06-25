@@ -7,19 +7,21 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.concurrent.Callable;
 
 public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT> {
 
-    private LazyOptional<AllomancyCapability> handler = LazyOptional.of(AllomancyCapability::new);
-
+    @CapabilityInject(AllomancyCapability.class)
+    public static final Capability<AllomancyCapability> PLAYER_CAP = null;
+    private LazyOptional<AllomancyCapability> handler;
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "allomancy_data");
+
     public static final int[] MAX_BURN_TIME = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
     public static final int IRON = 0, STEEL = 1, TIN = 2, PEWTER = 3, ZINC = 4, BRASS = 5, COPPER = 6, BRONZE = 7;
 
@@ -39,14 +41,23 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return the AllomancyCapabilites data of the player
      */
     public static AllomancyCapability forPlayer(Entity player) {
-        return player.getCapability(Allomancy.PLAYER_CAP, null).orElse(new AllomancyCapability());
+        return player.getCapability(PLAYER_CAP).orElseThrow(() -> new RuntimeException("Capability not attached!"));
     }
+
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        return PLAYER_CAP.orEmpty(cap,handler);
+    }
+
 
     /**
      * Constructor of the Capability object
      * 
      */
     public AllomancyCapability() {
+        handler = LazyOptional.of(() -> this);
     }
 
 
@@ -161,11 +172,14 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * Register the capability
      */
     public static void register() {
-        CapabilityManager.INSTANCE.register(AllomancyCapability.class, new AllomancyCapability.Storage(), new AllomancyCapability.Factory());
+        CapabilityManager.INSTANCE.register(AllomancyCapability.class, new AllomancyCapability.Storage(), () -> null);
     }
 
     @Override
     public CompoundNBT serializeNBT() {
+        handler.ifPresent(h ->{
+
+        });
         CompoundNBT nbt = new CompoundNBT();
         nbt.putByte("allomancyPower", this.getAllomancyPower());
         nbt.putInt("iron", this.getMetalAmounts(0));
@@ -211,16 +225,6 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
 
-    public boolean hasCapability(Capability<?> capability, Direction facing) {
-        return Allomancy.PLAYER_CAP != null && capability == Allomancy.PLAYER_CAP;
-
-    }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-            return handler.cast();
-    }
 
 
 
@@ -228,22 +232,18 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
         @Override
         public INBT writeNBT(Capability<AllomancyCapability> capability, AllomancyCapability instance, Direction side) {
-            return null;
+            return instance.serializeNBT();
         }
 
         @Override
         public void readNBT(Capability<AllomancyCapability> capability, AllomancyCapability instance, Direction side, INBT nbt) {
-
+            if(nbt instanceof CompoundNBT){
+                instance.deserializeNBT((CompoundNBT)nbt);
+            }
         }
 
 
     }
 
-    public static class Factory implements Callable<AllomancyCapability> {
-        @Override
-        public AllomancyCapability call() throws Exception {
-            return null;
-        }
-    }
 
 }

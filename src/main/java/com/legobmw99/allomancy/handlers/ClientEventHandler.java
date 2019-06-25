@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.handlers;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.entities.particles.ParticleSound;
+import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import com.legobmw99.allomancy.network.packets.GetCapabilitiesPacket;
 import com.legobmw99.allomancy.network.packets.TryPushPullBlock;
@@ -259,14 +259,14 @@ public class ClientEventHandler {
                     if (cap.getMetalBurning(AllomancyCapability.IRON)) {
                         if (mov != null) {
                             if (mov.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) mov).getEntity())) {
-                                Allomancy.proxy.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) mov).getEntity().getEntityId(), AllomancyUtils.PULL));
+                                NetworkHelper.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) mov).getEntity().getEntityId(), AllomancyUtils.PULL));
                             }
 
                             if (mov.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockRayTraceResult bmov = (BlockRayTraceResult) mov;
                                 BlockPos bp = bmov.getPos();
                                 if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock())) {
-                                    Allomancy.proxy.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
+                                    NetworkHelper.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
                                 }
                             }
 
@@ -279,7 +279,7 @@ public class ClientEventHandler {
                         if ((mov != null) && (mov.getType() == RayTraceResult.Type.ENTITY)) {
                             entity = ((EntityRayTraceResult) mov).getEntity();
                             if (entity instanceof CreatureEntity) {
-                                Allomancy.proxy.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), true));
+                                NetworkHelper.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), true));
                             }
                         }
                     }
@@ -292,14 +292,14 @@ public class ClientEventHandler {
                     if (cap.getMetalBurning(AllomancyCapability.STEEL)) {
                         if (mov != null) {
                             if (mov.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) mov).getEntity())) {
-                                Allomancy.proxy.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) mov).getEntity().getEntityId(), AllomancyUtils.PUSH));
+                                NetworkHelper.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) mov).getEntity().getEntityId(), AllomancyUtils.PUSH));
                             }
 
                             if (mov.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockRayTraceResult bmov = (BlockRayTraceResult) mov;
                                 BlockPos bp = bmov.getPos();
                                 if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock())) {
-                                    Allomancy.proxy.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
+                                    NetworkHelper.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
                                 }
                             }
 
@@ -312,7 +312,7 @@ public class ClientEventHandler {
                         if ((mov != null) && (mov.getType() == RayTraceResult.Type.ENTITY)) {
                             entity = ((EntityRayTraceResult) mov).getEntity();
                             if (entity instanceof CreatureEntity) {
-                                Allomancy.proxy.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), false));
+                                NetworkHelper.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), false));
                             }
                         }
                     }
@@ -333,7 +333,7 @@ public class ClientEventHandler {
 
                     for (Entity curEntity : eListBurners) {
                         if (curEntity != null && curEntity != player /* todo test if this is needed: && curEntity.hasCapability(Allomancy.PLAYER_CAP, null)*/) {
-                            Allomancy.proxy.sendToServer(new GetCapabilitiesPacket(curEntity.getEntityId()));
+                            NetworkHelper.sendToServer(new GetCapabilitiesPacket(curEntity.getEntityId()));
                             AllomancyCapability capOther = AllomancyCapability.forPlayer(curEntity);
                             if (capOther.getMetalBurning(AllomancyCapability.COPPER)) {
                                 metalBurners.remove((PlayerEntity) curEntity);
@@ -370,7 +370,7 @@ public class ClientEventHandler {
                 // Remove items from burners
                 LinkedList<PlayerEntity> toRemoveBurners = new LinkedList<PlayerEntity>();
                 for (PlayerEntity entity : metalBurners) {
-                    Allomancy.proxy.sendToServer(new GetCapabilitiesPacket(entity.getEntityId()));
+                    NetworkHelper.sendToServer(new GetCapabilitiesPacket(entity.getEntityId()));
                     AllomancyCapability capOther = AllomancyCapability.forPlayer(entity);
                     if (!entity.isAlive()) {
                         toRemoveBurners.add(entity);

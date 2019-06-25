@@ -1,12 +1,9 @@
 package com.legobmw99.allomancy;
 
-import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.proxy.ClientProxy;
 import com.legobmw99.allomancy.util.proxy.CommonProxy;
 import com.legobmw99.allomancy.util.proxy.ServerProxy;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -34,8 +31,6 @@ public class Allomancy {
 
     public static Allomancy instance;
 
-    @CapabilityInject(AllomancyCapability.class)
-    public static final Capability<AllomancyCapability> PLAYER_CAP = null;
 
 
     public Allomancy() {
@@ -46,7 +41,7 @@ public class Allomancy {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::modConfig);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, AllomancyConfig.SERVER_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AllomancyConfig.CLIENT_SPEC);
 
         //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
@@ -73,8 +68,8 @@ public class Allomancy {
         ModConfig cfg = e.getConfig();
         if(cfg.getSpec() == AllomancyConfig.CLIENT_SPEC){
             AllomancyConfig.refreshClient();
-        } else if (cfg.getSpec() == AllomancyConfig.SERVER_SPEC){
-            AllomancyConfig.refreshServer();
+        } else if (cfg.getSpec() == AllomancyConfig.COMMON_SPEC){
+            AllomancyConfig.refreshCommon();
         }
     }
 

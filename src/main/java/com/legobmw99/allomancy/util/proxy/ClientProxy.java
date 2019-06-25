@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.util.proxy;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.handlers.ClientEventHandler;
 import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.client.Minecraft;
@@ -47,14 +48,4 @@ public class ClientProxy extends CommonProxy {
         return Minecraft.getInstance().player;
     }
 
-    @Override
-    public void sendToServer(Object msg) {
-        Registry.NETWORK.sendToServer(msg);
-    }
-
-    @Override
-    public void sendTo(Object msg, ServerPlayerEntity player) {
-        throw new IllegalStateException("Only run this on the server!");
-
-    }
 }

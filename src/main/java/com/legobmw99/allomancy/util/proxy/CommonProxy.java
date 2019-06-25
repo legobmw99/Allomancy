@@ -1,9 +1,9 @@
 package com.legobmw99.allomancy.util.proxy;
 
 import com.legobmw99.allomancy.handlers.CommonEventHandler;
-import com.legobmw99.allomancy.util.*;
+import com.legobmw99.allomancy.util.AllomancyCapability;
+import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -32,8 +32,6 @@ public abstract class CommonProxy {
     //todo javadoc
     public abstract World getClientWorld();
     public abstract PlayerEntity getClientPlayer();
-    public abstract void sendToServer(Object msg);
-    public abstract void sendTo(Object msg, ServerPlayerEntity player);
 
 }
 

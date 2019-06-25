@@ -157,7 +157,7 @@ public class Registry {
         Item.Properties prop_single = new Item.Properties().group(allomancy_group).maxStackSize(1);
 
         event.getRegistry().registerAll(
-                new Item(new Item.Properties().group(allomancy_group).maxStackSize(1).containerItem(allomantic_grinder)).setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder")),
+                new Item(new Item.Properties().group(allomancy_group).maxStackSize(1).containerItem(Registry.allomantic_grinder)).setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder")),
                 new CoinBagItem(prop_single),
                 new MistcloakItem(WoolArmor, EquipmentSlotType.CHEST, new Item.Properties().group(ItemGroup.COMBAT)),
                 new LerasiumItem(),

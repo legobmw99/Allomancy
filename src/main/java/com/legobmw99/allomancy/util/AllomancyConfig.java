@@ -6,13 +6,13 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class AllomancyConfig {
 
-    public static final ServerConfig SERVER;
-    public static final ForgeConfigSpec SERVER_SPEC;
+    public static final CommonConfig COMMON;
+    public static final ForgeConfigSpec COMMON_SPEC;
 
     static {
-        final Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
-        SERVER_SPEC = specPair.getRight();
-        SERVER = specPair.getLeft();
+        final Pair<CommonConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(CommonConfig::new);
+        COMMON_SPEC = specPair.getRight();
+        COMMON = specPair.getLeft();
     }
 
     public static final ClientConfig CLIENT;
@@ -48,7 +48,7 @@ public class AllomancyConfig {
     public static boolean animate_selection;
     public static SCREEN_LOC overlay_position;
 
-    public static class ServerConfig {
+    public static class CommonConfig {
         public final ForgeConfigSpec.BooleanValue random_mistings;
         public final ForgeConfigSpec.BooleanValue generate_copper;
         public final ForgeConfigSpec.BooleanValue generate_tin;
@@ -67,7 +67,7 @@ public class AllomancyConfig {
         public final ForgeConfigSpec.IntValue zinc_min_y;
         public final ForgeConfigSpec.IntValue zinc_max_y;
 
-        ServerConfig(ForgeConfigSpec.Builder builder) {
+        CommonConfig(ForgeConfigSpec.Builder builder) {
             builder.push("Gameplay");
             random_mistings = builder.comment("Spawn players as a random Misting").define("random_mistings", true);
             //todo investigate whitelist here
@@ -93,24 +93,24 @@ public class AllomancyConfig {
         }
     }
 
-    public static void refreshServer() {
-        random_mistings = SERVER.random_mistings.get();
-        generate_copper = SERVER.generate_copper.get();
-        generate_tin = SERVER.generate_tin.get();
-        generate_lead = SERVER.generate_lead.get();
-        generate_zinc = SERVER.generate_zinc.get();
-        copper_density = SERVER.copper_density.get();
-        tin_density = SERVER.tin_density.get();
-        lead_density = SERVER.lead_density.get();
-        zinc_density = SERVER.zinc_density.get();
-        copper_min_y = SERVER.copper_min_y.get();
-        copper_max_y = SERVER.copper_max_y.get();
-        tin_min_y = SERVER.tin_min_y.get();
-        tin_max_y = SERVER.tin_max_y.get();
-        lead_min_y = SERVER.lead_min_y.get();
-        lead_max_y = SERVER.lead_max_y.get();
-        zinc_min_y = SERVER.zinc_min_y.get();
-        zinc_max_y = SERVER.zinc_max_y.get();
+    public static void refreshCommon() {
+        random_mistings = COMMON.random_mistings.get();
+        generate_copper = COMMON.generate_copper.get();
+        generate_tin = COMMON.generate_tin.get();
+        generate_lead = COMMON.generate_lead.get();
+        generate_zinc = COMMON.generate_zinc.get();
+        copper_density = COMMON.copper_density.get();
+        tin_density = COMMON.tin_density.get();
+        lead_density = COMMON.lead_density.get();
+        zinc_density = COMMON.zinc_density.get();
+        copper_min_y = COMMON.copper_min_y.get();
+        copper_max_y = COMMON.copper_max_y.get();
+        tin_min_y = COMMON.tin_min_y.get();
+        tin_max_y = COMMON.tin_max_y.get();
+        lead_min_y = COMMON.lead_min_y.get();
+        lead_max_y = COMMON.lead_max_y.get();
+        zinc_min_y = COMMON.zinc_min_y.get();
+        zinc_max_y = COMMON.zinc_max_y.get();
     }
 
     public static class ClientConfig {

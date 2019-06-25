@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import net.minecraft.block.Block;
@@ -211,7 +212,7 @@ public class AllomancyUtils {
      * @param capability the capability being handled
      */
     public static void toggleMetalBurn(byte metal, AllomancyCapability capability) {
-        Allomancy.proxy.sendToServer(new UpdateBurnPacket(metal, !capability.getMetalBurning(metal)));
+        NetworkHelper.sendToServer(new UpdateBurnPacket(metal, !capability.getMetalBurning(metal)));
 
         if (capability.getMetalAmounts(metal) > 0) {
             capability.setMetalBurning(metal, !capability.getMetalBurning(metal));
@@ -240,16 +241,16 @@ public class AllomancyUtils {
                 if (cap.getAllomancyPower() != i && cap.getAllomancyPower() != 8) {
                     // put out any metals that the player shouldn't be able to burn
                     cap.setMetalBurning(i, false);
-                    Allomancy.proxy.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
+                    NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
                 } else {
                     cap.setBurnTime(i, cap.getBurnTime(i) - 1);
                     if (cap.getBurnTime(i) == 0) {
                         cap.setBurnTime(i, cap.MAX_BURN_TIME[i]);
                         cap.setMetalAmounts(i, cap.getMetalAmounts(i) - 1);
-                        Allomancy.proxy.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
+                        NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
                         if (cap.getMetalAmounts(i) == 0) {
                             cap.setMetalBurning(i, false);
-                            Allomancy.proxy.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
+                            NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
                         }
                     }
                 }
