@@ -2,10 +2,7 @@ package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.block.IronLeverBlock;
-import com.legobmw99.allomancy.items.CoinBagItem;
-import com.legobmw99.allomancy.items.LerasiumItem;
-import com.legobmw99.allomancy.items.MistcloakItem;
-import com.legobmw99.allomancy.items.VialItem;
+import com.legobmw99.allomancy.items.*;
 import com.legobmw99.allomancy.network.packets.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -157,13 +154,11 @@ public class Registry {
     @SubscribeEvent
     public static void onRegisterItems(final RegistryEvent.Register<Item> event) {
         Item.Properties prop_generic = new Item.Properties().group(allomancy_group).maxStackSize(64);
-        Item temp = new Item(new Item.Properties().group(allomancy_group).maxStackSize(1)).setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder"));
         event.getRegistry().registerAll(
-                new Item(new Item.Properties().group(allomancy_group).maxStackSize(1).containerItem(temp)).setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder")),
-                new CoinBagItem(new Item.Properties().group(allomancy_group).maxStackSize(1)),
-                new MistcloakItem(WoolArmor, EquipmentSlotType.CHEST, new Item.Properties().group(ItemGroup.COMBAT)),
+                new GrinderItem(),
+                new CoinBagItem(),
+                new MistcloakItem(),
                 new LerasiumItem(),
-                // Register VialItem and its subtypes
                 new VialItem(),
                 // Register ingots and add them to the ore dictionary
                 new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "tin_ingot")),

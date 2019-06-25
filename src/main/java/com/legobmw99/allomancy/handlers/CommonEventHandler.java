@@ -52,7 +52,7 @@ public class CommonEventHandler {
 
                     cap.setAllomancyPower(randomMisting);
                     NetworkHelper.sendTo(new AllomancyPowerPacket(randomMisting), player);
-                    Allomancy.LOGGER.info("Assigned " + Registry.flake_metals[randomMisting] + " misting to " + player.getDisplayName().toString());
+                    Allomancy.LOGGER.info("Assigned " + Registry.flake_metals[randomMisting] + " misting to " + player.getName().getFormattedText());
                     ItemStack dust = new ItemStack(net.minecraft.util.registry.Registry.ITEM.getValue(new ResourceLocation(Allomancy.MODID, Registry.flake_metals[randomMisting] + "_flakes")).get());
                     // Give the player one flake of their metal
                     if (!player.inventory.addItemStackToInventory(dust)) {

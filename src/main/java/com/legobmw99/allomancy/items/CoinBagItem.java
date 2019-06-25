@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.items;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.util.AllomancyCapability;
+import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,8 +22,8 @@ public class CoinBagItem extends ShootableItem {
         return stack.getItem() == Items.IRON_NUGGET || stack.getItem() == Items.GOLD_NUGGET;
     };
 
-    public CoinBagItem(Item.Properties properties) {
-        super(properties);
+    public CoinBagItem() {
+        super(new Item.Properties().group(Registry.allomancy_group).maxStackSize(1));
         this.setRegistryName(new ResourceLocation(Allomancy.MODID, "coin_bag"));
     }
 
