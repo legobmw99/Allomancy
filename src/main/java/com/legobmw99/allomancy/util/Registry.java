@@ -12,7 +12,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -61,6 +63,9 @@ public class Registry {
     @ObjectHolder("allomancy:iron_lever")
     public static IronLeverBlock iron_lever;
 
+    @ObjectHolder("allomancy:vial_filling")
+    public static SpecialRecipeSerializer<VialItemRecipe> vial_recipe_serializer;
+
 
     public static final String[] flake_metals = {"iron", "steel", "tin", "pewter", "zinc", "brass", "copper", "bronze",
             "lead"};
@@ -77,6 +82,7 @@ public class Registry {
             return new ItemStack(Registry.mistcloak);
         }
     };
+
 
     public static KeyBinding burn;
 
@@ -140,21 +146,20 @@ public class Registry {
         //Use renderSnowball for nugget projectiles
         RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class, EntityRenderFactories.GOLD_FACTORY);
         RenderingRegistry.registerEntityRenderingHandler(EntityIronNugget.class, EntityRenderFactories.IRON_FACTORY);
-    }
-
-
-    //only does furnace recipes, rest are handled in JSON
-    public static void setupRecipes(Register<IRecipe> event) {
-        event.getRegistry().register(new RecipeItemVial());
     }*/
+
+
+    @SubscribeEvent
+    public static void setupRecipes(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
+        event.getRegistry().register(new VialItemRecipe.Serializer());
+    }
 
     @SubscribeEvent
     public static void onRegisterItems(final RegistryEvent.Register<Item> event) {
-        Allomancy.LOGGER.debug("Registering items");
         Item.Properties prop_generic = new Item.Properties().group(allomancy_group).maxStackSize(64);
-
+        Item temp = new Item(new Item.Properties().group(allomancy_group).maxStackSize(1)).setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder"));
         event.getRegistry().registerAll(
-                new Item(new Item.Properties().group(allomancy_group).maxStackSize(1).containerItem(Registry.allomantic_grinder)).setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder")),
+                new Item(new Item.Properties().group(allomancy_group).maxStackSize(1).containerItem(temp)).setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder")),
                 new CoinBagItem(new Item.Properties().group(allomancy_group).maxStackSize(1)),
                 new MistcloakItem(WoolArmor, EquipmentSlotType.CHEST, new Item.Properties().group(ItemGroup.COMBAT)),
                 new LerasiumItem(),
@@ -187,7 +192,6 @@ public class Registry {
 
     @SubscribeEvent
     public static void onRegisterBlocks(final RegistryEvent.Register<Block> event) {
-        Allomancy.LOGGER.info("Registering Blocks");
         event.getRegistry().registerAll(
                 new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "tin_ore")),
                 new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "lead_ore")),
