@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.handlers;
 
-import com.legobmw99.allomancy.entities.particles.ParticleSound;
+import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.entities.particles.SoundParticle;
 import com.legobmw99.allomancy.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
@@ -516,9 +517,10 @@ public class ClientEventHandler {
                 motionX = ((player.posX - (event.getSound().getX() + .5)) * -0.7) / magnitude;
                 motionY = ((player.posY - (event.getSound().getY() + .2)) * -0.7) / magnitude;
                 motionZ = ((player.posZ - (event.getSound().getZ() + .5)) * -0.7) / magnitude;
-                Particle particle = new ParticleSound(player.world, player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), player.posY + .2, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
+                Particle particle = new SoundParticle(player.world, player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), player.posY + .2, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
                         motionY, motionZ, sound);
                 this.mc.particles.addEffect(particle);
+                Allomancy.LOGGER.debug("Created Sound Particle for sound " + sound.getSoundLocation().toString());
             }
 
         }

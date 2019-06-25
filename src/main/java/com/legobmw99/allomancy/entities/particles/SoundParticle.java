@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.entities.particles;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.SpriteTexturedParticle;
@@ -8,20 +9,18 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ParticleSound extends SpriteTexturedParticle {
+public class SoundParticle extends SpriteTexturedParticle {
 
-    double entityX, entityY, entityZ;
-
-    public ParticleSound(World world, double x, double y, double z, double motionX, double motionY, double motionZ, ISound sound) {
+    public SoundParticle(World world, double x, double y, double z, double motionX, double motionY, double motionZ, ISound sound) {
 
         super(world, x, y, z, motionX, motionY, motionZ);
-
+        setSprite(Minecraft.getInstance().getTextureMap().getAtlasSprite("note"));
         this.motionX = motionX;
         this.motionY = motionY + 0.009D;
         this.motionZ = motionZ;
         this.particleScale *= 1.2F;
         this.maxAge = 15;
-        this.canCollide = false; // canCollide
+        this.canCollide = false;
         String soundName = sound.getSoundLocation().toString();
 
         if (soundName.contains("step") || soundName.contains("pickup")) {
@@ -54,10 +53,6 @@ public class ParticleSound extends SpriteTexturedParticle {
 
     @Override
     public void tick() {
-        if (((this.posX - entityX) < 1.7) && ((this.posY - entityY) < 2.5) && ((this.posZ - entityZ) < 1.7)) {
-            this.setExpired();
-        } 
-
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
