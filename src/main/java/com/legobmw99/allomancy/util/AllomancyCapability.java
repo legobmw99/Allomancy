@@ -19,8 +19,9 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     @CapabilityInject(AllomancyCapability.class)
     public static final Capability<AllomancyCapability> PLAYER_CAP = null;
-    private LazyOptional<AllomancyCapability> handler;
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "allomancy_data");
+
+    private LazyOptional<AllomancyCapability> handler;
 
     //todo seriously rethink this storage
     public static final int[] MAX_BURN_TIME = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };

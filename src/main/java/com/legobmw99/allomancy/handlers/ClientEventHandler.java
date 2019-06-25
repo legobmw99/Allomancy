@@ -220,7 +220,7 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onClientTick(final TickEvent.ClientTickEvent event) {
         // Run once per tick, only if in game, and only if there is a player
-        if (event.phase == TickEvent.Phase.END && (!this.mc.isGamePaused() && this.mc.player != null)) {
+        if (event.phase == TickEvent.Phase.END && !this.mc.isGamePaused() && this.mc.player != null && this.mc.player.isAlive()) {
 
             player = this.mc.player;
             cap = AllomancyCapability.forPlayer(player);
@@ -460,9 +460,10 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
         player = this.mc.player;
-        if (player == null) {
+        if (player == null || !player.isAlive()) {
             return;
         }
+
 
         cap = AllomancyCapability.forPlayer(player);
 
@@ -500,7 +501,7 @@ public class ClientEventHandler {
 
         player = this.mc.player;
         ISound sound = event.getSound();
-        if ((player == null) || (sound == null)) {
+        if ((player == null) || (sound == null) || !player.isAlive()) {
             return;
         }
 
