@@ -39,6 +39,8 @@ public class Registry {
     public static Item zinc_ingot;
     @ObjectHolder("allomancy:bronze_ingot")
     public static Item bronze_ingot;
+    @ObjectHolder("allomancy:brass_ingot")
+    public static Item brass_ingot;
     @ObjectHolder("allomancy:coin_bag")
     public static Item coin_bag;
     @ObjectHolder("allomancy:mistcloak")
@@ -164,7 +166,9 @@ public class Registry {
                 new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "lead_ingot")),
                 new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "copper_ingot")),
                 new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "zinc_ingot")),
-                new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "bronze_ingot"))
+                new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "bronze_ingot")),
+                new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, "brass_ingot"))
+
         );
 
 

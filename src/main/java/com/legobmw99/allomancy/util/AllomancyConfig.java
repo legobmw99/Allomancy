@@ -174,6 +174,16 @@ public class AllomancyConfig {
             defaultList.add("allomancy:lerasium_nugget");
             defaultList.add("allomancy:allomantic_grinder");
             defaultList.add("allomancy:coin_bag");
+            defaultList.add("allomancy:copper_ore");
+            defaultList.add("allomancy:tin_ore");
+            defaultList.add("allomancy:lead_ore");
+            defaultList.add("allomancy:zinc_ore");
+            defaultList.add("allomancy:copper_ingot");
+            defaultList.add("allomancy:tin_ingot");
+            defaultList.add("allomancy:lead_ingot");
+            defaultList.add("allomancy:zinc_ingot");
+            defaultList.add("allomancy:bronze_ingot");
+
 
             for (int i = 0; i < Registry.flake_metals.length; i++) {
                 defaultList.add("allomancy:" + Registry.flake_metals[i] + "_flakes");
