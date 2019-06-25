@@ -104,7 +104,6 @@ public class VialItem extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if(stack.hasTag()){
-            tooltip.add(new StringTextComponent("item.lerasium_nugget.lore"));
             for(int i = 0; i < 8; i++){
                 if(stack.getTag().getBoolean(Registry.flake_metals[i])){
                     tooltip.add(new StringTextComponent(Registry.flake_metals[i]));
