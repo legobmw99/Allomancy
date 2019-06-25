@@ -5,7 +5,6 @@ import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -14,7 +13,6 @@ import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -56,7 +54,7 @@ public class AllomancyUtils {
 
         GL11.glBegin(GL11.GL_LINE_STRIP);
 
-        GL11.glVertex3d(pX, pY + 1.2, pZ);
+        GL11.glVertex3d(pX, pY + .2 , pZ);
         GL11.glVertex3d(oX, oY, oZ);
 
         GL11.glEnd();
@@ -112,7 +110,7 @@ public class AllomancyUtils {
      * @return Whether or not the item is metal
      */
     public static boolean isBlockMetal(Block block) {
-        return block == Blocks.IRON_BLOCK; // metal_list.contains(block.getRegistryName().toString());
+        return AllomancyConfig.whitelist.contains(block.getRegistryName().toString());
     }
 
     /**
@@ -122,7 +120,7 @@ public class AllomancyUtils {
      * @return Whether or not the item is metal
      */
     public static boolean isItemMetal(ItemStack item) {
-        return (item != null) && item.getItem() == Items.IRON_INGOT;//metal_list.contains(item.getItem().getRegistryName().toString());
+        return AllomancyConfig.whitelist.contains(item.getItem().getRegistryName().toString());
     }
 
     /**

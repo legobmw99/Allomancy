@@ -40,8 +40,6 @@ public class Registry {
     public static Item zinc_ingot;
     @ObjectHolder("allomancy:bronze_ingot")
     public static Item bronze_ingot;
-    @ObjectHolder("allomancy:brass_ingot")
-    public static Item brass_ingot;
     @ObjectHolder("allomancy:coin_bag")
     public static Item coin_bag;
     @ObjectHolder("allomancy:mistcloak")

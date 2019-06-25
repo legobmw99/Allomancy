@@ -210,8 +210,6 @@ public class ClientEventHandler {
             }
         }
     }*/
-
-
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onClientTick(final TickEvent.ClientTickEvent event) {
@@ -254,7 +252,7 @@ public class ClientEventHandler {
 
                 if (this.mc.gameSettings.keyBindAttack.isKeyDown()) {
                     // Ray trace 20 blocks
-                    RayTraceResult mov = this.mc.objectMouseOver;
+                    RayTraceResult mov = this.mc.objectMouseOver; //todo investigate making longer
                     // All iron pulling powers
                     if (cap.getMetalBurning(AllomancyCapability.IRON)) {
                         if (mov != null) {
@@ -393,7 +391,7 @@ public class ClientEventHandler {
         }
     }
 
-    private void checkBlocks(BlockPos pos){
+    private void checkBlocks(BlockPos pos) {
         BlockPos imBlock = pos.toImmutable();
         if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(imBlock).getBlock())) {
             particleBlockTargets.add(imBlock);
@@ -450,7 +448,7 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onRenderGUIScreen(GuiScreenEvent.DrawScreenEvent event) {
         //if (event.getGui() instanceof GUIMetalSelect && !event.isCancelable()) {
-            //drawMetalOverlay();
+        //drawMetalOverlay();
         //}
     }
 
