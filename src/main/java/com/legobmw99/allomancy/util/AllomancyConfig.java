@@ -114,8 +114,6 @@ public class AllomancyConfig {
             defaultList.add(Items.CAULDRON.getRegistryName().toString());
             defaultList.add(Items.COMPASS.getRegistryName().toString());
             defaultList.add(Items.FLINT_AND_STEEL.getRegistryName().toString());
-            defaultList.add(Items.GOLD_NUGGET.getRegistryName().toString());
-            defaultList.add(Items.IRON_NUGGET.getRegistryName().toString());
             defaultList.add(Items.CHAINMAIL_HELMET.getRegistryName().toString());
             defaultList.add(Items.GOLDEN_HELMET.getRegistryName().toString());
             defaultList.add(Items.IRON_HELMET.getRegistryName().toString());
@@ -181,7 +179,8 @@ public class AllomancyConfig {
                 defaultList.add("allomancy:" + Registry.flake_metals[i] + "_flakes");
             }
 
-            /*TagCollection<Item> tc = ItemTags.getCollection(); //get everything from item tags, in theory
+            /* todo investigate
+            TagCollection<Item> tc = ItemTags.getCollection(); //get everything from item tags, in theory
             Stream<ResourceLocation> rs =  tc.getRegisteredTags().stream().filter(p -> isMetalName(p.toString()));
             rs.forEach(r -> tc.get(r).getAllElements().stream().map(i -> i.getRegistryName().toString()).forEach(defaultList::add));*/
 
@@ -229,7 +228,7 @@ public class AllomancyConfig {
             builder.push("Graphics");
             max_metal_detection = builder.comment("Maximum iron/steelsight distance").defineInRange("max_metal_distance", 12, 3, 30);
             animate_selection = builder.comment("Animate the selection wheel").define("animate_selection", true);
-            overlay_position = builder.comment("Screen Overlay Position").defineEnum("overlay_position", SCREEN_LOC.TOP_LEFT);
+            overlay_position = builder.comment("Screen Overlay Position").comment("Options: TOP_RIGHT, TOP_LEFT, BOTTOM_RIGHT, BOTTOM_LEFT").defineEnum("overlay_position", SCREEN_LOC.TOP_RIGHT);
             builder.pop();
         }
     }

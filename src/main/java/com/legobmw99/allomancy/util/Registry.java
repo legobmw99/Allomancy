@@ -151,12 +151,11 @@ public class Registry {
     @SubscribeEvent
     public static void onRegisterItems(final RegistryEvent.Register<Item> event) {
         Allomancy.LOGGER.debug("Registering items");
-        Item.Properties prop_generic = new Item.Properties().group(allomancy_group);
-        Item.Properties prop_single = new Item.Properties().group(allomancy_group).maxStackSize(1);
+        Item.Properties prop_generic = new Item.Properties().group(allomancy_group).maxStackSize(64);
 
         event.getRegistry().registerAll(
                 new Item(new Item.Properties().group(allomancy_group).maxStackSize(1).containerItem(Registry.allomantic_grinder)).setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder")),
-                new CoinBagItem(prop_single),
+                new CoinBagItem(new Item.Properties().group(allomancy_group).maxStackSize(1)),
                 new MistcloakItem(WoolArmor, EquipmentSlotType.CHEST, new Item.Properties().group(ItemGroup.COMBAT)),
                 new LerasiumItem(),
                 // Register VialItem and its subtypes
@@ -173,7 +172,7 @@ public class Registry {
         // Register flakes
         for (int i = 0; i < flake_metals.length; i++) {
             event.getRegistry().register(
-                    new Item(new Item.Properties().group(allomancy_group).maxDamage(0)).setRegistryName(new ResourceLocation(Allomancy.MODID, flake_metals[i] + "_flakes")));
+                    new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, flake_metals[i] + "_flakes")));
         }
 
         //Register ore block items
@@ -182,7 +181,7 @@ public class Registry {
                 new BlockItem(lead_ore, prop_generic).setRegistryName(lead_ore.getRegistryName()),
                 new BlockItem(copper_ore, prop_generic).setRegistryName(copper_ore.getRegistryName()),
                 new BlockItem(zinc_ore, prop_generic).setRegistryName(zinc_ore.getRegistryName()),
-                new BlockItem(iron_lever, prop_generic).setRegistryName(iron_lever.getRegistryName())
+                new BlockItem(iron_lever, new Item.Properties().group(ItemGroup.REDSTONE)).setRegistryName(iron_lever.getRegistryName())
         );
     }
 

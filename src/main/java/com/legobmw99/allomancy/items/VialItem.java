@@ -4,14 +4,14 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -25,40 +25,33 @@ public class VialItem extends Item {
 
     }
 
+
+
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
-        if(player == null){
-            return ActionResultType.FAIL;
-        }
+    public ItemStack onItemUseFinish(ItemStack stack, World world, LivingEntity livingEntity) {
 
         AllomancyCapability cap;
-        cap = AllomancyCapability.forPlayer(player);
+        cap = AllomancyCapability.forPlayer(livingEntity);
 
-        ItemStack stack = player.getHeldItem(context.getHand());
-
-        if (cap == null) {
-           return ActionResultType.PASS;
-        }
 
         if (!stack.hasTag()) {
-            return ActionResultType.PASS;
+            return stack;
         }
-        
-    	for(int i = 0; i < 8; i++){
-    		if(stack.getTag().contains(Registry.flake_metals[i]) && stack.getTag().getBoolean(Registry.flake_metals[i])){
-    			if(cap.getMetalAmounts(i) < 10){
-    				cap.setMetalAmounts(i, cap.getMetalAmounts(i) + 1);
-    			}
-    		}
-    	}
-    	
-        if (!player.abilities.isCreativeMode) {
+
+        for(int i = 0; i < 8; i++){
+            if(stack.getTag().contains(Registry.flake_metals[i]) && stack.getTag().getBoolean(Registry.flake_metals[i])){
+                if(cap.getMetalAmounts(i) < 10){
+                    cap.setMetalAmounts(i, cap.getMetalAmounts(i) + 1);
+                }
+            }
+        }
+
+        if (!((PlayerEntity) (livingEntity)).abilities.isCreativeMode) {
             stack.shrink(1);
-            player.inventory.addItemStackToInventory(new ItemStack(Registry.vial, 1));
+            ((PlayerEntity) (livingEntity)).inventory.addItemStackToInventory(new ItemStack(Registry.vial, 1));
         }
-    	
-        return ActionResultType.SUCCESS;
+
+        return stack;
     }
 
     @Override
@@ -106,12 +99,16 @@ public class VialItem extends Item {
         if(stack.hasTag()){
             for(int i = 0; i < 8; i++){
                 if(stack.getTag().getBoolean(Registry.flake_metals[i])){
-                    tooltip.add(new StringTextComponent(Registry.flake_metals[i]));
+                    ITextComponent metal = new TranslationTextComponent("metals." + Registry.flake_metals[i]);
+                    metal.setStyle(metal.getStyle().setColor(TextFormatting.GRAY));
+                    tooltip.add(metal);
                 }
             }
 
         }
     }
+
+
 
 
 
@@ -121,23 +118,19 @@ public class VialItem extends Item {
         return stack.hasTag() ? Rarity.UNCOMMON : Rarity.COMMON;
     }
 
-
-
-   /* todo investigate
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if (isInCreativeTab(tab)) {
-            subItems.add(new ItemStack(this, 1, 0));
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if(group == Registry.allomancy_group){
+            items.add(new ItemStack(this, 1));
 
             ItemStack resultItem = new ItemStack(Registry.vial, 1);
             CompoundNBT nbt = new CompoundNBT();
             for(int i = 0; i < 8; i++){
-                nbt.setBoolean(Registry.flake_metals[i], true);
+                nbt.putBoolean(Registry.flake_metals[i], true);
             }
-            resultItem.setTagCompound(nbt);
-            subItems.add(resultItem);
-
+            resultItem.setTag(nbt);
+            items.add(resultItem);
         }
-    }*/
- 
+    }
+
 }

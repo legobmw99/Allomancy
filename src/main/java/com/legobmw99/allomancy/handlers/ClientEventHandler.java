@@ -10,10 +10,13 @@ import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.AllomancyUtils;
 import com.legobmw99.allomancy.util.Registry;
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.IngameGui;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,6 +32,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -59,7 +63,7 @@ public class ClientEventHandler {
     /**
      * Draws the overlay for the metals
      */
-    /* todo investigate
+    // todo investigate
     @OnlyIn(Dist.CLIENT)
     private void drawMetalOverlay() {
 
@@ -86,10 +90,6 @@ public class ClientEventHandler {
 
         // Set the offsets of the overlay based on config
         switch (AllomancyConfig.overlay_position) {
-            case TOP_RIGHT:
-                renderX = 5;
-                renderY = 10;
-                break;
             case TOP_LEFT:
                 renderX = res.getScaledWidth() - 95;
                 renderY = 10;
@@ -102,6 +102,10 @@ public class ClientEventHandler {
                 renderX = 5;
                 renderY = res.getScaledHeight() - 40;
                 break;
+            default: //TOP_RIGHT
+                renderX = 5;
+                renderY = 10;
+                break;
         }
 
         IngameGui gig = new IngameGui(this.mc);
@@ -112,14 +116,14 @@ public class ClientEventHandler {
 
         /*
          * Misting overlay
-         *\/
+         */
         if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 8) {
 
             singleMetalY = 9 - cap.getMetalAmounts(cap.getAllomancyPower());
-            gig.drawTexturedModalRect(renderX + 1, renderY + 5 + singleMetalY, 7 + 6 * cap.getAllomancyPower(), 1 + singleMetalY, 3, 10 - singleMetalY);
-            gig.drawTexturedModalRect(renderX, renderY, 0, 0, 5, 20);
+            gig.blit(renderX + 1, renderY + 5 + singleMetalY, 7 + 6 * cap.getAllomancyPower(), 1 + singleMetalY, 3, 10 - singleMetalY);
+            gig.blit(renderX, renderY, 0, 0, 5, 20);
             if (this.cap.getMetalBurning(this.cap.getAllomancyPower())) {
-                gig.drawTexturedModalRect(renderX, renderY + 5 + singleMetalY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+                gig.blit(renderX, renderY + 5 + singleMetalY, Frames[this.currentFrame].x, Frames[this.currentFrame].y, 5, 3);
             }
             if (this.animationCounter > 6) // Draw the burning symbols...
             {
@@ -134,70 +138,70 @@ public class ClientEventHandler {
 
         /*
          * The rendering for a the overlay of a full Mistborn
-         *\/
+         */
         if (cap.getAllomancyPower() == 8) {
 
             ironY = 9 - this.cap.getMetalAmounts(AllomancyCapability.IRON);
-            gig.drawTexturedModalRect(renderX + 1, renderY + 5 + ironY, 7, 1 + ironY, 3, 10 - ironY);
+            gig.blit(renderX + 1, renderY + 5 + ironY, 7, 1 + ironY, 3, 10 - ironY);
 
             steelY = 9 - this.cap.getMetalAmounts(AllomancyCapability.STEEL);
-            gig.drawTexturedModalRect(renderX + 8, renderY + 5 + steelY, 13, 1 + steelY, 3, 10 - steelY);
+            gig.blit(renderX + 8, renderY + 5 + steelY, 13, 1 + steelY, 3, 10 - steelY);
 
             tinY = 9 - this.cap.getMetalAmounts(AllomancyCapability.TIN);
-            gig.drawTexturedModalRect(renderX + 26, renderY + 5 + tinY, 19, 1 + tinY, 3, 10 - tinY);
+            gig.blit(renderX + 26, renderY + 5 + tinY, 19, 1 + tinY, 3, 10 - tinY);
 
             pewterY = 9 - this.cap.getMetalAmounts(AllomancyCapability.PEWTER);
-            gig.drawTexturedModalRect(renderX + 33, renderY + 5 + pewterY, 25, 1 + pewterY, 3, 10 - pewterY);
+            gig.blit(renderX + 33, renderY + 5 + pewterY, 25, 1 + pewterY, 3, 10 - pewterY);
 
             zincY = 9 - this.cap.getMetalAmounts(AllomancyCapability.ZINC);
-            gig.drawTexturedModalRect(renderX + 51, renderY + 5 + zincY, 31, 1 + zincY, 3, 10 - zincY);
+            gig.blit(renderX + 51, renderY + 5 + zincY, 31, 1 + zincY, 3, 10 - zincY);
 
             brassY = 9 - this.cap.getMetalAmounts(AllomancyCapability.BRASS);
-            gig.drawTexturedModalRect(renderX + 58, renderY + 5 + brassY, 37, 1 + brassY, 3, 10 - brassY);
+            gig.blit(renderX + 58, renderY + 5 + brassY, 37, 1 + brassY, 3, 10 - brassY);
 
             copperY = 9 - this.cap.getMetalAmounts(AllomancyCapability.COPPER);
-            gig.drawTexturedModalRect(renderX + 76, renderY + 5 + copperY, 43, 1 + copperY, 3, 10 - copperY);
+            gig.blit(renderX + 76, renderY + 5 + copperY, 43, 1 + copperY, 3, 10 - copperY);
 
             bronzeY = 9 - this.cap.getMetalAmounts(AllomancyCapability.BRONZE);
-            gig.drawTexturedModalRect(renderX + 83, renderY + 5 + bronzeY, 49, 1 + bronzeY, 3, 10 - bronzeY);
+            gig.blit(renderX + 83, renderY + 5 + bronzeY, 49, 1 + bronzeY, 3, 10 - bronzeY);
 
             // Draw the gauges second, so that highlights and decorations show over
             // the bar.
-            gig.drawTexturedModalRect(renderX, renderY, 0, 0, 5, 20);
-            gig.drawTexturedModalRect(renderX + 7, renderY, 0, 0, 5, 20);
+            gig.blit(renderX, renderY, 0, 0, 5, 20);
+            gig.blit(renderX + 7, renderY, 0, 0, 5, 20);
 
-            gig.drawTexturedModalRect(renderX + 25, renderY, 0, 0, 5, 20);
-            gig.drawTexturedModalRect(renderX + 32, renderY, 0, 0, 5, 20);
+            gig.blit(renderX + 25, renderY, 0, 0, 5, 20);
+            gig.blit(renderX + 32, renderY, 0, 0, 5, 20);
 
-            gig.drawTexturedModalRect(renderX + 50, renderY, 0, 0, 5, 20);
-            gig.drawTexturedModalRect(renderX + 57, renderY, 0, 0, 5, 20);
+            gig.blit(renderX + 50, renderY, 0, 0, 5, 20);
+            gig.blit(renderX + 57, renderY, 0, 0, 5, 20);
 
-            gig.drawTexturedModalRect(renderX + 75, renderY, 0, 0, 5, 20);
-            gig.drawTexturedModalRect(renderX + 82, renderY, 0, 0, 5, 20);
+            gig.blit(renderX + 75, renderY, 0, 0, 5, 20);
+            gig.blit(renderX + 82, renderY, 0, 0, 5, 20);
 
             if (this.cap.getMetalBurning(AllomancyCapability.IRON)) {
-                gig.drawTexturedModalRect(renderX, renderY + 5 + ironY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+                gig.blit(renderX, renderY + 5 + ironY, Frames[this.currentFrame].x, Frames[this.currentFrame].y, 5, 3);
             }
             if (this.cap.getMetalBurning(AllomancyCapability.STEEL)) {
-                gig.drawTexturedModalRect(renderX + 7, renderY + 5 + steelY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+                gig.blit(renderX + 7, renderY + 5 + steelY, Frames[this.currentFrame].x, Frames[this.currentFrame].y, 5, 3);
             }
             if (this.cap.getMetalBurning(AllomancyCapability.TIN)) {
-                gig.drawTexturedModalRect(renderX + 25, renderY + 5 + tinY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+                gig.blit(renderX + 25, renderY + 5 + tinY, Frames[this.currentFrame].x, Frames[this.currentFrame].y, 5, 3);
             }
             if (this.cap.getMetalBurning(AllomancyCapability.PEWTER)) {
-                gig.drawTexturedModalRect(renderX + 32, renderY + 5 + pewterY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+                gig.blit(renderX + 32, renderY + 5 + pewterY, Frames[this.currentFrame].x, Frames[this.currentFrame].y, 5, 3);
             }
             if (this.cap.getMetalBurning(AllomancyCapability.ZINC)) {
-                gig.drawTexturedModalRect(renderX + 50, renderY + 5 + zincY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+                gig.blit(renderX + 50, renderY + 5 + zincY, Frames[this.currentFrame].x, Frames[this.currentFrame].y, 5, 3);
             }
             if (this.cap.getMetalBurning(AllomancyCapability.BRASS)) {
-                gig.drawTexturedModalRect(renderX + 57, renderY + 5 + brassY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+                gig.blit(renderX + 57, renderY + 5 + brassY, Frames[this.currentFrame].x, Frames[this.currentFrame].y, 5, 3);
             }
             if (this.cap.getMetalBurning(AllomancyCapability.COPPER)) {
-                gig.drawTexturedModalRect(renderX + 75, renderY + 5 + copperY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+                gig.blit(renderX + 75, renderY + 5 + copperY, Frames[this.currentFrame].x, Frames[this.currentFrame].y, 5, 3);
             }
             if (this.cap.getMetalBurning(AllomancyCapability.BRONZE)) {
-                gig.drawTexturedModalRect(renderX + 82, renderY + 5 + bronzeY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+                gig.blit(renderX + 82, renderY + 5 + bronzeY, Frames[this.currentFrame].x, Frames[this.currentFrame].y, 5, 3);
             }
 
             if (this.animationCounter > 6) // Draw the burning symbols...
@@ -209,7 +213,8 @@ public class ClientEventHandler {
                 }
             }
         }
-    }*/
+    }
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onClientTick(final TickEvent.ClientTickEvent event) {
@@ -316,7 +321,7 @@ public class ClientEventHandler {
                     }
 
                 }
-
+                // todo replace with a PlayerEvent.StartTracking event and PacketDistributor.TRACKING_ENTITY_AND_SELF
                 if (cap.getMetalBurning(AllomancyCapability.BRONZE) && !cap.getMetalBurning(AllomancyCapability.COPPER)) {
                     List<Entity> eListBurners;
                     metalBurners.clear();
@@ -440,16 +445,16 @@ public class ClientEventHandler {
             return;
         }
 
-        //drawMetalOverlay();
+        drawMetalOverlay();
 
     }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderGUIScreen(GuiScreenEvent.DrawScreenEvent event) {
-        //if (event.getGui() instanceof GUIMetalSelect && !event.isCancelable()) {
-        //drawMetalOverlay();
-        //}
+      //  if (event.getGui() instanceof GUIMetalSelect && !event.isCancelable()) {
+       // drawMetalOverlay();
+       // }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -478,7 +483,7 @@ public class ClientEventHandler {
             }
 
             for (BlockPos v : particleBlockTargets) {
-                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY()-1.0, v.getZ() + 0.5, 1.5F, 0F, 0.6F, 1F);
+                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY() - 1.0, v.getZ() + 0.5, 1.5F, 0F, 0.6F, 1F);
             }
         }
 
