@@ -474,11 +474,11 @@ public class ClientEventHandler {
         if ((this.cap.getMetalBurning(AllomancyCapability.IRON) || this.cap.getMetalBurning(AllomancyCapability.STEEL))) {
 
             for (Entity entity : particleTargets) {
-                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, entity.posX, entity.posY + entity.getHeight() / 2.0, entity.posZ, 1.5F, 0F, 0.6F, 1F);
+                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, entity.posX, entity.posY - 1.25 + entity.getHeight() / 2.0, entity.posZ, 1.5F, 0F, 0.6F, 1F);
             }
 
             for (BlockPos v : particleBlockTargets) {
-                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY() + 0.5, v.getZ() + 0.5, 1.5F, 0F, 0.6F, 1F);
+                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY()-1.0, v.getZ() + 0.5, 1.5F, 0F, 0.6F, 1F);
             }
         }
 
