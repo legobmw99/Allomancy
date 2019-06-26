@@ -67,46 +67,6 @@ public class AllomancyUtils {
 
 
     /**
-     * Replacement for the old addCoord in AxisAlignedBB.class, necessary for
-     * getMouseOverExtended
-     *
-     * @param a the original box
-     * @param x
-     * @param y
-     * @param z
-     * @return Adds a coordinate to the bounding box, extending it if the point
-     * lies outside the current ranges.
-     */
-    public static AxisAlignedBB addCoord(AxisAlignedBB a, double x, double y, double z) {
-        double d0 = a.minX;
-        double d1 = a.minY;
-        double d2 = a.minZ;
-        double d3 = a.maxX;
-        double d4 = a.maxY;
-        double d5 = a.maxZ;
-
-        if (x < 0.0D) {
-            d0 += x;
-        } else if (x > 0.0D) {
-            d3 += x;
-        }
-
-        if (y < 0.0D) {
-            d1 += y;
-        } else if (y > 0.0D) {
-            d4 += y;
-        }
-
-        if (z < 0.0D) {
-            d2 += z;
-        } else if (z > 0.0D) {
-            d5 += z;
-        }
-
-        return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
-    }
-
-    /**
      * Determines if a block is metal or not
      *
      * @param block to be checked

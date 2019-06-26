@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.ai;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
@@ -159,15 +159,15 @@ public class AIAttackOnCollideExtended extends Goal {
 			if (this.attackTick <= 0) {
 				this.attackTick = 20;
 
-				if (this.attacker.getHeldItemMainhand() != null) {
+				if (!this.attacker.getHeldItemMainhand().isEmpty()) {
 					this.attacker.swingArm(Hand.MAIN_HAND);
 				}
 
-				if (this.attacker instanceof AnimalEntity) {
+				if (this.attacker instanceof MonsterEntity) {
+					this.attacker.attackEntityAsMob(livingEntity);
+				} else {
 					livingEntity.attackEntityFrom(
 							DamageSource.causeMobDamage(this.attacker), 3);
-				} else {
-					this.attacker.attackEntityAsMob(livingEntity);
 				}
 			}
 		}

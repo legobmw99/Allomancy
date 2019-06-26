@@ -45,18 +45,24 @@ public class ChangeEmotionPacket {
             ctx.get().enqueueWork(() -> {
                         CreatureEntity target;
                         target = (CreatureEntity) ctx.get().getSender().world.getEntityByID(message.entityID);
-
                         if ((target != null) && message.aggro) {
+                            // Remove all current goals
                             target.goalSelector.getRunningGoals().forEach(target.goalSelector::removeGoal);
-                            target.setAttackTarget(target);
-                            target.setRevengeTarget(target);
+                            target.targetSelector.getRunningGoals().forEach(target.targetSelector::removeGoal);
+                            target.goalSelector.tick();
+                            target.targetSelector.tick();
+                            //Enable Targeting goals
+                            target.targetSelector.enableFlag(Goal.Flag.TARGET);
+                            //Add new goals
+                            target.setAttackTarget(ctx.get().getSender());
+                            target.setRevengeTarget(ctx.get().getSender());
                             target.goalSelector.addGoal(1, new SwimGoal(target));
-                            target.goalSelector.addGoal(5, new AIAttackOnCollideExtended(target, 1d, false));
-                            target.goalSelector.addGoal(5, new NearestAttackableTargetGoal<PlayerEntity>(target, PlayerEntity.class, false));
+                            target.targetSelector.addGoal(5, new AIAttackOnCollideExtended(target, 1d, false));
+                            target.targetSelector.addGoal(5, new NearestAttackableTargetGoal<PlayerEntity>(target, PlayerEntity.class, false));
                             target.goalSelector.addGoal(5, new RandomWalkingGoal(target, 0.8D));
                             target.goalSelector.addGoal(6, new LookAtGoal(target, PlayerEntity.class, 8.0F));
                             target.goalSelector.addGoal(6, new LookRandomlyGoal(target));
-                            target.goalSelector.addGoal(2, new HurtByTargetGoal(target, PlayerEntity.class));
+                            target.targetSelector.addGoal(2, new HurtByTargetGoal(target, PlayerEntity.class));
                             if (target instanceof CreeperEntity) {
                                 target.goalSelector.addGoal(2, new CreeperSwellGoal((CreeperEntity) target));
                             }
@@ -64,11 +70,19 @@ public class ChangeEmotionPacket {
                                 target.goalSelector.addGoal(4, new AIEvilAttack((RabbitEntity) target));
                             }
 
-                        } else if ((target != null) ) {
-                            target.goalSelector.getRunningGoals().forEach(target.goalSelector::removeGoal);
 
+                        } else if ((target != null) && !message.aggro) {
+                            // Remove all current goals
+                            target.goalSelector.getRunningGoals().forEach(target.goalSelector::removeGoal);
+                            target.targetSelector.getRunningGoals().forEach(target.targetSelector::removeGoal);
+                            target.goalSelector.tick();
+                            target.targetSelector.tick();
+                            target.setAttackTarget(null);
+                            target.setRevengeTarget(null);
+                            //Disable targeting as a whole
+                            target.targetSelector.disableFlag(Goal.Flag.TARGET);
+                            //Add new goals
                             target.goalSelector.addGoal(0, new SwimGoal(target));
-                            target.goalSelector.addGoal(0, new PanicGoal(target, 0.5D));
                             target.goalSelector.addGoal(5, new RandomWalkingGoal(target, 1.0D));
                             target.goalSelector.addGoal(6, new LookAtGoal(target, PlayerEntity.class, 6.0F));
                             target.goalSelector.addGoal(7, new LookRandomlyGoal(target));
