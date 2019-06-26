@@ -8,11 +8,13 @@ import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class GoldNuggetEntity extends ProjectileItemEntity {
     private boolean dropItem = true;
@@ -38,7 +40,7 @@ public class GoldNuggetEntity extends ProjectileItemEntity {
 
     @Override
     protected void onImpact(RayTraceResult rayTraceResult) {
-        if(rayTraceResult.getType() == RayTraceResult.Type.ENTITY && ((EntityRayTraceResult) rayTraceResult).getEntity() != this.getThrower()){
+        if(rayTraceResult.getType() == RayTraceResult.Type.ENTITY && ((EntityRayTraceResult) rayTraceResult).getEntity() == this.getThrower()){
             return;
         }
 
@@ -47,7 +49,7 @@ public class GoldNuggetEntity extends ProjectileItemEntity {
         }
 
         if (!this.world.isRemote) {
-            ItemStack goldAmmo = new ItemStack(Items.GOLD_NUGGET, 1);
+            ItemStack goldAmmo = new ItemStack(Items.GOLD_NUGGET);
             if (this.world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS) && rayTraceResult.getType() != RayTraceResult.Type.ENTITY && this.dropItem) {
                 this.world.addEntity(new ItemEntity(this.world, this.posX, this.posY, this.posZ, goldAmmo));
             }
@@ -62,4 +64,9 @@ public class GoldNuggetEntity extends ProjectileItemEntity {
         return Items.GOLD_NUGGET;
     }
 
+    @Override
+    public IPacket<?> createSpawnPacket()
+    {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 }

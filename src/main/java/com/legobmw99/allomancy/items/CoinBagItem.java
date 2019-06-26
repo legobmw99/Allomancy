@@ -45,24 +45,26 @@ public class CoinBagItem extends ShootableItem {
                 if (itemstack.getItem() == Items.GOLD_NUGGET) {
                     GoldNuggetEntity entitygold = new GoldNuggetEntity(Registry.gold_nugget, player, world);
                     entitygold.func_213884_b(itemstack);
-                    entitygold.shoot(player, player.rotationPitch, player.rotationYawHead, 0.0F, 7.0F, 0.0F);
+                    entitygold.shoot(player, player.rotationPitch, player.rotationYawHead, 2.0F, 5.0F, 1.0F);
                     world.addEntity(entitygold);
-                    return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(hand));
-
                 }
 
                 if (itemstack.getItem() == Items.IRON_NUGGET) {
                     IronNuggetEntity entityiron = new IronNuggetEntity(Registry.iron_nugget, player, world);
                     entityiron.func_213884_b(itemstack);
-                    entityiron.shoot(player, player.rotationPitch, player.rotationYawHead, 0.0F, 4.5F, 3.5F);
+                    entityiron.shoot(player, player.rotationPitch, player.rotationYawHead, 2.0F, 2.5F, 2.5F);
                     world.addEntity(entityiron);
-                    return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(hand));
 
                 }
+
+                if (!player.abilities.isCreativeMode) {
+                    itemstack.shrink(1);
+                }
+
+                return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(hand));
+
             }
-            if (!player.abilities.isCreativeMode) {
-                itemstack.shrink(1);
-            }
+
 
         }
         return new ActionResult<ItemStack>(ActionResultType.FAIL, player.getHeldItem(hand));

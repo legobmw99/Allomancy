@@ -2,13 +2,14 @@ package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.block.IronLeverBlock;
-import com.legobmw99.allomancy.entities.EntityRenderFactories;
 import com.legobmw99.allomancy.entities.GoldNuggetEntity;
 import com.legobmw99.allomancy.entities.IronNuggetEntity;
 import com.legobmw99.allomancy.items.*;
 import com.legobmw99.allomancy.network.packets.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -212,15 +213,19 @@ public class Registry {
     @OnlyIn(Dist.CLIENT)
     public static void registerEntityRenders() {
         //Use renderSnowball for nugget projectiles
-        RenderingRegistry.registerEntityRenderingHandler(GoldNuggetEntity.class, EntityRenderFactories.GOLD_FACTORY);
-        RenderingRegistry.registerEntityRenderingHandler(IronNuggetEntity.class, EntityRenderFactories.IRON_FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(GoldNuggetEntity.class, manager -> new SpriteRenderer<GoldNuggetEntity>(manager, Minecraft.getInstance().getItemRenderer()));
+        RenderingRegistry.registerEntityRenderingHandler(IronNuggetEntity.class, manager -> new SpriteRenderer<IronNuggetEntity>(manager, Minecraft.getInstance().getItemRenderer()));
     }
 
 
     @SubscribeEvent
     public static void onRegisterEntities(final RegistryEvent.Register<EntityType<?>> event) {
-        event.getRegistry().register(EntityType.Builder.<IronNuggetEntity>create(IronNuggetEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).build("iron_nugget").setRegistryName(Allomancy.MODID, "iron_nugget"));
-        event.getRegistry().register(EntityType.Builder.<GoldNuggetEntity>create(GoldNuggetEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).build("gold_nugget").setRegistryName(Allomancy.MODID, "gold_nugget"));
+        event.getRegistry().register(EntityType.Builder.<IronNuggetEntity>create(IronNuggetEntity::new, EntityClassification.MISC).setShouldReceiveVelocityUpdates(true)
+                .setUpdateInterval(1).setCustomClientFactory((spawnEntity, world) -> new IronNuggetEntity(iron_nugget, world)).size(0.25F, 0.25F).build("iron_nugget")
+                .setRegistryName(Allomancy.MODID, "iron_nugget"));
+        event.getRegistry().register(EntityType.Builder.<GoldNuggetEntity>create(GoldNuggetEntity::new, EntityClassification.MISC).setShouldReceiveVelocityUpdates(true)
+                .setUpdateInterval(1).setCustomClientFactory((spawnEntity, world) -> new GoldNuggetEntity(gold_nugget, world)).size(0.25F, 0.25F).build("gold_nugget")
+                .setRegistryName(Allomancy.MODID, "gold_nugget"));
 
     }
 

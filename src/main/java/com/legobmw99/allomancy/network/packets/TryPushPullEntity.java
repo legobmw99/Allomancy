@@ -8,6 +8,7 @@ import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -69,6 +70,8 @@ public class TryPushPullEntity {
                             AllomancyUtils.move(message.direction / 2.0, target, player.getPosition().down());
 
                             // Split the difference
+                        } else if (target instanceof ProjectileItemEntity){
+                            return;
                         } else {
                             AllomancyUtils.move(message.direction / 2.0, target, player.getPosition());
 
