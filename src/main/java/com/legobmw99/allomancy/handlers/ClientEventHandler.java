@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.handlers;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.entities.particles.SoundParticle;
 import com.legobmw99.allomancy.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.network.NetworkHelper;
@@ -507,12 +506,13 @@ public class ClientEventHandler {
         }
 
         magnitude = Math.sqrt(Math.pow((player.posX - sound.getX()), 2) + Math.pow((player.posY - sound.getY()), 2) + Math.pow((player.posZ - sound.getZ()), 2));
-        if (((magnitude) > 20) || ((magnitude) < .5)) {
+        if (((magnitude) > 20) || ((magnitude) < 1)) {
             return;
         }
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
         // Spawn sound particles
         if (cap.getMetalBurning(AllomancyCapability.TIN)) {
+            //todo change how this logic works
             if (sound.getSoundLocation().toString().contains("step") || sound.getSoundLocation().toString().contains("entity") || sound.getSoundLocation().toString().contains("hostile") || sound.getSoundLocation().toString().contains(".big")
                     || sound.getSoundLocation().toString().contains("scream") || sound.getSoundLocation().toString().contains("bow")) {
                 motionX = ((player.posX - (event.getSound().getX() + .5)) * -0.7) / magnitude;
@@ -521,8 +521,6 @@ public class ClientEventHandler {
                 Particle particle = new SoundParticle(player.world, player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), player.posY + .2, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
                         motionY, motionZ, sound);
                 this.mc.particles.addEffect(particle);
-                //todo investigate
-                Allomancy.LOGGER.debug("Created Sound Particle for sound " + sound.getSoundLocation().toString());
             }
 
         }
