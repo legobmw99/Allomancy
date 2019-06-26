@@ -57,7 +57,7 @@ public class AllomancyUtils {
 
         GL11.glBegin(GL11.GL_LINE_STRIP);
 
-        GL11.glVertex3d(pX, pY - 1, pZ);
+        GL11.glVertex3d(pX, pY - 0.5, pZ);
         GL11.glVertex3d(oX, oY, oZ);
 
         GL11.glEnd();

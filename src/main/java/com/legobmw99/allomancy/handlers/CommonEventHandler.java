@@ -66,6 +66,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public void onPlayerClone(final  net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
+        if (!event.getEntityPlayer().world.isRemote() && false) { //todo remove &&false once bug is fixed
             AllomancyCapability oldCap = AllomancyCapability.forPlayer(event.getOriginal());
             AllomancyCapability cap = AllomancyCapability.forPlayer(event.getEntityPlayer()); // the clone's cap
             if (oldCap.getAllomancyPower() >= 0) {
