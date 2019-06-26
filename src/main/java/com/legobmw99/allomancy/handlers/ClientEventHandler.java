@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.IngameGui;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.CreatureEntity;
@@ -440,7 +441,7 @@ public class ClientEventHandler {
         if (!this.mc.isGameFocused()) {
             return;
         }
-        if (this.mc.currentScreen != null) {
+        if (this.mc.currentScreen != null && !(this.mc.currentScreen instanceof ChatScreen) && !(this.mc.currentScreen instanceof MetalSelectScreen)) {
             return;
         }
 

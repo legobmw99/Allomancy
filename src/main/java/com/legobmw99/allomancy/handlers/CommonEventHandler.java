@@ -17,6 +17,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -65,7 +66,6 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public void onPlayerClone(final  net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
-        if (!event.getEntityPlayer().world.isRemote()) {
             AllomancyCapability oldCap = AllomancyCapability.forPlayer(event.getOriginal());
             AllomancyCapability cap = AllomancyCapability.forPlayer(event.getEntityPlayer()); // the clone's cap
             if (oldCap.getAllomancyPower() >= 0) {
@@ -73,7 +73,7 @@ public class CommonEventHandler {
                 cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
                 NetworkHelper.sendTo(new AllomancyPowerPacket(oldCap.getAllomancyPower()), (ServerPlayerEntity) event.getEntity());
             }
-            if (event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory") || !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
+            if (event.getEntityPlayer().world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) || !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
                 for (int i = 0; i < 8; i++) {
                     cap.setMetalAmounts(i, oldCap.getMetalAmounts(i));
                 }
