@@ -1,11 +1,9 @@
 package com.legobmw99.allomancy.util.proxy;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.handlers.ClientEventHandler;
 import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -17,7 +15,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void clientInit(final FMLClientSetupEvent e){
-       // Registry.registerEntityRenders();
+       Registry.registerEntityRenders();
     }
 
     @Override

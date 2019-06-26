@@ -44,8 +44,8 @@ public class TryPushPullBlock {
                         BlockPos pos = message.blockPos;
                         // Sanity check to make sure server has same configs and that the block is loaded in the server
                         if ((player.world.isBlockLoaded(pos) && (AllomancyUtils.isBlockMetal(player.world.getBlockState(pos).getBlock()))) // Check Block
-                                || player.getHeldItemMainhand().getItem() == Registry.coin_bag && (!player.func_213356_f(player.getHeldItemMainhand()).isEmpty()) /*some sort of find ammo func*/ &&
-                                message.direction == AllomancyUtils.PUSH) {
+                                || (player.getHeldItemMainhand().getItem() == Registry.coin_bag && (!player.func_213356_f(player.getHeldItemMainhand()).isEmpty()) /*some sort of find ammo func*/ &&
+                                message.direction == AllomancyUtils.PUSH)) {
                             // Check for the coin bag
                             if (player.world.getBlockState(pos).getBlock() instanceof IAllomanticallyActivatedBlock) {
                                 ((IAllomanticallyActivatedBlock) player.world.getBlockState(pos).getBlock())

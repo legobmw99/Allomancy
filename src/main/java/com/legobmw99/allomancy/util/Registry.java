@@ -2,11 +2,16 @@ package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.block.IronLeverBlock;
+import com.legobmw99.allomancy.entities.EntityRenderFactories;
+import com.legobmw99.allomancy.entities.GoldNuggetEntity;
+import com.legobmw99.allomancy.entities.IronNuggetEntity;
 import com.legobmw99.allomancy.items.*;
 import com.legobmw99.allomancy.network.packets.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -15,9 +20,12 @@ import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -62,8 +70,15 @@ public class Registry {
     @ObjectHolder("allomancy:iron_lever")
     public static IronLeverBlock iron_lever;
 
+    //Recipe holder
     @ObjectHolder("allomancy:vial_filling")
     public static SpecialRecipeSerializer<VialItemRecipe> vial_recipe_serializer;
+
+    //EntityType holders
+    @ObjectHolder("allomancy:iron_nugget")
+    public static EntityType<IronNuggetEntity> iron_nugget;
+    @ObjectHolder("allomancy:gold_nugget")
+    public static EntityType<GoldNuggetEntity> gold_nugget;
 
 
     public static final String[] flake_metals = {"iron", "steel", "tin", "pewter", "zinc", "brass", "copper", "bronze",
@@ -140,12 +155,6 @@ public class Registry {
 
     }
 
-    /*@OnlyIn(Dist.CLIENT)
-    public static void registerEntityRenders() {
-        //Use renderSnowball for nugget projectiles
-        RenderingRegistry.registerEntityRenderingHandler(EntityGoldNugget.class, EntityRenderFactories.GOLD_FACTORY);
-        RenderingRegistry.registerEntityRenderingHandler(EntityIronNugget.class, EntityRenderFactories.IRON_FACTORY);
-    }*/
 
     @SubscribeEvent
     public static void onRegisterRecipes(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
@@ -197,6 +206,21 @@ public class Registry {
                 new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "zinc_ore")),
                 new IronLeverBlock()
         );
+
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void registerEntityRenders() {
+        //Use renderSnowball for nugget projectiles
+        RenderingRegistry.registerEntityRenderingHandler(GoldNuggetEntity.class, EntityRenderFactories.GOLD_FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(IronNuggetEntity.class, EntityRenderFactories.IRON_FACTORY);
+    }
+
+
+    @SubscribeEvent
+    public static void onRegisterEntities(final RegistryEvent.Register<EntityType<?>> event) {
+        event.getRegistry().register(EntityType.Builder.<IronNuggetEntity>create(IronNuggetEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).build("iron_nugget").setRegistryName(Allomancy.MODID, "iron_nugget"));
+        event.getRegistry().register(EntityType.Builder.<GoldNuggetEntity>create(GoldNuggetEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).build("gold_nugget").setRegistryName(Allomancy.MODID, "gold_nugget"));
 
     }
 

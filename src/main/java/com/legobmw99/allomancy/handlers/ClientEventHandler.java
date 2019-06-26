@@ -268,7 +268,7 @@ public class ClientEventHandler {
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock())) {
+                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == Registry.coin_bag && player.isSneaking())) {
                                     NetworkHelper.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
                                 }
                             }
@@ -300,7 +300,7 @@ public class ClientEventHandler {
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock())) {
+                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == Registry.coin_bag && player.isSneaking())) {
                                     NetworkHelper.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
                                 }
                             }
@@ -494,6 +494,7 @@ public class ClientEventHandler {
         }
     }
 
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onSound(PlaySoundEvent event) {
@@ -506,7 +507,7 @@ public class ClientEventHandler {
         }
 
         magnitude = Math.sqrt(Math.pow((player.posX - sound.getX()), 2) + Math.pow((player.posY - sound.getY()), 2) + Math.pow((player.posZ - sound.getZ()), 2));
-        if (((magnitude) > 20) || ((magnitude) < 1)) {
+        if (((magnitude) > 25) || ((magnitude) < 3)) {
             return;
         }
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);

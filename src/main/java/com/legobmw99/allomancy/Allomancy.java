@@ -44,8 +44,6 @@ public class Allomancy {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AllomancyConfig.CLIENT_SPEC);
 
-        //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
-
     }
 
     public void clientInit(final FMLClientSetupEvent e) {

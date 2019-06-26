@@ -139,7 +139,7 @@ public class AllomancyConfig {
             defaultList.add(Items.IRON_SHOVEL.getRegistryName().toString());
             defaultList.add(Items.SHEARS.getRegistryName().toString());
             defaultList.add(Items.GOLDEN_APPLE.getRegistryName().toString());
-            defaultList.add(Items.GOLDEN_APPLE.getRegistryName().toString());
+            defaultList.add(Items.ENCHANTED_GOLDEN_APPLE.getRegistryName().toString());
             defaultList.add(Items.GOLDEN_CARROT.getRegistryName().toString());
             defaultList.add(Items.IRON_SWORD.getRegistryName().toString());
             defaultList.add(Items.IRON_NUGGET.getRegistryName().toString());

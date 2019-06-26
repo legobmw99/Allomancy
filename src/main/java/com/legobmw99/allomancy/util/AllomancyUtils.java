@@ -1,6 +1,8 @@
 package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.entities.GoldNuggetEntity;
+import com.legobmw99.allomancy.entities.IronNuggetEntity;
 import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
@@ -107,9 +109,9 @@ public class AllomancyUtils {
         if (entity instanceof FallingBlockEntity){
             return isBlockMetal(((FallingBlockEntity)entity).getBlockState().getBlock());
         }
-        //if (entity instanceof EntityIronNugget || entity instanceof EntityGoldNugget) {
-        //    return true;
-        //}
+        if (entity instanceof IronNuggetEntity || entity instanceof GoldNuggetEntity) {
+            return true;
+        }
         if (entity instanceof AbstractMinecartEntity) {
             return true;
         }

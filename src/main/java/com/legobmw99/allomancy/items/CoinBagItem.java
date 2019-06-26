@@ -1,13 +1,12 @@
 package com.legobmw99.allomancy.items;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.entities.GoldNuggetEntity;
+import com.legobmw99.allomancy.entities.IronNuggetEntity;
 import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShootableItem;
+import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -18,6 +17,7 @@ import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 
 public class CoinBagItem extends ShootableItem {
+
     public static final Predicate<ItemStack> NUGGETS = (stack) -> {
         return stack.getItem() == Items.IRON_NUGGET || stack.getItem() == Items.GOLD_NUGGET;
     };
@@ -35,25 +35,38 @@ public class CoinBagItem extends ShootableItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.func_213356_f(player.getHeldItem(hand));
+        if (itemstack.getItem() instanceof ArrowItem) { // the above get function has silly default behavior
+            itemstack = new ItemStack(Items.GOLD_NUGGET, 1);
+        }
 
-        if ( AllomancyCapability.forPlayer(player).getMetalBurning(AllomancyCapability.STEEL)) {    // make sure there is always an item available
+        if (AllomancyCapability.forPlayer(player).getMetalBurning(AllomancyCapability.STEEL)) {    // make sure there is always an item available
+            if (!world.isRemote) {
 
-            /* todo reimpl
-            if (itemstack.getItem() == Items.GOLD_NUGGET) {
-                EntityGoldNugget entitygold = new EntityGoldNugget(world, player);
-                world.addEntity(entitygold);
+                if (itemstack.getItem() == Items.GOLD_NUGGET) {
+                    GoldNuggetEntity entitygold = new GoldNuggetEntity(Registry.gold_nugget, player, world);
+                    entitygold.func_213884_b(itemstack);
+                    entitygold.shoot(player, player.rotationPitch, player.rotationYawHead, 0.0F, 7.0F, 0.0F);
+                    world.addEntity(entitygold);
+                    return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(hand));
+
+                }
+
+                if (itemstack.getItem() == Items.IRON_NUGGET) {
+                    IronNuggetEntity entityiron = new IronNuggetEntity(Registry.iron_nugget, player, world);
+                    entityiron.func_213884_b(itemstack);
+                    entityiron.shoot(player, player.rotationPitch, player.rotationYawHead, 0.0F, 4.5F, 3.5F);
+                    world.addEntity(entityiron);
+                    return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(hand));
+
+                }
             }
-
-            if (itemstack.getItem() == Items.IRON_NUGGET) {
-                EntityIronNugget entityiron = new EntityIronNugget(world, player);
-                world.addEntity(entityiron);
-            }*/
-
             if (!player.abilities.isCreativeMode) {
                 itemstack.shrink(1);
             }
+
         }
-        return new ActionResult<ItemStack>(ActionResultType.PASS, player.getHeldItem(hand));
+        return new ActionResult<ItemStack>(ActionResultType.FAIL, player.getHeldItem(hand));
+
     }
 
 
