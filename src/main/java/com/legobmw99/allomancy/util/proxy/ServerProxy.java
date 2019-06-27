@@ -1,6 +1,8 @@
 package com.legobmw99.allomancy.util.proxy;
 
 
+import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.commands.AllomancyPowerCommand;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -10,18 +12,19 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 public class ServerProxy extends CommonProxy {
 
     @Override
-    public void clientInit(FMLClientSetupEvent e) {
+    public void clientInit(final FMLClientSetupEvent e) {
         // no-op
     }
 
     @Override
-    public void init(FMLCommonSetupEvent e) {
+    public void init(final FMLCommonSetupEvent e) {
         super.init(e);
     }
 
     @Override
-    public void serverInit(FMLServerStartingEvent e) {
-        e.getCommandDispatcher();//e.registerServerCommand(new PowerCommand());
+    public void serverInit(final FMLServerStartingEvent e) {
+        Allomancy.LOGGER.info("Registering Allomancy Command");
+        AllomancyPowerCommand.register(e.getCommandDispatcher());
     }
 
     @Override

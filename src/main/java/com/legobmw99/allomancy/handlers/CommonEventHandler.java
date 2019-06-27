@@ -24,6 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class CommonEventHandler {
                     byte randomMisting = (byte) (Math.random() * 8);
                     cap.setAllomancyPower(randomMisting);
                     Allomancy.LOGGER.info("Assigned " + Registry.flake_metals[randomMisting] + " misting to " + player.getName().getFormattedText());
-                    ItemStack dust = new ItemStack(net.minecraft.util.registry.Registry.ITEM.getValue(new ResourceLocation(Allomancy.MODID, Registry.flake_metals[randomMisting] + "_flakes")).get());
+                    ItemStack dust = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Allomancy.MODID, Registry.flake_metals[randomMisting] + "_flakes")));
                     // Give the player one flake of their metal
                     if (!player.inventory.addItemStackToInventory(dust)) {
                         ItemEntity entity = new ItemEntity(player.getEntityWorld(), player.posX, player.posY, player.posZ, dust);

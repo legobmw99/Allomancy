@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.proxy.ClientProxy;
 import com.legobmw99.allomancy.util.proxy.CommonProxy;
 import com.legobmw99.allomancy.util.proxy.ServerProxy;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -35,10 +36,10 @@ public class Allomancy {
     public Allomancy() {
         instance = this;
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverInit);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientInit);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::modConfig);
+        MinecraftForge.EVENT_BUS.addListener(this::serverInit);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AllomancyConfig.CLIENT_SPEC);
@@ -49,7 +50,7 @@ public class Allomancy {
         proxy.clientInit(e);
     }
 
-    public void serverInit(FMLServerStartingEvent e) {
+    public void serverInit(final FMLServerStartingEvent e) {
         proxy.serverInit(e);
     }
 

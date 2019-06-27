@@ -44,6 +44,10 @@
     "advancements.become_mistborn.desc": "You have a power most people envy...",
 
     "key.categories.allomancy": "Allomancy",
-    "key.burn": "Burn Metals"
+    "key.burn": "Burn Metals",
+
+    "commands.allomancy.getpower": "%s currently has Allomantic power %s",
+    "commands.allomancy.setpower": "%s set to Allomantic power %s",
+    "commands.allomancy.unrecognized": "Unrecognized Allomancy power '%s'"
 
 }
