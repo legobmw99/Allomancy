@@ -34,7 +34,6 @@ public class LerasiumItem extends Item {
     }
 
 
-
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);

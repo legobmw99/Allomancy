@@ -70,7 +70,7 @@ public class TryPushPullEntity {
                             AllomancyUtils.move(message.direction / 2.0, target, player.getPosition().down());
 
                             // Split the difference
-                        } else if (target instanceof ProjectileItemEntity){
+                        } else if (target instanceof ProjectileItemEntity) {
                             return;
                         } else {
                             AllomancyUtils.move(message.direction / 2.0, target, player.getPosition());

@@ -40,7 +40,7 @@ public class GoldNuggetEntity extends ProjectileItemEntity {
 
     @Override
     protected void onImpact(RayTraceResult rayTraceResult) {
-        if(rayTraceResult.getType() == RayTraceResult.Type.ENTITY && ((EntityRayTraceResult) rayTraceResult).getEntity() == this.getThrower()){
+        if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY && ((EntityRayTraceResult) rayTraceResult).getEntity() == this.getThrower()) {
             return;
         }
 
@@ -65,8 +65,7 @@ public class GoldNuggetEntity extends ProjectileItemEntity {
     }
 
     @Override
-    public IPacket<?> createSpawnPacket()
-    {
+    public IPacket<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

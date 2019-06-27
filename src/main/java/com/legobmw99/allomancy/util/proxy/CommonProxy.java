@@ -18,7 +18,7 @@ public abstract class CommonProxy {
         // no-op
     }
 
-    public abstract void clientInit( final FMLClientSetupEvent e);
+    public abstract void clientInit(final FMLClientSetupEvent e);
 
     public abstract void serverInit(final FMLServerStartingEvent e);
 
@@ -31,6 +31,7 @@ public abstract class CommonProxy {
     }
 
     public abstract World getClientWorld();
+
     public abstract PlayerEntity getClientPlayer();
 
 }

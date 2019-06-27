@@ -24,22 +24,21 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     private LazyOptional<AllomancyCapability> handler;
 
     //todo seriously rethink this storage
-    public static final int[] MAX_BURN_TIME = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
+    public static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600};
     public static final int IRON = 0, STEEL = 1, TIN = 2, PEWTER = 3, ZINC = 4, BRASS = 5, COPPER = 6, BRONZE = 7;
 
     private byte allomancyPower = -1;
 
     private int damageStored = 0;
-    private int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
-    private int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    private boolean[] MetalBurning = { false, false, false, false, false, false, false, false };
+    private int[] BurnTime = {1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400};
+    private int[] MetalAmounts = {0, 0, 0, 0, 0, 0, 0, 0};
+    private boolean[] MetalBurning = {false, false, false, false, false, false, false, false};
 
 
     /**
      * Retrieve data for a specific player
-     * 
-     * @param player
-     *            the player you want data for
+     *
+     * @param player the player you want data for
      * @return the AllomancyCapabilites data of the player
      */
     public static AllomancyCapability forPlayer(Entity player) {
@@ -50,13 +49,12 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        return PLAYER_CAP.orEmpty(cap,handler);
+        return PLAYER_CAP.orEmpty(cap, handler);
     }
 
 
     /**
      * Constructor of the Capability object
-     * 
      */
     public AllomancyCapability() {
         handler = LazyOptional.of(() -> this);
@@ -65,7 +63,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     /**
      * Get the player's allomancy power -1 is none, 0-7 are each misting, 8 is full Mistborn
-     * 
+     *
      * @return the player's allomancy Power
      */
     public byte getAllomancyPower() {
@@ -74,9 +72,8 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     /**
      * Set the player's allomancy power
-     * 
-     * @param pow
-     *            the value to set
+     *
+     * @param pow the value to set
      */
     public void setAllomancyPower(byte pow) {
         this.allomancyPower = pow;
@@ -84,9 +81,8 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     /**
      * Check if a specific metal is burning
-     * 
-     * @param metal
-     *            the index of the metal to check
+     *
+     * @param metal the index of the metal to check
      * @return whether or not it is burning
      */
     public boolean getMetalBurning(int metal) {
@@ -95,11 +91,9 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     /**
      * Set whether or not a metal is burning
-     * 
-     * @param metal
-     *            the index of the metal to set
-     * @param metalBurning
-     *            the value to set
+     *
+     * @param metal        the index of the metal to set
+     * @param metalBurning the value to set
      */
     public void setMetalBurning(int metal, boolean metalBurning) {
         MetalBurning[metal] = metalBurning;
@@ -107,7 +101,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     /**
      * Get how much damage has been accumulated
-     * 
+     *
      * @return the amount of damage
      */
     public int getDamageStored() {
@@ -116,9 +110,8 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     /**
      * Set the amount of damage stored
-     * 
-     * @param damageStored
-     *            the amount of damage
+     *
+     * @param damageStored the amount of damage
      */
     public void setDamageStored(int damageStored) {
         this.damageStored = damageStored;
@@ -126,9 +119,8 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     /**
      * Get the amount of a specific metal
-     * 
-     * @param metal
-     *            the index of the metal to retrieve
+     *
+     * @param metal the index of the metal to retrieve
      * @return the amount of metal
      */
     public int getMetalAmounts(int metal) {
@@ -137,11 +129,9 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     /**
      * Set the amount of a specific metal
-     * 
-     * @param metal
-     *            the index of the metal to set
-     * @param metalAmounts
-     *            the amount of metal
+     *
+     * @param metal        the index of the metal to set
+     * @param metalAmounts the amount of metal
      */
     public void setMetalAmounts(int metal, int metalAmounts) {
         MetalAmounts[metal] = metalAmounts;
@@ -149,9 +139,8 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     /**
      * Get the burn time of a specific metal
-     * 
-     * @param metal
-     *            the index of the metal to retrieve
+     *
+     * @param metal the index of the metal to retrieve
      * @return the burn time
      */
     public int getBurnTime(int metal) {
@@ -160,11 +149,9 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     /**
      * Set the burn time of a specific metal
-     * 
-     * @param metal
-     *            the index of the metal to set
-     * @param burnTime
-     *            the burn time
+     *
+     * @param metal    the index of the metal to set
+     * @param burnTime the burn time
      */
     public void setBurnTime(int metal, int burnTime) {
         BurnTime[metal] = burnTime;
@@ -224,9 +211,6 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
 
-
-
-
     public static class Storage implements Capability.IStorage<AllomancyCapability> {
 
         @Override
@@ -236,8 +220,8 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
         @Override
         public void readNBT(Capability<AllomancyCapability> capability, AllomancyCapability instance, Direction side, INBT nbt) {
-            if(nbt instanceof CompoundNBT){
-                instance.deserializeNBT((CompoundNBT)nbt);
+            if (nbt instanceof CompoundNBT) {
+                instance.deserializeNBT((CompoundNBT) nbt);
             }
         }
 

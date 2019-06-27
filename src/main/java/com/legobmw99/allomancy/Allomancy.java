@@ -32,7 +32,6 @@ public class Allomancy {
     public static Allomancy instance;
 
 
-
     public Allomancy() {
         instance = this;
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
@@ -62,11 +61,11 @@ public class Allomancy {
         proxy.loadComplete(e);
     }
 
-    public void modConfig(final ModConfig.ModConfigEvent e){
+    public void modConfig(final ModConfig.ModConfigEvent e) {
         ModConfig cfg = e.getConfig();
-        if(cfg.getSpec() == AllomancyConfig.CLIENT_SPEC){
+        if (cfg.getSpec() == AllomancyConfig.CLIENT_SPEC) {
             AllomancyConfig.refreshClient();
-        } else if (cfg.getSpec() == AllomancyConfig.COMMON_SPEC){
+        } else if (cfg.getSpec() == AllomancyConfig.COMMON_SPEC) {
             AllomancyConfig.refreshCommon();
         }
     }

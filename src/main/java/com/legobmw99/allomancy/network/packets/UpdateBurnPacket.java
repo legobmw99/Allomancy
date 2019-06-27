@@ -50,7 +50,7 @@ public class UpdateBurnPacket {
                     cap.setMetalBurning(message.mat, false);
                 }
 
-                NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(()->player));
+                NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
 
 
             });

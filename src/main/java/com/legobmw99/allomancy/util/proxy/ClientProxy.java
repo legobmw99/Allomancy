@@ -14,8 +14,8 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 public class ClientProxy extends CommonProxy {
 
     @Override
-    public void clientInit(final FMLClientSetupEvent e){
-       Registry.registerEntityRenders();
+    public void clientInit(final FMLClientSetupEvent e) {
+        Registry.registerEntityRenders();
     }
 
     @Override

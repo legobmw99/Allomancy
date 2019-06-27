@@ -33,7 +33,7 @@ public class IronButtonBlock extends AbstractButtonBlock implements IAllomantica
     public boolean onBlockActivatedAllomantically(BlockState state, BlockPos pos, World worldIn, PlayerEntity player, boolean isPush) {
         if (state.get(POWERED) || worldIn.isRemote) {
             return true;
-        } else if(isPush) {
+        } else if (isPush) {
             worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(true)), 3);
             this.playSound(player, worldIn, pos, true);
             this.updateNeighbors(state, worldIn, pos);
