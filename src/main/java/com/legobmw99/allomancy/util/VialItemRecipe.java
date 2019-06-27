@@ -22,7 +22,7 @@ public class VialItemRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean func_77569_a(CraftingInventory inv, World worldIn) { //matches
+    public boolean matches(CraftingInventory inv, World worldIn) {
         this.item_result = ItemStack.EMPTY;
 
         boolean[] metals = {false, false, false, false, false, false, false, false};
@@ -81,7 +81,7 @@ public class VialItemRecipe extends SpecialRecipe {
 
 
     @Override
-    public ItemStack func_77572_b(CraftingInventory inv) { //getCraftingResult
+    public ItemStack getCraftingResult(CraftingInventory inv) { //getCraftingResult
         return this.item_result.copy();
     }
 
