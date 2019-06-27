@@ -132,7 +132,7 @@ public class Registry {
 
         @Override
         public String getName() {
-            return "wool";
+            return "allomancy:wool";
         }
 
         @Override
