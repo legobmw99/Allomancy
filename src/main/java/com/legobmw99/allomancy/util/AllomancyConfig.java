@@ -171,6 +171,7 @@ public class AllomancyConfig {
 
             defaultList.add("allomancy:vial");
             defaultList.add("allomancy:iron_lever");
+            defaultList.add("allomancy:iron_button");
             defaultList.add("allomancy:lerasium_nugget");
             defaultList.add("allomancy:allomantic_grinder");
             defaultList.add("allomancy:coin_bag");

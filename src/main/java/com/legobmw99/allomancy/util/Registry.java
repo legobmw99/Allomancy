@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.block.IronButtonBlock;
 import com.legobmw99.allomancy.block.IronLeverBlock;
 import com.legobmw99.allomancy.entities.GoldNuggetEntity;
 import com.legobmw99.allomancy.entities.IronNuggetEntity;
@@ -70,6 +71,8 @@ public class Registry {
     public static Block zinc_ore;
     @ObjectHolder("allomancy:iron_lever")
     public static IronLeverBlock iron_lever;
+    @ObjectHolder("allomancy:iron_button")
+    public static IronButtonBlock iron_button;
 
     //Recipe holder
     @ObjectHolder("allomancy:vial_filling")
@@ -194,7 +197,9 @@ public class Registry {
                 new BlockItem(lead_ore, prop_generic).setRegistryName(lead_ore.getRegistryName()),
                 new BlockItem(copper_ore, prop_generic).setRegistryName(copper_ore.getRegistryName()),
                 new BlockItem(zinc_ore, prop_generic).setRegistryName(zinc_ore.getRegistryName()),
-                new BlockItem(iron_lever, new Item.Properties().group(ItemGroup.REDSTONE)).setRegistryName(iron_lever.getRegistryName())
+                new BlockItem(iron_lever, new Item.Properties().group(ItemGroup.REDSTONE)).setRegistryName(iron_lever.getRegistryName()),
+                new BlockItem(iron_button, new Item.Properties().group(ItemGroup.REDSTONE)).setRegistryName(iron_button.getRegistryName())
+
         );
     }
 
@@ -205,7 +210,8 @@ public class Registry {
                 new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "lead_ore")),
                 new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "copper_ore")),
                 new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "zinc_ore")),
-                new IronLeverBlock()
+                new IronLeverBlock(),
+                new IronButtonBlock()
         );
 
     }

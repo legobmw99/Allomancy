@@ -6,7 +6,8 @@
     "block.allomancy.copper_ore": "Copper Ore",
     "block.allomancy.zinc_ore": "Zinc Ore",
     "block.allomancy.iron_lever": "Iron Lever",
-    "block.allomancy.iron_lever.lore": "This lever seems too heavy to move by ordinary means",
+    "block.allomancy.iron_button": "Iron Button",
+    "block.allomancy.iron_activation.lore": "This item seems too heavy to activate by ordinary means",
 
     "item.allomancy.allomantic_grinder": "Hand Grinder",
     "item.allomancy.lerasium_nugget": "Lerasium Nugget",
