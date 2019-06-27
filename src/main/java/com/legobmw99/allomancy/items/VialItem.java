@@ -82,13 +82,13 @@ public class VialItem extends Item {
             }
 
             if (filling == full) {
-                return new ActionResult<ItemStack>(ActionResultType.FAIL, itemStackIn);
+                return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
             }
 
             playerIn.setActiveHand(hand);
-            return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
+            return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
         }
-        return new ActionResult<ItemStack>(ActionResultType.FAIL, itemStackIn);
+        return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
     }
 
 

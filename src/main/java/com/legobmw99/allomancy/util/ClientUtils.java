@@ -33,7 +33,12 @@ public class ClientUtils {
     private static ClientPlayerEntity player = mc.player;
     private static AllomancyCapability cap;
 
-
+    /**
+     * Adapted from vanilla, allows getting mouseover at given distances
+     *
+     * @param dist the distance requested
+     * @return a RayTraceResult for the requested raytrace
+     */
     @Nullable
     public static RayTraceResult getMouseOverExtended(float dist) {
         mc = Minecraft.getInstance();
@@ -107,7 +112,10 @@ public class ClientUtils {
      * Draws the overlay for the metals
      */
     public static void drawMetalOverlay() {
-
+        player =  mc.player;
+        if(!player.isAlive()){
+            return;
+        }
         cap = AllomancyCapability.forPlayer(player);
 
         if (cap.getAllomancyPower() < 0) {

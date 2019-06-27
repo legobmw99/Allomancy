@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -33,12 +32,13 @@ public class Allomancy {
 
     public Allomancy() {
         instance = this;
+        // Register our setup events on the necessary buses
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientInit);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::modConfig);
         MinecraftForge.EVENT_BUS.addListener(this::serverInit);
 
+        //Config init
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AllomancyConfig.CLIENT_SPEC);
 
@@ -56,15 +56,12 @@ public class Allomancy {
     }
 
     public void init(final FMLCommonSetupEvent e) {
+        //Register our ArgumentType so it can be sent over network
         ArgumentTypes.register("allomancy_power", AllomancyPowerType.class, new ArgumentSerializer<>(AllomancyPowerType::powerType));
         OreGenerator.generationSetup();
         AllomancyCapability.register();
         MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
         Registry.registerPackets();
-    }
-
-    public void loadComplete(final FMLLoadCompleteEvent e) {
-
     }
 
     public void modConfig(final ModConfig.ModConfigEvent e) {
@@ -75,6 +72,4 @@ public class Allomancy {
             AllomancyConfig.refreshCommon();
         }
     }
-
-
 }

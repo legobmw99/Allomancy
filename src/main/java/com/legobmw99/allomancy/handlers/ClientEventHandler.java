@@ -204,7 +204,7 @@ public class ClientEventHandler {
         if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
             return;
         }
-        if (!this.mc.isGameFocused()) {
+        if (!this.mc.isGameFocused() || !this.mc.player.isAlive()) {
             return;
         }
         if (this.mc.currentScreen != null && !(this.mc.currentScreen instanceof ChatScreen) && !(this.mc.currentScreen instanceof MetalSelectScreen)) {
@@ -271,21 +271,23 @@ public class ClientEventHandler {
             return;
         }
 
-        magnitude = Math.sqrt(Math.pow((player.posX - sound.getX()), 2) + Math.pow((player.posY - sound.getY()), 2) + Math.pow((player.posZ - sound.getZ()), 2));
-        if (((magnitude) > 25) || ((magnitude) < 3)) {
-            return;
-        }
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-        // Spawn sound particles
         if (cap.getMetalBurning(AllomancyCapability.TIN)) {
-            //todo change how this logic works
-            if (sound.getSoundLocation().toString().contains("step") || sound.getSoundLocation().toString().contains("entity") || sound.getSoundLocation().toString().contains("hostile") || sound.getSoundLocation().toString().contains(".big")
-                    || sound.getSoundLocation().toString().contains("scream") || sound.getSoundLocation().toString().contains("bow")) {
+
+            magnitude = Math.sqrt(Math.pow((player.posX - sound.getX()), 2) + Math.pow((player.posY - sound.getY()), 2) + Math.pow((player.posZ - sound.getZ()), 2));
+
+            if (((magnitude) > 25) || ((magnitude) < 3)) {
+                return;
+            }
+
+            // Spawn sound particles
+            String soundName = sound.getSoundLocation().toString();
+            if (soundName.contains("entity") || soundName.contains("step")) {
                 motionX = ((player.posX - (event.getSound().getX() + .5)) * -0.7) / magnitude;
                 motionY = ((player.posY - (event.getSound().getY() + .2)) * -0.7) / magnitude;
                 motionZ = ((player.posZ - (event.getSound().getZ() + .5)) * -0.7) / magnitude;
                 Particle particle = new SoundParticle(player.world, player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), player.posY + .2, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
-                        motionY, motionZ, sound);
+                        motionY, motionZ, soundName);
                 this.mc.particles.addEffect(particle);
             }
         }

@@ -226,8 +226,6 @@ public class Registry {
 
     @SubscribeEvent
     public static void onRegisterEntities(final RegistryEvent.Register<EntityType<?>> event) {
-        Allomancy.LOGGER.debug("Arrow has a interval of " + EntityType.ARROW.getUpdateFrequency());
-        Allomancy.LOGGER.debug("Snowball has a interval of " + EntityType.SNOWBALL.getUpdateFrequency());
         event.getRegistry().register(EntityType.Builder.<IronNuggetEntity>create(IronNuggetEntity::new, EntityClassification.MISC).setShouldReceiveVelocityUpdates(true)
                 .setUpdateInterval(20).setCustomClientFactory((spawnEntity, world) -> new IronNuggetEntity(iron_nugget, world)).size(0.25F, 0.25F).build("iron_nugget")
                 .setRegistryName(Allomancy.MODID, "iron_nugget"));

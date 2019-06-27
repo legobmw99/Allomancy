@@ -48,7 +48,6 @@ public class TryPushPullBlock {
                         if (player.world.getBlockState(pos).getBlock() instanceof IAllomanticallyActivatedBlock) {
                             ((IAllomanticallyActivatedBlock) player.world.getBlockState(pos).getBlock())
                                     .onBlockActivatedAllomantically(player.world.getBlockState(pos), pos, player.world, player, message.direction == AllomancyUtils.PUSH);
-                            //} else if (player.world.getBlockState(pos).getBlock() instanceof FallingBlock){ //todo, maybe someday
                         } else {
                             AllomancyUtils.move(message.direction, player, pos);
                         }

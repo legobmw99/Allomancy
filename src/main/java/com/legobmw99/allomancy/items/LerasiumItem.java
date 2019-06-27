@@ -40,10 +40,10 @@ public class LerasiumItem extends Item {
         ItemStack itemStackIn = player.getHeldItem(hand);
         if (cap.getAllomancyPower() != 8) {
             player.setActiveHand(hand);
-            return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
+            return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
 
         } else {
-            return new ActionResult<ItemStack>(ActionResultType.FAIL, itemStackIn);
+            return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
         }
     }
 

@@ -47,7 +47,6 @@ public class VialItemRecipe extends SpecialRecipe {
             }
         }
 
-
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (!itemstack.isEmpty()) {

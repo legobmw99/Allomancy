@@ -18,9 +18,7 @@ import java.util.function.Predicate;
 
 public class CoinBagItem extends ShootableItem {
 
-    public static final Predicate<ItemStack> NUGGETS = (stack) -> {
-        return stack.getItem() == Items.IRON_NUGGET || stack.getItem() == Items.GOLD_NUGGET;
-    };
+    public static final Predicate<ItemStack> NUGGETS = (stack) -> stack.getItem() == Items.IRON_NUGGET || stack.getItem() == Items.GOLD_NUGGET;
 
     public CoinBagItem() {
         super(new Item.Properties().group(Registry.allomancy_group).maxStackSize(1));
@@ -61,13 +59,13 @@ public class CoinBagItem extends ShootableItem {
                     itemstack.shrink(1);
                 }
 
-                return new ActionResult<ItemStack>(ActionResultType.SUCCESS, player.getHeldItem(hand));
+                return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(hand));
 
             }
 
 
         }
-        return new ActionResult<ItemStack>(ActionResultType.FAIL, player.getHeldItem(hand));
+        return new ActionResult<>(ActionResultType.FAIL, player.getHeldItem(hand));
 
     }
 

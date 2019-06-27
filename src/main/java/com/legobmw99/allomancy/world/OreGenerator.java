@@ -59,6 +59,7 @@ public class OreGenerator {
 
     public static void generationSetup() {
         for (Biome biome : Biome.BIOMES) {
+            // We only want overworld generation
             if (biome.getRegistryName().toString().matches(".*end.*|.*nether.*")) {
                 continue;
             }

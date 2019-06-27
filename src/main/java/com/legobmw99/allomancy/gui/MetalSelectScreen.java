@@ -167,8 +167,6 @@ public class MetalSelectScreen extends Screen {
         GlStateManager.disableRescaleNormal();
 
         GlStateManager.popMatrix();
-
-
     }
 
     @Override
@@ -177,20 +175,10 @@ public class MetalSelectScreen extends Screen {
         return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
     }
 
-
     @Override
     public void tick() {
-
-        /*ImmutableSet<KeyBinding> set = ImmutableSet.of(mc.gameSettings.keyBindForward, mc.gameSettings.keyBindLeft,
-                mc.gameSettings.keyBindBack, mc.gameSettings.keyBindRight, mc.gameSettings.keyBindSneak,
-                mc.gameSettings.keyBindSprint, mc.gameSettings.keyBindJump);
-        for (KeyBinding k : set)
-            KeyBinding.setKeyBindState(k.getKey(), k.isKeyDown());*/
-
         timeIn++;
-
         super.tick();
-
     }
 
     @Override
@@ -214,7 +202,6 @@ public class MetalSelectScreen extends Screen {
             mc.player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F,
                     2.0F);
         }
-
     }
 
     @Override
