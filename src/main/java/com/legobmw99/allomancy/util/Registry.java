@@ -84,6 +84,9 @@ public class Registry {
     @ObjectHolder("allomancy:gold_nugget")
     public static EntityType<GoldNuggetEntity> gold_nugget;
 
+    @OnlyIn(Dist.CLIENT)
+    public static KeyBinding burn;
+
 
     public static final String[] flake_metals = {"iron", "steel", "tin", "pewter", "zinc", "brass", "copper", "bronze",
             "lead"};
@@ -101,8 +104,6 @@ public class Registry {
         }
     };
 
-
-    public static KeyBinding burn;
 
     public static IArmorMaterial WoolArmor = new IArmorMaterial() {
         @Override
@@ -149,11 +150,9 @@ public class Registry {
 
     public static void registerPackets() {
         int index = 0;
-        NETWORK.registerMessage(index++, AllomancyPowerPacket.class, AllomancyPowerPacket::encode, AllomancyPowerPacket::decode, AllomancyPowerPacket.Handler::handle);
-        NETWORK.registerMessage(index++, UpdateBurnPacket.class, UpdateBurnPacket::encode, UpdateBurnPacket::decode, UpdateBurnPacket.Handler::handle);
         NETWORK.registerMessage(index++, AllomancyCapabilityPacket.class, AllomancyCapabilityPacket::encode, AllomancyCapabilityPacket::decode, AllomancyCapabilityPacket.Handler::handle);
+        NETWORK.registerMessage(index++, UpdateBurnPacket.class, UpdateBurnPacket::encode, UpdateBurnPacket::decode, UpdateBurnPacket.Handler::handle);
         NETWORK.registerMessage(index++, ChangeEmotionPacket.class, ChangeEmotionPacket::encode, ChangeEmotionPacket::decode, ChangeEmotionPacket.Handler::handle);
-        NETWORK.registerMessage(index++, GetCapabilitiesPacket.class, GetCapabilitiesPacket::encode, GetCapabilitiesPacket::decode, GetCapabilitiesPacket.Handler::handle);
         NETWORK.registerMessage(index++, TryPushPullEntity.class, TryPushPullEntity::encode, TryPushPullEntity::decode, TryPushPullEntity.Handler::handle);
         NETWORK.registerMessage(index, TryPushPullBlock.class, TryPushPullBlock::encode, TryPushPullBlock::decode, TryPushPullBlock.Handler::handle);
 

@@ -179,28 +179,25 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     @Override
     public CompoundNBT serializeNBT() {
-        handler.ifPresent(h ->{
-
-        });
-        CompoundNBT nbt = new CompoundNBT();
-        nbt.putByte("allomancyPower", this.getAllomancyPower());
-        nbt.putInt("iron", this.getMetalAmounts(0));
-        nbt.putInt("steel", this.getMetalAmounts(1));
-        nbt.putInt("tin", this.getMetalAmounts(2));
-        nbt.putInt("pewter", this.getMetalAmounts(3));
-        nbt.putInt("zinc", this.getMetalAmounts(4));
-        nbt.putInt("brass", this.getMetalAmounts(5));
-        nbt.putInt("copper", this.getMetalAmounts(6));
-        nbt.putInt("bronze", this.getMetalAmounts(7));
-        nbt.putBoolean("iron_b", this.getMetalBurning(0));
-        nbt.putBoolean("steel_b", this.getMetalBurning(1));
-        nbt.putBoolean("tin_b", this.getMetalBurning(2));
-        nbt.putBoolean("pewter_b", this.getMetalBurning(3));
-        nbt.putBoolean("zinc_b", this.getMetalBurning(4));
-        nbt.putBoolean("brass_b", this.getMetalBurning(5));
-        nbt.putBoolean("copper_b", this.getMetalBurning(6));
-        nbt.putBoolean("bronze_b", this.getMetalBurning(7));
-        return nbt;
+        CompoundNBT allomancy_data = new CompoundNBT();
+        allomancy_data.putByte("allomancyPower", this.getAllomancyPower());
+        allomancy_data.putInt("iron", this.getMetalAmounts(0));
+        allomancy_data.putInt("steel", this.getMetalAmounts(1));
+        allomancy_data.putInt("tin", this.getMetalAmounts(2));
+        allomancy_data.putInt("pewter", this.getMetalAmounts(3));
+        allomancy_data.putInt("zinc", this.getMetalAmounts(4));
+        allomancy_data.putInt("brass", this.getMetalAmounts(5));
+        allomancy_data.putInt("copper", this.getMetalAmounts(6));
+        allomancy_data.putInt("bronze", this.getMetalAmounts(7));
+        allomancy_data.putBoolean("iron_b", this.getMetalBurning(0));
+        allomancy_data.putBoolean("steel_b", this.getMetalBurning(1));
+        allomancy_data.putBoolean("tin_b", this.getMetalBurning(2));
+        allomancy_data.putBoolean("pewter_b", this.getMetalBurning(3));
+        allomancy_data.putBoolean("zinc_b", this.getMetalBurning(4));
+        allomancy_data.putBoolean("brass_b", this.getMetalBurning(5));
+        allomancy_data.putBoolean("copper_b", this.getMetalBurning(6));
+        allomancy_data.putBoolean("bronze_b", this.getMetalBurning(7));
+        return allomancy_data;
 
     }
 

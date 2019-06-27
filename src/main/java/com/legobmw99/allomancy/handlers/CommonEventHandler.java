@@ -3,7 +3,6 @@ package com.legobmw99.allomancy.handlers;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
-import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.AllomancyUtils;
@@ -24,6 +23,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.List;
 
@@ -38,20 +38,15 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
-        if (!event.getPlayer().world.isRemote()) {
+        if (!event.getPlayer().world.isRemote) {
             if (event.getPlayer() instanceof ServerPlayerEntity) {
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
                 AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
-                NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
-                if (cap.getAllomancyPower() >= 0) {
-                    NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
-                } else if (AllomancyConfig.random_mistings && cap.getAllomancyPower() == -1) {
-
+                //Handle random misting case
+                if (AllomancyConfig.random_mistings && cap.getAllomancyPower() == -1) {
                     byte randomMisting = (byte) (Math.random() * 8);
-
                     cap.setAllomancyPower(randomMisting);
-                    NetworkHelper.sendTo(new AllomancyPowerPacket(randomMisting), player);
                     Allomancy.LOGGER.info("Assigned " + Registry.flake_metals[randomMisting] + " misting to " + player.getName().getFormattedText());
                     ItemStack dust = new ItemStack(net.minecraft.util.registry.Registry.ITEM.getValue(new ResourceLocation(Allomancy.MODID, Registry.flake_metals[randomMisting] + "_flakes")).get());
                     // Give the player one flake of their metal
@@ -60,27 +55,41 @@ public class CommonEventHandler {
                         player.getEntityWorld().addEntity(entity);
                     }
                 }
+
+                //Sync cap to client
+                NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
             }
         }
     }
 
     @SubscribeEvent
-    public void onPlayerClone(final  net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
-        if (!event.getEntityPlayer().world.isRemote() && false) { //todo remove &&false once bug is fixed
-            AllomancyCapability oldCap = AllomancyCapability.forPlayer(event.getOriginal());
-            AllomancyCapability cap = AllomancyCapability.forPlayer(event.getEntityPlayer()); // the clone's cap
-            if (oldCap.getAllomancyPower() >= 0) {
-                Allomancy.LOGGER.debug("Cloning allomancy capability");
-                cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
-                NetworkHelper.sendTo(new AllomancyPowerPacket(oldCap.getAllomancyPower()), (ServerPlayerEntity) event.getEntity());
-            }
-            if (event.getEntityPlayer().world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) || !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
-                for (int i = 0; i < 8; i++) {
-                    cap.setMetalAmounts(i, oldCap.getMetalAmounts(i));
+    public void onPlayerClone(final net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
+        if (!event.getEntityPlayer().world.isRemote()) {
+            event.getOriginal().getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(oldCap -> { //formerly used AllomancyCapability.forPlayer, but current forge bug breaks. See Forge #5869
+                AllomancyCapability cap = AllomancyCapability.forPlayer(event.getEntityPlayer()); // the clone's cap
+                if (oldCap.getAllomancyPower() >= 0) {
+                    cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
+                }
+                if (event.getEntityPlayer().world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) || !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
+                    for (int i = 0; i < 8; i++) {
+                        cap.setMetalAmounts(i, oldCap.getMetalAmounts(i));
+                    }
                 }
                 NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, event.getEntity().getEntityId()), (ServerPlayerEntity) event.getEntity());
+            });
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onStartTracking(final net.minecraftforge.event.entity.player.PlayerEvent.StartTracking event) {
+        if (!event.getTarget().world.isRemote) {
+            if (event.getTarget() instanceof ServerPlayerEntity) {
+                ServerPlayerEntity playerEntity = (ServerPlayerEntity) event.getTarget();
+                NetworkHelper.sendTo(new AllomancyCapabilityPacket(AllomancyCapability.forPlayer(playerEntity), playerEntity.getEntityId()), (ServerPlayerEntity) event.getEntityPlayer());
             }
         }
+
     }
 
     @SubscribeEvent
