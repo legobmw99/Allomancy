@@ -1,11 +1,16 @@
 package com.legobmw99.allomancy;
 
+import com.legobmw99.allomancy.commands.AllomancyPowerCommand;
+import com.legobmw99.allomancy.commands.AllomancyPowerType;
+import com.legobmw99.allomancy.handlers.ClientEventHandler;
+import com.legobmw99.allomancy.handlers.CommonEventHandler;
+import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.AllomancyConfig;
-import com.legobmw99.allomancy.util.proxy.ClientProxy;
-import com.legobmw99.allomancy.util.proxy.CommonProxy;
-import com.legobmw99.allomancy.util.proxy.ServerProxy;
+import com.legobmw99.allomancy.util.Registry;
+import com.legobmw99.allomancy.world.OreGenerator;
+import net.minecraft.command.arguments.ArgumentSerializer;
+import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -17,16 +22,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-
 @Mod(Allomancy.MODID)
 public class Allomancy {
     public static final String MODID = "allomancy";
-
-    public static File configDirectory;
-
-    public static CommonProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
-    ;
 
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -47,19 +45,26 @@ public class Allomancy {
     }
 
     public void clientInit(final FMLClientSetupEvent e) {
-        proxy.clientInit(e);
+        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+        Registry.initKeyBindings();
+        Registry.registerEntityRenders();
+
     }
 
     public void serverInit(final FMLServerStartingEvent e) {
-        proxy.serverInit(e);
+        AllomancyPowerCommand.register(e.getCommandDispatcher());
     }
 
     public void init(final FMLCommonSetupEvent e) {
-        proxy.init(e);
+        ArgumentTypes.register("allomancy_power", AllomancyPowerType.class, new ArgumentSerializer<>(AllomancyPowerType::powerType));
+        OreGenerator.generationSetup();
+        AllomancyCapability.register();
+        MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
+        Registry.registerPackets();
     }
 
     public void loadComplete(final FMLLoadCompleteEvent e) {
-        proxy.loadComplete(e);
+
     }
 
     public void modConfig(final ModConfig.ModConfigEvent e) {

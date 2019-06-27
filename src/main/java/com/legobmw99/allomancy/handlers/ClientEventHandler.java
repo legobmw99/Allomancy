@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.handlers;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.entities.particles.SoundParticle;
 import com.legobmw99.allomancy.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.network.NetworkHelper;
@@ -48,7 +47,7 @@ public class ClientEventHandler {
         // Run once per tick, only if in game, and only if there is a player
         if (event.phase == TickEvent.Phase.END && !this.mc.isGamePaused() && this.mc.player != null && this.mc.player.isAlive()) {
 
-            PlayerEntity player = Allomancy.proxy.getClientPlayer();
+            PlayerEntity player = mc.player;
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
             if (cap.getAllomancyPower() >= 0) {
@@ -174,7 +173,7 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onKeyInput(final InputEvent.KeyInputEvent event) {
         if (Registry.burn.isPressed()) {
-            PlayerEntity player = Allomancy.proxy.getClientPlayer();
+            PlayerEntity player = mc.player;
             AllomancyCapability cap;
             if (mc.currentScreen == null) {
                 if (player == null || !this.mc.isGameFocused()) {
@@ -226,7 +225,7 @@ public class ClientEventHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        PlayerEntity player = Allomancy.proxy.getClientPlayer();
+        PlayerEntity player = mc.player;
         if (player == null || !player.isAlive()) {
             return;
         }
@@ -266,7 +265,7 @@ public class ClientEventHandler {
     public void onSound(PlaySoundEvent event) {
         double motionX, motionY, motionZ, magnitude;
 
-        PlayerEntity player = Allomancy.proxy.getClientPlayer();
+        PlayerEntity player = mc.player;
         ISound sound = event.getSound();
         if ((player == null) || (sound == null) || !player.isAlive()) {
             return;

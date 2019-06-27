@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.network.packets;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.util.AllomancyCapability;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -41,7 +41,7 @@ public class AllomancyCapabilityPacket {
 
     public static void handle(final AllomancyCapabilityPacket message, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            PlayerEntity player = (PlayerEntity) Allomancy.proxy.getClientWorld().getEntityByID(message.entityID);
+            PlayerEntity player = (PlayerEntity) Minecraft.getInstance().world.getEntityByID(message.entityID);
             if (player != null) {
                 AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
                 playerCap.deserializeNBT(message.nbt);

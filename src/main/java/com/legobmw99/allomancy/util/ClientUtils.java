@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.util;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import net.minecraft.client.MainWindow;
@@ -30,9 +29,9 @@ public class ClientUtils {
     private static final ResourceLocation meterLoc = new ResourceLocation("allomancy", "textures/gui/overlay/meter.png");
     private static int animationCounter = 0;
     private static int currentFrame = 0;
-    private static ClientPlayerEntity player = (ClientPlayerEntity) Allomancy.proxy.getClientPlayer();
-    private static AllomancyCapability cap;
     private static Minecraft mc = Minecraft.getInstance();
+    private static ClientPlayerEntity player = mc.player;
+    private static AllomancyCapability cap;
 
 
     @Nullable
@@ -266,10 +265,10 @@ public class ClientUtils {
         }
         // play a sound effect
         if (capability.getMetalBurning(metal)) {
-            Allomancy.proxy.getClientPlayer().playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1,
+            player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1,
                     5);
         } else {
-            Allomancy.proxy.getClientPlayer().playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1,
+            player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1,
                     4);
         }
     }

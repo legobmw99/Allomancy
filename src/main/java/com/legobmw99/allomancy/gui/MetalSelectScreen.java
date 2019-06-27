@@ -9,8 +9,10 @@
  */
 package com.legobmw99.allomancy.gui;
 
-import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.util.*;
+import com.legobmw99.allomancy.util.AllomancyCapability;
+import com.legobmw99.allomancy.util.AllomancyConfig;
+import com.legobmw99.allomancy.util.ClientUtils;
+import com.legobmw99.allomancy.util.Registry;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -209,7 +211,7 @@ public class MetalSelectScreen extends Screen {
             int slot = slots.get(slotSelected);
             slot = (slot + 4) % 8; // Make the slot the one I actually want
             ClientUtils.toggleMetalBurn((byte) slot, cap);
-            Allomancy.proxy.getClientPlayer().playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F,
+            mc.player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F,
                     2.0F);
         }
 

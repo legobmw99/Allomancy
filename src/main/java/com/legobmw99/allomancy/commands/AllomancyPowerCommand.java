@@ -27,17 +27,16 @@ public class AllomancyPowerCommand {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
 
-
         LiteralArgumentBuilder<CommandSource> root = Commands.literal("allomancy").requires(permissions(0));
         root.then(Commands.literal("get").requires(permissions(0))
-                .executes(ctx -> getPower(ctx, false)))
+                .executes(ctx -> getPower(ctx, false))
                 .then(Commands.argument("targets", EntityArgument.players())
-                        .executes(ctx -> getPower(ctx, true)));
-        root.then(Commands.literal("set").requires(permissions(2)))
+                        .executes(ctx -> getPower(ctx, true))));
+        root.then(Commands.literal("set").requires(permissions(2))
                 .then(Commands.argument("type", AllomancyPowerType.INSTANCE)
-                        .executes(ctx -> setPower(ctx, false)))
-                .then(Commands.argument("targets", EntityArgument.players())
-                        .executes(ctx -> setPower(ctx, true)));
+                        .executes(ctx -> setPower(ctx, false))
+                        .then(Commands.argument("targets", EntityArgument.players())
+                                .executes(ctx -> setPower(ctx, true)))));
 
 
         LiteralCommandNode<CommandSource> command = dispatcher.register(root);
@@ -87,6 +86,9 @@ public class AllomancyPowerCommand {
         String type = ctx.getArgument("type", String.class);
         byte power = powerTypeToByte(type);
         cap.setAllomancyPower(power);
+        for (int i = 0; i < 8; i++) {
+            cap.setMetalBurning(i, false);
+        }
         NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
         ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.setpower", player.getDisplayName(), names[power + 1]), true);
         return power;
@@ -94,7 +96,7 @@ public class AllomancyPowerCommand {
     }
 
     private static byte powerTypeToByte(String type) {
-        for (byte i = 0; i < 9; i++) {
+        for (byte i = 0; i <= 9; i++) {
             if (type.equals(names[i])) {
                 i -= 1; //index at -1
                 return i;

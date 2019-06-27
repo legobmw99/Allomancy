@@ -23,6 +23,11 @@ public class AllomancyPowerType implements ArgumentType<String> {
 
     protected static final AllomancyPowerType INSTANCE = new AllomancyPowerType();
 
+    public static AllomancyPowerType powerType() {
+        return new AllomancyPowerType();
+    }
+
+
     @Override
     public String parse(StringReader reader) throws CommandSyntaxException {
         String in = reader.readUnquotedString();
@@ -34,7 +39,7 @@ public class AllomancyPowerType implements ArgumentType<String> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        return ISuggestionProvider.suggest(types, builder);
+        return ISuggestionProvider.suggest(types, builder).toCompletableFuture();
     }
 
     @Override
