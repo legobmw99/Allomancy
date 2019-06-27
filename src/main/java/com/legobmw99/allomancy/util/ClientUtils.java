@@ -1,6 +1,8 @@
 package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.network.NetworkHelper;
+import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -9,6 +11,7 @@ import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -246,6 +249,28 @@ public class ClientUtils {
                     currentFrame = 0;
                 }
             }
+        }
+    }
+
+    /**
+     * Used to toggle a metal's burn state and play a sound effect
+     *
+     * @param metal      the index of the metal to toggle
+     * @param capability the capability being handled
+     */
+    public static void toggleMetalBurn(byte metal, AllomancyCapability capability) {
+        NetworkHelper.sendToServer(new UpdateBurnPacket(metal, !capability.getMetalBurning(metal)));
+
+        if (capability.getMetalAmounts(metal) > 0) {
+            capability.setMetalBurning(metal, !capability.getMetalBurning(metal));
+        }
+        // play a sound effect
+        if (capability.getMetalBurning(metal)) {
+            Allomancy.proxy.getClientPlayer().playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1,
+                    5);
+        } else {
+            Allomancy.proxy.getClientPlayer().playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1,
+                    4);
         }
     }
 }

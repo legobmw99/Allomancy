@@ -1,11 +1,9 @@
 package com.legobmw99.allomancy.util;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.entities.GoldNuggetEntity;
 import com.legobmw99.allomancy.entities.IronNuggetEntity;
 import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
-import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
@@ -17,8 +15,6 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -137,28 +133,6 @@ public class AllomancyUtils {
 
     }
 
-
-    /**
-     * Used to toggle a metal's burn state and play a sound effect
-     *
-     * @param metal      the index of the metal to toggle
-     * @param capability the capability being handled
-     */
-    public static void toggleMetalBurn(byte metal, AllomancyCapability capability) {
-        NetworkHelper.sendToServer(new UpdateBurnPacket(metal, !capability.getMetalBurning(metal)));
-
-        if (capability.getMetalAmounts(metal) > 0) {
-            capability.setMetalBurning(metal, !capability.getMetalBurning(metal));
-        }
-        // play a sound effect
-        if (capability.getMetalBurning(metal)) {
-            Allomancy.proxy.getClientPlayer().playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1,
-                    5);
-        } else {
-            Allomancy.proxy.getClientPlayer().playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1,
-                    4);
-        }
-    }
 
     /**
      * Runs each worldTick, checking the burn times, abilities, and metal

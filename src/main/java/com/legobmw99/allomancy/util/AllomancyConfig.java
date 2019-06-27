@@ -76,25 +76,38 @@ public class AllomancyConfig {
         public final ForgeConfigSpec.IntValue zinc_max_y;
 
         CommonConfig(ForgeConfigSpec.Builder builder) {
-            builder.push("World Gen");
+            builder.comment("Settings for the mod's added ore generation").push("WorldGen");
+            builder.push("Copper");
             generate_copper = builder.comment("Generate Copper Ore").define("generate_copper", true);
-            generate_tin = builder.comment("Generate Tin Ore").define("generate_tin", true);
-            generate_lead = builder.comment("Generate Lead Ore").define("generate_lead", true);
-            generate_zinc = builder.comment("Generate Zinc Ore").define("generate_zinc", true);
             copper_density = builder.comment("Density of Copper Ore").defineInRange("copper_density", 15, 1, 40);
-            tin_density = builder.comment("Density of Tin Ore").defineInRange("tin_density", 15, 1, 40);
-            lead_density = builder.comment("Density of Lead Ore").defineInRange("lead_density", 15, 1, 40);
-            zinc_density = builder.comment("Density of Zinc Ore").defineInRange("zinc_density", 12, 1, 40);
             copper_min_y = builder.comment("Minimum Y Level to Generate Copper").defineInRange("copper_min_y", 30, 1, 128);
             copper_max_y = builder.comment("Maximum Y Level to Generate Copper").defineInRange("copper_max_y", 50, 1, 128);
+            builder.pop();
+
+            builder.push("Tin");
+            generate_tin = builder.comment("Generate Tin Ore").define("generate_tin", true);
+            tin_density = builder.comment("Density of Tin Ore").defineInRange("tin_density", 15, 1, 40);
             tin_min_y = builder.comment("Minimum Y Level to Generate Tin").defineInRange("tin_min_y", 40, 1, 128);
             tin_max_y = builder.comment("Maximum Y Level to Generate Tin").defineInRange("tin_max_y", 64, 1, 128);
+            builder.pop();
+
+            builder.push("Lead");
+            generate_lead = builder.comment("Generate Lead Ore").define("generate_lead", true);
+            lead_density = builder.comment("Density of Lead Ore").defineInRange("lead_density", 15, 1, 40);
             lead_min_y = builder.comment("Minimum Y Level to Generate Lead").defineInRange("lead_min_y", 20, 1, 128);
             lead_max_y = builder.comment("Maximum Y Level to Generate Lead").defineInRange("lead_max_y", 40, 1, 128);
+            builder.pop();
+
+            builder.push("Zinc");
+            generate_zinc = builder.comment("Generate Zinc Ore").define("generate_zinc", true);
+            zinc_density = builder.comment("Density of Zinc Ore").defineInRange("zinc_density", 12, 1, 40);
             zinc_min_y = builder.comment("Minimum Y Level to Generate Zinc").defineInRange("zinc_min_y", 20, 1, 128);
             zinc_max_y = builder.comment("Maximum Y Level to Generate Zinc").defineInRange("zinc_max_y", 40, 1, 128);
             builder.pop();
-            builder.push("Gameplay");
+
+            builder.pop();
+
+            builder.comment("Settings for the gameplay elements of the mod").push("Gameplay");
             random_mistings = builder.comment("Spawn players as a random Misting").define("random_mistings", true);
             whitelist = builder.comment("List of registry names of items and blocks that are counted as 'metal").defineList("whitelist", default_whitelist(), o -> o instanceof String);
             builder.pop();
@@ -237,7 +250,7 @@ public class AllomancyConfig {
 
         ClientConfig(ForgeConfigSpec.Builder builder) {
             builder.push("Graphics");
-            max_metal_detection = builder.comment("Maximum iron/steelsight distance").defineInRange("max_metal_distance", 12, 3, 30);
+            max_metal_detection = builder.comment("Maximum iron/steelsight distance").defineInRange("max_metal_distance", 15, 3, 30);
             animate_selection = builder.comment("Animate the selection wheel").define("animate_selection", true);
             overlay_position = builder.comment("Screen Overlay Position").comment("Options: TOP_RIGHT, TOP_LEFT, BOTTOM_RIGHT, BOTTOM_LEFT").defineEnum("overlay_position", SCREEN_LOC.TOP_RIGHT);
             builder.pop();

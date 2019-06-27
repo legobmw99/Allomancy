@@ -191,7 +191,7 @@ public class ClientEventHandler {
                  * Mistings only have one metal, so toggle that one
                  */
                 if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 8) {
-                    AllomancyUtils.toggleMetalBurn(cap.getAllomancyPower(), cap);
+                    ClientUtils.toggleMetalBurn(cap.getAllomancyPower(), cap);
                 }
 
                 /*
