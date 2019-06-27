@@ -69,9 +69,7 @@ public class ClientEventHandler {
                                     NetworkHelper.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
                                 }
                             }
-
                         }
-
                     }
                     // All zinc powers
                     if (cap.getMetalBurning(AllomancyCapability.ZINC)) {
@@ -83,7 +81,6 @@ public class ClientEventHandler {
                             }
                         }
                     }
-
                 }
                 if (this.mc.gameSettings.keyBindUseItem.isKeyDown()) {
                     // Ray trace 20 blocks
@@ -101,9 +98,7 @@ public class ClientEventHandler {
                                     NetworkHelper.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
                                 }
                             }
-
                         }
-
                     }
                     // All brass powers
                     if (cap.getMetalBurning(AllomancyCapability.BRASS)) {
@@ -115,7 +110,6 @@ public class ClientEventHandler {
                             }
                         }
                     }
-
                 }
 
 
@@ -219,7 +213,6 @@ public class ClientEventHandler {
         }
 
         ClientUtils.drawMetalOverlay();
-
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -296,9 +289,7 @@ public class ClientEventHandler {
                         motionY, motionZ, sound);
                 this.mc.particles.addEffect(particle);
             }
-
         }
     }
-
 
 }

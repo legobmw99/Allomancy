@@ -130,7 +130,6 @@ public class AllomancyUtils {
         if (toMove instanceof ServerPlayerEntity) {
             toMove.fallDistance = 0;
         }
-
     }
 
 
@@ -161,7 +160,6 @@ public class AllomancyUtils {
                         }
                     }
                 }
-
             }
         }
     }
