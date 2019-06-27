@@ -38,16 +38,14 @@ public class AllomancyCapabilityPacket {
         return new AllomancyCapabilityPacket(buf.readCompoundTag(), buf.readInt());
     }
 
-    public static class Handler {
 
-        public static void handle(final AllomancyCapabilityPacket message, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> {
-                PlayerEntity player = (PlayerEntity) Allomancy.proxy.getClientWorld().getEntityByID(message.entityID);
-                if (player != null) {
-                    AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
-                    playerCap.deserializeNBT(message.nbt);
-                }
-            });
-        }
+    public static void handle(final AllomancyCapabilityPacket message, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            PlayerEntity player = (PlayerEntity) Allomancy.proxy.getClientWorld().getEntityByID(message.entityID);
+            if (player != null) {
+                AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
+                playerCap.deserializeNBT(message.nbt);
+            }
+        });
     }
 }

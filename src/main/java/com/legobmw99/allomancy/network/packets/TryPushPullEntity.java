@@ -41,46 +41,43 @@ public class TryPushPullEntity {
     }
 
 
-    public static class Handler {
+    public static void handle(final TryPushPullEntity message, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayerEntity player = ctx.get().getSender();
+            Entity target = player.world.getEntityByID(message.entityIDOther);
+            if (target != null) {
+                if (AllomancyUtils.isEntityMetal(target)) {
+                    // The player moves
+                    if (target instanceof IronGolemEntity || target instanceof ItemFrameEntity) {
+                        AllomancyUtils.move(message.direction, player, target.getPosition());
 
-        public static void handle(final TryPushPullEntity message, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> {
-                ServerPlayerEntity player = ctx.get().getSender();
-                Entity target = player.world.getEntityByID(message.entityIDOther);
-                if (target != null) {
-                    if (AllomancyUtils.isEntityMetal(target)) {
-                        // The player moves
-                        if (target instanceof IronGolemEntity || target instanceof ItemFrameEntity) {
-                            AllomancyUtils.move(message.direction, player, target.getPosition());
-
-                            // Depends if the minecart is filled
-                        } else if (target instanceof AbstractMinecartEntity) {
-                            if (target.isBeingRidden()) {
-                                if (target.isRidingOrBeingRiddenBy(player)) {
-                                    //no op
-                                } else {
-                                    AllomancyUtils.move(message.direction / 2.0, target, player.getPosition());
-                                    AllomancyUtils.move(message.direction / 2.0, player, target.getPosition());
-                                }
+                        // Depends if the minecart is filled
+                    } else if (target instanceof AbstractMinecartEntity) {
+                        if (target.isBeingRidden()) {
+                            if (target.isRidingOrBeingRiddenBy(player)) {
+                                //no op
                             } else {
-                                AllomancyUtils.move(message.direction, target, player.getPosition());
+                                AllomancyUtils.move(message.direction / 2.0, target, player.getPosition());
+                                AllomancyUtils.move(message.direction / 2.0, player, target.getPosition());
                             }
-                            // The target moves
-                        } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity) {
-                            AllomancyUtils.move(message.direction / 2.0, target, player.getPosition().down());
-
-                            // Split the difference
-                        } else if (target instanceof ProjectileItemEntity) {
-                            return;
                         } else {
-                            AllomancyUtils.move(message.direction / 2.0, target, player.getPosition());
-
-                            AllomancyUtils.move(message.direction / 2.0, player, target.getPosition());
+                            AllomancyUtils.move(message.direction, target, player.getPosition());
                         }
+                        // The target moves
+                    } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity) {
+                        AllomancyUtils.move(message.direction / 2.0, target, player.getPosition().down());
+
+                        // Split the difference
+                    } else if (target instanceof ProjectileItemEntity) {
+                        return;
+                    } else {
+                        AllomancyUtils.move(message.direction / 2.0, target, player.getPosition());
+
+                        AllomancyUtils.move(message.direction / 2.0, player, target.getPosition());
                     }
                 }
+            }
 
-            });
-        }
+        });
     }
 }

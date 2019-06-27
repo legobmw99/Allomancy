@@ -36,24 +36,21 @@ public class UpdateBurnPacket {
     }
 
 
-    public static class Handler {
+    public static void handle(final UpdateBurnPacket message, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
 
-        public static void handle(final UpdateBurnPacket message, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> {
+            ServerPlayerEntity player = ctx.get().getSender();
+            AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
-                ServerPlayerEntity player = ctx.get().getSender();
-                AllomancyCapability cap = AllomancyCapability.forPlayer(player);
+            if (cap.getMetalAmounts(message.mat) > 0) {
+                cap.setMetalBurning(message.mat, message.value);
+            } else {
+                cap.setMetalBurning(message.mat, false);
+            }
 
-                if (cap.getMetalAmounts(message.mat) > 0) {
-                    cap.setMetalBurning(message.mat, message.value);
-                } else {
-                    cap.setMetalBurning(message.mat, false);
-                }
-
-                NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
+            NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
 
 
-            });
-        }
+        });
     }
 }
