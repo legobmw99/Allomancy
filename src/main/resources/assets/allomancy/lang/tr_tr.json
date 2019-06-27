@@ -1,0 +1,49 @@
+{
+    "itemGroup.allomancy": "Allomancy",
+
+    "block.allomancy.tin_ore": "Kalay Ore",
+    "block.allomancy.lead_ore": "Kurşun Ore",
+    "block.allomancy.copper_ore": "Bakır Ore",
+    "block.allomancy.zinc_ore": "Çinko Ore",
+    "block.allomancy.iron_lever": "Demir Şalter",
+    "block.allomancy.iron_button": "Demir Buton",
+    "block.allomancy.iron_activation.lore": "Bu öğe sıradan yöntemlerle etkinleştirmek için çok ağır görünüyor",
+
+    "item.allomancy.allomantic_grinder": "El Değirmeni",
+    "item.allomancy.lerasium_nugget": "Lerasium Parçası",
+    "item.allomancy.lerasium_nugget.lore": "Bu eşyaya garip güçler eklenmiş, belki de onu yemelisin",
+    "item.allomancy.mistcloak": "Mistcloak",
+    "item.allomancy.coin_bag": "Para Çantası",
+    "item.allomancy.vial": "Allomantic Vial",
+    "item.allomancy.brass_flakes": "Pirinç Tanesi",
+    "item.allomancy.bronze_flakes": "Bronz Tanesi",
+    "item.allomancy.iron_flakes": "Demir Tanesi",
+    "item.allomancy.steel_flakes": "Çelik Tanesi",
+    "item.allomancy.pewter_flakes": "Pewter Tanesi",
+    "item.allomancy.copper_flakes": "Bakır Tanesi",
+    "item.allomancy.tin_flakes": "Kalay Tanesi",
+    "item.allomancy.zinc_flakes": "Çinko Tanesi",
+    "item.allomancy.lead_flakes": "Kurşun Tanesi",
+    "item.allomancy.zinc_ingot": "Çinko Külçesi",
+    "item.allomancy.lead_ingot": "Kurşun Külçesi",
+    "item.allomancy.tin_ingot": "Kalay Külçesi",
+    "item.allomancy.copper_ingot": "Bakır Külçesi",
+    "item.allomancy.brass_ingot": "Pirinç Külçesi",
+    "item.allomancy.bronze_ingot": "Bronz Külçesi",
+
+    "metals.iron" : "Demir",
+    "metals.steel": "Çelik",
+    "metals.tin": "Kalay",
+    "metals.pewter": "Pewter",
+    "metals.bronze": "Bronz",
+    "metals.copper": "Bakır",
+    "metals.zinc": "Çinko",
+    "metals.brass": "Pirinç",
+
+    "advancements.become_mistborn.title": "Mistborn ol!",
+    "advancements.become_mistborn.desc": "Çoğu insanın imrendiği bir gücün var ...",
+
+    "key.categories.allomancy": "Allomancy",
+    "key.burn": "Metalleri Yak"
+
+}
