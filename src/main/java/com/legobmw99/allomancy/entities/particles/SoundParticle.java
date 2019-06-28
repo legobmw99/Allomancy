@@ -7,13 +7,14 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SoundParticle extends SpriteTexturedParticle {
-    public SoundParticle(World world, double x, double y, double z, double motionX, double motionY, double motionZ, String soundName) {
+    public SoundParticle(World world, double x, double y, double z, double motionX, double motionY, double motionZ, SoundCategory soundCategory) {
         super(world, x, y, z, motionX, motionY, motionZ);
         //todo change sprite
         setSprite(Minecraft.getInstance().getItemRenderer().getItemModelMesher().getParticleIcon(new ItemStack(Items.RABBIT_FOOT)));
@@ -26,29 +27,22 @@ public class SoundParticle extends SpriteTexturedParticle {
         setMaxAge(20);
 
         // Default: Blue
-        this.particleGreen = 0;
-        this.particleBlue = 1F;
-        this.particleRed = 0;
+        setColor(0F, 1F, 0);
 
 
-        if (soundName.contains("pig") || soundName.contains("rabbit") || soundName.contains("sheep") || soundName.contains("cow") || soundName.contains("cat") || soundName.contains("bat")
-                || soundName.contains("horse") || soundName.contains("wolf") || soundName.contains("mooshroom") || soundName.contains("villager") || soundName.contains("golem")
-                || soundName.contains("chicken")|| soundName.contains("donkey") || soundName.contains("mule") || soundName.contains("fox") || soundName.contains("turtle")
-                || soundName.contains("llama")) {
-            // Friendly mob: Green
-            this.particleGreen = 1;
-            this.particleBlue = 0.25F;
-            this.particleRed = 0;
+        if (soundCategory == SoundCategory.PLAYERS) {
+            //Players: Yellow
+            setColor(1F, 1F, 0F);
         }
 
-        if (soundName.contains("skeleton") || soundName.contains("hostile") || soundName.contains("zombie") || soundName.contains("slime") || soundName.contains("blaze")
-                || soundName.contains("witch") || soundName.contains("guardian") || soundName.contains("magmacube") || soundName.contains("endermen") || soundName.contains("enderdragon")
-                || soundName.contains("ghast") || soundName.contains("spider") || soundName.contains("silverfish") || soundName.contains("creeper") || soundName.contains("arrow")
-                || soundName.contains("pillager") || soundName.contains("phanton") || soundName.contains("husk") || soundName.contains("stray")  || soundName.contains("ravager")) {
+        if (soundCategory == SoundCategory.NEUTRAL) {
+            // Friendly mob: Green
+            setColor(0F, 1F, 0.25F);
+        }
+
+        if (soundCategory == SoundCategory.HOSTILE) {
             // Hostile mob: Red
-            this.particleGreen = 0.15F;
-            this.particleBlue = 0.15F;
-            this.particleRed = 1;
+            setColor(1F, 0.15F, 0.15F);
         }
 
     }

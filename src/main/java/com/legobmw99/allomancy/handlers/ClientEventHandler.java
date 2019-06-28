@@ -180,16 +180,13 @@ public class ClientEventHandler {
                     return;
                 }
                 cap = AllomancyCapability.forPlayer(player);
-                /*
-                 * Mistings only have one metal, so toggle that one
-                 */
+
+                //Mistings only have one metal, so toggle that one
                 if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 8) {
                     ClientUtils.toggleMetalBurn(cap.getAllomancyPower(), cap);
                 }
 
-                /*
-                 * If the player is a full Mistborn, display the GUI
-                 */
+                //If the player is a full Mistborn, display the GUI
                 if (cap.getAllomancyPower() == 8) {
                     this.mc.displayGuiScreen(new MetalSelectScreen());
                 }
@@ -279,7 +276,6 @@ public class ClientEventHandler {
             if (((magnitude) > 25) || ((magnitude) < 3)) {
                 return;
             }
-
             // Spawn sound particles
             String soundName = sound.getSoundLocation().toString();
             if (soundName.contains("entity") || soundName.contains("step")) {
@@ -287,7 +283,7 @@ public class ClientEventHandler {
                 motionY = ((player.posY - (event.getSound().getY() + .2)) * -0.7) / magnitude;
                 motionZ = ((player.posZ - (event.getSound().getZ() + .5)) * -0.7) / magnitude;
                 Particle particle = new SoundParticle(player.world, player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), player.posY + .2, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
-                        motionY, motionZ, soundName);
+                        motionY, motionZ, sound.getCategory());
                 this.mc.particles.addEffect(particle);
             }
         }
