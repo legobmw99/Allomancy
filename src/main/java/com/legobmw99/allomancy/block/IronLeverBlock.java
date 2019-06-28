@@ -30,18 +30,18 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyActivat
     }
 
     @Override
-    public boolean onBlockActivatedAllomantically(BlockState state, BlockPos pos, World worldIn, PlayerEntity playerIn,
+    public boolean onBlockActivatedAllomantically(BlockState state, World world, BlockPos pos, PlayerEntity playerIn,
                                                   boolean isPush) {
         state = state.cycle(POWERED);
-        if (worldIn.isRemote) {
+        if (world.isRemote) {
             return true;
         }
         if ((!isPush && state.get(POWERED)) || (isPush && !state.get(POWERED))) {
 
-            worldIn.setBlockState(pos, state, 3);
+            world.setBlockState(pos, state, 3);
             float f = state.get(POWERED) ? 0.6F : 0.5F;
-            worldIn.playSound((PlayerEntity) null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, f);
-            this.updateNeighbors(state, worldIn, pos);
+            world.playSound((PlayerEntity) null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, f);
+            this.updateNeighbors(state, world, pos);
             return true;
 
         }

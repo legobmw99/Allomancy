@@ -20,5 +20,5 @@ public interface IAllomanticallyActivatedBlock {
      * @param isPush whether or not the activation is Steel
      * @return whether or not the block was activated
      */
-    boolean onBlockActivatedAllomantically(BlockState state, BlockPos pos, World worldIn, PlayerEntity playerIn, boolean isPush);
+    boolean onBlockActivatedAllomantically(BlockState state, World world, BlockPos pos, PlayerEntity playerIn, boolean isPush);
 }
