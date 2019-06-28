@@ -66,7 +66,7 @@ public class CommonEventHandler {
     @SubscribeEvent
     public void onPlayerClone(final net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
         if (!event.getEntityPlayer().world.isRemote()) {
-            event.getOriginal().getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(oldCap -> { //formerly used AllomancyCapability.forPlayer, but current forge bug breaks. See Forge #5869
+            event.getOriginal().getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(oldCap -> { //formerly used AllomancyCapability.forPlayer, but current forge bug breaks. todo See Forge #5869
                 AllomancyCapability cap = AllomancyCapability.forPlayer(event.getEntityPlayer()); // the clone's cap
                 if (oldCap.getAllomancyPower() >= 0) {
                     cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
