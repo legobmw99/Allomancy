@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy;
 
-import com.legobmw99.allomancy.commands.AllomancyPowerCommand;
-import com.legobmw99.allomancy.commands.AllomancyPowerType;
+import com.legobmw99.allomancy.command.AllomancyPowerCommand;
+import com.legobmw99.allomancy.command.AllomancyPowerType;
 import com.legobmw99.allomancy.handlers.ClientEventHandler;
 import com.legobmw99.allomancy.handlers.CommonEventHandler;
 import com.legobmw99.allomancy.util.AllomancyCapability;

@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.commands;
+package com.legobmw99.allomancy.command;
 
 import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;

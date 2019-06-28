@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.commands;
+package com.legobmw99.allomancy.command;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;

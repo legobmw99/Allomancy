@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.handlers;
 
-import com.legobmw99.allomancy.entities.particles.SoundParticle;
+import com.legobmw99.allomancy.entity.particle.SoundParticle;
 import com.legobmw99.allomancy.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;

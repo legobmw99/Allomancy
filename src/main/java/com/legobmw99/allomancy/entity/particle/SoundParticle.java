@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.entities.particles;
+package com.legobmw99.allomancy.entity.particle;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IParticleRenderType;

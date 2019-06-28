@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.util;
 
-import com.legobmw99.allomancy.entities.GoldNuggetEntity;
-import com.legobmw99.allomancy.entities.IronNuggetEntity;
+import com.legobmw99.allomancy.entity.GoldNuggetEntity;
+import com.legobmw99.allomancy.entity.IronNuggetEntity;
 import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import net.minecraft.block.Block;

@@ -1,8 +1,8 @@
-package com.legobmw99.allomancy.items;
+package com.legobmw99.allomancy.item;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.entities.GoldNuggetEntity;
-import com.legobmw99.allomancy.entities.IronNuggetEntity;
+import com.legobmw99.allomancy.entity.GoldNuggetEntity;
+import com.legobmw99.allomancy.entity.IronNuggetEntity;
 import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.entity.player.PlayerEntity;

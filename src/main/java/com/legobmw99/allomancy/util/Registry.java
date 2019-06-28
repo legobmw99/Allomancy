@@ -3,9 +3,10 @@ package com.legobmw99.allomancy.util;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.block.IronButtonBlock;
 import com.legobmw99.allomancy.block.IronLeverBlock;
-import com.legobmw99.allomancy.entities.GoldNuggetEntity;
-import com.legobmw99.allomancy.entities.IronNuggetEntity;
-import com.legobmw99.allomancy.items.*;
+import com.legobmw99.allomancy.entity.GoldNuggetEntity;
+import com.legobmw99.allomancy.entity.IronNuggetEntity;
+import com.legobmw99.allomancy.item.*;
+import com.legobmw99.allomancy.item.recipe.VialItemRecipe;
 import com.legobmw99.allomancy.network.packets.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -31,6 +32,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
 import org.lwjgl.glfw.GLFW;
 
@@ -60,6 +62,8 @@ public class Registry {
     public static LerasiumItem lerasium_nugget;
     @ObjectHolder("allomancy:vial")
     public static VialItem vial;
+    public static Item[] flakes;
+
 
     // Block Holders
     @ObjectHolder("allomancy:tin_ore")
@@ -88,9 +92,9 @@ public class Registry {
     @OnlyIn(Dist.CLIENT)
     public static KeyBinding burn;
 
+    public static final String[] allomanctic_metals = {"iron", "steel", "tin", "pewter", "zinc", "brass", "copper", "bronze"};
 
-    public static final String[] flake_metals = {"iron", "steel", "tin", "pewter", "zinc", "brass", "copper", "bronze",
-            "lead"};
+    protected static final String[] flake_metals = {"iron", "steel", "tin", "pewter", "zinc", "brass", "copper", "bronze", "lead"};
 
     public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Allomancy.MODID, "networking"))
             .clientAcceptedVersions(s -> true)
@@ -191,6 +195,7 @@ public class Registry {
                     new Item(prop_generic).setRegistryName(new ResourceLocation(Allomancy.MODID, flake_metals[i] + "_flakes")));
         }
 
+
         //Register ore block items
         event.getRegistry().registerAll(
                 new BlockItem(tin_ore, prop_generic).setRegistryName(tin_ore.getRegistryName()),
@@ -201,6 +206,16 @@ public class Registry {
                 new BlockItem(iron_button, new Item.Properties().group(ItemGroup.REDSTONE)).setRegistryName(iron_button.getRegistryName())
 
         );
+        flakes = getFlakeItems();
+    }
+
+
+    private static Item[] getFlakeItems() {
+        Item[] flakes = new Item[9];
+        for (int i = 0; i < flakes.length; i++) {
+            flakes[i] = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Allomancy.MODID, flake_metals[i] + "_flakes"));
+        }
+        return flakes;
     }
 
     @SubscribeEvent

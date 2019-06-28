@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.items;
+package com.legobmw99.allomancy.item;
 
 import com.google.common.collect.Multimap;
 import com.legobmw99.allomancy.Allomancy;

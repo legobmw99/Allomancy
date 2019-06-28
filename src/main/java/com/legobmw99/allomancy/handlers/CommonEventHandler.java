@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.handlers;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.util.AllomancyCapability;
@@ -15,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -24,7 +22,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -48,11 +45,10 @@ public class CommonEventHandler {
                 if (AllomancyConfig.random_mistings && cap.getAllomancyPower() == -1) {
                     byte randomMisting = (byte) (Math.random() * 8);
                     cap.setAllomancyPower(randomMisting);
-                    Allomancy.LOGGER.info("Assigned " + Registry.flake_metals[randomMisting] + " misting to " + player.getName().getFormattedText());
-                    ItemStack dust = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Allomancy.MODID, Registry.flake_metals[randomMisting] + "_flakes")));
+                    ItemStack flakes = new ItemStack(Registry.flakes[randomMisting]);
                     // Give the player one flake of their metal
-                    if (!player.inventory.addItemStackToInventory(dust)) {
-                        ItemEntity entity = new ItemEntity(player.getEntityWorld(), player.posX, player.posY, player.posZ, dust);
+                    if (!player.inventory.addItemStackToInventory(flakes)) {
+                        ItemEntity entity = new ItemEntity(player.getEntityWorld(), player.posX, player.posY, player.posZ, flakes);
                         player.getEntityWorld().addEntity(entity);
                     }
                 }
