@@ -23,7 +23,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     private LazyOptional<AllomancyCapability> handler;
 
-    //todo seriously rethink this storage
+    //todo seriously rethink this cap
     public static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600};
     public static final int IRON = 0, STEEL = 1, TIN = 2, PEWTER = 3, ZINC = 4, BRASS = 5, COPPER = 6, BRONZE = 7;
 
@@ -53,9 +53,6 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
 
-    /**
-     * Constructor of the Capability object
-     */
     public AllomancyCapability() {
         handler = LazyOptional.of(() -> this);
     }
@@ -157,9 +154,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         BurnTime[metal] = burnTime;
     }
 
-    /**
-     * Register the capability
-     */
+
     public static void register() {
         CapabilityManager.INSTANCE.register(AllomancyCapability.class, new AllomancyCapability.Storage(), () -> null);
     }
@@ -168,45 +163,58 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     public CompoundNBT serializeNBT() {
         CompoundNBT allomancy_data = new CompoundNBT();
         allomancy_data.putByte("allomancyPower", this.getAllomancyPower());
-        allomancy_data.putInt("iron", this.getMetalAmounts(0));
-        allomancy_data.putInt("steel", this.getMetalAmounts(1));
-        allomancy_data.putInt("tin", this.getMetalAmounts(2));
-        allomancy_data.putInt("pewter", this.getMetalAmounts(3));
-        allomancy_data.putInt("zinc", this.getMetalAmounts(4));
-        allomancy_data.putInt("brass", this.getMetalAmounts(5));
-        allomancy_data.putInt("copper", this.getMetalAmounts(6));
-        allomancy_data.putInt("bronze", this.getMetalAmounts(7));
-        allomancy_data.putBoolean("iron_b", this.getMetalBurning(0));
-        allomancy_data.putBoolean("steel_b", this.getMetalBurning(1));
-        allomancy_data.putBoolean("tin_b", this.getMetalBurning(2));
-        allomancy_data.putBoolean("pewter_b", this.getMetalBurning(3));
-        allomancy_data.putBoolean("zinc_b", this.getMetalBurning(4));
-        allomancy_data.putBoolean("brass_b", this.getMetalBurning(5));
-        allomancy_data.putBoolean("copper_b", this.getMetalBurning(6));
-        allomancy_data.putBoolean("bronze_b", this.getMetalBurning(7));
+
+        CompoundNBT metal_storage = new CompoundNBT();
+        metal_storage.putInt("iron", this.getMetalAmounts(0));
+        metal_storage.putInt("steel", this.getMetalAmounts(1));
+        metal_storage.putInt("tin", this.getMetalAmounts(2));
+        metal_storage.putInt("pewter", this.getMetalAmounts(3));
+        metal_storage.putInt("zinc", this.getMetalAmounts(4));
+        metal_storage.putInt("brass", this.getMetalAmounts(5));
+        metal_storage.putInt("copper", this.getMetalAmounts(6));
+        metal_storage.putInt("bronze", this.getMetalAmounts(7));
+
+        allomancy_data.put("metal_storage", metal_storage);
+
+        CompoundNBT metal_burning = new CompoundNBT();
+        metal_burning.putBoolean("iron", this.getMetalBurning(0));
+        metal_burning.putBoolean("steel", this.getMetalBurning(1));
+        metal_burning.putBoolean("tin", this.getMetalBurning(2));
+        metal_burning.putBoolean("pewter", this.getMetalBurning(3));
+        metal_burning.putBoolean("zinc", this.getMetalBurning(4));
+        metal_burning.putBoolean("brass", this.getMetalBurning(5));
+        metal_burning.putBoolean("copper", this.getMetalBurning(6));
+        metal_burning.putBoolean("bronze", this.getMetalBurning(7));
+
+        allomancy_data.put("metal_burning", metal_burning);
+
         return allomancy_data;
 
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT compound) {
-        this.allomancyPower = compound.getByte("allomancyPower");
-        this.MetalAmounts[0] = compound.getInt("iron");
-        this.MetalAmounts[1] = compound.getInt("steel");
-        this.MetalAmounts[2] = compound.getInt("tin");
-        this.MetalAmounts[3] = compound.getInt("pewter");
-        this.MetalAmounts[4] = compound.getInt("zinc");
-        this.MetalAmounts[5] = compound.getInt("brass");
-        this.MetalAmounts[6] = compound.getInt("copper");
-        this.MetalAmounts[7] = compound.getInt("bronze");
-        this.MetalBurning[0] = compound.getBoolean("iron_b");
-        this.MetalBurning[1] = compound.getBoolean("steel_b");
-        this.MetalBurning[2] = compound.getBoolean("tin_b");
-        this.MetalBurning[3] = compound.getBoolean("pewter_b");
-        this.MetalBurning[4] = compound.getBoolean("zinc_b");
-        this.MetalBurning[5] = compound.getBoolean("brass_b");
-        this.MetalBurning[6] = compound.getBoolean("copper_b");
-        this.MetalBurning[7] = compound.getBoolean("bronze_b");
+    public void deserializeNBT(CompoundNBT allomancy_data) {
+        this.allomancyPower = allomancy_data.getByte("allomancyPower");
+
+        CompoundNBT metal_storage = (CompoundNBT) allomancy_data.get("metal_storage");
+        this.MetalAmounts[0] = metal_storage.getInt("iron");
+        this.MetalAmounts[1] = metal_storage.getInt("steel");
+        this.MetalAmounts[2] = metal_storage.getInt("tin");
+        this.MetalAmounts[3] = metal_storage.getInt("pewter");
+        this.MetalAmounts[4] = metal_storage.getInt("zinc");
+        this.MetalAmounts[5] = metal_storage.getInt("brass");
+        this.MetalAmounts[6] = metal_storage.getInt("copper");
+        this.MetalAmounts[7] = metal_storage.getInt("bronze");
+
+        CompoundNBT metal_burning = (CompoundNBT) allomancy_data.get("metal_burning");
+        this.MetalBurning[0] = metal_burning.getBoolean("iron");
+        this.MetalBurning[1] = metal_burning.getBoolean("steel");
+        this.MetalBurning[2] = metal_burning.getBoolean("tin");
+        this.MetalBurning[3] = metal_burning.getBoolean("pewter");
+        this.MetalBurning[4] = metal_burning.getBoolean("zinc");
+        this.MetalBurning[5] = metal_burning.getBoolean("brass");
+        this.MetalBurning[6] = metal_burning.getBoolean("copper");
+        this.MetalBurning[7] = metal_burning.getBoolean("bronze");
 
     }
 

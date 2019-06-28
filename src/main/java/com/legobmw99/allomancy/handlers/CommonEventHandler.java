@@ -116,7 +116,8 @@ public class CommonEventHandler {
     }
 
 
-    /*@SubscribeEvent
+    /* todo reimpl
+    @SubscribeEvent
     public void onLootTableLoad(final LootTableLoadEvent event) {
         String name = event.getName().toString();
         if (name.startsWith("minecraft:chests/simple_dungeon") || name.startsWith("minecraft:chests/desert_pyramid") || name.startsWith("minecraft:chests/jungle_temple")) {
