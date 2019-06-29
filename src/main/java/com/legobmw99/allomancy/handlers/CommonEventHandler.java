@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.handlers;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.network.NetworkHelper;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.util.AllomancyCapability;
@@ -14,9 +15,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -112,20 +117,15 @@ public class CommonEventHandler {
     }
 
 
-    /* todo reimpl
     @SubscribeEvent
     public void onLootTableLoad(final LootTableLoadEvent event) {
         String name = event.getName().toString();
-        if (name.startsWith("minecraft:chests/simple_dungeon") || name.startsWith("minecraft:chests/desert_pyramid") || name.startsWith("minecraft:chests/jungle_temple")) {
-            event.getTable().addPool(LootPool.builder().addEntry(new Loot));
-            event.getTable().addPool(new LootPool(new ILootGenerator[]{
-                     TableLootEntry.Serializer().func_212829_b_(new ResourceLocation(Allomancy.MODID, "inject/lerasium"),
-                            1, 0, new ILootCondition[0], "allomancy_inject_entry")
-            }, new ILootCondition[0],
-                    new RandomValueRange(1),
-                    new RandomValueRange(0, 1), "allomancy_inject_pool"));
+        if (name.equals("minecraft:chests/simple_dungeon") || name.equals("minecraft:chests/desert_pyramid")
+                || name.equals("minecraft:chests/jungle_temple") || name.equals("minecraft:chests/woodland_mansion")) {
+            //Inject a Lerasium loot table into the above vanilla tables
+            event.getTable().addPool(LootPool.builder().addEntry(TableLootEntry.func_216171_a(new ResourceLocation(Allomancy.MODID, "inject/lerasium"))).build());
         }
-    }*/
+    }
 
 
     @SubscribeEvent
