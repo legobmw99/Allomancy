@@ -26,11 +26,11 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.List;
 
 public class CommonEventHandler {
+
     @SubscribeEvent
     public void onAttachCapability(final AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof PlayerEntity) {
@@ -59,7 +59,7 @@ public class CommonEventHandler {
                 }
 
                 //Sync cap to client
-                NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
+                NetworkHelper.sync(event.getPlayer());
             }
         }
     }
@@ -67,18 +67,40 @@ public class CommonEventHandler {
     @SubscribeEvent
     public void onPlayerClone(final net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
         if (!event.getEntityPlayer().world.isRemote()) {
-            event.getOriginal().getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(oldCap -> { //formerly used AllomancyCapability.forPlayer, but current forge bug breaks. todo See Forge #5869
-                AllomancyCapability cap = AllomancyCapability.forPlayer(event.getEntityPlayer()); // the clone's cap
+
+            PlayerEntity player = event.getEntityPlayer();
+            AllomancyCapability cap = AllomancyCapability.forPlayer(player); // the clone's cap
+
+            PlayerEntity old = event.getOriginal();
+            old.revive();
+            old.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(oldCap -> {
                 if (oldCap.getAllomancyPower() >= 0) {
                     cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
                 }
-                if (event.getEntityPlayer().world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) || !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
+
+                if (player.world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) || !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
                     for (int i = 0; i < 8; i++) {
                         cap.setMetalAmounts(i, oldCap.getMetalAmounts(i));
                     }
                 }
-                NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, event.getEntity().getEntityId()), (ServerPlayerEntity) event.getEntity());
             });
+
+            NetworkHelper.sync(player);
+        }
+    }
+
+    @SubscribeEvent
+    public void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
+        if (!event.getPlayer().getEntityWorld().isRemote()) {
+            NetworkHelper.sync(event.getPlayer());
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (!event.getPlayer().getEntityWorld().isRemote()) {
+            NetworkHelper.sync(event.getPlayer());
         }
     }
 
@@ -91,7 +113,6 @@ public class CommonEventHandler {
                 NetworkHelper.sendTo(new AllomancyCapabilityPacket(AllomancyCapability.forPlayer(playerEntity), playerEntity.getEntityId()), (ServerPlayerEntity) event.getEntityPlayer());
             }
         }
-
     }
 
     @SubscribeEvent

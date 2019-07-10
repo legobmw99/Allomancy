@@ -19,6 +19,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     @CapabilityInject(AllomancyCapability.class)
     public static final Capability<AllomancyCapability> PLAYER_CAP = null;
+
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "allomancy_data");
 
     private LazyOptional<AllomancyCapability> handler;
@@ -45,18 +46,15 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         return player.getCapability(PLAYER_CAP).orElseThrow(() -> new RuntimeException("Capability not attached!"));
     }
 
-
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         return PLAYER_CAP.orEmpty(cap, handler);
     }
 
-
     public AllomancyCapability() {
         handler = LazyOptional.of(() -> this);
     }
-
 
     /**
      * Get the player's allomancy power -1 is none, 0-7 are each misting, 8 is full Mistborn
@@ -154,7 +152,6 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         BurnTime[metal] = burnTime;
     }
 
-
     public static void register() {
         CapabilityManager.INSTANCE.register(AllomancyCapability.class, new AllomancyCapability.Storage(), () -> null);
     }
@@ -232,9 +229,5 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
                 instance.deserializeNBT((CompoundNBT) nbt);
             }
         }
-
-
     }
-
-
 }
