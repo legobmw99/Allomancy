@@ -18,6 +18,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
 public class IronLeverBlock extends LeverBlock implements IAllomanticallyActivatedBlock {
 
     public IronLeverBlock() {
-        super(Block.Properties.create(Material.IRON).doesNotBlockMovement().hardnessAndResistance(1.0F));
+        super(Block.Properties.create(Material.IRON).doesNotBlockMovement().hardnessAndResistance(1.0F).harvestLevel(2).harvestTool(ToolType.PICKAXE));
         this.setRegistryName(Allomancy.MODID, "iron_lever");
     }
 

@@ -25,6 +25,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -220,11 +221,12 @@ public class Registry {
 
     @SubscribeEvent
     public static void onRegisterBlocks(final RegistryEvent.Register<Block> event) {
+        Block.Properties prop = Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F).harvestTool(ToolType.PICKAXE).harvestLevel(2);
         event.getRegistry().registerAll(
-                new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "tin_ore")),
-                new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "lead_ore")),
-                new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "copper_ore")),
-                new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F)).setRegistryName(new ResourceLocation(Allomancy.MODID, "zinc_ore")),
+                new Block(prop).setRegistryName(new ResourceLocation(Allomancy.MODID, "tin_ore")),
+                new Block(prop).setRegistryName(new ResourceLocation(Allomancy.MODID, "lead_ore")),
+                new Block(prop).setRegistryName(new ResourceLocation(Allomancy.MODID, "copper_ore")),
+                new Block(prop).setRegistryName(new ResourceLocation(Allomancy.MODID, "zinc_ore")),
                 new IronLeverBlock(),
                 new IronButtonBlock()
         );

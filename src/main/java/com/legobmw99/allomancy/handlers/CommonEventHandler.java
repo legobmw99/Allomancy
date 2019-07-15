@@ -144,7 +144,7 @@ public class CommonEventHandler {
         if (name.equals("minecraft:chests/simple_dungeon") || name.equals("minecraft:chests/desert_pyramid")
                 || name.equals("minecraft:chests/jungle_temple") || name.equals("minecraft:chests/woodland_mansion")) {
             //Inject a Lerasium loot table into the above vanilla tables
-            event.getTable().addPool(LootPool.builder().addEntry(TableLootEntry.func_216171_a(new ResourceLocation(Allomancy.MODID, "inject/lerasium"))).build());
+            event.getTable().addPool(LootPool.builder().addEntry(TableLootEntry.builder(new ResourceLocation(Allomancy.MODID, "inject/lerasium"))).build());
         }
     }
 
@@ -172,6 +172,7 @@ public class CommonEventHandler {
                         //Add jump boost and speed to pewter burners
                         curPlayer.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 30, 1, true, false));
                         curPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, 30, 0, true, false));
+                        curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 30, 1, true, false));
 
                         if (cap.getDamageStored() > 0) {
                             if (world.rand.nextInt(200) == 0) {

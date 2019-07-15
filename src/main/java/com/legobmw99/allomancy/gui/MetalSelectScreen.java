@@ -17,6 +17,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.StringTextComponent;
@@ -153,6 +154,7 @@ public class MetalSelectScreen extends Screen {
             ydp = (int) ((yp - y) * mod + y);
 
             mc.getRenderManager().textureManager.bindTexture(METAL_ICONS[(slot + 4) % 8]);
+            GlStateManager.color4f(1,1,1,1);
             blit(xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
         }
@@ -162,7 +164,9 @@ public class MetalSelectScreen extends Screen {
         GlStateManager.enableRescaleNormal();
         GlStateManager.enableBlend();
         GlStateManager.blendFuncSeparate(770, 771, 1, 0);
+        RenderHelper.enableGUIStandardItemLighting();
 
+        RenderHelper.disableStandardItemLighting();
         GlStateManager.disableBlend();
         GlStateManager.disableRescaleNormal();
 

@@ -32,7 +32,7 @@ public class CoinBagItem extends ShootableItem {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack itemstack = player.func_213356_f(player.getHeldItem(hand));
+        ItemStack itemstack = player.findAmmo(player.getHeldItem(hand));
         if (itemstack.getItem() instanceof ArrowItem) { // the above get function has silly default behavior
             itemstack = new ItemStack(Items.GOLD_NUGGET, 1);
         }
