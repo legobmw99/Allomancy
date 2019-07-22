@@ -48,7 +48,7 @@ public class MetalSelectScreen extends Screen {
     Minecraft mc;
 
     public MetalSelectScreen() {
-        super(new StringTextComponent("allomancy gui"));
+        super(new StringTextComponent("allomancy_gui"));
         ClientPlayerEntity player;
         player = Minecraft.getInstance().player;
         cap = AllomancyCapability.forPlayer(player);
@@ -138,9 +138,6 @@ public class MetalSelectScreen extends Screen {
             // add four and mod by eight to get #1 where I want it to be
             int width = mc.getRenderManager().getFontRenderer().getStringWidth(name);
 
-            double mod = 0.6;
-            int xdp = (int) ((xp - x) * mod + x);
-            int ydp = (int) ((yp - y) * mod + y);
 
             if (xsp < x)
                 xsp -= width - 8;
@@ -149,12 +146,12 @@ public class MetalSelectScreen extends Screen {
 
             mc.getRenderManager().getFontRenderer().drawStringWithShadow(name, xsp, ysp, 0xFFFFFF);
 
-            mod = 0.8;
-            xdp = (int) ((xp - x) * mod + x);
-            ydp = (int) ((yp - y) * mod + y);
+            double mod = 0.8;
+            int xdp = (int) ((xp - x) * mod + x);
+            int ydp = (int) ((yp - y) * mod + y);
 
             mc.getRenderManager().textureManager.bindTexture(METAL_ICONS[(slot + 4) % 8]);
-            GlStateManager.color4f(1,1,1,1);
+            GlStateManager.color4f(1, 1, 1, 1);
             blit(xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
         }
