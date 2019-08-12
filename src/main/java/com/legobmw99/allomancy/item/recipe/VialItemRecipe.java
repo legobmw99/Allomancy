@@ -96,6 +96,10 @@ public class VialItemRecipe extends SpecialRecipe {
         return this.item_result;
     }
 
+    @Override
+    public boolean canFit(int width, int height) {
+        return width * height >= 2;
+    }
 
     @Nonnull
     @Override

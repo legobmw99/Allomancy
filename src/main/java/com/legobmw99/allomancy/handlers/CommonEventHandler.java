@@ -24,8 +24,8 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.TickEvent;
 
 import java.util.List;
 
@@ -65,14 +65,14 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerClone(final net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
-        if (!event.getEntityPlayer().world.isRemote()) {
+    public void onPlayerClone(final PlayerEvent.Clone event) {
+        if (!event.getPlayer().world.isRemote()) {
 
-            PlayerEntity player = event.getEntityPlayer();
+            PlayerEntity player = event.getPlayer();
             AllomancyCapability cap = AllomancyCapability.forPlayer(player); // the clone's cap
 
             PlayerEntity old = event.getOriginal();
-            old.revive();
+
             old.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(oldCap -> {
                 if (oldCap.getAllomancyPower() >= 0) {
                     cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
@@ -110,7 +110,7 @@ public class CommonEventHandler {
         if (!event.getTarget().world.isRemote) {
             if (event.getTarget() instanceof ServerPlayerEntity) {
                 ServerPlayerEntity playerEntity = (ServerPlayerEntity) event.getTarget();
-                NetworkHelper.sendTo(new AllomancyCapabilityPacket(AllomancyCapability.forPlayer(playerEntity), playerEntity.getEntityId()), (ServerPlayerEntity) event.getEntityPlayer());
+                NetworkHelper.sendTo(new AllomancyCapabilityPacket(AllomancyCapability.forPlayer(playerEntity), playerEntity.getEntityId()), (ServerPlayerEntity) event.getPlayer());
             }
         }
     }
