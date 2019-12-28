@@ -13,6 +13,7 @@ item.nuggetLerasium.name=Lerasium Nugget
 item.nuggetLerasium.lore=This item is endowed with strange powers, perhaps you should ingest it?
 item.mistcloak.name=Mistcloak
 item.coinbag.name=Coin Bag
+item.glassdagger.name=Glass Dagger
 
 key.categories.allomancy=Allomancy
 key.burn=Burn Metals

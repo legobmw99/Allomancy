@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.util;
 
+import com.legobmw99.allomancy.items.*;
 import org.lwjgl.input.Keyboard;
 
 import com.legobmw99.allomancy.Allomancy;
@@ -7,11 +8,6 @@ import com.legobmw99.allomancy.block.BlockIronLever;
 import com.legobmw99.allomancy.entities.EntityGoldNugget;
 import com.legobmw99.allomancy.entities.EntityIronNugget;
 import com.legobmw99.allomancy.entities.EntityRenderFactories;
-import com.legobmw99.allomancy.items.ItemCoinBag;
-import com.legobmw99.allomancy.items.ItemGrinder;
-import com.legobmw99.allomancy.items.ItemMistcloak;
-import com.legobmw99.allomancy.items.ItemVial;
-import com.legobmw99.allomancy.items.NuggetLerasium;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.network.packets.AllomancyPowerPacket;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
@@ -49,6 +45,7 @@ public class Registry {
 	public static KeyBinding burn;
 	public static SimpleNetworkWrapper network;
 	public static Item itemAllomancyGrinder;
+	public static Item itemGlassDagger;
 	public static Item itemTinIngot;
 	public static Item itemLeadIngot;
 	public static Item itemCopperIngot;
@@ -96,6 +93,7 @@ public class Registry {
 		// Register the basic, not-metallic items
 		event.getRegistry().registerAll(
 				itemAllomancyGrinder = new ItemGrinder(),
+				itemGlassDagger = new ItemGlassDagger(),
 				itemCoinBag = new ItemCoinBag(),
 				Mistcloak = new ItemMistcloak(WoolArmor, 1, EntityEquipmentSlot.CHEST),
 				nuggetLerasium = new NuggetLerasium(),
@@ -205,6 +203,8 @@ public class Registry {
 				new ModelResourceLocation("allomancy:nuggetLerasium", "inventory"));
 		renderItem.getItemModelMesher().register(itemAllomancyGrinder, 0,
 				new ModelResourceLocation("allomancy:grinder", "inventory"));
+		renderItem.getItemModelMesher().register(itemGlassDagger, 0,
+				new ModelResourceLocation("allomancy:glassdagger", "inventory"));
 		renderItem.getItemModelMesher().register(Mistcloak, 0,
 				new ModelResourceLocation("allomancy:mistcloak", "inventory"));
 		renderItem.getItemModelMesher().register(itemCoinBag, 0,
