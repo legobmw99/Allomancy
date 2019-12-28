@@ -17,15 +17,15 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompound> {
 
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "Allomancy_Data");
-    public static final int[] MAX_BURN_TIME = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600 };
-    public static final int IRON = 0, STEEL = 1, TIN = 2, PEWTER = 3, ZINC = 4, BRASS = 5, COPPER = 6, BRONZE = 7;
+    public static final int[] MAX_BURN_TIME = { 1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 40, 40};
+    public static final int IRON = 0, STEEL = 1, TIN = 2, PEWTER = 3, ZINC = 4, BRASS = 5, COPPER = 6, BRONZE = 7, ALUMINUM = 8, DURALUMIN = 9;
 
     private int allomancyPower = -1;
 
     private int damageStored = 0;
-    private int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400 };
-    private int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    private boolean[] MetalBurning = { false, false, false, false, false, false, false, false };
+    private int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400, 80, 80};
+    private int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    private boolean[] MetalBurning = { false, false, false, false, false, false, false, false, false, false};
 
 
     /**
@@ -116,7 +116,7 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
      * @return the amount of metal
      */
     public int getMetalAmounts(int metal) {
-        return metal >= 0 && metal < 8 ? MetalAmounts[metal] : 0;
+        return metal >= 0 && metal < 10 ? MetalAmounts[metal] : 0;
     }
 
     /**
@@ -173,6 +173,8 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
         nbt.setInteger("brass", this.getMetalAmounts(5));
         nbt.setInteger("copper", this.getMetalAmounts(6));
         nbt.setInteger("bronze", this.getMetalAmounts(7));
+        nbt.setInteger("aluminum", this.getMetalAmounts(8));
+        nbt.setInteger("duralumin", this.getMetalAmounts(9));
         nbt.setBoolean("iron_b", this.getMetalBurning(0));
         nbt.setBoolean("steel_b", this.getMetalBurning(1));
         nbt.setBoolean("tin_b", this.getMetalBurning(2));
@@ -181,6 +183,8 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
         nbt.setBoolean("brass_b", this.getMetalBurning(5));
         nbt.setBoolean("copper_b", this.getMetalBurning(6));
         nbt.setBoolean("bronze_b", this.getMetalBurning(7));
+        nbt.setBoolean("aluminum_b", this.getMetalBurning(8));
+        nbt.setBoolean("duralumin_b", this.getMetalBurning(9));
         return nbt;
 
     }
@@ -196,6 +200,8 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
         this.MetalAmounts[5] = compound.getInteger("brass");
         this.MetalAmounts[6] = compound.getInteger("copper");
         this.MetalAmounts[7] = compound.getInteger("bronze");
+        this.MetalAmounts[8] = compound.getInteger("aluminum");
+        this.MetalAmounts[9] = compound.getInteger("duralumin");
         this.MetalBurning[0] = compound.getBoolean("iron_b");
         this.MetalBurning[1] = compound.getBoolean("steel_b");
         this.MetalBurning[2] = compound.getBoolean("tin_b");
@@ -204,8 +210,10 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
         this.MetalBurning[5] = compound.getBoolean("brass_b");
         this.MetalBurning[6] = compound.getBoolean("copper_b");
         this.MetalBurning[7] = compound.getBoolean("bronze_b");
+        this.MetalBurning[8] = compound.getBoolean("aluminum_b");
+        this.MetalBurning[9] = compound.getBoolean("duralumin_b");
         if (compound.getBoolean("ismistborn")) {
-            this.setAllomancyPower(8);
+            this.setAllomancyPower(10);
         }
     }
 

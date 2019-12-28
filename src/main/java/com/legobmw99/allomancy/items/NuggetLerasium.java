@@ -50,7 +50,7 @@ public class NuggetLerasium extends ItemFood {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand){
 		AllomancyCapability cap = AllomancyCapability.forPlayer(playerIn);
 		ItemStack itemStackIn = playerIn.getHeldItem(hand);
-		if (cap.getAllomancyPower() != 8) {
+		if (cap.getAllomancyPower() != 10) {
 	        playerIn.setActiveHand(hand);
 	        return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);	
 
@@ -65,8 +65,8 @@ public class NuggetLerasium extends ItemFood {
 		double x = entityLiving.posX;
 		double y = entityLiving.posY + 3;
 		double z = entityLiving.posZ;
-		if (cap.getAllomancyPower() != 8) {
-			cap.setAllomancyPower(8);
+		if (cap.getAllomancyPower() != 10) {
+			cap.setAllomancyPower(10);
         }
 		//Fancy shmancy effects
 		worldIn.spawnEntity(new EntityLightningBolt(worldIn, x, y, z, true));

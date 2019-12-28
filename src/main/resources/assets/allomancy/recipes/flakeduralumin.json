@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "allomancy:flakeduralumin",
+    "count": 2
+  },
+  "ingredients": [
+    {
+      "item": "allomancy:flakecopper"
+    },
+    {
+      "item": "allomancy:flakealuminum"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

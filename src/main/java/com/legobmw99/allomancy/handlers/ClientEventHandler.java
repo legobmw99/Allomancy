@@ -47,7 +47,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ClientEventHandler {
 	
-    private static final Point[] Frames = { new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12) };
+    private static final Point[] Frames = { new Point(85, 0), new Point(85, 4), new Point(85, 8), new Point(85, 12) };
     private static final ResourceLocation meterLoc  = new ResourceLocation("allomancy", "textures/gui/overlay/meter.png");
 
     private Minecraft mc = Minecraft.getMinecraft();
@@ -84,9 +84,9 @@ public class ClientEventHandler {
 
         this.animationCounter++;
         // left hand side.
-        int ironY, steelY, tinY, pewterY;
+        int ironY, steelY, tinY, pewterY, copperY;
         // right hand side
-        int copperY, bronzeY, zincY, brassY;
+        int bronzeY, zincY, brassY, duralumnY, aluminumY;
         // single metal
         int singleMetalY;
         int renderX, renderY = 0;
@@ -125,7 +125,7 @@ public class ClientEventHandler {
         /*
          * Misting overlay
          */
-        if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 8) {
+        if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 10) {
 
             singleMetalY = 9 - cap.getMetalAmounts(cap.getAllomancyPower());
             gig.drawTexturedModalRect(renderX + 1, renderY + 5 + singleMetalY, 7 + 6 * cap.getAllomancyPower(), 1 + singleMetalY, 3, 10 - singleMetalY);
@@ -147,7 +147,7 @@ public class ClientEventHandler {
         /*
          * The rendering for a the overlay of a full Mistborn
          */
-        if (cap.getAllomancyPower() == 8) {
+        if (cap.getAllomancyPower() == 10) {
 
             ironY = 9 - this.cap.getMetalAmounts(AllomancyCapability.IRON);
             gig.drawTexturedModalRect(renderX + 1, renderY + 5 + ironY, 7, 1 + ironY, 3, 10 - ironY);
@@ -173,6 +173,12 @@ public class ClientEventHandler {
             bronzeY = 9 - this.cap.getMetalAmounts(AllomancyCapability.BRONZE);
             gig.drawTexturedModalRect(renderX + 83, renderY + 5 + bronzeY, 49, 1 + bronzeY, 3, 10 - bronzeY);
 
+            aluminumY = 9 - this.cap.getMetalAmounts(AllomancyCapability.ALUMINUM);
+            gig.drawTexturedModalRect(renderX + 101, renderY + 5 + aluminumY, 55, 1 + aluminumY, 3, 10 - aluminumY);
+
+            duralumnY = 9 - this.cap.getMetalAmounts(AllomancyCapability.DURALUMIN);
+            gig.drawTexturedModalRect(renderX + 108, renderY + 5 + duralumnY, 61, 1 + duralumnY, 3, 10 - duralumnY);
+
             // Draw the gauges second, so that highlights and decorations show over
             // the bar.
             gig.drawTexturedModalRect(renderX, renderY, 0, 0, 5, 20);
@@ -186,6 +192,9 @@ public class ClientEventHandler {
 
             gig.drawTexturedModalRect(renderX + 75, renderY, 0, 0, 5, 20);
             gig.drawTexturedModalRect(renderX + 82, renderY, 0, 0, 5, 20);
+
+            gig.drawTexturedModalRect(renderX + 100, renderY, 0, 0, 5, 20);
+            gig.drawTexturedModalRect(renderX + 107, renderY, 0, 0, 5, 20);
 
             if (this.cap.getMetalBurning(AllomancyCapability.IRON)) {
                 gig.drawTexturedModalRect(renderX, renderY + 5 + ironY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
@@ -210,6 +219,12 @@ public class ClientEventHandler {
             }
             if (this.cap.getMetalBurning(AllomancyCapability.BRONZE)) {
                 gig.drawTexturedModalRect(renderX + 82, renderY + 5 + bronzeY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+            if (this.cap.getMetalBurning(AllomancyCapability.ALUMINUM)) {
+                gig.drawTexturedModalRect(renderX + 100, renderY + 5 + aluminumY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
+            }
+            if (this.cap.getMetalBurning(AllomancyCapability.DURALUMIN)) {
+                gig.drawTexturedModalRect(renderX + 107, renderY + 5 + duralumnY, Frames[this.currentFrame].getX(), Frames[this.currentFrame].getY(), 5, 3);
             }
 
             if (this.animationCounter > 6) // Draw the burning symbols...
@@ -355,7 +370,7 @@ public class ClientEventHandler {
                                 metalBurners.remove((EntityPlayer) curEntity);
                             } else if (capOther.getMetalBurning(AllomancyCapability.IRON) || capOther.getMetalBurning(AllomancyCapability.STEEL) || capOther.getMetalBurning(AllomancyCapability.TIN)
                                         || capOther.getMetalBurning(AllomancyCapability.PEWTER) || capOther.getMetalBurning(AllomancyCapability.ZINC) || capOther.getMetalBurning(AllomancyCapability.BRASS)
-                                        || capOther.getMetalBurning(AllomancyCapability.BRONZE)) {
+                                        || capOther.getMetalBurning(AllomancyCapability.BRONZE) || capOther.getMetalBurning(AllomancyCapability.DURALUMIN)) {
                                     metalBurners.add((EntityPlayer) curEntity);
                             }
                         }
@@ -396,7 +411,7 @@ public class ClientEventHandler {
                     }
                     if (capOther.getMetalBurning(AllomancyCapability.COPPER) || !(capOther.getMetalBurning(AllomancyCapability.IRON) || capOther.getMetalBurning(AllomancyCapability.STEEL)
                             || capOther.getMetalBurning(AllomancyCapability.TIN) || capOther.getMetalBurning(AllomancyCapability.PEWTER) || capOther.getMetalBurning(AllomancyCapability.ZINC)
-                            || capOther.getMetalBurning(AllomancyCapability.BRASS) || capOther.getMetalBurning(AllomancyCapability.BRONZE))) {
+                            || capOther.getMetalBurning(AllomancyCapability.BRASS) || capOther.getMetalBurning(AllomancyCapability.BRONZE) || capOther.getMetalBurning(AllomancyCapability.DURALUMIN))) {
                         toRemoveBurners.add(entity);
                     }
                 }
@@ -424,14 +439,14 @@ public class ClientEventHandler {
                 /*
                  * Mistings only have one metal, so toggle that one
                  */
-                if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 8) {
+                if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 10) {
                     AllomancyUtils.toggleMetalBurn(cap.getAllomancyPower(), cap);
                 }
 
                 /*
                  * If the player is a full Mistborn, display the GUI
                  */
-                if (cap.getAllomancyPower() == 8) {
+                if (cap.getAllomancyPower() == 10) {
                     mc.displayGuiScreen(new GUIMetalSelect());
                 }
             }
@@ -490,13 +505,13 @@ public class ClientEventHandler {
             }
 
             for (BlockPos v : particleBlockTargets) {
-                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY() + 0.5, v.getZ() + 0.5, 1.5F, 0F, 0.6F, 1F);
+                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY() + 0.5, v.getZ() + 0.5, 3F, 0F, 0.6F, 1F);
             }
         }
 
         if ((cap.getMetalBurning(AllomancyCapability.BRONZE))) {
             for (EntityPlayer entityplayer : metalBurners) {
-                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY+0.5, entityplayer.posZ, 2.5F, 0.5F, 0.15F, 0.15F);
+                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY+0.5, entityplayer.posZ, 3F, 0.5F, 0.15F, 0.15F);
             }
         }
     }

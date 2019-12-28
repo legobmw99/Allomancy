@@ -55,6 +55,7 @@ public class Registry {
 	public static Item itemZincIngot;
 	public static Item itemBronzeIngot;
 	public static Item itemBrassIngot;
+	public static Item itemAluminmIngot;
 	public static Item itemCoinBag;
 	public static Item Mistcloak;
 	public static Item nuggetLerasium;
@@ -63,9 +64,10 @@ public class Registry {
 	public static Block oreLead;
 	public static Block oreCopper;
 	public static Block oreZinc;
+	public static Block oreAluminum;
 	public static Block blockIronLever;
 	
-	public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze",
+	public static final String[] flakeMetals = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze", "Aluminum", "Duralumin",
 			"Lead" };
 	
 	
@@ -83,9 +85,11 @@ public class Registry {
 		oreCopper.setHarvestLevel("pickaxe", 1);
 		oreZinc = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreZinc").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreZinc"));
 		oreZinc.setHarvestLevel("pickaxe", 1);
+		oreAluminum = new Block(Material.ROCK).setHardness(.5F).setUnlocalizedName("oreAluminum").setCreativeTab(Registry.tabsAllomancy).setRegistryName(new ResourceLocation(Allomancy.MODID,"oreAluminum"));
+		oreAluminum.setHarvestLevel("pickaxe", 1);
 		blockIronLever = new BlockIronLever();
 		
-		event.getRegistry().registerAll(oreTin,oreLead,oreCopper,oreZinc, blockIronLever);
+		event.getRegistry().registerAll(oreTin,oreLead,oreCopper,oreZinc, oreAluminum, blockIronLever);
 	}
 
 	public static void initItems(Register event) {
@@ -103,7 +107,8 @@ public class Registry {
 				itemCopperIngot = new Item().setUnlocalizedName("ingotCopper").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotCopper")),
 				itemZincIngot = new Item().setUnlocalizedName("ingotZinc").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotZinc")),
 				itemBrassIngot = new Item().setUnlocalizedName("ingotBrass").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotBrass")),
-				itemBronzeIngot = new Item().setUnlocalizedName("ingotBronze").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotBronze"))
+				itemBronzeIngot = new Item().setUnlocalizedName("ingotBronze").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotBronze")),
+				itemAluminmIngot = new Item().setUnlocalizedName("ingotAluminum").setCreativeTab(Registry.tabsAllomancy).setMaxDamage(0).setRegistryName(new ResourceLocation(Allomancy.MODID, "ingotAluminum"))
 				);
 
 
@@ -119,6 +124,7 @@ public class Registry {
 				new ItemBlock(oreLead).setRegistryName(oreLead.getRegistryName()),
 				new ItemBlock(oreCopper).setRegistryName(oreCopper.getRegistryName()),
 				new ItemBlock(oreZinc).setRegistryName(oreZinc.getRegistryName()),
+				new ItemBlock(oreAluminum).setRegistryName(oreAluminum.getRegistryName()),
 				new ItemBlock(blockIronLever).setRegistryName(blockIronLever.getRegistryName())
 				);
 		
@@ -129,10 +135,12 @@ public class Registry {
 		OreDictionary.registerOre("ingotLead", itemLeadIngot);
 		OreDictionary.registerOre("ingotBronze", itemBronzeIngot);
 		OreDictionary.registerOre("ingotBrass", itemBrassIngot);
+		OreDictionary.registerOre("ingotAluminum", itemAluminmIngot);
 		OreDictionary.registerOre("oreZinc", oreZinc);
 		OreDictionary.registerOre("oreTin", oreTin);
 		OreDictionary.registerOre("oreCopper", oreCopper);
 		OreDictionary.registerOre("oreLead", oreLead);
+		OreDictionary.registerOre("oreAluminum", oreAluminum);
 	}
 
 	public static void initKeyBindings() {
@@ -171,6 +179,8 @@ public class Registry {
 				new ModelResourceLocation("allomancy:oreCopper", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreLead), 0,
 				new ModelResourceLocation("allomancy:oreLead", "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(oreAluminum), 0,
+				new ModelResourceLocation("allomancy:oreAluminum", "inventory"));
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(blockIronLever), 0,
 				new ModelResourceLocation("allomancy:iron_lever", "inventory"));
 
@@ -187,6 +197,8 @@ public class Registry {
 				new ModelResourceLocation("allomancy:ingotBrass", "inventory"));
 		renderItem.getItemModelMesher().register(itemBronzeIngot, 0,
 				new ModelResourceLocation("allomancy:ingotBronze", "inventory"));
+		renderItem.getItemModelMesher().register(itemAluminmIngot, 0,
+				new ModelResourceLocation("allomancy:ingotAluminum", "inventory"));
 
 		// Register misc item models individually
 		renderItem.getItemModelMesher().register(nuggetLerasium, 0,
@@ -215,6 +227,6 @@ public class Registry {
 		GameRegistry.addSmelting(oreCopper, new ItemStack(itemCopperIngot, 1), 5);
 		GameRegistry.addSmelting(oreLead, new ItemStack(itemLeadIngot, 1), 5);
 		GameRegistry.addSmelting(oreZinc, new ItemStack(itemZincIngot, 1), 5);
+		GameRegistry.addSmelting(oreAluminum, new ItemStack(itemAluminmIngot, 1), 5);
 	}
-
 }

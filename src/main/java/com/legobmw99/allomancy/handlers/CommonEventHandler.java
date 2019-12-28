@@ -86,7 +86,7 @@ public class CommonEventHandler {
             Registry.network.sendTo(new AllomancyPowerPacket(oldCap.getAllomancyPower()), (EntityPlayerMP) event.getEntity());
         }
         if (event.getEntityPlayer().world.getGameRules().getBoolean("keepInventory") || !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 9; i++) {
                 cap.setMetalAmounts(i, oldCap.getMetalAmounts(i));
                 Registry.network.sendTo(new AllomancyCapabilityPacket(cap, event.getEntity().getEntityId()), (EntityPlayerMP) event.getEntity());
 
@@ -104,7 +104,7 @@ public class CommonEventHandler {
                 Registry.network.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
             } else if (AllomancyConfig.randomizeMistings && cap.getAllomancyPower() == -1) {
 
-                int randomMisting = (int) (Math.random() * 8);
+                int randomMisting = (int) (Math.random() * 10);
 
                 cap.setAllomancyPower(randomMisting);
                 Registry.network.sendTo(new AllomancyPowerPacket(randomMisting), player);
@@ -153,10 +153,16 @@ public class CommonEventHandler {
                         curPlayer.attackEntityFrom(DamageSource.MAGIC, 2);
                     }
                     if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
-                    	//Add jump boost and speed to pewter burners
-                        curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(8), 30, 1, true, false));
-                        curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(1), 30, 0, true, false));
-                        
+                    	//Add jump boost and speed (and strength!) to pewter burners
+                        if (cap.getMetalBurning(AllomancyCapability.DURALUMIN)) {
+                            curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(8), 30, 5, true, false));
+                            curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(1), 30, 5, true, false));
+                            curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(5), 30, 5, true, false));
+                        } else {
+                            curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(8), 30, 1, true, false));
+                            curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(1), 30, 0, true, false));
+                            curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(5), 30, 0, true, false));
+                        }
                         if(cap.getDamageStored() > 0){
                         	if(world.rand.nextInt(200) == 0){
                         		cap.setDamageStored(cap.getDamageStored() - 1);
@@ -165,18 +171,23 @@ public class CommonEventHandler {
 
                     }
                     if (cap.getMetalBurning(AllomancyCapability.TIN)) {
-                        // Add night vision to tin-burners
-                        curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(16), Short.MAX_VALUE, 5, true, false));
-                        // Remove blindness for tin burners
-                        if (curPlayer.isPotionActive(Potion.getPotionById(15))) {
-                            curPlayer.removePotionEffect(Potion.getPotionById(15));
-
+                        if (cap.getMetalBurning(AllomancyCapability.DURALUMIN)) {
+                            // Bad effects from too much tin
+                            curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 120, 10, true, false));
+                            curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(9), 120, 10, true, false));
                         } else {
-                            PotionEffect eff;
-                            eff = curPlayer.getActivePotionEffect(Potion.getPotionById(16));
+                            // Add night vision to tin-burners
+                            curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(16), Short.MAX_VALUE, 5, true, false));
+                            // Remove blindness for tin burners
+                            if (curPlayer.isPotionActive(Potion.getPotionById(15))) {
+                                curPlayer.removePotionEffect(Potion.getPotionById(15));
 
+                            } else {
+                                PotionEffect eff;
+                                eff = curPlayer.getActivePotionEffect(Potion.getPotionById(16));
+
+                            }
                         }
-
                     }
                     // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing, only if the amplifier is 5
                     if ((!cap.getMetalBurning(AllomancyCapability.TIN)) && (curPlayer.getActivePotionEffect(Potion.getPotionById(16)) != null && curPlayer.getActivePotionEffect(Potion.getPotionById(16)).getAmplifier() == 5)) {
