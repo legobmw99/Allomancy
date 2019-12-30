@@ -11,6 +11,7 @@ import com.legobmw99.allomancy.util.AllomancyUtils;
 import com.legobmw99.allomancy.util.Registry;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +22,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.FoodStats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootEntry;
@@ -152,16 +154,36 @@ public class CommonEventHandler {
                         cap.setDamageStored(cap.getDamageStored() - 1);
                         curPlayer.attackEntityFrom(DamageSource.MAGIC, 2);
                     }
+                    //Add pewter hunger ignoring
+                    if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
+                        FoodStats foodStats = curPlayer.getFoodStats();
+                        if (foodStats.getFoodLevel() < 20) {
+                            cap.setHungerStored(cap.getHungerStored() + 20 - foodStats.getFoodLevel());
+                            foodStats.setFoodLevel(20);
+                        }
+                    }
+                    // Take away hunger boost if stopped burning pewter
+                    if (!cap.getMetalBurning(AllomancyCapability.PEWTER) && cap.getHungerStored() > 0) {
+                        FoodStats foodStats = curPlayer.getFoodStats();
+                        if (cap.getHungerStored() < 20) {
+                            foodStats.setFoodLevel(foodStats.getFoodLevel() - cap.getHungerStored());
+                        } else {
+                            foodStats.setFoodLevel(0);
+                        }
+                        cap.setHungerStored(0);
+                    }
                     if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
                     	//Add jump boost and speed (and strength!) to pewter burners
                         if (cap.getMetalBurning(AllomancyCapability.DURALUMIN)) {
                             curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(8), 30, 5, true, false));
                             curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(1), 30, 5, true, false));
                             curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(5), 30, 5, true, false));
+                            curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(10), 30, 2, true, false));
                         } else {
                             curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(8), 30, 1, true, false));
                             curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(1), 30, 0, true, false));
                             curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(5), 30, 0, true, false));
+                            curPlayer.addPotionEffect(new PotionEffect(Potion.getPotionById(10), 30, 0, true, false));
                         }
                         if(cap.getDamageStored() > 0){
                         	if(world.rand.nextInt(200) == 0){

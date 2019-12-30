@@ -23,6 +23,7 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
     private int allomancyPower = -1;
 
     private int damageStored = 0;
+    private int hungerStored = 0;
     private int[] BurnTime = { 1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400, 80, 80};
     private int[] MetalAmounts = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     private boolean[] MetalBurning = { false, false, false, false, false, false, false, false, false, false};
@@ -99,6 +100,15 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
     }
 
     /**
+     * Get how much hunger has been accumulated
+     *
+     * @return the amount of hunger
+     */
+    public int getHungerStored() {
+        return hungerStored;
+    }
+
+    /**
      * Set the amount of damage stored
      * 
      * @param damageStored
@@ -106,6 +116,16 @@ public class AllomancyCapability implements ICapabilitySerializable<NBTTagCompou
      */
     public void setDamageStored(int damageStored) {
         this.damageStored = damageStored;
+    }
+
+    /**
+     * Set the amount of damage stored
+     *
+     * @param damageStored
+     *            the amount of damage
+     */
+    public void setHungerStored(int hungerStored) {
+        this.hungerStored = hungerStored;
     }
 
     /**

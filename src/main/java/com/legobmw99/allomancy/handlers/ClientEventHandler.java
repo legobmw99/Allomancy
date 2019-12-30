@@ -511,7 +511,7 @@ public class ClientEventHandler {
 
         if ((cap.getMetalBurning(AllomancyCapability.BRONZE))) {
             for (EntityPlayer entityplayer : metalBurners) {
-                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY+0.5, entityplayer.posZ, 3F, 0.5F, 0.15F, 0.15F);
+                AllomancyUtils.drawMetalLine(playerX, playerY, playerZ, entityplayer.posX, entityplayer.posY+0.5, entityplayer.posZ, 10F, 0.5F, 0.15F, 0.15F);
             }
         }
     }
