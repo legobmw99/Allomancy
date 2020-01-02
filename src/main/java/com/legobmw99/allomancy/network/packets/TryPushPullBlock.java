@@ -26,9 +26,9 @@ public class TryPushPullBlock {
         this.direction = direction;
     }
 
-    public static void encode(TryPushPullBlock pkt, PacketBuffer buf) {
-        buf.writeBlockPos(pkt.blockPos);
-        buf.writeByte(pkt.direction);
+    public void encode(PacketBuffer buf) {
+        buf.writeBlockPos(this.blockPos);
+        buf.writeByte(this.direction);
     }
 
     public static TryPushPullBlock decode(PacketBuffer buf) {
@@ -36,23 +36,24 @@ public class TryPushPullBlock {
     }
 
 
-    public static void handle(final TryPushPullBlock message, Supplier<NetworkEvent.Context> ctx) {
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
                     ServerPlayerEntity player = ctx.get().getSender();
-                    BlockPos pos = message.blockPos;
+                    BlockPos pos = blockPos;
                     // Sanity check to make sure server has same configs and that the block is loaded in the server
                     if ((player.world.isBlockLoaded(pos) && (AllomancyUtils.isBlockMetal(player.world.getBlockState(pos).getBlock()))) // Check Block
                             || (player.getHeldItemMainhand().getItem() == Registry.coin_bag && (!player.findAmmo(player.getHeldItemMainhand()).isEmpty()) /*some sort of find ammo func*/ &&
-                            message.direction == AllomancyUtils.PUSH)) {
+                            direction == AllomancyUtils.PUSH)) {
                         // Check for the coin bag
                         if (player.world.getBlockState(pos).getBlock() instanceof IAllomanticallyActivatedBlock) {
                             ((IAllomanticallyActivatedBlock) player.world.getBlockState(pos).getBlock())
-                                    .onBlockActivatedAllomantically(player.world.getBlockState(pos), player.world, pos, player, message.direction == AllomancyUtils.PUSH);
+                                    .onBlockActivatedAllomantically(player.world.getBlockState(pos), player.world, pos, player, direction == AllomancyUtils.PUSH);
                         } else {
-                            AllomancyUtils.move(message.direction, player, pos);
+                            AllomancyUtils.move(direction, player, pos);
                         }
                     }
                 }
         );
+        ctx.get().setPacketHandled(true);
     }
 }

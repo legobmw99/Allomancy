@@ -26,9 +26,9 @@ public class UpdateBurnPacket {
         this.value = value; // Convert bool to int
     }
 
-    public static void encode(UpdateBurnPacket pkt, PacketBuffer buf) {
-        buf.writeByte(pkt.mat);
-        buf.writeBoolean(pkt.value);
+    public void encode(PacketBuffer buf) {
+        buf.writeByte(this.mat);
+        buf.writeBoolean(this.value);
     }
 
     public static UpdateBurnPacket decode(PacketBuffer buf) {
@@ -36,21 +36,22 @@ public class UpdateBurnPacket {
     }
 
 
-    public static void handle(final UpdateBurnPacket message, Supplier<NetworkEvent.Context> ctx) {
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
 
             ServerPlayerEntity player = ctx.get().getSender();
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
-            if (cap.getMetalAmounts(message.mat) > 0) {
-                cap.setMetalBurning(message.mat, message.value);
+            if (cap.getMetalAmounts(mat) > 0) {
+                cap.setMetalBurning(mat, value);
             } else {
-                cap.setMetalBurning(message.mat, false);
+                cap.setMetalBurning(mat, false);
             }
 
             NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
 
 
         });
+        ctx.get().setPacketHandled(true);
     }
 }

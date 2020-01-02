@@ -60,7 +60,7 @@ public class GoldNuggetEntity extends ProjectileItemEntity {
 
 
     @Override
-    protected Item func_213885_i() {
+    protected Item getDefaultItem() {
         return Items.GOLD_NUGGET;
     }
 

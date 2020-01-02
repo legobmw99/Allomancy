@@ -42,14 +42,14 @@ public class CoinBagItem extends ShootableItem {
 
                 if (itemstack.getItem() == Items.GOLD_NUGGET) {
                     GoldNuggetEntity entitygold = new GoldNuggetEntity(Registry.gold_nugget, player, world);
-                    entitygold.func_213884_b(itemstack);
+                    entitygold.entityDropItem(itemstack);
                     entitygold.shoot(player, player.rotationPitch, player.rotationYawHead, 2.0F, 4.0F, 1.0F);
                     world.addEntity(entitygold);
                 }
 
                 if (itemstack.getItem() == Items.IRON_NUGGET) {
                     IronNuggetEntity entityiron = new IronNuggetEntity(Registry.iron_nugget, player, world);
-                    entityiron.func_213884_b(itemstack);
+                    entityiron.entityDropItem(itemstack);
                     entityiron.shoot(player, player.rotationPitch, player.rotationYawHead, 2.0F, 2.25F, 2.5F);
                     world.addEntity(entityiron);
 

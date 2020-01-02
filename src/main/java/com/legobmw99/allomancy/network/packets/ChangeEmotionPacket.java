@@ -29,21 +29,20 @@ public class ChangeEmotionPacket {
     }
 
 
-    public static void encode(ChangeEmotionPacket pkt, PacketBuffer buf) {
-        buf.writeInt(pkt.entityID);
-        buf.writeBoolean(pkt.aggro);
+    public void encode(PacketBuffer buf) {
+        buf.writeInt(this.entityID);
+        buf.writeBoolean(this.aggro);
     }
 
     public static ChangeEmotionPacket decode(PacketBuffer buf) {
         return new ChangeEmotionPacket(buf.readInt(), buf.readBoolean());
     }
 
-
-    public static void handle(final ChangeEmotionPacket message, Supplier<NetworkEvent.Context> ctx) {
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
                     CreatureEntity target;
-                    target = (CreatureEntity) ctx.get().getSender().world.getEntityByID(message.entityID);
-                    if ((target != null) && message.aggro) {
+                    target = (CreatureEntity) ctx.get().getSender().world.getEntityByID(entityID);
+                    if ((target != null) && aggro) {
                         // Remove all current goals
                         target.goalSelector.getRunningGoals().forEach(target.goalSelector::removeGoal);
                         target.targetSelector.getRunningGoals().forEach(target.targetSelector::removeGoal);
@@ -60,16 +59,16 @@ public class ChangeEmotionPacket {
                         target.goalSelector.addGoal(5, new RandomWalkingGoal(target, 0.8D));
                         target.goalSelector.addGoal(6, new LookAtGoal(target, PlayerEntity.class, 8.0F));
                         target.goalSelector.addGoal(6, new LookRandomlyGoal(target));
-                        target.targetSelector.addGoal(2, new HurtByTargetGoal(target, PlayerEntity.class));
+                        target.targetSelector.addGoal(4, new HurtByTargetGoal(target, PlayerEntity.class));
                         if (target instanceof CreeperEntity) {
-                            target.goalSelector.addGoal(2, new CreeperSwellGoal((CreeperEntity) target));
+                            target.goalSelector.addGoal(6, new CreeperSwellGoal((CreeperEntity) target));
                         }
                         if (target instanceof RabbitEntity) {
                             target.goalSelector.addGoal(4, new AIEvilAttack((RabbitEntity) target));
                         }
 
 
-                    } else if ((target != null) && !message.aggro) {
+                    } else if ((target != null) && !aggro) {
                         // Remove all current goals
                         target.goalSelector.getRunningGoals().forEach(target.goalSelector::removeGoal);
                         target.targetSelector.getRunningGoals().forEach(target.targetSelector::removeGoal);
@@ -80,14 +79,15 @@ public class ChangeEmotionPacket {
                         //Disable targeting as a whole
                         target.targetSelector.disableFlag(Goal.Flag.TARGET);
                         //Add new goals
-                        target.goalSelector.addGoal(0, new SwimGoal(target));
+                        target.goalSelector.addGoal(1, new SwimGoal(target));
                         target.goalSelector.addGoal(5, new RandomWalkingGoal(target, 1.0D));
-                        target.goalSelector.addGoal(6, new LookAtGoal(target, PlayerEntity.class, 6.0F));
-                        target.goalSelector.addGoal(7, new LookRandomlyGoal(target));
+                        target.goalSelector.addGoal(7, new LookAtGoal(target, PlayerEntity.class, 6.0F));
+                        target.goalSelector.addGoal(8, new LookRandomlyGoal(target));
 
                     }
 
                 }
         );
+        ctx.get().setPacketHandled(true);
     }
 }

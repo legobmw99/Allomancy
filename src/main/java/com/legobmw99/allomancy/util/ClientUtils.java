@@ -48,7 +48,7 @@ public class ClientUtils {
         Entity entity = mc.getRenderViewEntity();
         if (entity != null) {
             if (mc.world != null) {
-                objectMouseOver = entity.func_213324_a(dist, partialTicks, false);
+                objectMouseOver = entity.pick(dist, partialTicks, false);
                 Vec3d vec3d = entity.getEyePosition(partialTicks);
                 boolean flag = false;
                 int i = 3;
@@ -62,7 +62,7 @@ public class ClientUtils {
                 Vec3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
                 float f = 1.0F;
                 AxisAlignedBB axisalignedbb = entity.getBoundingBox().expand(vec3d1.scale(dist)).grow(1.0D, 1.0D, 1.0D);
-                EntityRayTraceResult entityraytraceresult = ProjectileHelper.func_221273_a(entity, vec3d, vec3d2, axisalignedbb, (e) -> {
+                EntityRayTraceResult entityraytraceresult = ProjectileHelper.rayTraceEntities(entity, vec3d, vec3d2, axisalignedbb, (e) -> {
                     return true;
                 }, d1);
                 if (entityraytraceresult != null) {

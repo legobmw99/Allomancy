@@ -97,11 +97,7 @@ public class Registry {
 
     protected static final String[] flake_metals = {"iron", "steel", "tin", "pewter", "zinc", "brass", "copper", "bronze", "lead"};
 
-    public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Allomancy.MODID, "networking"))
-            .clientAcceptedVersions(s -> true)
-            .serverAcceptedVersions(s -> true)
-            .networkProtocolVersion(() -> "1.0.0")
-            .simpleChannel();
+    public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(Allomancy.MODID, "networking"), () -> "1.0", s -> true, s -> true);
 
     public static ItemGroup allomancy_group = new ItemGroup(Allomancy.MODID) {
         @Override
@@ -109,7 +105,6 @@ public class Registry {
             return new ItemStack(Registry.mistcloak);
         }
     };
-
 
     public static IArmorMaterial WoolArmor = new IArmorMaterial() {
         @Override
@@ -148,7 +143,6 @@ public class Registry {
         }
     };
 
-
     public static void initKeyBindings() {
         burn = new KeyBinding("key.burn", GLFW.GLFW_KEY_F, "key.categories.allomancy");
         ClientRegistry.registerKeyBinding(burn);
@@ -163,7 +157,6 @@ public class Registry {
         NETWORK.registerMessage(index, TryPushPullBlock.class, TryPushPullBlock::encode, TryPushPullBlock::decode, TryPushPullBlock::handle);
 
     }
-
 
     @SubscribeEvent
     public static void onRegisterRecipes(final RegistryEvent.Register<IRecipeSerializer<?>> event) {

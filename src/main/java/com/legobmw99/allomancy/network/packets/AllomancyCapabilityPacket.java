@@ -29,9 +29,9 @@ public class AllomancyCapabilityPacket {
         this.entityID = entityID;
     }
 
-    public static void encode(AllomancyCapabilityPacket pkt, PacketBuffer buf) {
-        buf.writeCompoundTag(pkt.nbt);
-        buf.writeInt(pkt.entityID);
+    public void encode(PacketBuffer buf) {
+        buf.writeCompoundTag(this.nbt);
+        buf.writeInt(this.entityID);
     }
 
     public static AllomancyCapabilityPacket decode(PacketBuffer buf) {
@@ -39,13 +39,14 @@ public class AllomancyCapabilityPacket {
     }
 
 
-    public static void handle(final AllomancyCapabilityPacket message, Supplier<NetworkEvent.Context> ctx) {
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            PlayerEntity player = (PlayerEntity) Minecraft.getInstance().world.getEntityByID(message.entityID);
+            PlayerEntity player = (PlayerEntity) Minecraft.getInstance().world.getEntityByID(entityID);
             if (player != null) {
                 AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
-                playerCap.deserializeNBT(message.nbt);
+                playerCap.deserializeNBT(nbt);
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }
