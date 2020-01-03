@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.network;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.network.packets.*;
-import com.legobmw99.allomancy.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.network.*;
+import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
