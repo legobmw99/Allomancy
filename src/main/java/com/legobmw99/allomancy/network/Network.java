@@ -16,10 +16,6 @@ public class Network {
 
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Allomancy.MODID, "networking"), () -> "1.0", s -> true, s -> true);
 
-    public static void sendToServer(Object msg) {
-        INSTANCE.sendToServer(msg);
-    }
-
     private static int index = 0;
 
     private static int nextIndex() {
@@ -34,6 +30,9 @@ public class Network {
         INSTANCE.registerMessage(nextIndex(), TryPushPullBlock.class, TryPushPullBlock::encode, TryPushPullBlock::decode, TryPushPullBlock::handle);
     }
 
+    public static void sendToServer(Object msg) {
+        INSTANCE.sendToServer(msg);
+    }
 
     public static void sendTo(Object msg, ServerPlayerEntity player) {
         if (!(player instanceof FakePlayer)) {
@@ -45,9 +44,13 @@ public class Network {
         INSTANCE.send(target, msg);
     }
 
-    public static void sync(PlayerEntity playerIn) {
-        AllomancyCapability cap = AllomancyCapability.forPlayer(playerIn);
-        sendTo(new AllomancyCapabilityPacket(cap, playerIn.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerIn));
+    public static void sync(PlayerEntity player) {
+        AllomancyCapability cap = AllomancyCapability.forPlayer(player);
+        sync(cap, player);
+    }
+
+    public static void sync(AllomancyCapability cap, PlayerEntity player) {
+        sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
     }
 
 }

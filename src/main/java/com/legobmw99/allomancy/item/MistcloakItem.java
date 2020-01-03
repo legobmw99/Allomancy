@@ -1,14 +1,11 @@
 package com.legobmw99.allomancy.item;
 
 import com.google.common.collect.Multimap;
-import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.setup.Registry;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 

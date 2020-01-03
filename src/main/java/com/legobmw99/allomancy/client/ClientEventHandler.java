@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.client;
 
 import com.legobmw99.allomancy.client.entity.particle.SoundParticle;
+import com.legobmw99.allomancy.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.client.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
@@ -211,14 +212,14 @@ public class ClientEventHandler {
             return;
         }
 
-        ClientUtils.drawMetalOverlay();
+        MetalOverlay.drawMetalOverlay();
     }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderGUIScreen(GuiScreenEvent.DrawScreenEvent event) {
         if (event.getGui() instanceof MetalSelectScreen && !event.isCancelable()) {
-            ClientUtils.drawMetalOverlay();
+            MetalOverlay.drawMetalOverlay();
         }
     }
 

@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.item;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.setup.Registry;
 import com.legobmw99.allomancy.util.AllomancyCapability;
 import net.minecraft.client.util.ITooltipFlag;
@@ -16,7 +15,6 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;

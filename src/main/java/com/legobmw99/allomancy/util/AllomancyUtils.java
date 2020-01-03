@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 /**
  * Contains all static, common methods in one place
@@ -157,7 +156,7 @@ public class AllomancyUtils {
                         Network.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), player);
                         if (capability.getMetalAmounts(i) == 0) {
                             capability.setMetalBurning(i, false);
-                            Network.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
+                            Network.sync(capability, player);
                         }
                     }
                 }

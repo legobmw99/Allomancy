@@ -5,7 +5,6 @@ import com.legobmw99.allomancy.util.AllomancyCapability;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
@@ -47,9 +46,7 @@ public class UpdateBurnPacket {
             } else {
                 cap.setMetalBurning(mat, false);
             }
-
-            Network.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
-
+            Network.sync(cap, player);
 
         });
         ctx.get().setPacketHandled(true);

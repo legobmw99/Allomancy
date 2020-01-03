@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.item;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.entity.GoldNuggetEntity;
 import com.legobmw99.allomancy.entity.IronNuggetEntity;
 import com.legobmw99.allomancy.setup.Registry;
@@ -10,7 +9,6 @@ import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;

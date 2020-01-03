@@ -1,10 +1,8 @@
 package com.legobmw99.allomancy.item;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.setup.Registry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 public class GrinderItem extends Item {
 

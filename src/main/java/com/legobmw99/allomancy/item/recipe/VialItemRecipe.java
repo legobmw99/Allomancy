@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.item.recipe;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.setup.Registry;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
