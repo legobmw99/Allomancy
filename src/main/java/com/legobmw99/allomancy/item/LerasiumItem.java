@@ -30,7 +30,6 @@ public class LerasiumItem extends Item {
 
     public LerasiumItem() {
         super(new Item.Properties().group(Registry.allomancy_group).rarity(Rarity.EPIC).maxStackSize(1).food(lerasium));
-        this.setRegistryName(new ResourceLocation(Allomancy.MODID, "lerasium_nugget"));
     }
 
 

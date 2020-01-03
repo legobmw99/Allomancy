@@ -10,7 +10,6 @@ public class GrinderItem extends Item {
 
     public GrinderItem() {
         super(new Item.Properties().group(Registry.allomancy_group).maxStackSize(1));
-        setRegistryName(new ResourceLocation(Allomancy.MODID, "allomantic_grinder"));
     }
 
     @Override

@@ -28,7 +28,6 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyActivat
 
     public IronLeverBlock() {
         super(Block.Properties.create(Material.IRON).doesNotBlockMovement().hardnessAndResistance(1.0F).harvestLevel(2).harvestTool(ToolType.PICKAXE));
-        this.setRegistryName(Allomancy.MODID, "iron_lever");
     }
 
     @Override

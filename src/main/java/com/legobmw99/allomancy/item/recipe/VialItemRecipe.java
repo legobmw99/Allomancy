@@ -114,7 +114,6 @@ public class VialItemRecipe extends SpecialRecipe {
 
         public Serializer() {
             super(VialItemRecipe::new);
-            setRegistryName(new ResourceLocation(Allomancy.MODID, "vial_filling"));
         }
     }
 }

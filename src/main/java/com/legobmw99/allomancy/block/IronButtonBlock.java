@@ -28,7 +28,6 @@ public class IronButtonBlock extends AbstractButtonBlock implements IAllomantica
 
     public IronButtonBlock() {
         super(false, Block.Properties.create(Material.IRON).doesNotBlockMovement().hardnessAndResistance(1.0F).harvestLevel(2).harvestTool(ToolType.PICKAXE));
-        this.setRegistryName(Allomancy.MODID, "iron_button");
     }
 
     @Override

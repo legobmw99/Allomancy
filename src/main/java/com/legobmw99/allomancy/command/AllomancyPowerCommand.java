@@ -32,6 +32,7 @@ public class AllomancyPowerCommand {
                 .executes(ctx -> getPower(ctx, false))
                 .then(Commands.argument("targets", EntityArgument.players())
                         .executes(ctx -> getPower(ctx, true))));
+
         root.then(Commands.literal("set").requires(permissions(2))
                 .then(Commands.argument("type", AllomancyPowerType.INSTANCE)
                         .executes(ctx -> setPower(ctx, false))

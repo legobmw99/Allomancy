@@ -34,7 +34,7 @@ public class Allomancy {
 
     public Allomancy() {
         instance = this;
-        // Register our com.legobmw99.allomancy.setup events on the necessary buses
+        // Register our setup events on the necessary buses
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientInit);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::modConfig);
@@ -43,11 +43,9 @@ public class Allomancy {
         // Register all Registries
         Registry.register();
 
-
         //Config init
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AllomancyConfig.CLIENT_SPEC);
-
     }
 
     public void clientInit(final FMLClientSetupEvent e) {

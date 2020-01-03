@@ -22,7 +22,6 @@ public class CoinBagItem extends ShootableItem {
 
     public CoinBagItem() {
         super(new Item.Properties().group(Registry.allomancy_group).maxStackSize(1));
-        this.setRegistryName(new ResourceLocation(Allomancy.MODID, "coin_bag"));
     }
 
     @Nonnull
@@ -42,14 +41,12 @@ public class CoinBagItem extends ShootableItem {
 
                 if (itemstack.getItem() == Items.GOLD_NUGGET) {
                     GoldNuggetEntity entitygold = new GoldNuggetEntity(player, world);
-                    entitygold.entityDropItem(itemstack);
                     entitygold.shoot(player, player.rotationPitch, player.rotationYawHead, 2.0F, 4.0F, 1.0F);
                     world.addEntity(entitygold);
                 }
 
                 if (itemstack.getItem() == Items.IRON_NUGGET) {
                     IronNuggetEntity entityiron = new IronNuggetEntity(player, world);
-                    entityiron.entityDropItem(itemstack);
                     entityiron.shoot(player, player.rotationPitch, player.rotationYawHead, 2.0F, 2.25F, 2.5F);
                     world.addEntity(entityiron);
 
