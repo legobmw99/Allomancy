@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.entity;
 
+import com.legobmw99.allomancy.setup.Registry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -19,12 +20,12 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class GoldNuggetEntity extends ProjectileItemEntity {
     private boolean dropItem = true;
 
-    public GoldNuggetEntity(EntityType<? extends ProjectileItemEntity> type, World world) {
-        super(type, world);
+    public GoldNuggetEntity(World world) {
+        super((EntityType<? extends ProjectileItemEntity>) Registry.GOLD_NUGGET.get(), world);
     }
 
-    public GoldNuggetEntity(EntityType<? extends ProjectileItemEntity> type, LivingEntity livingEntity, World world) {
-        super(type, livingEntity, world);
+    public GoldNuggetEntity(LivingEntity livingEntity, World world) {
+        super((EntityType<? extends ProjectileItemEntity>) Registry.GOLD_NUGGET.get(), livingEntity, world);
         if (livingEntity instanceof PlayerEntity) {
             PlayerEntity ep = (PlayerEntity) livingEntity;
             if (ep.abilities.isCreativeMode) {
@@ -33,8 +34,12 @@ public class GoldNuggetEntity extends ProjectileItemEntity {
         }
     }
 
-    public GoldNuggetEntity(EntityType<? extends ProjectileItemEntity> type, double x, double y, double z, World world) {
-        super(type, x, y, z, world);
+    public GoldNuggetEntity(double x, double y, double z, World world) {
+        super((EntityType<? extends ProjectileItemEntity>) Registry.GOLD_NUGGET.get(), x, y, z, world);
+    }
+
+    public GoldNuggetEntity(EntityType<GoldNuggetEntity> type, World world) {
+        super((EntityType<? extends ProjectileItemEntity>) Registry.GOLD_NUGGET.get(), world);
     }
 
 

@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.util;
+package com.legobmw99.allomancy.setup;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;

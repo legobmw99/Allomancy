@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.command;
 
-import com.legobmw99.allomancy.network.NetworkHelper;
+import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.util.AllomancyCapability;
 import com.mojang.brigadier.CommandDispatcher;
@@ -89,7 +89,7 @@ public class AllomancyPowerCommand {
         for (int i = 0; i < 8; i++) {
             cap.setMetalBurning(i, false);
         }
-        NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
+        Network.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
         ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.setpower", player.getDisplayName(), names[power + 1]), true);
         return power;
 

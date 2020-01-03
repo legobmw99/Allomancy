@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.network.packets;
 
-import com.legobmw99.allomancy.network.NetworkHelper;
+import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.util.AllomancyCapability;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -48,7 +48,7 @@ public class UpdateBurnPacket {
                 cap.setMetalBurning(mat, false);
             }
 
-            NetworkHelper.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
+            Network.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
 
 
         });

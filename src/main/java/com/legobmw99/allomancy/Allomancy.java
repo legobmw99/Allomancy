@@ -1,12 +1,14 @@
 package com.legobmw99.allomancy;
 
+import com.legobmw99.allomancy.client.ClientEventHandler;
+import com.legobmw99.allomancy.client.ClientSetup;
 import com.legobmw99.allomancy.command.AllomancyPowerCommand;
 import com.legobmw99.allomancy.command.AllomancyPowerType;
-import com.legobmw99.allomancy.handlers.ClientEventHandler;
-import com.legobmw99.allomancy.handlers.CommonEventHandler;
+import com.legobmw99.allomancy.network.Network;
+import com.legobmw99.allomancy.setup.AllomancyConfig;
+import com.legobmw99.allomancy.setup.Registry;
 import com.legobmw99.allomancy.util.AllomancyCapability;
-import com.legobmw99.allomancy.util.AllomancyConfig;
-import com.legobmw99.allomancy.util.Registry;
+import com.legobmw99.allomancy.util.CommonEventHandler;
 import com.legobmw99.allomancy.world.OreGenerator;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
@@ -32,11 +34,15 @@ public class Allomancy {
 
     public Allomancy() {
         instance = this;
-        // Register our setup events on the necessary buses
+        // Register our com.legobmw99.allomancy.setup events on the necessary buses
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientInit);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::modConfig);
         MinecraftForge.EVENT_BUS.addListener(this::serverInit);
+
+        // Register all Registries
+        Registry.register();
+
 
         //Config init
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_SPEC);
@@ -46,8 +52,8 @@ public class Allomancy {
 
     public void clientInit(final FMLClientSetupEvent e) {
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-        Registry.initKeyBindings();
-        Registry.registerEntityRenders();
+        ClientSetup.initKeyBindings();
+        ClientSetup.registerEntityRenders();
 
     }
 
@@ -61,7 +67,7 @@ public class Allomancy {
         OreGenerator.generationSetup();
         AllomancyCapability.register();
         MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
-        Registry.registerPackets();
+        Network.registerPackets();
     }
 
     public void modConfig(final ModConfig.ModConfigEvent e) {

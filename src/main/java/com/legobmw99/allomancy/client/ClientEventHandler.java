@@ -1,12 +1,15 @@
-package com.legobmw99.allomancy.handlers;
+package com.legobmw99.allomancy.client;
 
-import com.legobmw99.allomancy.entity.particle.SoundParticle;
-import com.legobmw99.allomancy.gui.MetalSelectScreen;
-import com.legobmw99.allomancy.network.NetworkHelper;
+import com.legobmw99.allomancy.client.entity.particle.SoundParticle;
+import com.legobmw99.allomancy.client.gui.MetalSelectScreen;
+import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.network.packets.ChangeEmotionPacket;
 import com.legobmw99.allomancy.network.packets.TryPushPullBlock;
 import com.legobmw99.allomancy.network.packets.TryPushPullEntity;
-import com.legobmw99.allomancy.util.*;
+import com.legobmw99.allomancy.setup.AllomancyConfig;
+import com.legobmw99.allomancy.setup.Registry;
+import com.legobmw99.allomancy.util.AllomancyCapability;
+import com.legobmw99.allomancy.util.AllomancyUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -23,8 +26,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.HashSet;
 import java.util.List;
@@ -59,13 +62,13 @@ public class ClientEventHandler {
                     if (cap.getMetalBurning(AllomancyCapability.IRON)) {
                         if (trace != null) {
                             if (trace.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
-                                NetworkHelper.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), AllomancyUtils.PULL));
+                                Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), AllomancyUtils.PULL));
                             }
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == Registry.coin_bag && player.isSneaking())) {
-                                    NetworkHelper.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
+                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == Registry.COIN_BAG.get() && player.isSneaking())) {
+                                    Network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
                                 }
                             }
                         }
@@ -76,7 +79,7 @@ public class ClientEventHandler {
                         if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
                             entity = ((EntityRayTraceResult) trace).getEntity();
                             if (entity instanceof CreatureEntity) {
-                                NetworkHelper.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), true));
+                                Network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), true));
                             }
                         }
                     }
@@ -88,13 +91,13 @@ public class ClientEventHandler {
                     if (cap.getMetalBurning(AllomancyCapability.STEEL)) {
                         if (trace != null) {
                             if (trace.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
-                                NetworkHelper.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), AllomancyUtils.PUSH));
+                                Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), AllomancyUtils.PUSH));
                             }
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == Registry.coin_bag && player.isSneaking())) {
-                                    NetworkHelper.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
+                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == Registry.COIN_BAG.get() && player.isSneaking())) {
+                                    Network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
                                 }
                             }
                         }
@@ -105,7 +108,7 @@ public class ClientEventHandler {
                         if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
                             entity = ((EntityRayTraceResult) trace).getEntity();
                             if (entity instanceof CreatureEntity) {
-                                NetworkHelper.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), false));
+                                Network.sendToServer(new ChangeEmotionPacket(entity.getEntityId(), false));
                             }
                         }
                     }
@@ -172,7 +175,7 @@ public class ClientEventHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onKeyInput(final InputEvent.KeyInputEvent event) {
-        if (Registry.burn.isPressed()) {
+        if (ClientSetup.burn.isPressed()) {
             PlayerEntity player = mc.player;
             AllomancyCapability cap;
             if (mc.currentScreen == null) {

@@ -3,8 +3,8 @@ package com.legobmw99.allomancy.item;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.entity.GoldNuggetEntity;
 import com.legobmw99.allomancy.entity.IronNuggetEntity;
+import com.legobmw99.allomancy.setup.Registry;
 import com.legobmw99.allomancy.util.AllomancyCapability;
-import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
@@ -41,14 +41,14 @@ public class CoinBagItem extends ShootableItem {
             if (!world.isRemote) {
 
                 if (itemstack.getItem() == Items.GOLD_NUGGET) {
-                    GoldNuggetEntity entitygold = new GoldNuggetEntity(Registry.gold_nugget, player, world);
+                    GoldNuggetEntity entitygold = new GoldNuggetEntity(player, world);
                     entitygold.entityDropItem(itemstack);
                     entitygold.shoot(player, player.rotationPitch, player.rotationYawHead, 2.0F, 4.0F, 1.0F);
                     world.addEntity(entitygold);
                 }
 
                 if (itemstack.getItem() == Items.IRON_NUGGET) {
-                    IronNuggetEntity entityiron = new IronNuggetEntity(Registry.iron_nugget, player, world);
+                    IronNuggetEntity entityiron = new IronNuggetEntity(player, world);
                     entityiron.entityDropItem(itemstack);
                     entityiron.shoot(player, player.rotationPitch, player.rotationYawHead, 2.0F, 2.25F, 2.5F);
                     world.addEntity(entityiron);

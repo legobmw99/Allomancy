@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.network.packets;
 
-import com.legobmw99.allomancy.ai.AIAttackOnCollideExtended;
-import com.legobmw99.allomancy.ai.AIEvilAttack;
+import com.legobmw99.allomancy.entity.ai.AIAttackOnCollideExtended;
+import com.legobmw99.allomancy.entity.ai.AIEvilAttack;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.CreeperEntity;

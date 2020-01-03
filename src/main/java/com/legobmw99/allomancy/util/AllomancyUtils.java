@@ -2,8 +2,9 @@ package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.entity.GoldNuggetEntity;
 import com.legobmw99.allomancy.entity.IronNuggetEntity;
-import com.legobmw99.allomancy.network.NetworkHelper;
+import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
+import com.legobmw99.allomancy.setup.AllomancyConfig;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
@@ -147,16 +148,16 @@ public class AllomancyUtils {
                 if (capability.getAllomancyPower() != i && capability.getAllomancyPower() != 8) {
                     // put out any metals that the player shouldn't be able to burn
                     capability.setMetalBurning(i, false);
-                    NetworkHelper.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), player);
+                    Network.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), player);
                 } else {
                     capability.setBurnTime(i, capability.getBurnTime(i) - 1);
                     if (capability.getBurnTime(i) == 0) {
                         capability.setBurnTime(i, capability.MAX_BURN_TIME[i]);
                         capability.setMetalAmounts(i, capability.getMetalAmounts(i) - 1);
-                        NetworkHelper.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), player);
+                        Network.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), player);
                         if (capability.getMetalAmounts(i) == 0) {
                             capability.setMetalBurning(i, false);
-                            NetworkHelper.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
+                            Network.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
                         }
                     }
                 }

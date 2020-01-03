@@ -1,5 +1,6 @@
-package com.legobmw99.allomancy.block;
+package com.legobmw99.allomancy.api.block;
 
+import com.legobmw99.allomancy.block.IronLeverBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;

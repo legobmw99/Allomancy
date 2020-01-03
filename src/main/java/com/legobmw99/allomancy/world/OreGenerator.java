@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.world;
 
-import com.legobmw99.allomancy.util.AllomancyConfig;
-import com.legobmw99.allomancy.util.Registry;
+import com.legobmw99.allomancy.setup.AllomancyConfig;
+import com.legobmw99.allomancy.setup.Registry;
 import net.minecraft.block.Block;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
@@ -47,13 +47,13 @@ public class OreGenerator {
 
     static {
         ores.add(new OreData(AllomancyConfig.copper_max_y, AllomancyConfig.copper_min_y, 9, AllomancyConfig.copper_density,
-                Registry.copper_ore, AllomancyConfig.generate_copper));
+                Registry.COPPER_ORE.get(), AllomancyConfig.generate_copper));
         ores.add(new OreData(AllomancyConfig.tin_max_y, AllomancyConfig.tin_min_y, 9, AllomancyConfig.tin_density,
-                Registry.tin_ore, AllomancyConfig.generate_tin));
+                Registry.TIN_ORE.get(), AllomancyConfig.generate_tin));
         ores.add(new OreData(AllomancyConfig.lead_max_y, AllomancyConfig.lead_min_y, 9, AllomancyConfig.lead_density,
-                Registry.lead_ore, AllomancyConfig.generate_lead));
+                Registry.LEAD_ORE.get(), AllomancyConfig.generate_lead));
         ores.add(new OreData(AllomancyConfig.zinc_max_y, AllomancyConfig.zinc_min_y, 9, AllomancyConfig.zinc_density,
-                Registry.zinc_ore, AllomancyConfig.generate_zinc));
+                Registry.ZINC_ORE.get(), AllomancyConfig.generate_zinc));
     }
 
 

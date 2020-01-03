@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.item;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.setup.Registry;
 import com.legobmw99.allomancy.util.AllomancyCapability;
-import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;

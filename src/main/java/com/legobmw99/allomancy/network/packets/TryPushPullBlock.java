@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.network.packets;
 
-import com.legobmw99.allomancy.block.IAllomanticallyActivatedBlock;
+import com.legobmw99.allomancy.api.block.IAllomanticallyActivatedBlock;
+import com.legobmw99.allomancy.setup.Registry;
 import com.legobmw99.allomancy.util.AllomancyUtils;
-import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +42,7 @@ public class TryPushPullBlock {
                     BlockPos pos = blockPos;
                     // Sanity check to make sure server has same configs and that the block is loaded in the server
                     if ((player.world.isBlockLoaded(pos) && (AllomancyUtils.isBlockMetal(player.world.getBlockState(pos).getBlock()))) // Check Block
-                            || (player.getHeldItemMainhand().getItem() == Registry.coin_bag && (!player.findAmmo(player.getHeldItemMainhand()).isEmpty()) /*some sort of find ammo func*/ &&
+                            || (player.getHeldItemMainhand().getItem() == Registry.COIN_BAG.get() && (!player.findAmmo(player.getHeldItemMainhand()).isEmpty()) /*some sort of find ammo func*/ &&
                             direction == AllomancyUtils.PUSH)) {
                         // Check for the coin bag
                         if (player.world.getBlockState(pos).getBlock() instanceof IAllomanticallyActivatedBlock) {

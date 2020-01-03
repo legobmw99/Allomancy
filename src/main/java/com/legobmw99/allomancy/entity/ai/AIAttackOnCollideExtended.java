@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.ai;
+package com.legobmw99.allomancy.entity.ai;
 
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;

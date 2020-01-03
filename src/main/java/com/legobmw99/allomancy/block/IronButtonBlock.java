@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.block;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.block.IAllomanticallyActivatedBlock;
 import net.minecraft.block.AbstractButtonBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.item;
 
 import com.google.common.collect.Multimap;
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.util.Registry;
+import com.legobmw99.allomancy.setup.Registry;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;

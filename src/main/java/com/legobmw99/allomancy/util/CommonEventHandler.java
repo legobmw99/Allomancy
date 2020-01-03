@@ -1,12 +1,10 @@
-package com.legobmw99.allomancy.handlers;
+package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.network.NetworkHelper;
+import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.network.packets.AllomancyCapabilityPacket;
-import com.legobmw99.allomancy.util.AllomancyCapability;
-import com.legobmw99.allomancy.util.AllomancyConfig;
-import com.legobmw99.allomancy.util.AllomancyUtils;
-import com.legobmw99.allomancy.util.Registry;
+import com.legobmw99.allomancy.setup.AllomancyConfig;
+import com.legobmw99.allomancy.setup.Registry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,10 +20,10 @@ import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
 
@@ -50,7 +48,7 @@ public class CommonEventHandler {
                 if (AllomancyConfig.random_mistings && cap.getAllomancyPower() == -1) {
                     byte randomMisting = (byte) (Math.random() * 8);
                     cap.setAllomancyPower(randomMisting);
-                    ItemStack flakes = new ItemStack(Registry.flakes[randomMisting]);
+                    ItemStack flakes = new ItemStack(Registry.FLAKES.get(randomMisting).get());
                     // Give the player one flake of their metal
                     if (!player.inventory.addItemStackToInventory(flakes)) {
                         ItemEntity entity = new ItemEntity(player.getEntityWorld(), player.posX, player.posY, player.posZ, flakes);
@@ -59,7 +57,7 @@ public class CommonEventHandler {
                 }
 
                 //Sync cap to client
-                NetworkHelper.sync(event.getPlayer());
+                Network.sync(event.getPlayer());
             }
         }
     }
@@ -85,14 +83,14 @@ public class CommonEventHandler {
                 }
             });
 
-            NetworkHelper.sync(player);
+            Network.sync(player);
         }
     }
 
     @SubscribeEvent
     public void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
         if (!event.getPlayer().getEntityWorld().isRemote()) {
-            NetworkHelper.sync(event.getPlayer());
+            Network.sync(event.getPlayer());
         }
     }
 
@@ -100,7 +98,7 @@ public class CommonEventHandler {
     @SubscribeEvent
     public void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
         if (!event.getPlayer().getEntityWorld().isRemote()) {
-            NetworkHelper.sync(event.getPlayer());
+            Network.sync(event.getPlayer());
         }
     }
 
@@ -110,7 +108,7 @@ public class CommonEventHandler {
         if (!event.getTarget().world.isRemote) {
             if (event.getTarget() instanceof ServerPlayerEntity) {
                 ServerPlayerEntity playerEntity = (ServerPlayerEntity) event.getTarget();
-                NetworkHelper.sendTo(new AllomancyCapabilityPacket(AllomancyCapability.forPlayer(playerEntity), playerEntity.getEntityId()), (ServerPlayerEntity) event.getPlayer());
+                Network.sendTo(new AllomancyCapabilityPacket(AllomancyCapability.forPlayer(playerEntity), playerEntity.getEntityId()), (ServerPlayerEntity) event.getPlayer());
             }
         }
     }

@@ -7,12 +7,12 @@
  * The code was used as a template for the circular GUI,
  * and was heavily modified
  */
-package com.legobmw99.allomancy.gui;
+package com.legobmw99.allomancy.client.gui;
 
+import com.legobmw99.allomancy.client.ClientSetup;
+import com.legobmw99.allomancy.client.ClientUtils;
+import com.legobmw99.allomancy.setup.AllomancyConfig;
 import com.legobmw99.allomancy.util.AllomancyCapability;
-import com.legobmw99.allomancy.util.AllomancyConfig;
-import com.legobmw99.allomancy.util.ClientUtils;
-import com.legobmw99.allomancy.util.Registry;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -184,7 +184,7 @@ public class MetalSelectScreen extends Screen {
 
     @Override
     public boolean keyReleased(int keysym, int scancode, int p_keyReleased_3_) {
-        if (Registry.burn.matchesKey(keysym, scancode)) {
+        if (ClientSetup.burn.matchesKey(keysym, scancode)) {
             mc.displayGuiScreen(null);
             mc.mouseHelper.grabMouse();
             return true;

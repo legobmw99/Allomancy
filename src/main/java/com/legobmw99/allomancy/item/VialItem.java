@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.item;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.setup.Registry;
 import com.legobmw99.allomancy.util.AllomancyCapability;
-import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -47,7 +47,7 @@ public class VialItem extends Item {
 
         if (!((PlayerEntity) (livingEntity)).abilities.isCreativeMode) {
             stack.shrink(1);
-            ((PlayerEntity) (livingEntity)).inventory.addItemStackToInventory(new ItemStack(Registry.vial, 1));
+            ((PlayerEntity) (livingEntity)).inventory.addItemStackToInventory(new ItemStack(Registry.VIAL.get(), 1));
         }
 
         return stack;
@@ -118,7 +118,7 @@ public class VialItem extends Item {
         if (group == Registry.allomancy_group) {
             items.add(new ItemStack(this, 1));
 
-            ItemStack resultItem = new ItemStack(Registry.vial, 1);
+            ItemStack resultItem = new ItemStack(Registry.VIAL.get(), 1);
             CompoundNBT nbt = new CompoundNBT();
             for (int i = 0; i < Registry.allomanctic_metals.length; i++) {
                 nbt.putBoolean(Registry.allomanctic_metals[i], true);

@@ -1,8 +1,9 @@
 package com.legobmw99.allomancy.item.recipe;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.util.Registry;
+import com.legobmw99.allomancy.setup.Registry;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
@@ -11,12 +12,13 @@ import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
 
 public class VialItemRecipe extends SpecialRecipe {
-    private static final Ingredient INGREDIENT_FLAKES = Ingredient.fromItems(Registry.flakes);
-    private static final Ingredient INGREDIENT_VIAL = Ingredient.fromItems(Registry.vial);
+    private static final Ingredient INGREDIENT_FLAKES = Ingredient.fromItems(Registry.FLAKES.stream().map(RegistryObject::get).toArray(Item[]::new));
+    private static final Ingredient INGREDIENT_VIAL = Ingredient.fromItems(Registry.VIAL.get());
 
     private ItemStack item_result = ItemStack.EMPTY;
 
@@ -37,7 +39,7 @@ public class VialItemRecipe extends SpecialRecipe {
             if (!itemstack.isEmpty()) {
                 if (INGREDIENT_FLAKES.test(itemstack)) {
                     for (int j = 0; j < metals.length; j++) {
-                        if (itemstack.getItem() == Registry.flakes[j]) {
+                        if (itemstack.getItem() == Registry.FLAKES.get(j).get()) {
                             if (metals[j]) {
                                 return false;
                             }
@@ -68,7 +70,7 @@ public class VialItemRecipe extends SpecialRecipe {
             }
         }
         if (ingredients[0] && ingredients[1]) {
-            this.item_result = new ItemStack(Registry.vial, 1);
+            this.item_result = new ItemStack(Registry.VIAL.get(), 1);
             CompoundNBT nbt = new CompoundNBT();
             for (int i = 0; i < metals.length; i++) {
                 nbt.putBoolean(Registry.allomanctic_metals[i], metals[i]);
@@ -104,7 +106,7 @@ public class VialItemRecipe extends SpecialRecipe {
     @Nonnull
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return Registry.vial_recipe_serializer;
+        return Registry.VIAL_RECIPE_SERIALIZER.get();
     }
 
 

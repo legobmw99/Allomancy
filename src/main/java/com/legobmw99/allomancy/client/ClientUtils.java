@@ -1,7 +1,9 @@
-package com.legobmw99.allomancy.util;
+package com.legobmw99.allomancy.client;
 
-import com.legobmw99.allomancy.network.NetworkHelper;
+import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.network.packets.UpdateBurnPacket;
+import com.legobmw99.allomancy.setup.AllomancyConfig;
+import com.legobmw99.allomancy.util.AllomancyCapability;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -112,8 +114,8 @@ public class ClientUtils {
      * Draws the overlay for the metals
      */
     public static void drawMetalOverlay() {
-        player =  mc.player;
-        if(!player.isAlive()){
+        player = mc.player;
+        if (!player.isAlive()) {
             return;
         }
         cap = AllomancyCapability.forPlayer(player);
@@ -266,7 +268,7 @@ public class ClientUtils {
      * @param capability the capability being handled
      */
     public static void toggleMetalBurn(byte metal, AllomancyCapability capability) {
-        NetworkHelper.sendToServer(new UpdateBurnPacket(metal, !capability.getMetalBurning(metal)));
+        Network.sendToServer(new UpdateBurnPacket(metal, !capability.getMetalBurning(metal)));
 
         if (capability.getMetalAmounts(metal) > 0) {
             capability.setMetalBurning(metal, !capability.getMetalBurning(metal));

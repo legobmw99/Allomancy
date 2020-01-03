@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.ai;
+package com.legobmw99.allomancy.entity.ai;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
