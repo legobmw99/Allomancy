@@ -249,37 +249,35 @@ public class ClientEventHandler {
         RenderSystem.multMatrix(stack.func_227866_c_().func_227870_a_());
         RenderSystem.disableTexture();
         RenderSystem.disableDepthTest();
-        RenderSystem.depthMask( false );
-        RenderSystem.polygonMode( GL11.GL_FRONT_AND_BACK, GL11.GL_LINE );
-        RenderSystem.blendFunc( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA );
+        RenderSystem.depthMask(false);
+        RenderSystem.polygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.enableBlend();
 
 
-        Vec3d playervec = new Vec3d (MathHelper.lerp(event.getPartialTicks(), player.prevPosX,player.getLookVec().getX()),
-                                        MathHelper.lerp(event.getPartialTicks(), player.prevPosY,player.getLookVec().getY()),
-                                        MathHelper.lerp(event.getPartialTicks(), player.prevPosZ,player.getLookVec().getZ()));
+        Vec3d playervec = view.add(0, -.1, 0);
         // Iron and Steel lines
         if ((cap.getMetalBurning(AllomancyCapability.IRON) || cap.getMetalBurning(AllomancyCapability.STEEL))) {
 
             for (Entity entity : metal_entities) {
-                ClientUtils.drawMetalLine(player.getEyePosition(event.getPartialTicks()), entity.getPositionVec().add(0, -1.25, 0), 1.5F, 0F, 0.6F, 1F);
+                ClientUtils.drawMetalLine(playervec, entity.getPositionVec(), 1.5F, 0F, 0.6F, 1F);
             }
 
             for (BlockPos b : metal_blocks) {
-                ClientUtils.drawMetalLine(playervec.add(0,player.getEyeHeight(),0), new Vec3d(b).add(0.5, 0.5, 0.5), 1.5F, 0F, 0.6F, 1F);
+                ClientUtils.drawMetalLine(playervec, new Vec3d(b).add(0.5, 0.5, 0.5), 1.5F, 0F, 0.6F, 1F);
             }
         }
 
         if ((cap.getMetalBurning(AllomancyCapability.BRONZE) && !cap.getMetalBurning(AllomancyCapability.COPPER))) {
             for (PlayerEntity playerEntity : nearby_allomancers) {
-                ClientUtils.drawMetalLine(player.getEyePosition(event.getPartialTicks()), playerEntity.getEyePosition(event.getPartialTicks()), 3.0F, 0.7F, 0.15F, 0.15F);
+                ClientUtils.drawMetalLine(playervec, playerEntity.getPositionVec(), 3.0F, 0.7F, 0.15F, 0.15F);
             }
         }
 
-        RenderSystem.polygonMode( GL11.GL_FRONT_AND_BACK, GL11.GL_FILL );
+        RenderSystem.polygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
         RenderSystem.disableBlend();
         RenderSystem.enableDepthTest();
-        RenderSystem.depthMask( true );
+        RenderSystem.depthMask(true);
         RenderSystem.enableTexture();
         RenderSystem.popMatrix();
     }
