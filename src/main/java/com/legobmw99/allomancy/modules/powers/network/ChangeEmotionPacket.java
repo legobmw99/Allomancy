@@ -40,6 +40,9 @@ public class ChangeEmotionPacket {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
+
+            // TODO break out into utils for make aggro/make peaceful?
+            // TODO: entity specific for Villager, tameables, bees, pigmen, and other pack-mobs.
                     CreatureEntity target;
                     target = (CreatureEntity) ctx.get().getSender().world.getEntityByID(entityID);
                     if ((target != null) && aggro) {
