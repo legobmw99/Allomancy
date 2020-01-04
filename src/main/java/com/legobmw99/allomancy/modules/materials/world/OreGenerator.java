@@ -11,6 +11,7 @@ import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.placement.ConfiguredPlacement;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 
@@ -60,18 +61,16 @@ public class OreGenerator {
 
 
     public static void generationSetup() {
-        for (Biome biome : Biome.BIOMES) {
+        for (Biome biome : ForgeRegistries.BIOMES) {
             // We only want overworld generation
             if (biome.getRegistryName().toString().matches(".*end.*|.*nether.*")) {
                 continue;
             }
             for (OreData ore : ores) {
                 if (ore.config_enabled) {
-                    ConfiguredFeature<OreFeatureConfig, Feature<OreFeatureConfig>> feature = new ConfiguredFeature<>(Feature.ORE,
-                            new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.ore_block.getDefaultState(), ore.vein_size));
-                    feature.func_227228_a_(new ConfiguredPlacement<>(Placement.COUNT_RANGE, new CountRangeConfig(ore.ores_per_chunk, ore.max_height, 1, ore.max_height)));
-                    biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, feature);
-
+                    biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
+                            Feature.ORE.func_225566_b_(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.ore_block.getDefaultState(), ore.vein_size))
+                                    .func_227228_a_(new ConfiguredPlacement<>(Placement.COUNT_RANGE, new CountRangeConfig(ore.ores_per_chunk, ore.max_height, 1, ore.max_height))));
                 }
             }
         }
