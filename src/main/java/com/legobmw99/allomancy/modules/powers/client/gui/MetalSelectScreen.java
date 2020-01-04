@@ -17,17 +17,18 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class MetalSelectScreen extends Screen {
@@ -44,100 +45,94 @@ public class MetalSelectScreen extends Screen {
     int timeIn = PowersConfig.animate_selection.get() ? 0 : 10; // Config setting for whether the wheel animates open or instantly appears
     int slotSelected = -1;
     AllomancyCapability cap;
-    List<Integer> slots;
     Minecraft mc;
 
     public MetalSelectScreen() {
         super(new StringTextComponent("allomancy_gui"));
-        ClientPlayerEntity player;
-        player = Minecraft.getInstance().player;
-        cap = AllomancyCapability.forPlayer(player);
         mc = Minecraft.getInstance();
+        cap = AllomancyCapability.forPlayer(mc.player);
 
-        slots = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            slots.add(i);
-        }
     }
 
     @Override
     public void render(int mx, int my, float partialTicks) {
-        RenderSystem.pushMatrix();
-        RenderSystem.disableTexture();
+        super.render(mx, my, partialTicks);
 
         int x = width / 2;
         int y = height / 2;
         int maxRadius = 80;
 
-        boolean mouseIn = true;
-        float angle = (float) mouseAngle(x, y, mx, my);
+        double angle = mouseAngle(x, y, mx, my);
 
-        RenderSystem.enableBlend();
-        RenderSystem.shadeModel(GL11.GL_SMOOTH);
-        int segments = slots.size();
-        float totalDeg = 0;
-        float degPer = 360F / segments;
-
-        List<int[]> stringPositions = new ArrayList();
+        int segments = METAL_NAMES.length;
+        float step = (float) Math.PI / 180;
+        float degPer = (float) Math.PI * 2 / segments;
 
         slotSelected = -1;
 
+        Tessellator tess = Tessellator.getInstance();
+        BufferBuilder buf = tess.getBuffer();
+
+
+        RenderSystem.disableCull();
+        RenderSystem.disableTexture();
+        RenderSystem.enableBlend();
+        RenderSystem.shadeModel(GL11.GL_FLAT);
+        buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+
         for (int seg = 0; seg < segments; seg++) {
-            boolean mouseInSector = mouseIn && angle > totalDeg && angle < totalDeg + degPer;
+            boolean mouseInSector = degPer * seg < angle && angle < degPer * (seg + 1);
             float radius = Math.max(0F, Math.min((timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+            if (mouseInSector) {
+                slotSelected = seg;
+                radius *= 1.025f;
+            }
 
-            GL11.glBegin(GL11.GL_TRIANGLE_FAN);
-
-            float gs = 0.3F;
-
-            if (seg % 2 == 1)
-                gs += 0.25F;
+            int gs = 0x40;
+            if (seg % 2 == 0)
+                gs += 0x19;
 
             gs = cap.getMetalAmounts((seg + 4) % 8) == 0 ? 0 : gs;
 
-            float r = cap.getMetalBurning((seg + 4) % 8) ? 1.0F : gs;
-            float g = gs;
-            float b = gs;
-            float a = 0.6F;
-            if (mouseInSector) {
-                slotSelected = seg;
+            int r = cap.getMetalBurning((seg + 4) % 8) ? 0xFF : gs;
+            int g = gs;
+            int b = gs;
+            int a = 0x99;
+
+
+            if (seg == 0)
+                buf.func_225582_a_(x, y, 0).func_225586_a_(r, g, b, a).endVertex(); //pos, color
+
+
+            for (float i = 0; i < degPer + step / 2; i += step) {
+                float rad = i + seg * degPer;
+                float xp = x + MathHelper.cos(rad) * radius;
+                float yp = y + MathHelper.sin(rad) * radius;
+
+                if (i == 0)
+                    buf.func_225582_a_(xp, yp, 0).func_225586_a_(r, g, b, a).endVertex();
+                buf.func_225582_a_(xp, yp, 0).func_225586_a_(r, g, b, a).endVertex();
             }
-
-            RenderSystem.color4f(r, g, b, a);
-            GL11.glVertex2i(x, y);
-
-            for (float i = degPer; i >= 0; i--) {
-                float rad = (float) ((i + totalDeg) / 180F * Math.PI);
-                double xp = x + Math.cos(rad) * radius;
-                double yp = y + Math.sin(rad) * radius;
-                if (i == (int) (degPer / 2)) {
-                    stringPositions.add(new int[]{seg, (int) xp, (int) yp, mouseInSector ? 'n' : 'r'});
-                    stringPositions.add(
-                            new int[]{seg, (int) xp, (int) yp, cap.getMetalAmounts((seg + 4) % 8) == 0 ? '7' : 'f'}); // Mark unused ones as disabled
-                }
-                GL11.glVertex2d(xp, yp);
-            }
-            totalDeg += degPer;
-
-            GL11.glVertex2i(x, y);
-            GL11.glEnd();
-
         }
+        tess.draw();
+
         RenderSystem.shadeModel(GL11.GL_FLAT);
         RenderSystem.enableTexture();
 
-        for (int[] pos : stringPositions) {
-            int slot = slots.get(pos[0]);
-            int xp = pos[1];
-            int yp = pos[2];
-            char c = (char) pos[3];
+        for (int seg = 0; seg < segments; seg++) {
+            boolean mouseInSector = degPer * seg < angle && angle < degPer * (seg + 1);
+            float radius = Math.max(0F, Math.min((timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+            if (mouseInSector)
+                radius *= 1.025f;
 
-            int xsp = xp - 4;
-            int ysp = yp;
-            String name = "\u00a7" + c + METAL_NAMES[(slot + 4) % 8];
-            // add four and mod by eight to get #1 where I want it to be
+            float rad = (seg + 0.5f) * degPer;
+            float xp = x + MathHelper.cos(rad) * radius;
+            float yp = y + MathHelper.sin(rad) * radius;
+
+            float xsp = xp - 4;
+            float ysp = yp;
+            String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + METAL_NAMES[(seg + 4) % 8];
             int width = mc.getRenderManager().getFontRenderer().getStringWidth(name);
-
 
             if (xsp < x)
                 xsp -= width - 8;
@@ -150,24 +145,21 @@ public class MetalSelectScreen extends Screen {
             int xdp = (int) ((xp - x) * mod + x);
             int ydp = (int) ((yp - y) * mod + y);
 
-            mc.getRenderManager().textureManager.bindTexture(METAL_ICONS[(slot + 4) % 8]);
+            mc.getRenderManager().textureManager.bindTexture(METAL_ICONS[(seg + 4) % 8]);
             RenderSystem.color4f(1, 1, 1, 1);
             blit(xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
         }
-        float stime = 5F;
-        float fract = Math.min(stime, timeIn + partialTicks) / stime;
-        float s = 3F * fract;
+
         RenderSystem.enableRescaleNormal();
         RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(770, 771, 1, 0);
+        RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         RenderHelper.func_227780_a_();  //enableGUIStandardItemLighting();
 
         RenderHelper.disableStandardItemLighting();
         RenderSystem.disableBlend();
         RenderSystem.disableRescaleNormal();
 
-        RenderSystem.popMatrix();
     }
 
     @Override
@@ -197,7 +189,7 @@ public class MetalSelectScreen extends Screen {
      */
     private void toggleSelected() {
         if (slotSelected != -1) {
-            int slot = slots.get(slotSelected);
+            int slot = slotSelected;
             slot = (slot + 4) % 8; // Make the slot the one I actually want
             ClientUtils.toggleMetalBurn((byte) slot, cap);
             mc.player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F,
