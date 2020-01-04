@@ -15,7 +15,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
@@ -77,25 +76,23 @@ public class ClientUtils {
      *
      * @param width the width of the line
      */
-    public static void drawMetalLine(double pX, double pY, double pZ, double oX, double oY, double oZ, float width,
+    public static void drawMetalLine(Vec3d player, Vec3d dest, float width,
                                      float r, float g, float b) {
-        GL11.glPushMatrix();
+        /*GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glTranslated(-pX, -pY, -pZ);
         GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
 
+        GL11.glColor3f(r,g,b);
         GL11.glLineWidth(width);
-        GL11.glColor3f(r, g, b);
-
         GL11.glBegin(GL11.GL_LINE_STRIP);
-
-        GL11.glVertex3d(pX, pY-.1, pZ);
-        GL11.glVertex3d(oX, oY, oZ);
-
+        GL11.glVertex3d(player.getX(),player.getY() - 0.01,player.getZ());
+        GL11.glVertex3d(dest.getX(),dest.getY(),dest.getZ() );
+        GL11.glVertex3d(dest.getX(),dest.getY(),dest.getZ() );
         GL11.glEnd();
+
+        GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopAttrib();
-        GL11.glPopMatrix();
+        GL11.glPopMatrix();*/
     }
 
 

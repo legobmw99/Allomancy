@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.modules.powers;
 
-import com.legobmw99.allomancy.modules.combat.client.CombatClientSetup;
 import com.legobmw99.allomancy.modules.powers.client.ClientEventHandler;
 import com.legobmw99.allomancy.modules.powers.client.PowerClientSetup;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerCommand;

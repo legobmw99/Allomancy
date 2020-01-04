@@ -101,7 +101,7 @@ public class AllomancyUtils {
      *
      * @param directionScalar the direction and (possibly) scalar multiple of the magnitude
      * @param toMove          the entity to move
-     * @param block             the point being moved toward or away from
+     * @param block           the point being moved toward or away from
      */
     public static void move(double directionScalar, Entity toMove, BlockPos block) {
 

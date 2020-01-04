@@ -1,7 +1,6 @@
 package com.legobmw99.allomancy.modules.combat.entity;
 
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;

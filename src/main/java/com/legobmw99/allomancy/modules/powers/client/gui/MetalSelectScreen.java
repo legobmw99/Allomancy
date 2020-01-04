@@ -15,7 +15,6 @@ import com.legobmw99.allomancy.modules.powers.client.PowerClientSetup;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;

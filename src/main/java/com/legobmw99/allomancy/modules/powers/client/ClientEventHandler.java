@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
@@ -124,8 +123,8 @@ public class ClientEventHandler {
                     List<Entity> entities;
                     Stream<BlockPos> blocks;
                     int max = PowersConfig.max_metal_detection.get();
-                    BlockPos negative = new BlockPos(player).add(-max,-max,-max);
-                    BlockPos positive = new BlockPos(player).add(max,max,max);
+                    BlockPos negative = new BlockPos(player).add(-max, -max, -max);
+                    BlockPos positive = new BlockPos(player).add(max, max, max);
 
                     // Add metal entities to metal list
                     entities = player.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(negative, positive));
@@ -150,8 +149,8 @@ public class ClientEventHandler {
                 if (cap.getMetalBurning(AllomancyCapability.BRONZE) && !cap.getMetalBurning(AllomancyCapability.COPPER)) {
                     List<PlayerEntity> nearby_players;
                     // Add metal burners to a list
-                    BlockPos negative = new BlockPos(player).add(-30,-30,-30);
-                    BlockPos positive = new BlockPos(player).add(30,30,30);
+                    BlockPos negative = new BlockPos(player).add(-30, -30, -30);
+                    BlockPos positive = new BlockPos(player).add(30, 30, 30);
                     // Add entities to metal list
                     nearby_players = player.world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(negative, positive), entity -> entity != null && entity != player);
 
@@ -222,6 +221,7 @@ public class ClientEventHandler {
         }
     }
 
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
@@ -235,24 +235,21 @@ public class ClientEventHandler {
         if (cap.getAllomancyPower() < 0) {
             return;
         }
-        double playerX = MathHelper.lerp(event.getPartialTicks(), player.prevPosX, posX(player));
-        double playerY = MathHelper.lerp(event.getPartialTicks(), player.prevPosY, posZ(player));
-        double playerZ = MathHelper.lerp(event.getPartialTicks(), player.prevPosZ, posZ(player));
         // Iron and Steel lines
         if ((cap.getMetalBurning(AllomancyCapability.IRON) || cap.getMetalBurning(AllomancyCapability.STEEL))) {
 
             for (Entity entity : metal_entities) {
-                ClientUtils.drawMetalLine(playerX, playerY, playerZ, posX(entity), posY(entity) - 1.25 + entity.getHeight() / 2.0, posZ(entity), 1.5F, 0F, 0.6F, 1F);
+                ClientUtils.drawMetalLine(player.getEyePosition(event.getPartialTicks()), entity.getPositionVec().add(0, -1.25, 0), 1.5F, 0F, 0.6F, 1F);
             }
 
             for (BlockPos b : metal_blocks) {
-                ClientUtils.drawMetalLine(playerX, playerY, playerZ, b.getX() + 0.5, b.getY() - 1.0, b.getZ() + 0.5, 1.5F, 0F, 0.6F, 1F);
+                ClientUtils.drawMetalLine(player.getEyePosition(event.getPartialTicks()), new Vec3d(b).add(0.5, -1.0, 0.5), 1.5F, 0F, 0.6F, 1F);
             }
         }
 
         if ((cap.getMetalBurning(AllomancyCapability.BRONZE) && !cap.getMetalBurning(AllomancyCapability.COPPER))) {
             for (PlayerEntity playerEntity : nearby_allomancers) {
-                ClientUtils.drawMetalLine(playerX, playerY, playerZ, posX(playerEntity), posY(playerEntity) - 0.5, posZ(playerEntity), 3.0F, 0.7F, 0.15F, 0.15F);
+                ClientUtils.drawMetalLine(player.getEyePosition(event.getPartialTicks()), playerEntity.getEyePosition(event.getPartialTicks()), 3.0F, 0.7F, 0.15F, 0.15F);
             }
         }
     }
@@ -272,7 +269,7 @@ public class ClientEventHandler {
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
         if (cap.getMetalBurning(AllomancyCapability.TIN)) {
 
-            magnitude = Math.sqrt(player.getDistanceSq(sound.getX(),sound.getY(),sound.getZ()));
+            magnitude = Math.sqrt(player.getDistanceSq(sound.getX(), sound.getY(), sound.getZ()));
 
             if (((magnitude) > 25) || ((magnitude) < 3)) {
                 return;
@@ -291,20 +288,4 @@ public class ClientEventHandler {
             }
         }
     }
-
-    /*
-    Silly wrappers to try to avoid mapping issues driving me mad
-    */
-    private static double posX(Entity e){
-        return e.func_226277_ct_();
-    }
-
-    private static double posY(Entity e){
-        return e.func_226278_cu_();
-    }
-
-    private static double posZ(Entity e){
-        return e.func_226281_cx_();
-    }
-
 }
