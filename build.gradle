@@ -43,7 +43,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                betterthanmending {
+                allomancy {
                     source sourceSets.main
                 }
             }
@@ -59,7 +59,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                betterthanmending {
+                allomancy {
                     source sourceSets.main
                 }
             }
@@ -78,7 +78,7 @@ minecraft {
             args '--mod', 'allomancy', '--all', '--output', file('src/generated/resources/')
 
             mods {
-                examplemod {
+                allomancy {
                     source sourceSets.main
                 }
             }

@@ -1,7 +1,9 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
+import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.combat.entity.GoldNuggetEntity;
 import com.legobmw99.allomancy.modules.combat.entity.IronNuggetEntity;
+import com.legobmw99.allomancy.modules.powers.PowersSetup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.settings.KeyBinding;
@@ -20,10 +22,4 @@ public class PowerClientSetup {
         ClientRegistry.registerKeyBinding(burn);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public static void registerEntityRenders() {
-        //Use renderSnowball for nugget projectiles
-        RenderingRegistry.registerEntityRenderingHandler(GoldNuggetEntity.class, manager -> new SpriteRenderer<GoldNuggetEntity>(manager, Minecraft.getInstance().getItemRenderer()));
-        RenderingRegistry.registerEntityRenderingHandler(IronNuggetEntity.class, manager -> new SpriteRenderer<IronNuggetEntity>(manager, Minecraft.getInstance().getItemRenderer()));
-    }
 }

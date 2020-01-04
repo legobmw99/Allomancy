@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.powers;
 
+import com.legobmw99.allomancy.modules.combat.client.CombatClientSetup;
 import com.legobmw99.allomancy.modules.powers.client.ClientEventHandler;
 import com.legobmw99.allomancy.modules.powers.client.PowerClientSetup;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerCommand;
@@ -18,7 +19,6 @@ public class PowersSetup {
     public static void clientInit(final FMLClientSetupEvent e) {
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
         PowerClientSetup.initKeyBindings();
-        PowerClientSetup.registerEntityRenders();
     }
 
     public static void serverInit(final FMLServerStartingEvent e) {

@@ -13,19 +13,19 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.ClientUtils;
 import com.legobmw99.allomancy.modules.powers.client.PowerClientSetup;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
-import javax.vecmath.Vector2f;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,18 +62,18 @@ public class MetalSelectScreen extends Screen {
 
     @Override
     public void render(int mx, int my, float partialTicks) {
-        GlStateManager.pushMatrix();
-        GlStateManager.disableTexture();
+        RenderSystem.pushMatrix();
+        RenderSystem.disableTexture();
 
         int x = width / 2;
         int y = height / 2;
         int maxRadius = 80;
 
         boolean mouseIn = true;
-        float angle = mouseAngle(x, y, mx, my);
+        float angle = (float) mouseAngle(x, y, mx, my);
 
-        GlStateManager.enableBlend();
-        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        RenderSystem.enableBlend();
+        RenderSystem.shadeModel(GL11.GL_SMOOTH);
         int segments = slots.size();
         float totalDeg = 0;
         float degPer = 360F / segments;
@@ -103,7 +103,7 @@ public class MetalSelectScreen extends Screen {
                 slotSelected = seg;
             }
 
-            GlStateManager.color4f(r, g, b, a);
+            RenderSystem.color4f(r, g, b, a);
             GL11.glVertex2i(x, y);
 
             for (float i = degPer; i >= 0; i--) {
@@ -123,8 +123,8 @@ public class MetalSelectScreen extends Screen {
             GL11.glEnd();
 
         }
-        GlStateManager.shadeModel(GL11.GL_FLAT);
-        GlStateManager.enableTexture();
+        RenderSystem.shadeModel(GL11.GL_FLAT);
+        RenderSystem.enableTexture();
 
         for (int[] pos : stringPositions) {
             int slot = slots.get(pos[0]);
@@ -151,23 +151,23 @@ public class MetalSelectScreen extends Screen {
             int ydp = (int) ((yp - y) * mod + y);
 
             mc.getRenderManager().textureManager.bindTexture(METAL_ICONS[(slot + 4) % 8]);
-            GlStateManager.color4f(1, 1, 1, 1);
+            RenderSystem.color4f(1, 1, 1, 1);
             blit(xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
         }
         float stime = 5F;
         float fract = Math.min(stime, timeIn + partialTicks) / stime;
         float s = 3F * fract;
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(770, 771, 1, 0);
-        RenderHelper.enableGUIStandardItemLighting();
+        RenderSystem.enableRescaleNormal();
+        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(770, 771, 1, 0);
+        RenderHelper.func_227780_a_();  //enableGUIStandardItemLighting();
 
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableBlend();
-        GlStateManager.disableRescaleNormal();
+        RenderSystem.disableBlend();
+        RenderSystem.disableRescaleNormal();
 
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
     @Override
@@ -210,12 +210,8 @@ public class MetalSelectScreen extends Screen {
         return false;
     }
 
-    private static float mouseAngle(int x, int y, int mx, int my) {
-        Vector2f baseVec = new Vector2f(1F, 0F);
-        Vector2f mouseVec = new Vector2f(mx - x, my - y);
 
-        float ang = (float) (Math.acos(baseVec.dot(mouseVec) / (baseVec.length() * mouseVec.length()))
-                * (180F / Math.PI));
-        return my < y ? 360F - ang : ang;
+    private static double mouseAngle(int x, int y, int mx, int my) {
+        return (MathHelper.atan2(my - y, mx - x) + Math.PI * 2) % (Math.PI * 2);
     }
 }

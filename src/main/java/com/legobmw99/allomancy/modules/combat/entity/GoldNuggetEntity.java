@@ -56,7 +56,7 @@ public class GoldNuggetEntity extends ProjectileItemEntity {
         if (!this.world.isRemote) {
             ItemStack goldAmmo = new ItemStack(Items.GOLD_NUGGET);
             if (this.world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS) && rayTraceResult.getType() != RayTraceResult.Type.ENTITY && this.dropItem) {
-                this.world.addEntity(new ItemEntity(this.world, this.posX, this.posY, this.posZ, goldAmmo));
+                this.world.addEntity(new ItemEntity(this.world, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(),  goldAmmo));
             }
 
             this.remove();

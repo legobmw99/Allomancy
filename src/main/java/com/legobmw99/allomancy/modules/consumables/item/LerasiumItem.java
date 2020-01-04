@@ -47,9 +47,9 @@ public class LerasiumItem extends Item {
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World world, LivingEntity livingEntity) {
         AllomancyCapability cap = AllomancyCapability.forPlayer((PlayerEntity) livingEntity);
-        double x = livingEntity.posX;
-        double y = livingEntity.posY + 3;
-        double z = livingEntity.posZ;
+        double x = livingEntity.getPositionVec().getX();
+        double y = livingEntity.getPositionVec().getY() + 3;
+        double z = livingEntity.getPositionVec().getZ();
         if (cap.getAllomancyPower() != 8) {
             cap.setAllomancyPower((byte) 8);
         }

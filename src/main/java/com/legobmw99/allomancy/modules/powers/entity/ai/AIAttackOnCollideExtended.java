@@ -95,7 +95,7 @@ public class AIAttackOnCollideExtended extends Goal {
         if (livingEntity == null) {
             return false;
         }
-        BlockPos pos1 = new BlockPos(livingEntity.posX, livingEntity.posY, livingEntity.posZ);
+        BlockPos pos1 = new BlockPos(livingEntity);
 
         return (livingEntity
                 .isAlive() && (!this.longMemory ? !this.attacker
@@ -159,7 +159,7 @@ public class AIAttackOnCollideExtended extends Goal {
         double d0 = (this.attacker.getWidth() * 2.0F * this.attacker.getWidth() * 2.0F)
                 + livingEntity.getWidth();
 
-        if (this.attacker.getDistanceSq(livingEntity.posX, livingEntity.posY, livingEntity.posZ) <= d0) {
+        if (this.attacker.getDistanceSq(livingEntity) <= d0) {
             if (this.attackTick <= 0) {
                 this.attackTick = 20;
 

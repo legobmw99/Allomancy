@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * Contains all static, common methods in one place
@@ -100,22 +101,24 @@ public class AllomancyUtils {
      *
      * @param directionScalar the direction and (possibly) scalar multiple of the magnitude
      * @param toMove          the entity to move
-     * @param vec             the point being moved toward or away from
+     * @param block             the point being moved toward or away from
      */
-    public static void move(double directionScalar, Entity toMove, BlockPos vec) {
+    public static void move(double directionScalar, Entity toMove, BlockPos block) {
 
         double motionX, motionY, motionZ, magnitude;
         if (toMove.isPassenger()) {
             toMove = toMove.getRidingEntity();
         }
+        Vec3d vec = toMove.getPositionVec();
+        double posX = vec.getX(), posY = vec.getY(), posZ = vec.getZ();
         // Calculate the length of the vector between the entity and anchor
-        magnitude = Math.sqrt(Math.pow((toMove.posX - (double) (vec.getX() + .5)), 2)
-                + Math.pow((toMove.posY - (double) (vec.getY() + .5)), 2)
-                + Math.pow((toMove.posZ - (double) (vec.getZ() + .5)), 2));
+        magnitude = Math.sqrt(Math.pow((posX - (double) (block.getX() + .5)), 2)
+                + Math.pow((posY - (double) (block.getY() + .5)), 2)
+                + Math.pow((posZ - (double) (block.getZ() + .5)), 2));
         // Get a unit(-ish) vector in the direction of motion
-        motionX = ((toMove.posX - (double) (vec.getX() + .5)) * directionScalar * (1.1) / magnitude);
-        motionY = ((toMove.posY - (double) (vec.getY() + .5)) * directionScalar * (1.1) / magnitude);
-        motionZ = ((toMove.posZ - (double) (vec.getZ() + .5)) * directionScalar * (1.1) / magnitude);
+        motionX = ((posX - (double) (block.getX() + .5)) * directionScalar * (1.1) / magnitude);
+        motionY = ((posY - (double) (block.getY() + .5)) * directionScalar * (1.1) / magnitude);
+        motionZ = ((posZ - (double) (block.getZ() + .5)) * directionScalar * (1.1) / magnitude);
         // Move along that vector, additively increasing motion until you max
         // out at the above values
         double x = toMove.getMotion().getX(), y = toMove.getMotion().getY(), z = toMove.getMotion().getZ();
@@ -163,6 +166,4 @@ public class AllomancyUtils {
             }
         }
     }
-
-
 }

@@ -5,17 +5,14 @@ import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ForgeIngameGui;
+import net.minecraftforge.client.gui.ForgeIngameGui;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
 public class MetalOverlay {
-    private static Minecraft mc = Minecraft.getInstance();
-    private static ClientPlayerEntity player = mc.player;
-
     private static final Point[] Frames = {new Point(72, 0), new Point(72, 4), new Point(72, 8), new Point(72, 12)};
     private static final ResourceLocation meterLoc = new ResourceLocation("allomancy", "textures/gui/overlay/meter.png");
     private static int animationCounter = 0;
@@ -25,6 +22,8 @@ public class MetalOverlay {
      * Draws the overlay for the metals
      */
     public static void drawMetalOverlay() {
+        Minecraft mc = Minecraft.getInstance();
+        ClientPlayerEntity player = mc.player;
         if (!player.isAlive()) {
             return;
         }
@@ -43,7 +42,7 @@ public class MetalOverlay {
         // single metal
         int singleMetalY;
         int renderX, renderY = 0;
-        MainWindow res = mc.mainWindow;
+        MainWindow res = mc.func_228018_at_(); //getMainWindow
 
         // Set the offsets of the overlay based on config
         switch (PowersConfig.overlay_position.get()) {
@@ -66,9 +65,9 @@ public class MetalOverlay {
         }
 
         ForgeIngameGui gui = new ForgeIngameGui(mc);
-        mc.getRenderManager().textureManager.bindTexture(meterLoc);
-        ITextureObject obj;
-        obj = mc.getRenderManager().textureManager.getTexture(meterLoc);
+        mc.getTextureManager().bindTexture(meterLoc);
+        Texture obj;
+        obj = mc.getTextureManager().func_229267_b_(meterLoc); //getTexture
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
         /*

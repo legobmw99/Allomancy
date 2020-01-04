@@ -63,11 +63,6 @@ public class SoundParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public void renderParticle(BufferBuilder buffer, ActiveRenderInfo entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
-    }
-
-    @Override
     public IParticleRenderType getRenderType() {
         return IParticleRenderType.TERRAIN_SHEET;
     }

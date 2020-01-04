@@ -36,6 +36,7 @@ public class AllomancySetup {
     }
 
     public static void clientInit(final FMLClientSetupEvent e) {
+        CombatSetup.clientInit(e);
         PowersSetup.clientInit(e);
     }
 

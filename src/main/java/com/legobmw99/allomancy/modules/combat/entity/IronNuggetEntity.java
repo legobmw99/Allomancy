@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.modules.combat.entity;
 
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -21,11 +22,11 @@ public class IronNuggetEntity extends ProjectileItemEntity {
     private boolean dropItem = true;
 
     public IronNuggetEntity(World world) {
-        super((EntityType<? extends ProjectileItemEntity>) CombatSetup.IRON_NUGGET.get(), world);
+        super(CombatSetup.IRON_NUGGET.get(), world);
     }
 
     public IronNuggetEntity(LivingEntity livingEntity, World world) {
-        super((EntityType<? extends ProjectileItemEntity>) CombatSetup.IRON_NUGGET.get(), livingEntity, world);
+        super(CombatSetup.IRON_NUGGET.get(), livingEntity, world);
         if (livingEntity instanceof PlayerEntity) {
             PlayerEntity ep = (PlayerEntity) livingEntity;
             if (ep.abilities.isCreativeMode) {
@@ -35,11 +36,11 @@ public class IronNuggetEntity extends ProjectileItemEntity {
     }
 
     public IronNuggetEntity(double x, double y, double z, World world) {
-        super((EntityType<? extends ProjectileItemEntity>) CombatSetup.IRON_NUGGET.get(), x, y, z, world);
+        super(CombatSetup.IRON_NUGGET.get(), x, y, z, world);
     }
 
     public IronNuggetEntity(EntityType<IronNuggetEntity> type, World world) {
-        super((EntityType<? extends ProjectileItemEntity>) CombatSetup.IRON_NUGGET.get(), world);
+        super(CombatSetup.IRON_NUGGET.get(), world);
     }
 
 
@@ -56,7 +57,7 @@ public class IronNuggetEntity extends ProjectileItemEntity {
         if (!this.world.isRemote) {
             ItemStack ironAmmo = new ItemStack(Items.IRON_NUGGET, 1);
             if (this.world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS) && rayTraceResult.getType() != RayTraceResult.Type.ENTITY && this.dropItem) {
-                this.world.addEntity(new ItemEntity(this.world, this.posX, this.posY, this.posZ, ironAmmo));
+                this.world.addEntity(new ItemEntity(this.world, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), ironAmmo));
             }
 
             this.remove();
@@ -73,4 +74,6 @@ public class IronNuggetEntity extends ProjectileItemEntity {
     public IPacket<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
+
+
 }

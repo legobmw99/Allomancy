@@ -36,7 +36,6 @@ public class ClientUtils {
         mc = Minecraft.getInstance();
         float partialTicks = mc.getRenderPartialTicks();
         RayTraceResult objectMouseOver = null;
-        Entity pointedEntity;
         Entity entity = mc.getRenderViewEntity();
         if (entity != null) {
             if (mc.world != null) {
@@ -91,7 +90,7 @@ public class ClientUtils {
 
         GL11.glBegin(GL11.GL_LINE_STRIP);
 
-        GL11.glVertex3d(pX, pY - 0.5, pZ);
+        GL11.glVertex3d(pX, pY-.1, pZ);
         GL11.glVertex3d(oX, oY, oZ);
 
         GL11.glEnd();

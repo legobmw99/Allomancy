@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
@@ -68,7 +69,7 @@ public class ClientEventHandler {
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isSneaking())) {
+                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
                                     Network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
                                 }
                             }
@@ -97,7 +98,7 @@ public class ClientEventHandler {
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isSneaking())) {
+                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
                                     Network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
                                 }
                             }
@@ -122,10 +123,9 @@ public class ClientEventHandler {
                 if (cap.getMetalBurning(AllomancyCapability.IRON) || cap.getMetalBurning(AllomancyCapability.STEEL)) {
                     List<Entity> entities;
                     Stream<BlockPos> blocks;
-                    int xLoc = (int) player.posX, yLoc = (int) player.posY, zLoc = (int) player.posZ;
                     int max = PowersConfig.max_metal_detection.get();
-                    BlockPos negative = new BlockPos(xLoc - max, yLoc - max, zLoc - max);
-                    BlockPos positive = new BlockPos(xLoc + max, yLoc + max, zLoc + max);
+                    BlockPos negative = new BlockPos(player).add(-max,-max,-max);
+                    BlockPos positive = new BlockPos(player).add(max,max,max);
 
                     // Add metal entities to metal list
                     entities = player.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(negative, positive));
@@ -150,9 +150,8 @@ public class ClientEventHandler {
                 if (cap.getMetalBurning(AllomancyCapability.BRONZE) && !cap.getMetalBurning(AllomancyCapability.COPPER)) {
                     List<PlayerEntity> nearby_players;
                     // Add metal burners to a list
-                    int xLoc = (int) player.posX, yLoc = (int) player.posY, zLoc = (int) player.posZ;
-                    BlockPos negative = new BlockPos(xLoc - 30, yLoc - 30, zLoc - 30);
-                    BlockPos positive = new BlockPos(xLoc + 30, yLoc + 30, zLoc + 30);
+                    BlockPos negative = new BlockPos(player).add(-30,-30,-30);
+                    BlockPos positive = new BlockPos(player).add(30,30,30);
                     // Add entities to metal list
                     nearby_players = player.world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(negative, positive), entity -> entity != null && entity != player);
 
@@ -236,26 +235,24 @@ public class ClientEventHandler {
         if (cap.getAllomancyPower() < 0) {
             return;
         }
-
-        double playerX = player.prevPosX + (player.posX - player.prevPosX) * event.getPartialTicks();
-        double playerY = player.prevPosY + (player.posY - player.prevPosY) * event.getPartialTicks();
-        double playerZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.getPartialTicks();
-
+        double playerX = MathHelper.lerp(event.getPartialTicks(), player.prevPosX, posX(player));
+        double playerY = MathHelper.lerp(event.getPartialTicks(), player.prevPosY, posZ(player));
+        double playerZ = MathHelper.lerp(event.getPartialTicks(), player.prevPosZ, posZ(player));
         // Iron and Steel lines
         if ((cap.getMetalBurning(AllomancyCapability.IRON) || cap.getMetalBurning(AllomancyCapability.STEEL))) {
 
             for (Entity entity : metal_entities) {
-                ClientUtils.drawMetalLine(playerX, playerY, playerZ, entity.posX, entity.posY - 1.25 + entity.getHeight() / 2.0, entity.posZ, 1.5F, 0F, 0.6F, 1F);
+                ClientUtils.drawMetalLine(playerX, playerY, playerZ, posX(entity), posY(entity) - 1.25 + entity.getHeight() / 2.0, posZ(entity), 1.5F, 0F, 0.6F, 1F);
             }
 
-            for (BlockPos v : metal_blocks) {
-                ClientUtils.drawMetalLine(playerX, playerY, playerZ, v.getX() + 0.5, v.getY() - 1.0, v.getZ() + 0.5, 1.5F, 0F, 0.6F, 1F);
+            for (BlockPos b : metal_blocks) {
+                ClientUtils.drawMetalLine(playerX, playerY, playerZ, b.getX() + 0.5, b.getY() - 1.0, b.getZ() + 0.5, 1.5F, 0F, 0.6F, 1F);
             }
         }
 
         if ((cap.getMetalBurning(AllomancyCapability.BRONZE) && !cap.getMetalBurning(AllomancyCapability.COPPER))) {
             for (PlayerEntity playerEntity : nearby_allomancers) {
-                ClientUtils.drawMetalLine(playerX, playerY, playerZ, playerEntity.posX, playerEntity.posY - 0.5, playerEntity.posZ, 3.0F, 0.7F, 0.15F, 0.15F);
+                ClientUtils.drawMetalLine(playerX, playerY, playerZ, posX(playerEntity), posY(playerEntity) - 0.5, posZ(playerEntity), 3.0F, 0.7F, 0.15F, 0.15F);
             }
         }
     }
@@ -275,22 +272,39 @@ public class ClientEventHandler {
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
         if (cap.getMetalBurning(AllomancyCapability.TIN)) {
 
-            magnitude = Math.sqrt(Math.pow((player.posX - sound.getX()), 2) + Math.pow((player.posY - sound.getY()), 2) + Math.pow((player.posZ - sound.getZ()), 2));
+            magnitude = Math.sqrt(player.getDistanceSq(sound.getX(),sound.getY(),sound.getZ()));
 
             if (((magnitude) > 25) || ((magnitude) < 3)) {
                 return;
             }
+            Vec3d vec = player.getPositionVec();
+            double posX = vec.getX(), posY = vec.getY(), posZ = vec.getZ();
             // Spawn sound particles
             String soundName = sound.getSoundLocation().toString();
             if (soundName.contains("entity") || soundName.contains("step")) {
-                motionX = ((player.posX - (event.getSound().getX() + .5)) * -0.7) / magnitude;
-                motionY = ((player.posY - (event.getSound().getY() + .2)) * -0.7) / magnitude;
-                motionZ = ((player.posZ - (event.getSound().getZ() + .5)) * -0.7) / magnitude;
-                Particle particle = new SoundParticle(player.world, player.posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), player.posY + .2, player.posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
+                motionX = ((posX - (event.getSound().getX() + .5)) * -0.7) / magnitude;
+                motionY = ((posY - (event.getSound().getY() + .2)) * -0.7) / magnitude;
+                motionZ = ((posZ - (event.getSound().getZ() + .5)) * -0.7) / magnitude;
+                Particle particle = new SoundParticle(player.world, posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), posY + .2, posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
                         motionY, motionZ, sound.getCategory());
                 this.mc.particles.addEffect(particle);
             }
         }
+    }
+
+    /*
+    Silly wrappers to try to avoid mapping issues driving me mad
+    */
+    private static double posX(Entity e){
+        return e.func_226277_ct_();
+    }
+
+    private static double posY(Entity e){
+        return e.func_226278_cu_();
+    }
+
+    private static double posZ(Entity e){
+        return e.func_226281_cx_();
     }
 
 }

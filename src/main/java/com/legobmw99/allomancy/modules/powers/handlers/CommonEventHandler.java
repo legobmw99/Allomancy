@@ -53,7 +53,7 @@ public class CommonEventHandler {
                     ItemStack flakes = new ItemStack(MaterialsSetup.FLAKES.get(randomMisting).get());
                     // Give the player one flake of their metal
                     if (!player.inventory.addItemStackToInventory(flakes)) {
-                        ItemEntity entity = new ItemEntity(player.getEntityWorld(), player.posX, player.posY, player.posZ, flakes);
+                        ItemEntity entity = new ItemEntity(player.getEntityWorld(), player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), flakes);
                         player.getEntityWorld().addEntity(entity);
                     }
                 }

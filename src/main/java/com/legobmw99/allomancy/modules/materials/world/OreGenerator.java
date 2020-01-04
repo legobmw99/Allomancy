@@ -5,9 +5,13 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.block.Block;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.placement.ConfiguredPlacement;
 import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 
 import java.util.ArrayList;
@@ -65,11 +69,11 @@ public class OreGenerator {
             }
             for (OreData ore : ores) {
                 if (ore.config_enabled) {
-                    biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
-                            Biome.createDecoratedFeature(Feature.ORE,
-                                    new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.ore_block.getDefaultState(), ore.vein_size),
-                                    Placement.COUNT_RANGE,
-                                    new CountRangeConfig(ore.ores_per_chunk, ore.max_height, 1, ore.max_height)));
+                    ConfiguredFeature<OreFeatureConfig, Feature<OreFeatureConfig>> feature = new ConfiguredFeature<>(Feature.ORE,
+                            new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.ore_block.getDefaultState(), ore.vein_size));
+                    feature.func_227228_a_(new ConfiguredPlacement<>(Placement.COUNT_RANGE, new CountRangeConfig(ore.ores_per_chunk, ore.max_height, 1, ore.max_height)));
+                    biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, feature);
+
                 }
             }
         }
