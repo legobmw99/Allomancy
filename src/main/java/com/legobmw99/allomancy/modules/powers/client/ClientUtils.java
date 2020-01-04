@@ -3,8 +3,12 @@ package com.legobmw99.allomancy.modules.powers.client;
 import com.legobmw99.allomancy.modules.powers.network.UpdateBurnPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.network.Network;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +19,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
@@ -78,21 +83,17 @@ public class ClientUtils {
      */
     public static void drawMetalLine(Vec3d player, Vec3d dest, float width,
                                      float r, float g, float b) {
-        /*GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        RenderSystem.lineWidth(width);
 
-        GL11.glColor3f(r,g,b);
-        GL11.glLineWidth(width);
-        GL11.glBegin(GL11.GL_LINE_STRIP);
-        GL11.glVertex3d(player.getX(),player.getY() - 0.01,player.getZ());
-        GL11.glVertex3d(dest.getX(),dest.getY(),dest.getZ() );
-        GL11.glVertex3d(dest.getX(),dest.getY(),dest.getZ() );
-        GL11.glEnd();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
 
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();*/
+        buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+        // func_225582_a_ = POS
+        // func_227885_a_ = COLOR
+        buffer.func_225582_a_(player.getX(),player.getY(),player.getZ()).func_227885_a_(r, g, b, 0.8f).endVertex();
+        buffer.func_225582_a_(dest.getX(),dest.getY(),dest.getZ()).func_227885_a_(r, g, b, 0.8f).endVertex();
+        tessellator.draw();
     }
 
 

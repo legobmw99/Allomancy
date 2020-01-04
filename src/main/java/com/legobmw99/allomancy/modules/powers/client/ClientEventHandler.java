@@ -11,6 +11,9 @@ import com.legobmw99.allomancy.modules.powers.network.TryPushPullEntity;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyUtils;
 import com.legobmw99.allomancy.network.Network;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -29,6 +32,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.opengl.GL11;
 
 import java.util.HashSet;
 import java.util.List;
@@ -235,6 +239,25 @@ public class ClientEventHandler {
         if (cap.getAllomancyPower() < 0) {
             return;
         }
+
+
+        Vec3d view = mc.gameRenderer.getActiveRenderInfo().getProjectedView();
+        MatrixStack stack = event.getMatrixStack();
+        stack.func_227861_a_(-view.x, -view.y, -view.z); // translate
+
+        RenderSystem.pushMatrix();
+        RenderSystem.multMatrix(stack.func_227866_c_().func_227870_a_());
+        RenderSystem.disableTexture();
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask( false );
+        RenderSystem.polygonMode( GL11.GL_FRONT_AND_BACK, GL11.GL_LINE );
+        RenderSystem.blendFunc( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA );
+        RenderSystem.enableBlend();
+
+
+        Vec3d playervec = new Vec3d (MathHelper.lerp(event.getPartialTicks(), player.prevPosX,player.getLookVec().getX()),
+                                        MathHelper.lerp(event.getPartialTicks(), player.prevPosY,player.getLookVec().getY()),
+                                        MathHelper.lerp(event.getPartialTicks(), player.prevPosZ,player.getLookVec().getZ()));
         // Iron and Steel lines
         if ((cap.getMetalBurning(AllomancyCapability.IRON) || cap.getMetalBurning(AllomancyCapability.STEEL))) {
 
@@ -243,7 +266,7 @@ public class ClientEventHandler {
             }
 
             for (BlockPos b : metal_blocks) {
-                ClientUtils.drawMetalLine(player.getEyePosition(event.getPartialTicks()), new Vec3d(b).add(0.5, -1.0, 0.5), 1.5F, 0F, 0.6F, 1F);
+                ClientUtils.drawMetalLine(playervec.add(0,player.getEyeHeight(),0), new Vec3d(b).add(0.5, 0.5, 0.5), 1.5F, 0F, 0.6F, 1F);
             }
         }
 
@@ -252,6 +275,13 @@ public class ClientEventHandler {
                 ClientUtils.drawMetalLine(player.getEyePosition(event.getPartialTicks()), playerEntity.getEyePosition(event.getPartialTicks()), 3.0F, 0.7F, 0.15F, 0.15F);
             }
         }
+
+        RenderSystem.polygonMode( GL11.GL_FRONT_AND_BACK, GL11.GL_FILL );
+        RenderSystem.disableBlend();
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthMask( true );
+        RenderSystem.enableTexture();
+        RenderSystem.popMatrix();
     }
 
 
