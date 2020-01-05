@@ -122,14 +122,14 @@ public class CommonEventHandler {
             ServerPlayerEntity source = (ServerPlayerEntity) event.getSource().getTrueSource();
             AllomancyCapability cap = AllomancyCapability.forPlayer(source);
 
-            if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
+            if (cap.getMetalBurning(Allomancy.PEWTER)) {
                 event.setAmount(event.getAmount() + 2);
             }
         }
         // Reduce incoming damage for pewter burners
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
             AllomancyCapability cap = AllomancyCapability.forPlayer(event.getEntityLiving());
-            if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
+            if (cap.getMetalBurning(Allomancy.PEWTER)) {
                 event.setAmount(event.getAmount() - 2);
                 // Note that they took damage, will come in to play if they stop burning
                 cap.setDamageStored(cap.getDamageStored() + 1);
@@ -144,7 +144,7 @@ public class CommonEventHandler {
         if (name.equals("minecraft:chests/simple_dungeon") || name.equals("minecraft:chests/desert_pyramid")
                 || name.equals("minecraft:chests/jungle_temple") || name.equals("minecraft:chests/woodland_mansion")) {
             //Inject a Lerasium loot table into the above vanilla tables
-            event.getTable().addPool(LootPool.builder().addEntry(TableLootEntry.builder(new ResourceLocation(Allomancy.MODID, "inject/lerasium"))).build());
+            event.getTable().addPool(LootPool.builder().name("lerasium_inject").addEntry(TableLootEntry.builder(new ResourceLocation(Allomancy.MODID, "inject/lerasium"))).build());
         }
     }
 
@@ -164,11 +164,11 @@ public class CommonEventHandler {
                         AllomancyUtils.updateMetalBurnTime(cap, (ServerPlayerEntity) curPlayer);
                     }
                     // Damage the player if they have stored damage and pewter cuts out
-                    if (!cap.getMetalBurning(AllomancyCapability.PEWTER) && (cap.getDamageStored() > 0)) {
+                    if (!cap.getMetalBurning(Allomancy.PEWTER) && (cap.getDamageStored() > 0)) {
                         cap.setDamageStored(cap.getDamageStored() - 1);
                         curPlayer.attackEntityFrom(DamageSource.MAGIC, 2);
                     }
-                    if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
+                    if (cap.getMetalBurning(Allomancy.PEWTER)) {
                         //Add jump boost and speed to pewter burners
                         curPlayer.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 30, 1, true, false));
                         curPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, 30, 0, true, false));
@@ -181,7 +181,7 @@ public class CommonEventHandler {
                         }
 
                     }
-                    if (cap.getMetalBurning(AllomancyCapability.TIN)) {
+                    if (cap.getMetalBurning(Allomancy.TIN)) {
                         // Add night vision to tin-burners
                         curPlayer.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, Short.MAX_VALUE, 5, true, false));
                         // Remove blindness for tin burners
@@ -195,7 +195,7 @@ public class CommonEventHandler {
 
                     }
                     // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing, only if the amplifier is 5
-                    if ((!cap.getMetalBurning(AllomancyCapability.TIN)) && (curPlayer.getActivePotionEffect(Effects.NIGHT_VISION) != null && curPlayer.getActivePotionEffect(Effects.NIGHT_VISION).getAmplifier() == 5)) {
+                    if ((!cap.getMetalBurning(Allomancy.TIN)) && (curPlayer.getActivePotionEffect(Effects.NIGHT_VISION) != null && curPlayer.getActivePotionEffect(Effects.NIGHT_VISION).getAmplifier() == 5)) {
                         curPlayer.removePotionEffect(Effects.NIGHT_VISION);
                     }
                 }

@@ -27,7 +27,6 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     // TODO: Should this cap have a more robust idea of powers than just an integer
     // TODO: Refactor, move constants
     public static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600};
-    public static final int IRON = 0, STEEL = 1, TIN = 2, PEWTER = 3, ZINC = 4, BRASS = 5, COPPER = 6, BRONZE = 7;
 
     private byte allomancyPower = -1;
 

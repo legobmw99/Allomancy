@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
@@ -64,7 +65,7 @@ public class ClientEventHandler {
                     // Ray trace 20 blocks
                     RayTraceResult trace = ClientUtils.getMouseOverExtended(20F);
                     // All iron pulling powers
-                    if (cap.getMetalBurning(AllomancyCapability.IRON)) {
+                    if (cap.getMetalBurning(Allomancy.IRON)) {
                         if (trace != null) {
                             if (trace.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
                                 Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), AllomancyUtils.PULL));
@@ -79,7 +80,7 @@ public class ClientEventHandler {
                         }
                     }
                     // All zinc powers
-                    if (cap.getMetalBurning(AllomancyCapability.ZINC)) {
+                    if (cap.getMetalBurning(Allomancy.ZINC)) {
                         Entity entity;
                         if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
                             entity = ((EntityRayTraceResult) trace).getEntity();
@@ -93,7 +94,7 @@ public class ClientEventHandler {
                     // Ray trace 20 blocks
                     RayTraceResult trace = ClientUtils.getMouseOverExtended(20F);
                     // All steel pushing powers
-                    if (cap.getMetalBurning(AllomancyCapability.STEEL)) {
+                    if (cap.getMetalBurning(Allomancy.STEEL)) {
                         if (trace != null) {
                             if (trace.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
                                 Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), AllomancyUtils.PUSH));
@@ -108,7 +109,7 @@ public class ClientEventHandler {
                         }
                     }
                     // All brass powers
-                    if (cap.getMetalBurning(AllomancyCapability.BRASS)) {
+                    if (cap.getMetalBurning(Allomancy.BRASS)) {
                         Entity entity;
                         if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
                             entity = ((EntityRayTraceResult) trace).getEntity();
@@ -123,7 +124,7 @@ public class ClientEventHandler {
                 // Populate the metal lists
                 metal_blocks.clear();
                 metal_entities.clear();
-                if (cap.getMetalBurning(AllomancyCapability.IRON) || cap.getMetalBurning(AllomancyCapability.STEEL)) {
+                if (cap.getMetalBurning(Allomancy.IRON) || cap.getMetalBurning(Allomancy.STEEL)) {
                     List<Entity> entities;
                     Stream<BlockPos> blocks;
                     int max = PowersConfig.max_metal_detection.get();
@@ -150,7 +151,7 @@ public class ClientEventHandler {
                 }
                 // Populate our list of nearby allomancy users
                 nearby_allomancers.clear();
-                if (cap.getMetalBurning(AllomancyCapability.BRONZE) && !cap.getMetalBurning(AllomancyCapability.COPPER)) {
+                if (cap.getMetalBurning(Allomancy.BRONZE) && !cap.getMetalBurning(Allomancy.COPPER)) {
                     List<PlayerEntity> nearby_players;
                     // Add metal burners to a list
                     BlockPos negative = new BlockPos(player).add(-30, -30, -30);
@@ -160,12 +161,12 @@ public class ClientEventHandler {
 
                     for (PlayerEntity otherPlayer : nearby_players) {
                         AllomancyCapability capOther = AllomancyCapability.forPlayer(otherPlayer);
-                        if (capOther.getMetalBurning(AllomancyCapability.COPPER)) { // player is inside a smoker cloud, should not detect
+                        if (capOther.getMetalBurning(Allomancy.COPPER)) { // player is inside a smoker cloud, should not detect
                             nearby_allomancers.clear();
                             return;
-                        } else if (capOther.getMetalBurning(AllomancyCapability.IRON) || capOther.getMetalBurning(AllomancyCapability.STEEL) || capOther.getMetalBurning(AllomancyCapability.TIN)
-                                || capOther.getMetalBurning(AllomancyCapability.PEWTER) || capOther.getMetalBurning(AllomancyCapability.ZINC) || capOther.getMetalBurning(AllomancyCapability.BRASS)
-                                || capOther.getMetalBurning(AllomancyCapability.BRONZE)) {
+                        } else if (capOther.getMetalBurning(Allomancy.IRON) || capOther.getMetalBurning(Allomancy.STEEL) || capOther.getMetalBurning(Allomancy.TIN)
+                                || capOther.getMetalBurning(Allomancy.PEWTER) || capOther.getMetalBurning(Allomancy.ZINC) || capOther.getMetalBurning(Allomancy.BRASS)
+                                || capOther.getMetalBurning(Allomancy.BRONZE)) {
                             nearby_allomancers.add(otherPlayer);
                         }
                     }
@@ -257,7 +258,7 @@ public class ClientEventHandler {
 
         Vec3d playervec = view.add(0, -.1, 0);
         // Iron and Steel lines
-        if ((cap.getMetalBurning(AllomancyCapability.IRON) || cap.getMetalBurning(AllomancyCapability.STEEL))) {
+        if ((cap.getMetalBurning(Allomancy.IRON) || cap.getMetalBurning(Allomancy.STEEL))) {
 
             for (Entity entity : metal_entities) {
                 ClientUtils.drawMetalLine(playervec, entity.getPositionVec(), 1.5F, 0F, 0.6F, 1F);
@@ -268,7 +269,7 @@ public class ClientEventHandler {
             }
         }
 
-        if ((cap.getMetalBurning(AllomancyCapability.BRONZE) && !cap.getMetalBurning(AllomancyCapability.COPPER))) {
+        if ((cap.getMetalBurning(Allomancy.BRONZE) && !cap.getMetalBurning(Allomancy.COPPER))) {
             for (PlayerEntity playerEntity : nearby_allomancers) {
                 ClientUtils.drawMetalLine(playervec, playerEntity.getPositionVec(), 3.0F, 0.7F, 0.15F, 0.15F);
             }
@@ -295,7 +296,7 @@ public class ClientEventHandler {
         }
 
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-        if (cap.getMetalBurning(AllomancyCapability.TIN)) {
+        if (cap.getMetalBurning(Allomancy.TIN)) {
 
             magnitude = Math.sqrt(player.getDistanceSq(sound.getX(), sound.getY(), sound.getZ()));
 

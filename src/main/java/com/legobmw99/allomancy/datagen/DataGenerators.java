@@ -16,10 +16,11 @@ public class DataGenerators {
         if (event.includeServer()) {
             generator.addProvider(new Recipes(generator));
             generator.addProvider(new LootTables(generator));
+            //generator.addProvider(new Advancements(generator));
         }
         if (event.includeClient()) {
-            generator.addProvider(new BlockStates(generator, Allomancy.MODID, event.getExistingFileHelper()));
-            generator.addProvider(new ItemModels(generator, Allomancy.MODID, event.getExistingFileHelper()));
+            //generator.addProvider(new BlockStates(generator, Allomancy.MODID, event.getExistingFileHelper()));
+            //generator.addProvider(new ItemModels(generator, Allomancy.MODID, event.getExistingFileHelper()));
             generator.addProvider(new Languages(generator, Allomancy.MODID, "en_us"));
         }
     }

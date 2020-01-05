@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.client.gui;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import net.minecraft.client.MainWindow;
@@ -97,28 +98,28 @@ public class MetalOverlay {
          */
         if (cap.getAllomancyPower() == 8) {
 
-            ironY = 9 - cap.getMetalAmounts(AllomancyCapability.IRON);
+            ironY = 9 - cap.getMetalAmounts(Allomancy.IRON);
             gui.blit(renderX + 1, renderY + 5 + ironY, 7, 1 + ironY, 3, 10 - ironY);
 
-            steelY = 9 - cap.getMetalAmounts(AllomancyCapability.STEEL);
+            steelY = 9 - cap.getMetalAmounts(Allomancy.STEEL);
             gui.blit(renderX + 8, renderY + 5 + steelY, 13, 1 + steelY, 3, 10 - steelY);
 
-            tinY = 9 - cap.getMetalAmounts(AllomancyCapability.TIN);
+            tinY = 9 - cap.getMetalAmounts(Allomancy.TIN);
             gui.blit(renderX + 26, renderY + 5 + tinY, 19, 1 + tinY, 3, 10 - tinY);
 
-            pewterY = 9 - cap.getMetalAmounts(AllomancyCapability.PEWTER);
+            pewterY = 9 - cap.getMetalAmounts(Allomancy.PEWTER);
             gui.blit(renderX + 33, renderY + 5 + pewterY, 25, 1 + pewterY, 3, 10 - pewterY);
 
-            zincY = 9 - cap.getMetalAmounts(AllomancyCapability.ZINC);
+            zincY = 9 - cap.getMetalAmounts(Allomancy.ZINC);
             gui.blit(renderX + 51, renderY + 5 + zincY, 31, 1 + zincY, 3, 10 - zincY);
 
-            brassY = 9 - cap.getMetalAmounts(AllomancyCapability.BRASS);
+            brassY = 9 - cap.getMetalAmounts(Allomancy.BRASS);
             gui.blit(renderX + 58, renderY + 5 + brassY, 37, 1 + brassY, 3, 10 - brassY);
 
-            copperY = 9 - cap.getMetalAmounts(AllomancyCapability.COPPER);
+            copperY = 9 - cap.getMetalAmounts(Allomancy.COPPER);
             gui.blit(renderX + 76, renderY + 5 + copperY, 43, 1 + copperY, 3, 10 - copperY);
 
-            bronzeY = 9 - cap.getMetalAmounts(AllomancyCapability.BRONZE);
+            bronzeY = 9 - cap.getMetalAmounts(Allomancy.BRONZE);
             gui.blit(renderX + 83, renderY + 5 + bronzeY, 49, 1 + bronzeY, 3, 10 - bronzeY);
 
             // Draw the gauges second, so that highlights and decorations show over
@@ -135,28 +136,28 @@ public class MetalOverlay {
             gui.blit(renderX + 75, renderY, 0, 0, 5, 20);
             gui.blit(renderX + 82, renderY, 0, 0, 5, 20);
 
-            if (cap.getMetalBurning(AllomancyCapability.IRON)) {
+            if (cap.getMetalBurning(Allomancy.IRON)) {
                 gui.blit(renderX, renderY + 5 + ironY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
             }
-            if (cap.getMetalBurning(AllomancyCapability.STEEL)) {
+            if (cap.getMetalBurning(Allomancy.STEEL)) {
                 gui.blit(renderX + 7, renderY + 5 + steelY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
             }
-            if (cap.getMetalBurning(AllomancyCapability.TIN)) {
+            if (cap.getMetalBurning(Allomancy.TIN)) {
                 gui.blit(renderX + 25, renderY + 5 + tinY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
             }
-            if (cap.getMetalBurning(AllomancyCapability.PEWTER)) {
+            if (cap.getMetalBurning(Allomancy.PEWTER)) {
                 gui.blit(renderX + 32, renderY + 5 + pewterY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
             }
-            if (cap.getMetalBurning(AllomancyCapability.ZINC)) {
+            if (cap.getMetalBurning(Allomancy.ZINC)) {
                 gui.blit(renderX + 50, renderY + 5 + zincY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
             }
-            if (cap.getMetalBurning(AllomancyCapability.BRASS)) {
+            if (cap.getMetalBurning(Allomancy.BRASS)) {
                 gui.blit(renderX + 57, renderY + 5 + brassY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
             }
-            if (cap.getMetalBurning(AllomancyCapability.COPPER)) {
+            if (cap.getMetalBurning(Allomancy.COPPER)) {
                 gui.blit(renderX + 75, renderY + 5 + copperY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
             }
-            if (cap.getMetalBurning(AllomancyCapability.BRONZE)) {
+            if (cap.getMetalBurning(Allomancy.BRONZE)) {
                 gui.blit(renderX + 82, renderY + 5 + bronzeY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
             }
 
