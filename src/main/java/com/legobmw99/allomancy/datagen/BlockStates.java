@@ -25,8 +25,7 @@ public class BlockStates extends BlockStateProvider {
 
     private void singleTextureBlock(Block block, String model, String texture) {
         Allomancy.LOGGER.debug("Creating Block Data for " + block.getRegistryName());
-        ModelFile mf = cubeAll(model, modLoc(texture));
-        simpleBlock(block, mf);
+        simpleBlock(block);
     }
 
     @Override
