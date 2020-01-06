@@ -40,6 +40,7 @@ public class Languages extends LanguageProvider {
                 "This item is endowed with strange powers, perhaps you should ingest it?");
         add(CombatSetup.MISTCLOAK.get(), "Mistcloak");
         add(CombatSetup.COIN_BAG.get(), "Coin Bag");
+        add(CombatSetup.OBSIDIAN_DAGGER.get(), "Obsidian Dagger");
         add(ConsumeSetup.VIAL.get(), "Allomantic Vial");
 
         add(MaterialsSetup.TIN_INGOT.get(), "Tin Ingot");

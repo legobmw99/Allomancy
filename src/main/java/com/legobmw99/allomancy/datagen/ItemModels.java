@@ -25,6 +25,8 @@ public class ItemModels extends ItemModelProvider {
 
         itemHandheld(CombatSetup.MISTCLOAK.get(), "item/mistcloak");
         itemHandheld(CombatSetup.COIN_BAG.get(), "item/coin_bag");
+        itemHandheld(CombatSetup.OBSIDIAN_DAGGER.get(), "item/obsidian_dagger");
+
 
         itemHandheld(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "item/allomantic_grinder");
         itemHandheld(ConsumeSetup.VIAL.get(), "item/vial");

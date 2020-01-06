@@ -6,6 +6,7 @@ import com.legobmw99.allomancy.modules.combat.entity.GoldNuggetEntity;
 import com.legobmw99.allomancy.modules.combat.entity.IronNuggetEntity;
 import com.legobmw99.allomancy.modules.combat.item.CoinBagItem;
 import com.legobmw99.allomancy.modules.combat.item.MistcloakItem;
+import com.legobmw99.allomancy.modules.combat.item.ObsidianDaggerItem;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -37,6 +38,7 @@ public class CombatSetup {
 
     public static final RegistryObject<MistcloakItem> MISTCLOAK = ITEMS.register("mistcloak", MistcloakItem::new);
     public static final RegistryObject<CoinBagItem> COIN_BAG = ITEMS.register("coin_bag", CoinBagItem::new);
+    public static final RegistryObject<ObsidianDaggerItem> OBSIDIAN_DAGGER = ITEMS.register("obsidian_dagger", ObsidianDaggerItem::new);
 
 
     public static final RegistryObject<EntityType<IronNuggetEntity>> IRON_NUGGET = ENTITIES.register("iron_nugget", () ->

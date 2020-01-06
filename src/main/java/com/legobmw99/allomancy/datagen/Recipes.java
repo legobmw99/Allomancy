@@ -36,6 +36,7 @@ public class Recipes extends RecipeProvider {
         add('G', Items.GLASS);
         add('I', Tags.Items.STORAGE_BLOCKS_IRON);
         add('W', Items.GRAY_WOOL);
+        add('O', Tags.Items.OBSIDIAN);
 
     }
 
@@ -47,6 +48,7 @@ public class Recipes extends RecipeProvider {
         buildShaped(consumer, ConsumeSetup.ALLOMANTIC_GRINDER.get(), Items.IRON_INGOT, "iii", "ggg", "iii");
         buildShaped(consumer, ConsumeSetup.VIAL.get(), 3, Items.GLASS, " S ", "G G", " G ");
         buildShaped(consumer, CombatSetup.MISTCLOAK.get(), ConsumeSetup.VIAL.get(), "iii", "ggg", "iii");
+        buildShaped(consumer, CombatSetup.OBSIDIAN_DAGGER.get(), CombatSetup.MISTCLOAK.get(), "  O", " O ", "s  ");
 
         // Ore Recipes
         buildSmeltingAndBlasting(consumer, MaterialsSetup.COPPER_INGOT.get(), MaterialsSetup.COPPER_ORE.get(), 0.8F);
