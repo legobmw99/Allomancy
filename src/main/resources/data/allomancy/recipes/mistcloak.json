@@ -1,13 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "W W",
-    "WWW",
-    "WWW"
+    "iii",
+    "ggg",
+    "iii"
   ],
   "key": {
-    "W": {
-      "item": "minecraft:gray_wool"
+    "g": {
+      "tag": "forge:ingots/gold"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
     }
   },
   "result": {

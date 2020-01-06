@@ -54,6 +54,8 @@ public class Recipes extends RecipeProvider {
         buildSmeltingAndBlasting(consumer, MaterialsSetup.TIN_INGOT.get(), MaterialsSetup.TIN_ORE.get(), 0.6F);
         buildSmeltingAndBlasting(consumer, MaterialsSetup.LEAD_INGOT.get(), MaterialsSetup.LEAD_ORE.get(), 0.4F);
 
+        buildShapless(consumer, ConsumeSetup.LERASIUM_NUGGET.get(), 1, Items.NETHER_STAR, ing(Items.NETHER_STAR), ing(Tags.Items.STORAGE_BLOCKS_GOLD));
+
         // Grinder Recipes
         for (RegistryObject<Item> flake_reg : MaterialsSetup.FLAKES) {
             Item flake = flake_reg.get();

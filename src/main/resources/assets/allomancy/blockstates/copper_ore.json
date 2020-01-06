@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "": { "model": "allomancy:block/copper_ore" }
+  "variants": {
+    "": {
+      "model": "allomancy:block/copper_ore"
     }
+  }
 }

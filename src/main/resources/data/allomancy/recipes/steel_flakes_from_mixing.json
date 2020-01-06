@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "allomancy:iron_flakes"
+      "item": "minecraft:coal"
     },
     {
-      "item": "minecraft:coal"
+      "item": "allomancy:iron_flakes"
     }
   ],
   "result": {
     "item": "allomancy:steel_flakes",
-    "count" : 2
+    "count": 2
   }
 }

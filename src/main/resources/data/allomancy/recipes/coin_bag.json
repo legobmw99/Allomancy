@@ -1,19 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " xy",
+    " #g",
     "l l",
     " l "
   ],
   "key": {
-    "x": {
+    "#": {
       "item": "minecraft:lead"
-    },
-    "y": {
-      "item": "minecraft:gold_nugget"
     },
     "l": {
       "item": "minecraft:leather"
+    },
+    "g": {
+      "item": "minecraft:gold_nugget"
     }
   },
   "result": {

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:tin_flakes"
+    ]
+  },
+  "criteria": {
+    "has_allomantic_grinder": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "allomancy:allomantic_grinder"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:tin_flakes"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_allomantic_grinder",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -109,7 +109,7 @@ public class BlockStates extends BlockStateProvider {
             }
         };
 
-        ModelFile lever_on = models().getBuilder("allomancy:iron_lever")
+        ModelFile lever_on = models().getBuilder("allomancy:iron_lever").ao(false)
                 .texture("particle", mcLoc("block/iron_block"))
                 .texture("base", mcLoc("block/iron_block"))
                 .texture("lever", modLoc("block/iron_lever"))
@@ -124,7 +124,7 @@ public class BlockStates extends BlockStateProvider {
                     .allFaces(lever_generator)
                 .end();
 
-        ModelFile lever_off = models().getBuilder("allomancy:iron_lever_off")
+        ModelFile lever_off = models().getBuilder("allomancy:iron_lever_off").ao(false)
                 .texture("particle", mcLoc("block/iron_block"))
                 .texture("base", mcLoc("block/iron_block"))
                 .texture("lever", modLoc("block/iron_lever"))

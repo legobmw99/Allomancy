@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "x",
-    "y"
+    "s",
+    "I"
   ],
   "key": {
-    "x": {
+    "s": {
       "item": "minecraft:stick"
     },
-    "y": {
+    "I": {
       "tag": "forge:storage_blocks/iron"
     }
   },

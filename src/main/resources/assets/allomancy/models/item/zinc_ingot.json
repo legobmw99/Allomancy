@@ -1,6 +1,6 @@
 {
-    "parent": "item/handheld",
-    "textures": {
-        "layer0": "allomancy:item/zinc_ingot"
-    }
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "allomancy:item/zinc_ingot"
+  }
 }

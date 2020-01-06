@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "": { "model": "allomancy:block/lead_ore" }
+  "variants": {
+    "": {
+      "model": "allomancy:block/lead_ore"
     }
+  }
 }

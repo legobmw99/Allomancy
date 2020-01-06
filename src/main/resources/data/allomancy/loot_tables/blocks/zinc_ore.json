@@ -2,7 +2,7 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "pool1",
+      "name": "zinc_ore",
       "rolls": 1,
       "entries": [
         {

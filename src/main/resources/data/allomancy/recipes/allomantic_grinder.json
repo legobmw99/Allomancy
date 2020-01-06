@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "xxx",
-    "yyy",
-    "xxx"
+    "iii",
+    "ggg",
+    "iii"
   ],
   "key": {
-    "x": {
-      "tag": "forge:ingots/iron"
+    "g": {
+      "tag": "forge:ingots/gold"
     },
-    "y": {
-      "tag": "forge:nuggets/gold"
+    "i": {
+      "tag": "forge:ingots/iron"
     }
   },
   "result": {

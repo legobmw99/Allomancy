@@ -1,6 +1,6 @@
 {
-    "parent": "item/handheld",
-    "textures": {
-        "layer0": "allomancy:item/lerasium_nugget"
-    }
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "allomancy:item/lerasium_nugget"
+  }
 }

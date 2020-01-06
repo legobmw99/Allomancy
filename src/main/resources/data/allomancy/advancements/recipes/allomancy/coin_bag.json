@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:coin_bag"
+    ]
+  },
+  "criteria": {
+    "has_gold_nugget": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "allomancy:mistcloak"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:coin_bag"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_gold_nugget",
+      "has_the_recipe"
+    ]
+  ]
+}

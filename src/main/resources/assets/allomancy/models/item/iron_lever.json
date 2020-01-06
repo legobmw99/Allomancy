@@ -1,7 +1,6 @@
 {
-    "parent": "item/handheld",
-    "textures": {
-        "layer0": "allomancy:block/iron_lever"
-    }
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "allomancy:block/iron_lever"
+  }
 }
-s

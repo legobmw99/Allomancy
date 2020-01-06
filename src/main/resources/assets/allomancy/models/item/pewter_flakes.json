@@ -1,6 +1,6 @@
 {
-    "parent": "item/handheld",
-    "textures": {
-        "layer0": "allomancy:item/pewter_flakes"
-    }
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "allomancy:item/pewter_flakes"
+  }
 }
