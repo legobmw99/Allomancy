@@ -1,7 +1,10 @@
 package com.legobmw99.allomancy.modules.powers.util;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.modules.powers.network.AllomancyCapabilityPacket;
+import com.legobmw99.allomancy.network.Network;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -22,18 +25,18 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "allomancy_data");
 
-    private LazyOptional<AllomancyCapability> handler;
+    private static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600};
 
-    // TODO: Should this cap have a more robust idea of powers than just an integer
-    // TODO: Refactor, move constants
-    public static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600};
 
+    // TODO: Should this cap have a more robust idea of powers than just a number
     private byte allomancyPower = -1;
 
     private int damageStored = 0;
     private int[] BurnTime = {1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400};
     private int[] MetalAmounts = {0, 0, 0, 0, 0, 0, 0, 0};
     private boolean[] MetalBurning = {false, false, false, false, false, false, false, false};
+
+    private LazyOptional<AllomancyCapability> handler;
 
 
     /**
@@ -45,6 +48,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     public static AllomancyCapability forPlayer(Entity player) {
         return player.getCapability(PLAYER_CAP).orElseThrow(() -> new RuntimeException("Capability not attached!"));
     }
+
 
     @Nonnull
     @Override
@@ -138,7 +142,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param metal the index of the metal to retrieve
      * @return the burn time
      */
-    public int getBurnTime(int metal) {
+    protected int getBurnTime(int metal) {
         return BurnTime[metal];
     }
 
@@ -148,9 +152,42 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param metal    the index of the metal to set
      * @param burnTime the burn time
      */
-    public void setBurnTime(int metal, int burnTime) {
+    protected void setBurnTime(int metal, int burnTime) {
         BurnTime[metal] = burnTime;
     }
+
+
+    /**
+     * Runs each worldTick, checking the burn times, abilities, and metal
+     * amounts. Then syncs to the client to make sure everyone is on the same
+     * page
+     *
+     * @param capability the AllomancyCapabilities data
+     * @param player     the player being checked
+     */
+    public static void updateMetalBurnTime(AllomancyCapability capability, ServerPlayerEntity player) {
+        for (int i = 0; i < 8; i++) {
+            if (capability.getMetalBurning(i)) {
+                if (capability.getAllomancyPower() != i && capability.getAllomancyPower() != 8) {
+                    // put out any metals that the player shouldn't be able to burn
+                    capability.setMetalBurning(i, false);
+                    Network.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), player);
+                } else {
+                    capability.setBurnTime(i, capability.getBurnTime(i) - 1);
+                    if (capability.getBurnTime(i) == 0) {
+                        capability.setBurnTime(i, MAX_BURN_TIME[i]);
+                        capability.setMetalAmounts(i, capability.getMetalAmounts(i) - 1);
+                        Network.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), player);
+                        if (capability.getMetalAmounts(i) == 0) {
+                            capability.setMetalBurning(i, false);
+                            Network.sync(capability, player);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     public static void register() {
         CapabilityManager.INSTANCE.register(AllomancyCapability.class, new AllomancyCapability.Storage(), () -> null);

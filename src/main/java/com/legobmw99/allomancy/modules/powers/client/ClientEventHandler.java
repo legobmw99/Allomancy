@@ -10,7 +10,7 @@ import com.legobmw99.allomancy.modules.powers.network.ChangeEmotionPacket;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullBlock;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullEntity;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyUtils;
+import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import com.legobmw99.allomancy.network.Network;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -67,14 +67,14 @@ public class ClientEventHandler {
                     // All iron pulling powers
                     if (cap.getMetalBurning(Allomancy.IRON)) {
                         if (trace != null) {
-                            if (trace.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
-                                Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), AllomancyUtils.PULL));
+                            if (trace.getType() == RayTraceResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
+                                Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), PowerUtils.PULL));
                             }
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
-                                    Network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PULL));
+                                if (PowerUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
+                                    Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PULL));
                                 }
                             }
                         }
@@ -96,14 +96,14 @@ public class ClientEventHandler {
                     // All steel pushing powers
                     if (cap.getMetalBurning(Allomancy.STEEL)) {
                         if (trace != null) {
-                            if (trace.getType() == RayTraceResult.Type.ENTITY && AllomancyUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
-                                Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), AllomancyUtils.PUSH));
+                            if (trace.getType() == RayTraceResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
+                                Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), PowerUtils.PUSH));
                             }
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (AllomancyUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
-                                    Network.sendToServer(new TryPushPullBlock(bp, AllomancyUtils.PUSH));
+                                if (PowerUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
+                                    Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PUSH));
                                 }
                             }
                         }
@@ -134,7 +134,7 @@ public class ClientEventHandler {
                     // Add metal entities to metal list
                     entities = player.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(negative, positive));
                     entities.forEach(entity -> {
-                        if (AllomancyUtils.isEntityMetal(entity)) {
+                        if (PowerUtils.isEntityMetal(entity)) {
                             metal_entities.add(entity);
                         }
                     });
@@ -143,7 +143,7 @@ public class ClientEventHandler {
                     blocks = BlockPos.getAllInBox(negative, positive);
                     blocks.forEach(bp -> {
                         BlockPos imBlock = bp.toImmutable();
-                        if (AllomancyUtils.isBlockMetal(player.world.getBlockState(imBlock).getBlock())) {
+                        if (PowerUtils.isBlockMetal(player.world.getBlockState(imBlock).getBlock())) {
                             metal_blocks.add(imBlock);
                         }
                     });

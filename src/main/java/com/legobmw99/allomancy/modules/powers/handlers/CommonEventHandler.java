@@ -5,7 +5,6 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.network.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyUtils;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
@@ -161,7 +160,7 @@ public class CommonEventHandler {
                 if (cap.getAllomancyPower() >= 0) {
                     // Run the necessary updates on the player's metals
                     if (curPlayer instanceof ServerPlayerEntity) {
-                        AllomancyUtils.updateMetalBurnTime(cap, (ServerPlayerEntity) curPlayer);
+                        AllomancyCapability.updateMetalBurnTime(cap, (ServerPlayerEntity) curPlayer);
                     }
                     // Damage the player if they have stored damage and pewter cuts out
                     if (!cap.getMetalBurning(Allomancy.PEWTER) && (cap.getDamageStored() > 0)) {

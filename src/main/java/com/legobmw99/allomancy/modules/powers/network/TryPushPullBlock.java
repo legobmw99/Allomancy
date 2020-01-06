@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.api.block.IAllomanticallyActivatedBlock;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyUtils;
+import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
@@ -41,15 +41,15 @@ public class TryPushPullBlock {
                     ServerPlayerEntity player = ctx.get().getSender();
                     BlockPos pos = blockPos;
                     // Sanity check to make sure server has same configs and that the block is loaded in the server
-                    if ((player.world.isBlockLoaded(pos) && (AllomancyUtils.isBlockMetal(player.world.getBlockState(pos).getBlock()))) // Check Block
+                    if ((player.world.isBlockLoaded(pos) && (PowerUtils.isBlockMetal(player.world.getBlockState(pos).getBlock()))) // Check Block
                             || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && (!player.findAmmo(player.getHeldItemMainhand()).isEmpty()) /*some sort of find ammo func*/ &&
-                            direction == AllomancyUtils.PUSH)) {
+                            direction == PowerUtils.PUSH)) {
                         // Check for the coin bag
                         if (player.world.getBlockState(pos).getBlock() instanceof IAllomanticallyActivatedBlock) {
                             ((IAllomanticallyActivatedBlock) player.world.getBlockState(pos).getBlock())
-                                    .onBlockActivatedAllomantically(player.world.getBlockState(pos), player.world, pos, player, direction == AllomancyUtils.PUSH);
+                                    .onBlockActivatedAllomantically(player.world.getBlockState(pos), player.world, pos, player, direction == PowerUtils.PUSH);
                         } else {
-                            AllomancyUtils.move(direction, player, pos);
+                            PowerUtils.move(direction, player, pos);
                         }
                     }
                 }

@@ -72,6 +72,11 @@ public class LerasiumItem extends Item {
     }
 
     @Override
+    public int getUseDuration(ItemStack stack) {
+        return 4;
+    }
+
+    @Override
     public boolean hasEffect(ItemStack par1ItemStack) {
         //Add enchantment glint
         return true;

@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
-import com.legobmw99.allomancy.modules.powers.util.AllomancyUtils;
+import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -46,10 +46,10 @@ public class TryPushPullEntity {
             ServerPlayerEntity player = ctx.get().getSender();
             Entity target = player.world.getEntityByID(entityIDOther);
             if (target != null) {
-                if (AllomancyUtils.isEntityMetal(target)) {
+                if (PowerUtils.isEntityMetal(target)) {
                     // The player moves
                     if (target instanceof IronGolemEntity || target instanceof ItemFrameEntity) {
-                        AllomancyUtils.move(direction, player, target.getPosition());
+                        PowerUtils.move(direction, player, target.getPosition());
 
                         // Depends if the minecart is filled
                     } else if (target instanceof AbstractMinecartEntity) {
@@ -57,23 +57,23 @@ public class TryPushPullEntity {
                             if (target.isRidingOrBeingRiddenBy(player)) {
                                 //no op
                             } else {
-                                AllomancyUtils.move(direction / 2.0, target, player.getPosition());
-                                AllomancyUtils.move(direction / 2.0, player, target.getPosition());
+                                PowerUtils.move(direction / 2.0, target, player.getPosition());
+                                PowerUtils.move(direction / 2.0, player, target.getPosition());
                             }
                         } else {
-                            AllomancyUtils.move(direction, target, player.getPosition());
+                            PowerUtils.move(direction, target, player.getPosition());
                         }
                         // The target moves
                     } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity) {
-                        AllomancyUtils.move(direction / 2.0, target, player.getPosition().down());
+                        PowerUtils.move(direction / 2.0, target, player.getPosition().down());
 
                         // Split the difference
                     } else if (target instanceof ProjectileItemEntity) {
                         return;
                     } else {
-                        AllomancyUtils.move(direction / 2.0, target, player.getPosition());
+                        PowerUtils.move(direction / 2.0, target, player.getPosition());
 
-                        AllomancyUtils.move(direction / 2.0, player, target.getPosition());
+                        PowerUtils.move(direction / 2.0, player, target.getPosition());
                     }
                 }
             }
