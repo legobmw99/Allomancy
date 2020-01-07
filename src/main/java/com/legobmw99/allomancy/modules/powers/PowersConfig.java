@@ -5,14 +5,9 @@ import com.legobmw99.allomancy.setup.AllomancyConfig;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.data.TagsProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.util.IItemProvider;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.ArrayList;
@@ -168,16 +163,16 @@ public class PowersConfig {
 
     }
 
-    private static void add(String s){
+    private static void add(String s) {
         Allomancy.LOGGER.debug("Adding " + s + " to the default whitelist!");
         defaultList.add(s);
     }
 
-    private static void add(Item i){
+    private static void add(Item i) {
         add(i.getRegistryName().toString());
     }
 
-    private static void add(Block b){
+    private static void add(Block b) {
         add(b.getRegistryName().toString());
     }
 

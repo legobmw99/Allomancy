@@ -14,13 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -103,7 +99,6 @@ public class CommonEventHandler {
         }
     }
 
-
     @SubscribeEvent
     public void onStartTracking(final net.minecraftforge.event.entity.player.PlayerEvent.StartTracking event) {
         if (!event.getTarget().world.isRemote) {
@@ -135,18 +130,6 @@ public class CommonEventHandler {
             }
         }
     }
-
-
-    @SubscribeEvent
-    public void onLootTableLoad(final LootTableLoadEvent event) {
-        String name = event.getName().toString();
-        if (name.equals("minecraft:chests/simple_dungeon") || name.equals("minecraft:chests/desert_pyramid")
-                || name.equals("minecraft:chests/jungle_temple") || name.equals("minecraft:chests/woodland_mansion")) {
-            //Inject a Lerasium loot table into the above vanilla tables
-            event.getTable().addPool(LootPool.builder().name("lerasium_inject").addEntry(TableLootEntry.builder(new ResourceLocation(Allomancy.MODID, "inject/lerasium"))).build());
-        }
-    }
-
 
     @SubscribeEvent
     public void onWorldTick(final TickEvent.WorldTickEvent event) {

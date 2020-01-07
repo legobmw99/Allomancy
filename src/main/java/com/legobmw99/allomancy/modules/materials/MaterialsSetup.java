@@ -1,11 +1,13 @@
 package com.legobmw99.allomancy.modules.materials;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
 import com.legobmw99.allomancy.modules.materials.world.OreGenerator;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -24,8 +26,10 @@ public class MaterialsSetup {
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
+
     public static void init(final FMLCommonSetupEvent e) {
         OreGenerator.generationSetup();
+        MinecraftForge.EVENT_BUS.register(new LootTableInjector());
     }
 
     public static final RegistryObject<Block> ZINC_ORE = BLOCKS.register("zinc_ore", () -> new Block(AllomancySetup.createStandardBlockProperties()));

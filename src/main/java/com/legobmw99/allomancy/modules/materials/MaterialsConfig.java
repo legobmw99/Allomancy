@@ -3,6 +3,8 @@ package com.legobmw99.allomancy.modules.materials;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class MaterialsConfig {
+    public static ForgeConfigSpec.BooleanValue generate_lerasium;
+    public static ForgeConfigSpec.BooleanValue generate_unbreakable_daggers;
     public static ForgeConfigSpec.BooleanValue generate_copper;
     public static ForgeConfigSpec.BooleanValue generate_tin;
     public static ForgeConfigSpec.BooleanValue generate_lead;
@@ -21,7 +23,7 @@ public class MaterialsConfig {
     public static ForgeConfigSpec.IntValue zinc_max_y;
 
     public static void init(ForgeConfigSpec.Builder common_builder, ForgeConfigSpec.Builder client_builder) {
-        common_builder.comment("Settings for the mod's added ore generation").push("WorldGen");
+        common_builder.comment("Settings for the mod's added generation").push("WorldGen");
         common_builder.push("Copper");
         generate_copper = common_builder.comment("Generate Copper Ore").define("generate_copper", true);
         copper_density = common_builder.comment("Density of Copper Ore").defineInRange("copper_density", 15, 1, 40);
@@ -48,6 +50,11 @@ public class MaterialsConfig {
         zinc_density = common_builder.comment("Density of Zinc Ore").defineInRange("zinc_density", 12, 1, 40);
         zinc_min_y = common_builder.comment("Minimum Y Level to Generate Zinc").defineInRange("zinc_min_y", 20, 1, 128);
         zinc_max_y = common_builder.comment("Maximum Y Level to Generate Zinc").defineInRange("zinc_max_y", 40, 1, 128);
+        common_builder.pop();
+
+        common_builder.push("Loot Injection");
+        generate_lerasium = common_builder.comment("Add Lerasium to dungeon and other loot tables").define("generate_lerasium", true);
+        generate_unbreakable_daggers = common_builder.comment("Add Unbreakable Obsidian Daggers to end city and other loot tables").define("generate_unbreakable_daggers", true);
         common_builder.pop();
 
         common_builder.pop();
