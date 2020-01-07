@@ -26,7 +26,7 @@ public class ItemModels extends ItemModelProvider {
         itemHandheld(CombatSetup.MISTCLOAK.get(), "item/mistcloak");
         itemHandheld(CombatSetup.COIN_BAG.get(), "item/coin_bag");
         itemHandheld(CombatSetup.OBSIDIAN_DAGGER.get(), "item/obsidian_dagger");
-
+        largeItemHandheld(CombatSetup.KOLOSS_BLADE.get(), "item/koloss_blade");
 
         itemHandheld(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "item/allomantic_grinder");
         itemHandheld(ConsumeSetup.VIAL.get(), "item/vial");
@@ -59,6 +59,12 @@ public class ItemModels extends ItemModelProvider {
     public void itemHandheld(Item item, String texture) {
         Allomancy.LOGGER.debug("Creating Item Model for " + item.getRegistryName());
         getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(mcLoc("item/handheld")))
+                .texture("layer0", modLoc(texture));
+    }
+
+    public void largeItemHandheld(Item item, String texture) {
+        Allomancy.LOGGER.debug("Creating Large Item Model for " + item.getRegistryName());
+        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(modLoc("item/handheld_large")))
                 .texture("layer0", modLoc(texture));
     }
 

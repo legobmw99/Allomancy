@@ -41,6 +41,9 @@ public class Languages extends LanguageProvider {
         add(CombatSetup.MISTCLOAK.get(), "Mistcloak");
         add(CombatSetup.COIN_BAG.get(), "Coin Bag");
         add(CombatSetup.OBSIDIAN_DAGGER.get(), "Obsidian Dagger");
+        add(CombatSetup.KOLOSS_BLADE.get(), "Koloss Blade");
+        add("item.allomancy.koloss_blade.lore",
+                "This item is too heavy for the average person to wield.");
         add(ConsumeSetup.VIAL.get(), "Allomantic Vial");
 
         add(MaterialsSetup.TIN_INGOT.get(), "Tin Ingot");
