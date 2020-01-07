@@ -27,7 +27,7 @@ public class LerasiumItem extends Item {
     private static final Food lerasium = new Food.Builder().fastToEat().setAlwaysEdible().saturation(0).hunger(0).build();
 
     public LerasiumItem() {
-        super(new Item.Properties().group(AllomancySetup.allomancy_group).rarity(Rarity.EPIC).maxStackSize(1).food(lerasium));
+        super(AllomancySetup.createStandardItemProperties().rarity(Rarity.EPIC).maxStackSize(1).food(lerasium));
     }
 
 

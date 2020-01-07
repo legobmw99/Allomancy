@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 public class GrinderItem extends Item {
 
     public GrinderItem() {
-        super(new Item.Properties().group(AllomancySetup.allomancy_group).maxStackSize(1));
+        super(AllomancySetup.createStandardItemProperties().maxStackSize(1));
     }
 
     @Override

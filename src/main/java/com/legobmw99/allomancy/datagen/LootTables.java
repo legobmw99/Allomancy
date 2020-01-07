@@ -31,7 +31,7 @@ public class LootTables extends LootTableProvider {
         gen = dataGeneratorIn;
     }
 
-    private void addBlockTables(){
+    private void addBlockTables() {
         addSimpleBlock("copper_ore", MaterialsSetup.COPPER_ORE.get());
         addSimpleBlock("tin_ore", MaterialsSetup.TIN_ORE.get());
         addSimpleBlock("zinc_ore", MaterialsSetup.ZINC_ORE.get());

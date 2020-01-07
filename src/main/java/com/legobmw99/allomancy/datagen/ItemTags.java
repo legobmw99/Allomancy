@@ -6,7 +6,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
 import net.minecraft.tags.Tag;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
 public class ItemTags extends ItemTagsProvider {
@@ -27,14 +26,14 @@ public class ItemTags extends ItemTagsProvider {
         addForgeTag("ingots/steel");
         addForgeTag("ingots/pewter");
 
-        addForgeTag("ores/lead",MaterialsSetup.LEAD_ORE_ITEM.get());
-        addForgeTag("ores/tin",MaterialsSetup.TIN_ORE_ITEM.get());
-        addForgeTag("ores/copper",MaterialsSetup.COPPER_ORE_ITEM.get());
-        addForgeTag("ores/zinc",MaterialsSetup.ZINC_ORE_ITEM.get());
+        addForgeTag("ores/lead", MaterialsSetup.LEAD_ORE_ITEM.get());
+        addForgeTag("ores/tin", MaterialsSetup.TIN_ORE_ITEM.get());
+        addForgeTag("ores/copper", MaterialsSetup.COPPER_ORE_ITEM.get());
+        addForgeTag("ores/zinc", MaterialsSetup.ZINC_ORE_ITEM.get());
 
     }
 
-    private void addForgeTag(String name, Item... items){
+    private void addForgeTag(String name, Item... items) {
         Allomancy.LOGGER.debug("Creating item tag for forge:" + name);
         ResourceLocation loc = new ResourceLocation("forge", name);
         getBuilder(new Tag<Item>(loc)).replace(false).add(items).build(loc);

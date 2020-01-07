@@ -23,7 +23,7 @@ import java.util.List;
 public class VialItem extends Item {
 
     public VialItem() {
-        super(new Item.Properties().group(AllomancySetup.allomancy_group).maxStackSize(16));
+        super(AllomancySetup.createStandardItemProperties().maxStackSize(32));
     }
 
 

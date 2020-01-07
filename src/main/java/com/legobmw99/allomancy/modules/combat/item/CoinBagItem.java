@@ -6,7 +6,10 @@ import com.legobmw99.allomancy.modules.combat.entity.IronNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.ArrowItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.ShootableItem;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -20,7 +23,7 @@ public class CoinBagItem extends ShootableItem {
     public static final Predicate<ItemStack> NUGGETS = (stack) -> stack.getItem() == Items.IRON_NUGGET || stack.getItem() == Items.GOLD_NUGGET;
 
     public CoinBagItem() {
-        super(new Item.Properties().group(AllomancySetup.allomancy_group).maxStackSize(1));
+        super(AllomancySetup.createStandardItemProperties().maxStackSize(1));
     }
 
     @Nonnull

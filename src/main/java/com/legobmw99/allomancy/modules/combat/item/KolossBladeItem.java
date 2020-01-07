@@ -19,13 +19,13 @@ import java.util.List;
 
 public class KolossBladeItem extends SwordItem {
     public KolossBladeItem() {
-        super(ItemTier.STONE, 8, -2.4F, new Item.Properties().group(ItemGroup.COMBAT));
+        super(ItemTier.STONE, 9, -2.6F, new Item.Properties().group(ItemGroup.COMBAT));
     }
 
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        if (entityIn != null && entityIn instanceof PlayerEntity) {
+        if (entityIn != null && entityIn instanceof PlayerEntity && entityIn.getCapability(AllomancyCapability.PLAYER_CAP).isPresent()) {
             PlayerEntity player = (PlayerEntity) entityIn;
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
             if (isSelected && (player.getHeldItemOffhand() != stack)) {

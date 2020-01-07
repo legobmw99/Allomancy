@@ -6,7 +6,6 @@ import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.model.Model;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.AttachFace;
 import net.minecraft.util.Direction;
@@ -60,10 +59,10 @@ public class BlockStates extends BlockStateProvider {
                             .with(IronButtonBlock.FACE, face)
                             .with(IronButtonBlock.HORIZONTAL_FACING, dir)
                             .modelForState()
-                            .modelFile(model)
-                            .uvLock(uvlock)
-                            .rotationY(yangle)
-                            .rotationX(xangle)
+                                .modelFile(model)
+                                .uvLock(uvlock)
+                                .rotationY(yangle)
+                                .rotationX(xangle)
                             .addModel();
                 }
             }
