@@ -69,7 +69,7 @@ public class OreGenerator {
                 if (ore.config_enabled) {
                     biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
                             Feature.ORE.func_225566_b_(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.ore_block.getDefaultState(), ore.vein_size))
-                                    .func_227228_a_(new ConfiguredPlacement<>(Placement.COUNT_RANGE, new CountRangeConfig(ore.ores_per_chunk, ore.max_height, 1, ore.max_height))));
+                                    .func_227228_a_(new ConfiguredPlacement<>(Placement.COUNT_RANGE, new CountRangeConfig(ore.ores_per_chunk, ore.max_height - ore.min_height, 1, ore.max_height))));
                 }
             }
         }
