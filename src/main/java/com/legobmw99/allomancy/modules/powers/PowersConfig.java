@@ -1,10 +1,18 @@
 package com.legobmw99.allomancy.modules.powers;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.setup.AllomancyConfig;
 import com.legobmw99.allomancy.setup.AllomancySetup;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.data.TagsProvider;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.util.IItemProvider;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.ArrayList;
@@ -55,99 +63,122 @@ public class PowersConfig {
         whitelist.addAll(cfg_whitelist.get());
     }
 
+
+    private static ArrayList<String> defaultList;
+
     private static List<String> default_whitelist() {
-        ArrayList<String> defaultList = new ArrayList<>();
-        defaultList.add(Items.IRON_AXE.getRegistryName().toString());
-        defaultList.add(Items.GOLDEN_AXE.getRegistryName().toString());
-        defaultList.add(Items.CHAINMAIL_BOOTS.getRegistryName().toString());
-        defaultList.add(Items.GOLDEN_BOOTS.getRegistryName().toString());
-        defaultList.add(Items.IRON_BOOTS.getRegistryName().toString());
-        defaultList.add(Items.BUCKET.getRegistryName().toString());
-        defaultList.add(Items.LAVA_BUCKET.getRegistryName().toString());
-        defaultList.add(Items.MILK_BUCKET.getRegistryName().toString());
-        defaultList.add(Items.WATER_BUCKET.getRegistryName().toString());
-        defaultList.add(Items.CAULDRON.getRegistryName().toString());
-        defaultList.add(Items.COMPASS.getRegistryName().toString());
-        defaultList.add(Items.FLINT_AND_STEEL.getRegistryName().toString());
-        defaultList.add(Items.CHAINMAIL_HELMET.getRegistryName().toString());
-        defaultList.add(Items.GOLDEN_HELMET.getRegistryName().toString());
-        defaultList.add(Items.IRON_HELMET.getRegistryName().toString());
-        defaultList.add(Items.GOLDEN_HOE.getRegistryName().toString());
-        defaultList.add(Items.IRON_HOE.getRegistryName().toString());
-        defaultList.add(Items.GOLDEN_HORSE_ARMOR.getRegistryName().toString());
-        defaultList.add(Items.IRON_HORSE_ARMOR.getRegistryName().toString());
-        defaultList.add(Items.CHAINMAIL_LEGGINGS.getRegistryName().toString());
-        defaultList.add(Items.GOLDEN_LEGGINGS.getRegistryName().toString());
-        defaultList.add(Items.IRON_LEGGINGS.getRegistryName().toString());
-        defaultList.add(Items.MINECART.getRegistryName().toString());
-        defaultList.add(Items.CHEST_MINECART.getRegistryName().toString());
-        defaultList.add(Items.HOPPER_MINECART.getRegistryName().toString());
-        defaultList.add(Items.FURNACE_MINECART.getRegistryName().toString());
-        defaultList.add(Items.TNT_MINECART.getRegistryName().toString());
-        defaultList.add(Items.IRON_PICKAXE.getRegistryName().toString());
-        defaultList.add(Items.GOLDEN_PICKAXE.getRegistryName().toString());
-        defaultList.add(Items.IRON_CHESTPLATE.getRegistryName().toString());
-        defaultList.add(Items.CHAINMAIL_CHESTPLATE.getRegistryName().toString());
-        defaultList.add(Items.GOLDEN_CHESTPLATE.getRegistryName().toString());
-        defaultList.add(Items.CLOCK.getRegistryName().toString());
-        defaultList.add(Items.GOLDEN_SHOVEL.getRegistryName().toString());
-        defaultList.add(Items.IRON_SHOVEL.getRegistryName().toString());
-        defaultList.add(Items.SHEARS.getRegistryName().toString());
-        defaultList.add(Items.GOLDEN_APPLE.getRegistryName().toString());
-        defaultList.add(Items.ENCHANTED_GOLDEN_APPLE.getRegistryName().toString());
-        defaultList.add(Items.GOLDEN_CARROT.getRegistryName().toString());
-        defaultList.add(Items.IRON_SWORD.getRegistryName().toString());
-        defaultList.add(Items.IRON_NUGGET.getRegistryName().toString());
-        defaultList.add(Items.IRON_INGOT.getRegistryName().toString());
-        defaultList.add(Items.GOLD_NUGGET.getRegistryName().toString());
-        defaultList.add(Items.GOLD_INGOT.getRegistryName().toString());
+        defaultList = new ArrayList<>();
 
-        defaultList.add(Blocks.ANVIL.getRegistryName().toString());
-        defaultList.add(Blocks.IRON_TRAPDOOR.getRegistryName().toString());
-        defaultList.add(Blocks.IRON_DOOR.getRegistryName().toString());
-        defaultList.add(Blocks.CAULDRON.getRegistryName().toString());
-        defaultList.add(Blocks.IRON_BARS.getRegistryName().toString());
-        defaultList.add(Blocks.HOPPER.getRegistryName().toString());
-        defaultList.add(Blocks.PISTON_HEAD.getRegistryName().toString());
-        defaultList.add(Blocks.MOVING_PISTON.getRegistryName().toString());
-        defaultList.add(Blocks.STICKY_PISTON.getRegistryName().toString());
-        defaultList.add(Blocks.BELL.getRegistryName().toString());
-        defaultList.add(Blocks.PISTON.getRegistryName().toString());
-        defaultList.add(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE.getRegistryName().toString());
-        defaultList.add(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE.getRegistryName().toString());
-        defaultList.add(Blocks.RAIL.getRegistryName().toString());
-        defaultList.add(Blocks.ACTIVATOR_RAIL.getRegistryName().toString());
-        defaultList.add(Blocks.DETECTOR_RAIL.getRegistryName().toString());
-        defaultList.add(Blocks.POWERED_RAIL.getRegistryName().toString());
-        defaultList.add(Blocks.IRON_BLOCK.getRegistryName().toString());
-        defaultList.add(Blocks.IRON_ORE.getRegistryName().toString());
-        defaultList.add(Blocks.GOLD_BLOCK.getRegistryName().toString());
-        defaultList.add(Blocks.GOLD_ORE.getRegistryName().toString());
+        add(Items.IRON_AXE);
+        add(Items.GOLDEN_AXE);
+        add(Items.CHAINMAIL_BOOTS);
+        add(Items.GOLDEN_BOOTS);
+        add(Items.IRON_BOOTS);
+        add(Items.BUCKET);
+        add(Items.LAVA_BUCKET);
+        add(Items.MILK_BUCKET);
+        add(Items.WATER_BUCKET);
+        add(Items.CAULDRON);
+        add(Items.COMPASS);
+        add(Items.FLINT_AND_STEEL);
+        add(Items.CHAINMAIL_HELMET);
+        add(Items.GOLDEN_HELMET);
+        add(Items.IRON_HELMET);
+        add(Items.GOLDEN_HOE);
+        add(Items.IRON_HOE);
+        add(Items.GOLDEN_HORSE_ARMOR);
+        add(Items.IRON_HORSE_ARMOR);
+        add(Items.CHAINMAIL_LEGGINGS);
+        add(Items.GOLDEN_LEGGINGS);
+        add(Items.IRON_LEGGINGS);
+        add(Items.MINECART);
+        add(Items.CHEST_MINECART);
+        add(Items.HOPPER_MINECART);
+        add(Items.FURNACE_MINECART);
+        add(Items.TNT_MINECART);
+        add(Items.IRON_PICKAXE);
+        add(Items.GOLDEN_PICKAXE);
+        add(Items.IRON_CHESTPLATE);
+        add(Items.CHAINMAIL_CHESTPLATE);
+        add(Items.GOLDEN_CHESTPLATE);
+        add(Items.CLOCK);
+        add(Items.GOLDEN_SHOVEL);
+        add(Items.IRON_SHOVEL);
+        add(Items.SHEARS);
+        add(Items.GOLDEN_APPLE);
+        add(Items.ENCHANTED_GOLDEN_APPLE);
+        add(Items.GOLDEN_CARROT);
+        add(Items.IRON_SWORD);
+        add(Items.IRON_INGOT);
+        add(Items.IRON_NUGGET);
+        add(Items.GOLD_INGOT);
+        add(Items.GOLD_NUGGET);
 
-        defaultList.add("allomancy:vial");
-        defaultList.add("allomancy:iron_lever");
-        defaultList.add("allomancy:iron_button");
-        defaultList.add("allomancy:lerasium_nugget");
-        defaultList.add("allomancy:allomantic_grinder");
-        defaultList.add("allomancy:coin_bag");
-        defaultList.add("allomancy:copper_ore");
-        defaultList.add("allomancy:tin_ore");
-        defaultList.add("allomancy:lead_ore");
-        defaultList.add("allomancy:zinc_ore");
-        defaultList.add("allomancy:copper_ingot");
-        defaultList.add("allomancy:tin_ingot");
-        defaultList.add("allomancy:lead_ingot");
-        defaultList.add("allomancy:zinc_ingot");
-        defaultList.add("allomancy:bronze_ingot");
+        add(Blocks.ANVIL);
+        add(Blocks.IRON_TRAPDOOR);
+        add(Blocks.IRON_DOOR);
+        add(Blocks.CAULDRON);
+        add(Blocks.IRON_BARS);
+        add(Blocks.HOPPER);
+        add(Blocks.PISTON_HEAD);
+        add(Blocks.MOVING_PISTON);
+        add(Blocks.STICKY_PISTON);
+        add(Blocks.BELL);
+        add(Blocks.PISTON);
+        add(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE);
+        add(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE);
+        add(Blocks.RAIL);
+        add(Blocks.ACTIVATOR_RAIL);
+        add(Blocks.DETECTOR_RAIL);
+        add(Blocks.POWERED_RAIL);
+        add(Blocks.IRON_BLOCK);
+        add(Blocks.IRON_ORE);
+        add(Blocks.GOLD_BLOCK);
+        add(Blocks.GOLD_ORE);
+        add(Blocks.LANTERN);
+        add(Blocks.TRAPPED_CHEST);
+        add(Blocks.TRIPWIRE);
+
+
+        add("allomancy:vial");
+        add("allomancy:iron_lever");
+        add("allomancy:iron_button");
+        add("allomancy:lerasium_nugget");
+        add("allomancy:allomantic_grinder");
+        add("allomancy:coin_bag");
+        add("allomancy:copper_ore");
+        add("allomancy:tin_ore");
+        add("allomancy:lead_ore");
+        add("allomancy:zinc_ore");
+        add("allomancy:copper_ingot");
+        add("allomancy:tin_ingot");
+        add("allomancy:lead_ingot");
+        add("allomancy:zinc_ingot");
+        add("allomancy:bronze_ingot");
+        add("allomancy:brass_ingot");
 
 
         for (int i = 0; i < AllomancySetup.flake_metals.length; i++) {
-            defaultList.add("allomancy:" + AllomancySetup.flake_metals[i] + "_flakes");
+            add("allomancy:" + AllomancySetup.flake_metals[i] + "_flakes");
         }
 
         defaultList.sort(String::compareTo);
 
         return defaultList;
+
+    }
+
+    private static void add(String s){
+        Allomancy.LOGGER.debug("Adding " + s + " to the default whitelist!");
+        defaultList.add(s);
+    }
+
+    private static void add(Item i){
+        add(i.getRegistryName().toString());
+    }
+
+    private static void add(Block b){
+        add(b.getRegistryName().toString());
     }
 
 }
