@@ -201,7 +201,7 @@ public class CommonEventHandler {
                         curPlayer.livingTick();
 
                         if (world instanceof ServerWorld) {
-                            int max = 4;
+                            int max = 5;
                             BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
                             BlockPos positive = new BlockPos(curPlayer).add(max, max, max);
 

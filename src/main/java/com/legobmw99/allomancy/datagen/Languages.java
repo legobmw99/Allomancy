@@ -41,8 +41,8 @@ public class Languages extends LanguageProvider {
         add("item.allomancy.koloss_blade.lore",
                 "This item is too heavy for the average person to wield.");
         add(ConsumeSetup.VIAL.get(), "Allomantic Vial");
-        add("item.allomancy.vial.lore_count","Contains %d metals.");
-        add("item.allomancy.vial.lore_inst", "Hold SHIFT to view.");
+        add("item.allomancy.vial.lore_count","Contains %d metals");
+        add("item.allomancy.vial.lore_inst", "Hold SHIFT to view");
 
         add(MaterialsSetup.TIN_INGOT.get(), "Tin Ingot");
         add(MaterialsSetup.COPPER_INGOT.get(), "Copper Ingot");

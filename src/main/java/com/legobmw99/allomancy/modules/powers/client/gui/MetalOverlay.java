@@ -14,7 +14,16 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 
 public class MetalOverlay {
-    private static final Point[] Frames = {new Point(55, 0), new Point(55, 4), new Point(55, 8), new Point(55, 12)};
+    private static final Point[] Frames = new Point[4];
+
+    static {
+        int x = 0;
+        int firsty = 22;
+        for (int i = 0; i < 4; i++) {
+            Frames[i] = new Point(x, firsty + (4 * i));
+        }
+    }
+
     private static final ResourceLocation meterLoc = new ResourceLocation("allomancy", "textures/gui/overlay/meter.png");
     private static int animationCounter = 0;
     private static int currentFrame = 0;
@@ -101,6 +110,6 @@ public class MetalOverlay {
 
     private static void blit(int x, int y, int p_blit_3, int p_blit_4, int p_blit_5, int p_blit_6) {
         ForgeIngameGui gui = new ForgeIngameGui(Minecraft.getInstance());
-        ForgeIngameGui.blit(x, y, gui.getBlitOffset(), p_blit_3, p_blit_4, p_blit_5, p_blit_6, 64, 64);
+        ForgeIngameGui.blit(x, y, gui.getBlitOffset(), p_blit_3, p_blit_4, p_blit_5, p_blit_6, 128, 128);
     }
 }
