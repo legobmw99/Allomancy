@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -38,10 +39,10 @@ public class VialItem extends Item {
             return stack;
         }
 
-        for (int i = 0; i < AllomancySetup.allomanctic_metals.length; i++) {
-            if (stack.getTag().contains(AllomancySetup.allomanctic_metals[i]) && stack.getTag().getBoolean(AllomancySetup.allomanctic_metals[i])) {
-                if (cap.getMetalAmounts(i) < 10) {
-                    cap.setMetalAmounts(i, cap.getMetalAmounts(i) + 1);
+        for (Metal mt : Metal.values()) {
+            if (stack.getTag().contains(mt.getName()) && stack.getTag().getBoolean(mt.getName())) {
+                if (cap.getAmount(mt) < 10) {
+                    cap.setAmount(mt, cap.getAmount(mt) + 1);
                 }
             }
         }
@@ -73,10 +74,10 @@ public class VialItem extends Item {
         int filling = 0, full = 0;
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         if (itemStackIn.hasTag()) {
-            for (int i = 0; i < AllomancySetup.allomanctic_metals.length; i++) {
-                if (itemStackIn.getTag().contains(AllomancySetup.allomanctic_metals[i]) && itemStackIn.getTag().getBoolean(AllomancySetup.allomanctic_metals[i])) {
+            for (Metal mt : Metal.values()) {
+                if (itemStackIn.getTag().contains(mt.getName()) && itemStackIn.getTag().getBoolean(mt.getName())) {
                     filling++;
-                    if (cap.getMetalAmounts(i) >= 10) {
+                    if (cap.getAmount(mt) >= 10) {
                         full++;
                     }
                 }
@@ -97,9 +98,9 @@ public class VialItem extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (stack.hasTag()) {
-            for (int i = 0; i < AllomancySetup.allomanctic_metals.length; i++) {
-                if (stack.getTag().getBoolean(AllomancySetup.allomanctic_metals[i])) {
-                    ITextComponent metal = new TranslationTextComponent("metals." + AllomancySetup.allomanctic_metals[i]);
+            for (Metal mt : Metal.values()) {
+                if (stack.getTag().getBoolean(mt.getName())) {
+                    ITextComponent metal = new TranslationTextComponent("metals." + mt.getName());
                     metal.setStyle(metal.getStyle().setColor(TextFormatting.GRAY));
                     tooltip.add(metal);
                 }
@@ -121,8 +122,8 @@ public class VialItem extends Item {
 
             ItemStack resultItem = new ItemStack(ConsumeSetup.VIAL.get(), 1);
             CompoundNBT nbt = new CompoundNBT();
-            for (int i = 0; i < AllomancySetup.allomanctic_metals.length; i++) {
-                nbt.putBoolean(AllomancySetup.allomanctic_metals[i], true);
+            for (Metal mt : Metal.values()) {
+                nbt.putBoolean(mt.getName(), true);
             }
             resultItem.setTag(nbt);
             items.add(resultItem);

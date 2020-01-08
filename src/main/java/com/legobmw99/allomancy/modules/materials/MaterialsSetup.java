@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.materials;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
 import com.legobmw99.allomancy.modules.materials.world.OreGenerator;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -50,10 +51,11 @@ public class MaterialsSetup {
     public static final List<RegistryObject<Item>> FLAKES = new ArrayList<>();
 
     static {
-        for (String flake_metal : AllomancySetup.flake_metals) {
-            String name = flake_metal + "_flakes";
+        for (Metal mt : Metal.values()) {
+            String name = mt.getName() + "_flakes";
             FLAKES.add(MaterialsSetup.ITEMS.register(name, () -> new Item(AllomancySetup.createStandardItemProperties())));
         }
+        FLAKES.add(MaterialsSetup.ITEMS.register("lead_flakes", () -> new Item(AllomancySetup.createStandardItemProperties())));
     }
 }
 

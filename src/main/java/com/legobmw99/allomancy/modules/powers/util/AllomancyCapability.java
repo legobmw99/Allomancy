@@ -1,7 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.util;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.powers.network.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -17,6 +16,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 
 public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT> {
 
@@ -28,74 +28,142 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     private static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600};
 
 
-    // TODO: Should this cap have a more robust idea of powers than just a number
-    private byte allomancyPower = -1;
-
-    private int damageStored = 0;
-    private int[] BurnTime = {1800, 1800, 3600, 1500, 1800, 1800, 2400, 2400};
-    private int[] MetalAmounts = {0, 0, 0, 0, 0, 0, 0, 0};
-    private boolean[] MetalBurning = {false, false, false, false, false, false, false, false};
+    private boolean[] allomanticPowers;
+    private int damageStored;
+    private int[] BurnTime;
+    private int[] MetalAmounts;
+    private boolean[] MetalBurning;
 
     private LazyOptional<AllomancyCapability> handler;
 
-
-    /**
-     * Retrieve data for a specific player
-     *
-     * @param player the player you want data for
-     * @return the AllomancyCapabilites data of the player
-     */
-    public static AllomancyCapability forPlayer(Entity player) {
-        return player.getCapability(PLAYER_CAP).orElseThrow(() -> new RuntimeException("Capability not attached!"));
-    }
-
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        return PLAYER_CAP.orEmpty(cap, handler);
-    }
-
     public AllomancyCapability() {
         handler = LazyOptional.of(() -> this);
+
+        int powers = Metal.values().length;
+        allomanticPowers = new boolean[powers];
+        Arrays.fill(allomanticPowers, false);
+
+        MetalAmounts = new int[powers];
+        Arrays.fill(MetalAmounts, 0);
+
+        BurnTime = Arrays.copyOf(MAX_BURN_TIME, powers);
+
+        MetalBurning = new boolean[powers];
+        Arrays.fill(MetalBurning, false);
+
+        damageStored = 0;
+    }
+
+
+    /**
+     * Get if the player has the supplied power
+     *
+     * @param metal the Metal to check
+     * @return true if this capability has the power specified
+     */
+    public boolean hasPower(Metal metal) {
+        return allomanticPowers[metal.getIndex()];
     }
 
     /**
-     * Get the player's allomancy power -1 is none, 0-7 are each misting, 8 is full Mistborn
+     * Check if the player is a Mistborn
      *
-     * @return the player's allomancy Power
+     * @return true if the player has ALL powers
      */
-    public byte getAllomancyPower() {
-        return allomancyPower;
+    public boolean isMistborn() {
+        for (boolean power : allomanticPowers) {
+            if (!power) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
-     * Set the player's allomancy power
-     *
-     * @param pow the value to set
+     * Sets the player as a Mistborn
      */
-    public void setAllomancyPower(byte pow) {
-        this.allomancyPower = pow;
+    public void setMistborn() {
+        Arrays.fill(allomanticPowers, true);
     }
 
     /**
-     * Check if a specific metal is burning
+     * Check if the player is uninvested
      *
-     * @param metal the index of the metal to check
-     * @return whether or not it is burning
+     * @return true if the player has NO powers
      */
-    public boolean getMetalBurning(int metal) {
-        return MetalBurning[metal];
+    public boolean isUninvested() {
+        for (boolean power : allomanticPowers) {
+            if (power) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
-     * Set whether or not a metal is burning
-     *
-     * @param metal        the index of the metal to set
-     * @param metalBurning the value to set
+     * Sets the player as uninvested
      */
-    public void setMetalBurning(int metal, boolean metalBurning) {
-        MetalBurning[metal] = metalBurning;
+    public void setUninvested() {
+        Arrays.fill(allomanticPowers, false);
+    }
+
+
+    /**
+     * Grant this player the given metal power
+     *
+     * @param metal the Metal to add
+     */
+    public void addPower(Metal metal) {
+        allomanticPowers[metal.getIndex()] = true;
+    }
+
+    /**
+     * Remove the given metal power from this player
+     *
+     * @param metal the Metal to remove
+     */
+    public void revokePower(Metal metal) {
+        allomanticPowers[metal.getIndex()] = false;
+    }
+
+    /**
+     * Checks if the player is burning the given metal
+     *
+     * @param metal the Metal to check
+     * @return true if the player is burning it
+     */
+    public boolean isBurning(Metal metal) {
+        return MetalBurning[metal.getIndex()];
+    }
+
+    /**
+     * Sets the player's burning flag for the given metal
+     *
+     * @param metal        the Metal to set
+     * @param metalBurning the value to set it to
+     */
+    public void setBurning(Metal metal, boolean metalBurning) {
+        MetalBurning[metal.getIndex()] = metalBurning;
+    }
+
+    /**
+     * Gets the players stored amount of the given metal
+     *
+     * @param metal the Metal to check
+     * @return the amount stored
+     */
+    public int getAmount(Metal metal) {
+        return MetalAmounts[metal.getIndex()];
+    }
+
+    /**
+     * Sets the players amount of Metal to the given value
+     *
+     * @param metal the Metal to set
+     * @param amt   the amount stored
+     */
+    public void setAmount(Metal metal, int amt) {
+        MetalAmounts[metal.getIndex()] = amt;
     }
 
     /**
@@ -117,43 +185,23 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
     /**
-     * Get the amount of a specific metal
-     *
-     * @param metal the index of the metal to retrieve
-     * @return the amount of metal
-     */
-    public int getMetalAmounts(int metal) {
-        return metal >= 0 && metal < 8 ? MetalAmounts[metal] : 0;
-    }
-
-    /**
-     * Set the amount of a specific metal
-     *
-     * @param metal        the index of the metal to set
-     * @param metalAmounts the amount of metal
-     */
-    public void setMetalAmounts(int metal, int metalAmounts) {
-        MetalAmounts[metal] = metalAmounts;
-    }
-
-    /**
      * Get the burn time of a specific metal
      *
-     * @param metal the index of the metal to retrieve
+     * @param metal the metal to retrieve
      * @return the burn time
      */
-    protected int getBurnTime(int metal) {
-        return BurnTime[metal];
+    protected int getBurnTime(Metal metal) {
+        return BurnTime[metal.getIndex()];
     }
 
     /**
      * Set the burn time of a specific metal
      *
-     * @param metal    the index of the metal to set
+     * @param metal    the the metal to set
      * @param burnTime the burn time
      */
-    protected void setBurnTime(int metal, int burnTime) {
-        BurnTime[metal] = burnTime;
+    protected void setBurnTime(Metal metal, int burnTime) {
+        BurnTime[metal.getIndex()] = burnTime;
     }
 
 
@@ -166,26 +214,44 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param player     the player being checked
      */
     public static void updateMetalBurnTime(AllomancyCapability capability, ServerPlayerEntity player) {
-        for (int i = 0; i < 8; i++) {
-            if (capability.getMetalBurning(i)) {
-                if (capability.getAllomancyPower() != i && capability.getAllomancyPower() != 8) {
+        for (Metal metal : Metal.values()) {
+            if (capability.isBurning(metal)) {
+                if (!capability.hasPower(metal)) {
                     // put out any metals that the player shouldn't be able to burn
-                    capability.setMetalBurning(i, false);
-                    Network.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), player);
+                    capability.setBurning(metal, false);
+                    Network.sync(capability, player);
                 } else {
-                    capability.setBurnTime(i, capability.getBurnTime(i) - 1);
-                    if (capability.getBurnTime(i) == 0) {
-                        capability.setBurnTime(i, MAX_BURN_TIME[i]);
-                        capability.setMetalAmounts(i, capability.getMetalAmounts(i) - 1);
-                        Network.sendTo(new AllomancyCapabilityPacket(capability, player.getEntityId()), player);
-                        if (capability.getMetalAmounts(i) == 0) {
-                            capability.setMetalBurning(i, false);
-                            Network.sync(capability, player);
+                    capability.setBurnTime(metal, capability.getBurnTime(metal) - 1);
+                    if (capability.getBurnTime(metal) == 0) {
+                        if (capability.getAmount(metal) == 0) {
+                            capability.setBurning(metal, false);
+                        } else {
+                            capability.setBurnTime(metal, MAX_BURN_TIME[metal.getIndex()]);
+                            capability.setAmount(metal, capability.getAmount(metal) - 1);
                         }
+                        Network.sync(capability, player);
                     }
                 }
             }
         }
+    }
+
+
+    /**
+     * Retrieve data for a specific player
+     *
+     * @param player the player you want data for
+     * @return the AllomancyCapabilites data of the player
+     */
+    public static AllomancyCapability forPlayer(Entity player) {
+        return player.getCapability(PLAYER_CAP).orElseThrow(() -> new RuntimeException("Capability not attached!"));
+    }
+
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        return PLAYER_CAP.orEmpty(cap, handler);
     }
 
 
@@ -196,30 +262,25 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     @Override
     public CompoundNBT serializeNBT() {
         CompoundNBT allomancy_data = new CompoundNBT();
-        allomancy_data.putByte("allomancyPower", this.getAllomancyPower());
+
+        CompoundNBT abilities = new CompoundNBT();
+        for (Metal mt : Metal.values()) {
+            abilities.putBoolean(mt.getName(), this.hasPower(mt));
+        }
+        allomancy_data.put("abilities", abilities);
+
 
         CompoundNBT metal_storage = new CompoundNBT();
-        metal_storage.putInt("iron", this.getMetalAmounts(0));
-        metal_storage.putInt("steel", this.getMetalAmounts(1));
-        metal_storage.putInt("tin", this.getMetalAmounts(2));
-        metal_storage.putInt("pewter", this.getMetalAmounts(3));
-        metal_storage.putInt("zinc", this.getMetalAmounts(4));
-        metal_storage.putInt("brass", this.getMetalAmounts(5));
-        metal_storage.putInt("copper", this.getMetalAmounts(6));
-        metal_storage.putInt("bronze", this.getMetalAmounts(7));
-
+        for (Metal mt : Metal.values()) {
+            metal_storage.putInt(mt.getName(), this.getAmount(mt));
+        }
         allomancy_data.put("metal_storage", metal_storage);
 
-        CompoundNBT metal_burning = new CompoundNBT();
-        metal_burning.putBoolean("iron", this.getMetalBurning(0));
-        metal_burning.putBoolean("steel", this.getMetalBurning(1));
-        metal_burning.putBoolean("tin", this.getMetalBurning(2));
-        metal_burning.putBoolean("pewter", this.getMetalBurning(3));
-        metal_burning.putBoolean("zinc", this.getMetalBurning(4));
-        metal_burning.putBoolean("brass", this.getMetalBurning(5));
-        metal_burning.putBoolean("copper", this.getMetalBurning(6));
-        metal_burning.putBoolean("bronze", this.getMetalBurning(7));
 
+        CompoundNBT metal_burning = new CompoundNBT();
+        for (Metal mt : Metal.values()) {
+            metal_burning.putBoolean(mt.getName(), this.isBurning(mt));
+        }
         allomancy_data.put("metal_burning", metal_burning);
 
         return allomancy_data;
@@ -228,27 +289,36 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     @Override
     public void deserializeNBT(CompoundNBT allomancy_data) {
-        this.allomancyPower = allomancy_data.getByte("allomancyPower");
+
+        if (allomancy_data.contains("allomancyPower")) {
+            byte old_power = allomancy_data.getByte("allomancyPower");
+            if (old_power != -1) {
+                if (old_power == 8) {
+                    this.setMistborn();
+                } else {
+                    this.addPower(Metal.getMetal(old_power));
+                }
+            }
+        }
+
+        CompoundNBT abilities = (CompoundNBT) allomancy_data.get("abilities");
+        for (Metal mt : Metal.values()) {
+            if (abilities.getBoolean(mt.getName())) {
+                this.addPower(mt);
+            } else {
+                this.revokePower(mt);
+            }
+        }
 
         CompoundNBT metal_storage = (CompoundNBT) allomancy_data.get("metal_storage");
-        this.MetalAmounts[0] = metal_storage.getInt("iron");
-        this.MetalAmounts[1] = metal_storage.getInt("steel");
-        this.MetalAmounts[2] = metal_storage.getInt("tin");
-        this.MetalAmounts[3] = metal_storage.getInt("pewter");
-        this.MetalAmounts[4] = metal_storage.getInt("zinc");
-        this.MetalAmounts[5] = metal_storage.getInt("brass");
-        this.MetalAmounts[6] = metal_storage.getInt("copper");
-        this.MetalAmounts[7] = metal_storage.getInt("bronze");
+        for (Metal mt : Metal.values()) {
+            this.setAmount(mt, metal_storage.getInt(mt.getName()));
+        }
 
         CompoundNBT metal_burning = (CompoundNBT) allomancy_data.get("metal_burning");
-        this.MetalBurning[0] = metal_burning.getBoolean("iron");
-        this.MetalBurning[1] = metal_burning.getBoolean("steel");
-        this.MetalBurning[2] = metal_burning.getBoolean("tin");
-        this.MetalBurning[3] = metal_burning.getBoolean("pewter");
-        this.MetalBurning[4] = metal_burning.getBoolean("zinc");
-        this.MetalBurning[5] = metal_burning.getBoolean("brass");
-        this.MetalBurning[6] = metal_burning.getBoolean("copper");
-        this.MetalBurning[7] = metal_burning.getBoolean("bronze");
+        for (Metal mt : Metal.values()) {
+            this.setBurning(mt, metal_burning.getBoolean(mt.getName()));
+        }
 
     }
 

@@ -119,7 +119,7 @@ public class BlockStates extends BlockStateProvider {
                 .element()
                     .from(7, 1, 7).to(9, 11, 9)
                     .rotation()
-                        .origin(8, 1, 8).axis(Direction.Axis.X).angle(-7F).end() //TODO -45
+                        .origin(8, 1, 8).axis(Direction.Axis.X).angle(-45F).end()
                     .allFaces(lever_generator)
                 .end();
 
@@ -134,7 +134,7 @@ public class BlockStates extends BlockStateProvider {
                 .element()
                     .from(7, 1, 7).to(9, 11, 9)
                     .rotation()
-                        .origin(8, 1, 8).axis(Direction.Axis.X).angle(7).end() //TODO 45
+                        .origin(8, 1, 8).axis(Direction.Axis.X).angle(45).end()
                     .allFaces(lever_generator)
                 .end();
 

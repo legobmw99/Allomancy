@@ -1,10 +1,10 @@
 package com.legobmw99.allomancy.modules.powers.handlers;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.network.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
@@ -42,9 +42,9 @@ public class CommonEventHandler {
                 AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
                 //Handle random misting case
-                if (PowersConfig.random_mistings.get() && cap.getAllomancyPower() == -1) {
-                    byte randomMisting = (byte) (Math.random() * 8);
-                    cap.setAllomancyPower(randomMisting);
+                if (PowersConfig.random_mistings.get() && cap.isUninvested()) {
+                    byte randomMisting = (byte) (Math.random() * Metal.values().length);
+                    cap.addPower(Metal.getMetal(randomMisting));
                     ItemStack flakes = new ItemStack(MaterialsSetup.FLAKES.get(randomMisting).get());
                     // Give the player one flake of their metal
                     if (!player.inventory.addItemStackToInventory(flakes)) {
@@ -69,13 +69,17 @@ public class CommonEventHandler {
             PlayerEntity old = event.getOriginal();
 
             old.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(oldCap -> {
-                if (oldCap.getAllomancyPower() >= 0) {
-                    cap.setAllomancyPower(oldCap.getAllomancyPower()); // make sure the new player has the same mistborn status
+                if (!oldCap.isUninvested()) { // make sure the new player has the same power status
+                    for (Metal mt : Metal.values()) {
+                        if (oldCap.hasPower(mt)) {
+                            cap.addPower(mt);
+                        }
+                    }
                 }
 
                 if (player.world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) || !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
-                    for (int i = 0; i < 8; i++) {
-                        cap.setMetalAmounts(i, oldCap.getMetalAmounts(i));
+                    for (Metal mt : Metal.values()) {
+                        cap.setAmount(mt, oldCap.getAmount(mt));
                     }
                 }
             });
@@ -116,14 +120,14 @@ public class CommonEventHandler {
             ServerPlayerEntity source = (ServerPlayerEntity) event.getSource().getTrueSource();
             AllomancyCapability cap = AllomancyCapability.forPlayer(source);
 
-            if (cap.getMetalBurning(Allomancy.PEWTER)) {
+            if (cap.isBurning(Metal.PEWTER)) {
                 event.setAmount(event.getAmount() + 2);
             }
         }
         // Reduce incoming damage for pewter burners
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
             AllomancyCapability cap = AllomancyCapability.forPlayer(event.getEntityLiving());
-            if (cap.getMetalBurning(Allomancy.PEWTER)) {
+            if (cap.isBurning(Metal.PEWTER)) {
                 event.setAmount(event.getAmount() - 2);
                 // Note that they took damage, will come in to play if they stop burning
                 cap.setDamageStored(cap.getDamageStored() + 1);
@@ -140,17 +144,17 @@ public class CommonEventHandler {
             for (PlayerEntity curPlayer : list) {
                 AllomancyCapability cap = AllomancyCapability.forPlayer(curPlayer);
 
-                if (cap.getAllomancyPower() >= 0) {
+                if (!cap.isUninvested()) {
                     // Run the necessary updates on the player's metals
                     if (curPlayer instanceof ServerPlayerEntity) {
                         AllomancyCapability.updateMetalBurnTime(cap, (ServerPlayerEntity) curPlayer);
                     }
                     // Damage the player if they have stored damage and pewter cuts out
-                    if (!cap.getMetalBurning(Allomancy.PEWTER) && (cap.getDamageStored() > 0)) {
+                    if (!cap.isBurning(Metal.PEWTER) && (cap.getDamageStored() > 0)) {
                         cap.setDamageStored(cap.getDamageStored() - 1);
                         curPlayer.attackEntityFrom(DamageSource.MAGIC, 2);
                     }
-                    if (cap.getMetalBurning(Allomancy.PEWTER)) {
+                    if (cap.isBurning(Metal.PEWTER)) {
                         //Add jump boost and speed to pewter burners
                         curPlayer.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 30, 1, true, false));
                         curPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, 30, 0, true, false));
@@ -163,7 +167,7 @@ public class CommonEventHandler {
                         }
 
                     }
-                    if (cap.getMetalBurning(Allomancy.TIN)) {
+                    if (cap.isBurning(Metal.TIN)) {
                         // Add night vision to tin-burners
                         curPlayer.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, Short.MAX_VALUE, 5, true, false));
                         // Remove blindness for tin burners
@@ -176,8 +180,11 @@ public class CommonEventHandler {
                         }
 
                     }
+
                     // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing, only if the amplifier is 5
-                    if ((!cap.getMetalBurning(Allomancy.TIN)) && (curPlayer.getActivePotionEffect(Effects.NIGHT_VISION) != null && curPlayer.getActivePotionEffect(Effects.NIGHT_VISION).getAmplifier() == 5)) {
+                    if ((!cap.isBurning(Metal.TIN)) &&
+                            (curPlayer.getActivePotionEffect(Effects.NIGHT_VISION) != null &&
+                                    curPlayer.getActivePotionEffect(Effects.NIGHT_VISION).getAmplifier() == 5)) {
                         curPlayer.removePotionEffect(Effects.NIGHT_VISION);
                     }
                 }

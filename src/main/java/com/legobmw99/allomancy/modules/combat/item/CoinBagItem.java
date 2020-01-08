@@ -1,9 +1,9 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.entity.GoldNuggetEntity;
 import com.legobmw99.allomancy.modules.combat.entity.IronNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArrowItem;
@@ -38,7 +38,7 @@ public class CoinBagItem extends ShootableItem {
             itemstack = new ItemStack(Items.GOLD_NUGGET, 1);
         }
 
-        if (AllomancyCapability.forPlayer(player).getMetalBurning(Allomancy.STEEL)) {    // make sure there is always an item available
+        if (AllomancyCapability.forPlayer(player).isBurning(Metal.STEEL)) {    // make sure there is always an item available
             if (!world.isRemote) {
 
                 if (itemstack.getItem() == Items.GOLD_NUGGET) {

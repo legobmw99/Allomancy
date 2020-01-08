@@ -11,23 +11,23 @@ import java.util.function.Supplier;
 public class ChangeEmotionPacket {
 
     private int entityID;
-    private boolean aggro;
+    private boolean make_aggressive;
 
     /**
      * Make a mob either angry or passive, depending on aggro
      *
-     * @param entityID the mob to be effected
-     * @param aggro    whether the mob should be mad or passive
+     * @param entityID        the mob to be effected
+     * @param make_aggressive true if mob should be aggressive
      */
-    public ChangeEmotionPacket(int entityID, boolean aggro) {
+    public ChangeEmotionPacket(int entityID, boolean make_aggressive) {
         this.entityID = entityID;
-        this.aggro = aggro;
+        this.make_aggressive = make_aggressive;
     }
 
 
     public void encode(PacketBuffer buf) {
         buf.writeInt(this.entityID);
-        buf.writeBoolean(this.aggro);
+        buf.writeBoolean(this.make_aggressive);
     }
 
     public static ChangeEmotionPacket decode(PacketBuffer buf) {
@@ -37,11 +37,10 @@ public class ChangeEmotionPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             PlayerEntity allomancer = ctx.get().getSender();
-            CreatureEntity target;
-            target = (CreatureEntity) allomancer.world.getEntityByID(entityID);
-            if ((target != null) && aggro) {
+            CreatureEntity target = (CreatureEntity) allomancer.world.getEntityByID(entityID);
+            if ((target != null) && make_aggressive) {
                 PowerUtils.riotEntity(target, allomancer);
-            } else if ((target != null) && !aggro) {
+            } else if ((target != null) && !make_aggressive) {
                 PowerUtils.sootheEntity(target, allomancer);
             }
         });

@@ -5,6 +5,7 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 
@@ -53,14 +54,14 @@ public class Languages extends LanguageProvider {
         add(MaterialsSetup.BRASS_INGOT.get(), "Brass Ingot");
         add(MaterialsSetup.LEAD_INGOT.get(), "Lead Ingot");
 
-        add(MaterialsSetup.FLAKES.get(Allomancy.IRON).get(), "Iron Flakes");
-        add(MaterialsSetup.FLAKES.get(Allomancy.STEEL).get(), "Steel Flakes");
-        add(MaterialsSetup.FLAKES.get(Allomancy.TIN).get(), "Tin Flakes");
-        add(MaterialsSetup.FLAKES.get(Allomancy.PEWTER).get(), "Pewter Flakes");
-        add(MaterialsSetup.FLAKES.get(Allomancy.ZINC).get(), "Zinc Flakes");
-        add(MaterialsSetup.FLAKES.get(Allomancy.BRASS).get(), "Brass Flakes");
-        add(MaterialsSetup.FLAKES.get(Allomancy.COPPER).get(), "Copper Flakes");
-        add(MaterialsSetup.FLAKES.get(Allomancy.BRONZE).get(), "Bronze Flakes");
+        add(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get(), "Iron Flakes");
+        add(MaterialsSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), "Steel Flakes");
+        add(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get(), "Tin Flakes");
+        add(MaterialsSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), "Pewter Flakes");
+        add(MaterialsSetup.FLAKES.get(Metal.ZINC.getIndex()).get(), "Zinc Flakes");
+        add(MaterialsSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), "Brass Flakes");
+        add(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get(), "Copper Flakes");
+        add(MaterialsSetup.FLAKES.get(Metal.BRONZE.getIndex()).get(), "Bronze Flakes");
         add(MaterialsSetup.FLAKES.get(8).get(), "Lead Flakes");
 
         add(CombatSetup.GOLD_NUGGET.get(), "Gold Nugget");
@@ -72,8 +73,9 @@ public class Languages extends LanguageProvider {
         add("key.categories.allomancy", "Allomancy");
         add("key.burn", "Burn Metals");
 
-        add("commands.allomancy.getpower", "%s currently has Allomantic power %s");
-        add("commands.allomancy.setpower", "%s set to Allomantic power %s");
+        add("commands.allomancy.getpowers", "%s currently has Allomantic powers %s");
+        add("commands.allomancy.addpower", "%s added Allomantic power %s");
+        add("commands.allomancy.removepower", "%s removed Allomantic power %s");
         add("commands.allomancy.unrecognized", "Unrecognized Allomancy power '%s'");
     }
 

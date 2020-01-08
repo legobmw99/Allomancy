@@ -21,10 +21,7 @@ public class Allomancy {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static final int IRON = 0, STEEL = 1, TIN = 2, PEWTER = 3,  ZINC = 4,  BRASS = 5, COPPER = 6, BRONZE = 7;
-
     public static Allomancy instance;
-
 
     public Allomancy() {
         instance = this;

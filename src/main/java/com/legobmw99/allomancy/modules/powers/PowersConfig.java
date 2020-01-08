@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import com.legobmw99.allomancy.setup.AllomancyConfig;
-import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
@@ -153,9 +153,10 @@ public class PowersConfig {
         add("allomancy:brass_ingot");
 
 
-        for (int i = 0; i < AllomancySetup.flake_metals.length; i++) {
-            add("allomancy:" + AllomancySetup.flake_metals[i] + "_flakes");
+        for (Metal mt : Metal.values()) {
+            add("allomancy:" + mt.getName() + "_flakes");
         }
+        add("allomancy:lead_flakes");
 
         defaultList.sort(String::compareTo);
 

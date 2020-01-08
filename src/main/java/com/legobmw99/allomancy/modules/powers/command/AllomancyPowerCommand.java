@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.modules.powers.command;
 
 import com.legobmw99.allomancy.modules.powers.network.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import com.legobmw99.allomancy.network.Network;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -18,8 +19,14 @@ import java.util.function.Predicate;
 
 public class AllomancyPowerCommand {
 
-    private static final String[] names = {"none", "iron_misting", "steel_misting", "tin_misting", "pewter_misting", "zinc_misting", "brass_misting", "copper_misting", "bronze_misting", "mistborn"};
+    protected static final String[] names = new String[Metal.values().length + 1];
 
+    static {
+        int i = 0;
+        for (Metal mt : Metal.values())
+            names[i++] = mt.getName();
+        names[i] = "all";
+    }
 
     private static Predicate<CommandSource> permissions(int level) {
         return (player) -> player.hasPermissionLevel(level);
@@ -29,15 +36,21 @@ public class AllomancyPowerCommand {
 
         LiteralArgumentBuilder<CommandSource> root = Commands.literal("allomancy").requires(permissions(0));
         root.then(Commands.literal("get").requires(permissions(0))
-                .executes(ctx -> getPower(ctx, false))
+                .executes(ctx -> getPowers(ctx, false))
                 .then(Commands.argument("targets", EntityArgument.players())
-                        .executes(ctx -> getPower(ctx, true))));
+                        .executes(ctx -> getPowers(ctx, true))));
 
-        root.then(Commands.literal("set").requires(permissions(2))
+        root.then(Commands.literal("add").requires(permissions(2))
                 .then(Commands.argument("type", AllomancyPowerType.INSTANCE)
-                        .executes(ctx -> setPower(ctx, false))
+                        .executes(ctx -> addPower(ctx, false))
                         .then(Commands.argument("targets", EntityArgument.players())
-                                .executes(ctx -> setPower(ctx, true)))));
+                                .executes(ctx -> addPower(ctx, true)))));
+
+        root.then(Commands.literal("remove").requires(permissions(2))
+                .then(Commands.argument("type", AllomancyPowerType.INSTANCE)
+                        .executes(ctx -> removePower(ctx, false))
+                        .then(Commands.argument("targets", EntityArgument.players())
+                                .executes(ctx -> removePower(ctx, true)))));
 
 
         LiteralCommandNode<CommandSource> command = dispatcher.register(root);
@@ -46,64 +59,97 @@ public class AllomancyPowerCommand {
     }
 
 
-    private static int getPower(CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
+    private static int getPowers(CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
         int i = 0;
         if (hasPlayer) {
             for (ServerPlayerEntity p : EntityArgument.getPlayers(ctx, "targets")) {
-                getPower(ctx, p);
+                getPowers(ctx, p);
                 i++;
             }
         } else {
-            getPower(ctx, ctx.getSource().asPlayer());
+            getPowers(ctx, ctx.getSource().asPlayer());
             i = 1;
         }
 
         return i;
     }
 
-    private static int getPower(CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
+    private static void getPowers(CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-        int power = cap.getAllomancyPower();
-        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.getpower", player.getDisplayName(), names[power + 1]), true);
-        return power;
+        String powers = "";
+        if (cap.isMistborn()) {
+            powers = "all";
+        } else if (cap.isUninvested()) {
+            powers = "none";
+        } else {
+            for (Metal mt : Metal.values()) {
+                if (cap.hasPower(mt)) {
+                    if (powers.equals("")) {
+                        powers = mt.getName();
+                    } else {
+                        powers = powers + ", " + mt.getName();
+                    }
+                }
+            }
+        }
+        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.getpowers", player.getDisplayName(), powers), true);
     }
 
-    private static int setPower(CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
+    private static int addPower(CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
         int i = 0;
         if (hasPlayer) {
             for (ServerPlayerEntity p : EntityArgument.getPlayers(ctx, "targets")) {
-                setPower(ctx, p);
+                addPower(ctx, p);
                 i++;
             }
         } else {
-            setPower(ctx, ctx.getSource().asPlayer());
+            addPower(ctx, ctx.getSource().asPlayer());
             i = 1;
         }
         return i;
     }
 
-    private static int setPower(CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
+    private static void addPower(CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
         String type = ctx.getArgument("type", String.class);
-        byte power = powerTypeToByte(type);
-        cap.setAllomancyPower(power);
-        for (int i = 0; i < 8; i++) {
-            cap.setMetalBurning(i, false);
+        if (type.equalsIgnoreCase("all")) {
+            cap.setMistborn();
+        } else {
+            Metal mt = Metal.valueOf(type.toUpperCase());
+            cap.addPower(mt);
         }
+
         Network.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
-        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.setpower", player.getDisplayName(), names[power + 1]), true);
-        return power;
-
+        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.addpower", player.getDisplayName(), type), true);
     }
 
-    private static byte powerTypeToByte(String type) {
-        for (byte i = 0; i <= 9; i++) {
-            if (type.equals(names[i])) {
-                i -= 1; //index at -1
-                return i;
+    private static int removePower(CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
+        int i = 0;
+        if (hasPlayer) {
+            for (ServerPlayerEntity p : EntityArgument.getPlayers(ctx, "targets")) {
+                removePower(ctx, p);
+                i++;
             }
+        } else {
+            removePower(ctx, ctx.getSource().asPlayer());
+            i = 1;
         }
-        return -1;
+        return i;
     }
+
+    private static void removePower(CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
+        AllomancyCapability cap = AllomancyCapability.forPlayer(player);
+        String type = ctx.getArgument("type", String.class);
+        if (type.equalsIgnoreCase("all")) {
+            cap.setUninvested();
+        } else {
+            Metal mt = Metal.valueOf(type.toUpperCase());
+            cap.revokePower(mt);
+        }
+
+        Network.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
+        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.removepower", player.getDisplayName(), type), true);
+    }
+
 
 }

@@ -5,6 +5,7 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
@@ -71,18 +72,18 @@ public class Recipes extends RecipeProvider {
         }
 
         // Mixing Recipes
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Allomancy.STEEL).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:steel_flakes_from_mixing",
-                ing(Items.COAL), ing(MaterialsSetup.FLAKES.get(Allomancy.IRON).get()));
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Allomancy.PEWTER).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+                ing(Items.COAL), ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:pewter_flakes_from_mixing",
-                ing(MaterialsSetup.FLAKES.get(Allomancy.TIN).get()), ing(MaterialsSetup.FLAKES.get(8).get()));
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Allomancy.BRASS).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+                ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(8).get()));
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:brass_flakes_from_mixing",
-                ing(MaterialsSetup.FLAKES.get(Allomancy.ZINC).get()), ing(MaterialsSetup.FLAKES.get(Allomancy.COPPER).get()));
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Allomancy.BRONZE).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+                ing(MaterialsSetup.FLAKES.get(Metal.ZINC.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BRONZE.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:bronze_flakes_from_mixing",
-                ing(MaterialsSetup.FLAKES.get(Allomancy.TIN).get()), ing(MaterialsSetup.FLAKES.get(Allomancy.COPPER).get()));
+                ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));
 
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
         ShapedRecipeBuilder.shapedRecipe(CombatSetup.COIN_BAG.get())

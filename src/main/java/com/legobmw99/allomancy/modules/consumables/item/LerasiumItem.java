@@ -35,7 +35,7 @@ public class LerasiumItem extends Item {
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
         ItemStack itemStackIn = player.getHeldItem(hand);
-        if (cap.getAllomancyPower() != 8) {
+        if (!cap.isMistborn()) {
             player.setActiveHand(hand);
             return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
 
@@ -50,8 +50,8 @@ public class LerasiumItem extends Item {
         double x = livingEntity.getPositionVec().getX();
         double y = livingEntity.getPositionVec().getY() + 3;
         double z = livingEntity.getPositionVec().getZ();
-        if (cap.getAllomancyPower() != 8) {
-            cap.setAllomancyPower((byte) 8);
+        if (!cap.isMistborn()) {
+            cap.setMistborn();
         }
         //Fancy shmancy effects
         world.addEntity(new LightningBoltEntity(world, x, y, z, true));

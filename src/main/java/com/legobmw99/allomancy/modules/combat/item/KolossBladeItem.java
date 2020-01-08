@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -29,7 +29,7 @@ public class KolossBladeItem extends SwordItem {
             PlayerEntity player = (PlayerEntity) entityIn;
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
             if (isSelected && (player.getHeldItemOffhand() != stack)) {
-                if (!cap.getMetalBurning(Allomancy.PEWTER)) {
+                if (!cap.isBurning(Metal.PEWTER)) {
                     player.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 10, 10, true, false));
                     player.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10, 10, true, false));
                     player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 0, true, false));

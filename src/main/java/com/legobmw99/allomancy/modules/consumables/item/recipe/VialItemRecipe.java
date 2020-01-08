@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.consumables.item.recipe;
 
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.setup.AllomancySetup;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 
 public class VialItemRecipe extends SpecialRecipe {
     private static final Ingredient INGREDIENT_FLAKES = Ingredient.fromItems(MaterialsSetup.FLAKES.stream().map(RegistryObject::get).toArray(Item[]::new));
@@ -32,32 +33,33 @@ public class VialItemRecipe extends SpecialRecipe {
     public boolean matches(CraftingInventory inv, World worldIn) {
         this.item_result = ItemStack.EMPTY;
 
-        boolean[] metals = {false, false, false, false, false, false, false, false};
+        boolean[] metals = new boolean[Metal.values().length];
+        Arrays.fill(metals, false);
         boolean[] ingredients = {false, false};
 
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (!itemstack.isEmpty()) {
                 if (INGREDIENT_FLAKES.test(itemstack)) {
-                    for (int j = 0; j < metals.length; j++) {
-                        if (itemstack.getItem() == MaterialsSetup.FLAKES.get(j).get()) {
-                            if (metals[j]) {
+                    for (Metal mt : Metal.values()) {
+                        if (itemstack.getItem() == MaterialsSetup.FLAKES.get(mt.getIndex()).get()) {
+                            if (metals[mt.getIndex()]) {
                                 return false;
                             }
 
-                            metals[j] = true;
+                            metals[mt.getIndex()] = true;
                             ingredients[1] = true;
                         }
                     }
                 } else if (INGREDIENT_VIAL.test(itemstack)) {
                     if (itemstack.getTag() != null) {
-                        for (int j = 0; j < metals.length; j++) {
-                            if (itemstack.getTag().contains(AllomancySetup.allomanctic_metals[j])) {
-                                boolean hasMetalAlready = itemstack.getTag().getBoolean(AllomancySetup.allomanctic_metals[j]);
-                                if (metals[j] && hasMetalAlready) {
+                        for (Metal mt : Metal.values()) {
+                            if (itemstack.getTag().contains(mt.getName())) {
+                                boolean hasMetalAlready = itemstack.getTag().getBoolean(mt.getName());
+                                if (metals[mt.getIndex()] && hasMetalAlready) {
                                     return false;
                                 } else {
-                                    metals[j] = metals[j] || hasMetalAlready;
+                                    metals[mt.getIndex()] = metals[mt.getIndex()] || hasMetalAlready;
                                 }
                             }
                         }
@@ -73,8 +75,8 @@ public class VialItemRecipe extends SpecialRecipe {
         if (ingredients[0] && ingredients[1]) {
             this.item_result = new ItemStack(ConsumeSetup.VIAL.get(), 1);
             CompoundNBT nbt = new CompoundNBT();
-            for (int i = 0; i < metals.length; i++) {
-                nbt.putBoolean(AllomancySetup.allomanctic_metals[i], metals[i]);
+            for (Metal mt : Metal.values()) {
+                nbt.putBoolean(mt.getName(), metals[mt.getIndex()]);
             }
             this.item_result.setTag(nbt);
             return true;

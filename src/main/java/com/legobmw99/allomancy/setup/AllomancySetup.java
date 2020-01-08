@@ -16,9 +16,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 public class AllomancySetup {
-    public static final String[] allomanctic_metals = {"iron", "steel", "tin", "pewter", "zinc", "brass", "copper", "bronze"};
-    public static final String[] flake_metals = {"iron", "steel", "tin", "pewter", "zinc", "brass", "copper", "bronze", "lead"};
-
 
     public static ItemGroup allomancy_group = new ItemGroup(Allomancy.MODID) {
         @Override

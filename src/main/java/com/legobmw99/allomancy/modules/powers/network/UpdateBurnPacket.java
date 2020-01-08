@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -11,27 +12,27 @@ import java.util.function.Supplier;
 
 public class UpdateBurnPacket {
 
-    private byte mat;
+    private Metal mt;
     private boolean value;
 
     /**
      * Send request to the server to change the burning state of a metal
      *
-     * @param mat   the index of the metal
+     * @param mt    the metal
      * @param value whether or not it is burning
      */
-    public UpdateBurnPacket(byte mat, boolean value) {
-        this.mat = mat;
+    public UpdateBurnPacket(Metal mt, boolean value) {
+        this.mt = mt;
         this.value = value; // Convert bool to int
     }
 
     public void encode(PacketBuffer buf) {
-        buf.writeByte(this.mat);
+        buf.writeEnumValue(mt);
         buf.writeBoolean(this.value);
     }
 
     public static UpdateBurnPacket decode(PacketBuffer buf) {
-        return new UpdateBurnPacket(buf.readByte(), buf.readBoolean());
+        return new UpdateBurnPacket(buf.readEnumValue(Metal.class), buf.readBoolean());
     }
 
 
@@ -41,10 +42,10 @@ public class UpdateBurnPacket {
             ServerPlayerEntity player = ctx.get().getSender();
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
-            if (cap.getMetalAmounts(mat) > 0) {
-                cap.setMetalBurning(mat, value);
+            if (cap.hasPower(mt) && cap.getAmount(mt) > 0) {
+                cap.setBurning(mt, value);
             } else {
-                cap.setMetalBurning(mat, false);
+                cap.setBurning(mt, false);
             }
             Network.sync(cap, player);
 

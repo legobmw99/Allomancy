@@ -13,6 +13,7 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.ClientUtils;
 import com.legobmw99.allomancy.modules.powers.client.PowerClientSetup;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -31,6 +32,8 @@ import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class MetalSelectScreen extends Screen {
+
+    // TODO: Make dependent on MT.length
 
     private static final String[] METAL_NAMES = {"Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze"};
     private static final String GUI_METAL = "allomancy:textures/gui/metals/sign%d.png";
@@ -80,7 +83,8 @@ public class MetalSelectScreen extends Screen {
         buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
 
         for (int seg = 0; seg < segments; seg++) {
-            boolean mouseInSector = degPer * seg < angle && angle < degPer * (seg + 1);
+            Metal mt = Metal.getMetal((seg + 4) % 8);
+            boolean mouseInSector = cap.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
             float radius = Math.max(0F, Math.min((timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
             if (mouseInSector) {
                 slotSelected = seg;
@@ -91,9 +95,9 @@ public class MetalSelectScreen extends Screen {
             if (seg % 2 == 0)
                 gs += 0x19;
 
-            gs = cap.getMetalAmounts((seg + 4) % 8) == 0 ? 0 : gs;
+            gs = (!cap.hasPower(mt) || cap.getAmount(mt) == 0) ? 0 : gs;
 
-            int r = cap.getMetalBurning((seg + 4) % 8) ? 0xFF : gs;
+            int r = cap.isBurning(mt) ? 0xFF : gs;
             int g = gs;
             int b = gs;
             int a = 0x99;
@@ -119,10 +123,12 @@ public class MetalSelectScreen extends Screen {
         RenderSystem.enableTexture();
 
         for (int seg = 0; seg < segments; seg++) {
-            boolean mouseInSector = degPer * seg < angle && angle < degPer * (seg + 1);
+            Metal mt = Metal.getMetal((seg + 4) % 8);
+            boolean mouseInSector = cap.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
             float radius = Math.max(0F, Math.min((timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
             if (mouseInSector)
                 radius *= 1.025f;
+
 
             float rad = (seg + 0.5f) * degPer;
             float xp = x + MathHelper.cos(rad) * radius;
@@ -188,11 +194,11 @@ public class MetalSelectScreen extends Screen {
      */
     private void toggleSelected() {
         if (slotSelected != -1) {
-            int slot = slotSelected;
-            slot = (slot + 4) % 8; // Make the slot the one I actually want
-            ClientUtils.toggleMetalBurn((byte) slot, cap);
+            Metal mt = Metal.getMetal((slotSelected + 4) % 8);
+            ClientUtils.toggleBurn(mt, cap);
             mc.player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F,
                     2.0F);
+
         }
     }
 

@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.modules.powers.client;
 
 import com.legobmw99.allomancy.modules.powers.network.UpdateBurnPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import com.legobmw99.allomancy.network.Network;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -103,14 +104,18 @@ public class ClientUtils {
      * @param metal      the index of the metal to toggle
      * @param capability the capability being handled
      */
-    public static void toggleMetalBurn(byte metal, AllomancyCapability capability) {
-        Network.sendToServer(new UpdateBurnPacket(metal, !capability.getMetalBurning(metal)));
+    public static void toggleBurn(Metal metal, AllomancyCapability capability) {
+        if(!capability.hasPower(metal)){
+            return;
+        }
 
-        if (capability.getMetalAmounts(metal) > 0) {
-            capability.setMetalBurning(metal, !capability.getMetalBurning(metal));
+        Network.sendToServer(new UpdateBurnPacket(metal, !capability.isBurning(metal)));
+
+        if (capability.getAmount(metal) > 0) {
+            capability.setBurning(metal, !capability.isBurning(metal));
         }
         // play a sound effect
-        if (capability.getMetalBurning(metal)) {
+        if (capability.isBurning(metal)) {
             player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1,
                     5);
         } else {

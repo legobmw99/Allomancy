@@ -1,7 +1,9 @@
 package com.legobmw99.allomancy.modules.powers.client.gui;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.util.Metal;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -32,7 +34,7 @@ public class MetalOverlay {
 
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
-        if (cap.getAllomancyPower() < 0) {
+        if (cap.isUninvested()) {
             return;
         }
 
@@ -64,34 +66,27 @@ public class MetalOverlay {
         obj = mc.getTextureManager().func_229267_b_(meterLoc); //getTexture
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
-        /*
-         * Misting overlay
-         */
-        if (cap.getAllomancyPower() >= 0 && cap.getAllomancyPower() < 8) {
-            int singleMetalY = 9 - cap.getMetalAmounts(cap.getAllomancyPower());
-            blit(renderX + 1, renderY + 5 + singleMetalY, 7 + 6 * cap.getAllomancyPower(), 1 + singleMetalY, 3, 10 - singleMetalY);
-            blit(renderX, renderY, 0, 0, 5, 20);
-            if (cap.getMetalBurning(cap.getAllomancyPower())) {
-                blit(renderX, renderY + 4 + singleMetalY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
-            }
-        }
+
 
         /*
-         * The rendering for a the overlay of a full Mistborn
+         * The rendering for a the overlay
          */
-        if (cap.getAllomancyPower() == 8) {
-            for (int i = 0; i < 8; i++) {
-                int metalY = 9 - cap.getMetalAmounts(i);
+
+        for (Metal mt : Metal.values()) {
+            if (cap.hasPower(mt)) {
+                int metalY = 9 - cap.getAmount(mt);
+                int i = mt.getIndex();
                 int offset = (i / 2) * 11; // Adding a gap between pairs
                 // Draw the bars first
                 blit(renderX + 1 + (7 * i) + offset, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
                 // Draw the gauges second, so that highlights and decorations show over the bar.
                 blit(renderX + (7 * i) + offset, renderY, 0, 0, 5, 20);
                 // Draw the fire if it is burning
-                if (cap.getMetalBurning(i)) {
-                    blit(renderX  + (7 * i) + offset, renderY + 4 + metalY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
+                if (cap.isBurning(mt)) {
+                    blit(renderX + (7 * i) + offset, renderY + 4 + metalY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
                 }
             }
+
         }
 
         // Update the animation counters
