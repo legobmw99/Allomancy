@@ -30,21 +30,17 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Arrays;
+
 @OnlyIn(Dist.CLIENT)
 public class MetalSelectScreen extends Screen {
 
-    // TODO: Make dependent on MT.length
+    private static final String[] METAL_NAMES = Arrays.stream(Metal.values()).map(m -> m.getName()).toArray(String[]::new);
+    private static final String GUI_METAL = "allomancy:textures/gui/metals/%s_symbol.png";
 
-    private static final String[] METAL_NAMES = {"Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze"};
-    private static final String GUI_METAL = "allomancy:textures/gui/metals/sign%d.png";
+    private static final ResourceLocation[] METAL_ICONS = Arrays.stream(METAL_NAMES).map(s -> new ResourceLocation(String.format(GUI_METAL,s))).toArray(ResourceLocation[]::new);
 
-    private static final ResourceLocation[] METAL_ICONS = new ResourceLocation[]{
-            new ResourceLocation(String.format(GUI_METAL, 0)), new ResourceLocation(String.format(GUI_METAL, 1)),
-            new ResourceLocation(String.format(GUI_METAL, 2)), new ResourceLocation(String.format(GUI_METAL, 3)),
-            new ResourceLocation(String.format(GUI_METAL, 4)), new ResourceLocation(String.format(GUI_METAL, 5)),
-            new ResourceLocation(String.format(GUI_METAL, 6)), new ResourceLocation(String.format(GUI_METAL, 7)),};
-
-    int timeIn = PowersConfig.animate_selection.get() ? 0 : 10; // Config setting for whether the wheel animates open or instantly appears
+    int timeIn = PowersConfig.animate_selection.get() ? 0 : 16; // Config setting for whether the wheel animates open or instantly appears
     int slotSelected = -1;
     AllomancyCapability cap;
     Minecraft mc;
@@ -83,7 +79,7 @@ public class MetalSelectScreen extends Screen {
         buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
 
         for (int seg = 0; seg < segments; seg++) {
-            Metal mt = Metal.getMetal((seg + 4) % 8);
+            Metal mt = Metal.getMetal(toMetalIndex(seg));
             boolean mouseInSector = cap.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
             float radius = Math.max(0F, Math.min((timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
             if (mouseInSector) {
@@ -123,7 +119,7 @@ public class MetalSelectScreen extends Screen {
         RenderSystem.enableTexture();
 
         for (int seg = 0; seg < segments; seg++) {
-            Metal mt = Metal.getMetal((seg + 4) % 8);
+            Metal mt = Metal.getMetal(toMetalIndex(seg));
             boolean mouseInSector = cap.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
             float radius = Math.max(0F, Math.min((timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
             if (mouseInSector)
@@ -136,7 +132,7 @@ public class MetalSelectScreen extends Screen {
 
             float xsp = xp - 4;
             float ysp = yp;
-            String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + METAL_NAMES[(seg + 4) % 8];
+            String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + toTitleCase(METAL_NAMES[toMetalIndex(seg)]);
             int width = mc.getRenderManager().getFontRenderer().getStringWidth(name);
 
             if (xsp < x)
@@ -150,7 +146,7 @@ public class MetalSelectScreen extends Screen {
             int xdp = (int) ((xp - x) * mod + x);
             int ydp = (int) ((yp - y) * mod + y);
 
-            mc.getRenderManager().textureManager.bindTexture(METAL_ICONS[(seg + 4) % 8]);
+            mc.getRenderManager().textureManager.bindTexture(METAL_ICONS[toMetalIndex(seg)]);
             RenderSystem.color4f(1, 1, 1, 1);
             blit(xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
@@ -194,7 +190,7 @@ public class MetalSelectScreen extends Screen {
      */
     private void toggleSelected() {
         if (slotSelected != -1) {
-            Metal mt = Metal.getMetal((slotSelected + 4) % 8);
+            Metal mt = Metal.getMetal(toMetalIndex(slotSelected));
             ClientUtils.toggleBurn(mt, cap);
             mc.player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F,
                     2.0F);
@@ -210,5 +206,13 @@ public class MetalSelectScreen extends Screen {
 
     private static double mouseAngle(int x, int y, int mx, int my) {
         return (MathHelper.atan2(my - y, mx - x) + Math.PI * 2) % (Math.PI * 2);
+    }
+
+    private static String toTitleCase(String s){
+        return s.substring(0,1).toUpperCase() + s.substring(1);
+    }
+
+    private static int toMetalIndex(int segment){
+        return (segment + 8) % Metal.values().length;
     }
 }

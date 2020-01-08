@@ -75,7 +75,7 @@ public class MetalOverlay {
             if (cap.hasPower(mt)) {
                 int metalY = 9 - cap.getAmount(mt);
                 int i = mt.getIndex();
-                int offset = (i / 2) * 11; // Adding a gap between pairs
+                int offset = (i / 2) * 4; // Adding a gap between pairs
                 // Draw the bars first
                 blit(renderX + 1 + (7 * i) + offset, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
                 // Draw the gauges second, so that highlights and decorations show over the bar.

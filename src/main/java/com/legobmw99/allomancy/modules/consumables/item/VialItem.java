@@ -2,8 +2,9 @@ package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.setup.AllomancySetup;
+import com.legobmw99.allomancy.setup.Metal;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,6 +18,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -94,18 +97,32 @@ public class VialItem extends Item {
     }
 
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (stack.hasTag()) {
+            boolean full_display = Screen.hasShiftDown();
+            int count = 0;
             for (Metal mt : Metal.values()) {
                 if (stack.getTag().getBoolean(mt.getName())) {
-                    ITextComponent metal = new TranslationTextComponent("metals." + mt.getName());
-                    metal.setStyle(metal.getStyle().setColor(TextFormatting.GRAY));
-                    tooltip.add(metal);
+                    count++;
+                    if (full_display) {
+                        ITextComponent metal = new TranslationTextComponent("metals." + mt.getName());
+                        metal.setStyle(metal.getStyle().setColor(TextFormatting.GRAY));
+                        tooltip.add(metal);
+                    }
                 }
             }
+            if (!full_display) {
+                ITextComponent lcount = new TranslationTextComponent("item.allomancy.vial.lore_count", count);
+                lcount.setStyle(lcount.getStyle().setColor(TextFormatting.GRAY));
+                tooltip.add(lcount);
+                ITextComponent linst = new TranslationTextComponent("item.allomancy.vial.lore_inst");
+                linst.setStyle(linst.getStyle().setColor(TextFormatting.GRAY));
+                tooltip.add(linst);
 
+            }
         }
     }
 

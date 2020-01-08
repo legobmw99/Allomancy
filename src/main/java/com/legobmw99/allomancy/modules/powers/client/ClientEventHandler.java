@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
@@ -23,6 +24,7 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.*;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -266,15 +268,34 @@ public class ClientEventHandler {
             }
 
             for (BlockPos b : metal_blocks) {
-                ClientUtils.drawMetalLine(playervec, new Vec3d(b).add(0.5, 0.5, 0.5), 1.5F, 0F, 0.6F, 1F);
+                ClientUtils.drawMetalLine(playervec, blockVec(b), 1.5F, 0F, 0.6F, 1F);
             }
         }
 
         if ((cap.isBurning(Metal.BRONZE) && !cap.isBurning(Metal.COPPER))) {
             for (PlayerEntity playerEntity : nearby_allomancers) {
-                ClientUtils.drawMetalLine(playervec, playerEntity.getPositionVec(), 3.0F, 0.7F, 0.15F, 0.15F);
+                ClientUtils.drawMetalLine(playervec, playerEntity.getPositionVec(), 5.0F, 0.7F, 0.15F, 0.15F);
             }
         }
+
+        if(cap.isBurning(Metal.ELECTRUM)){
+            BlockPos spawn_pos = cap.getSpawnLoc();
+            if (spawn_pos == null){
+                spawn_pos = player.world.getSpawnPoint();
+            }
+
+            if(player.dimension == DimensionType.OVERWORLD){
+                ClientUtils.drawMetalLine(playervec, blockVec(spawn_pos), 3.0F, 0.7F, 0.8F, 0.2F);
+            }
+        }
+
+        if(cap.isBurning(Metal.GOLD)){
+            BlockPos death_pos = cap.getDeathLoc();
+            if (death_pos != null && player.dimension == cap.getDeathDim()){
+                ClientUtils.drawMetalLine(playervec, blockVec(death_pos), 3.0F, 0.9F, 0.85F, 0.0F);
+            }
+        }
+
 
         RenderSystem.polygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
         RenderSystem.disableBlend();
@@ -284,6 +305,9 @@ public class ClientEventHandler {
         RenderSystem.popMatrix();
     }
 
+    private static Vec3d blockVec(BlockPos b){
+        return new Vec3d(b).add(0.5, 0.5, 0.5);
+    }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent

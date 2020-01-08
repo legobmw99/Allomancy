@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "allomancy:item/bendalloy_flakes"
+  }
+}

@@ -4,8 +4,10 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.network.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import com.legobmw99.allomancy.network.Network;
+import com.legobmw99.allomancy.setup.Metal;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,16 +15,23 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
+import java.util.Random;
 
 public class CommonEventHandler {
 
@@ -69,6 +78,7 @@ public class CommonEventHandler {
             PlayerEntity old = event.getOriginal();
 
             old.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(oldCap -> {
+                cap.setDeathLoc(oldCap.getDeathLoc(), oldCap.getDeathDim());
                 if (!oldCap.isUninvested()) { // make sure the new player has the same power status
                     for (Metal mt : Metal.values()) {
                         if (oldCap.hasPower(mt)) {
@@ -114,6 +124,27 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
+    public void onSetSpawn(final PlayerSetSpawnEvent event) {
+        PlayerEntity player = event.getPlayer();
+        if (player instanceof ServerPlayerEntity) {
+            AllomancyCapability cap = AllomancyCapability.forPlayer(player);
+            cap.setSpawnLoc(event.getNewSpawn());
+            Network.sync(cap, player);
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onLivingDeath(final LivingDeathEvent event) {
+        if (event.getEntityLiving() instanceof ServerPlayerEntity) {
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
+            AllomancyCapability cap = AllomancyCapability.forPlayer(player);
+            cap.setDeathLoc(player.getPosition(), player.dimension);
+            Network.sync(cap, player);
+        }
+    }
+
+    @SubscribeEvent
     public void onDamage(final LivingHurtEvent event) {
         // Increase outgoing damage for pewter burners
         if (event.getSource().getTrueSource() instanceof ServerPlayerEntity) {
@@ -123,17 +154,25 @@ public class CommonEventHandler {
             if (cap.isBurning(Metal.PEWTER)) {
                 event.setAmount(event.getAmount() + 2);
             }
+
+            if (cap.isBurning(Metal.CHROMIUM)) { // TODO: test
+                if (event.getEntityLiving() instanceof PlayerEntity) {
+                    PowerUtils.wipePlayer((PlayerEntity) event.getEntityLiving());
+                }
+            }
         }
         // Reduce incoming damage for pewter burners
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
-            AllomancyCapability cap = AllomancyCapability.forPlayer(event.getEntityLiving());
-            if (cap.isBurning(Metal.PEWTER)) {
+            AllomancyCapability capHurt = AllomancyCapability.forPlayer(event.getEntityLiving());
+            if (capHurt.isBurning(Metal.PEWTER)) {
                 event.setAmount(event.getAmount() - 2);
                 // Note that they took damage, will come in to play if they stop burning
-                cap.setDamageStored(cap.getDamageStored() + 1);
+                capHurt.setDamageStored(capHurt.getDamageStored() + 1);
             }
         }
     }
+
+    private Random random = new Random();
 
     @SubscribeEvent
     public void onWorldTick(final TickEvent.WorldTickEvent event) {
@@ -143,12 +182,43 @@ public class CommonEventHandler {
             List<? extends PlayerEntity> list = world.getPlayers();
             for (PlayerEntity curPlayer : list) {
                 AllomancyCapability cap = AllomancyCapability.forPlayer(curPlayer);
-
                 if (!cap.isUninvested()) {
+                    if (cap.isBurning(Metal.ALUMINUM)) {
+                        PowerUtils.wipePlayer(curPlayer);
+                    }
+
+                    // TODO Duralumin/Nicrosil
+                    // TODO Cadmium/Bendalloy
+
                     // Run the necessary updates on the player's metals
                     if (curPlayer instanceof ServerPlayerEntity) {
                         AllomancyCapability.updateMetalBurnTime(cap, (ServerPlayerEntity) curPlayer);
                     }
+
+                    if (cap.isBurning(Metal.BENDALLOY)) {
+                        curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 10, 3, true, false));
+                        curPlayer.livingTick();
+                        curPlayer.livingTick();
+
+                        if (world instanceof ServerWorld) {
+                            int max = 4;
+                            BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
+                            BlockPos positive = new BlockPos(curPlayer).add(max, max, max);
+
+                            BlockPos.getAllInBox(negative, positive).forEach(bp -> {
+                                BlockState block = world.getBlockState(bp);
+                                TileEntity te = world.getTileEntity(bp);
+                                for (int i = 0; i < 20 / (te == null ? 10 : 1); i++) {
+                                    if (te instanceof ITickableTileEntity) {
+                                        ((ITickableTileEntity) te).tick();
+                                    } else if (block.ticksRandomly()) {
+                                        block.func_227034_b_((ServerWorld) world, bp, random); //randomTick
+                                    }
+                                }
+                            });
+                        }
+                    }
+
                     // Damage the player if they have stored damage and pewter cuts out
                     if (!cap.isBurning(Metal.PEWTER) && (cap.getDamageStored() > 0)) {
                         cap.setDamageStored(cap.getDamageStored() - 1);
@@ -156,9 +226,9 @@ public class CommonEventHandler {
                     }
                     if (cap.isBurning(Metal.PEWTER)) {
                         //Add jump boost and speed to pewter burners
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 30, 1, true, false));
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, 30, 0, true, false));
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 30, 1, true, false));
+                        curPlayer.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 10, 1, true, false));
+                        curPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, 10, 0, true, false));
+                        curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 10, 1, true, false));
 
                         if (cap.getDamageStored() > 0) {
                             if (world.rand.nextInt(200) == 0) {

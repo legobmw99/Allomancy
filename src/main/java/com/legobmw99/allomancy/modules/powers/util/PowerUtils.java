@@ -6,6 +6,7 @@ import com.legobmw99.allomancy.modules.combat.entity.IronNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIAttackOnCollideExtended;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIEvilAttack;
+import com.legobmw99.allomancy.network.Network;
 import net.minecraft.block.Block;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
@@ -110,6 +111,15 @@ public class PowerUtils {
         }
 
         return false;
+    }
+
+    public static void wipePlayer(PlayerEntity player) {
+        AllomancyCapability capHurt = AllomancyCapability.forPlayer(player);
+        capHurt.drainMetals();
+        player.clearActivePotions();
+
+        if (player instanceof ServerPlayerEntity)
+            Network.sync(capHurt, player);
     }
 
     /**

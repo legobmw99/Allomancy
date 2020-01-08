@@ -77,7 +77,7 @@ public class Recipes extends RecipeProvider {
                 ing(Items.COAL), ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
         buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:pewter_flakes_from_mixing",
-                ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(8).get()));
+                ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(MaterialsSetup.FLAKES.size() - 1).get()));
         buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:brass_flakes_from_mixing",
                 ing(MaterialsSetup.FLAKES.get(Metal.ZINC.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));

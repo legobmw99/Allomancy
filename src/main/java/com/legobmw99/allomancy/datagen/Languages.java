@@ -16,14 +16,10 @@ public class Languages extends LanguageProvider {
     @Override
     protected void addTranslations() {
         add("itemGroup.allomancy", "Allomancy");
-        add("metals.iron", "Iron");
-        add("metals.steel", "Steel");
-        add("metals.tin", "Tin");
-        add("metals.pewter", "Pewter");
-        add("metals.bronze", "Bronze");
-        add("metals.copper", "Copper");
-        add("metals.zinc", "Zinc");
-        add("metals.brass", "Brass");
+        for(Metal mt: Metal.values()){
+            add("metals." + mt.getName(), toTitleCase(mt.getName()));
+        }
+
 
         add(MaterialsSetup.TIN_ORE.get(), "Tin Ore");
         add(MaterialsSetup.LEAD_ORE.get(), "Lead Ore");
@@ -45,6 +41,8 @@ public class Languages extends LanguageProvider {
         add("item.allomancy.koloss_blade.lore",
                 "This item is too heavy for the average person to wield.");
         add(ConsumeSetup.VIAL.get(), "Allomantic Vial");
+        add("item.allomancy.vial.lore_count","Contains %d metals.");
+        add("item.allomancy.vial.lore_inst", "Hold SHIFT to view.");
 
         add(MaterialsSetup.TIN_INGOT.get(), "Tin Ingot");
         add(MaterialsSetup.COPPER_INGOT.get(), "Copper Ingot");
@@ -53,15 +51,10 @@ public class Languages extends LanguageProvider {
         add(MaterialsSetup.BRASS_INGOT.get(), "Brass Ingot");
         add(MaterialsSetup.LEAD_INGOT.get(), "Lead Ingot");
 
-        add(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get(), "Iron Flakes");
-        add(MaterialsSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), "Steel Flakes");
-        add(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get(), "Tin Flakes");
-        add(MaterialsSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), "Pewter Flakes");
-        add(MaterialsSetup.FLAKES.get(Metal.ZINC.getIndex()).get(), "Zinc Flakes");
-        add(MaterialsSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), "Brass Flakes");
-        add(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get(), "Copper Flakes");
-        add(MaterialsSetup.FLAKES.get(Metal.BRONZE.getIndex()).get(), "Bronze Flakes");
-        add(MaterialsSetup.FLAKES.get(8).get(), "Lead Flakes");
+        for(Metal mt: Metal.values()){
+            add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), toTitleCase(mt.getName()) + " Flakes");
+        }
+        add(MaterialsSetup.FLAKES.get(MaterialsSetup.FLAKES.size() - 1).get(), "Lead Flakes");
 
         add(CombatSetup.GOLD_NUGGET.get(), "Gold Nugget");
         add(CombatSetup.IRON_NUGGET.get(), "Iron Nugget");
@@ -72,10 +65,14 @@ public class Languages extends LanguageProvider {
         add("key.categories.allomancy", "Allomancy");
         add("key.burn", "Burn Metals");
 
-        add("commands.allomancy.getpowers", "%s currently has Allomantic powers %s");
+        add("commands.allomancy.getpowers", "%s currently has Allomantic powers: %s");
         add("commands.allomancy.addpower", "%s added Allomantic power %s");
         add("commands.allomancy.removepower", "%s removed Allomantic power %s");
-        add("commands.allomancy.unrecognized", "Unrecognized Allomancy power '%s'");
+        add("commands.allomancy.unrecognized", "Unrecognized Allomancy power: '%s'");
+    }
+
+    private static String toTitleCase(String s){
+        return s.substring(0,1).toUpperCase() + s.substring(1);
     }
 
     @Override

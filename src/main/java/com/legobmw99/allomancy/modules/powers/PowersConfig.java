@@ -154,7 +154,8 @@ public class PowersConfig {
 
 
         for (Metal mt : Metal.values()) {
-            add("allomancy:" + mt.getName() + "_flakes");
+            if (mt != Metal.ALUMINUM)
+                add("allomancy:" + mt.getName() + "_flakes");
         }
         add("allomancy:lead_flakes");
 

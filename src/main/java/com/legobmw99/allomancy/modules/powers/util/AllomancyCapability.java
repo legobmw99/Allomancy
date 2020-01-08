@@ -4,12 +4,13 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -27,14 +28,19 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "allomancy_data");
 
-    private static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600};
+    private static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
 
 
     private boolean[] allomantic_powers;
-    private int damange_stored;
     private int[] burn_time;
     private int[] metal_amounts;
     private boolean[] burning_metals;
+
+    private int damange_stored;
+
+    private int death_dimension;
+    private BlockPos death_pos;
+    private BlockPos spawn_pos;
 
     private LazyOptional<AllomancyCapability> handler;
 
@@ -54,6 +60,8 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         Arrays.fill(burning_metals, false);
 
         damange_stored = 0;
+        death_pos = null;
+        spawn_pos = null;
     }
 
 
@@ -159,7 +167,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
     /**
-     * Sets the players amount of Metal to the given value
+     * Sets the players amount of Metal to the given valuee
      *
      * @param metal the Metal to set
      * @param amt   the amount stored
@@ -169,10 +177,11 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
     /**
-     *  Drain all player's metals
+     * Drain all player's metals
      */
-    public void drainMetals(){
+    public void drainMetals() {
         Arrays.fill(metal_amounts, 0);
+        Arrays.fill(burning_metals, false);
     }
 
     /**
@@ -191,6 +200,31 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      */
     public void setDamageStored(int damageStored) {
         this.damange_stored = damageStored;
+    }
+
+    public void setDeathLoc(BlockPos pos, DimensionType dim){
+        setDeathLoc(pos, dim.getId());
+    }
+
+    protected void setDeathLoc(BlockPos pos, int dim){
+        this.death_pos = pos;
+        this.death_dimension = dim;
+    }
+
+    public BlockPos getDeathLoc(){
+        return this.death_pos;
+    }
+
+    public DimensionType getDeathDim(){
+        return DimensionType.getById(death_dimension);
+    }
+
+    public void setSpawnLoc(BlockPos pos){
+        this.spawn_pos = pos;
+    }
+
+    public BlockPos getSpawnLoc(){
+        return this.spawn_pos;
     }
 
     /**
@@ -292,6 +326,20 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         }
         allomancy_data.put("metal_burning", metal_burning);
 
+        CompoundNBT position = new CompoundNBT();
+        if(this.death_pos != null) {
+            position.putInt("death_dimension", this.death_dimension);
+            position.putInt("death_x", this.death_pos.getX());
+            position.putInt("death_y", this.death_pos.getY());
+            position.putInt("death_z", this.death_pos.getZ());
+        }
+        if(this.spawn_pos != null) {
+            position.putInt("spawn_x", this.spawn_pos.getX());
+            position.putInt("spawn_y", this.spawn_pos.getY());
+            position.putInt("spawn_z", this.spawn_pos.getZ());
+        }
+        allomancy_data.put("position", position);
+
         return allomancy_data;
 
     }
@@ -327,6 +375,15 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         CompoundNBT metal_burning = (CompoundNBT) allomancy_data.get("metal_burning");
         for (Metal mt : Metal.values()) {
             this.setBurning(mt, metal_burning.getBoolean(mt.getName()));
+        }
+
+        CompoundNBT position = (CompoundNBT) allomancy_data.get("position");
+        if (position.contains("death_x")){
+            this.setDeathLoc(new BlockPos(position.getInt("death_x"),position.getInt("death_y"),position.getInt("death_z")),
+                    position.getInt("death_dimension"));
+        }
+        if (position.contains("spawn_x")){
+            this.setSpawnLoc(new BlockPos(position.getInt("spawn_x"),position.getInt("spawn_y"),position.getInt("spawn_z")));
         }
 
     }

@@ -8,7 +8,7 @@ public enum Metal {
     ZINC(4, "zinc"),
     BRASS(5, "brass"),
     COPPER(6, "copper"),
-    BRONZE(7, "bronze"); /*, TODO
+    BRONZE(7, "bronze"),
     ALUMINUM(8, "aluminum"),
     DURALUMIN(9, "duralumin"),
     CHROMIUM(10, "chromium"),
@@ -16,7 +16,7 @@ public enum Metal {
     GOLD(12, "gold"),
     ELECTRUM(13, "electrum"),
     CADMIUM(14, "cadmium"),
-    BENDALLOY(15, "bendalloy");*/
+    BENDALLOY(15, "bendalloy");
 
     private final int index;
     private final String name;
