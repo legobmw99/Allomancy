@@ -1,11 +1,10 @@
 package com.legobmw99.allomancy.datagen;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.modules.powers.util.Metal;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 

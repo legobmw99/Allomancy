@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.modules.powers.util.Metal;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;

@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.modules.combat.item;
 import com.legobmw99.allomancy.modules.combat.entity.GoldNuggetEntity;
 import com.legobmw99.allomancy.modules.combat.entity.IronNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.modules.powers.util.Metal;
+import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArrowItem;

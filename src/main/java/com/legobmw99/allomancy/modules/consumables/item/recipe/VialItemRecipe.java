@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.consumables.item.recipe;
 
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.modules.powers.util.Metal;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

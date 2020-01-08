@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.modules.powers.util.Metal;
+import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;

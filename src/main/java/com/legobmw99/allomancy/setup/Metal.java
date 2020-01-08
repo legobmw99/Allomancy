@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.modules.powers.util;
+package com.legobmw99.allomancy.setup;
 
 public enum Metal {
     IRON(0, "iron"),

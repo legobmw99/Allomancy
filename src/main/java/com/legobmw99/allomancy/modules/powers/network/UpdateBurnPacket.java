@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.modules.powers.util.Metal;
+import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;

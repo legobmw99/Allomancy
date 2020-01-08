@@ -9,7 +9,7 @@ import com.legobmw99.allomancy.modules.powers.network.ChangeEmotionPacket;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullBlock;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullEntity;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.modules.powers.util.Metal;
+import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import com.legobmw99.allomancy.network.Network;
 import com.mojang.blaze3d.matrix.MatrixStack;

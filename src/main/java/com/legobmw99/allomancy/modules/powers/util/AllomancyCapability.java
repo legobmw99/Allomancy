@@ -2,7 +2,9 @@ package com.legobmw99.allomancy.modules.powers.util;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.network.Network;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -28,11 +30,11 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     private static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600};
 
 
-    private boolean[] allomanticPowers;
-    private int damageStored;
-    private int[] BurnTime;
-    private int[] MetalAmounts;
-    private boolean[] MetalBurning;
+    private boolean[] allomantic_powers;
+    private int damange_stored;
+    private int[] burn_time;
+    private int[] metal_amounts;
+    private boolean[] burning_metals;
 
     private LazyOptional<AllomancyCapability> handler;
 
@@ -40,18 +42,18 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         handler = LazyOptional.of(() -> this);
 
         int powers = Metal.values().length;
-        allomanticPowers = new boolean[powers];
-        Arrays.fill(allomanticPowers, false);
+        allomantic_powers = new boolean[powers];
+        Arrays.fill(allomantic_powers, false);
 
-        MetalAmounts = new int[powers];
-        Arrays.fill(MetalAmounts, 0);
+        metal_amounts = new int[powers];
+        Arrays.fill(metal_amounts, 0);
 
-        BurnTime = Arrays.copyOf(MAX_BURN_TIME, powers);
+        burn_time = Arrays.copyOf(MAX_BURN_TIME, powers);
 
-        MetalBurning = new boolean[powers];
-        Arrays.fill(MetalBurning, false);
+        burning_metals = new boolean[powers];
+        Arrays.fill(burning_metals, false);
 
-        damageStored = 0;
+        damange_stored = 0;
     }
 
 
@@ -62,7 +64,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return true if this capability has the power specified
      */
     public boolean hasPower(Metal metal) {
-        return allomanticPowers[metal.getIndex()];
+        return allomantic_powers[metal.getIndex()];
     }
 
     /**
@@ -71,7 +73,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return true if the player has ALL powers
      */
     public boolean isMistborn() {
-        for (boolean power : allomanticPowers) {
+        for (boolean power : allomantic_powers) {
             if (!power) {
                 return false;
             }
@@ -83,7 +85,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * Sets the player as a Mistborn
      */
     public void setMistborn() {
-        Arrays.fill(allomanticPowers, true);
+        Arrays.fill(allomantic_powers, true);
     }
 
     /**
@@ -92,7 +94,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return true if the player has NO powers
      */
     public boolean isUninvested() {
-        for (boolean power : allomanticPowers) {
+        for (boolean power : allomantic_powers) {
             if (power) {
                 return false;
             }
@@ -104,7 +106,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * Sets the player as uninvested
      */
     public void setUninvested() {
-        Arrays.fill(allomanticPowers, false);
+        Arrays.fill(allomantic_powers, false);
     }
 
 
@@ -114,7 +116,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param metal the Metal to add
      */
     public void addPower(Metal metal) {
-        allomanticPowers[metal.getIndex()] = true;
+        allomantic_powers[metal.getIndex()] = true;
     }
 
     /**
@@ -123,7 +125,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param metal the Metal to remove
      */
     public void revokePower(Metal metal) {
-        allomanticPowers[metal.getIndex()] = false;
+        allomantic_powers[metal.getIndex()] = false;
     }
 
     /**
@@ -133,7 +135,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return true if the player is burning it
      */
     public boolean isBurning(Metal metal) {
-        return MetalBurning[metal.getIndex()];
+        return burning_metals[metal.getIndex()];
     }
 
     /**
@@ -143,7 +145,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param metalBurning the value to set it to
      */
     public void setBurning(Metal metal, boolean metalBurning) {
-        MetalBurning[metal.getIndex()] = metalBurning;
+        burning_metals[metal.getIndex()] = metalBurning;
     }
 
     /**
@@ -153,7 +155,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return the amount stored
      */
     public int getAmount(Metal metal) {
-        return MetalAmounts[metal.getIndex()];
+        return metal_amounts[metal.getIndex()];
     }
 
     /**
@@ -163,7 +165,14 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param amt   the amount stored
      */
     public void setAmount(Metal metal, int amt) {
-        MetalAmounts[metal.getIndex()] = amt;
+        metal_amounts[metal.getIndex()] = amt;
+    }
+
+    /**
+     *  Drain all player's metals
+     */
+    public void drainMetals(){
+        Arrays.fill(metal_amounts, 0);
     }
 
     /**
@@ -172,7 +181,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return the amount of damage
      */
     public int getDamageStored() {
-        return damageStored;
+        return damange_stored;
     }
 
     /**
@@ -181,7 +190,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param damageStored the amount of damage
      */
     public void setDamageStored(int damageStored) {
-        this.damageStored = damageStored;
+        this.damange_stored = damageStored;
     }
 
     /**
@@ -191,7 +200,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return the burn time
      */
     protected int getBurnTime(Metal metal) {
-        return BurnTime[metal.getIndex()];
+        return burn_time[metal.getIndex()];
     }
 
     /**
@@ -201,7 +210,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param burnTime the burn time
      */
     protected void setBurnTime(Metal metal, int burnTime) {
-        BurnTime[metal.getIndex()] = burnTime;
+        burn_time[metal.getIndex()] = burnTime;
     }
 
 

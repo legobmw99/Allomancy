@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.modules.materials;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
 import com.legobmw99.allomancy.modules.materials.world.OreGenerator;
-import com.legobmw99.allomancy.modules.powers.util.Metal;
+import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
