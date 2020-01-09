@@ -279,9 +279,9 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
                                 capability.drainMetals(Arrays.stream(Metal.values()).filter(capability::isBurning).toArray(Metal[]::new));
                             }
                         } else {
-                            capability.setBurnTime(metal, MAX_BURN_TIME[metal.getIndex()]);
                             capability.setAmount(metal, capability.getAmount(metal) - 1);
                         }
+                        capability.setBurnTime(metal, MAX_BURN_TIME[metal.getIndex()]);
                         Network.sync(capability, player);
                     }
                 }
