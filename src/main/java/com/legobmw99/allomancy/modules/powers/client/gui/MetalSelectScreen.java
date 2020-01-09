@@ -35,10 +35,10 @@ import java.util.Arrays;
 @OnlyIn(Dist.CLIENT)
 public class MetalSelectScreen extends Screen {
 
-    private static final String[] METAL_NAMES = Arrays.stream(Metal.values()).map(m -> m.getName()).toArray(String[]::new);
+    private static final String[] METAL_NAMES = Arrays.stream(Metal.values()).map(Metal::getDisplayName).toArray(String[]::new);
     private static final String GUI_METAL = "allomancy:textures/gui/metals/%s_symbol.png";
 
-    private static final ResourceLocation[] METAL_ICONS = Arrays.stream(METAL_NAMES).map(s -> new ResourceLocation(String.format(GUI_METAL,s))).toArray(ResourceLocation[]::new);
+    private static final ResourceLocation[] METAL_ICONS = Arrays.stream(METAL_NAMES).map(s -> new ResourceLocation(String.format(GUI_METAL,s.toLowerCase()))).toArray(ResourceLocation[]::new);
 
     int timeIn = PowersConfig.animate_selection.get() ? 0 : 16; // Config setting for whether the wheel animates open or instantly appears
     int slotSelected = -1;
@@ -132,7 +132,7 @@ public class MetalSelectScreen extends Screen {
 
             float xsp = xp - 4;
             float ysp = yp;
-            String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + toTitleCase(METAL_NAMES[toMetalIndex(seg)]);
+            String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + METAL_NAMES[toMetalIndex(seg)];
             int width = mc.getRenderManager().getFontRenderer().getStringWidth(name);
 
             if (xsp < x)
@@ -203,13 +203,8 @@ public class MetalSelectScreen extends Screen {
         return false;
     }
 
-
     private static double mouseAngle(int x, int y, int mx, int my) {
         return (MathHelper.atan2(my - y, mx - x) + Math.PI * 2) % (Math.PI * 2);
-    }
-
-    private static String toTitleCase(String s){
-        return s.substring(0,1).toUpperCase() + s.substring(1);
     }
 
     private static int toMetalIndex(int segment){

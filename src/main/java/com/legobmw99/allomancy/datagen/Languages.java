@@ -17,9 +17,8 @@ public class Languages extends LanguageProvider {
     protected void addTranslations() {
         add("itemGroup.allomancy", "Allomancy");
         for(Metal mt: Metal.values()){
-            add("metals." + mt.getName(), toTitleCase(mt.getName()));
+            add("metals." + mt.getName(), mt.getDisplayName());
         }
-
 
         add(MaterialsSetup.TIN_ORE.get(), "Tin Ore");
         add(MaterialsSetup.LEAD_ORE.get(), "Lead Ore");
@@ -52,7 +51,7 @@ public class Languages extends LanguageProvider {
         add(MaterialsSetup.LEAD_INGOT.get(), "Lead Ingot");
 
         for(Metal mt: Metal.values()){
-            add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), toTitleCase(mt.getName()) + " Flakes");
+            add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), mt.getDisplayName() + " Flakes");
         }
         add(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get(), "Lead Flakes");
 
@@ -69,10 +68,6 @@ public class Languages extends LanguageProvider {
         add("commands.allomancy.addpower", "%s added Allomantic power %s");
         add("commands.allomancy.removepower", "%s removed Allomantic power %s");
         add("commands.allomancy.unrecognized", "Unrecognized Allomancy power: '%s'");
-    }
-
-    private static String toTitleCase(String s){
-        return s.substring(0,1).toUpperCase() + s.substring(1);
     }
 
     @Override
