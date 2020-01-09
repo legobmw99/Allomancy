@@ -7,6 +7,7 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIAttackOnCollideExtended;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIEvilAttack;
 import com.legobmw99.allomancy.network.Network;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.block.Block;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
@@ -34,6 +35,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
@@ -115,7 +117,7 @@ public class PowerUtils {
 
     public static void wipePlayer(PlayerEntity player) {
         AllomancyCapability capHurt = AllomancyCapability.forPlayer(player);
-        capHurt.drainMetals();
+        capHurt.drainMetals(Metal.values());
         player.clearActivePotions();
 
         if (player instanceof ServerPlayerEntity)
@@ -158,6 +160,18 @@ public class PowerUtils {
         // Only save players from fall damage
         if (toMove instanceof ServerPlayerEntity) {
             toMove.fallDistance = 0;
+        }
+    }
+
+    public static void teleport(World world, PlayerEntity player, BlockPos pos) {
+        if (!world.isRemote) {
+            if (player != null) {
+                if (player.isPassenger()) {
+                    player.stopRiding();
+                }
+                player.teleportKeepLoaded(pos.getX(), pos.getY() + 1.5, pos.getZ());
+                player.fallDistance = 0.0F;
+            }
         }
     }
 

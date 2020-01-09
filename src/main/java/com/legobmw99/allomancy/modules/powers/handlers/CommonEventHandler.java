@@ -9,6 +9,7 @@ import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -18,9 +19,11 @@ import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -187,15 +190,33 @@ public class CommonEventHandler {
                         PowerUtils.wipePlayer(curPlayer);
                     }
 
+
                     // TODO Duralumin/Nicrosil
-                    // TODO Cadmium/Bendalloy
+
+                    if (cap.isBurning(Metal.ELECTRUM) && cap.getAmount(Metal.ELECTRUM) >= 9 && cap.isBurning(Metal.DURALUMIN)) {
+                        BlockPos spawn_pos = cap.getSpawnLoc();
+                        if (spawn_pos == null) {
+                            spawn_pos = world.getSpawnPoint();
+                        }
+
+                        if (curPlayer.dimension == DimensionType.OVERWORLD) {
+                            PowerUtils.teleport(world, curPlayer, spawn_pos);
+                            cap.drainMetals(Metal.DURALUMIN, Metal.ELECTRUM);
+                        }
+                    } else if (cap.isBurning(Metal.GOLD) && cap.getAmount(Metal.GOLD) >= 9 && cap.isBurning(Metal.DURALUMIN)) { // These should be mutually exclusive
+                        BlockPos death_pos = cap.getDeathLoc();
+                        if (death_pos != null && curPlayer.dimension == cap.getDeathDim()) {
+                            PowerUtils.teleport(world, curPlayer, death_pos);
+                            cap.drainMetals(Metal.DURALUMIN, Metal.GOLD);
+                        }
+                    }
 
                     // Run the necessary updates on the player's metals
                     if (curPlayer instanceof ServerPlayerEntity) {
                         AllomancyCapability.updateMetalBurnTime(cap, (ServerPlayerEntity) curPlayer);
                     }
 
-                    if (cap.isBurning(Metal.BENDALLOY)) {
+                    if (cap.isBurning(Metal.BENDALLOY) && !cap.isBurning(Metal.CADMIUM)) {
                         curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 10, 3, true, false));
                         curPlayer.livingTick();
                         curPlayer.livingTick();
@@ -204,7 +225,10 @@ public class CommonEventHandler {
                             int max = 5;
                             BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
                             BlockPos positive = new BlockPos(curPlayer).add(max, max, max);
-
+                            world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
+                                entity.livingTick();
+                                entity.livingTick();
+                            });
                             BlockPos.getAllInBox(negative, positive).forEach(bp -> {
                                 BlockState block = world.getBlockState(bp);
                                 TileEntity te = world.getTileEntity(bp);
@@ -217,6 +241,15 @@ public class CommonEventHandler {
                                 }
                             });
                         }
+                    }
+                    if (cap.isBurning(Metal.CADMIUM) && !cap.isBurning(Metal.BENDALLOY)) {
+                        int max = 10;
+                        BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
+                        BlockPos positive = new BlockPos(curPlayer).add(max, max, max);
+                        world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
+                            if (entity != curPlayer)
+                                entity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 2, true, false));
+                        });
                     }
 
                     // Damage the player if they have stored damage and pewter cuts out

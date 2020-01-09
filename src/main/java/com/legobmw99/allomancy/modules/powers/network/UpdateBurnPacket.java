@@ -1,12 +1,13 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.network.Network;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 
@@ -44,6 +45,9 @@ public class UpdateBurnPacket {
 
             if (cap.hasPower(mt) && cap.getAmount(mt) > 0) {
                 cap.setBurning(mt, value);
+                if (!value && mt == Metal.DURALUMIN) {
+                    cap.drainMetals(Arrays.stream(Metal.values()).filter(cap::isBurning).toArray(Metal[]::new));
+                }
             } else {
                 cap.setBurning(mt, false);
             }
