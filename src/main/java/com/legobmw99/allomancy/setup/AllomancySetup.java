@@ -32,6 +32,10 @@ public class AllomancySetup {
         return Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F).harvestTool(ToolType.PICKAXE).harvestLevel(2);
     }
 
+    public static Item createStandardItem(){
+        return new Item(AllomancySetup.createStandardItemProperties());
+    }
+
     public static void clientInit(final FMLClientSetupEvent e) {
         CombatSetup.clientInit(e);
         PowersSetup.clientInit(e);

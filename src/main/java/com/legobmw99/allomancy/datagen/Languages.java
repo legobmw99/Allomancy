@@ -54,7 +54,7 @@ public class Languages extends LanguageProvider {
         for(Metal mt: Metal.values()){
             add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), toTitleCase(mt.getName()) + " Flakes");
         }
-        add(MaterialsSetup.FLAKES.get(MaterialsSetup.FLAKES.size() - 1).get(), "Lead Flakes");
+        add(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get(), "Lead Flakes");
 
         add(CombatSetup.GOLD_NUGGET.get(), "Gold Nugget");
         add(CombatSetup.IRON_NUGGET.get(), "Iron Nugget");
