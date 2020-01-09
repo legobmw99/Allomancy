@@ -41,7 +41,7 @@ public class TryPushPullBlock {
                     ServerPlayerEntity player = ctx.get().getSender();
                     BlockPos pos = blockPos;
                     // Sanity check to make sure server has same configs and that the block is loaded in the server
-                    if ((player.world.isBlockLoaded(pos) && (PowerUtils.isBlockMetal(player.world.getBlockState(pos).getBlock()))) // Check Block
+                    if ((player.world.isBlockLoaded(pos) && (PowerUtils.isBlockStateMetal(player.world.getBlockState(pos)))) // Check Block
                             || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && (!player.findAmmo(player.getHeldItemMainhand()).isEmpty()) /*some sort of find ammo func*/ &&
                             direction == PowerUtils.PUSH)) {
                         // Check for the coin bag

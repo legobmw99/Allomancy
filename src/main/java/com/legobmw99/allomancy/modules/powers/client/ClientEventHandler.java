@@ -75,7 +75,7 @@ public class ClientEventHandler {
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (PowerUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
+                                if (PowerUtils.isBlockStateMetal(this.mc.world.getBlockState(bp)) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
                                     Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PULL));
                                 }
                             }
@@ -104,7 +104,7 @@ public class ClientEventHandler {
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (PowerUtils.isBlockMetal(this.mc.world.getBlockState(bp).getBlock()) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
+                                if (PowerUtils.isBlockStateMetal(this.mc.world.getBlockState(bp)) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
                                     Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PUSH));
                                 }
                             }
@@ -154,7 +154,7 @@ public class ClientEventHandler {
                     blocks = BlockPos.getAllInBox(negative, positive);
                     blocks.forEach(bp -> {
                         BlockPos imBlock = bp.toImmutable();
-                        if (PowerUtils.isBlockMetal(player.world.getBlockState(imBlock).getBlock())) {
+                        if (PowerUtils.isBlockStateMetal(player.world.getBlockState(imBlock))) {
                             metal_blocks.add(imBlock);
                         }
                     });

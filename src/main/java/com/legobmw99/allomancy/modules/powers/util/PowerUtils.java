@@ -9,6 +9,7 @@ import com.legobmw99.allomancy.modules.powers.entity.ai.AIEvilAttack;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
@@ -51,13 +52,23 @@ public class PowerUtils {
 
 
     /**
+     * Block state wrapper on {@link PowerUtils#isBlockMetal}
+     *
+     * @param state BlockState to check
+     * @return whether or not the block state is metal
+     */
+    public static boolean isBlockStateMetal(BlockState state){
+        return isBlockMetal(state.getBlock());
+    }
+
+    /**
      * Determines if a block is metal or not
      *
      * @param block to be checked
-     * @return Whether or not the item is metal
+     * @return Whether or not the block is metal
      */
     public static boolean isBlockMetal(Block block) {
-        return PowersConfig.whitelist.contains(block.getRegistryName().toString());
+        return isOnWhitelist(block.getRegistryName().toString());
     }
 
     /**
@@ -67,7 +78,12 @@ public class PowerUtils {
      * @return Whether or not the item is metal
      */
     public static boolean isItemMetal(ItemStack item) {
-        return PowersConfig.whitelist.contains(item.getItem().getRegistryName().toString());
+        return isOnWhitelist(item.getItem().getRegistryName().toString());
+    }
+
+
+    private static boolean isOnWhitelist(String string){
+        return PowersConfig.whitelist.contains(string);
     }
 
     /**
@@ -89,7 +105,7 @@ public class PowerUtils {
         }
 
         if (entity instanceof FallingBlockEntity) {
-            return isBlockMetal(((FallingBlockEntity) entity).getBlockState().getBlock());
+            return isBlockStateMetal(((FallingBlockEntity) entity).getBlockState());
         }
         if (entity instanceof IronNuggetEntity || entity instanceof GoldNuggetEntity) {
             return true;
