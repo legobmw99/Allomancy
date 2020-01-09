@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
@@ -9,10 +8,11 @@ import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticle;
 import com.legobmw99.allomancy.modules.powers.network.ChangeEmotionPacket;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullBlock;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullEntity;
+import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import com.legobmw99.allomancy.network.Network;
+import com.legobmw99.allomancy.setup.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -120,6 +120,15 @@ public class ClientEventHandler {
                             }
                         }
                     }
+                    if (cap.isBurning(Metal.NICROSIL)) {
+                        Entity entity;
+                        if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
+                            entity = ((EntityRayTraceResult) trace).getEntity();
+                            if (entity instanceof PlayerEntity) {
+                                Network.sendToServer(new UpdateEnhancedPacket(true, entity.getEntityId()));
+                            }
+                        }
+                    }
                 }
 
 
@@ -163,7 +172,8 @@ public class ClientEventHandler {
 
                     for (PlayerEntity otherPlayer : nearby_players) {
                         AllomancyCapability capOther = AllomancyCapability.forPlayer(otherPlayer);
-                        if (capOther.isBurning(Metal.COPPER)) { // player is inside a smoker cloud, should not detect
+                        if (capOther.isBurning(Metal.COPPER) && (!cap.isEnhanced() || capOther.isEnhanced())) {
+                            // player is inside a smoker cloud, should not detect
                             nearby_allomancers.clear();
                             return;
                         } else {
@@ -260,7 +270,9 @@ public class ClientEventHandler {
 
 
         Vec3d playervec = view.add(0, -.1, 0);
-        // Iron and Steel lines
+        /*********************************************
+         * IRON AND STEEL LINES                      *
+         *********************************************/
         if ((cap.isBurning(Metal.IRON) || cap.isBurning(Metal.STEEL))) {
 
             for (Entity entity : metal_entities) {
@@ -272,30 +284,33 @@ public class ClientEventHandler {
             }
         }
 
+        /*********************************************
+         * BRONZE LINES                              *
+         *********************************************/
         if ((cap.isBurning(Metal.BRONZE) && !cap.isBurning(Metal.COPPER))) {
             for (PlayerEntity playerEntity : nearby_allomancers) {
                 ClientUtils.drawMetalLine(playervec, playerEntity.getPositionVec(), 5.0F, 0.7F, 0.15F, 0.15F);
             }
         }
 
-        if(cap.isBurning(Metal.ELECTRUM)){
-            BlockPos spawn_pos = cap.getSpawnLoc();
-            if (spawn_pos == null){
-                spawn_pos = player.world.getSpawnPoint();
-            }
-
-            if(player.dimension == DimensionType.OVERWORLD){
-                ClientUtils.drawMetalLine(playervec, blockVec(spawn_pos), 3.0F, 0.7F, 0.8F, 0.2F);
-            }
-        }
-
-        if(cap.isBurning(Metal.GOLD)){
+        /*********************************************
+         * GOLD AND ELECTRUM LINES                   *
+         *********************************************/
+        if (cap.isBurning(Metal.GOLD)) {
             BlockPos death_pos = cap.getDeathLoc();
-            if (death_pos != null && player.dimension == cap.getDeathDim()){
+            if (death_pos != null && player.dimension == cap.getDeathDim()) {
                 ClientUtils.drawMetalLine(playervec, blockVec(death_pos), 3.0F, 0.9F, 0.85F, 0.0F);
             }
         }
-
+        if (cap.isBurning(Metal.ELECTRUM)) {
+            BlockPos spawn_pos = cap.getSpawnLoc();
+            if (spawn_pos == null) {
+                spawn_pos = player.world.getSpawnPoint();
+            }
+            if (player.dimension == DimensionType.OVERWORLD) {
+                ClientUtils.drawMetalLine(playervec, blockVec(spawn_pos), 3.0F, 0.7F, 0.8F, 0.2F);
+            }
+        }
 
         RenderSystem.polygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
         RenderSystem.disableBlend();
@@ -305,7 +320,7 @@ public class ClientEventHandler {
         RenderSystem.popMatrix();
     }
 
-    private static Vec3d blockVec(BlockPos b){
+    private static Vec3d blockVec(BlockPos b) {
         return new Vec3d(b).add(0.5, 0.5, 0.5);
     }
 

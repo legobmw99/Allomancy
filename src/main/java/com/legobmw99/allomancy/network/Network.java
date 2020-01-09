@@ -28,6 +28,7 @@ public class Network {
         INSTANCE.registerMessage(nextIndex(), ChangeEmotionPacket.class, ChangeEmotionPacket::encode, ChangeEmotionPacket::decode, ChangeEmotionPacket::handle);
         INSTANCE.registerMessage(nextIndex(), TryPushPullEntity.class, TryPushPullEntity::encode, TryPushPullEntity::decode, TryPushPullEntity::handle);
         INSTANCE.registerMessage(nextIndex(), TryPushPullBlock.class, TryPushPullBlock::encode, TryPushPullBlock::decode, TryPushPullBlock::handle);
+        INSTANCE.registerMessage(nextIndex(), UpdateEnhancedPacket.class, UpdateEnhancedPacket::encode, UpdateEnhancedPacket::decode, UpdateEnhancedPacket::handle);
     }
 
     public static void sendToServer(Object msg) {

@@ -42,7 +42,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     private BlockPos death_pos;
     private BlockPos spawn_pos;
 
-    private boolean is_enhanced;
+    private int enhanced_time;
 
 
     private LazyOptional<AllomancyCapability> handler;
@@ -62,6 +62,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         burning_metals = new boolean[powers];
         Arrays.fill(burning_metals, false);
 
+        enhanced_time = 0;
         damange_stored = 0;
         death_pos = null;
         spawn_pos = null;
@@ -256,6 +257,18 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         burn_time[metal.getIndex()] = burnTime;
     }
 
+    public void decEnhanced() {
+        if (isEnhanced())
+            this.enhanced_time--;
+    }
+
+    public void setEnhanced(int time) {
+        this.enhanced_time = time;
+    }
+
+    public boolean isEnhanced() {
+        return this.enhanced_time > 0;
+    }
 
     /**
      * Runs each worldTick, checking the burn times, abilities, and metal
@@ -277,9 +290,6 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
                     if (capability.getBurnTime(metal) <= 0) {
                         if (capability.getAmount(metal) <= 0) {
                             capability.setBurning(metal, false);
-                            if (metal == Metal.DURALUMIN) {
-                                capability.drainMetals(Arrays.stream(Metal.values()).filter(capability::isBurning).toArray(Metal[]::new));
-                            }
                         } else {
                             capability.setAmount(metal, capability.getAmount(metal) - 1);
                         }

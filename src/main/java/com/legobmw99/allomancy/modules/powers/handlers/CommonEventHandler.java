@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.network.AllomancyCapabilityPacket;
+import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import com.legobmw99.allomancy.network.Network;
@@ -33,7 +34,9 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -156,7 +159,7 @@ public class CommonEventHandler {
             AllomancyCapability cap = AllomancyCapability.forPlayer(source);
 
             if (cap.isBurning(Metal.PEWTER)) {
-                if (cap.isBurning(Metal.DURALUMIN)) { // Duralumin OHK
+                if (cap.isEnhanced()) { // Duralumin OHK
                     event.setAmount(event.getAmount() + 500);
                 } else {
                     event.setAmount(event.getAmount() + 2);
@@ -173,7 +176,7 @@ public class CommonEventHandler {
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
             AllomancyCapability capHurt = AllomancyCapability.forPlayer(event.getEntityLiving());
             if (capHurt.isBurning(Metal.PEWTER)) {
-                if (capHurt.isBurning(Metal.DURALUMIN)) { // Duralumin invuln
+                if (capHurt.isEnhanced()) { // Duralumin invuln
                     Allomancy.LOGGER.debug("Canceling Damage");
                     event.setAmount(0);
                     event.setCanceled(true);
@@ -199,14 +202,37 @@ public class CommonEventHandler {
             for (PlayerEntity curPlayer : list) {
                 AllomancyCapability cap = AllomancyCapability.forPlayer(curPlayer);
                 if (!cap.isUninvested()) {
+
+                    /*********************************************
+                     * ALUMINUM AND DURALUMIN                    *
+                     *********************************************/
                     if (cap.isBurning(Metal.ALUMINUM)) {
                         PowerUtils.wipePlayer(curPlayer);
                     }
+                    if (cap.isBurning(Metal.DURALUMIN) && !cap.isEnhanced()) {
+                        cap.setEnhanced(2);
+                        Network.sendTo(new UpdateEnhancedPacket(2, curPlayer.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> curPlayer));
+                    } else if (!cap.isBurning(Metal.DURALUMIN) && cap.isEnhanced()) {
+                        cap.decEnhanced();
+                        if (!cap.isEnhanced()) { //Enhancement ran out this tick
+                            Network.sendTo(new UpdateEnhancedPacket(false, curPlayer.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> curPlayer));
+                            cap.drainMetals(Arrays.stream(Metal.values()).filter(cap::isBurning).toArray(Metal[]::new));
+                        }
+                    }
 
 
-                    // TODO Duralumin/Nicrosil
+                    // Run the necessary updates on the player's metals
+                    // Ran AFTER duralumin and aluminum to make sure they function correctly
+                    if (curPlayer instanceof ServerPlayerEntity) {
+                        AllomancyCapability.updateMetalBurnTime(cap, (ServerPlayerEntity) curPlayer);
+                    }
 
-                    if (cap.isBurning(Metal.DURALUMIN) && cap.isBurning(Metal.CHROMIUM)) {
+
+
+                    /*********************************************
+                     * CHROMIUM (enhanced)                       *
+                     *********************************************/
+                    if (cap.isEnhanced() && cap.isBurning(Metal.CHROMIUM)) {
                         if (world instanceof ServerWorld) {
                             int max = 20;
                             BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
@@ -218,7 +244,11 @@ public class CommonEventHandler {
                         }
                     }
 
-                    if (cap.isBurning(Metal.DURALUMIN) && cap.isBurning(Metal.ELECTRUM) && cap.getAmount(Metal.ELECTRUM) >= 9) {
+
+                    /*********************************************
+                     * GOLD AND ELECTRUM (enhanced)              *
+                     *********************************************/
+                    if (cap.isEnhanced() && cap.isBurning(Metal.ELECTRUM) && cap.getAmount(Metal.ELECTRUM) >= 9) {
                         BlockPos spawn_pos = cap.getSpawnLoc();
                         if (spawn_pos == null) {
                             spawn_pos = world.getSpawnPoint();
@@ -226,29 +256,31 @@ public class CommonEventHandler {
 
                         if (curPlayer.dimension == DimensionType.OVERWORLD) {
                             PowerUtils.teleport(world, curPlayer, spawn_pos);
-                            cap.drainMetals(Metal.DURALUMIN, Metal.ELECTRUM);
+                            if (cap.isBurning(Metal.DURALUMIN))
+                                cap.drainMetals(Metal.DURALUMIN);
+                            cap.drainMetals(Metal.ELECTRUM);
                         }
-                    } else if (cap.isBurning(Metal.DURALUMIN) && cap.isBurning(Metal.GOLD) && cap.getAmount(Metal.GOLD) >= 9) { // These should be mutually exclusive
+                    } else if (cap.isEnhanced() && cap.isBurning(Metal.GOLD) && cap.getAmount(Metal.GOLD) >= 9) { // These should be mutually exclusive
                         BlockPos death_pos = cap.getDeathLoc();
                         if (death_pos != null && curPlayer.dimension == cap.getDeathDim()) {
                             PowerUtils.teleport(world, curPlayer, death_pos);
-                            cap.drainMetals(Metal.DURALUMIN, Metal.GOLD);
+                            if (cap.isBurning(Metal.DURALUMIN))
+                                cap.drainMetals(Metal.DURALUMIN);
+                            cap.drainMetals(Metal.GOLD);
                         }
                     }
 
-                    // Run the necessary updates on the player's metals
-                    if (curPlayer instanceof ServerPlayerEntity) {
-                        AllomancyCapability.updateMetalBurnTime(cap, (ServerPlayerEntity) curPlayer);
-                    }
 
+                    /*********************************************
+                     * BENDALLOY AND CADMIUM                     *
+                     *********************************************/
                     if (cap.isBurning(Metal.BENDALLOY) && !cap.isBurning(Metal.CADMIUM)) {
                         curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 10, 3, true, false));
                         curPlayer.livingTick();
                         curPlayer.livingTick();
 
                         if (world instanceof ServerWorld) {
-
-                            int max = cap.isBurning(Metal.DURALUMIN) ? 10: 5;
+                            int max = cap.isEnhanced() ? 10 : 5;
                             BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
                             BlockPos positive = new BlockPos(curPlayer).add(max, max, max);
                             world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
@@ -258,7 +290,7 @@ public class CommonEventHandler {
                             BlockPos.getAllInBox(negative, positive).forEach(bp -> {
                                 BlockState block = world.getBlockState(bp);
                                 TileEntity te = world.getTileEntity(bp);
-                                for (int i = 0; i < max*4 / (te == null ? 10 : 1); i++) {
+                                for (int i = 0; i < max * 4 / (te == null ? 10 : 1); i++) {
                                     if (te instanceof ITickableTileEntity) {
                                         ((ITickableTileEntity) te).tick();
                                     } else if (block.ticksRandomly()) {
@@ -269,20 +301,39 @@ public class CommonEventHandler {
                         }
                     }
                     if (cap.isBurning(Metal.CADMIUM) && !cap.isBurning(Metal.BENDALLOY)) {
-                        int max = cap.isBurning(Metal.DURALUMIN) ? 20: 10;
+                        int max = cap.isEnhanced() ? 20 : 10;
                         BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
                         BlockPos positive = new BlockPos(curPlayer).add(max, max, max);
-                        int slowness_amplifier = cap.isBurning(Metal.DURALUMIN) ? 255 : 2; // Duralumin freezes entities
+                        int slowness_amplifier = cap.isEnhanced() ? 255 : 2; // Duralumin freezes entities
                         world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
                             if (entity != curPlayer)
                                 entity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, slowness_amplifier, true, false));
                         });
                     }
 
-                    // Damage the player if they have stored damage and pewter cuts out
-                    if (!cap.isBurning(Metal.PEWTER) && (cap.getDamageStored() > 0)) {
-                        cap.setDamageStored(cap.getDamageStored() - 1);
-                        curPlayer.attackEntityFrom(DamageSource.MAGIC, 2);
+
+                    /*********************************************
+                     * TIN AND PEWTER                            *
+                     *********************************************/
+                    if (cap.isBurning(Metal.TIN)) {
+                        // Add night vision to tin-burners
+                        curPlayer.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, Short.MAX_VALUE, 5, true, false));
+                        if (cap.isEnhanced()) { // Tin and Duralumin is too much to handle
+                            curPlayer.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100, 150, true, false));
+                            if (world.rand.nextInt(50) == 0) {
+                                curPlayer.addPotionEffect(new EffectInstance(Effects.NAUSEA, 100, 0, true, false));
+                            }
+                        } else { // Remove blindness from normal tin burners
+                            if (curPlayer.isPotionActive(Effects.BLINDNESS)) {
+                                curPlayer.removePotionEffect(Effects.BLINDNESS);
+                            }
+                        }
+                    }
+                    // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing, only if the amplifier is 5
+                    if ((!cap.isBurning(Metal.TIN)) &&
+                            (curPlayer.getActivePotionEffect(Effects.NIGHT_VISION) != null &&
+                                    curPlayer.getActivePotionEffect(Effects.NIGHT_VISION).getAmplifier() == 5)) {
+                        curPlayer.removePotionEffect(Effects.NIGHT_VISION);
                     }
                     if (cap.isBurning(Metal.PEWTER)) {
                         //Add jump boost and speed to pewter burners
@@ -297,27 +348,21 @@ public class CommonEventHandler {
                         }
 
                     }
-                    if (cap.isBurning(Metal.TIN)) {
-                        // Add night vision to tin-burners
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, Short.MAX_VALUE, 5, true, false));
-                        if (cap.isBurning(Metal.DURALUMIN)) { // Tin and Duralumin is too much to handle
-                            curPlayer.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100, 5, true, false));
-                            if (world.rand.nextInt(50) == 0) {
-                                curPlayer.addPotionEffect(new EffectInstance(Effects.NAUSEA, 100, 0, true, false));
-                            }
-                        } else { // Remove blindness from normal tin burners
-                            if (curPlayer.isPotionActive(Effects.BLINDNESS)) {
-                                curPlayer.removePotionEffect(Effects.BLINDNESS);
-                            }
-                        }
+                    // Damage the player if they have stored damage and pewter cuts out
+                    if (!cap.isBurning(Metal.PEWTER) && (cap.getDamageStored() > 0)) {
+                        cap.setDamageStored(cap.getDamageStored() - 1);
+                        curPlayer.attackEntityFrom(DamageSource.MAGIC, 2);
                     }
 
-                    // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing, only if the amplifier is 5
-                    if ((!cap.isBurning(Metal.TIN)) &&
-                            (curPlayer.getActivePotionEffect(Effects.NIGHT_VISION) != null &&
-                                    curPlayer.getActivePotionEffect(Effects.NIGHT_VISION).getAmplifier() == 5)) {
-                        curPlayer.removePotionEffect(Effects.NIGHT_VISION);
+
+                    /*********************************************
+                     * COPPER (enhanced)                      *
+                     *********************************************/
+                    if (cap.isEnhanced() && cap.isBurning(Metal.COPPER)) {
+                        curPlayer.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 20, 50, true, false));
                     }
+
+
                 }
             }
         }
