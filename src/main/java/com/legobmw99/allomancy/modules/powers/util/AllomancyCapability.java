@@ -42,6 +42,8 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     private BlockPos death_pos;
     private BlockPos spawn_pos;
 
+    private boolean is_enhanced;
+
 
     private LazyOptional<AllomancyCapability> handler;
 
