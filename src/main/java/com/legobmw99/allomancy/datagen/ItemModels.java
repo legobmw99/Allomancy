@@ -29,7 +29,6 @@ public class ItemModels extends ItemModelProvider {
         largeItemHandheld(CombatSetup.KOLOSS_BLADE.get(), "item/koloss_blade");
 
         itemHandheld(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "item/allomantic_grinder");
-        itemHandheld(ConsumeSetup.VIAL.get(), "item/vial");
         itemHandheld(ConsumeSetup.LERASIUM_NUGGET.get(), "item/lerasium_nugget");
 
         parentedBlock(MaterialsSetup.COPPER_ORE.get(), "block/copper_ore");
@@ -47,6 +46,14 @@ public class ItemModels extends ItemModelProvider {
             Item flake = flake_reg.get();
             itemHandheld(flake, "item/" + flake.getRegistryName().getPath());
         }
+
+        Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial (filled)");
+        ModelFile mf = getBuilder("vial_filled").parent(getExistingFile(mcLoc("item/handheld")))
+                .texture("layer0", modLoc("item/full_vial"));
+        Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial");
+        getBuilder("vial").parent(getExistingFile(mcLoc("item/handheld")))
+                .texture("layer0", modLoc("item/vial"))
+                .override().predicate(mcLoc("custom_model_data"), 1).model(mf).end();
 
     }
 

@@ -78,6 +78,7 @@ public class VialItemRecipe extends SpecialRecipe {
             for (Metal mt : Metal.values()) {
                 nbt.putBoolean(mt.getName(), metals[mt.getIndex()]);
             }
+            nbt.putInt("CustomModelData", 1);
             this.item_result.setTag(nbt);
             return true;
         } else {

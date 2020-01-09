@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.IntNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -142,6 +143,7 @@ public class VialItem extends Item {
             for (Metal mt : Metal.values()) {
                 nbt.putBoolean(mt.getName(), true);
             }
+            nbt.putInt("CustomModelData", 1);
             resultItem.setTag(nbt);
             items.add(resultItem);
         }
