@@ -29,6 +29,7 @@ public class MaterialsConfig {
     public static void init(ForgeConfigSpec.Builder common_builder, ForgeConfigSpec.Builder client_builder) {
         common_builder.comment("Settings for the mod's added generation").push("WorldGen");
 
+        // TODO: 4 new ores
         common_builder.push("Aluminum");
         generate_aluminum = common_builder.comment("Generate Aluminum Ore").define("generate_aluminum", true);
         aluminum_density = common_builder.comment("Density of Aluminum Ore").defineInRange("aluminum_density", 15, 1, 40);

@@ -37,7 +37,6 @@ public class MaterialsSetup {
         MinecraftForge.EVENT_BUS.register(new LootTableInjector());
     }
 
-    // TODO:  Chromium, Cadmium
     public static final RegistryObject<Block> ALUMINUM_ORE = BLOCKS.register("aluminum_ore", AllomancySetup::createStandardBlock);
     public static final RegistryObject<Item> ALUMINUM_ORE_ITEM = ITEMS.register("aluminum_ore", () -> new BlockItem(ALUMINUM_ORE.get(), AllomancySetup.createStandardItemProperties()));
     public static final RegistryObject<Item> ALUMINUM_INGOT = ITEMS.register("aluminum_ingot",  AllomancySetup::createStandardItem);

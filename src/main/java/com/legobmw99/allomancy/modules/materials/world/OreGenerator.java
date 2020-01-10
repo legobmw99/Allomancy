@@ -48,6 +48,8 @@ public class OreGenerator {
     private static ArrayList<OreData> ores = new ArrayList<>();
 
     static {
+        // TODO: 4 new ores
+
         ores.add(new OreData(MaterialsConfig.copper_max_y.get(), MaterialsConfig.copper_min_y.get(), 9, MaterialsConfig.copper_density.get(),
                 MaterialsSetup.COPPER_ORE.get(), MaterialsConfig.generate_copper.get()));
         ores.add(new OreData(MaterialsConfig.tin_max_y.get(), MaterialsConfig.tin_min_y.get(), 9, MaterialsConfig.tin_density.get(),
