@@ -11,6 +11,7 @@ import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import org.omg.CORBA.ObjectHolder;
 
 public class Network {
 
@@ -51,7 +52,11 @@ public class Network {
     }
 
     public static void sync(AllomancyCapability cap, PlayerEntity player) {
-        sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
+        sync(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
+    }
+
+    public static void sync(Object msg, PlayerEntity player){
+        sendTo(msg, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
     }
 
 }

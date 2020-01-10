@@ -45,7 +45,7 @@ public class UpdateEnhancedPacket {
                 playerCap.setEnhanced(enhance_time);
 
                 if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER){ // Update player of own status
-                    Network.sendTo(new UpdateEnhancedPacket(enhance_time, entityID), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
+                    Network.sync(new UpdateEnhancedPacket(enhance_time, entityID), player);
                 }
             }
 

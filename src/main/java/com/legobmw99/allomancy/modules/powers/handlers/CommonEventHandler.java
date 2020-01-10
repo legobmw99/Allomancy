@@ -211,11 +211,11 @@ public class CommonEventHandler {
                     }
                     if (cap.isBurning(Metal.DURALUMIN) && !cap.isEnhanced()) {
                         cap.setEnhanced(2);
-                        Network.sendTo(new UpdateEnhancedPacket(2, curPlayer.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> curPlayer));
+                        Network.sync(new UpdateEnhancedPacket(2, curPlayer.getEntityId()),  curPlayer);
                     } else if (!cap.isBurning(Metal.DURALUMIN) && cap.isEnhanced()) {
                         cap.decEnhanced();
                         if (!cap.isEnhanced()) { //Enhancement ran out this tick
-                            Network.sendTo(new UpdateEnhancedPacket(false, curPlayer.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> curPlayer));
+                            Network.sync(new UpdateEnhancedPacket(false, curPlayer.getEntityId()), curPlayer);
                             cap.drainMetals(Arrays.stream(Metal.values()).filter(cap::isBurning).toArray(Metal[]::new));
                         }
                     }
