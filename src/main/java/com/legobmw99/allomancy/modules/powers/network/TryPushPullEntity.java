@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 public class TryPushPullEntity {
 
     private int entityIDOther;
-    private byte direction;
+    private int direction;
 
     /**
      * Send a request to the server to use iron or steel on an entity
@@ -25,7 +25,7 @@ public class TryPushPullEntity {
      * @param entityIDOther the entity you are requesting the data of
      * @param direction     the direction (1 for push, -1 for pull)
      */
-    public TryPushPullEntity(int entityIDOther, byte direction) {
+    public TryPushPullEntity(int entityIDOther, int direction) {
         this.entityIDOther = entityIDOther;
         this.direction = direction;
 
@@ -33,11 +33,11 @@ public class TryPushPullEntity {
 
     public void encode(PacketBuffer buf) {
         buf.writeInt(this.entityIDOther);
-        buf.writeByte(this.direction);
+        buf.writeInt(this.direction);
     }
 
     public static TryPushPullEntity decode(PacketBuffer buf) {
-        return new TryPushPullEntity(buf.readInt(), buf.readByte());
+        return new TryPushPullEntity(buf.readInt(), buf.readInt());
     }
 
 

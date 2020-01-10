@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
+import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,6 +13,7 @@ public class ChangeEmotionPacket {
 
     private int entityID;
     private boolean make_aggressive;
+
 
     /**
      * Make a mob either angry or passive, depending on aggro
@@ -38,10 +40,14 @@ public class ChangeEmotionPacket {
         ctx.get().enqueueWork(() -> {
             PlayerEntity allomancer = ctx.get().getSender();
             CreatureEntity target = (CreatureEntity) allomancer.world.getEntityByID(entityID);
-            if ((target != null) && make_aggressive) {
-                PowerUtils.riotEntity(target, allomancer);
-            } else if ((target != null) && !make_aggressive) {
-                PowerUtils.sootheEntity(target, allomancer);
+            if(target == null){
+                return;
+            }
+            boolean enhanced = AllomancyCapability.forPlayer(allomancer).isEnhanced();
+            if (make_aggressive) {
+                PowerUtils.riotEntity(target, allomancer, enhanced);
+            } else {
+                PowerUtils.sootheEntity(target, allomancer, enhanced);
             }
         });
         ctx.get().setPacketHandled(true);

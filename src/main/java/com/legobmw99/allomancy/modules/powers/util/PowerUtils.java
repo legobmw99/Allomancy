@@ -36,6 +36,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import java.util.function.Predicate;
@@ -57,7 +58,7 @@ public class PowerUtils {
      * @param state BlockState to check
      * @return whether or not the block state is metal
      */
-    public static boolean isBlockStateMetal(BlockState state){
+    public static boolean isBlockStateMetal(BlockState state) {
         return isBlockMetal(state.getBlock());
     }
 
@@ -82,7 +83,7 @@ public class PowerUtils {
     }
 
 
-    private static boolean isOnWhitelist(String string){
+    private static boolean isOnWhitelist(String string) {
         return PowersConfig.whitelist.contains(string);
     }
 
@@ -174,7 +175,7 @@ public class PowerUtils {
         toMove.velocityChanged = true;
 
         // Only save players from fall damage
-        if (toMove instanceof ServerPlayerEntity) {
+        if (toMove instanceof ServerPlayerEntity && Math.abs(directionScalar) <= 1) {
             toMove.fallDistance = 0;
         }
     }
@@ -191,73 +192,91 @@ public class PowerUtils {
         }
     }
 
-    public static void riotEntity(CreatureEntity target, PlayerEntity allomancer) {
+    public static void riotEntity(CreatureEntity target, PlayerEntity allomancer, boolean enhanced) {
         try {
-            //Enable Targeting goals
-            target.targetSelector.enableFlag(Goal.Flag.TARGET);
-            //Add new goals
-            target.setAttackTarget(allomancer);
-            target.setRevengeTarget(allomancer);
-            target.targetSelector.addGoal(1, new AIAttackOnCollideExtended(target, 1d, false));
-            target.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(target, PlayerEntity.class, false));
-            target.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(target, target.getClass(), false));
-            target.goalSelector.addGoal(4, new LookRandomlyGoal(target));
-            target.targetSelector.addGoal(2, new HurtByTargetGoal(target).setCallsForHelp());
-            if (target.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null && !(target instanceof GuardianEntity)) {
-                target.goalSelector.addGoal(3, new MeleeAttackGoal(target, 1.2D, true));
-            }
+            if (!enhanced) {
+                //Enable Targeting goals
+                target.targetSelector.enableFlag(Goal.Flag.TARGET);
+                //Add new goals
+                target.setAttackTarget(allomancer);
+                target.setRevengeTarget(allomancer);
+                target.targetSelector.addGoal(1, new AIAttackOnCollideExtended(target, 1d, false));
+                target.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(target, PlayerEntity.class, false));
+                target.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(target, target.getClass(), false));
+                target.goalSelector.addGoal(4, new LookRandomlyGoal(target));
+                target.targetSelector.addGoal(2, new HurtByTargetGoal(target).setCallsForHelp());
+                if (target.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null && !(target instanceof GuardianEntity)) {
+                    target.goalSelector.addGoal(3, new MeleeAttackGoal(target, 1.2D, true));
+                }
 
-            if (target instanceof CreeperEntity) {
-                target.goalSelector.addGoal(1, new CreeperSwellGoal((CreeperEntity) target));
-            }
-            if (target instanceof RabbitEntity) {
-                target.goalSelector.addGoal(1, new AIEvilAttack((RabbitEntity) target));
-            }
-            if (target instanceof AbstractSkeletonEntity) {
-                target.goalSelector.addGoal(1, new RangedBowAttackGoal<>((AbstractSkeletonEntity) target, 1.0D, 20, 15.0F));
-            }
-            if (target instanceof IllusionerEntity) {
-                target.goalSelector.addGoal(1, new RangedBowAttackGoal<>((IllusionerEntity) target, 0.5D, 20, 15.0F));
-            }
-            if (target instanceof PillagerEntity) {
-                target.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>((PillagerEntity) target, 1.0D, 8.0F));
+                target.setAggroed(true);
+
+                if (target instanceof CreeperEntity) {
+                    target.goalSelector.addGoal(1, new CreeperSwellGoal((CreeperEntity) target));
+                }
+                if (target instanceof RabbitEntity) {
+                    target.goalSelector.addGoal(1, new AIEvilAttack((RabbitEntity) target));
+                }
+                if (target instanceof AbstractSkeletonEntity) {
+                    target.goalSelector.addGoal(1, new RangedBowAttackGoal<>((AbstractSkeletonEntity) target, 1.0D, 20, 15.0F));
+                }
+                if (target instanceof IllusionerEntity) {
+                    target.goalSelector.addGoal(1, new RangedBowAttackGoal<>((IllusionerEntity) target, 0.5D, 20, 15.0F));
+                }
+                if (target instanceof PillagerEntity) {
+                    target.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>((PillagerEntity) target, 1.0D, 8.0F));
+                }
+            } else {
+                target.world.createExplosion(target,
+                        target.getPositionVec().getX(), target.getPositionVec().getY(), target.getPositionVec().getZ(),
+                        1.2F, false, Explosion.Mode.BREAK);
+                target.remove();
             }
         } catch (Exception e) {
             Allomancy.LOGGER.error("Failed to riot entity " + target + "! Please report this error!", e);
         }
     }
 
-    public static void sootheEntity(CreatureEntity target, PlayerEntity allomancer) {
+    public static void sootheEntity(CreatureEntity target, PlayerEntity allomancer, boolean enhanced) {
         try {
-            // Remove all current aggro goals
-            target.goalSelector.getRunningGoals().filter(isAggroGoal).forEach(target.goalSelector::removeGoal);
-            target.targetSelector.getRunningGoals().filter(isAggroGoal).forEach(target.targetSelector::removeGoal);
-            target.goalSelector.tick();
-            target.targetSelector.tick();
-            target.setAttackTarget(null);
-            target.setRevengeTarget(null);
-            //Disable targeting as a whole
-            target.targetSelector.disableFlag(Goal.Flag.TARGET);
-            //Add new goals
-            target.goalSelector.addGoal(7, new LookAtGoal(target, PlayerEntity.class, 6.0F));
+            if (!enhanced) {
+                if(target.isAIDisabled()){
+                    target.setNoAI(false);
+                }
+                // Remove all current aggro goals
+                target.goalSelector.getRunningGoals().filter(isAggroGoal).forEach(target.goalSelector::removeGoal);
+                target.targetSelector.getRunningGoals().filter(isAggroGoal).forEach(target.targetSelector::removeGoal);
+                target.goalSelector.tick();
+                target.targetSelector.tick();
+                target.setAttackTarget(null);
+                target.setRevengeTarget(null);
+                //Disable targeting as a whole
+                target.targetSelector.disableFlag(Goal.Flag.TARGET);
+                target.setAggroed(false);
+                //Add new goals
+                target.goalSelector.addGoal(7, new LookAtGoal(target, PlayerEntity.class, 6.0F));
 
-            if (target instanceof TameableEntity) {
-                if (Math.random() < 0.3)
-                    ((TameableEntity) target).setTamedBy(allomancer);
+                if (target instanceof TameableEntity) {
+                    if (Math.random() < 0.3)
+                        ((TameableEntity) target).setTamedBy(allomancer);
+                }
+                if (target instanceof AbstractHorseEntity) {
+                    if (Math.random() < 0.3)
+                        ((AbstractHorseEntity) target).setTamedBy(allomancer);
+                }
+                if (target instanceof SheepEntity) {
+                    target.goalSelector.addGoal(1, new EatGrassGoal(target));
+                }
+                if (target instanceof VillagerEntity) {
+                    ((VillagerEntity) target).updateReputation(IReputationType.TRADE, allomancer);
+                }
+                if (target instanceof WanderingTraderEntity) {
+                    target.goalSelector.addGoal(1, new TradeWithPlayerGoal((AbstractVillagerEntity) target));
+                }
+            } else { // Completely remove all ai if enhanced
+                target.setNoAI(true);
             }
-            if (target instanceof AbstractHorseEntity) {
-                if (Math.random() < 0.3)
-                    ((AbstractHorseEntity) target).setTamedBy(allomancer);
-            }
-            if (target instanceof SheepEntity) {
-                target.goalSelector.addGoal(1, new EatGrassGoal(target));
-            }
-            if (target instanceof VillagerEntity) {
-                ((VillagerEntity) target).updateReputation(IReputationType.TRADE, allomancer);
-            }
-            if (target instanceof WanderingTraderEntity) {
-                target.goalSelector.addGoal(1, new TradeWithPlayerGoal((AbstractVillagerEntity) target));
-            }
+
         } catch (Exception e) {
             Allomancy.LOGGER.error("Failed to soothe entity " + target + "! Please report this error!", e);
         }

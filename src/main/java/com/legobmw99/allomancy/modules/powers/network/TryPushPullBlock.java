@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 public class TryPushPullBlock {
 
     private BlockPos blockPos;
-    private byte direction;
+    private int direction;
 
     /**
      * Send a request to the server to use iron or steel on a block
@@ -21,18 +21,18 @@ public class TryPushPullBlock {
      * @param block     the block
      * @param direction the direction (1 for push, -1 for pull)
      */
-    public TryPushPullBlock(BlockPos block, byte direction) {
+    public TryPushPullBlock(BlockPos block, int direction) {
         this.blockPos = block;
         this.direction = direction;
     }
 
     public void encode(PacketBuffer buf) {
         buf.writeBlockPos(this.blockPos);
-        buf.writeByte(this.direction);
+        buf.writeInt(this.direction);
     }
 
     public static TryPushPullBlock decode(PacketBuffer buf) {
-        return new TryPushPullBlock(buf.readBlockPos(), buf.readByte());
+        return new TryPushPullBlock(buf.readBlockPos(), buf.readInt());
     }
 
 
@@ -42,12 +42,11 @@ public class TryPushPullBlock {
                     BlockPos pos = blockPos;
                     // Sanity check to make sure server has same configs and that the block is loaded in the server
                     if ((player.world.isBlockLoaded(pos) && (PowerUtils.isBlockStateMetal(player.world.getBlockState(pos)))) // Check Block
-                            || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && (!player.findAmmo(player.getHeldItemMainhand()).isEmpty()) /*some sort of find ammo func*/ &&
-                            direction == PowerUtils.PUSH)) {
+                            || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && (!player.findAmmo(player.getHeldItemMainhand()).isEmpty()) && direction > 0)) {
                         // Check for the coin bag
                         if (player.world.getBlockState(pos).getBlock() instanceof IAllomanticallyActivatedBlock) {
                             ((IAllomanticallyActivatedBlock) player.world.getBlockState(pos).getBlock())
-                                    .onBlockActivatedAllomantically(player.world.getBlockState(pos), player.world, pos, player, direction == PowerUtils.PUSH);
+                                    .onBlockActivatedAllomantically(player.world.getBlockState(pos), player.world, pos, player, direction > 0);
                         } else {
                             PowerUtils.move(direction, player, pos);
                         }

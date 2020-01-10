@@ -62,21 +62,25 @@ public class ClientEventHandler {
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
             if (!cap.isUninvested()) {
+                // Duralumin makes you move much quicker and reach much further
+                int force_multiplier = cap.isEnhanced() ? 4 : 1;
+                int dist_modifier = cap.isEnhanced() ? 2 : 1;
+
                 // Handle our input-based powers
                 if (this.mc.gameSettings.keyBindAttack.isKeyDown()) {
-                    // Ray trace 20 blocks
-                    RayTraceResult trace = ClientUtils.getMouseOverExtended(20F);
+                    // Ray trace 20 blocks (or 40 if enhanced)
+                    RayTraceResult trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
                     // All iron pulling powers
                     if (cap.isBurning(Metal.IRON)) {
                         if (trace != null) {
                             if (trace.getType() == RayTraceResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
-                                Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), PowerUtils.PULL));
+                                Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), PowerUtils.PULL * force_multiplier));
                             }
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
                                 if (PowerUtils.isBlockStateMetal(this.mc.world.getBlockState(bp)) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
-                                    Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PULL));
+                                    Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PULL * force_multiplier));
                                 }
                             }
                         }
@@ -93,19 +97,20 @@ public class ClientEventHandler {
                     }
                 }
                 if (this.mc.gameSettings.keyBindUseItem.isKeyDown()) {
-                    // Ray trace 20 blocks
-                    RayTraceResult trace = ClientUtils.getMouseOverExtended(20F);
+                    // Ray trace 20 blocks (or 40 if enhanced)
+                    RayTraceResult trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
                     // All steel pushing powers
                     if (cap.isBurning(Metal.STEEL)) {
+
                         if (trace != null) {
                             if (trace.getType() == RayTraceResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
-                                Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), PowerUtils.PUSH));
+                                Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getEntityId(), PowerUtils.PUSH * force_multiplier));
                             }
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
                                 if (PowerUtils.isBlockStateMetal(this.mc.world.getBlockState(bp)) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
-                                    Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PUSH));
+                                    Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PUSH * force_multiplier));
                                 }
                             }
                         }
@@ -120,6 +125,7 @@ public class ClientEventHandler {
                             }
                         }
                     }
+                    // TODO: Test
                     if (cap.isBurning(Metal.NICROSIL)) {
                         Entity entity;
                         if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
