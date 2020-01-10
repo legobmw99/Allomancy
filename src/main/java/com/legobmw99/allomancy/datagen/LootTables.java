@@ -36,10 +36,14 @@ public class LootTables extends LootTableProvider {
     }
 
     private void addBlockTables() {
+        addSimpleBlock("aluminum_ore", MaterialsSetup.ALUMINUM_ORE.get());
+        addSimpleBlock("cadmium_ore", MaterialsSetup.CADMIUM_ORE.get());
+        addSimpleBlock("chromium_ore", MaterialsSetup.CHROMIUM_ORE.get());
         addSimpleBlock("copper_ore", MaterialsSetup.COPPER_ORE.get());
+        addSimpleBlock("lead_ore", MaterialsSetup.LEAD_ORE.get());
+        addSimpleBlock("silver_ore", MaterialsSetup.SILVER_ORE.get());
         addSimpleBlock("tin_ore", MaterialsSetup.TIN_ORE.get());
         addSimpleBlock("zinc_ore", MaterialsSetup.ZINC_ORE.get());
-        addSimpleBlock("lead_ore", MaterialsSetup.LEAD_ORE.get());
         addSimpleBlock("iron_button", ExtrasSetup.IRON_BUTTON.get());
         addSimpleBlock("iron_lever", ExtrasSetup.IRON_LEVER.get());
     }

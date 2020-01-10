@@ -55,10 +55,14 @@ public class Recipes extends RecipeProvider {
         buildShaped(consumer, CombatSetup.KOLOSS_BLADE.get(), ConsumeSetup.LERASIUM_NUGGET.get(), "CC", "CC", "sC");
 
         // Ore Recipes
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.ALUMINUM_INGOT.get(), MaterialsSetup.ALUMINUM_ORE.get(), 0.6F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.CADMIUM_INGOT.get(), MaterialsSetup.CADMIUM_ORE.get(), 0.7F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.CHROMIUM_INGOT.get(), MaterialsSetup.CHROMIUM_ORE.get(), 0.7F);
         buildSmeltingAndBlasting(consumer, MaterialsSetup.COPPER_INGOT.get(), MaterialsSetup.COPPER_ORE.get(), 0.8F);
-        buildSmeltingAndBlasting(consumer, MaterialsSetup.ZINC_INGOT.get(), MaterialsSetup.ZINC_ORE.get(), 0.6F);
-        buildSmeltingAndBlasting(consumer, MaterialsSetup.TIN_INGOT.get(), MaterialsSetup.TIN_ORE.get(), 0.6F);
         buildSmeltingAndBlasting(consumer, MaterialsSetup.LEAD_INGOT.get(), MaterialsSetup.LEAD_ORE.get(), 0.4F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.SILVER_INGOT.get(), MaterialsSetup.SILVER_ORE.get(), 1.0F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.TIN_INGOT.get(), MaterialsSetup.TIN_ORE.get(), 0.6F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.ZINC_INGOT.get(), MaterialsSetup.ZINC_ORE.get(), 0.6F);
 
         buildShapless(consumer, ConsumeSetup.LERASIUM_NUGGET.get(), 1, Items.NETHER_STAR, ing(Items.NETHER_STAR), ing(Tags.Items.STORAGE_BLOCKS_GOLD));
 
@@ -74,16 +78,36 @@ public class Recipes extends RecipeProvider {
         // Mixing Recipes
         buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:steel_flakes_from_mixing",
-                ing(Items.COAL), ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
+                ing(Items.COAL),
+                ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
         buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:pewter_flakes_from_mixing",
-                ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get()));
+                ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()),
+                ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get()));
         buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:brass_flakes_from_mixing",
-                ing(MaterialsSetup.FLAKES.get(Metal.ZINC.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));
+                ing(MaterialsSetup.FLAKES.get(Metal.ZINC.getIndex()).get()),
+                ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));
         buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BRONZE.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:bronze_flakes_from_mixing",
-                ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));
+                ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()),
+                ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.DURALUMIN.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+                "allomancy:duralumin_flakes_from_mixing",
+                ing(MaterialsSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()),
+                ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.ELECTRUM.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+                "allomancy:electrum_flakes_from_mixing",
+                ing(MaterialsSetup.FLAKES.get(Metal.GOLD.getIndex()).get()),
+                ing(MaterialsSetup.FLAKES.get(MaterialsSetup.SILVER).get()));
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BENDALLOY.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+                "allomancy:bendalloy_flakes_from_mixing",
+                ing(MaterialsSetup.FLAKES.get(Metal.CADMIUM.getIndex()).get()),
+                ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get()));
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.NICROSIL.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+                "allomancy:nicrosil_flakes_from_mixing",
+                ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()),
+                ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
 
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
         ShapedRecipeBuilder.shapedRecipe(CombatSetup.COIN_BAG.get())

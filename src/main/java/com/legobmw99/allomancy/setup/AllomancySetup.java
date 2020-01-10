@@ -33,7 +33,11 @@ public class AllomancySetup {
     }
 
     public static Item createStandardItem(){
-        return new Item(AllomancySetup.createStandardItemProperties());
+        return new Item(createStandardItemProperties());
+    }
+
+    public static Block createStandardBlock(){
+        return new Block(createStandardBlockProperties());
     }
 
     public static void clientInit(final FMLClientSetupEvent e) {

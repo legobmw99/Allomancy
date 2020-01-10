@@ -20,9 +20,13 @@ public class Languages extends LanguageProvider {
             add("metals." + mt.getName(), mt.getDisplayName());
         }
 
-        add(MaterialsSetup.TIN_ORE.get(), "Tin Ore");
-        add(MaterialsSetup.LEAD_ORE.get(), "Lead Ore");
+        add(MaterialsSetup.ALUMINUM_ORE.get(), "Aluminum Ore");
+        add(MaterialsSetup.CADMIUM_ORE.get(), "Cadmium Ore");
+        add(MaterialsSetup.CHROMIUM_ORE.get(), "Chromium Ore");
         add(MaterialsSetup.COPPER_ORE.get(), "Copper Ore");
+        add(MaterialsSetup.LEAD_ORE.get(), "Lead Ore");
+        add(MaterialsSetup.SILVER_ORE.get(), "Silver Ore");
+        add(MaterialsSetup.TIN_ORE.get(), "Tin Ore");
         add(MaterialsSetup.ZINC_ORE.get(), "Zinc Ore");
         add(ExtrasSetup.IRON_BUTTON.get(), "Iron Button");
         add(ExtrasSetup.IRON_LEVER.get(), "Iron Lever");
@@ -43,17 +47,22 @@ public class Languages extends LanguageProvider {
         add("item.allomancy.vial.lore_count","Contains %d metals");
         add("item.allomancy.vial.lore_inst", "Hold SHIFT to view");
 
-        add(MaterialsSetup.TIN_INGOT.get(), "Tin Ingot");
+        add(MaterialsSetup.ALUMINUM_INGOT.get(), "Aluminum Ingot");
+        add(MaterialsSetup.CADMIUM_INGOT.get(), "Cadmium Ingot");
+        add(MaterialsSetup.CHROMIUM_INGOT.get(), "Chromium Ingot");
         add(MaterialsSetup.COPPER_INGOT.get(), "Copper Ingot");
-        add(MaterialsSetup.BRONZE_INGOT.get(), "Bronze Ingot");
-        add(MaterialsSetup.ZINC_INGOT.get(), "Zinc Ingot");
         add(MaterialsSetup.BRASS_INGOT.get(), "Brass Ingot");
+        add(MaterialsSetup.BRONZE_INGOT.get(), "Bronze Ingot");
         add(MaterialsSetup.LEAD_INGOT.get(), "Lead Ingot");
+        add(MaterialsSetup.SILVER_INGOT.get(), "Silver Ingot");
+        add(MaterialsSetup.TIN_INGOT.get(), "Tin Ingot");
+        add(MaterialsSetup.ZINC_INGOT.get(), "Zinc Ingot");
 
         for(Metal mt: Metal.values()){
             add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), mt.getDisplayName() + " Flakes");
         }
         add(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get(), "Lead Flakes");
+        add(MaterialsSetup.FLAKES.get(MaterialsSetup.SILVER).get(), "Silver Flakes");
 
         add(CombatSetup.GOLD_NUGGET.get(), "Gold Nugget");
         add(CombatSetup.IRON_NUGGET.get(), "Iron Nugget");

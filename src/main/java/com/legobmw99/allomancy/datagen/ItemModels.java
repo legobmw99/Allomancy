@@ -31,10 +31,19 @@ public class ItemModels extends ItemModelProvider {
         itemHandheld(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "item/allomantic_grinder");
         itemHandheld(ConsumeSetup.LERASIUM_NUGGET.get(), "item/lerasium_nugget");
 
+        parentedBlock(MaterialsSetup.ALUMINUM_ORE.get(), "block/aluminum_ore");
+        parentedBlock(MaterialsSetup.CADMIUM_ORE.get(), "block/cadmium_ore");
+        parentedBlock(MaterialsSetup.CHROMIUM_ORE.get(), "block/chromium_ore");
         parentedBlock(MaterialsSetup.COPPER_ORE.get(), "block/copper_ore");
+        parentedBlock(MaterialsSetup.LEAD_ORE.get(), "block/lead_ore");
+        parentedBlock(MaterialsSetup.SILVER_ORE.get(), "block/silver_ore");
         parentedBlock(MaterialsSetup.TIN_ORE.get(), "block/tin_ore");
         parentedBlock(MaterialsSetup.ZINC_ORE.get(), "block/zinc_ore");
-        parentedBlock(MaterialsSetup.LEAD_ORE.get(), "block/lead_ore");
+
+        itemHandheld(MaterialsSetup.ALUMINUM_INGOT.get(), "item/aluminum_ingot");
+        itemHandheld(MaterialsSetup.CADMIUM_INGOT.get(), "item/cadmium_ingot");
+        itemHandheld(MaterialsSetup.CHROMIUM_INGOT.get(), "item/chromium_ingot");
+        itemHandheld(MaterialsSetup.SILVER_INGOT.get(), "item/silver_ingot");
         itemHandheld(MaterialsSetup.BRASS_INGOT.get(), "item/brass_ingot");
         itemHandheld(MaterialsSetup.TIN_INGOT.get(), "item/tin_ingot");
         itemHandheld(MaterialsSetup.COPPER_INGOT.get(), "item/copper_ingot");

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "allomancy:cadmium_ore"
+  },
+  "result": "allomancy:cadmium_ingot",
+  "experience": 0.7,
+  "cookingtime": 100
+}

@@ -21,10 +21,14 @@ public class BlockStates extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        singleTextureBlock(MaterialsSetup.ZINC_ORE.get(), "zinc_ore", "block/zinc_ore");
-        singleTextureBlock(MaterialsSetup.TIN_ORE.get(), "tin_ore", "block/tin_ore");
+        singleTextureBlock(MaterialsSetup.ALUMINUM_ORE.get(), "aluminum_ore", "block/aluminum_ore");
+        singleTextureBlock(MaterialsSetup.CADMIUM_ORE.get(), "cadmium_ore", "block/cadmium_ore");
+        singleTextureBlock(MaterialsSetup.CHROMIUM_ORE.get(), "chromium_ore", "block/chromium_ore");
         singleTextureBlock(MaterialsSetup.COPPER_ORE.get(), "copper_ore", "block/copper_ore");
         singleTextureBlock(MaterialsSetup.LEAD_ORE.get(), "lead_ore", "block/lead_ore");
+        singleTextureBlock(MaterialsSetup.SILVER_ORE.get(), "silver_ore", "block/silver_ore");
+        singleTextureBlock(MaterialsSetup.TIN_ORE.get(), "tin_ore", "block/tin_ore");
+        singleTextureBlock(MaterialsSetup.ZINC_ORE.get(), "zinc_ore", "block/zinc_ore");
 
         createIronLeverBlock();
         createIronButtonBlock();
