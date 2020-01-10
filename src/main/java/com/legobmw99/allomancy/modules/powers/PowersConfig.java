@@ -141,11 +141,17 @@ public class PowersConfig {
         add("allomancy:lerasium_nugget");
         add("allomancy:allomantic_grinder");
         add("allomancy:coin_bag");
+        add("allomancy:cadmium_ore");
+        add("allomancy:chromium_ore");
         add("allomancy:copper_ore");
+        add("allomancy:silver_ore");
         add("allomancy:tin_ore");
         add("allomancy:lead_ore");
         add("allomancy:zinc_ore");
+        add("allomancy:cadmium_ingot");
+        add("allomancy:chromium_ingot");
         add("allomancy:copper_ingot");
+        add("allomancy:silver_ingot");
         add("allomancy:tin_ingot");
         add("allomancy:lead_ingot");
         add("allomancy:zinc_ingot");
@@ -158,6 +164,7 @@ public class PowersConfig {
                 add("allomancy:" + mt.getName() + "_flakes");
         }
         add("allomancy:lead_flakes");
+        add("allomancy:silver_flakes");
 
         defaultList.sort(String::compareTo);
 

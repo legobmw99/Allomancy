@@ -39,8 +39,8 @@ public class Allomancy {
         // Register all Registries
         CombatSetup.register();
         ConsumeSetup.register();
-        ExtrasSetup.register();
         MaterialsSetup.register();
+        ExtrasSetup.register();
 
         // Load existing config
         AllomancyConfig.loadConfig(AllomancyConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve("allomancy-client.toml"));

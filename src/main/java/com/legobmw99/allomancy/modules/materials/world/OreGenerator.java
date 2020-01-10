@@ -7,7 +7,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.ConfiguredPlacement;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -49,14 +48,21 @@ public class OreGenerator {
 
     static {
         // TODO: 4 new ores
-
+        ores.add(new OreData(MaterialsConfig.aluminum_max_y.get(), MaterialsConfig.aluminum_min_y.get(), 9, MaterialsConfig.aluminum_density.get(),
+                MaterialsSetup.ALUMINUM_ORE.get(), MaterialsConfig.generate_aluminum.get()));
+        ores.add(new OreData(MaterialsConfig.cadmium_max_y.get(), MaterialsConfig.cadmium_min_y.get(), 7, MaterialsConfig.cadmium_density.get(),
+                MaterialsSetup.CADMIUM_ORE.get(), MaterialsConfig.generate_cadmium.get()));
+        ores.add(new OreData(MaterialsConfig.chromium_max_y.get(), MaterialsConfig.chromium_min_y.get(), 6, MaterialsConfig.cadmium_density.get(),
+                MaterialsSetup.CHROMIUM_ORE.get(), MaterialsConfig.generate_chromium.get()));
         ores.add(new OreData(MaterialsConfig.copper_max_y.get(), MaterialsConfig.copper_min_y.get(), 9, MaterialsConfig.copper_density.get(),
                 MaterialsSetup.COPPER_ORE.get(), MaterialsConfig.generate_copper.get()));
-        ores.add(new OreData(MaterialsConfig.tin_max_y.get(), MaterialsConfig.tin_min_y.get(), 9, MaterialsConfig.tin_density.get(),
-                MaterialsSetup.TIN_ORE.get(), MaterialsConfig.generate_tin.get()));
         ores.add(new OreData(MaterialsConfig.lead_max_y.get(), MaterialsConfig.lead_min_y.get(), 9, MaterialsConfig.lead_density.get(),
                 MaterialsSetup.LEAD_ORE.get(), MaterialsConfig.generate_lead.get()));
-        ores.add(new OreData(MaterialsConfig.zinc_max_y.get(), MaterialsConfig.zinc_min_y.get(), 9, MaterialsConfig.zinc_density.get(),
+        ores.add(new OreData(MaterialsConfig.silver_max_y.get(), MaterialsConfig.silver_min_y.get(), 7, MaterialsConfig.silver_density.get(),
+                MaterialsSetup.SILVER_ORE.get(), MaterialsConfig.generate_silver.get()));
+        ores.add(new OreData(MaterialsConfig.tin_max_y.get(), MaterialsConfig.tin_min_y.get(), 11, MaterialsConfig.tin_density.get(),
+                MaterialsSetup.TIN_ORE.get(), MaterialsConfig.generate_tin.get()));
+        ores.add(new OreData(MaterialsConfig.zinc_max_y.get(), MaterialsConfig.zinc_min_y.get(), 8, MaterialsConfig.zinc_density.get(),
                 MaterialsSetup.ZINC_ORE.get(), MaterialsConfig.generate_zinc.get()));
     }
 
@@ -64,14 +70,15 @@ public class OreGenerator {
     public static void generationSetup() {
         for (Biome biome : ForgeRegistries.BIOMES) {
             // We only want overworld generation
-            if (biome.getRegistryName().toString().matches(".*end.*|.*nether.*")) {
+            if (biome.getCategory().equals(Biome.Category.NETHER) || biome.getCategory().equals(Biome.Category.THEEND)) {
                 continue;
             }
             for (OreData ore : ores) {
                 if (ore.config_enabled) {
                     biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
                             Feature.ORE.func_225566_b_(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.ore_block.getDefaultState(), ore.vein_size))
-                                    .func_227228_a_(new ConfiguredPlacement<>(Placement.COUNT_RANGE, new CountRangeConfig(ore.ores_per_chunk, ore.max_height - ore.min_height, 1, ore.max_height))));
+                                    .func_227228_a_(Placement.COUNT_RANGE
+                                            .func_227446_a_(new CountRangeConfig(ore.ores_per_chunk, ore.min_height, ore.min_height, ore.max_height))));
                 }
             }
         }
