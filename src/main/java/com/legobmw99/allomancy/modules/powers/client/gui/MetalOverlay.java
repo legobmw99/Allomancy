@@ -51,16 +51,16 @@ public class MetalOverlay {
         // Set the offsets of the overlay based on config
         switch (PowersConfig.overlay_position.get()) {
             case TOP_RIGHT:
-                renderX = res.getScaledWidth() - 95;
+                renderX = res.getScaledWidth() - 145;
                 renderY = 10;
                 break;
             case BOTTOM_RIGHT:
-                renderX = res.getScaledWidth() - 95;
-                renderY = res.getScaledHeight() - 40;
+                renderX = res.getScaledWidth() - 145;
+                renderY = res.getScaledHeight() - 50;
                 break;
             case BOTTOM_LEFT:
                 renderX = 5;
-                renderY = res.getScaledHeight() - 40;
+                renderY = res.getScaledHeight() - 50;
                 break;
             default: // TOP_LEFT
                 renderX = 5;
