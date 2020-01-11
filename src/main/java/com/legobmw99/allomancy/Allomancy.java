@@ -17,6 +17,11 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(Allomancy.MODID)
 public class Allomancy {
+    /* TODO:
+        Fix textures on old ingots
+        Redo silver flake texture
+        Redo curseforge page
+     */
     public static final String MODID = "allomancy";
 
     public static final Logger LOGGER = LogManager.getLogger();
