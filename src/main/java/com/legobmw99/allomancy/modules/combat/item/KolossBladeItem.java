@@ -5,6 +5,7 @@ import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
@@ -36,6 +37,11 @@ public class KolossBladeItem extends SwordItem {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
+       return (attacker instanceof PlayerEntity) && (AllomancyCapability.forPlayer(attacker).isBurning(Metal.PEWTER));
     }
 
     @Override

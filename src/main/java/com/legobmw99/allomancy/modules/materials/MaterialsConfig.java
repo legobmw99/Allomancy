@@ -69,7 +69,7 @@ public class MaterialsConfig {
         generate_copper = common_builder.comment("Generate Copper Ore").define("generate_copper", true);
         copper_density = common_builder.comment("Density of Copper Ore").defineInRange("copper_density", 15, 1, 40);
         copper_min_y = common_builder.comment("Minimum Y Level to Generate Copper").defineInRange("copper_min_y", 30, 1, 128);
-        copper_max_y = common_builder.comment("Maximum Y Level to Generate Copper").defineInRange("copper_max_y", 50, 1, 128);
+        copper_max_y = common_builder.comment("Maximum Y Level to Generate Copper").defineInRange("copper_max_y", 70, 1, 128);
         common_builder.pop();
 
         common_builder.push("Lead");
@@ -90,7 +90,7 @@ public class MaterialsConfig {
         generate_tin = common_builder.comment("Generate Tin Ore").define("generate_tin", true);
         tin_density = common_builder.comment("Density of Tin Ore").defineInRange("tin_density", 15, 1, 40);
         tin_min_y = common_builder.comment("Minimum Y Level to Generate Tin").defineInRange("tin_min_y", 40, 1, 128);
-        tin_max_y = common_builder.comment("Maximum Y Level to Generate Tin").defineInRange("tin_max_y", 64, 1, 128);
+        tin_max_y = common_builder.comment("Maximum Y Level to Generate Tin").defineInRange("tin_max_y", 80, 1, 128);
         common_builder.pop();
 
 
