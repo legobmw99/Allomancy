@@ -47,7 +47,6 @@ public class OreGenerator {
     private static ArrayList<OreData> ores = new ArrayList<>();
 
     static {
-        // TODO: 4 new ores
         ores.add(new OreData(MaterialsConfig.aluminum_max_y.get(), MaterialsConfig.aluminum_min_y.get(), 9, MaterialsConfig.aluminum_density.get(),
                 MaterialsSetup.ALUMINUM_ORE.get(), MaterialsConfig.generate_aluminum.get()));
         ores.add(new OreData(MaterialsConfig.cadmium_max_y.get(), MaterialsConfig.cadmium_min_y.get(), 7, MaterialsConfig.cadmium_density.get(),
