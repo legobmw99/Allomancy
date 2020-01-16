@@ -50,7 +50,7 @@ public class Recipes extends RecipeProvider {
         buildShaped(consumer, ExtrasSetup.IRON_BUTTON.get(), Items.IRON_INGOT, "i", "I");
         buildShaped(consumer, ConsumeSetup.ALLOMANTIC_GRINDER.get(), Items.IRON_INGOT, "iii", "ggg", "iii");
         buildShaped(consumer, ConsumeSetup.VIAL.get(), 3, Items.GLASS, " S ", "G G", " G ");
-        buildShaped(consumer, CombatSetup.MISTCLOAK.get(), ConsumeSetup.VIAL.get(), "iii", "ggg", "iii");
+        buildShaped(consumer, CombatSetup.MISTCLOAK.get(), ConsumeSetup.VIAL.get(), "W W", "WWW", "WWW");
         buildShaped(consumer, CombatSetup.OBSIDIAN_DAGGER.get(), CombatSetup.MISTCLOAK.get(), "  O", " O ", "s  ");
         buildShaped(consumer, CombatSetup.KOLOSS_BLADE.get(), ConsumeSetup.LERASIUM_NUGGET.get(), "CC", "CC", "sC");
 
