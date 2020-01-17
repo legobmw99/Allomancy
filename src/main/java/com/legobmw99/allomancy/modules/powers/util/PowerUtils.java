@@ -200,6 +200,7 @@ public class PowerUtils {
                 //Add new goals
                 target.setAttackTarget(allomancer);
                 target.setRevengeTarget(allomancer);
+                // TODO: try to use PrioritizedGoal::startExecuting for already hostiles
                 target.targetSelector.addGoal(1, new AIAttackOnCollideExtended(target, 1d, false));
                 target.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(target, PlayerEntity.class, false));
                 target.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(target, target.getClass(), false));
@@ -244,6 +245,7 @@ public class PowerUtils {
                     target.setNoAI(false);
                 }
                 // Remove all current aggro goals
+                // TODO: Try PrioritizedGoal::resetTask
                 target.goalSelector.getRunningGoals().filter(isAggroGoal).forEach(target.goalSelector::removeGoal);
                 target.targetSelector.getRunningGoals().filter(isAggroGoal).forEach(target.targetSelector::removeGoal);
                 target.goalSelector.tick();
