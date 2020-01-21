@@ -65,12 +65,10 @@ public class TryPushPullEntity {
                         }
                         // The target moves
                     } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity) {
-                        PowerUtils.move(direction / 2.0, target, player.getPosition().down());
+                        PowerUtils.move(direction / 2.0, target, player.getPosition().func_177977_b()); //down()
 
                         // Split the difference
-                    } else if (target instanceof ProjectileItemEntity) {
-                        return;
-                    } else {
+                    } else if (!(target instanceof ProjectileItemEntity)) {
                         PowerUtils.move(direction / 2.0, target, player.getPosition());
 
                         PowerUtils.move(direction / 2.0, player, target.getPosition());

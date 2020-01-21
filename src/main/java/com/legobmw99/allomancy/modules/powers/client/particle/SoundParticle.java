@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class SoundParticle extends SpriteTexturedParticle {
     public SoundParticle(World world, double x, double y, double z, double motionX, double motionY, double motionZ, SoundCategory soundCategory) {
         super(world, x, y, z, motionX, motionY, motionZ);
-        // TODO: change sprite
+        // TODO: change sprite - look into  AtlasTexture.LOCATION_PARTICLES_TEXTURE
         setSprite(Minecraft.getInstance().getItemRenderer().getItemModelMesher().getParticleIcon(new ItemStack(Items.RABBIT_FOOT)));
         this.motionX = motionX;
         this.motionY = motionY + 0.009D;

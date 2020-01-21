@@ -11,7 +11,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,9 +45,6 @@ public class Allomancy {
         MaterialsSetup.register();
         ExtrasSetup.register();
 
-        // Load existing config
-        AllomancyConfig.loadConfig(AllomancyConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve("allomancy-client.toml"));
-        AllomancyConfig.loadConfig(AllomancyConfig.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve("allomancy-common.toml"));
     }
 
 }
