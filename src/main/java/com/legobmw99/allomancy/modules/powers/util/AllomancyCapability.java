@@ -37,6 +37,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     private boolean[] burning_metals;
 
     private int damange_stored;
+    private int hunger_stored;
 
     private int death_dimension;
     private BlockPos death_pos;
@@ -64,6 +65,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
         enhanced_time = 0;
         damange_stored = 0;
+        hunger_stored = 0;
         death_pos = null;
         spawn_pos = null;
 
@@ -204,12 +206,30 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
     /**
+     * Get how much hunger has been accumulated
+     *
+     * @return the amount of hunger
+     */
+    public int getHungerStored() {
+        return hunger_stored;
+    }
+
+    /**
      * Set the amount of damage stored
      *
      * @param damageStored the amount of damage
      */
     public void setDamageStored(int damageStored) {
         this.damange_stored = damageStored;
+    }
+
+    /**
+     * Set the amount of hunger stored
+     *
+     * @param hungerStored the amount of damage
+     */
+    public void setHungerStored(int hungerStored) {
+        this.hunger_stored = hungerStored;
     }
 
     public void setDeathLoc(BlockPos pos, DimensionType dim) {

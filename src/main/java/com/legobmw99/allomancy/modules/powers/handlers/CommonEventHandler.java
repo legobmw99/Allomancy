@@ -21,6 +21,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.FoodStats;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
@@ -274,13 +275,13 @@ public class CommonEventHandler {
                     /*********************************************
                      * BENDALLOY AND CADMIUM                     *
                      *********************************************/
-                    if (cap.isBurning(Metal.BENDALLOY) && !cap.isBurning(Metal.CADMIUM)) {
+                    if (!cap.isBurning(Metal.BENDALLOY) && cap.isBurning(Metal.CADMIUM)) {
                         curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 10, 3, true, false));
                         curPlayer.livingTick();
                         curPlayer.livingTick();
 
                         if (world instanceof ServerWorld) {
-                            int max = cap.isEnhanced() ? 10 : 5;
+                            int max = cap.isEnhanced() ? 30 : 20;
                             BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
                             BlockPos positive = new BlockPos(curPlayer).add(max, max, max);
                             world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
@@ -300,14 +301,15 @@ public class CommonEventHandler {
                             });
                         }
                     }
-                    if (cap.isBurning(Metal.CADMIUM) && !cap.isBurning(Metal.BENDALLOY)) {
-                        int max = cap.isEnhanced() ? 20 : 10;
+                    if (!cap.isBurning(Metal.CADMIUM) && cap.isBurning(Metal.BENDALLOY)) {
+                        int max = cap.isEnhanced() ? 30 : 20;
                         BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
                         BlockPos positive = new BlockPos(curPlayer).add(max, max, max);
-                        int slowness_amplifier = cap.isEnhanced() ? 255 : 2; // Duralumin freezes entities
+                        int slowness_amplifier = cap.isEnhanced() ? 255 : 3; // Duralumin freezes entities
                         world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
                             if (entity != curPlayer)
                                 entity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, slowness_amplifier, true, false));
+                                entity.spawnRunningParticles();
                         });
                     }
 
@@ -336,22 +338,37 @@ public class CommonEventHandler {
                         curPlayer.removePotionEffect(Effects.NIGHT_VISION);
                     }
                     if (cap.isBurning(Metal.PEWTER)) {
+                        FoodStats foodStats = curPlayer.getFoodStats();
+                        if (foodStats.getFoodLevel() < 20) {
+                            cap.setHungerStored(cap.getHungerStored() + 20 - foodStats.getFoodLevel());
+                            foodStats.setFoodLevel(20);
+                        }
                         //Add jump boost and speed to pewter burners
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 10, 1, true, false));
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, 10, 0, true, false));
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 10, 1, true, false));
+                        if (cap.isEnhanced()) {
+                            curPlayer.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 10, 4, true, false));
+                            curPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, 10, 3, true, false));
+                            curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 10, 4, true, false));
 
+                        } else {
+                            curPlayer.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 10, 1, true, false));
+                            curPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, 10, 0, true, false));
+                            curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 10, 1, true, false));
+
+                        }
                         if (cap.getDamageStored() > 0) {
                             if (world.rand.nextInt(200) == 0) {
                                 cap.setDamageStored(cap.getDamageStored() - 1);
                             }
                         }
-
                     }
                     // Damage the player if they have stored damage and pewter cuts out
                     if (!cap.isBurning(Metal.PEWTER) && (cap.getDamageStored() > 0)) {
                         cap.setDamageStored(cap.getDamageStored() - 1);
                         curPlayer.attackEntityFrom(DamageSource.MAGIC, 2);
+                    }
+                    if (!cap.isBurning(Metal.PEWTER) && (cap.getHungerStored() > 0)) {
+                        curPlayer.getFoodStats().setFoodLevel(curPlayer.getFoodStats().getFoodLevel() - cap.getHungerStored());
+                        cap.setHungerStored(0);
                     }
 
 

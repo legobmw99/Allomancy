@@ -79,22 +79,39 @@ public class MetalOverlay {
         /*
          * The rendering for a the overlay
          */
-
-        for (Metal mt : Metal.values()) {
-            if (cap.hasPower(mt)) {
-                int metalY = 9 - cap.getAmount(mt);
-                int i = mt.getIndex();
-                int offset = (i / 2) * 4; // Adding a gap between pairs
-                // Draw the bars first
-                blit(renderX + 1 + (7 * i) + offset, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
-                // Draw the gauges second, so that highlights and decorations show over the bar.
-                blit(renderX + (7 * i) + offset, renderY, 0, 0, 5, 20);
-                // Draw the fire if it is burning
-                if (cap.isBurning(mt)) {
-                    blit(renderX + (7 * i) + offset, renderY + 4 + metalY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
+        if (cap.isMistborn()) {
+            for (Metal mt : Metal.values()) {
+                if (cap.hasPower(mt)) {
+                    int metalY = 9 - cap.getAmount(mt);
+                    int i = mt.getIndex();
+                    int offset = (i / 2) * 4; // Adding a gap between pairs
+                    // Draw the bars first
+                    blit(renderX + 1 + (7 * i) + offset, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
+                    // Draw the gauges second, so that highlights and decorations show over the bar.
+                    blit(renderX + (7 * i) + offset, renderY, 0, 0, 5, 20);
+                    // Draw the fire if it is burning
+                    if (cap.isBurning(mt)) {
+                        blit(renderX + (7 * i) + offset, renderY + 4 + metalY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
+                    }
                 }
-            }
 
+            }
+        } else {
+            for (Metal mt : Metal.values()) {
+                if (cap.hasPower(mt)) {
+                    int metalY = 9 - cap.getAmount(mt);
+                    int i = mt.getIndex();
+                    // Draw the bars first
+                    blit(renderX + 1 + (7), renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
+                    // Draw the gauges second, so that highlights and decorations show over the bar.
+                    blit(renderX + (7), renderY, 0, 0, 5, 20);
+                    // Draw the fire if it is burning
+                    if (cap.isBurning(mt)) {
+                        blit(renderX + (7), renderY + 4 + metalY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
+                    }
+                }
+
+            }
         }
 
         // Update the animation counters
