@@ -8,4 +8,4 @@ This mod is currently being updated for `Minecraft 1.15.2` and `Forge 31.1.12`
 
 Please verify and report any issues!
 
-*This mod was originally concieved by [ZenDarva](https://github.com/ZenDarva) and used some code from [Psi](https://github.com/Vazkii/Psi) as a template. All code is used under license or with permission.*
+*This mod was originally conceived by [ZenDarva](https://github.com/ZenDarva) and used some code from [Psi](https://github.com/Vazkii/Psi) as a template. All code is used under license or with permission.*
