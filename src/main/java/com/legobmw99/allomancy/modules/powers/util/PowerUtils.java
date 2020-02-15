@@ -244,10 +244,9 @@ public class PowerUtils {
                 if(target.isAIDisabled()){
                     target.setNoAI(false);
                 }
-                // Remove all current aggro goals
-                // TODO: Try PrioritizedGoal::resetTask
-                target.goalSelector.getRunningGoals().filter(isAggroGoal).forEach(target.goalSelector::removeGoal);
-                target.targetSelector.getRunningGoals().filter(isAggroGoal).forEach(target.targetSelector::removeGoal);
+                // Reset all current aggro goals
+                target.goalSelector.getRunningGoals().filter(isAggroGoal).forEach(PrioritizedGoal::resetTask);
+                target.targetSelector.getRunningGoals().filter(isAggroGoal).forEach(PrioritizedGoal::resetTask);
                 target.goalSelector.tick();
                 target.targetSelector.tick();
                 target.setAttackTarget(null);
