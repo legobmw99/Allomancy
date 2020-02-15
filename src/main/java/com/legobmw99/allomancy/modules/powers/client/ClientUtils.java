@@ -90,10 +90,8 @@ public class ClientUtils {
         BufferBuilder buffer = tessellator.getBuffer();
 
         buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-        // func_225582_a_ = POS
-        // func_227885_a_ = COLOR
-        buffer.func_225582_a_(player.getX(), player.getY(), player.getZ()).func_227885_a_(r, g, b, 0.8f).endVertex();
-        buffer.func_225582_a_(dest.getX(), dest.getY(), dest.getZ()).func_227885_a_(r, g, b, 0.8f).endVertex();
+        buffer.pos(player.getX(), player.getY(), player.getZ()).color(r, g, b, 0.8f).endVertex();
+        buffer.pos(dest.getX(), dest.getY(), dest.getZ()).color(r, g, b, 0.8f).endVertex();
         tessellator.draw();
     }
 

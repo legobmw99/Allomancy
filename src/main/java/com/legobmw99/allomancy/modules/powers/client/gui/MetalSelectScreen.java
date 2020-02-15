@@ -100,7 +100,7 @@ public class MetalSelectScreen extends Screen {
 
 
             if (seg == 0)
-                buf.func_225582_a_(x, y, 0).func_225586_a_(r, g, b, a).endVertex(); //pos, color
+                buf.pos(x, y, 0).color(r, g, b, a).endVertex(); //pos, color
 
 
             for (float i = 0; i < degPer + step / 2; i += step) {
@@ -109,8 +109,8 @@ public class MetalSelectScreen extends Screen {
                 float yp = y + MathHelper.sin(rad) * radius;
 
                 if (i == 0)
-                    buf.func_225582_a_(xp, yp, 0).func_225586_a_(r, g, b, a).endVertex();
-                buf.func_225582_a_(xp, yp, 0).func_225586_a_(r, g, b, a).endVertex();
+                    buf.pos(xp, yp, 0).color(r, g, b, a).endVertex();
+                buf.pos(xp, yp, 0).color(r, g, b, a).endVertex();
             }
         }
         tess.draw();
@@ -155,7 +155,7 @@ public class MetalSelectScreen extends Screen {
         RenderSystem.enableRescaleNormal();
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        RenderHelper.func_227780_a_();  //enableGUIStandardItemLighting();
+        RenderHelper.enableStandardItemLighting();
 
         RenderHelper.disableStandardItemLighting();
         RenderSystem.disableBlend();

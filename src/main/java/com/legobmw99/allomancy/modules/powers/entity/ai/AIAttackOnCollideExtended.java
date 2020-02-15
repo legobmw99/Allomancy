@@ -75,7 +75,7 @@ public class AIAttackOnCollideExtended extends Goal {
             return false;
         } else {
             if (--this.field_75445_i <= 0) {
-                this.entityPathEntity = this.attacker.getNavigator().func_75494_a(livingEntity, 0); //getPathToLivingEntity
+                this.entityPathEntity = this.attacker.getNavigator().getPathToEntity(livingEntity, 0);
                 this.field_75445_i = 4 + this.attacker.getRNG().nextInt(7);
                 return this.entityPathEntity != null;
             } else {

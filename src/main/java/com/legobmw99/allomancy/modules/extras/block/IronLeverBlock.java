@@ -49,8 +49,8 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyActivat
         return false;
     }
 
-    @Override // onBlockActivated
-    public ActionResultType func_225533_a_(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         return ActionResultType.FAIL;
     }
 

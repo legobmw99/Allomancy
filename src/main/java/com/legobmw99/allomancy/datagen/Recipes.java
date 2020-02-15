@@ -117,7 +117,7 @@ public class Recipes extends RecipeProvider {
                 .build(consumer);
 
         Allomancy.LOGGER.debug("Creating Special Recipe for Vial Filling");
-        CustomRecipeBuilder.func_218656_a(ConsumeSetup.VIAL_RECIPE_SERIALIZER.get())
+        CustomRecipeBuilder.customRecipe(ConsumeSetup.VIAL_RECIPE_SERIALIZER.get())
                 .build(consumer, "allomancy:vial_filling_recipe");
 
     }

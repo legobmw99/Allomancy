@@ -34,7 +34,7 @@ public class MetalOverlay {
     public static void drawMetalOverlay() {
         Minecraft mc = Minecraft.getInstance();
         ClientPlayerEntity player = mc.player;
-        MainWindow res = mc.func_228018_at_(); //getMainWindow
+        MainWindow res = mc.getMainWindow();
 
         if (!player.isAlive()) {
             return;
@@ -71,7 +71,7 @@ public class MetalOverlay {
         ForgeIngameGui gui = new ForgeIngameGui(mc);
         mc.getTextureManager().bindTexture(meterLoc);
         Texture obj;
-        obj = mc.getTextureManager().func_229267_b_(meterLoc); //getTexture
+        obj = mc.getTextureManager().getTexture(meterLoc);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
 

@@ -294,7 +294,7 @@ public class CommonEventHandler {
                                     if (te instanceof ITickableTileEntity) {
                                         ((ITickableTileEntity) te).tick();
                                     } else if (block.ticksRandomly()) {
-                                        block.func_227034_b_((ServerWorld) world, bp, random); //randomTick
+                                        block.randomTick((ServerWorld) world, bp, random);
                                     }
                                 }
                             });

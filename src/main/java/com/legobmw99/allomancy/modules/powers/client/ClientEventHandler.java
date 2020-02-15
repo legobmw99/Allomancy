@@ -253,7 +253,7 @@ public class ClientEventHandler {
         if (player == null || !player.isAlive()) {
             return;
         }
-
+        
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
         if (cap.isUninvested()) {
@@ -263,10 +263,10 @@ public class ClientEventHandler {
 
         Vec3d view = mc.gameRenderer.getActiveRenderInfo().getProjectedView();
         MatrixStack stack = event.getMatrixStack();
-        stack.func_227861_a_(-view.x, -view.y, -view.z); // translate
+        stack.translate(-view.x, -view.y, -view.z);
 
         RenderSystem.pushMatrix();
-        RenderSystem.multMatrix(stack.func_227866_c_().func_227870_a_());
+        RenderSystem.multMatrix(stack.getLast().getMatrix());
         RenderSystem.disableTexture();
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
