@@ -86,7 +86,7 @@ public class LootTables extends LootTableProvider {
         LootPool.Builder dagger_builder = LootPool.builder()
                 .name("main")
                 .rolls(ConstantRange.of(1))
-                .addEntry(ItemLootEntry.builder(CombatSetup.OBSIDIAN_DAGGER.get()).acceptFunction(SetNBT.func_215952_a(nbt)).weight(1))
+                .addEntry(ItemLootEntry.builder(CombatSetup.OBSIDIAN_DAGGER.get()).acceptFunction(SetNBT.builder(nbt)).weight(1))
                 .addEntry(EmptyLootEntry.func_216167_a().weight(19));
         tables.put(new ResourceLocation(Allomancy.MODID, "/inject/obsidian_dagger"),
                 LootTable.builder().addLootPool(dagger_builder).build());
