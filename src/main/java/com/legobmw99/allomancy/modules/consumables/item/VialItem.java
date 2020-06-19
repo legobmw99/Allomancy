@@ -7,6 +7,7 @@ import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -53,7 +54,10 @@ public class VialItem extends Item {
 
         if (!((PlayerEntity) (livingEntity)).abilities.isCreativeMode) {
             stack.shrink(1);
-            ((PlayerEntity) (livingEntity)).inventory.addItemStackToInventory(new ItemStack(ConsumeSetup.VIAL.get(), 1));
+
+            if (!((PlayerEntity) livingEntity).inventory.addItemStackToInventory(new ItemStack(ConsumeSetup.VIAL.get(), 1))){
+                world.addEntity(new ItemEntity(world, livingEntity.getPosX(), livingEntity.getPosY(), livingEntity.getPosZ(), new ItemStack(ConsumeSetup.VIAL.get(), 1)));
+            }
         }
 
         return stack;
