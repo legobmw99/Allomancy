@@ -8,9 +8,11 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -38,8 +40,9 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     private int damange_stored;
 
-    private int death_dimension;
+    private String death_dimension;
     private BlockPos death_pos;
+    private String spawn_dimension;
     private BlockPos spawn_pos;
 
     private int enhanced_time;
@@ -212,13 +215,13 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         this.damange_stored = damageStored;
     }
 
-    public void setDeathLoc(BlockPos pos, DimensionType dim) {
-        setDeathLoc(pos, dim.getId());
+    public void setDeathLoc(BlockPos pos, RegistryKey<World> dim) {
+        setDeathLoc(pos, dim.getRegistryName().toString());
     }
 
-    protected void setDeathLoc(BlockPos pos, int dim) {
+    protected void setDeathLoc(BlockPos pos, String dim_name) {
         this.death_pos = pos;
-        this.death_dimension = dim;
+        this.death_dimension = dim_name;
     }
 
     public BlockPos getDeathLoc() {
@@ -226,18 +229,27 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
 
-
-    public DimensionType getDeathDim() {
-        return DimensionType.getById(death_dimension);
+    public RegistryKey<World> getDeathDim() {
+        return RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(this.death_dimension));
     }
 
-    public void setSpawnLoc(BlockPos pos) {
+    public void setSpawnLoc(BlockPos pos, RegistryKey<World> dim) {
+        setSpawnLoc(pos, dim.getRegistryName().toString());
+    }
+
+    public void setSpawnLoc(BlockPos pos, String dim_name) {
         this.spawn_pos = pos;
+        this.spawn_dimension = dim_name;
     }
 
     public BlockPos getSpawnLoc() {
         return this.spawn_pos;
     }
+
+    public RegistryKey<World> getSpawnDim() {
+        return RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(this.spawn_dimension));
+    }
+
 
     /**
      * Get the burn time of a specific metal
@@ -352,12 +364,13 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
         CompoundNBT position = new CompoundNBT();
         if (this.death_pos != null) {
-            position.putInt("death_dimension", this.death_dimension);
+            position.putString("death_dimension", this.death_dimension);
             position.putInt("death_x", this.death_pos.getX());
             position.putInt("death_y", this.death_pos.getY());
             position.putInt("death_z", this.death_pos.getZ());
         }
         if (this.spawn_pos != null) {
+            position.putString("spawn_dimension", this.spawn_dimension);
             position.putInt("spawn_x", this.spawn_pos.getX());
             position.putInt("spawn_y", this.spawn_pos.getY());
             position.putInt("spawn_z", this.spawn_pos.getZ());
@@ -402,12 +415,13 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         }
 
         CompoundNBT position = (CompoundNBT) allomancy_data.get("position");
-        if (position.contains("death_x")) {
+        if (position.contains("death_dimension")) {
             this.setDeathLoc(new BlockPos(position.getInt("death_x"), position.getInt("death_y"), position.getInt("death_z")),
-                    position.getInt("death_dimension"));
+                    position.getString("death_dimension"));
         }
-        if (position.contains("spawn_x")) {
-            this.setSpawnLoc(new BlockPos(position.getInt("spawn_x"), position.getInt("spawn_y"), position.getInt("spawn_z")));
+        if (position.contains("spawn_dimension")) {
+            this.setSpawnLoc(new BlockPos(position.getInt("spawn_x"), position.getInt("spawn_y"), position.getInt("spawn_z")),
+                    position.getString("spawn_dimension"));
         }
 
     }

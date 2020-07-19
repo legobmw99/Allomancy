@@ -1,10 +1,10 @@
-Allomancy 4.0.3
+Allomancy 4.1.0
 =========
 [![ CurseForge](http://cf.way2muchnoise.eu/256282.svg)](https://minecraft.curseforge.com/projects/allomancy)
 
 This mod adds the basics of [Allomancy](http://coppermind.net/wiki/Allomancy) from Brandon Sanderson's book series *Mistborn*. 
 
-This mod is currently being updated for `Minecraft 1.15.2` and `Forge 31.2.21`
+This mod is currently being updated for `Minecraft 1.16.1` and `Forge 32.0.70`
 
 Please verify and report any issues!
 

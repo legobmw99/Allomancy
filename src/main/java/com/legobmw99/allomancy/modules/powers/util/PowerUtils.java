@@ -149,7 +149,7 @@ public class PowerUtils {
      * @param toMove          the entity to move
      * @param block           the point being moved toward or away from
      */
-    public static void move(double directionScalar, Entity toMove, Vector3d block) {
+    public static void move(double directionScalar, Entity toMove, BlockPos block) {
 
         double motionX, motionY, motionZ, magnitude;
         if (toMove.isPassenger()) {

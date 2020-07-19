@@ -16,6 +16,7 @@ import com.legobmw99.allomancy.setup.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import jdk.nashorn.internal.ir.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -23,9 +24,11 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -304,18 +307,20 @@ public class ClientEventHandler {
          * GOLD AND ELECTRUM LINES                   *
          *********************************************/
         if (cap.isBurning(Metal.GOLD)) {
-            BlockPos death_pos = cap.getDeathLoc();
-            if (death_pos != null && player.dimension == cap.getDeathDim()) {
-                ClientUtils.drawMetalLine(playervec, blockVec(death_pos), 3.0F, 0.9F, 0.85F, 0.0F);
+            RegistryKey<World> deathDim = cap.getDeathDim();
+            if (deathDim != null && player.world.func_234923_W_() == deathDim) { //world .getDim (look for return type matches)
+                ClientUtils.drawMetalLine(playervec, blockVec(cap.getDeathLoc()), 3.0F, 0.9F, 0.85F, 0.0F);
             }
         }
         if (cap.isBurning(Metal.ELECTRUM)) {
-            BlockPos spawn_pos = cap.getSpawnLoc();
-            if (spawn_pos == null) {
-                spawn_pos = player.world.getSpawnPoint();
-            }
-            if (player.dimension == DimensionType.OVERWORLD) {
-                ClientUtils.drawMetalLine(playervec, blockVec(spawn_pos), 3.0F, 0.7F, 0.8F, 0.2F);
+            RegistryKey<World> spawnDim = cap.getSpawnDim();
+            if (spawnDim == null && player.world.func_234923_W_() == World.field_234918_g_) { // overworld, no spawn --> use world spawn
+                BlockPos spawnLoc = new BlockPos(player.world.getWorldInfo().getSpawnX(),
+                        player.world.getWorldInfo().getSpawnY(), player.world.getWorldInfo().getSpawnZ());
+                ClientUtils.drawMetalLine(playervec, blockVec(spawnLoc), 3.0F, 0.7F, 0.8F, 0.2F);
+
+            } else if (spawnDim != null && player.world.func_234923_W_() == spawnDim) {
+                ClientUtils.drawMetalLine(playervec, blockVec(cap.getSpawnLoc()), 3.0F, 0.7F, 0.8F, 0.2F);
             }
         }
 

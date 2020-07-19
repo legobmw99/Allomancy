@@ -94,7 +94,7 @@ public class AIAttackOnCollideExtended extends Goal {
         if (livingEntity == null) {
             return false;
         }
-        BlockPos pos1 = new BlockPos(livingEntity);
+        BlockPos pos1 = new BlockPos(livingEntity.getPositionVec());
 
         return (livingEntity
                 .isAlive() && (!this.longMemory ? !this.attacker

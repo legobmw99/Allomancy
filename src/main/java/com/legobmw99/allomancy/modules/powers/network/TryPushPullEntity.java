@@ -10,6 +10,7 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -49,27 +50,27 @@ public class TryPushPullEntity {
                 if (PowerUtils.isEntityMetal(target)) {
                     // The player moves
                     if (target instanceof IronGolemEntity || target instanceof ItemFrameEntity) {
-                        PowerUtils.move(direction, player, target.getPositionVec());
+                        PowerUtils.move(direction, player, new BlockPos(target.getPositionVec()));
 
                         // Depends if the minecart is filled
                     } else if (target instanceof AbstractMinecartEntity) {
                         if (target.isBeingRidden()) {
                             if (!target.isRidingOrBeingRiddenBy(player)) {
-                                PowerUtils.move(direction / 2.0, target, player.getPositionVec());
-                                PowerUtils.move(direction / 2.0, player, target.getPositionVec());
+                                PowerUtils.move(direction / 2.0, target, new BlockPos(player.getPositionVec()));
+                                PowerUtils.move(direction / 2.0, player, new BlockPos(target.getPositionVec()));
                             }
                         } else {
-                            PowerUtils.move(direction, target, player.getPositionVec());
+                            PowerUtils.move(direction, target, new BlockPos(player.getPositionVec()));
                         }
                         // The target moves
                     } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity) {
-                        PowerUtils.move(direction / 2.0, target, player.getPositionVec().add(0, -1, 0));
+                        PowerUtils.move(direction / 2.0, target, new BlockPos(player.getPositionVec()).down());
 
                         // Split the difference
                     } else if (!(target instanceof ProjectileItemEntity)) {
-                        PowerUtils.move(direction / 2.0, target, player.getPositionVec());
+                        PowerUtils.move(direction / 2.0, target, new BlockPos(player.getPositionVec()));
 
-                        PowerUtils.move(direction / 2.0, player, target.getPositionVec());
+                        PowerUtils.move(direction / 2.0, player, new BlockPos(target.getPositionVec()));
                     }
                 }
             }

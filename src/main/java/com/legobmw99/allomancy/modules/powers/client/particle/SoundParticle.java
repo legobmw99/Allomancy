@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.powers.client.particle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.SpriteTexturedParticle;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.SoundCategory;
@@ -13,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class SoundParticle extends SpriteTexturedParticle {
     public SoundParticle(World world, double x, double y, double z, double motionX, double motionY, double motionZ, SoundCategory soundCategory) {
-        super(world, x, y, z, motionX, motionY, motionZ);
+        super((ClientWorld) world, x, y, z, motionX, motionY, motionZ);
         // TODO: change sprite - look into  AtlasTexture.LOCATION_PARTICLES_TEXTURE
         setSprite(Minecraft.getInstance().getItemRenderer().getItemModelMesher().getParticleIcon(new ItemStack(Items.RABBIT_FOOT)));
         this.motionX = motionX;

@@ -134,7 +134,7 @@ public class CommonEventHandler {
         PlayerEntity player = event.getPlayer();
         if (player instanceof ServerPlayerEntity) {
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-            cap.setSpawnLoc(event.getNewSpawn());
+            cap.setSpawnLoc(event.getNewSpawn(), player.world.func_234923_W_());
             Network.sync(cap, player);
         }
     }
@@ -145,7 +145,7 @@ public class CommonEventHandler {
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-            cap.setDeathLoc(player.getPositionVec(), player.dimension);
+            cap.setDeathLoc(new BlockPos(player.getPositionVec()), player.world.func_234923_W_());
             Network.sync(cap, player);
         }
     }
@@ -249,10 +249,10 @@ public class CommonEventHandler {
                     if (cap.isEnhanced() && cap.isBurning(Metal.ELECTRUM) && cap.getAmount(Metal.ELECTRUM) >= 9) {
                         BlockPos spawn_pos = cap.getSpawnLoc();
                         if (spawn_pos == null) {
-                            spawn_pos = world.getSpawnPoint();
+                            spawn_pos =  new BlockPos(world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY(), world.getWorldInfo().getSpawnZ());
                         }
-
-                        if (curPlayer.dimension == DimensionType.OVERWORLD) {
+                            // TODO doesnt work in other dimensions, should it?
+                        if (curPlayer.world.func_234923_W_() == World.field_234918_g_) {
                             PowerUtils.teleport(world, curPlayer, spawn_pos);
                             if (cap.isBurning(Metal.DURALUMIN))
                                 cap.drainMetals(Metal.DURALUMIN);
@@ -260,7 +260,8 @@ public class CommonEventHandler {
                         }
                     } else if (cap.isEnhanced() && cap.isBurning(Metal.GOLD) && cap.getAmount(Metal.GOLD) >= 9) { // These should be mutually exclusive
                         BlockPos death_pos = cap.getDeathLoc();
-                        if (death_pos != null && curPlayer.dimension == cap.getDeathDim()) {
+                        // TODO make work cross-dimension? maybe?
+                        if (death_pos != null && curPlayer.world.func_234923_W_() == cap.getDeathDim()) {
                             PowerUtils.teleport(world, curPlayer, death_pos);
                             if (cap.isBurning(Metal.DURALUMIN))
                                 cap.drainMetals(Metal.DURALUMIN);
