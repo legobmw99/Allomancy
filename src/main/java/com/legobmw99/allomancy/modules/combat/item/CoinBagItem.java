@@ -43,13 +43,15 @@ public class CoinBagItem extends ShootableItem {
 
                 if (itemstack.getItem() == Items.GOLD_NUGGET) {
                     GoldNuggetEntity entitygold = new GoldNuggetEntity(player, world);
-                    entitygold.shoot(player, player.rotationPitch, player.rotationYawHead, 2.0F, 4.0F, 1.0F);
+                    //          formerly called .shoot()
+                    entitygold.func_234612_a_(player, player.rotationPitch, player.rotationYawHead, 2.0F, 4.0F, 1.0F);
                     world.addEntity(entitygold);
                 }
 
                 if (itemstack.getItem() == Items.IRON_NUGGET) {
                     IronNuggetEntity entityiron = new IronNuggetEntity(player, world);
-                    entityiron.shoot(player, player.rotationPitch, player.rotationYawHead, 2.0F, 2.25F, 2.5F);
+                    //          formerly called .shoot()
+                    entityiron.func_234612_a_(player, player.rotationPitch, player.rotationYawHead, 2.0F, 2.25F, 2.5F);
                     world.addEntity(entityiron);
 
                 }
@@ -71,6 +73,11 @@ public class CoinBagItem extends ShootableItem {
 
     @Override
     public int getItemEnchantability() {
+        return 0;
+    }
+
+    @Override
+    public int func_230305_d_() { // TODO figure out what this does - new in 1.16
         return 0;
     }
 }

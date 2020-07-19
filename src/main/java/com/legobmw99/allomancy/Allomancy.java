@@ -32,7 +32,7 @@ public class Allomancy {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancySetup::init);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancySetup::clientInit);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancyConfig::refresh);
-        MinecraftForge.EVENT_BUS.addListener(AllomancySetup::serverInit);
+        MinecraftForge.EVENT_BUS.addListener(AllomancySetup::registerCommands);
 
         // Config init
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_CONFIG);

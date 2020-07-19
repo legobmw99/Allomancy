@@ -23,9 +23,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -34,7 +34,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -146,7 +145,7 @@ public class CommonEventHandler {
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-            cap.setDeathLoc(player.getPosition(), player.dimension);
+            cap.setDeathLoc(player.getPositionVec(), player.dimension);
             Network.sync(cap, player);
         }
     }
@@ -211,7 +210,7 @@ public class CommonEventHandler {
                     }
                     if (cap.isBurning(Metal.DURALUMIN) && !cap.isEnhanced()) {
                         cap.setEnhanced(2);
-                        Network.sync(new UpdateEnhancedPacket(2, curPlayer.getEntityId()),  curPlayer);
+                        Network.sync(new UpdateEnhancedPacket(2, curPlayer.getEntityId()), curPlayer);
                     } else if (!cap.isBurning(Metal.DURALUMIN) && cap.isEnhanced()) {
                         cap.decEnhanced();
                         if (!cap.isEnhanced()) { //Enhancement ran out this tick
@@ -228,15 +227,14 @@ public class CommonEventHandler {
                     }
 
 
-
                     /*********************************************
                      * CHROMIUM (enhanced)                       *
                      *********************************************/
                     if (cap.isEnhanced() && cap.isBurning(Metal.CHROMIUM)) {
                         if (world instanceof ServerWorld) {
                             int max = 20;
-                            BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
-                            BlockPos positive = new BlockPos(curPlayer).add(max, max, max);
+                            BlockPos negative = new BlockPos(curPlayer.getPositionVec()).add(-max, -max, -max);
+                            BlockPos positive = new BlockPos(curPlayer.getPositionVec()).add(max, max, max);
                             world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(negative, positive)).forEach(otherPlayer -> {
                                 AllomancyCapability capOther = AllomancyCapability.forPlayer(otherPlayer);
                                 capOther.drainMetals(Metal.values());
@@ -281,8 +279,8 @@ public class CommonEventHandler {
 
                         if (world instanceof ServerWorld) {
                             int max = cap.isEnhanced() ? 10 : 5;
-                            BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
-                            BlockPos positive = new BlockPos(curPlayer).add(max, max, max);
+                            BlockPos negative = new BlockPos(curPlayer.getPositionVec()).add(-max, -max, -max);
+                            BlockPos positive = new BlockPos(curPlayer.getPositionVec()).add(max, max, max);
                             world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
                                 entity.livingTick();
                                 entity.livingTick();
@@ -302,8 +300,8 @@ public class CommonEventHandler {
                     }
                     if (cap.isBurning(Metal.CADMIUM) && !cap.isBurning(Metal.BENDALLOY)) {
                         int max = cap.isEnhanced() ? 20 : 10;
-                        BlockPos negative = new BlockPos(curPlayer).add(-max, -max, -max);
-                        BlockPos positive = new BlockPos(curPlayer).add(max, max, max);
+                        BlockPos negative = new BlockPos(curPlayer.getPositionVec()).add(-max, -max, -max);
+                        BlockPos positive = new BlockPos(curPlayer.getPositionVec()).add(max, max, max);
                         int slowness_amplifier = cap.isEnhanced() ? 255 : 2; // Duralumin freezes entities
                         world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
                             if (entity != curPlayer)

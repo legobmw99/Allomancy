@@ -2,8 +2,8 @@ package com.legobmw99.allomancy.modules.powers.client;
 
 import com.legobmw99.allomancy.modules.powers.network.UpdateBurnPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.network.Network;
+import com.legobmw99.allomancy.setup.Metal;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -17,7 +17,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -45,7 +45,7 @@ public class ClientUtils {
         if (entity != null) {
             if (mc.world != null) {
                 objectMouseOver = entity.pick(dist, partialTicks, false);
-                Vec3d vec3d = entity.getEyePosition(partialTicks);
+                Vector3d vec3d = entity.getEyePosition(partialTicks);
                 boolean flag = false;
                 int i = 3;
                 double d1 = dist * dist;
@@ -54,8 +54,8 @@ public class ClientUtils {
                     d1 = objectMouseOver.getHitVec().squareDistanceTo(vec3d);
                 }
 
-                Vec3d vec3d1 = entity.getLook(1.0F);
-                Vec3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
+                Vector3d vec3d1 = entity.getLook(1.0F);
+                Vector3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
                 float f = 1.0F;
                 AxisAlignedBB axisalignedbb = entity.getBoundingBox().expand(vec3d1.scale(dist)).grow(1.0D, 1.0D, 1.0D);
                 EntityRayTraceResult entityraytraceresult = ProjectileHelper.rayTraceEntities(entity, vec3d, vec3d2, axisalignedbb, (e) -> {
@@ -63,7 +63,7 @@ public class ClientUtils {
                 }, d1);
                 if (entityraytraceresult != null) {
                     Entity entity1 = entityraytraceresult.getEntity();
-                    Vec3d vec3d3 = entityraytraceresult.getHitVec();
+                    Vector3d vec3d3 = entityraytraceresult.getHitVec();
                     double d2 = vec3d.squareDistanceTo(vec3d3);
                     if (d2 < d1) {
                         objectMouseOver = entityraytraceresult;
@@ -80,9 +80,11 @@ public class ClientUtils {
      * Draws a line from the player (denoted pX,Y,Z) to the given set of
      * coordinates (oX,Y,Z) in a certain color (r,g,b)
      *
-     * @param width the width of the line
+     * @param player
+     * @param dest
+     * @param width  the width of the line
      */
-    public static void drawMetalLine(Vec3d player, Vec3d dest, float width,
+    public static void drawMetalLine(Vector3d player, Vector3d dest, float width,
                                      float r, float g, float b) {
         RenderSystem.lineWidth(width);
 
@@ -103,7 +105,7 @@ public class ClientUtils {
      * @param capability the capability being handled
      */
     public static void toggleBurn(Metal metal, AllomancyCapability capability) {
-        if(!capability.hasPower(metal)){
+        if (!capability.hasPower(metal)) {
             return;
         }
 

@@ -24,8 +24,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class CombatSetup {
-    public static final DeferredRegister<EntityType<?>> ENTITIES = new DeferredRegister<>(ForgeRegistries.ENTITIES, Allomancy.MODID);
-    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, Allomancy.MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Allomancy.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Allomancy.MODID);
 
 
     public static void register() {
@@ -83,6 +83,11 @@ public class CombatSetup {
 
         @Override
         public float getToughness() {
+            return 0;
+        }
+
+        @Override
+        public float func_230304_f_() { // knockback resistance
             return 0;
         }
     };

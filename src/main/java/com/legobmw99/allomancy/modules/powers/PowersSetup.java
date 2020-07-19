@@ -9,9 +9,9 @@ import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 public class PowersSetup {
 
@@ -20,8 +20,8 @@ public class PowersSetup {
         PowerClientSetup.initKeyBindings();
     }
 
-    public static void serverInit(final FMLServerStartingEvent e) {
-        AllomancyPowerCommand.register(e.getCommandDispatcher());
+    public static void registerCommands(final RegisterCommandsEvent e) {
+        AllomancyPowerCommand.register(e.getDispatcher());
     }
 
     public static void init(final FMLCommonSetupEvent e) {

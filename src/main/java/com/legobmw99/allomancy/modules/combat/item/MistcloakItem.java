@@ -2,8 +2,9 @@ package com.legobmw99.allomancy.modules.combat.item;
 
 import com.google.common.collect.Multimap;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
@@ -20,13 +21,15 @@ public class MistcloakItem extends ArmorItem {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
-        Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
+        Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
 
         if (equipmentSlot == EquipmentSlotType.CHEST) {
-            multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor modifier", (double) this.damageReduceAmount, AttributeModifier.Operation.ADDITION));
-            multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor toughness", (double) this.toughness, AttributeModifier.Operation.ADDITION));
-            multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Speed Modifier", .25, AttributeModifier.Operation.MULTIPLY_TOTAL));
+            //ARMOR/ARMOR_TOUGHNESS/MOVEMENT SPEED
+            multimap.put(Attributes.field_233826_i_, new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor modifier", (double) this.getDamageReduceAmount(), AttributeModifier.Operation.ADDITION));
+                                                                                                                                                            // getToughness
+            multimap.put(Attributes.field_233827_j_, new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor toughness", (double) this.func_234657_f_(), AttributeModifier.Operation.ADDITION));
+            multimap.put(Attributes.field_233821_d_, new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Speed Modifier", .25, AttributeModifier.Operation.MULTIPLY_TOTAL));
         }
         return multimap;
     }

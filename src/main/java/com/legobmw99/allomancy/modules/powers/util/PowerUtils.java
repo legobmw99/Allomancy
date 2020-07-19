@@ -13,7 +13,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -35,7 +36,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
@@ -148,13 +149,13 @@ public class PowerUtils {
      * @param toMove          the entity to move
      * @param block           the point being moved toward or away from
      */
-    public static void move(double directionScalar, Entity toMove, BlockPos block) {
+    public static void move(double directionScalar, Entity toMove, Vector3d block) {
 
         double motionX, motionY, motionZ, magnitude;
         if (toMove.isPassenger()) {
             toMove = toMove.getRidingEntity();
         }
-        Vec3d vec = toMove.getPositionVec();
+        Vector3d vec = toMove.getPositionVec();
         double posX = vec.getX(), posY = vec.getY(), posZ = vec.getZ();
         // Calculate the length of the vector between the entity and anchor
         magnitude = Math.sqrt(Math.pow((posX - (double) (block.getX() + .5)), 2)
@@ -206,7 +207,7 @@ public class PowerUtils {
                 target.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(target, target.getClass(), false));
                 target.goalSelector.addGoal(4, new LookRandomlyGoal(target));
                 target.targetSelector.addGoal(2, new HurtByTargetGoal(target).setCallsForHelp());
-                if (target.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null && !(target instanceof GuardianEntity)) {
+                if (target.getAttribute(Attributes.field_233823_f_) != null && !(target instanceof GuardianEntity)) { // ATTACK_DAMAGE
                     target.goalSelector.addGoal(3, new MeleeAttackGoal(target, 1.2D, true));
                 }
 

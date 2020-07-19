@@ -5,8 +5,7 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.tags.Tag;
-import net.minecraft.util.ResourceLocation;
+
 
 public class BlockTags extends BlockTagsProvider {
     public BlockTags(DataGenerator generatorIn) {
@@ -29,8 +28,7 @@ public class BlockTags extends BlockTagsProvider {
 
     private void addForgeTag(String name, Block... items) {
         Allomancy.LOGGER.debug("Creating block tag for forge:" + name);
-        ResourceLocation loc = new ResourceLocation("forge", name);
-        getBuilder(new Tag<Block>(loc)).replace(false).add(items).build(loc);
+        func_240522_a_(net.minecraft.tags.BlockTags.makeWrapperTag("forge:" + name)).replace(false).func_240534_a_(items); // getBuilder, add, prior had a build() call
     }
 
 

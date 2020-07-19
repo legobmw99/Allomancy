@@ -45,12 +45,13 @@ public class GoldNuggetEntity extends ProjectileItemEntity {
 
     @Override
     protected void onImpact(RayTraceResult rayTraceResult) {
-        if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY && ((EntityRayTraceResult) rayTraceResult).getEntity() == this.getThrower()) {
+                                                                                                                    // I think this is .getThrower()
+        if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY && ((EntityRayTraceResult) rayTraceResult).getEntity() == this.func_234616_v_()) {
             return;
         }
 
         if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY) {
-            ((EntityRayTraceResult) rayTraceResult).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), (float) 4);
+            ((EntityRayTraceResult) rayTraceResult).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), (float) 4);
         }
 
         if (!this.world.isRemote) {

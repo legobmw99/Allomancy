@@ -17,7 +17,7 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class IronNuggetEntity extends ProjectileItemEntity {
+public class IronNuggetEntity extends AbstractNuggetEntity {
     private boolean dropItem = true;
 
     public IronNuggetEntity(World world) {
@@ -45,12 +45,13 @@ public class IronNuggetEntity extends ProjectileItemEntity {
 
     @Override
     protected void onImpact(RayTraceResult rayTraceResult) {
-        if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY && ((EntityRayTraceResult) rayTraceResult).getEntity() == this.getThrower()) {
+                                                                                                                            // I think this is .getThrower() or equiv
+        if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY && ((EntityRayTraceResult) rayTraceResult).getEntity() == this.func_234616_v_()) {
             return;
         }
 
         if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY) {
-            ((EntityRayTraceResult) rayTraceResult).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), (float) 5);
+            ((EntityRayTraceResult) rayTraceResult).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), (float) 5);
         }
 
         if (!this.world.isRemote) {

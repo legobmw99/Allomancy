@@ -49,29 +49,27 @@ public class TryPushPullEntity {
                 if (PowerUtils.isEntityMetal(target)) {
                     // The player moves
                     if (target instanceof IronGolemEntity || target instanceof ItemFrameEntity) {
-                        PowerUtils.move(direction, player, target.getPosition());
+                        PowerUtils.move(direction, player, target.getPositionVec());
 
                         // Depends if the minecart is filled
                     } else if (target instanceof AbstractMinecartEntity) {
                         if (target.isBeingRidden()) {
-                            if (target.isRidingOrBeingRiddenBy(player)) {
-                                //no op
-                            } else {
-                                PowerUtils.move(direction / 2.0, target, player.getPosition());
-                                PowerUtils.move(direction / 2.0, player, target.getPosition());
+                            if (!target.isRidingOrBeingRiddenBy(player)) {
+                                PowerUtils.move(direction / 2.0, target, player.getPositionVec());
+                                PowerUtils.move(direction / 2.0, player, target.getPositionVec());
                             }
                         } else {
-                            PowerUtils.move(direction, target, player.getPosition());
+                            PowerUtils.move(direction, target, player.getPositionVec());
                         }
                         // The target moves
                     } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity) {
-                        PowerUtils.move(direction / 2.0, target, player.getPosition().down());
+                        PowerUtils.move(direction / 2.0, target, player.getPositionVec().add(0, -1, 0));
 
                         // Split the difference
                     } else if (!(target instanceof ProjectileItemEntity)) {
-                        PowerUtils.move(direction / 2.0, target, player.getPosition());
+                        PowerUtils.move(direction / 2.0, target, player.getPositionVec());
 
-                        PowerUtils.move(direction / 2.0, player, target.getPosition());
+                        PowerUtils.move(direction / 2.0, player, target.getPositionVec());
                     }
                 }
             }

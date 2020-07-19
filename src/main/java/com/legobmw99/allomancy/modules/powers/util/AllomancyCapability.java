@@ -10,7 +10,7 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -224,6 +224,8 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     public BlockPos getDeathLoc() {
         return this.death_pos;
     }
+
+
 
     public DimensionType getDeathDim() {
         return DimensionType.getById(death_dimension);

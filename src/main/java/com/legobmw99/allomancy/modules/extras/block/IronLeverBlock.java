@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.modules.extras.block;
 
 import com.legobmw99.allomancy.api.block.IAllomanticallyActivatedBlock;
+import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeverBlock;
@@ -33,7 +34,7 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyActivat
     @Override
     public boolean onBlockActivatedAllomantically(BlockState state, World world, BlockPos pos, PlayerEntity playerIn,
                                                   boolean isPush) {
-        state = state.cycle(POWERED);
+        state = state.func_235896_a_(POWERED); // formerly cycle
         if (world.isRemote) {
             return true;
         }
@@ -57,8 +58,7 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyActivat
     @Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        ITextComponent lore = new TranslationTextComponent("block.allomancy.iron_activation.lore");
-        lore.setStyle(lore.getStyle().setColor(TextFormatting.GRAY));
+        ITextComponent lore = AllomancySetup.addColorToText("block.allomancy.iron_activation.lore", TextFormatting.GRAY);
         tooltip.add(lore);
     }
 

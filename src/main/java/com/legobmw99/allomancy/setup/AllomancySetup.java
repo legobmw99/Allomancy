@@ -10,7 +10,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.Color;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -40,13 +45,29 @@ public class AllomancySetup {
         return new Block(createStandardBlockProperties());
     }
 
+    public static IFormattableTextComponent addColorToText(String translationKey, TextFormatting color){
+        IFormattableTextComponent lore = new TranslationTextComponent(translationKey);
+        return addColor(lore, color);
+    }
+
+    public static IFormattableTextComponent addColorToText(String translationKey, TextFormatting color, Object... args){
+        IFormattableTextComponent lore = new TranslationTextComponent(translationKey, args);
+        return addColor(lore, color);
+    }
+
+    private static IFormattableTextComponent addColor(IFormattableTextComponent text, TextFormatting color){
+        // setStyle, setColor, fromTextFormatting
+        text.func_230530_a_(text.getStyle().func_240718_a_(Color.func_240744_a_(color)));
+        return text;
+    }
+
     public static void clientInit(final FMLClientSetupEvent e) {
         CombatSetup.clientInit(e);
         PowersSetup.clientInit(e);
     }
 
-    public static void serverInit(final FMLServerStartingEvent e) {
-        PowersSetup.serverInit(e);
+    public static void registerCommands(final RegisterCommandsEvent e) {
+        PowersSetup.registerCommands(e);
     }
 
     public static void init(final FMLCommonSetupEvent e) {

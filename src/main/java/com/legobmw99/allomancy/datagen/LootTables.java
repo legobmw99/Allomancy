@@ -12,12 +12,11 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.data.LootTableProvider;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.SurvivesExplosion;
+import net.minecraft.loot.functions.SetNBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.SurvivesExplosion;
-import net.minecraft.world.storage.loot.functions.SetAttributes;
-import net.minecraft.world.storage.loot.functions.SetNBT;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -81,7 +80,7 @@ public class LootTables extends LootTableProvider {
                 LootTable.builder().addLootPool(leras_builder).build());
 
         CompoundNBT nbt = new CompoundNBT();
-        nbt.putBoolean("Unbreakable",true);
+        nbt.putBoolean("Unbreakable", true);
         Allomancy.LOGGER.debug("Creating Loot Table for Obsidian Dagger inject");
         LootPool.Builder dagger_builder = LootPool.builder()
                 .name("main")
@@ -90,7 +89,6 @@ public class LootTables extends LootTableProvider {
                 .addEntry(EmptyLootEntry.func_216167_a().weight(19));
         tables.put(new ResourceLocation(Allomancy.MODID, "/inject/obsidian_dagger"),
                 LootTable.builder().addLootPool(dagger_builder).build());
-
 
 
         writeTables(cache, tables);

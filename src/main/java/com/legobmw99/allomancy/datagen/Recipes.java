@@ -11,6 +11,7 @@ import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
@@ -71,8 +72,7 @@ public class Recipes extends RecipeProvider {
             Item flake = flake_reg.get();
             String flakeType = flake.getRegistryName().getPath().substring(0, flake.getRegistryName().getPath().indexOf('_'));
             buildShapless(consumer, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()),
-                    ing(new ItemTags.Wrapper(new ResourceLocation("forge",
-                            "ingots/" + flakeType))));
+                    ing(ItemTags.makeWrapperTag("forge:" + "ingots/" + flakeType)));
         }
 
         // Mixing Recipes
@@ -187,7 +187,7 @@ public class Recipes extends RecipeProvider {
 
     }
 
-    protected void add(char c, Tag<Item> itemTag) {
+    protected void add(char c, ITag.INamedTag<Item> itemTag) {
         defaultIngredients.put(c, Ingredient.fromTag(itemTag));
     }
 
@@ -199,7 +199,7 @@ public class Recipes extends RecipeProvider {
         defaultIngredients.put(c, ingredient);
     }
 
-    protected Ingredient ing(Tag<Item> itemTag) {
+    protected Ingredient ing(ITag.INamedTag<Item> itemTag) {
         return Ingredient.fromTag(itemTag);
     }
 

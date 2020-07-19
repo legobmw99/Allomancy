@@ -3,6 +3,8 @@ package com.legobmw99.allomancy.modules.consumables.item;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,6 +17,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -54,7 +57,10 @@ public class LerasiumItem extends Item {
             cap.setMistborn();
         }
         //Fancy shmancy effects
-        world.addEntity(new LightningBoltEntity(world, x, y, z, true));
+        LightningBoltEntity lightning = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
+        lightning.func_233623_a_(true); //effectOnly
+        lightning.func_233576_c_(new Vector3d(x,y,z)); // set position - see TridentEntity
+        world.addEntity(lightning);
         livingEntity.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE,
                 20, 0, true, false));
 
@@ -65,8 +71,7 @@ public class LerasiumItem extends Item {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        ITextComponent lore = new TranslationTextComponent("item.allomancy.lerasium_nugget.lore");
-        lore.setStyle(lore.getStyle().setColor(TextFormatting.LIGHT_PURPLE));
+        ITextComponent lore = AllomancySetup.addColorToText("item.allomancy.lerasium_nugget.lore", TextFormatting.LIGHT_PURPLE);
         tooltip.add(lore);
 
     }

@@ -24,7 +24,8 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.*;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -145,8 +146,8 @@ public class ClientEventHandler {
                     List<Entity> entities;
                     Stream<BlockPos> blocks;
                     int max = PowersConfig.max_metal_detection.get();
-                    BlockPos negative = new BlockPos(player).add(-max, -max, -max);
-                    BlockPos positive = new BlockPos(player).add(max, max, max);
+                    BlockPos negative = new BlockPos(player.getPositionVec()).add(-max, -max, -max);
+                    BlockPos positive = new BlockPos(player.getPositionVec()).add(max, max, max);
 
                     // Add metal entities to metal list
                     entities = player.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(negative, positive));
@@ -171,8 +172,8 @@ public class ClientEventHandler {
                 if (cap.isBurning(Metal.BRONZE) && !cap.isBurning(Metal.COPPER)) {
                     List<PlayerEntity> nearby_players;
                     // Add metal burners to a list
-                    BlockPos negative = new BlockPos(player).add(-30, -30, -30);
-                    BlockPos positive = new BlockPos(player).add(30, 30, 30);
+                    BlockPos negative = new BlockPos(player.getPositionVec()).add(-30, -30, -30);
+                    BlockPos positive = new BlockPos(player.getPositionVec()).add(30, 30, 30);
                     // Add entities to metal list
                     nearby_players = player.world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(negative, positive), entity -> entity != null && entity != player);
 
@@ -253,7 +254,7 @@ public class ClientEventHandler {
         if (player == null || !player.isAlive()) {
             return;
         }
-        
+
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
         if (cap.isUninvested()) {
@@ -261,7 +262,7 @@ public class ClientEventHandler {
         }
 
 
-        Vec3d view = mc.gameRenderer.getActiveRenderInfo().getProjectedView();
+        Vector3d view = mc.gameRenderer.getActiveRenderInfo().getProjectedView();
         MatrixStack stack = event.getMatrixStack();
         stack.translate(-view.x, -view.y, -view.z);
 
@@ -275,7 +276,7 @@ public class ClientEventHandler {
         RenderSystem.enableBlend();
 
 
-        Vec3d playervec = view.add(0, -.1, 0);
+        Vector3d playervec = view.add(0, -.1, 0);
         /*********************************************
          * IRON AND STEEL LINES                      *
          *********************************************/
@@ -326,8 +327,8 @@ public class ClientEventHandler {
         RenderSystem.popMatrix();
     }
 
-    private static Vec3d blockVec(BlockPos b) {
-        return new Vec3d(b).add(0.5, 0.5, 0.5);
+    private static Vector3d blockVec(BlockPos b) {
+        return new Vector3d(b.getX() + 0.5, b.getY() + 0.5,b.getZ() + 0.5);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -349,7 +350,7 @@ public class ClientEventHandler {
             if (((magnitude) > 25) || ((magnitude) < 3)) {
                 return;
             }
-            Vec3d vec = player.getPositionVec();
+            Vector3d vec = player.getPositionVec();
             double posX = vec.getX(), posY = vec.getY(), posZ = vec.getZ();
             // Spawn sound particles
             String soundName = sound.getSoundLocation().toString();

@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
@@ -11,8 +12,9 @@ import net.minecraft.util.ResourceLocation;
 public class ItemTags extends ItemTagsProvider {
 
 
-    public ItemTags(DataGenerator generatorIn) {
-        super(generatorIn);
+    public ItemTags(DataGenerator gen, BlockTagsProvider blockTagProvider)
+    {
+        super(gen, blockTagProvider);
     }
 
     @Override
@@ -46,9 +48,11 @@ public class ItemTags extends ItemTagsProvider {
     }
 
     private void addForgeTag(String name, Item... items) {
+        // see ForgeItemTagsProvider
         Allomancy.LOGGER.debug("Creating item tag for forge:" + name);
         ResourceLocation loc = new ResourceLocation("forge", name);
-        getBuilder(new Tag<Item>(loc)).replace(false).add(items).build(loc);
+
+        func_240522_a_(net.minecraft.tags.ItemTags.makeWrapperTag("forge" + name)).replace(false).func_240534_a_(items);
     }
 
 

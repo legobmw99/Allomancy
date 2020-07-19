@@ -11,14 +11,11 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.IntNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -55,7 +52,7 @@ public class VialItem extends Item {
         if (!((PlayerEntity) (livingEntity)).abilities.isCreativeMode) {
             stack.shrink(1);
 
-            if (!((PlayerEntity) livingEntity).inventory.addItemStackToInventory(new ItemStack(ConsumeSetup.VIAL.get(), 1))){
+            if (!((PlayerEntity) livingEntity).inventory.addItemStackToInventory(new ItemStack(ConsumeSetup.VIAL.get(), 1))) {
                 world.addEntity(new ItemEntity(world, livingEntity.getPosX(), livingEntity.getPosY(), livingEntity.getPosZ(), new ItemStack(ConsumeSetup.VIAL.get(), 1)));
             }
         }
@@ -107,24 +104,21 @@ public class VialItem extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (stack.hasTag()) {
-            boolean full_display = Screen.hasShiftDown();
+            boolean full_display = Screen.func_231173_s_(); // hasShiftDown
             int count = 0;
             for (Metal mt : Metal.values()) {
                 if (stack.getTag().getBoolean(mt.getName())) {
                     count++;
                     if (full_display) {
-                        ITextComponent metal = new TranslationTextComponent("metals." + mt.getName());
-                        metal.setStyle(metal.getStyle().setColor(TextFormatting.GRAY));
+                        IFormattableTextComponent metal = AllomancySetup.addColorToText("metals." + mt.getName(), TextFormatting.GRAY);
                         tooltip.add(metal);
                     }
                 }
             }
             if (!full_display) {
-                ITextComponent lcount = new TranslationTextComponent("item.allomancy.vial.lore_count", count);
-                lcount.setStyle(lcount.getStyle().setColor(TextFormatting.GRAY));
+                IFormattableTextComponent lcount = AllomancySetup.addColorToText("item.allomancy.vial.lore_count", TextFormatting.GRAY, count);
                 tooltip.add(lcount);
-                ITextComponent linst = new TranslationTextComponent("item.allomancy.vial.lore_inst");
-                linst.setStyle(linst.getStyle().setColor(TextFormatting.GRAY));
+                IFormattableTextComponent linst = AllomancySetup.addColorToText("item.allomancy.vial.lore_inst", TextFormatting.GRAY);
                 tooltip.add(linst);
 
             }
