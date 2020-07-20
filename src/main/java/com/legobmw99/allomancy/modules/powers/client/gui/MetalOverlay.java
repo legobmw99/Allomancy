@@ -111,6 +111,6 @@ public class MetalOverlay {
 
     private static void blit(int x, int y, int p_blit_3, int p_blit_4, int p_blit_5, int p_blit_6) {
         ForgeIngameGui gui = new ForgeIngameGui(Minecraft.getInstance());
-        ForgeIngameGui.func_238464_a_(new MatrixStack(), x, y, 0/*gui.getBlitOffset()*/, p_blit_3, p_blit_4, p_blit_5, p_blit_6, 128, 128);
+        ForgeIngameGui.func_238464_a_(new MatrixStack(), x, y, 0/* todo: was gui.getBlitOffset()*/, p_blit_3, p_blit_4, p_blit_5, p_blit_6, 128, 128);
     }
 }

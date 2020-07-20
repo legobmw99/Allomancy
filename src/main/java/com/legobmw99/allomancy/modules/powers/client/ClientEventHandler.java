@@ -309,6 +309,7 @@ public class ClientEventHandler {
         // todo electrum broke, gold broke if set spawn
         if (cap.isBurning(Metal.GOLD)) {
             RegistryKey<World> deathDim = cap.getDeathDim();
+            System.out.println(deathDim);
             if (deathDim != null && player.world.func_234923_W_() == deathDim) { //world .getDim (look for return type matches)
                 ClientUtils.drawMetalLine(playervec, blockVec(cap.getDeathLoc()), 3.0F, 0.9F, 0.85F, 0.0F);
             }

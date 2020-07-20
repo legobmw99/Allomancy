@@ -55,7 +55,7 @@ public class MetalSelectScreen extends Screen {
 
     }
 
-    @Override
+    @Override // TODO: investigate this, makes @MetalOverlay opaque/glitchy
     public void func_230430_a_(MatrixStack matrixStack, int mx, int my, float partialTicks) { // render
         super.func_230430_a_(matrixStack, mx, my, partialTicks);
 

@@ -135,6 +135,7 @@ public class CommonEventHandler {
         if (player instanceof ServerPlayerEntity) {
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
             cap.setSpawnLoc(event.getNewSpawn(), player.world.func_234923_W_());
+            System.out.println( player.world.func_234923_W_());
             Network.sync(cap, player);
         }
     }

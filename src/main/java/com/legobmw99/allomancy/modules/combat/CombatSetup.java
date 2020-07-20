@@ -46,6 +46,7 @@ public class CombatSetup {
     public static final RegistryObject<EntityType<IronNuggetEntity>> IRON_NUGGET = ENTITIES.register("iron_nugget", () ->
             EntityType.Builder.<IronNuggetEntity>create(IronNuggetEntity::new, EntityClassification.MISC).setShouldReceiveVelocityUpdates(true)
                     .setUpdateInterval(20).setCustomClientFactory((spawnEntity, world) -> new IronNuggetEntity(world)).size(0.25F, 0.25F).build("iron_nugget"));
+
     public static final RegistryObject<EntityType<GoldNuggetEntity>> GOLD_NUGGET = ENTITIES.register("gold_nugget", () ->
             EntityType.Builder.<GoldNuggetEntity>create(GoldNuggetEntity::new, EntityClassification.MISC).setShouldReceiveVelocityUpdates(true)
                     .setUpdateInterval(20).setCustomClientFactory((spawnEntity, world) -> new GoldNuggetEntity(world)).size(0.25F, 0.25F).build("gold_nugget"));

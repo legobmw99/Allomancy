@@ -77,7 +77,7 @@ public class CoinBagItem extends ShootableItem {
     }
 
     @Override
-    public int func_230305_d_() { // TODO figure out what this does - new in 1.16
+    public int func_230305_d_() { // TODO figure out what this does - new in 1.16, possibly speed?
         return 0;
     }
 }
