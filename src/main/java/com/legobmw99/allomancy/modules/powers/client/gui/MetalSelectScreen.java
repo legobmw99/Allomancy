@@ -173,9 +173,8 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public void func_231160_c_() { // todo tick?
+    public void func_231023_e_() { // tick
         timeIn++;
-        super.func_231160_c_();
     }
 
     @Override

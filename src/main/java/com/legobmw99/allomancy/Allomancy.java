@@ -18,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 public class Allomancy {
     /* TODO:
         Redo silver flake texture
-        Redo curseforge page
      */
     public static final String MODID = "allomancy";
 
