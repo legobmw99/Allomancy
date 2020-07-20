@@ -14,6 +14,7 @@ import com.legobmw99.allomancy.modules.powers.client.ClientUtils;
 import com.legobmw99.allomancy.modules.powers.client.PowerClientSetup;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.setup.Metal;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -31,6 +32,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
+
+// TODO broken
 
 @OnlyIn(Dist.CLIENT)
 public class MetalSelectScreen extends Screen {
@@ -53,11 +56,11 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public void render(int mx, int my, float partialTicks) {
-        super.render(mx, my, partialTicks);
+    public void func_230430_a_(MatrixStack matrixStack, int mx, int my, float partialTicks) { // render
+        super.func_230430_a_(matrixStack, mx, my, partialTicks);
 
-        int x = width / 2;
-        int y = height / 2;
+        int x = this.field_230708_k_  / 2; //width
+        int y = this.field_230709_l_  / 2; //height
         int maxRadius = 80;
 
         double angle = mouseAngle(x, y, mx, my);
@@ -140,7 +143,7 @@ public class MetalSelectScreen extends Screen {
             if (ysp < y)
                 ysp -= 9;
 
-            mc.getRenderManager().getFontRenderer().drawStringWithShadow(name, xsp, ysp, 0xFFFFFF);
+            mc.getRenderManager().getFontRenderer().func_238405_a_(matrixStack, name, xsp, ysp, 0xFFFFFF); //drawStringWithShadow?
 
             double mod = 0.8;
             int xdp = (int) ((xp - x) * mod + x);
@@ -148,7 +151,7 @@ public class MetalSelectScreen extends Screen {
 
             mc.getRenderManager().textureManager.bindTexture(METAL_ICONS[toMetalIndex(seg)]);
             RenderSystem.color4f(1, 1, 1, 1);
-            blit(xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
+            func_238463_a_( matrixStack,xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16); //blit?
 
         }
 
@@ -164,15 +167,15 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
+    public boolean func_231044_a_(double mouseX, double mouseY, int mouseButton) { //mouseClicked
         toggleSelected();
-        return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
+        return super.func_231044_a_(mouseX, mouseY, mouseButton);
     }
 
     @Override
-    public void tick() {
+    public void func_231160_c_() { // todo tick?
         timeIn++;
-        super.tick();
+        super.func_231160_c_();
     }
 
     @Override
@@ -198,8 +201,8 @@ public class MetalSelectScreen extends Screen {
         }
     }
 
-    @Override
-    public boolean isPauseScreen() {
+    @Override // isPauseScreen?
+    public boolean func_231177_au__() {
         return false;
     }
 

@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.powers.client.gui;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.setup.Metal;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -110,6 +111,6 @@ public class MetalOverlay {
 
     private static void blit(int x, int y, int p_blit_3, int p_blit_4, int p_blit_5, int p_blit_6) {
         ForgeIngameGui gui = new ForgeIngameGui(Minecraft.getInstance());
-        ForgeIngameGui.blit(x, y, gui.getBlitOffset(), p_blit_3, p_blit_4, p_blit_5, p_blit_6, 128, 128);
+        ForgeIngameGui.func_238464_a_(new MatrixStack(), x, y, 0/*gui.getBlitOffset()*/, p_blit_3, p_blit_4, p_blit_5, p_blit_6, 128, 128);
     }
 }

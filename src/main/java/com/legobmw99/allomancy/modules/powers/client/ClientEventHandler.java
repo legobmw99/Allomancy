@@ -306,6 +306,7 @@ public class ClientEventHandler {
         /*********************************************
          * GOLD AND ELECTRUM LINES                   *
          *********************************************/
+        // todo electrum broke, gold broke if set spawn
         if (cap.isBurning(Metal.GOLD)) {
             RegistryKey<World> deathDim = cap.getDeathDim();
             if (deathDim != null && player.world.func_234923_W_() == deathDim) { //world .getDim (look for return type matches)

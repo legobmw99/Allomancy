@@ -215,6 +215,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         this.damange_stored = damageStored;
     }
 
+    // todo docs
     public void setDeathLoc(BlockPos pos, RegistryKey<World> dim) {
         setDeathLoc(pos, dim.getRegistryName().toString());
     }
@@ -230,7 +231,11 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
 
     public RegistryKey<World> getDeathDim() {
+        if (this.death_dimension == null) {
+            return null;
+        }
         return RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(this.death_dimension));
+
     }
 
     public void setSpawnLoc(BlockPos pos, RegistryKey<World> dim) {
@@ -247,6 +252,9 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
     public RegistryKey<World> getSpawnDim() {
+        if (this.spawn_dimension == null) {
+            return null;
+        }
         return RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(this.spawn_dimension));
     }
 
