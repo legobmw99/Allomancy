@@ -1,8 +1,7 @@
 package com.legobmw99.allomancy.modules.powers.util;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.combat.entity.GoldNuggetEntity;
-import com.legobmw99.allomancy.modules.combat.entity.IronNuggetEntity;
+import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIAttackOnCollideExtended;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIEvilAttack;
@@ -13,7 +12,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.FallingBlockEntity;
@@ -109,7 +107,7 @@ public class PowerUtils {
         if (entity instanceof FallingBlockEntity) {
             return isBlockStateMetal(((FallingBlockEntity) entity).getBlockState());
         }
-        if (entity instanceof IronNuggetEntity || entity instanceof GoldNuggetEntity) {
+        if (entity instanceof ProjectileNuggetEntity) {
             return true;
         }
         if (entity instanceof AbstractMinecartEntity) {

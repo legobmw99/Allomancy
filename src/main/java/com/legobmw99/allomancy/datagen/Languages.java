@@ -64,8 +64,7 @@ public class Languages extends LanguageProvider {
         add(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get(), "Lead Flakes");
         add(MaterialsSetup.FLAKES.get(MaterialsSetup.SILVER).get(), "Silver Flakes");
 
-        add(CombatSetup.GOLD_NUGGET.get(), "Gold Nugget");
-        add(CombatSetup.IRON_NUGGET.get(), "Iron Nugget");
+        add(CombatSetup.NUGGET_PROJECTILE.get(), "Nugget Projectile");
 
         add("advancements.become_mistborn.title", "Become Mistborn!");
         add("advancements.become_mistborn.desc", "You have a power most people envy...");

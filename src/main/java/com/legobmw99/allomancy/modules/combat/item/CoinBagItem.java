@@ -1,10 +1,9 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
-import com.legobmw99.allomancy.modules.combat.entity.GoldNuggetEntity;
-import com.legobmw99.allomancy.modules.combat.entity.IronNuggetEntity;
+import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.setup.AllomancySetup;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
@@ -41,20 +40,13 @@ public class CoinBagItem extends ShootableItem {
         if (AllomancyCapability.forPlayer(player).isBurning(Metal.STEEL)) {    // make sure there is always an item available
             if (!world.isRemote) {
 
-                if (itemstack.getItem() == Items.GOLD_NUGGET) {
-                    GoldNuggetEntity entitygold = new GoldNuggetEntity(player, world);
-                    //          formerly called .shoot()
-                    entitygold.func_234612_a_(player, player.rotationPitch, player.rotationYawHead, 2.0F, 4.0F, 1.0F);
-                    world.addEntity(entitygold);
-                }
+                Ammo type = (itemstack.getItem() == Items.GOLD_NUGGET) ? Ammo.GOLD : Ammo.IRON;
 
-                if (itemstack.getItem() == Items.IRON_NUGGET) {
-                    IronNuggetEntity entityiron = new IronNuggetEntity(player, world);
-                    //          formerly called .shoot()
-                    entityiron.func_234612_a_(player, player.rotationPitch, player.rotationYawHead, 2.0F, 2.25F, 2.5F);
-                    world.addEntity(entityiron);
+                ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, type.damage);
+                //          formerly called .shoot()
+                nugget_projectile.func_234612_a_(player, player.rotationPitch, player.rotationYawHead, type.arg1, type.arg2, type.arg3);
+                world.addEntity(nugget_projectile);
 
-                }
 
                 if (!player.abilities.isCreativeMode) {
                     itemstack.shrink(1);
@@ -70,6 +62,18 @@ public class CoinBagItem extends ShootableItem {
 
     }
 
+    private enum Ammo {
+        GOLD(4.0F, 2.0F, 4.0F, 1.0F),
+        IRON(5.0F, 2.0F, 2.25F, 2.5F);
+        float damage, arg1, arg2, arg3;
+
+        Ammo(float damage, float v1, float v2, float v3) {
+            this.damage = damage;
+            arg1 = v1;
+            arg2 = v2;
+            arg3 = v3;
+        }
+    }
 
     @Override
     public int getItemEnchantability() {

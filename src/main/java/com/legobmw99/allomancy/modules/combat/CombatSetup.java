@@ -2,8 +2,7 @@ package com.legobmw99.allomancy.modules.combat;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.client.CombatClientSetup;
-import com.legobmw99.allomancy.modules.combat.entity.GoldNuggetEntity;
-import com.legobmw99.allomancy.modules.combat.entity.IronNuggetEntity;
+import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.combat.item.CoinBagItem;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.combat.item.MistcloakItem;
@@ -43,13 +42,15 @@ public class CombatSetup {
     public static final RegistryObject<KolossBladeItem> KOLOSS_BLADE = ITEMS.register("koloss_blade", KolossBladeItem::new);
 
 
-    public static final RegistryObject<EntityType<IronNuggetEntity>> IRON_NUGGET = ENTITIES.register("iron_nugget", () ->
-            EntityType.Builder.<IronNuggetEntity>create(IronNuggetEntity::new, EntityClassification.MISC).setShouldReceiveVelocityUpdates(true)
-                    .setUpdateInterval(20).setCustomClientFactory((spawnEntity, world) -> new IronNuggetEntity(world)).size(0.25F, 0.25F).build("iron_nugget"));
+    public static final RegistryObject<EntityType<ProjectileNuggetEntity>> NUGGET_PROJECTILE = ENTITIES.register("nugget_projectile", () ->
+            EntityType.Builder.<ProjectileNuggetEntity>create(ProjectileNuggetEntity::new, EntityClassification.MISC).setShouldReceiveVelocityUpdates(true)
+                    .setUpdateInterval(20).setCustomClientFactory(
+                    (spawnEntity, world) -> {
+                        System.out.println(spawnEntity.getEntity());
+                        return new ProjectileNuggetEntity(world, spawnEntity.getEntity());
+                    }
+            ).size(0.25F, 0.25F).build("nugget_projectile"));
 
-    public static final RegistryObject<EntityType<GoldNuggetEntity>> GOLD_NUGGET = ENTITIES.register("gold_nugget", () ->
-            EntityType.Builder.<GoldNuggetEntity>create(GoldNuggetEntity::new, EntityClassification.MISC).setShouldReceiveVelocityUpdates(true)
-                    .setUpdateInterval(20).setCustomClientFactory((spawnEntity, world) -> new GoldNuggetEntity(world)).size(0.25F, 0.25F).build("gold_nugget"));
 
     public static final IArmorMaterial WoolArmor = new IArmorMaterial() {
         @Override
