@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 public class ClientUtils {
 
     private static Minecraft mc = Minecraft.getInstance();
-    private static ClientPlayerEntity player = mc.player;
+    private static final ClientPlayerEntity player = mc.player;
 
     /**
      * Adapted from vanilla, allows getting mouseover at given distances

@@ -160,13 +160,13 @@ public class PowerUtils {
         Vector3d vec = toMove.getPositionVec();
         double posX = vec.getX(), posY = vec.getY(), posZ = vec.getZ();
         // Calculate the length of the vector between the entity and anchor
-        magnitude = Math.sqrt(Math.pow((posX - (double) (block.getX() + .5)), 2)
-                + Math.pow((posY - (double) (block.getY() + .5)), 2)
-                + Math.pow((posZ - (double) (block.getZ() + .5)), 2));
+        magnitude = Math.sqrt(Math.pow((posX - (block.getX() + .5)), 2)
+                + Math.pow((posY - (block.getY() + .5)), 2)
+                + Math.pow((posZ - (block.getZ() + .5)), 2));
         // Get a unit(-ish) vector in the direction of motion
-        motionX = ((posX - (double) (block.getX() + .5)) * directionScalar * (1.1) / magnitude);
-        motionY = ((posY - (double) (block.getY() + .5)) * directionScalar * (1.1) / magnitude);
-        motionZ = ((posZ - (double) (block.getZ() + .5)) * directionScalar * (1.1) / magnitude);
+        motionX = ((posX - (block.getX() + .5)) * directionScalar * (1.1) / magnitude);
+        motionY = ((posY - (block.getY() + .5)) * directionScalar * (1.1) / magnitude);
+        motionZ = ((posZ - (block.getZ() + .5)) * directionScalar * (1.1) / magnitude);
         // Move along that vector, additively increasing motion until you max
         // out at the above values
         double x = toMove.getMotion().getX(), y = toMove.getMotion().getY(), z = toMove.getMotion().getZ();
@@ -300,7 +300,7 @@ public class PowerUtils {
 
     }
 
-    private static Predicate<Goal> isAggroGoal = (goal) ->
+    private static final Predicate<Goal> isAggroGoal = (goal) ->
             goal instanceof CreeperSwellGoal ||
                     goal instanceof AIAttackOnCollideExtended ||
                     goal instanceof MeleeAttackGoal ||

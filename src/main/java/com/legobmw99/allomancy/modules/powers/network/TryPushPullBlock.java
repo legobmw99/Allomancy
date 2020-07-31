@@ -12,8 +12,8 @@ import java.util.function.Supplier;
 
 public class TryPushPullBlock {
 
-    private BlockPos blockPos;
-    private int direction;
+    private final BlockPos blockPos;
+    private final int direction;
 
     /**
      * Send a request to the server to use iron or steel on a block

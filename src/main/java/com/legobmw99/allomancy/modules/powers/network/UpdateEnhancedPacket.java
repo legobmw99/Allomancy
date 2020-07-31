@@ -12,8 +12,8 @@ import java.util.function.Supplier;
 
 public class UpdateEnhancedPacket {
 
-    private int enhance_time;
-    private int entityID;
+    private final int enhance_time;
+    private final int entityID;
 
 
     public UpdateEnhancedPacket(boolean enhanced, int entityID) {

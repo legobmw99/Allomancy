@@ -13,8 +13,8 @@ import java.util.function.Supplier;
 
 public class UpdateBurnPacket {
 
-    private Metal mt;
-    private boolean value;
+    private final Metal mt;
+    private final boolean value;
 
     /**
      * Send request to the server to change the burning state of a metal

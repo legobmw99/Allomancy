@@ -10,6 +10,6 @@ public class AIEvilAttack extends MeleeAttackGoal {
     }
 
     protected double getAttackReachSqr(LivingEntity attackTarget) {
-        return (double) (4.0F + attackTarget.getWidth());
+        return 4.0F + attackTarget.getWidth();
     }
 }

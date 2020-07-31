@@ -17,8 +17,8 @@ import java.util.function.Supplier;
 
 public class TryPushPullEntity {
 
-    private int entityIDOther;
-    private int direction;
+    private final int entityIDOther;
+    private final int direction;
 
     /**
      * Send a request to the server to use iron or steel on an entity

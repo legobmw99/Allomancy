@@ -33,10 +33,10 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     private static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
 
 
-    private boolean[] allomantic_powers;
-    private int[] burn_time;
-    private int[] metal_amounts;
-    private boolean[] burning_metals;
+    private final boolean[] allomantic_powers;
+    private final int[] burn_time;
+    private final int[] metal_amounts;
+    private final boolean[] burning_metals;
 
     private int damange_stored;
 
@@ -48,7 +48,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     private int enhanced_time;
 
 
-    private LazyOptional<AllomancyCapability> handler;
+    private final LazyOptional<AllomancyCapability> handler;
 
     public AllomancyCapability() {
         handler = LazyOptional.of(() -> this);

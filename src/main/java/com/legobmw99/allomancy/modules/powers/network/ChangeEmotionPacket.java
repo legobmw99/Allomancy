@@ -11,8 +11,8 @@ import java.util.function.Supplier;
 
 public class ChangeEmotionPacket {
 
-    private int entityID;
-    private boolean make_aggressive;
+    private final int entityID;
+    private final boolean make_aggressive;
 
 
     /**

@@ -11,8 +11,8 @@ import java.util.function.Supplier;
 
 public class AllomancyCapabilityPacket {
 
-    private CompoundNBT nbt;
-    private int entityID;
+    private final CompoundNBT nbt;
+    private final int entityID;
 
     /**
      * Packet for sending Allomancy player data to a client

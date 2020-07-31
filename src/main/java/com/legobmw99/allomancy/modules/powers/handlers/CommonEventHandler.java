@@ -190,7 +190,7 @@ public class CommonEventHandler {
         }
     }
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
     @SubscribeEvent
     public void onWorldTick(final TickEvent.WorldTickEvent event) {

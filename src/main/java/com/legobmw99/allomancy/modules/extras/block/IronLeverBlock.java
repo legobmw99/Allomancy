@@ -41,7 +41,7 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyActivat
 
             world.setBlockState(pos, state, 3);
             float f = state.get(POWERED) ? 0.6F : 0.5F;
-            world.playSound((PlayerEntity) null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, f);
+            world.playSound(null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, f);
             this.updateNeighbors(state, world, pos);
             return true;
 

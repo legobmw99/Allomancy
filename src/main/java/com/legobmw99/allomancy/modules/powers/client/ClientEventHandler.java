@@ -49,9 +49,9 @@ public class ClientEventHandler {
 
     private final Minecraft mc = Minecraft.getInstance();
 
-    private Set<Entity> metal_entities = new HashSet<>();
-    private Set<BlockPos> metal_blocks = new HashSet<>();
-    private Set<PlayerEntity> nearby_allomancers = new HashSet<>();
+    private final Set<Entity> metal_entities = new HashSet<>();
+    private final Set<BlockPos> metal_blocks = new HashSet<>();
+    private final Set<PlayerEntity> nearby_allomancers = new HashSet<>();
 
 
     @OnlyIn(Dist.CLIENT)
