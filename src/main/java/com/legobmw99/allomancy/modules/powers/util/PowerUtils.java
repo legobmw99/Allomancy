@@ -32,6 +32,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -179,12 +180,17 @@ public class PowerUtils {
         }
     }
 
-    public static void teleport(World world, PlayerEntity player, BlockPos pos) {
+    public static void teleport(World world, RegistryKey<World> dimension, PlayerEntity player, BlockPos pos) {
         if (!world.isRemote) {
             if (player != null) {
                 if (player.isPassenger()) {
                     player.stopRiding();
                 }
+
+                if(player.world.func_234923_W_() != dimension){
+                   player = (PlayerEntity) player.func_241206_a_(world.getServer().getWorld(dimension)); //change dimension
+                }
+
                 player.teleportKeepLoaded(pos.getX(), pos.getY() + 1.5, pos.getZ());
                 player.fallDistance = 0.0F;
             }

@@ -21,6 +21,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
@@ -134,8 +135,7 @@ public class CommonEventHandler {
         PlayerEntity player = event.getPlayer();
         if (player instanceof ServerPlayerEntity) {
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-            cap.setSpawnLoc(event.getNewSpawn(), player.world.func_234923_W_());
-            System.out.println( player.world.func_234923_W_());
+            cap.setSpawnLoc(event.getNewSpawn(), event.getSpawnWorld());
             Network.sync(cap, player);
         }
     }
@@ -248,22 +248,30 @@ public class CommonEventHandler {
                      * GOLD AND ELECTRUM (enhanced)              *
                      *********************************************/
                     if (cap.isEnhanced() && cap.isBurning(Metal.ELECTRUM) && cap.getAmount(Metal.ELECTRUM) >= 9) {
-                        BlockPos spawn_pos = cap.getSpawnLoc();
-                        if (spawn_pos == null) {
-                            spawn_pos =  new BlockPos(world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY(), world.getWorldInfo().getSpawnZ());
+                        RegistryKey<World> spawnDim = cap.getSpawnDim();
+                        BlockPos spawnLoc = null;
+
+                        if (spawnDim != null && spawnDim == curPlayer.world.func_234923_W_()){
+                            spawnLoc = cap.getSpawnLoc();
+                        } else if (spawnDim == null) { // overworld, no spawn --> use world spawn
+                            spawnDim = World.field_234918_g_;
+                            spawnLoc = new BlockPos(curPlayer.world.getWorldInfo().getSpawnX(),
+                                     curPlayer.world.getWorldInfo().getSpawnY(), curPlayer.world.getWorldInfo().getSpawnZ());
+
                         }
-                            // TODO doesnt work in other dimensions, should it?
-                        if (curPlayer.world.func_234923_W_() == World.field_234918_g_) {
-                            PowerUtils.teleport(world, curPlayer, spawn_pos);
+
+                        if(spawnLoc != null){
+                            PowerUtils.teleport(world, spawnDim, curPlayer, spawnLoc);
                             if (cap.isBurning(Metal.DURALUMIN))
                                 cap.drainMetals(Metal.DURALUMIN);
                             cap.drainMetals(Metal.ELECTRUM);
                         }
+
+
                     } else if (cap.isEnhanced() && cap.isBurning(Metal.GOLD) && cap.getAmount(Metal.GOLD) >= 9) { // These should be mutually exclusive
-                        BlockPos death_pos = cap.getDeathLoc();
-                        // TODO make work cross-dimension? maybe?
-                        if (death_pos != null && curPlayer.world.func_234923_W_() == cap.getDeathDim()) {
-                            PowerUtils.teleport(world, curPlayer, death_pos);
+                        RegistryKey<World> deathDim = cap.getDeathDim();
+                        if (deathDim != null) {
+                            PowerUtils.teleport(world, deathDim, curPlayer, cap.getDeathLoc());
                             if (cap.isBurning(Metal.DURALUMIN))
                                 cap.drainMetals(Metal.DURALUMIN);
                             cap.drainMetals(Metal.GOLD);

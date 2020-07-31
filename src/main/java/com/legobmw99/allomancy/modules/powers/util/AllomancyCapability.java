@@ -217,7 +217,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     // todo docs
     public void setDeathLoc(BlockPos pos, RegistryKey<World> dim) {
-        setDeathLoc(pos, dim.getRegistryName().toString());
+        setDeathLoc(pos, dim.func_240901_a_().toString());
     }
 
     protected void setDeathLoc(BlockPos pos, String dim_name) {
@@ -239,7 +239,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
     public void setSpawnLoc(BlockPos pos, RegistryKey<World> dim) {
-        setSpawnLoc(pos, dim.getRegistryName().toString());
+        setSpawnLoc(pos, dim.func_240901_a_().toString());
     }
 
     public void setSpawnLoc(BlockPos pos, String dim_name) {
