@@ -6,14 +6,12 @@ import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 
 public class ItemTags extends ItemTagsProvider {
 
 
-    public ItemTags(DataGenerator gen, BlockTagsProvider blockTagProvider)
-    {
+    public ItemTags(DataGenerator gen, BlockTagsProvider blockTagProvider) {
         super(gen, blockTagProvider);
     }
 

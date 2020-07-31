@@ -16,7 +16,7 @@ public class Languages extends LanguageProvider {
     @Override
     protected void addTranslations() {
         add("itemGroup.allomancy", "Allomancy");
-        for(Metal mt: Metal.values()){
+        for (Metal mt : Metal.values()) {
             add("metals." + mt.getName(), mt.getDisplayName());
         }
 
@@ -44,7 +44,7 @@ public class Languages extends LanguageProvider {
         add("item.allomancy.koloss_blade.lore",
                 "This item is too heavy for the average person to wield.");
         add(ConsumeSetup.VIAL.get(), "Allomantic Vial");
-        add("item.allomancy.vial.lore_count","Contains %d metals");
+        add("item.allomancy.vial.lore_count", "Contains %d metals");
         add("item.allomancy.vial.lore_inst", "Hold SHIFT to view");
 
         add(MaterialsSetup.ALUMINUM_INGOT.get(), "Aluminum Ingot");
@@ -58,7 +58,7 @@ public class Languages extends LanguageProvider {
         add(MaterialsSetup.TIN_INGOT.get(), "Tin Ingot");
         add(MaterialsSetup.ZINC_INGOT.get(), "Zinc Ingot");
 
-        for(Metal mt: Metal.values()){
+        for (Metal mt : Metal.values()) {
             add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), mt.getDisplayName() + " Flakes");
         }
         add(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get(), "Lead Flakes");

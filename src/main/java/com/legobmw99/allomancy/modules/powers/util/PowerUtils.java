@@ -38,7 +38,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.ITeleporter;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -187,8 +190,16 @@ public class PowerUtils {
                     player.stopRiding();
                 }
 
-                if(player.world.func_234923_W_() != dimension){
-                   player = (PlayerEntity) player.func_241206_a_(world.getServer().getWorld(dimension)); //change dimension
+                if (player.world.func_234923_W_() != dimension) {
+                    //change dimension
+                    player = (PlayerEntity) player.changeDimension(world.getServer().getWorld(dimension), new ITeleporter() {
+                        @Override
+                        public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
+                            Entity repositionedEntity = repositionEntity.apply(false);
+                            repositionedEntity.setPositionAndUpdate(pos.getX(), pos.getY(), pos.getZ());
+                            return repositionedEntity;
+                        }
+                    });
                 }
 
                 player.teleportKeepLoaded(pos.getX(), pos.getY() + 1.5, pos.getZ());
@@ -246,7 +257,7 @@ public class PowerUtils {
     public static void sootheEntity(CreatureEntity target, PlayerEntity allomancer, boolean enhanced) {
         try {
             if (!enhanced) {
-                if(target.isAIDisabled()){
+                if (target.isAIDisabled()) {
                     target.setNoAI(false);
                 }
                 // Reset all current aggro goals

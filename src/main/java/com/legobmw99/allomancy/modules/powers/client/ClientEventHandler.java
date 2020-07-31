@@ -16,7 +16,6 @@ import com.legobmw99.allomancy.setup.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import jdk.nashorn.internal.ir.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -27,7 +26,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -335,7 +333,7 @@ public class ClientEventHandler {
     }
 
     private static Vector3d blockVec(BlockPos b) {
-        return new Vector3d(b.getX() + 0.5, b.getY() + 0.5,b.getZ() + 0.5);
+        return new Vector3d(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
     }
 
     @OnlyIn(Dist.CLIENT)

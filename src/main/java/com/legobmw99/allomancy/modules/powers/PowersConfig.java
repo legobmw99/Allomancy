@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.setup.AllomancyConfig;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;

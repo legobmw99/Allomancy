@@ -3,7 +3,6 @@ package com.legobmw99.allomancy.modules.consumables.item;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
@@ -20,7 +19,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -59,7 +57,7 @@ public class LerasiumItem extends Item {
         //Fancy shmancy effects
         LightningBoltEntity lightning = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
         lightning.func_233623_a_(true); //effectOnly
-        lightning.func_233576_c_(new Vector3d(x,y,z)); // set position - see TridentEntity
+        lightning.func_233576_c_(new Vector3d(x, y, z)); // set position - see TridentEntity
         world.addEntity(lightning);
         livingEntity.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE,
                 20, 0, true, false));

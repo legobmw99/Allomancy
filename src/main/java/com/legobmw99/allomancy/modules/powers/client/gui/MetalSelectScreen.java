@@ -41,7 +41,7 @@ public class MetalSelectScreen extends Screen {
     private static final String[] METAL_NAMES = Arrays.stream(Metal.values()).map(Metal::getDisplayName).toArray(String[]::new);
     private static final String GUI_METAL = "allomancy:textures/gui/metals/%s_symbol.png";
 
-    private static final ResourceLocation[] METAL_ICONS = Arrays.stream(METAL_NAMES).map(s -> new ResourceLocation(String.format(GUI_METAL,s.toLowerCase()))).toArray(ResourceLocation[]::new);
+    private static final ResourceLocation[] METAL_ICONS = Arrays.stream(METAL_NAMES).map(s -> new ResourceLocation(String.format(GUI_METAL, s.toLowerCase()))).toArray(ResourceLocation[]::new);
 
     int timeIn = PowersConfig.animate_selection.get() ? 0 : 16; // Config setting for whether the wheel animates open or instantly appears
     int slotSelected = -1;
@@ -59,8 +59,8 @@ public class MetalSelectScreen extends Screen {
     public void func_230430_a_(MatrixStack matrixStack, int mx, int my, float partialTicks) { // render
         super.func_230430_a_(matrixStack, mx, my, partialTicks);
 
-        int x = this.field_230708_k_  / 2; //width
-        int y = this.field_230709_l_  / 2; //height
+        int x = this.field_230708_k_ / 2; //width
+        int y = this.field_230709_l_ / 2; //height
         int maxRadius = 80;
 
         double angle = mouseAngle(x, y, mx, my);
@@ -151,7 +151,7 @@ public class MetalSelectScreen extends Screen {
 
             mc.getRenderManager().textureManager.bindTexture(METAL_ICONS[toMetalIndex(seg)]);
             RenderSystem.color4f(1, 1, 1, 1);
-            func_238463_a_( matrixStack,xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16); //blit?
+            func_238463_a_(matrixStack, xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16); //blit?
 
         }
 
@@ -209,7 +209,7 @@ public class MetalSelectScreen extends Screen {
         return (MathHelper.atan2(my - y, mx - x) + Math.PI * 2) % (Math.PI * 2);
     }
 
-    private static int toMetalIndex(int segment){
+    private static int toMetalIndex(int segment) {
         return (segment + 8) % Metal.values().length;
     }
 }

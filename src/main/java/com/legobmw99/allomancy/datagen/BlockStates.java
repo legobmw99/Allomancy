@@ -42,7 +42,6 @@ public class BlockStates extends BlockStateProvider {
     }
 
 
-
     private void createIronButtonBlock() {
         Allomancy.LOGGER.debug("Creating Block Data for allomancy:iron_button");
         ModelFile inventory = models().withExistingParent("allomancy:iron_button_inventory", mcLoc("block/button_inventory")).texture("texture", mcLoc("block/iron_block"));
@@ -63,10 +62,10 @@ public class BlockStates extends BlockStateProvider {
                             .with(IronButtonBlock.FACE, face)
                             .with(IronButtonBlock.HORIZONTAL_FACING, dir)
                             .modelForState()
-                                .modelFile(model)
-                                .uvLock(uvlock)
-                                .rotationY(yangle)
-                                .rotationX(xangle)
+                            .modelFile(model)
+                            .uvLock(uvlock)
+                            .rotationY(yangle)
+                            .rotationX(xangle)
                             .addModel();
                 }
             }
@@ -117,14 +116,14 @@ public class BlockStates extends BlockStateProvider {
                 .texture("base", mcLoc("block/iron_block"))
                 .texture("lever", modLoc("block/iron_lever"))
                 .element()
-                    .from(5, 0, 4).to(11, 3, 12)
-                    .allFaces(base_generator)
+                .from(5, 0, 4).to(11, 3, 12)
+                .allFaces(base_generator)
                 .end()
                 .element()
-                    .from(7, 1, 7).to(9, 11, 9)
-                    .rotation()
-                        .origin(8, 1, 8).axis(Direction.Axis.X).angle(-45F).end()
-                    .allFaces(lever_generator)
+                .from(7, 1, 7).to(9, 11, 9)
+                .rotation()
+                .origin(8, 1, 8).axis(Direction.Axis.X).angle(-45F).end()
+                .allFaces(lever_generator)
                 .end();
 
         ModelFile lever_off = models().getBuilder("allomancy:iron_lever_off").ao(false)
@@ -132,14 +131,14 @@ public class BlockStates extends BlockStateProvider {
                 .texture("base", mcLoc("block/iron_block"))
                 .texture("lever", modLoc("block/iron_lever"))
                 .element()
-                    .from(5, 0, 4).to(11, 3, 12)
-                    .allFaces(base_generator)
+                .from(5, 0, 4).to(11, 3, 12)
+                .allFaces(base_generator)
                 .end()
                 .element()
-                    .from(7, 1, 7).to(9, 11, 9)
-                    .rotation()
-                        .origin(8, 1, 8).axis(Direction.Axis.X).angle(45).end()
-                    .allFaces(lever_generator)
+                .from(7, 1, 7).to(9, 11, 9)
+                .rotation()
+                .origin(8, 1, 8).axis(Direction.Axis.X).angle(45).end()
+                .allFaces(lever_generator)
                 .end();
 
         VariantBlockStateBuilder builder = getVariantBuilder(ExtrasSetup.IRON_LEVER.get());
@@ -157,9 +156,9 @@ public class BlockStates extends BlockStateProvider {
                             .with(IronLeverBlock.FACE, face)
                             .with(IronLeverBlock.HORIZONTAL_FACING, dir)
                             .modelForState()
-                                .modelFile(model)
-                                .rotationY(yangle)
-                                .rotationX(xangle)
+                            .modelFile(model)
+                            .rotationY(yangle)
+                            .rotationX(xangle)
                             .addModel();
                 }
             }

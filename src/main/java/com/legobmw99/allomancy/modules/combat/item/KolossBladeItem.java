@@ -13,7 +13,6 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -42,7 +41,7 @@ public class KolossBladeItem extends SwordItem {
 
     @Override
     public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
-       return (attacker instanceof PlayerEntity) && (AllomancyCapability.forPlayer(attacker).isBurning(Metal.PEWTER));
+        return (attacker instanceof PlayerEntity) && (AllomancyCapability.forPlayer(attacker).isBurning(Metal.PEWTER));
     }
 
     @Override

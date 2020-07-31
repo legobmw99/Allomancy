@@ -18,7 +18,6 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 public class AllomancySetup {
 
@@ -37,25 +36,25 @@ public class AllomancySetup {
         return Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F).harvestTool(ToolType.PICKAXE).harvestLevel(2);
     }
 
-    public static Item createStandardItem(){
+    public static Item createStandardItem() {
         return new Item(createStandardItemProperties());
     }
 
-    public static Block createStandardBlock(){
+    public static Block createStandardBlock() {
         return new Block(createStandardBlockProperties());
     }
 
-    public static IFormattableTextComponent addColorToText(String translationKey, TextFormatting color){
+    public static IFormattableTextComponent addColorToText(String translationKey, TextFormatting color) {
         IFormattableTextComponent lore = new TranslationTextComponent(translationKey);
         return addColor(lore, color);
     }
 
-    public static IFormattableTextComponent addColorToText(String translationKey, TextFormatting color, Object... args){
+    public static IFormattableTextComponent addColorToText(String translationKey, TextFormatting color, Object... args) {
         IFormattableTextComponent lore = new TranslationTextComponent(translationKey, args);
         return addColor(lore, color);
     }
 
-    private static IFormattableTextComponent addColor(IFormattableTextComponent text, TextFormatting color){
+    private static IFormattableTextComponent addColor(IFormattableTextComponent text, TextFormatting color) {
         // setStyle, setColor, fromTextFormatting
         text.func_230530_a_(text.getStyle().func_240718_a_(Color.func_240744_a_(color)));
         return text;

@@ -40,7 +40,7 @@ public class ChangeEmotionPacket {
         ctx.get().enqueueWork(() -> {
             PlayerEntity allomancer = ctx.get().getSender();
             CreatureEntity target = (CreatureEntity) allomancer.world.getEntityByID(entityID);
-            if(target == null){
+            if (target == null) {
                 return;
             }
             boolean enhanced = AllomancyCapability.forPlayer(allomancer).isEnhanced();

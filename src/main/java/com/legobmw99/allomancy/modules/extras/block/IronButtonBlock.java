@@ -15,7 +15,9 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
@@ -37,7 +39,7 @@ public class IronButtonBlock extends AbstractButtonBlock implements IAllomantica
             world.setBlockState(pos, state.with(POWERED, Boolean.valueOf(true)), 3);
             this.playSound(player, world, pos, true);
             this.updateNeighbors(state, world, pos);
-            world.getPendingBlockTicks().scheduleTick(pos, this,20);
+            world.getPendingBlockTicks().scheduleTick(pos, this, 20);
             return true;
         } else {
             return false;

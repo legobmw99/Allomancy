@@ -48,7 +48,7 @@ public class UpdateBurnPacket {
                 if (!value && mt == Metal.DURALUMIN) {
                     cap.drainMetals(Arrays.stream(Metal.values()).filter(cap::isBurning).toArray(Metal[]::new));
                 }
-                if (!value && cap.isEnhanced()){
+                if (!value && cap.isEnhanced()) {
                     cap.drainMetals(mt);
                 }
             } else {

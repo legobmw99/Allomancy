@@ -3,8 +3,8 @@ package com.legobmw99.allomancy.modules.materials;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
 import com.legobmw99.allomancy.modules.materials.world.OreGenerator;
-import com.legobmw99.allomancy.setup.Metal;
 import com.legobmw99.allomancy.setup.AllomancySetup;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -45,7 +45,7 @@ public class MaterialsSetup {
             String name = mt.getName() + "_flakes";
             FLAKES.add(MaterialsSetup.ITEMS.register(name, AllomancySetup::createStandardItem));
         }
-        FLAKES.add(MaterialsSetup.ITEMS.register("lead_flakes",  AllomancySetup::createStandardItem));
+        FLAKES.add(MaterialsSetup.ITEMS.register("lead_flakes", AllomancySetup::createStandardItem));
         FLAKES.add(MaterialsSetup.ITEMS.register("silver_flakes", AllomancySetup::createStandardItem));
     }
 
@@ -67,17 +67,16 @@ public class MaterialsSetup {
     public static final RegistryObject<Item> ZINC_ORE_ITEM = ITEMS.register("zinc_ore", () -> new BlockItem(ZINC_ORE.get(), AllomancySetup.createStandardItemProperties()));
 
 
-    public static final RegistryObject<Item> ALUMINUM_INGOT = ITEMS.register("aluminum_ingot",  AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> CADMIUM_INGOT = ITEMS.register("cadmium_ingot",  AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> CHROMIUM_INGOT = ITEMS.register("chromium_ingot",  AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> COPPER_INGOT = ITEMS.register("copper_ingot",  AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> LEAD_INGOT = ITEMS.register("lead_ingot",  AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> SILVER_INGOT = ITEMS.register("silver_ingot",  AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> TIN_INGOT = ITEMS.register("tin_ingot",  AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> ZINC_INGOT = ITEMS.register("zinc_ingot",  AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> BRASS_INGOT = ITEMS.register("brass_ingot",  AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> BRONZE_INGOT = ITEMS.register("bronze_ingot",  AllomancySetup::createStandardItem);
-
+    public static final RegistryObject<Item> ALUMINUM_INGOT = ITEMS.register("aluminum_ingot", AllomancySetup::createStandardItem);
+    public static final RegistryObject<Item> CADMIUM_INGOT = ITEMS.register("cadmium_ingot", AllomancySetup::createStandardItem);
+    public static final RegistryObject<Item> CHROMIUM_INGOT = ITEMS.register("chromium_ingot", AllomancySetup::createStandardItem);
+    public static final RegistryObject<Item> COPPER_INGOT = ITEMS.register("copper_ingot", AllomancySetup::createStandardItem);
+    public static final RegistryObject<Item> LEAD_INGOT = ITEMS.register("lead_ingot", AllomancySetup::createStandardItem);
+    public static final RegistryObject<Item> SILVER_INGOT = ITEMS.register("silver_ingot", AllomancySetup::createStandardItem);
+    public static final RegistryObject<Item> TIN_INGOT = ITEMS.register("tin_ingot", AllomancySetup::createStandardItem);
+    public static final RegistryObject<Item> ZINC_INGOT = ITEMS.register("zinc_ingot", AllomancySetup::createStandardItem);
+    public static final RegistryObject<Item> BRASS_INGOT = ITEMS.register("brass_ingot", AllomancySetup::createStandardItem);
+    public static final RegistryObject<Item> BRONZE_INGOT = ITEMS.register("bronze_ingot", AllomancySetup::createStandardItem);
 
 
 }
