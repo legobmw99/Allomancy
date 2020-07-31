@@ -24,7 +24,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -199,7 +198,8 @@ public class CommonEventHandler {
 
             World world = event.world;
             List<? extends PlayerEntity> list = world.getPlayers();
-            for (PlayerEntity curPlayer : list) {
+            for (int enti = list.size() - 1; enti >= 0; enti--) {
+                PlayerEntity curPlayer = list.get(enti);
                 AllomancyCapability cap = AllomancyCapability.forPlayer(curPlayer);
                 if (!cap.isUninvested()) {
 
@@ -249,23 +249,21 @@ public class CommonEventHandler {
                      *********************************************/
                     if (cap.isEnhanced() && cap.isBurning(Metal.ELECTRUM) && cap.getAmount(Metal.ELECTRUM) >= 9) {
                         RegistryKey<World> spawnDim = cap.getSpawnDim();
-                        BlockPos spawnLoc = null;
+                        BlockPos spawnLoc;
 
-                        if (spawnDim != null && spawnDim == curPlayer.world.func_234923_W_()){
+                        if (spawnDim != null) {
                             spawnLoc = cap.getSpawnLoc();
-                        } else if (spawnDim == null) { // overworld, no spawn --> use world spawn
-                            spawnDim = World.field_234918_g_;
+                        } else {
+                            spawnDim = World.field_234918_g_; // overworld, no spawn --> use world spawn
                             spawnLoc = new BlockPos(curPlayer.world.getWorldInfo().getSpawnX(),
-                                     curPlayer.world.getWorldInfo().getSpawnY(), curPlayer.world.getWorldInfo().getSpawnZ());
+                                    curPlayer.world.getWorldInfo().getSpawnY(), curPlayer.world.getWorldInfo().getSpawnZ());
 
                         }
 
-                        if(spawnLoc != null){
-                            PowerUtils.teleport(world, spawnDim, curPlayer, spawnLoc);
-                            if (cap.isBurning(Metal.DURALUMIN))
-                                cap.drainMetals(Metal.DURALUMIN);
-                            cap.drainMetals(Metal.ELECTRUM);
-                        }
+                        PowerUtils.teleport(world, spawnDim, curPlayer, spawnLoc);
+                        if (cap.isBurning(Metal.DURALUMIN))
+                            cap.drainMetals(Metal.DURALUMIN);
+                        cap.drainMetals(Metal.ELECTRUM);
 
 
                     } else if (cap.isEnhanced() && cap.isBurning(Metal.GOLD) && cap.getAmount(Metal.GOLD) >= 9) { // These should be mutually exclusive
