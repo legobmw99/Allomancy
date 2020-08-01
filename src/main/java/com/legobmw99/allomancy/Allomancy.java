@@ -16,9 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(Allomancy.MODID)
 public class Allomancy {
-    /* TODO:
-        Redo silver flake texture
-     */
+
     public static final String MODID = "allomancy";
 
     public static final Logger LOGGER = LogManager.getLogger();
