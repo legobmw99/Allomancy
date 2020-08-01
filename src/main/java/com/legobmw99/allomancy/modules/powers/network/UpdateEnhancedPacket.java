@@ -17,7 +17,7 @@ public class UpdateEnhancedPacket {
 
 
     public UpdateEnhancedPacket(boolean enhanced, int entityID) {
-        this.enhance_time = enhanced ? 1000 : 0;
+        this.enhance_time = enhanced ? 100 : 0;
         this.entityID = entityID;
     }
 
@@ -38,13 +38,19 @@ public class UpdateEnhancedPacket {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            PlayerEntity player = (PlayerEntity) Minecraft.getInstance().world.getEntityByID(entityID);
-            if (player != null) {
-                AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
-                playerCap.setEnhanced(enhance_time);
+            if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) { // Update player of own status
+                PlayerEntity player = (PlayerEntity) ctx.get().getSender().world.getEntityByID(entityID);
+                if (player != null) {
+                    AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
+                    playerCap.setEnhanced(enhance_time);
 
-                if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) { // Update player of own status
                     Network.sync(new UpdateEnhancedPacket(enhance_time, entityID), player);
+                }
+            } else {
+                PlayerEntity player = (PlayerEntity) Minecraft.getInstance().world.getEntityByID(entityID);
+                if (player != null) {
+                    AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
+                    playerCap.setEnhanced(enhance_time);
                 }
             }
 

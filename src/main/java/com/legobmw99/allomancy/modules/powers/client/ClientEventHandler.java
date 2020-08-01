@@ -127,9 +127,8 @@ public class ClientEventHandler {
                     }
                     // TODO: Test
                     if (cap.isBurning(Metal.NICROSIL)) {
-                        Entity entity;
                         if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
-                            entity = ((EntityRayTraceResult) trace).getEntity();
+                            Entity entity = ((EntityRayTraceResult) trace).getEntity();
                             if (entity instanceof PlayerEntity) {
                                 Network.sendToServer(new UpdateEnhancedPacket(true, entity.getEntityId()));
                             }
