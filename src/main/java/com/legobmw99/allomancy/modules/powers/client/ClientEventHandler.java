@@ -125,7 +125,7 @@ public class ClientEventHandler {
                             }
                         }
                     }
-                    // TODO: Test
+
                     if (cap.isBurning(Metal.NICROSIL)) {
                         if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
                             Entity entity = ((EntityRayTraceResult) trace).getEntity();

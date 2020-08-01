@@ -165,7 +165,7 @@ public class CommonEventHandler {
                 }
             }
 
-            if (cap.isBurning(Metal.CHROMIUM)) { // TODO: Test
+            if (cap.isBurning(Metal.CHROMIUM)) {
                 if (event.getEntityLiving() instanceof PlayerEntity) {
                     PowerUtils.wipePlayer((PlayerEntity) event.getEntityLiving());
                 }

@@ -28,7 +28,7 @@ public class SoundParticleData implements IParticleData {
 
         @Override
         public SoundParticleData deserialize(ParticleType<SoundParticleData> particleTypeIn, StringReader reader) throws CommandSyntaxException {
-            return new SoundParticleData(SoundCategory.NEUTRAL); //TODO?
+            return new SoundParticleData(SoundCategory.AMBIENT);
         }
 
         @Override
