@@ -84,6 +84,21 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
     /**
+     * Get the number of powers the player has
+     *
+     * @return int between 0 and 16, inclusive
+     */
+    public int getPowerCount() {
+        int count = 0;
+        for (boolean power : allomantic_powers) {
+            if (power) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
      * Check if the player is a Mistborn
      *
      * @return true if the player has ALL powers
@@ -215,21 +230,41 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         this.damange_stored = damageStored;
     }
 
-    // todo docs
+    /**
+     * Set the death location and dimension
+     *
+     * @param pos BlockPos of the death location
+     * @param dim The RegistryKey representing the dimension the death occured in
+     */
     public void setDeathLoc(BlockPos pos, RegistryKey<World> dim) {
         setDeathLoc(pos, dim.func_240901_a_().toString());
     }
 
+    /**
+     * Set the death location and dimension
+     *
+     * @param pos      BlockPos of the death location
+     * @param dim_name A string representing the dimension the death occured in, e.g. minecraft:overworld
+     */
     protected void setDeathLoc(BlockPos pos, String dim_name) {
         this.death_pos = pos;
         this.death_dimension = dim_name;
     }
 
+    /**
+     * Returns the location of the most recent player's death, or null
+     *
+     * @return BlockPos of player's death, or null
+     */
     public BlockPos getDeathLoc() {
         return this.death_pos;
     }
 
-
+    /**
+     * Returns the dimension of the most recent player's death, or null
+     *
+     * @return RegistryKey corresponding to the dimension, or null
+     */
     public RegistryKey<World> getDeathDim() {
         if (this.death_dimension == null) {
             return null;
@@ -238,19 +273,41 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     }
 
+    /**
+     * Set the spawn location and dimension
+     *
+     * @param pos BlockPos of the spawn point
+     * @param dim The RegistryKey representing the spawn dimension
+     */
     public void setSpawnLoc(BlockPos pos, RegistryKey<World> dim) {
         setSpawnLoc(pos, dim.func_240901_a_().toString());
     }
 
+    /**
+     * Set the spawn location and dimension
+     *
+     * @param pos      BlockPos of the spawn point
+     * @param dim_name A string representing the dimension the spawn dimension, e.g. minecraft:overworld
+     */
     public void setSpawnLoc(BlockPos pos, String dim_name) {
         this.spawn_pos = pos;
         this.spawn_dimension = dim_name;
     }
 
+    /**
+     * Returns the location of the players spawn point if set, or null
+     *
+     * @return BlockPos of player's death, or null
+     */
     public BlockPos getSpawnLoc() {
         return this.spawn_pos;
     }
 
+    /**
+     * Returns the dimension of the most player's spawn point, or null if unset.
+     *
+     * @return RegistryKey corresponding to the dimension, or null
+     */
     public RegistryKey<World> getSpawnDim() {
         if (this.spawn_dimension == null) {
             return null;
