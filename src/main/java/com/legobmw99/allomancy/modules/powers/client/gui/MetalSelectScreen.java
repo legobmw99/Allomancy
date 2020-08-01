@@ -33,8 +33,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
 
-// TODO broken
-
 @OnlyIn(Dist.CLIENT)
 public class MetalSelectScreen extends Screen {
 
@@ -55,7 +53,7 @@ public class MetalSelectScreen extends Screen {
 
     }
 
-    @Override // TODO: investigate this, makes @MetalOverlay opaque/glitchy
+    @Override
     public void func_230430_a_(MatrixStack matrixStack, int mx, int my, float partialTicks) { // render
         super.func_230430_a_(matrixStack, mx, my, partialTicks);
 

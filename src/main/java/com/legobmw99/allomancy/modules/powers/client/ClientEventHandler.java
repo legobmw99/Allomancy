@@ -29,7 +29,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -202,7 +201,6 @@ public class ClientEventHandler {
         }
     }
 
-
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onKeyInput(final InputEvent.KeyInputEvent event) {
@@ -238,15 +236,6 @@ public class ClientEventHandler {
 
         MetalOverlay.drawMetalOverlay();
     }
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public void onRenderGUIScreen(GuiScreenEvent.DrawScreenEvent event) {
-        if (event.getGui() instanceof MetalSelectScreen && !event.isCancelable()) {
-            MetalOverlay.drawMetalOverlay();
-        }
-    }
-
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -305,7 +294,6 @@ public class ClientEventHandler {
         /*********************************************
          * GOLD AND ELECTRUM LINES                   *
          *********************************************/
-        // todo electrum broke, gold broke if set spawn
         if (cap.isBurning(Metal.GOLD)) {
             RegistryKey<World> deathDim = cap.getDeathDim();
             if (deathDim != null && player.world.func_234923_W_() == deathDim) { //world .getDim (look for return type matches)
