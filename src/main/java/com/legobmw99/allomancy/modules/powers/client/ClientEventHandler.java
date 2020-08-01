@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
-import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticle;
+import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
 import com.legobmw99.allomancy.modules.powers.network.ChangeEmotionPacket;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullBlock;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullEntity;
@@ -19,7 +19,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -204,7 +203,7 @@ public class ClientEventHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onKeyInput(final InputEvent.KeyInputEvent event) {
-        if (PowerClientSetup.burn.isPressed()) {
+        if (PowersClientSetup.burn.isPressed()) {
             PlayerEntity player = mc.player;
             AllomancyCapability cap;
             if (mc.currentScreen == null) {
@@ -324,6 +323,7 @@ public class ClientEventHandler {
         return new Vector3d(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
     }
 
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onSound(PlaySoundEvent event) {
@@ -351,9 +351,8 @@ public class ClientEventHandler {
                 motionX = ((posX - (event.getSound().getX() + .5)) * -0.7) / magnitude;
                 motionY = ((posY - (event.getSound().getY() + .2)) * -0.7) / magnitude;
                 motionZ = ((posZ - (event.getSound().getZ() + .5)) * -0.7) / magnitude;
-                Particle particle = new SoundParticle(player.world, posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), posY + .2, posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
-                        motionY, motionZ, sound.getCategory());
-                this.mc.particles.addEffect(particle);
+                this.mc.particles.addParticle(new SoundParticleData(sound.getCategory()), posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), posY + .2, posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
+                        motionY, motionZ);
             }
         }
     }

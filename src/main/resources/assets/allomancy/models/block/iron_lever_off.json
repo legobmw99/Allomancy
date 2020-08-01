@@ -1,8 +1,8 @@
 {
   "ambientocclusion": false,
   "textures": {
-    "particle": "block/iron_block",
-    "base": "block/iron_block",
+    "particle": "minecraft:block/iron_block",
+    "base": "minecraft:block/iron_block",
     "lever": "allomancy:block/iron_lever"
   },
   "elements": [
@@ -85,7 +85,7 @@
       },
       "faces": {
         "down": {
-          "texture": "missingno"
+          "texture": "minecraft:missingno"
         },
         "up": {
           "texture": "#lever",

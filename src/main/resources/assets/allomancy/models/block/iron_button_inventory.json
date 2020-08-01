@@ -1,6 +1,6 @@
 {
-  "parent": "block/button_inventory",
+  "parent": "minecraft:block/button_inventory",
   "textures": {
-    "texture": "block/iron_block"
+    "texture": "minecraft:block/iron_block"
   }
 }

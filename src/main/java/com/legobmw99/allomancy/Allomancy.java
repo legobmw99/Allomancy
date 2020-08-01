@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.setup.AllomancyConfig;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,6 +30,7 @@ public class Allomancy {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancySetup::init);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancySetup::clientInit);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancyConfig::refresh);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(PowersClientSetup::registerParticle);
         MinecraftForge.EVENT_BUS.addListener(AllomancySetup::registerCommands);
 
         // Config init
@@ -37,6 +39,7 @@ public class Allomancy {
 
 
         // Register all Registries
+        PowersClientSetup.register();
         CombatSetup.register();
         ConsumeSetup.register();
         MaterialsSetup.register();

@@ -1,12 +1,12 @@
 {
-  "parent": "item/handheld",
+  "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "allomancy:item/vial"
   },
   "overrides": [
     {
       "predicate": {
-        "custom_model_data": 1.0
+        "minecraft:custom_model_data": 1.0
       },
       "model": "allomancy:item/vial_filled"
     }

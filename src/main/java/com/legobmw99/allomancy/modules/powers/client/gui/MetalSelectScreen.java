@@ -11,7 +11,7 @@ package com.legobmw99.allomancy.modules.powers.client.gui;
 
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.ClientUtils;
-import com.legobmw99.allomancy.modules.powers.client.PowerClientSetup;
+import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.setup.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -177,7 +177,7 @@ public class MetalSelectScreen extends Screen {
 
     @Override
     public boolean keyReleased(int keysym, int scancode, int p_keyReleased_3_) {
-        if (PowerClientSetup.burn.matchesKey(keysym, scancode)) {
+        if (PowersClientSetup.burn.matchesKey(keysym, scancode)) {
             mc.displayGuiScreen(null);
             mc.mouseHelper.grabMouse();
             return true;

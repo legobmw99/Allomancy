@@ -45,10 +45,7 @@ public class CombatSetup {
     public static final RegistryObject<EntityType<ProjectileNuggetEntity>> NUGGET_PROJECTILE = ENTITIES.register("nugget_projectile", () ->
             EntityType.Builder.<ProjectileNuggetEntity>create(ProjectileNuggetEntity::new, EntityClassification.MISC).setShouldReceiveVelocityUpdates(true)
                     .setUpdateInterval(20).setCustomClientFactory(
-                    (spawnEntity, world) -> {
-                        System.out.println(spawnEntity.getEntity());
-                        return new ProjectileNuggetEntity(world, spawnEntity.getEntity());
-                    }
+                    (spawnEntity, world) -> new ProjectileNuggetEntity(world, spawnEntity.getEntity())
             ).size(0.25F, 0.25F).build("nugget_projectile"));
 
 
