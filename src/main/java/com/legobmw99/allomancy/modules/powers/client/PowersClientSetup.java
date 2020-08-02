@@ -33,7 +33,7 @@ public class PowersClientSetup {
     });
 
     public static void initKeyBindings() {
-        burn = new KeyBinding("key.burn", GLFW.GLFW_KEY_F, "key.categories.allomancy");
+        burn = new KeyBinding("key.burn", GLFW.GLFW_KEY_V, "key.categories.allomancy");
         ClientRegistry.registerKeyBinding(burn);
     }
 
