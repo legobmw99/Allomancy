@@ -30,4 +30,8 @@ public class PowersSetup {
         AllomancyCapability.register();
         MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
     }
+
+    public static void register() {
+        PowersClientSetup.register();
+    }
 }

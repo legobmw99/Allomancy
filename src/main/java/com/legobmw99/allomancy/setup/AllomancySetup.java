@@ -49,8 +49,8 @@ public class AllomancySetup {
         return addColor(lore, color);
     }
 
-    public static IFormattableTextComponent addColorToText(String translationKey, TextFormatting color, Object... args) {
-        IFormattableTextComponent lore = new TranslationTextComponent(translationKey, args);
+    public static IFormattableTextComponent addColorToText(String translationKey, TextFormatting color, Object... fmting) {
+        IFormattableTextComponent lore = new TranslationTextComponent(translationKey, fmting);
         return addColor(lore, color);
     }
 

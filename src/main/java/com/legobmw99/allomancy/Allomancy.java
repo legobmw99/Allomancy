@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.powers.PowersSetup;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.setup.AllomancyConfig;
 import com.legobmw99.allomancy.setup.AllomancySetup;
@@ -39,7 +40,7 @@ public class Allomancy {
 
 
         // Register all Registries
-        PowersClientSetup.register();
+        PowersSetup.register();
         CombatSetup.register();
         ConsumeSetup.register();
         MaterialsSetup.register();
