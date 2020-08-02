@@ -11,7 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.FallingBlockEntity;
@@ -100,14 +100,12 @@ public class PowerUtils {
         if (entity == null) {
             return false;
         }
-
         if (entity instanceof ItemEntity) {
             return isItemMetal(((ItemEntity) entity).getItem());
         }
         if (entity instanceof ItemFrameEntity) {
             return isItemMetal(((ItemFrameEntity) entity).getDisplayedItem());
         }
-
         if (entity instanceof FallingBlockEntity) {
             return isBlockStateMetal(((FallingBlockEntity) entity).getBlockState());
         }
@@ -117,8 +115,8 @@ public class PowerUtils {
         if (entity instanceof AbstractMinecartEntity) {
             return true;
         }
-        if (entity instanceof MobEntity) {
-            MobEntity ent = (MobEntity) entity;
+        if (entity instanceof LivingEntity) {
+            LivingEntity ent = (LivingEntity) entity;
             if (ent instanceof IronGolemEntity) {
                 return true;
             }
@@ -135,6 +133,11 @@ public class PowerUtils {
         return false;
     }
 
+    /**
+     * Wipe all metals from the player and sync to tracking entities. Used by Alluminum and Nicrosil
+     *
+     * @param player The player to wipe
+     */
     public static void wipePlayer(PlayerEntity player) {
         AllomancyCapability capHurt = AllomancyCapability.forPlayer(player);
         capHurt.drainMetals(Metal.values());

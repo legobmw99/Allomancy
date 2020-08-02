@@ -312,6 +312,7 @@ public class CommonEventHandler {
                         BlockPos positive = new BlockPos(curPlayer.getPositionVec()).add(max, max, max);
                         int slowness_amplifier = cap.isEnhanced() ? 255 : 2; // Duralumin freezes entities
                         world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
+                            entity.addPotionEffect(new EffectInstance(Effects.SLOW_FALLING, 10, 0, true, false));
                             if (entity != curPlayer)
                                 entity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, slowness_amplifier, true, false));
                         });
