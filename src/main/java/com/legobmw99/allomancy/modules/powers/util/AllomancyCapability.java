@@ -99,6 +99,15 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
     /**
+     * Returns an array of the player's metal abilities
+     *
+     * @return array of Metal
+     */
+    public Metal[] getPowers() {
+        return Arrays.stream(Metal.values()).filter(this::hasPower).toArray(Metal[]::new);
+    }
+
+    /**
      * Check if the player is a Mistborn
      *
      * @return true if the player has ALL powers

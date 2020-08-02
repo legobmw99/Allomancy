@@ -76,23 +76,23 @@ public class AllomancyPowerCommand {
 
     private static void getPowers(CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-        String powers = "";
+        StringBuilder powers = new StringBuilder();
         if (cap.isMistborn()) {
-            powers = "all";
+            powers.append("all");
         } else if (cap.isUninvested()) {
-            powers = "none";
+            powers.append("none");
         } else {
             for (Metal mt : Metal.values()) {
                 if (cap.hasPower(mt)) {
-                    if (powers.equals("")) {
-                        powers = mt.getName();
+                    if (powers.length() == 0) {
+                        powers.append(mt.getName());
                     } else {
-                        powers = powers + ", " + mt.getName();
+                        powers.append(", ").append(mt.getName());
                     }
                 }
             }
         }
-        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.getpowers", player.getDisplayName(), powers), true);
+        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
     }
 
     private static int addPower(CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
