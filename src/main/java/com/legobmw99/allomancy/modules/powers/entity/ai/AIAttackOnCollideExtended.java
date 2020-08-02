@@ -38,7 +38,7 @@ public class AIAttackOnCollideExtended extends Goal {
      * The PathEntity of our entity.
      */
     Path entityPathEntity;
-    Class classTarget;
+    Class<?> classTarget;
     private int field_75445_i;
 
     private int failedPathFindingPenalty;
