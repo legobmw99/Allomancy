@@ -50,10 +50,8 @@ import java.util.function.Predicate;
 
 public class PowerUtils {
 
-
     public static final byte PUSH = 1;
     public static final byte PULL = -1;
-
 
     /**
      * Block state wrapper on {@link PowerUtils#isBlockMetal}
@@ -186,7 +184,15 @@ public class PowerUtils {
         }
     }
 
-    public static void teleport(World world, RegistryKey<World> dimension, PlayerEntity player, BlockPos pos) {
+    /**
+     * Teleports a player to the given dimension and blockpos
+     *
+     * @param player    The player to move
+     * @param world     The server world. Fails if clientside
+     * @param dimension Dimension to call {@link Entity#changeDimension} on
+     * @param pos       BlockPos to move the player to using {@link Entity#teleportKeepLoaded}
+     */
+    public static void teleport(PlayerEntity player, World world, RegistryKey<World> dimension, BlockPos pos) {
         if (!world.isRemote) {
             if (player != null) {
                 if (player.isPassenger()) {

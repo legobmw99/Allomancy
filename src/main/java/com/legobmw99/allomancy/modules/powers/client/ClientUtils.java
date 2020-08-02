@@ -84,8 +84,7 @@ public class ClientUtils {
      * @param dest
      * @param width  the width of the line
      */
-    public static void drawMetalLine(Vector3d player, Vector3d dest, float width,
-                                     float r, float g, float b) {
+    public static void drawMetalLine(Vector3d player, Vector3d dest, float width, float r, float g, float b) {
         RenderSystem.lineWidth(width);
 
         Tessellator tessellator = Tessellator.getInstance();

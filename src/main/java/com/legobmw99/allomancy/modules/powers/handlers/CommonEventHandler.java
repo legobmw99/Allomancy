@@ -260,7 +260,7 @@ public class CommonEventHandler {
 
                         }
 
-                        PowerUtils.teleport(world, spawnDim, curPlayer, spawnLoc);
+                        PowerUtils.teleport(curPlayer, world, spawnDim, spawnLoc);
                         if (cap.isBurning(Metal.DURALUMIN))
                             cap.drainMetals(Metal.DURALUMIN);
                         cap.drainMetals(Metal.ELECTRUM);
@@ -269,7 +269,7 @@ public class CommonEventHandler {
                     } else if (cap.isEnhanced() && cap.isBurning(Metal.GOLD) && cap.getAmount(Metal.GOLD) >= 9) { // These should be mutually exclusive
                         RegistryKey<World> deathDim = cap.getDeathDim();
                         if (deathDim != null) {
-                            PowerUtils.teleport(world, deathDim, curPlayer, cap.getDeathLoc());
+                            PowerUtils.teleport(curPlayer, world, deathDim, cap.getDeathLoc());
                             if (cap.isBurning(Metal.DURALUMIN))
                                 cap.drainMetals(Metal.DURALUMIN);
                             cap.drainMetals(Metal.GOLD);
