@@ -40,7 +40,7 @@ public class ItemVial extends Item {
             return stack;
         }
         
-    	for(int i = 0; i < 8; i++){
+    	for(int i = 0; i < 10; i++){
     		if(stack.getTagCompound().hasKey(Registry.flakeMetals[i]) && stack.getTagCompound().getBoolean(Registry.flakeMetals[i])){
     			if(cap.getMetalAmounts(i) < 10){
     				cap.setMetalAmounts(i, cap.getMetalAmounts(i) + 1);
@@ -74,7 +74,7 @@ public class ItemVial extends Item {
         int filling = 0, full = 0; 
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
         if (itemStackIn.getTagCompound() != null) {
-        	for(int i = 0; i < 8; i++){
+        	for(int i = 0; i < 10; i++){
         		if(itemStackIn.getTagCompound().hasKey(Registry.flakeMetals[i]) && itemStackIn.getTagCompound().getBoolean(Registry.flakeMetals[i])){
         			filling++;
         			if(cap.getMetalAmounts(i) >= 10){
@@ -104,7 +104,7 @@ public class ItemVial extends Item {
 	@Override
     public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced){
 		if(stack.getTagCompound() != null){
-			for(int i = 0; i < 8; i++){
+			for(int i = 0; i < 10; i++){
 				if(stack.getTagCompound().getBoolean(Registry.flakeMetals[i])){
 					tooltip.add(Registry.flakeMetals[i]);
 				}
@@ -126,7 +126,7 @@ public class ItemVial extends Item {
 			
 			ItemStack resultItem = new ItemStack(Registry.itemVial, 1);
         	NBTTagCompound nbt = new NBTTagCompound();
-        	for(int i = 0; i < 8; i++){
+        	for(int i = 0; i < 10; i++){
         		nbt.setBoolean(Registry.flakeMetals[i], true);
         	}
         	resultItem.setTagCompound(nbt);

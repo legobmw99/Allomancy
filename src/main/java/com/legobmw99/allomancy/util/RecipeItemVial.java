@@ -21,7 +21,7 @@ public class RecipeItemVial extends  net.minecraftforge.registries.IForgeRegistr
 	public boolean matches(InventoryCrafting inv, World worldIn) {
         this.resultItem = ItemStack.EMPTY;
 
-        boolean[] metals = {false,false,false,false,false,false,false,false};
+        boolean[] metals = {false,false,false,false,false,false,false,false,false,false};
         boolean[] ingredients = {false,false};
 
         for (int i = 0; i < inv.getSizeInventory(); ++i){
@@ -31,7 +31,7 @@ public class RecipeItemVial extends  net.minecraftforge.registries.IForgeRegistr
             	if(!itemstack.getItem().getRegistryName().toString().contains("allomancy:flake") && !itemstack.getItem().getRegistryName().toString().equals("allomancy:itemvial")){
             		return false;
             	}
-            	for(int j = 0; j < 8; j++){
+            	for(int j = 0; j < 10; j++){
             		if(itemstack.getItem() == Item.getByNameOrId("allomancy:flake" + Registry.flakeMetals[j])){
             			ingredients[1] = true;
             			metals[j] = true;

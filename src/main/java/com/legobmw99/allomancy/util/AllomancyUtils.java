@@ -45,7 +45,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Contains all static, common methods in one place
- * 
+ *
  */
 
 public class AllomancyUtils {
@@ -54,6 +54,7 @@ public class AllomancyUtils {
 
 	public static final int PUSH = 1;
 	public static final int PULL = -1;
+
 
 	public static void init() {
 		generateWhitelist();
@@ -203,13 +204,13 @@ public class AllomancyUtils {
 	/**
 	 * Draws a line from the player (denoted pX,Y,Z) to the given set of
 	 * coordinates (oX,Y,Z) in a certain color (r,g,b)
-	 * 
+	 *
 	 * @param width
 	 *            the width of the line
 	 */
 	@SideOnly(Side.CLIENT)
 	public static void drawMetalLine(double pX, double pY, double pZ, double oX, double oY, double oZ, float width,
-			float r, float g, float b) {
+									 float r, float g, float b) {
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		GL11.glTranslated(-pX, -pY, -pZ);
@@ -231,7 +232,7 @@ public class AllomancyUtils {
 
 	/**
 	 * Copied mostly from vanilla, this gets what the mouse is over
-	 * 
+	 *
 	 * @param dist
 	 *            distance
 	 * @return the result of the raytrace
@@ -292,7 +293,7 @@ public class AllomancyUtils {
 	/**
 	 * Replacement for the old addCoord in AxisAlignedBB.class, necessary for
 	 * getMouseOverExtended
-	 * 
+	 *
 	 * @param a
 	 *            the original box
 	 * @param x
@@ -332,7 +333,7 @@ public class AllomancyUtils {
 
 	/**
 	 * Determines if a block is metal or not
-	 * 
+	 *
 	 * @param block
 	 *            to be checked
 	 * @return Whether or not the item is metal
@@ -343,7 +344,7 @@ public class AllomancyUtils {
 
 	/**
 	 * Determines if an item is metal or not
-	 * 
+	 *
 	 * @param item
 	 *            to be checked
 	 * @return Whether or not the item is metal
@@ -354,7 +355,7 @@ public class AllomancyUtils {
 
 	/**
 	 * Determines if an entity is metal or not
-	 * 
+	 *
 	 * @param entity
 	 *            to be checked
 	 * @return Whether or not the entity is metallic
@@ -363,19 +364,19 @@ public class AllomancyUtils {
 		if (entity == null) {
 			return false;
 		}
-		
+
 		if (entity instanceof EntityItem) {
 			return isItemMetal(((EntityItem) entity).getItem());
-		} 
-		if (entity instanceof EntityItemFrame){ 
+		}
+		if (entity instanceof EntityItemFrame){
 			return isItemMetal(((EntityItemFrame) entity).getDisplayedItem());
-		} 
+		}
 		if(entity instanceof EntityIronNugget || entity instanceof EntityGoldNugget) {
 			return true;
-		} 
+		}
 		if(entity instanceof EntityMinecart) {
 			return true;
-		} 
+		}
 		if (entity instanceof EntityLiving) {
 			EntityLiving ent = (EntityLiving) entity;
 			if(ent instanceof EntityIronGolem){
@@ -389,14 +390,14 @@ public class AllomancyUtils {
 					return true;
 				}
 			}
-		} 
-		
+		}
+
 		return false;
 	}
 
 	/**
 	 * Move an entity either toward or away from an anchor point
-	 * 
+	 *
 	 * @param directionScalar
 	 *            the direction and (possibly) scalar multiple of the magnitude
 	 * @param toMove
@@ -414,6 +415,11 @@ public class AllomancyUtils {
 		magnitude = Math.sqrt(Math.pow((toMove.posX - (double) (vec.getX() + .5)), 2)
 				+ Math.pow((toMove.posY - (double) (vec.getY() + .5)), 2)
 				+ Math.pow((toMove.posZ - (double) (vec.getZ() + .5)), 2));
+
+		if (AllomancyCapability.forPlayer(Minecraft.getMinecraft().player).getMetalBurning(AllomancyCapability.DURALUMIN)) {
+			magnitude = magnitude / 5;
+		}
+
 		// Get a unit(-ish) vector in the direction of motion
 		motionX = ((toMove.posX - (double) (vec.getX() + .5)) * directionScalar * (1.1) / magnitude);
 		motionY = ((toMove.posY - (double) (vec.getY() + .5)) * directionScalar * (1.1) / magnitude);
@@ -438,7 +444,7 @@ public class AllomancyUtils {
 
 	/**
 	 * Used to toggle a metal's burn state and play a sound effect
-	 * 
+	 *
 	 * @param metal
 	 *            the index of the metal to toggle
 	 * @param capability
@@ -464,32 +470,51 @@ public class AllomancyUtils {
 	 * Runs each worldTick, checking the burn times, abilities, and metal
 	 * amounts. Then syncs to the client to make sure everyone is on the same
 	 * page
-	 * 
+	 *
 	 * @param cap
 	 *            the AllomancyCapabilities data
 	 * @param player
 	 *            the player being checked
 	 */
 	public static void updateMetalBurnTime(AllomancyCapability cap1, EntityPlayerMP player) {
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 10; i++) {
+			if (cap1.getMetalBurning(AllomancyCapability.ALUMINUM)) {
+				if (i != AllomancyCapability.ALUMINUM) {
+					cap1.setMetalAmounts(i, 0);
+				}
+			}
 			if (cap1.getMetalBurning(i)) {
-				if (cap1.getAllomancyPower() != i && cap1.getAllomancyPower() != 8) {
+				if (cap1.getAllomancyPower() != i && cap1.getAllomancyPower() != 10) {
 					// put out any metals that the player shouldn't be able to burn
 					cap1.setMetalBurning(i, false);
 					Registry.network.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
 				} else {
-					cap1.setBurnTime(i, cap1.getBurnTime(i) - 1);
-					if (cap1.getBurnTime(i) == 0) {
-						cap1.setBurnTime(i, cap1.MAX_BURN_TIME[i]);
-						cap1.setMetalAmounts(i, cap1.getMetalAmounts(i) - 1);
-						Registry.network.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
-						if (cap1.getMetalAmounts(i) == 0) {
-							cap1.setMetalBurning(i, false);
+					if (cap1.getMetalBurning(AllomancyCapability.DURALUMIN) && i != AllomancyCapability.DURALUMIN) {
+						// Burn non-duralumin/aluminum metals quickly if also burning Duralumin
+						cap1.setBurnTime(i, cap1.getBurnTime(i) - cap1.MAX_BURN_TIME[i] / 10);
+						if (cap1.getBurnTime(i) <= 0) {
+							cap1.setBurnTime(i, 10);
+							cap1.setMetalAmounts(i, cap1.getMetalAmounts(i) - 1);
 							Registry.network.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
+							if (cap1.getMetalAmounts(i) == 0) {
+								cap1.setMetalBurning(i, false);
+								Registry.network.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
+							}
+						}
+					} else {
+						// Burn metals normally if not burning Duralumin
+						cap1.setBurnTime(i, cap1.getBurnTime(i) - 1);
+						if (cap1.getBurnTime(i) == 0) {
+							cap1.setBurnTime(i, cap1.MAX_BURN_TIME[i]);
+							cap1.setMetalAmounts(i, cap1.getMetalAmounts(i) - 1);
+							Registry.network.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
+							if (cap1.getMetalAmounts(i) == 0) {
+								cap1.setMetalBurning(i, false);
+								Registry.network.sendTo(new AllomancyCapabilityPacket(cap1, player.getEntityId()), player);
+							}
 						}
 					}
 				}
-
 			}
 		}
 	}

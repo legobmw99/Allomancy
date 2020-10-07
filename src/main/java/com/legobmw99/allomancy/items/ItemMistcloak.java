@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.google.common.collect.Multimap;
 import com.legobmw99.allomancy.Allomancy;
 
+import com.legobmw99.allomancy.util.Registry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -20,7 +21,7 @@ public class ItemMistcloak extends ItemArmor {
         super(par2EnumArmorMaterial, par3, i);
         this.setUnlocalizedName("mistcloak");
         this.setRegistryName(new ResourceLocation(Allomancy.MODID, "mistcloak"));
-        this.setCreativeTab(CreativeTabs.COMBAT);
+        this.setCreativeTab(Registry.tabsAllomancy);
     }
 
     @Override

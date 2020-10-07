@@ -4,6 +4,7 @@ tile.oreTin.name=Tin Ore
 tile.oreLead.name=Lead Ore
 tile.oreCopper.name=Copper Ore
 tile.oreZinc.name=Zinc Ore
+tile.oreAluminum.name=Aluminum Ore
 tile.iron_lever.name=Iron Lever
 tile.iron_lever.lore=This lever seems to heavy to move by ordinary means
 
@@ -12,6 +13,7 @@ item.nuggetLerasium.name=Lerasium Nugget
 item.nuggetLerasium.lore=This item is endowed with strange powers, perhaps you should ingest it?
 item.mistcloak.name=Mistcloak
 item.coinbag.name=Coin Bag
+item.glassdagger.name=Glass Dagger
 
 key.categories.allomancy=Allomancy
 key.burn=Burn Metals
@@ -31,6 +33,8 @@ item.flakeCopper.name=Copper Flakes
 item.flakeTin.name=Tin Flakes
 item.flakeZinc.name=Zinc Flakes
 item.flakeLead.name=Lead Flakes
+item.flakeDuralumin.name=Duralumin Flakes
+item.flakeAluminum.name=Aluminum Flakes
 
 item.ingotZinc.name=Zinc Ingot
 item.ingotLead.name=Lead Ingot
@@ -38,6 +42,7 @@ item.ingotTin.name=Tin Ingot
 item.ingotCopper.name=Copper Ingot
 item.ingotBrass.name=Brass Ingot
 item.ingotBronze.name=Bronze Ingot
+item.ingotAluminum.name=Aluminum Ingot
 
 advancements.becomeMistborn.title=Become Mistborn!
 advancements.becomeMistborn.desc=You have a power most people envy...

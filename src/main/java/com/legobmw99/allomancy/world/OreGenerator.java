@@ -74,7 +74,9 @@ public class OreGenerator implements IWorldGenerator {
 		data = new OreData(AllomancyConfig.zincMaxY, AllomancyConfig.zincMinY, 8, 4, AllomancyConfig.zincDensity,
 				Registry.oreZinc, AllomancyConfig.generateZinc);
 		this.oreList.add(data);
-
+		data = new OreData(AllomancyConfig.aluminumMaxY, AllomancyConfig.aluminumMinY, 8, 4, AllomancyConfig.aluminumDensity,
+				Registry.oreAluminum, AllomancyConfig.generateAluminum);
+		this.oreList.add(data);
 	}
 
 	@Override

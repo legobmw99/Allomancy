@@ -22,7 +22,7 @@ public class PowerCommand extends CommandBase {
 
     private final List aliases;
     protected int level;
-    protected String[] names = { "Uninvested", "Iron Misting", "Steel Misting", "Tin Misting", "Pewter Misting", "Zinc Misting", "Brass Misting", "Copper Misting", "Bronze Misting", "Mistborn" };
+    protected String[] names = { "Uninvested", "Iron Misting", "Steel Misting", "Tin Misting", "Pewter Misting", "Zinc Misting", "Brass Misting", "Copper Misting", "Bronze Misting", "Duralumin Misting", "Aluminum Misting", "Mistborn"};
 
     public PowerCommand() {
         aliases = new ArrayList();
@@ -63,8 +63,8 @@ public class PowerCommand extends CommandBase {
                 if (level < -1){
                 	throw new NumberInvalidException("commands.generic.num.tooSmall", new Object[] {level+1,0});
                 }
-                if(level > 8) {
-                	throw new NumberInvalidException("commands.generic.num.tooBig", new Object[] {level+1,9});
+                if(level > 10) {
+                	throw new NumberInvalidException("commands.generic.num.tooBig", new Object[] {level+1,10});
                 }
                 
 

@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "allomancy:flakealuminum",
+    "count": 2
+  },
+  "ingredients": [
+    {
+      "item": "#allomancy:ingotAluminum"
+    },
+    {
+      "item": "allomancy:grinder"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

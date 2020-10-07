@@ -35,14 +35,15 @@ import net.minecraft.util.SoundEvent;
 
 public class GUIMetalSelect extends GuiScreen {
 
-	private static final String[] METAL_NAMES = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze" };
+	private static final String[] METAL_NAMES = { "Iron", "Steel", "Tin", "Pewter", "Zinc", "Brass", "Copper", "Bronze", "Aluminum", "Duralumin"};
 	private static final String GUI_METAL = "allomancy:textures/gui/metals/sign%d.png";
 
 	private static final ResourceLocation[] METAL_ICONS = new ResourceLocation[] {
 			new ResourceLocation(String.format(GUI_METAL, 0)), new ResourceLocation(String.format(GUI_METAL, 1)),
 			new ResourceLocation(String.format(GUI_METAL, 2)), new ResourceLocation(String.format(GUI_METAL, 3)),
 			new ResourceLocation(String.format(GUI_METAL, 4)), new ResourceLocation(String.format(GUI_METAL, 5)),
-			new ResourceLocation(String.format(GUI_METAL, 6)), new ResourceLocation(String.format(GUI_METAL, 7)), };
+			new ResourceLocation(String.format(GUI_METAL, 6)), new ResourceLocation(String.format(GUI_METAL, 7)),
+			new ResourceLocation(String.format(GUI_METAL, 8)), new ResourceLocation(String.format(GUI_METAL, 9))};
 
 	int timeIn = AllomancyConfig.animateSelection ? 0 : 10; // Config setting for whether the wheel animates open or instantly appears
 	int slotSelected = -1;
@@ -55,7 +56,7 @@ public class GUIMetalSelect extends GuiScreen {
 		cap = AllomancyCapability.forPlayer(player);
 
 		slots = new ArrayList();
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 10; i++) {
 			slots.add(i);
 		}
 	}
@@ -95,9 +96,9 @@ public class GUIMetalSelect extends GuiScreen {
 			if (seg % 2 == 1)
 				gs += 0.25F;
 
-			gs = cap.getMetalAmounts((seg + 4) % 8) == 0 ? 0 : gs;
+			gs = cap.getMetalAmounts((seg + 4) % 10) == 0 ? 0 : gs;
 
-			float r = cap.getMetalBurning((seg + 4) % 8) ? 1.0F : gs;
+			float r = cap.getMetalBurning((seg + 4) % 10) ? 1.0F : gs;
 			float g = gs;
 			float b = gs;
 			float a = 0.6F;
@@ -115,7 +116,7 @@ public class GUIMetalSelect extends GuiScreen {
 				if (i == (int) (degPer / 2)) {
 					stringPositions.add(new int[] { seg, (int) xp, (int) yp, mouseInSector ? 'n' : 'r' });
 					stringPositions.add(
-							new int[] { seg, (int) xp, (int) yp, cap.getMetalAmounts((seg + 4) % 8) == 0 ? '7' : 'f' }); // Mark unused ones as disabled
+							new int[] { seg, (int) xp, (int) yp, cap.getMetalAmounts((seg + 4) % 10) == 0 ? '7' : 'f' }); // Mark unused ones as disabled
 				}
 				GL11.glVertex2d(xp, yp);
 			}
@@ -136,7 +137,7 @@ public class GUIMetalSelect extends GuiScreen {
 
 			int xsp = xp - 4;
 			int ysp = yp;
-			String name = "\u00a7" + c + METAL_NAMES[(slot + 4) % 8];
+			String name = "\u00a7" + c + METAL_NAMES[(slot + 4) % 10];
 			// add four and mod by eight to get #1 where I want it to be
 			int width = fontRenderer.getStringWidth(name);
 
@@ -155,7 +156,7 @@ public class GUIMetalSelect extends GuiScreen {
 			xdp = (int) ((xp - x) * mod + x);
 			ydp = (int) ((yp - y) * mod + y);
 
-			mc.renderEngine.bindTexture(METAL_ICONS[(slot + 4) % 8]);
+			mc.renderEngine.bindTexture(METAL_ICONS[(slot + 4) % 10]);
 			drawModalRectWithCustomSizedTexture(xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
 		}
@@ -203,7 +204,7 @@ public class GUIMetalSelect extends GuiScreen {
 	private void toggleSelected() {
 		if (slotSelected != -1) {
 			int slot = slots.get(slotSelected);
-			slot = (slot + 4) % 8; // Make the slot the one I actually want
+			slot = (slot + 4) % 10; // Make the slot the one I actually want
 			AllomancyUtils.toggleMetalBurn(slot, cap);
 			Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("ui.button.click")), 0.1F,
 					2.0F);
