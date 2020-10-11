@@ -10,6 +10,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.AttachFace;
 import net.minecraft.util.Direction;
 import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.BiConsumer;
 

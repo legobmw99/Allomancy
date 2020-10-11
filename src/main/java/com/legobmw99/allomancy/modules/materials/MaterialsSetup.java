@@ -33,7 +33,6 @@ public class MaterialsSetup {
 
 
     public static void init(final FMLCommonSetupEvent e) {
-        OreGenerator.generationSetup();
         MinecraftForge.EVENT_BUS.register(new LootTableInjector());
     }
 
