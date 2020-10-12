@@ -17,20 +17,13 @@ import java.util.Set;
 
 public class PowersConfig {
 
-    public enum SCREEN_LOC {
-        TOP_RIGHT,
-        BOTTOM_RIGHT,
-        TOP_LEFT,
-        BOTTOM_LEFT
-    }
-
     public static ForgeConfigSpec.IntValue max_metal_detection;
     public static ForgeConfigSpec.BooleanValue animate_selection;
     public static ForgeConfigSpec.EnumValue<SCREEN_LOC> overlay_position;
     public static ForgeConfigSpec.BooleanValue random_mistings;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
-
     public static Set<String> whitelist = new HashSet<>();
+    private static ArrayList<String> defaultList;
 
     public static void init(ForgeConfigSpec.Builder common_builder, ForgeConfigSpec.Builder client_builder) {
 
@@ -57,9 +50,6 @@ public class PowersConfig {
         whitelist.clear();
         whitelist.addAll(cfg_whitelist.get());
     }
-
-
-    private static ArrayList<String> defaultList;
 
     private static List<String> default_whitelist() {
         defaultList = new ArrayList<>();
@@ -108,6 +98,19 @@ public class PowersConfig {
         add(Items.IRON_NUGGET);
         add(Items.GOLD_INGOT);
         add(Items.GOLD_NUGGET);
+        add(Items.field_234759_km_); // NETHERITE INGOT
+        add(Items.field_234760_kn_); // NETHERITE SCRAP. Op?
+        // netherite armor
+        add(Items.field_234763_ls_);
+        add(Items.field_234764_lt_);
+        add(Items.field_234765_lu_);
+        add(Items.field_234766_lv_);
+        // netherite tools
+        add(Items.field_234754_kI_);
+        add(Items.field_234755_kJ_);
+        add(Items.field_234756_kK_);
+        add(Items.field_234757_kL_);
+        add(Items.field_234758_kU_);
 
         add(Blocks.ANVIL);
         add(Blocks.IRON_TRAPDOOR);
@@ -133,7 +136,12 @@ public class PowersConfig {
         add(Blocks.LANTERN);
         add(Blocks.TRAPPED_CHEST);
         add(Blocks.TRIPWIRE);
-
+        add(Blocks.field_235334_I_); // NETHER GOLD ORE
+        add(Blocks.field_235366_md_); // SOUL LANTERN
+        add(Blocks.field_235397_ng_); // NETHERITE BLOCK
+        add(Blocks.field_235398_nh_); // ANCIENT DEBRIS. OP? TODO: consider if this should not be here, alongside scrap
+        add(Blocks.field_235405_no_); // LODESTONE
+        add(Blocks.field_235416_nz_); // GILDED BLACKSTONE
 
         add("allomancy:vial");
         add("allomancy:iron_lever");
@@ -183,6 +191,13 @@ public class PowersConfig {
 
     private static void add(Block b) {
         add(b.getRegistryName().toString());
+    }
+
+    public enum SCREEN_LOC {
+        TOP_RIGHT,
+        BOTTOM_RIGHT,
+        TOP_LEFT,
+        BOTTOM_LEFT
     }
 
 }
