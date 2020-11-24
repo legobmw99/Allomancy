@@ -26,14 +26,13 @@ public class ChangeEmotionPacket {
         this.make_aggressive = make_aggressive;
     }
 
+    public static ChangeEmotionPacket decode(PacketBuffer buf) {
+        return new ChangeEmotionPacket(buf.readInt(), buf.readBoolean());
+    }
 
     public void encode(PacketBuffer buf) {
         buf.writeInt(this.entityID);
         buf.writeBoolean(this.make_aggressive);
-    }
-
-    public static ChangeEmotionPacket decode(PacketBuffer buf) {
-        return new ChangeEmotionPacket(buf.readInt(), buf.readBoolean());
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {

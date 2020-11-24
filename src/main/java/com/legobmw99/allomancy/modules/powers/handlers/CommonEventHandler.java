@@ -41,13 +41,14 @@ import java.util.Random;
 
 public class CommonEventHandler {
 
+    private final Random random = new Random();
+
     @SubscribeEvent
     public void onAttachCapability(final AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof PlayerEntity) {
             event.addCapability(AllomancyCapability.IDENTIFIER, new AllomancyCapability());
         }
     }
-
 
     @SubscribeEvent
     public void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
@@ -111,7 +112,6 @@ public class CommonEventHandler {
         }
     }
 
-
     @SubscribeEvent
     public void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
         if (!event.getPlayer().getEntityWorld().isRemote()) {
@@ -139,13 +139,12 @@ public class CommonEventHandler {
         }
     }
 
-
     @SubscribeEvent
     public void onLivingDeath(final LivingDeathEvent event) {
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-            cap.setDeathLoc(new BlockPos(player.getPositionVec()), player.world.func_234923_W_());
+            cap.setDeathLoc(new BlockPos(player.getPositionVec()), player.world.getDimensionKey());
             Network.sync(cap, player);
         }
     }
@@ -189,8 +188,6 @@ public class CommonEventHandler {
             }
         }
     }
-
-    private final Random random = new Random();
 
     @SubscribeEvent
     public void onWorldTick(final TickEvent.WorldTickEvent event) {
@@ -254,7 +251,7 @@ public class CommonEventHandler {
                         if (spawnDim != null) {
                             spawnLoc = cap.getSpawnLoc();
                         } else {
-                            spawnDim = World.field_234918_g_; // overworld, no spawn --> use world spawn
+                            spawnDim = World.OVERWORLD; // no spawn --> use world spawn
                             spawnLoc = new BlockPos(curPlayer.world.getWorldInfo().getSpawnX(),
                                     curPlayer.world.getWorldInfo().getSpawnY(), curPlayer.world.getWorldInfo().getSpawnZ());
 

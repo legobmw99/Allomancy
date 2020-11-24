@@ -27,15 +27,14 @@ public class UpdateBurnPacket {
         this.value = value; // Convert bool to int
     }
 
-    public void encode(PacketBuffer buf) {
-        buf.writeEnumValue(mt);
-        buf.writeBoolean(this.value);
-    }
-
     public static UpdateBurnPacket decode(PacketBuffer buf) {
         return new UpdateBurnPacket(buf.readEnumValue(Metal.class), buf.readBoolean());
     }
 
+    public void encode(PacketBuffer buf) {
+        buf.writeEnumValue(mt);
+        buf.writeBoolean(this.value);
+    }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {

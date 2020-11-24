@@ -25,9 +25,8 @@ import java.util.Map;
 
 public class LootTables extends LootTableProvider {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-
-    private final DataGenerator gen;
     protected final Map<Block, LootTable.Builder> lootTables = new HashMap<>();
+    private final DataGenerator gen;
 
     public LootTables(DataGenerator dataGeneratorIn) {
         super(dataGeneratorIn);

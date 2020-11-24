@@ -32,15 +32,14 @@ public class TryPushPullEntity {
 
     }
 
-    public void encode(PacketBuffer buf) {
-        buf.writeInt(this.entityIDOther);
-        buf.writeInt(this.direction);
-    }
-
     public static TryPushPullEntity decode(PacketBuffer buf) {
         return new TryPushPullEntity(buf.readInt(), buf.readInt());
     }
 
+    public void encode(PacketBuffer buf) {
+        buf.writeInt(this.entityIDOther);
+        buf.writeInt(this.direction);
+    }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {

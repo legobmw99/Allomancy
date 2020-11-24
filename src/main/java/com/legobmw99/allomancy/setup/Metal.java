@@ -18,20 +18,20 @@ public enum Metal {
     CADMIUM,
     BENDALLOY;
 
-    public String getName() {
-        return super.name().toLowerCase();
-    }
-
-    public int getIndex() {
-        return ordinal();
-    }
-
     public static Metal getMetal(int index) {
         for (Metal metal : values()) {
             if (metal.getIndex() == index)
                 return metal;
         }
         return null;
+    }
+
+    public String getName() {
+        return super.name().toLowerCase();
+    }
+
+    public int getIndex() {
+        return ordinal();
     }
 
     public String getDisplayName() {

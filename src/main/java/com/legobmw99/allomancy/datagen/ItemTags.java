@@ -50,7 +50,7 @@ public class ItemTags extends ItemTagsProvider {
         Allomancy.LOGGER.debug("Creating item tag for forge:" + name);
         ResourceLocation loc = new ResourceLocation("forge", name);
 
-        func_240522_a_(net.minecraft.tags.ItemTags.makeWrapperTag("forge" + name)).replace(false).func_240534_a_(items);
+        getOrCreateBuilder(net.minecraft.tags.ItemTags.makeWrapperTag("forge" + name)).replace(false).add(items);
     }
 
 

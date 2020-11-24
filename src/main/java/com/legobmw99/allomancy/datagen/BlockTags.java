@@ -28,7 +28,7 @@ public class BlockTags extends BlockTagsProvider {
 
     private void addForgeTag(String name, Block... items) {
         Allomancy.LOGGER.debug("Creating block tag for forge:" + name);
-        func_240522_a_(net.minecraft.tags.BlockTags.makeWrapperTag("forge:" + name)).replace(false).func_240534_a_(items); // getBuilder, add, prior had a build() call
+        getOrCreateBuilder(net.minecraft.tags.BlockTags.makeWrapperTag("forge:" + name)).replace(false).add(items);
     }
 
 

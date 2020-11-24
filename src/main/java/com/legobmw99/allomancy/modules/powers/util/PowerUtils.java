@@ -52,6 +52,15 @@ public class PowerUtils {
 
     public static final byte PUSH = 1;
     public static final byte PULL = -1;
+    private static final Predicate<Goal> isAggroGoal = (goal) ->
+            goal instanceof CreeperSwellGoal ||
+                    goal instanceof AIAttackOnCollideExtended ||
+                    goal instanceof MeleeAttackGoal ||
+                    goal instanceof TargetGoal ||
+                    goal instanceof PanicGoal ||
+                    goal.getClass().getName().contains("Fireball") ||
+                    goal.getClass().getName().contains("Attack") ||
+                    goal.getClass().getName().contains("Anger");
 
     /**
      * Block state wrapper on {@link PowerUtils#isBlockMetal}
@@ -82,7 +91,6 @@ public class PowerUtils {
     public static boolean isItemMetal(ItemStack item) {
         return isOnWhitelist(item.getItem().getRegistryName().toString());
     }
-
 
     private static boolean isOnWhitelist(String string) {
         return PowersConfig.whitelist.contains(string);
@@ -199,7 +207,7 @@ public class PowerUtils {
                     player.stopRiding();
                 }
 
-                if (player.world.func_234923_W_() != dimension) {
+                if (player.world.getDimensionKey() != dimension) {
                     //change dimension
                     player = (PlayerEntity) player.changeDimension(world.getServer().getWorld(dimension), new ITeleporter() {
                         @Override
@@ -231,7 +239,7 @@ public class PowerUtils {
                 target.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(target, target.getClass(), false));
                 target.goalSelector.addGoal(4, new LookRandomlyGoal(target));
                 target.targetSelector.addGoal(2, new HurtByTargetGoal(target).setCallsForHelp());
-                if (target.getAttribute(Attributes.field_233823_f_) != null && !(target instanceof GuardianEntity)) { // ATTACK_DAMAGE
+                if (target.getAttribute(Attributes.ATTACK_DAMAGE) != null && !(target instanceof GuardianEntity)) {
                     target.goalSelector.addGoal(3, new MeleeAttackGoal(target, 1.2D, true));
                 }
 
@@ -308,14 +316,4 @@ public class PowerUtils {
         }
 
     }
-
-    private static final Predicate<Goal> isAggroGoal = (goal) ->
-            goal instanceof CreeperSwellGoal ||
-                    goal instanceof AIAttackOnCollideExtended ||
-                    goal instanceof MeleeAttackGoal ||
-                    goal instanceof TargetGoal ||
-                    goal instanceof PanicGoal ||
-                    goal.getClass().getName().contains("Fireball") ||
-                    goal.getClass().getName().contains("Attack") ||
-                    goal.getClass().getName().contains("Anger");
 }

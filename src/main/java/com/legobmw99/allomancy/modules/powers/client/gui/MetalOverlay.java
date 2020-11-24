@@ -16,6 +16,9 @@ import java.awt.*;
 
 public class MetalOverlay {
     private static final Point[] Frames = new Point[4];
+    private static final ResourceLocation meterLoc = new ResourceLocation("allomancy", "textures/gui/overlay/meter.png");
+    private static int animationCounter = 0;
+    private static int currentFrame = 0;
 
     static {
         int x = 0;
@@ -24,10 +27,6 @@ public class MetalOverlay {
             Frames[i] = new Point(x, firsty + (4 * i));
         }
     }
-
-    private static final ResourceLocation meterLoc = new ResourceLocation("allomancy", "textures/gui/overlay/meter.png");
-    private static int animationCounter = 0;
-    private static int currentFrame = 0;
 
     /**
      * Draws the overlay for the metals
@@ -111,6 +110,6 @@ public class MetalOverlay {
 
     private static void blit(int x, int y, int p_blit_3, int p_blit_4, int p_blit_5, int p_blit_6) {
         ForgeIngameGui gui = new ForgeIngameGui(Minecraft.getInstance());
-        ForgeIngameGui.func_238464_a_(new MatrixStack(), x, y, 0/* todo: was gui.getBlitOffset()*/, p_blit_3, p_blit_4, p_blit_5, p_blit_6, 128, 128);
+        ForgeIngameGui.blit(new MatrixStack(), x, y, gui.getBlitOffset(), p_blit_3, p_blit_4, p_blit_5, p_blit_6, 128, 128);
     }
 }

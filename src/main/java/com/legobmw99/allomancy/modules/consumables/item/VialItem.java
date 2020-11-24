@@ -106,7 +106,7 @@ public class VialItem extends Item {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (stack.hasTag()) {
-            boolean full_display = Screen.func_231173_s_(); // hasShiftDown
+            boolean full_display = Screen.hasShiftDown();
             int count = 0;
             for (Metal mt : Metal.values()) {
                 if (stack.getTag().getBoolean(mt.getName())) {

@@ -20,17 +20,15 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.lwjgl.glfw.GLFW;
 
 public class PowersClientSetup {
-    @OnlyIn(Dist.CLIENT)
-    public static KeyBinding burn;
-
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Allomancy.MODID);
-
     public static final RegistryObject<ParticleType<SoundParticleData>> SOUND_PARTICLE_TYPE = PARTICLES.register("sound_particle", () -> new ParticleType<SoundParticleData>(true, SoundParticleData.DESERIALIZER) {
         @Override
         public Codec<SoundParticleData> func_230522_e_() {
             return null;
         }
     });
+    @OnlyIn(Dist.CLIENT)
+    public static KeyBinding burn;
 
     public static void initKeyBindings() {
         burn = new KeyBinding("key.burn", GLFW.GLFW_KEY_V, "key.categories.allomancy");

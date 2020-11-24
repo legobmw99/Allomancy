@@ -37,18 +37,13 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     private final int[] burn_time;
     private final int[] metal_amounts;
     private final boolean[] burning_metals;
-
+    private final LazyOptional<AllomancyCapability> handler;
     private int damange_stored;
-
     private String death_dimension;
     private BlockPos death_pos;
     private String spawn_dimension;
     private BlockPos spawn_pos;
-
     private int enhanced_time;
-
-
-    private final LazyOptional<AllomancyCapability> handler;
 
     public AllomancyCapability() {
         handler = LazyOptional.of(() -> this);
@@ -72,6 +67,50 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     }
 
+    /**
+     * Runs each worldTick, checking the burn times, abilities, and metal
+     * amounts. Then syncs to the client to make sure everyone is on the same
+     * page
+     *
+     * @param capability the AllomancyCapabilities data
+     * @param player     the player being checked
+     */
+    public static void updateMetalBurnTime(AllomancyCapability capability, ServerPlayerEntity player) {
+        for (Metal metal : Metal.values()) {
+            if (capability.isBurning(metal)) {
+                if (!capability.hasPower(metal)) {
+                    // put out any metals that the player shouldn't be able to burn
+                    capability.setBurning(metal, false);
+                    Network.sync(capability, player);
+                } else {
+                    capability.setBurnTime(metal, capability.getBurnTime(metal) - 1);
+                    if (capability.getBurnTime(metal) <= 0) {
+                        if (capability.getAmount(metal) <= 0) {
+                            capability.setBurning(metal, false);
+                        } else {
+                            capability.setAmount(metal, capability.getAmount(metal) - 1);
+                        }
+                        capability.setBurnTime(metal, MAX_BURN_TIME[metal.getIndex()]);
+                        Network.sync(capability, player);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Retrieve data for a specific player
+     *
+     * @param player the player you want data for
+     * @return the AllomancyCapabilites data of the player
+     */
+    public static AllomancyCapability forPlayer(Entity player) {
+        return player.getCapability(PLAYER_CAP).orElseThrow(() -> new RuntimeException("Capability not attached!"));
+    }
+
+    public static void register() {
+        CapabilityManager.INSTANCE.register(AllomancyCapability.class, new AllomancyCapability.Storage(), () -> null);
+    }
 
     /**
      * Get if the player has the supplied power
@@ -148,7 +187,6 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     public void setUninvested() {
         Arrays.fill(allomantic_powers, false);
     }
-
 
     /**
      * Grant this player the given metal power
@@ -246,7 +284,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param dim The RegistryKey representing the dimension the death occured in
      */
     public void setDeathLoc(BlockPos pos, RegistryKey<World> dim) {
-        setDeathLoc(pos, dim.func_240901_a_().toString());
+        setDeathLoc(pos, dim.getLocation().toString());
     }
 
     /**
@@ -278,7 +316,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         if (this.death_dimension == null) {
             return null;
         }
-        return RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(this.death_dimension));
+        return RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(this.death_dimension));
 
     }
 
@@ -289,7 +327,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param dim The RegistryKey representing the spawn dimension
      */
     public void setSpawnLoc(BlockPos pos, RegistryKey<World> dim) {
-        setSpawnLoc(pos, dim.func_240901_a_().toString());
+        setSpawnLoc(pos, dim.getLocation().toString());
     }
 
     /**
@@ -321,9 +359,8 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         if (this.spawn_dimension == null) {
             return null;
         }
-        return RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(this.spawn_dimension));
+        return RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(this.spawn_dimension));
     }
-
 
     /**
      * Get the burn time of a specific metal
@@ -350,66 +387,18 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
             this.enhanced_time--;
     }
 
-    public void setEnhanced(int time) {
-        this.enhanced_time = time;
-    }
-
     public boolean isEnhanced() {
         return this.enhanced_time > 0;
     }
 
-    /**
-     * Runs each worldTick, checking the burn times, abilities, and metal
-     * amounts. Then syncs to the client to make sure everyone is on the same
-     * page
-     *
-     * @param capability the AllomancyCapabilities data
-     * @param player     the player being checked
-     */
-    public static void updateMetalBurnTime(AllomancyCapability capability, ServerPlayerEntity player) {
-        for (Metal metal : Metal.values()) {
-            if (capability.isBurning(metal)) {
-                if (!capability.hasPower(metal)) {
-                    // put out any metals that the player shouldn't be able to burn
-                    capability.setBurning(metal, false);
-                    Network.sync(capability, player);
-                } else {
-                    capability.setBurnTime(metal, capability.getBurnTime(metal) - 1);
-                    if (capability.getBurnTime(metal) <= 0) {
-                        if (capability.getAmount(metal) <= 0) {
-                            capability.setBurning(metal, false);
-                        } else {
-                            capability.setAmount(metal, capability.getAmount(metal) - 1);
-                        }
-                        capability.setBurnTime(metal, MAX_BURN_TIME[metal.getIndex()]);
-                        Network.sync(capability, player);
-                    }
-                }
-            }
-        }
+    public void setEnhanced(int time) {
+        this.enhanced_time = time;
     }
-
-
-    /**
-     * Retrieve data for a specific player
-     *
-     * @param player the player you want data for
-     * @return the AllomancyCapabilites data of the player
-     */
-    public static AllomancyCapability forPlayer(Entity player) {
-        return player.getCapability(PLAYER_CAP).orElseThrow(() -> new RuntimeException("Capability not attached!"));
-    }
-
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         return PLAYER_CAP.orEmpty(cap, handler);
-    }
-
-
-    public static void register() {
-        CapabilityManager.INSTANCE.register(AllomancyCapability.class, new AllomancyCapability.Storage(), () -> null);
     }
 
     @Override

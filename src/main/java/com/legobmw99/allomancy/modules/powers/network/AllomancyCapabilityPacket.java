@@ -29,15 +29,14 @@ public class AllomancyCapabilityPacket {
         this.entityID = entityID;
     }
 
-    public void encode(PacketBuffer buf) {
-        buf.writeCompoundTag(this.nbt);
-        buf.writeInt(this.entityID);
-    }
-
     public static AllomancyCapabilityPacket decode(PacketBuffer buf) {
         return new AllomancyCapabilityPacket(buf.readCompoundTag(), buf.readInt());
     }
 
+    public void encode(PacketBuffer buf) {
+        buf.writeCompoundTag(this.nbt);
+        buf.writeInt(this.entityID);
+    }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {

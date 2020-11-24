@@ -26,15 +26,14 @@ public class UpdateEnhancedPacket {
         this.entityID = entityID;
     }
 
-    public void encode(PacketBuffer buf) {
-        buf.writeInt(this.enhance_time);
-        buf.writeInt(this.entityID);
-    }
-
     public static UpdateEnhancedPacket decode(PacketBuffer buf) {
         return new UpdateEnhancedPacket(buf.readInt(), buf.readInt());
     }
 
+    public void encode(PacketBuffer buf) {
+        buf.writeInt(this.enhance_time);
+        buf.writeInt(this.entityID);
+    }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {

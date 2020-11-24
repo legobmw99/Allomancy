@@ -53,12 +53,20 @@ public class MetalSelectScreen extends Screen {
 
     }
 
-    @Override
-    public void func_230430_a_(MatrixStack matrixStack, int mx, int my, float partialTicks) { // render
-        super.func_230430_a_(matrixStack, mx, my, partialTicks);
+    private static double mouseAngle(int x, int y, int mx, int my) {
+        return (MathHelper.atan2(my - y, mx - x) + Math.PI * 2) % (Math.PI * 2);
+    }
 
-        int x = this.field_230708_k_ / 2; //width
-        int y = this.field_230709_l_ / 2; //height
+    private static int toMetalIndex(int segment) {
+        return (segment + 8) % Metal.values().length;
+    }
+
+    @Override
+    public void render(MatrixStack matrixStack, int mx, int my, float partialTicks) { // render
+        super.render(matrixStack, mx, my, partialTicks);
+
+        int x = this.width / 2; //width
+        int y = this.height / 2; //height
         int maxRadius = 80;
 
         double angle = mouseAngle(x, y, mx, my);
@@ -141,7 +149,7 @@ public class MetalSelectScreen extends Screen {
             if (ysp < y)
                 ysp -= 9;
 
-            mc.getRenderManager().getFontRenderer().func_238405_a_(matrixStack, name, xsp, ysp, 0xFFFFFF); //drawStringWithShadow?
+            mc.getRenderManager().getFontRenderer().drawStringWithShadow(matrixStack, name, xsp, ysp, 0xFFFFFF);
 
             double mod = 0.8;
             int xdp = (int) ((xp - x) * mod + x);
@@ -149,7 +157,7 @@ public class MetalSelectScreen extends Screen {
 
             mc.getRenderManager().textureManager.bindTexture(METAL_ICONS[toMetalIndex(seg)]);
             RenderSystem.color4f(1, 1, 1, 1);
-            func_238463_a_(matrixStack, xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16); //blit?
+            blit(matrixStack, xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
         }
 
@@ -165,13 +173,13 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public boolean func_231044_a_(double mouseX, double mouseY, int mouseButton) { //mouseClicked
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) { //mouseClicked
         toggleSelected();
-        return super.func_231044_a_(mouseX, mouseY, mouseButton);
+        return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
-    public void func_231023_e_() { // tick
+    public void tick() { // tick
         timeIn++;
     }
 
@@ -199,15 +207,7 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override // isPauseScreen?
-    public boolean func_231177_au__() {
+    public boolean isPauseScreen() {
         return false;
-    }
-
-    private static double mouseAngle(int x, int y, int mx, int my) {
-        return (MathHelper.atan2(my - y, mx - x) + Math.PI * 2) % (Math.PI * 2);
-    }
-
-    private static int toMetalIndex(int segment) {
-        return (segment + 8) % Metal.values().length;
     }
 }

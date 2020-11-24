@@ -12,18 +12,6 @@ import net.minecraft.util.registry.Registry;
 public class SoundParticleData implements IParticleData {
 
 
-    private final SoundCategory type;
-
-
-    public SoundParticleData(SoundCategory type) {
-        this.type = type;
-    }
-
-    protected SoundCategory getSoundType() {
-        return this.type;
-    }
-
-
     public static final IParticleData.IDeserializer<SoundParticleData> DESERIALIZER = new IParticleData.IDeserializer<SoundParticleData>() {
 
         @Override
@@ -36,6 +24,15 @@ public class SoundParticleData implements IParticleData {
             return new SoundParticleData(buffer.readEnumValue(SoundCategory.class));
         }
     };
+    private final SoundCategory type;
+
+    public SoundParticleData(SoundCategory type) {
+        this.type = type;
+    }
+
+    protected SoundCategory getSoundType() {
+        return this.type;
+    }
 
     @Override
     public ParticleType<?> getType() {

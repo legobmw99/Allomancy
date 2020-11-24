@@ -16,16 +16,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ConsumeSetup {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Allomancy.MODID);
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Allomancy.MODID);
+    public static final RegistryObject<GrinderItem> ALLOMANTIC_GRINDER = ITEMS.register("allomantic_grinder", GrinderItem::new);
+    public static final RegistryObject<LerasiumItem> LERASIUM_NUGGET = ITEMS.register("lerasium_nugget", LerasiumItem::new);
+    public static final RegistryObject<VialItem> VIAL = ITEMS.register("vial", VialItem::new);
+    public static final RegistryObject<SpecialRecipeSerializer<VialItemRecipe>> VIAL_RECIPE_SERIALIZER = RECIPES.register("vial_filling", VialItemRecipe.Serializer::new);
 
     public static void register() {
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         RECIPES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
-
-    public static final RegistryObject<GrinderItem> ALLOMANTIC_GRINDER = ITEMS.register("allomantic_grinder", GrinderItem::new);
-    public static final RegistryObject<LerasiumItem> LERASIUM_NUGGET = ITEMS.register("lerasium_nugget", LerasiumItem::new);
-    public static final RegistryObject<VialItem> VIAL = ITEMS.register("vial", VialItem::new);
-
-    public static final RegistryObject<SpecialRecipeSerializer<VialItemRecipe>> VIAL_RECIPE_SERIALIZER = RECIPES.register("vial_filling", VialItemRecipe.Serializer::new);
 
 }

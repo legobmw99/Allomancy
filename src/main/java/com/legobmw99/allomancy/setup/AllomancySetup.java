@@ -55,8 +55,7 @@ public class AllomancySetup {
     }
 
     private static IFormattableTextComponent addColor(IFormattableTextComponent text, TextFormatting color) {
-        // setStyle, setColor, fromTextFormatting
-        text.func_230530_a_(text.getStyle().func_240718_a_(Color.func_240744_a_(color)));
+        text.setStyle(text.getStyle().setColor(Color.fromTextFormatting(color)));
         return text;
     }
 

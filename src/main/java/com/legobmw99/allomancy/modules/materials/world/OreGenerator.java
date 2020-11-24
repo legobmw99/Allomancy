@@ -1,12 +1,13 @@
 package com.legobmw99.allomancy.modules.materials.world;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsConfig;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.block.Block;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.placement.TopSolidRangeConfig;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 
@@ -39,10 +40,17 @@ public class OreGenerator {
         BiomeGenerationSettingsBuilder generation = event.getGeneration();
         for (OreData ore : ores) {
             if (ore.config_enabled) {
-                // TODO - investigate once srg'd
-                generation.func_242513_a(GenerationStage.Decoration.UNDERGROUND_ORES,
-                        Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.field_241882_a, ore.ore_block.getDefaultState(), ore.vein_size))
-                                .func_242733_d(ore.max_height).func_242728_a().func_242731_b(ore.ores_per_chunk));
+                // TODO - investigate min/max
+                generation.withFeature(
+                        GenerationStage.Decoration.UNDERGROUND_ORES,
+                        Feature.ORE
+                                .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
+                                        ore.ore_block.getDefaultState(), ore.vein_size))
+                                .withPlacement(Placement.RANGE.configure(
+                                        new TopSolidRangeConfig(0, ore.min_height, ore.max_height)))
+                                .square()
+                                .func_242731_b(ore.ores_per_chunk)
+                );
             }
         }
     }

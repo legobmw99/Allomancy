@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import com.legobmw99.allomancy.setup.Metal;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
@@ -62,6 +63,16 @@ public class CoinBagItem extends ShootableItem {
 
     }
 
+    @Override
+    public int getItemEnchantability() {
+        return 0;
+    }
+
+    @Override
+    public int func_230305_d_() { // TODO figure out what this does - new in 1.16, possibly speed?
+        return 0;
+    }
+
     private enum Ammo {
         GOLD(4.0F, 2.0F, 4.0F, 1.0F),
         IRON(5.0F, 2.0F, 2.25F, 2.5F);
@@ -73,15 +84,5 @@ public class CoinBagItem extends ShootableItem {
             arg2 = v2;
             arg3 = v3;
         }
-    }
-
-    @Override
-    public int getItemEnchantability() {
-        return 0;
-    }
-
-    @Override
-    public int func_230305_d_() { // TODO figure out what this does - new in 1.16, possibly speed?
-        return 0;
     }
 }

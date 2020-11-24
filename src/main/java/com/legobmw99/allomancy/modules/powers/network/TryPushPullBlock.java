@@ -26,15 +26,14 @@ public class TryPushPullBlock {
         this.direction = direction;
     }
 
-    public void encode(PacketBuffer buf) {
-        buf.writeBlockPos(this.blockPos);
-        buf.writeInt(this.direction);
-    }
-
     public static TryPushPullBlock decode(PacketBuffer buf) {
         return new TryPushPullBlock(buf.readBlockPos(), buf.readInt());
     }
 
+    public void encode(PacketBuffer buf) {
+        buf.writeBlockPos(this.blockPos);
+        buf.writeInt(this.direction);
+    }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {

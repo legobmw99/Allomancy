@@ -51,6 +51,9 @@ public class ClientEventHandler {
     private final Set<BlockPos> metal_blocks = new HashSet<>();
     private final Set<PlayerEntity> nearby_allomancers = new HashSet<>();
 
+    private static Vector3d blockVec(BlockPos b) {
+        return new Vector3d(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
+    }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -294,18 +297,18 @@ public class ClientEventHandler {
          *********************************************/
         if (cap.isBurning(Metal.GOLD)) {
             RegistryKey<World> deathDim = cap.getDeathDim();
-            if (deathDim != null && player.world.func_234923_W_() == deathDim) { //world .getDim (look for return type matches)
+            if (deathDim != null && player.world.getDimensionKey() == deathDim) { //world .getDim (look for return type matches)
                 ClientUtils.drawMetalLine(playervec, blockVec(cap.getDeathLoc()), 3.0F, 0.9F, 0.85F, 0.0F);
             }
         }
         if (cap.isBurning(Metal.ELECTRUM)) {
             RegistryKey<World> spawnDim = cap.getSpawnDim();
-            if (spawnDim == null && player.world.func_234923_W_() == World.field_234918_g_) { // overworld, no spawn --> use world spawn
+            if (spawnDim == null && player.world.getDimensionKey() == World.OVERWORLD) { // overworld, no spawn --> use world spawn
                 BlockPos spawnLoc = new BlockPos(player.world.getWorldInfo().getSpawnX(),
                         player.world.getWorldInfo().getSpawnY(), player.world.getWorldInfo().getSpawnZ());
                 ClientUtils.drawMetalLine(playervec, blockVec(spawnLoc), 3.0F, 0.7F, 0.8F, 0.2F);
 
-            } else if (spawnDim != null && player.world.func_234923_W_() == spawnDim) {
+            } else if (spawnDim != null && player.world.getDimensionKey() == spawnDim) {
                 ClientUtils.drawMetalLine(playervec, blockVec(cap.getSpawnLoc()), 3.0F, 0.7F, 0.8F, 0.2F);
             }
         }
@@ -317,11 +320,6 @@ public class ClientEventHandler {
         RenderSystem.enableTexture();
         RenderSystem.popMatrix();
     }
-
-    private static Vector3d blockVec(BlockPos b) {
-        return new Vector3d(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
-    }
-
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
