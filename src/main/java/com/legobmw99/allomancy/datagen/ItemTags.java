@@ -7,12 +7,13 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ItemTags extends ItemTagsProvider {
 
 
-    public ItemTags(DataGenerator gen, BlockTagsProvider blockTagProvider) {
-        super(gen, blockTagProvider);
+    public ItemTags(DataGenerator gen, BlockTagsProvider blockTagProvider, String modid, ExistingFileHelper exFileHelper) {
+        super(gen, blockTagProvider, modid, exFileHelper);
     }
 
     @Override
