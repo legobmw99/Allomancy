@@ -284,7 +284,8 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param dim The RegistryKey representing the dimension the death occured in
      */
     public void setDeathLoc(BlockPos pos, RegistryKey<World> dim) {
-        setDeathLoc(pos, dim.getLocation().toString());
+        if (dim != null)
+            setDeathLoc(pos, dim.getLocation().toString());
     }
 
     /**
