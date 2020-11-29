@@ -15,9 +15,9 @@ public class DataGenerators {
         if (event.includeServer()) {
             generator.addProvider(new Recipes(generator));
             generator.addProvider(new LootTables(generator));
-            BlockTags blocktags = new BlockTags(generator);
+            BlockTags blocktags = new BlockTags(generator, Allomancy.MODID, event.getExistingFileHelper());
             generator.addProvider(blocktags);
-            generator.addProvider(new ItemTags(generator, blocktags));
+            generator.addProvider(new ItemTags(generator, blocktags, Allomancy.MODID, event.getExistingFileHelper()));
             generator.addProvider(new Advancements(generator));
         }
         if (event.includeClient()) {

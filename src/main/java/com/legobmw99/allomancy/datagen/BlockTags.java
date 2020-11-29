@@ -5,11 +5,14 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.util.registry.Registry;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 
 public class BlockTags extends BlockTagsProvider {
-    public BlockTags(DataGenerator generatorIn) {
-        super(generatorIn);
+
+    public BlockTags(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
+        super(gen, modid, exFileHelper);
     }
 
     @Override
