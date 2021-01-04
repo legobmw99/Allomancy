@@ -18,7 +18,6 @@ public class PowersSetup {
     public static void clientInit(final FMLClientSetupEvent e) {
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
         PowersClientSetup.initKeyBindings();
-        ClientEventHandler.setHud();
     }
 
     public static void registerCommands(final RegisterCommandsEvent e) {

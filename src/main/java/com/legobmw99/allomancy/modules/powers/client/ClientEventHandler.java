@@ -57,12 +57,6 @@ public class ClientEventHandler {
     private final Set<BlockPos> metal_blocks = new HashSet<>();
     private final Set<PlayerEntity> nearby_allomancers = new HashSet<>();
 
-    private static boolean hud;
-    
-    public static void setHud() {
-	hud = PowersConfig.enable_overlay.get();
-    }
-    
     private static Vector3d blockVec(BlockPos b) {
         return new Vector3d(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
     }
@@ -234,7 +228,6 @@ public class ClientEventHandler {
         
         if (PowersClientSetup.hud.isPressed()) {
             PowersConfig.enable_overlay.set(!PowersConfig.enable_overlay.get());
-            hud = PowersConfig.enable_overlay.get();
         }
     }
 
@@ -242,7 +235,7 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
 
-	if(!hud) {
+	if(!PowersConfig.enable_overlay.get()) {
             return;
         }
         if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
