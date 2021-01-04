@@ -35,6 +35,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashSet;
@@ -219,8 +220,8 @@ public class ClientEventHandler {
                 }
             }
         }
-        
-        if (PowersClientSetup.hud.isPressed()) {
+
+        if (PowersClientSetup.hud.isPressed() && event.getAction() == GLFW.GLFW_PRESS) {
             PowersConfig.enable_overlay.set(!PowersConfig.enable_overlay.get());
         }
     }
@@ -229,7 +230,7 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
 
-	if(!PowersConfig.enable_overlay.get()) {
+        if (!PowersConfig.enable_overlay.get() && !(this.mc.currentScreen instanceof MetalSelectScreen)) {
             return;
         }
         if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
