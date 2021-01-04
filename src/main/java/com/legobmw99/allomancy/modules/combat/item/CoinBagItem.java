@@ -4,7 +4,6 @@ import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import com.legobmw99.allomancy.setup.Metal;
-import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;

@@ -1,12 +1,9 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
-import org.lwjgl.glfw.GLFW;
-
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticle;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
 import com.mojang.serialization.Codec;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.particles.ParticleType;
@@ -20,6 +17,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.lwjgl.glfw.GLFW;
 
 public class PowersClientSetup {
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Allomancy.MODID);

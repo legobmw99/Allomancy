@@ -5,7 +5,6 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 

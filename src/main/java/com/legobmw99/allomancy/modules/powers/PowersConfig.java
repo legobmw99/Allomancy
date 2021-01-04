@@ -1,20 +1,19 @@
 package com.legobmw99.allomancy.modules.powers;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.setup.AllomancyConfig;
 import com.legobmw99.allomancy.setup.Metal;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class PowersConfig {
 
