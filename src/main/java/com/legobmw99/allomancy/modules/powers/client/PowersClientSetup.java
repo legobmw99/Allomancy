@@ -37,7 +37,7 @@ public class PowersClientSetup {
 
     public static void initKeyBindings() {
         burn = new KeyBinding("key.burn", GLFW.GLFW_KEY_V, "key.categories.allomancy");
-        hud = new KeyBinding("key.hud", GLFW.GLFW_KEY_H, "key.categories.allomancy"); 
+        hud = new KeyBinding("key.hud", -1, "key.categories.allomancy"); 
         ClientRegistry.registerKeyBinding(burn);
         ClientRegistry.registerKeyBinding(hud);
     }
