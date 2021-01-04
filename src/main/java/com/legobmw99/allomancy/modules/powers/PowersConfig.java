@@ -1,8 +1,14 @@
 package com.legobmw99.allomancy.modules.powers;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.setup.AllomancyConfig;
 import com.legobmw99.allomancy.setup.Metal;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
@@ -10,15 +16,11 @@ import net.minecraft.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class PowersConfig {
 
     public static ForgeConfigSpec.IntValue max_metal_detection;
     public static ForgeConfigSpec.BooleanValue animate_selection;
+    public static ForgeConfigSpec.BooleanValue enable_overlay;
     public static ForgeConfigSpec.EnumValue<SCREEN_LOC> overlay_position;
     public static ForgeConfigSpec.BooleanValue random_mistings;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
@@ -35,6 +37,7 @@ public class PowersConfig {
         client_builder.push("Graphics");
         max_metal_detection = client_builder.comment("Maximum iron/steelsight distance").defineInRange("max_metal_distance", 15, 3, 30);
         animate_selection = client_builder.comment("Animate the selection wheel").define("animate_selection", true);
+        enable_overlay = client_builder.comment("Enable the screen overlay").define("overlay_enabled", true);
         overlay_position = client_builder.comment("Screen Overlay Position").defineEnum("overlay_position", SCREEN_LOC.TOP_LEFT);
         client_builder.pop();
     }
