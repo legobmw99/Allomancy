@@ -1,6 +1,7 @@
 {
   "advancements.become_mistborn.desc": "Du besitzt Macht, um die dich die meisten Menschen beneiden ...",
   "advancements.become_mistborn.title": "Werde ein Nebelgeborener!",
+
   "block.allomancy.aluminum_ore": "Aluminumerz",
   "block.allomancy.cadmium_ore": "Kadmiumerz",
   "block.allomancy.chromium_ore": "Chromerz",
@@ -12,10 +13,12 @@
   "block.allomancy.silver_ore": "Silbererz",
   "block.allomancy.tin_ore": "Zinnerz",
   "block.allomancy.zinc_ore": "Zinkerz",
+
   "commands.allomancy.addpower": "%s wurde die allomantische F\u00e4higkeit %s zu verbrennen hinzugef\u00fcgt",
   "commands.allomancy.getpowers": "%s hat folgende allomantische F\u00e4higkeiten: %s",
   "commands.allomancy.removepower": "%s wurde die allomantische F\u00e4higkeit %s zu verbrennen entfernt",
   "commands.allomancy.unrecognized": "Unbekannte allomantische F\u00e4higkeit: '%s'",
+
   "entity.allomancy.nugget_projectile": "Klumpen Projektil",
   "item.allomancy.allomantic_grinder": "Handm\u00fchle",
   "item.allomancy.aluminum_flakes": "Aluminiumflocken",
@@ -37,7 +40,7 @@
   "item.allomancy.gold_flakes": "Goldflocken",
   "item.allomancy.iron_flakes": "Eisenflocken",
   "item.allomancy.koloss_blade": "Koloss Schwert",
-  "item.allomancy.koloss_blade.lore": "Dieser Gegenstand ist zu schwer für eine gew\u00f6hnlich Person.",
+  "item.allomancy.koloss_blade.lore": "Dieser Gegenstand ist zu schwer fï¿½r eine gew\u00f6hnlich Person.",
   "item.allomancy.lead_flakes": "Bleiflocken",
   "item.allomancy.lead_ingot": "Bleibarren",
   "item.allomancy.lerasium_nugget": "Lerasiumklumpen",
@@ -56,10 +59,13 @@
   "item.allomancy.vial.lore_inst": "Halte UMSCHALT f\u00fcr mehr Info",
   "item.allomancy.zinc_flakes": "Zinkflocken",
   "item.allomancy.zinc_ingot": "Zinkbarren",
+
   "itemGroup.allomancy": "Allomantie",
+
   "key.burn": "Metalle verbrennen",
   "key.hud": "Hud umschalten",
   "key.categories.allomancy": "Allomantie",
+
   "metals.aluminum": "Aluminum",
   "metals.bendalloy": "Biegmetall",
   "metals.brass": "Messing",

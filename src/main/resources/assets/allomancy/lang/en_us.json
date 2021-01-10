@@ -1,6 +1,7 @@
 {
   "advancements.become_mistborn.desc": "You have a power most people envy...",
   "advancements.become_mistborn.title": "Become Mistborn!",
+
   "block.allomancy.aluminum_ore": "Aluminum Ore",
   "block.allomancy.cadmium_ore": "Cadmium Ore",
   "block.allomancy.chromium_ore": "Chromium Ore",
@@ -12,11 +13,14 @@
   "block.allomancy.silver_ore": "Silver Ore",
   "block.allomancy.tin_ore": "Tin Ore",
   "block.allomancy.zinc_ore": "Zinc Ore",
+
   "commands.allomancy.addpower": "%s added Allomantic power %s",
   "commands.allomancy.getpowers": "%s currently has Allomantic powers: %s",
   "commands.allomancy.removepower": "%s removed Allomantic power %s",
   "commands.allomancy.unrecognized": "Unrecognized Allomancy power: '%s'",
+
   "entity.allomancy.nugget_projectile": "Nugget Projectile",
+
   "item.allomancy.allomantic_grinder": "Hand Grinder",
   "item.allomancy.aluminum_flakes": "Aluminum Flakes",
   "item.allomancy.aluminum_ingot": "Aluminum Ingot",
@@ -56,10 +60,12 @@
   "item.allomancy.vial.lore_inst": "Hold SHIFT to view",
   "item.allomancy.zinc_flakes": "Zinc Flakes",
   "item.allomancy.zinc_ingot": "Zinc Ingot",
+
   "itemGroup.allomancy": "Allomancy",
   "key.burn": "Burn Metals",
   "key.hud": "Toggle Hud",
   "key.categories.allomancy": "Allomancy",
+
   "metals.aluminum": "Aluminum",
   "metals.bendalloy": "Bendalloy",
   "metals.brass": "Brass",
