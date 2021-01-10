@@ -27,6 +27,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -38,7 +39,7 @@ public class MetalSelectScreen extends Screen {
 
     private static final String[] METAL_NAMES = Arrays.stream(Metal.values()).map(Metal::getDisplayName).toArray(String[]::new);
     private static final String GUI_METAL = "allomancy:textures/gui/metals/%s_symbol.png";
-
+    private static final String[] METAL_LOCAL = Arrays.stream(METAL_NAMES).map(s -> "metals." + s.toLowerCase()).toArray(String[]::new);
     private static final ResourceLocation[] METAL_ICONS = Arrays.stream(METAL_NAMES).map(s -> new ResourceLocation(String.format(GUI_METAL, s.toLowerCase()))).toArray(ResourceLocation[]::new);
 
     int timeIn = PowersConfig.animate_selection.get() ? 0 : 16; // Config setting for whether the wheel animates open or instantly appears
@@ -141,7 +142,7 @@ public class MetalSelectScreen extends Screen {
 
             float xsp = xp - 4;
             float ysp = yp;
-            String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + METAL_NAMES[toMetalIndex(seg)];
+            String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + new TranslationTextComponent(METAL_LOCAL[toMetalIndex(seg)]).getString();
             int width = mc.getRenderManager().getFontRenderer().getStringWidth(name);
 
             if (xsp < x)
