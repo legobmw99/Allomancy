@@ -49,10 +49,10 @@ public class ItemModels extends ItemModelProvider {
                 continue;
 
             Item nugget = MaterialsSetup.NUGGETS.get(i).get();
-            itemGenerated(flake, "item/" + nugget.getRegistryName().getPath());
+            itemGenerated(nugget, "item/" + nugget.getRegistryName().getPath());
 
             Item ingot = MaterialsSetup.INGOTS.get(i).get();
-            itemGenerated(flake, "item/" + ingot.getRegistryName().getPath());
+            itemGenerated(ingot, "item/" + ingot.getRegistryName().getPath());
 
             Block block = MaterialsSetup.STORAGE_BLOCKS.get(i).get();
             parentedBlock(block, "block/" + block.getRegistryName().getPath());

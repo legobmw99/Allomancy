@@ -1,4 +1,6 @@
 {
   "replace": false,
-  "values": []
+  "values": [
+    "allomancy:bendalloy_ingot"
+  ]
 }

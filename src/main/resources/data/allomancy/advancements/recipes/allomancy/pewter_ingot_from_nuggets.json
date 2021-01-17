@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:pewter_ingot_from_nuggets"
+    ]
+  },
+  "criteria": {
+    "has_pewter_nugget": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "allomancy:pewter_nugget"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:pewter_ingot_from_nuggets"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_pewter_nugget",
+      "has_the_recipe"
+    ]
+  ]
+}

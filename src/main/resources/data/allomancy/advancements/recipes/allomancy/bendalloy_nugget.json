@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:bendalloy_nugget"
+    ]
+  },
+  "criteria": {
+    "has_bendalloy_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "allomancy:bendalloy_ingot"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:bendalloy_nugget"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_bendalloy_ingot",
+      "has_the_recipe"
+    ]
+  ]
+}

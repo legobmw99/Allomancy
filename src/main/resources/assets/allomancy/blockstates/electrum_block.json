@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "allomancy:block/electrum_block"
+    }
+  }
+}

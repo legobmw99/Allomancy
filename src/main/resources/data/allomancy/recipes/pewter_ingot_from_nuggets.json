@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "allomancy:pewter_nugget"
+    },
+    {
+      "item": "allomancy:pewter_nugget"
+    },
+    {
+      "item": "allomancy:pewter_nugget"
+    },
+    {
+      "item": "allomancy:pewter_nugget"
+    },
+    {
+      "item": "allomancy:pewter_nugget"
+    },
+    {
+      "item": "allomancy:pewter_nugget"
+    },
+    {
+      "item": "allomancy:pewter_nugget"
+    },
+    {
+      "item": "allomancy:pewter_nugget"
+    },
+    {
+      "item": "allomancy:pewter_nugget"
+    }
+  ],
+  "result": {
+    "item": "allomancy:pewter_ingot"
+  }
+}
