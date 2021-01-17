@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
@@ -18,22 +19,26 @@ public class ItemTags extends ItemTagsProvider {
 
     @Override
     protected void registerTags() {
-        addForgeTag("ingots/brass", MaterialsSetup.BRASS_INGOT.get());
-        addForgeTag("ingots/tin", MaterialsSetup.TIN_INGOT.get());
-        addForgeTag("ingots/zinc", MaterialsSetup.ZINC_INGOT.get());
-        addForgeTag("ingots/copper", MaterialsSetup.COPPER_INGOT.get());
-        addForgeTag("ingots/bronze", MaterialsSetup.BRONZE_INGOT.get());
-        addForgeTag("ingots/lead", MaterialsSetup.LEAD_INGOT.get());
-        addForgeTag("ingots/aluminum", MaterialsSetup.ALUMINUM_INGOT.get());
-        addForgeTag("ingots/chromium", MaterialsSetup.CHROMIUM_INGOT.get());
-        addForgeTag("ingots/cadmium", MaterialsSetup.CADMIUM_INGOT.get());
-        addForgeTag("ingots/silver", MaterialsSetup.SILVER_INGOT.get());
-        addForgeTag("ingots/pewter");
-        addForgeTag("ingots/steel");
-        addForgeTag("ingots/duralumin");
-        addForgeTag("ingots/nicrosil");
-        addForgeTag("ingots/electrum");
-        addForgeTag("ingots/bendalloy");
+
+        for (Metal mt : Metal.values()) {
+            if (mt == Metal.GOLD || mt == Metal.IRON)
+                continue;
+
+            addForgeTag("nuggets/" + mt.getName(), MaterialsSetup.NUGGETS.get(mt.getIndex()).get());
+            addForgeTag("ingots/" + mt.getName(), MaterialsSetup.INGOTS.get(mt.getIndex()).get());
+            addForgeTag("blocks/" + mt.getName(), MaterialsSetup.STORAGE_BLOCK_ITEMS.get(mt.getIndex()).get());
+            addForgeTag("storage_blocks/" + mt.getName(), MaterialsSetup.STORAGE_BLOCK_ITEMS.get(mt.getIndex()).get());
+
+        }
+        addForgeTag("nuggets/lead", MaterialsSetup.NUGGETS.get(MaterialsSetup.LEAD).get());
+        addForgeTag("ingots/lead", MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).get());
+        addForgeTag("blocks/lead", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.LEAD).get());
+        addForgeTag("storage_blocks/lead", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.LEAD).get());
+
+        addForgeTag("nuggets/silver", MaterialsSetup.NUGGETS.get(MaterialsSetup.SILVER).get());
+        addForgeTag("ingots/silver", MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get());
+        addForgeTag("blocks/silver", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).get());
+        addForgeTag("storage_blocks/silver", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).get());
 
         addForgeTag("ores/lead", MaterialsSetup.LEAD_ORE_ITEM.get());
         addForgeTag("ores/tin", MaterialsSetup.TIN_ORE_ITEM.get());
@@ -49,9 +54,8 @@ public class ItemTags extends ItemTagsProvider {
     private void addForgeTag(String name, Item... items) {
         // see ForgeItemTagsProvider
         Allomancy.LOGGER.debug("Creating item tag for forge:" + name);
-        ResourceLocation loc = new ResourceLocation("forge", name);
 
-        getOrCreateBuilder(net.minecraft.tags.ItemTags.makeWrapperTag("forge" + name)).replace(false).add(items);
+        getOrCreateBuilder(net.minecraft.tags.ItemTags.makeWrapperTag("forge:" + name)).replace(false).add(items);
     }
 
 

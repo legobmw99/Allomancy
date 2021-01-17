@@ -17,6 +17,7 @@ import net.minecraft.loot.conditions.SurvivesExplosion;
 import net.minecraft.loot.functions.SetNBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.RegistryObject;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -44,6 +45,14 @@ public class LootTables extends LootTableProvider {
         addSimpleBlock("zinc_ore", MaterialsSetup.ZINC_ORE.get());
         addSimpleBlock("iron_button", ExtrasSetup.IRON_BUTTON.get());
         addSimpleBlock("iron_lever", ExtrasSetup.IRON_LEVER.get());
+
+        for (RegistryObject<Block> rblock : MaterialsSetup.STORAGE_BLOCKS) {
+            if (rblock != null) {
+                Block block = rblock.get();
+                addSimpleBlock(block.getRegistryName().getPath(), block);
+            }
+        }
+
     }
 
     // Useful boilerplate from McJtyLib

@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
@@ -24,6 +25,16 @@ public class BlockTags extends BlockTagsProvider {
         addForgeTag("ores/silver", MaterialsSetup.SILVER_ORE.get());
         addForgeTag("ores/tin", MaterialsSetup.TIN_ORE.get());
         addForgeTag("ores/zinc", MaterialsSetup.ZINC_ORE.get());
+
+        for (Metal mt : Metal.values()) {
+            if (mt != Metal.GOLD && mt != Metal.IRON) {
+                addForgeTag("storage_blocks/" + mt.getName(), MaterialsSetup.STORAGE_BLOCKS.get(mt.getIndex()).get());
+            }
+        }
+
+        addForgeTag("storage_blocks/lead", MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.LEAD).get());
+
+        addForgeTag("storage_blocks/silver", MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.SILVER).get());
 
 
     }

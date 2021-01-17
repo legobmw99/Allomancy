@@ -15,7 +15,6 @@ import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fml.RegistryObject;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,33 +46,53 @@ public class Recipes extends RecipeProvider {
         // Basic Shaped Recipes
         buildShaped(consumer, ExtrasSetup.IRON_LEVER.get(), Items.IRON_INGOT, "s", "I");
         buildShaped(consumer, ExtrasSetup.IRON_BUTTON.get(), Items.IRON_INGOT, "i", "I");
-        buildShaped(consumer, ConsumeSetup.ALLOMANTIC_GRINDER.get(), Items.IRON_INGOT, "iii", "ggg", "iii");
-        buildShaped(consumer, ConsumeSetup.VIAL.get(), 3, Items.GLASS, " S ", "G G", " G ");
+        buildShaped(consumer, ConsumeSetup.ALLOMANTIC_GRINDER.get(), Items.IRON_INGOT, "ggg", "iii", "ggg");
+        buildShaped(consumer, ConsumeSetup.VIAL.get(), 4, Items.GLASS, " S ", "G G", " G ");
         buildShaped(consumer, CombatSetup.MISTCLOAK.get(), ConsumeSetup.VIAL.get(), "W W", "WWW", "WWW");
         buildShaped(consumer, CombatSetup.OBSIDIAN_DAGGER.get(), CombatSetup.MISTCLOAK.get(), "  O", " O ", "s  ");
         buildShaped(consumer, CombatSetup.KOLOSS_BLADE.get(), ConsumeSetup.LERASIUM_NUGGET.get(), "CC", "CC", "sC");
 
         // Ore Recipes
-        buildSmeltingAndBlasting(consumer, MaterialsSetup.ALUMINUM_INGOT.get(), MaterialsSetup.ALUMINUM_ORE.get(), 0.6F);
-        buildSmeltingAndBlasting(consumer, MaterialsSetup.CADMIUM_INGOT.get(), MaterialsSetup.CADMIUM_ORE.get(), 0.7F);
-        buildSmeltingAndBlasting(consumer, MaterialsSetup.CHROMIUM_INGOT.get(), MaterialsSetup.CHROMIUM_ORE.get(), 0.7F);
-        buildSmeltingAndBlasting(consumer, MaterialsSetup.COPPER_INGOT.get(), MaterialsSetup.COPPER_ORE.get(), 0.8F);
-        buildSmeltingAndBlasting(consumer, MaterialsSetup.LEAD_INGOT.get(), MaterialsSetup.LEAD_ORE.get(), 0.4F);
-        buildSmeltingAndBlasting(consumer, MaterialsSetup.SILVER_INGOT.get(), MaterialsSetup.SILVER_ORE.get(), 1.0F);
-        buildSmeltingAndBlasting(consumer, MaterialsSetup.TIN_INGOT.get(), MaterialsSetup.TIN_ORE.get(), 0.6F);
-        buildSmeltingAndBlasting(consumer, MaterialsSetup.ZINC_INGOT.get(), MaterialsSetup.ZINC_ORE.get(), 0.6F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(), MaterialsSetup.ALUMINUM_ORE.get(), 0.6F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.INGOTS.get(Metal.CADMIUM.getIndex()).get(), MaterialsSetup.CADMIUM_ORE.get(), 0.7F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.INGOTS.get(Metal.CHROMIUM.getIndex()).get(), MaterialsSetup.CHROMIUM_ORE.get(), 0.7F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.INGOTS.get(Metal.COPPER.getIndex()).get(), MaterialsSetup.COPPER_ORE.get(), 0.8F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.INGOTS.get(Metal.TIN.getIndex()).get(), MaterialsSetup.TIN_ORE.get(), 0.6F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.INGOTS.get(Metal.ZINC.getIndex()).get(), MaterialsSetup.ZINC_ORE.get(), 0.6F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).get(), MaterialsSetup.LEAD_ORE.get(), 0.4F);
+        buildSmeltingAndBlasting(consumer, MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get(), MaterialsSetup.SILVER_ORE.get(), 1.0F);
 
         buildShapless(consumer, ConsumeSetup.LERASIUM_NUGGET.get(), 1, Items.NETHER_STAR, ing(Items.NETHER_STAR), ing(Tags.Items.STORAGE_BLOCKS_GOLD));
 
-        // Grinder Recipes
-        for (RegistryObject<Item> flake_reg : MaterialsSetup.FLAKES) {
-            Item flake = flake_reg.get();
+        // Most metal based recipes
+        for (int i = 0; i < MaterialsSetup.METAL_ITEM_LEN; i++) {
+
+            // Grinder recipes
+            Item flake = MaterialsSetup.FLAKES.get(i).get();
             String flakeType = flake.getRegistryName().getPath().substring(0, flake.getRegistryName().getPath().indexOf('_'));
             buildShapless(consumer, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()),
                     ing(ItemTags.makeWrapperTag("forge:" + "ingots/" + flakeType)));
+
+            if (i == Metal.GOLD.getIndex() || i == Metal.IRON.getIndex())
+                continue;
+
+            // Block and nugget crafting/uncrafting
+            Item block = MaterialsSetup.STORAGE_BLOCK_ITEMS.get(i).get();
+            Item ingot = MaterialsSetup.INGOTS.get(i).get();
+            Item nugget = MaterialsSetup.NUGGETS.get(i).get();
+
+            // building up
+            buildShapless(consumer, block, 1, ingot, repeat(ing(ingot), 9));
+            buildShapless(consumer, ingot, 1, nugget, "allomancy:" + ingot.getRegistryName().getPath() + "_from_nuggets", repeat(ing(nugget), 9));
+
+            // breaking down
+            buildShapless(consumer, ingot, 9, block, "allomancy:" + ingot.getRegistryName().getPath() + "_from_block", ing(block));
+            buildShapless(consumer, nugget, 9, ingot, ing(ingot));
         }
 
+
         // Mixing Recipes
+        // GRINDER
         buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:steel_flakes_from_mixing",
                 ing(Items.COAL),
@@ -106,6 +125,8 @@ public class Recipes extends RecipeProvider {
                 "allomancy:nicrosil_flakes_from_mixing",
                 ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()),
                 ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
+        // ALLOYS TODO
+
 
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
         ShapedRecipeBuilder.shapedRecipe(CombatSetup.COIN_BAG.get())
@@ -207,6 +228,14 @@ public class Recipes extends RecipeProvider {
 
     protected Ingredient ing(Ingredient ingredient) {
         return ingredient;
+    }
+
+    protected Ingredient[] repeat(Ingredient ing, int n) {
+        Ingredient[] out = new Ingredient[n];
+        for (int i = 0; i < n; i++) {
+            out[i] = ing;
+        }
+        return out;
     }
 
 

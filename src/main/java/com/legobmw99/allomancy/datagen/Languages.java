@@ -17,7 +17,7 @@ public class Languages extends LanguageProvider {
     protected void addTranslations() {
         add("itemGroup.allomancy", "Allomancy");
         for (Metal mt : Metal.values()) {
-            add("metals." + mt.getName(), mt.getDisplayName());
+            add("metals." + mt.getName(), getDisplayName(mt));
         }
 
         add(MaterialsSetup.ALUMINUM_ORE.get(), "Aluminum Ore");
@@ -47,22 +47,26 @@ public class Languages extends LanguageProvider {
         add("item.allomancy.vial.lore_count", "Contains %d metals");
         add("item.allomancy.vial.lore_inst", "Hold SHIFT to view");
 
-        add(MaterialsSetup.ALUMINUM_INGOT.get(), "Aluminum Ingot");
-        add(MaterialsSetup.CADMIUM_INGOT.get(), "Cadmium Ingot");
-        add(MaterialsSetup.CHROMIUM_INGOT.get(), "Chromium Ingot");
-        add(MaterialsSetup.COPPER_INGOT.get(), "Copper Ingot");
-        add(MaterialsSetup.BRASS_INGOT.get(), "Brass Ingot");
-        add(MaterialsSetup.BRONZE_INGOT.get(), "Bronze Ingot");
-        add(MaterialsSetup.LEAD_INGOT.get(), "Lead Ingot");
-        add(MaterialsSetup.SILVER_INGOT.get(), "Silver Ingot");
-        add(MaterialsSetup.TIN_INGOT.get(), "Tin Ingot");
-        add(MaterialsSetup.ZINC_INGOT.get(), "Zinc Ingot");
-
         for (Metal mt : Metal.values()) {
-            add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), mt.getDisplayName() + " Flakes");
+            add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), getDisplayName(mt) + " Flakes");
+
+            if (mt == Metal.GOLD || mt == Metal.IRON)
+                continue;
+
+            add(MaterialsSetup.NUGGETS.get(mt.getIndex()).get(), getDisplayName(mt) + " Nugget");
+            add(MaterialsSetup.INGOTS.get(mt.getIndex()).get(), getDisplayName(mt) + " Ingot");
+            add(MaterialsSetup.STORAGE_BLOCKS.get(mt.getIndex()).get(), getDisplayName(mt) + " Block");
         }
+
         add(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get(), "Lead Flakes");
+        add(MaterialsSetup.NUGGETS.get(MaterialsSetup.LEAD).get(), "Lead Nugget");
+        add(MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).get(), "Lead Ingot");
+        add(MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.LEAD).get(), "Lead Block");
+
         add(MaterialsSetup.FLAKES.get(MaterialsSetup.SILVER).get(), "Silver Flakes");
+        add(MaterialsSetup.NUGGETS.get(MaterialsSetup.SILVER).get(), "Silver Nugget");
+        add(MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get(), "Silver Ingot");
+        add(MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.SILVER).get(), "Silver Block");
 
         add(CombatSetup.NUGGET_PROJECTILE.get(), "Nugget Projectile");
 
@@ -81,5 +85,9 @@ public class Languages extends LanguageProvider {
     @Override
     public String getName() {
         return "Allomancy Language";
+    }
+
+    private String getDisplayName(Metal mt) {
+        return mt.getName().substring(0, 1).toUpperCase() + mt.getName().substring(1);
     }
 }

@@ -11,6 +11,7 @@ import net.minecraft.state.properties.AttachFace;
 import net.minecraft.util.Direction;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.fml.RegistryObject;
 
 import java.util.function.BiConsumer;
 
@@ -30,6 +31,14 @@ public class BlockStates extends BlockStateProvider {
         singleTextureBlock(MaterialsSetup.SILVER_ORE.get(), "silver_ore", "block/silver_ore");
         singleTextureBlock(MaterialsSetup.TIN_ORE.get(), "tin_ore", "block/tin_ore");
         singleTextureBlock(MaterialsSetup.ZINC_ORE.get(), "zinc_ore", "block/zinc_ore");
+
+        for (RegistryObject<Block> rblock : MaterialsSetup.STORAGE_BLOCKS) {
+            if (rblock != null) {
+                Block block = rblock.get();
+                String path = block.getRegistryName().getPath();
+                singleTextureBlock(block, path, "block/" + path);
+            }
+        }
 
         createIronLeverBlock();
         createIronButtonBlock();

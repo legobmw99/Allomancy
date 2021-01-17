@@ -21,9 +21,9 @@ public class DataGenerators {
             generator.addProvider(new Advancements(generator));
         }
         if (event.includeClient()) {
+            generator.addProvider(new Languages(generator, Allomancy.MODID, "en_us"));
             generator.addProvider(new BlockStates(generator, Allomancy.MODID, event.getExistingFileHelper()));
             generator.addProvider(new ItemModels(generator, Allomancy.MODID, event.getExistingFileHelper()));
-            generator.addProvider(new Languages(generator, Allomancy.MODID, "en_us"));
         }
     }
 }

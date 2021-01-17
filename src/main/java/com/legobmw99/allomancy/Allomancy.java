@@ -32,15 +32,11 @@ public class Allomancy {
         // Register our setup events on the necessary buses
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancySetup::init);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancySetup::clientInit);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancyConfig::refresh);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancyConfig::onLoad);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancyConfig::onReload);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(PowersClientSetup::registerParticle);
         MinecraftForge.EVENT_BUS.addListener(AllomancySetup::registerCommands);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, OreGenerator::registerGeneration);
-
-        // Config init
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_CONFIG);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AllomancyConfig.CLIENT_CONFIG);
-
 
         // Register all Registries
         PowersSetup.register();
@@ -48,6 +44,10 @@ public class Allomancy {
         ConsumeSetup.register();
         MaterialsSetup.register();
         ExtrasSetup.register();
+
+        // Config init
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_CONFIG);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AllomancyConfig.CLIENT_CONFIG);
 
     }
 

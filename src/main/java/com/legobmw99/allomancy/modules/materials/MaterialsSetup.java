@@ -21,6 +21,11 @@ public class MaterialsSetup {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Allomancy.MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Allomancy.MODID);
     public static final List<RegistryObject<Item>> FLAKES = new ArrayList<>();
+    public static final List<RegistryObject<Item>> NUGGETS = new ArrayList<>();
+    public static final List<RegistryObject<Item>> INGOTS = new ArrayList<>();
+    public static final List<RegistryObject<Block>> STORAGE_BLOCKS = new ArrayList<>();
+    public static final List<RegistryObject<Item>> STORAGE_BLOCK_ITEMS = new ArrayList<>();
+
     public static final RegistryObject<Block> ALUMINUM_ORE = BLOCKS.register("aluminum_ore", AllomancySetup::createStandardBlock);
     public static final RegistryObject<Item> ALUMINUM_ORE_ITEM = ITEMS.register("aluminum_ore", () -> new BlockItem(ALUMINUM_ORE.get(), AllomancySetup.createStandardItemProperties()));
     public static final RegistryObject<Block> CADMIUM_ORE = BLOCKS.register("cadmium_ore", AllomancySetup::createStandardBlock);
@@ -37,28 +42,42 @@ public class MaterialsSetup {
     public static final RegistryObject<Item> TIN_ORE_ITEM = ITEMS.register("tin_ore", () -> new BlockItem(TIN_ORE.get(), AllomancySetup.createStandardItemProperties()));
     public static final RegistryObject<Block> ZINC_ORE = BLOCKS.register("zinc_ore", AllomancySetup::createStandardBlock);
     public static final RegistryObject<Item> ZINC_ORE_ITEM = ITEMS.register("zinc_ore", () -> new BlockItem(ZINC_ORE.get(), AllomancySetup.createStandardItemProperties()));
-    public static final RegistryObject<Item> ALUMINUM_INGOT = ITEMS.register("aluminum_ingot", AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> CADMIUM_INGOT = ITEMS.register("cadmium_ingot", AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> CHROMIUM_INGOT = ITEMS.register("chromium_ingot", AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> COPPER_INGOT = ITEMS.register("copper_ingot", AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> LEAD_INGOT = ITEMS.register("lead_ingot", AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> SILVER_INGOT = ITEMS.register("silver_ingot", AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> TIN_INGOT = ITEMS.register("tin_ingot", AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> ZINC_INGOT = ITEMS.register("zinc_ingot", AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> BRASS_INGOT = ITEMS.register("brass_ingot", AllomancySetup::createStandardItem);
-    public static final RegistryObject<Item> BRONZE_INGOT = ITEMS.register("bronze_ingot", AllomancySetup::createStandardItem);
-    private static int id = Metal.values().length;
-    public static final int LEAD = id++;
-    public static final int SILVER = id++;
+
+    public static int METAL_ITEM_LEN = Metal.values().length;
+    public static final int LEAD = METAL_ITEM_LEN++;
+    public static final int SILVER = METAL_ITEM_LEN++;
 
     static {
         for (Metal mt : Metal.values()) {
-            String name = mt.getName() + "_flakes";
-            FLAKES.add(MaterialsSetup.ITEMS.register(name, AllomancySetup::createStandardItem));
+            String name = mt.getName();
+            FLAKES.add(MaterialsSetup.ITEMS.register(name + "_flakes", AllomancySetup::createStandardItem));
+
+            if (mt == Metal.GOLD || mt == Metal.IRON) {
+                NUGGETS.add(null);
+                INGOTS.add(null);
+                STORAGE_BLOCKS.add(null);
+                STORAGE_BLOCK_ITEMS.add(null);
+            } else {
+                NUGGETS.add(ITEMS.register(name + "_nugget", AllomancySetup::createStandardItem));
+                INGOTS.add(ITEMS.register(name + "_ingot", AllomancySetup::createStandardItem));
+                STORAGE_BLOCKS.add(BLOCKS.register(name + "_block", AllomancySetup::createStandardBlock));
+                STORAGE_BLOCK_ITEMS.add(ITEMS.register(name + "_block", () -> new BlockItem(STORAGE_BLOCKS.get(mt.getIndex()).get(), AllomancySetup.createStandardItemProperties())));
+            }
         }
         FLAKES.add(MaterialsSetup.ITEMS.register("lead_flakes", AllomancySetup::createStandardItem));
+        NUGGETS.add(ITEMS.register("lead_nugget", AllomancySetup::createStandardItem));
+        INGOTS.add(ITEMS.register("lead_ingot", AllomancySetup::createStandardItem));
+        STORAGE_BLOCKS.add(BLOCKS.register("lead_block", AllomancySetup::createStandardBlock));
+        STORAGE_BLOCK_ITEMS.add(ITEMS.register("lead_block", () -> new BlockItem(STORAGE_BLOCKS.get(LEAD).get(), AllomancySetup.createStandardItemProperties())));
+
         FLAKES.add(MaterialsSetup.ITEMS.register("silver_flakes", AllomancySetup::createStandardItem));
+        NUGGETS.add(ITEMS.register("silver_nugget", AllomancySetup::createStandardItem));
+        INGOTS.add(ITEMS.register("silver_ingot", AllomancySetup::createStandardItem));
+        STORAGE_BLOCKS.add(BLOCKS.register("silver_block", AllomancySetup::createStandardBlock));
+        STORAGE_BLOCK_ITEMS.add(ITEMS.register("silver_block", () -> new BlockItem(STORAGE_BLOCKS.get(SILVER).get(), AllomancySetup.createStandardItemProperties())));
+
     }
+
 
     public static void register() {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());

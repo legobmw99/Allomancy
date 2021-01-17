@@ -34,7 +34,5 @@ public enum Metal {
         return ordinal();
     }
 
-    public String getDisplayName() {
-        return super.name().substring(0, 1).toUpperCase() + getName().substring(1);
-    }
+
 }

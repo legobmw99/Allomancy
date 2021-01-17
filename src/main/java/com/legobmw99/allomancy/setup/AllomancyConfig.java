@@ -21,9 +21,13 @@ public class AllomancyConfig {
         CLIENT_CONFIG = CLIENT_BUILDER.build();
     }
 
-    public static void refresh(final ModConfig.ModConfigEvent e) {
+    public static void onReload(final ModConfig.Reloading e) {
         PowersConfig.refresh(e);
     }
 
+
+    public static void onLoad(final ModConfig.Loading e) {
+        PowersConfig.load_whitelist(e);
+    }
 
 }

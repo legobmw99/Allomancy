@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.setup.AllomancyConfig;
 import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.block.Block;
@@ -9,11 +10,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PowersConfig {
 
@@ -22,6 +22,7 @@ public class PowersConfig {
     public static ForgeConfigSpec.BooleanValue enable_overlay;
     public static ForgeConfigSpec.EnumValue<SCREEN_LOC> overlay_position;
     public static ForgeConfigSpec.BooleanValue random_mistings;
+    public static ForgeConfigSpec.BooleanValue generate_whitelist;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
     public static Set<String> whitelist = new HashSet<>();
     private static ArrayList<String> defaultList;
@@ -30,7 +31,8 @@ public class PowersConfig {
 
         common_builder.comment("Settings for the gameplay elements of the mod").push("Gameplay");
         random_mistings = common_builder.comment("Spawn players as a random Misting").define("random_mistings", true);
-        cfg_whitelist = common_builder.comment("List of registry names of items and blocks that are counted as 'metal").defineList("whitelist", default_whitelist(), o -> o instanceof String);
+        generate_whitelist = common_builder.comment("Regenerate the metal whitelist").define("regenerate_whitelist", true);
+        cfg_whitelist = common_builder.comment("List of registry names of items and blocks that are counted as 'metal").defineList("whitelist", new ArrayList<>(), o -> o instanceof String);
         common_builder.pop();
 
         client_builder.push("Graphics");
@@ -51,6 +53,17 @@ public class PowersConfig {
     private static void refresh_whitelist() {
         whitelist.clear();
         whitelist.addAll(cfg_whitelist.get());
+    }
+
+    public static void load_whitelist(final ModConfig.Loading e) {
+        ModConfig cfg = e.getConfig();
+        if (cfg.getSpec() == AllomancyConfig.COMMON_CONFIG) {
+            if (generate_whitelist.get()) {
+                cfg_whitelist.set(default_whitelist());
+                generate_whitelist.set(false);
+            }
+            refresh_whitelist();
+        }
     }
 
     private static List<String> default_whitelist() {
@@ -165,20 +178,43 @@ public class PowersConfig {
         add("allomancy:zinc_ingot");
         add("allomancy:bronze_ingot");
         add("allomancy:brass_ingot");
+        add("allomancy:steel_ingot");
+        add("allomancy:pewter_ingot");
+        add("allomancy:duralumin_ingot");
+        add("allomancy:nicrosil_ingot");
+        add("allomancy:electrum_ingot");
+        add("allomancy:bendalloy_ingot");
 
+        for (int i = 0; i < MaterialsSetup.METAL_ITEM_LEN; i++) {
+            add(MaterialsSetup.FLAKES.get(i).get());
 
-        for (Metal mt : Metal.values()) {
-            if (mt != Metal.ALUMINUM)
-                add("allomancy:" + mt.getName() + "_flakes");
+            if (i == Metal.GOLD.getIndex() || i == Metal.IRON.getIndex())
+                continue;
+
+            add(MaterialsSetup.NUGGETS.get(i).get());
+            add(MaterialsSetup.STORAGE_BLOCKS.get(i).get());
         }
-        add("allomancy:lead_flakes");
-        add("allomancy:silver_flakes");
+
+        Allomancy.LOGGER.debug("Dumping registries");
+
+        ForgeRegistries.ITEMS.getValues().stream().map(i -> {
+            Allomancy.LOGGER.debug(i.getRegistryName());
+            return i;
+        }).collect(Collectors.toList());
+
+        // TODO do something here
+
 
         defaultList.sort(String::compareTo);
 
         return defaultList;
 
     }
+
+    static boolean stringContainsItemFromList(String inputStr, String[] items) {
+        return Arrays.stream(items).anyMatch(inputStr::contains);
+    }
+
 
     private static void add(String s) {
         Allomancy.LOGGER.debug("Adding " + s + " to the default whitelist!");

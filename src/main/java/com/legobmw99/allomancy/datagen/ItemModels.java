@@ -5,13 +5,13 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.RegistryObject;
 
 public class ItemModels extends ItemModelProvider {
     public ItemModels(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
@@ -40,20 +40,22 @@ public class ItemModels extends ItemModelProvider {
         parentedBlock(MaterialsSetup.TIN_ORE.get(), "block/tin_ore");
         parentedBlock(MaterialsSetup.ZINC_ORE.get(), "block/zinc_ore");
 
-        itemGenerated(MaterialsSetup.ALUMINUM_INGOT.get(), "item/aluminum_ingot");
-        itemGenerated(MaterialsSetup.CADMIUM_INGOT.get(), "item/cadmium_ingot");
-        itemGenerated(MaterialsSetup.CHROMIUM_INGOT.get(), "item/chromium_ingot");
-        itemGenerated(MaterialsSetup.SILVER_INGOT.get(), "item/silver_ingot");
-        itemGenerated(MaterialsSetup.BRASS_INGOT.get(), "item/brass_ingot");
-        itemGenerated(MaterialsSetup.TIN_INGOT.get(), "item/tin_ingot");
-        itemGenerated(MaterialsSetup.COPPER_INGOT.get(), "item/copper_ingot");
-        itemGenerated(MaterialsSetup.LEAD_INGOT.get(), "item/lead_ingot");
-        itemGenerated(MaterialsSetup.BRONZE_INGOT.get(), "item/bronze_ingot");
-        itemGenerated(MaterialsSetup.ZINC_INGOT.get(), "item/zinc_ingot");
+        for (int i = 0; i < MaterialsSetup.METAL_ITEM_LEN; i++) {
 
-        for (RegistryObject<Item> flake_reg : MaterialsSetup.FLAKES) {
-            Item flake = flake_reg.get();
+            Item flake = MaterialsSetup.FLAKES.get(i).get();
             itemGenerated(flake, "item/" + flake.getRegistryName().getPath());
+
+            if (i == Metal.GOLD.getIndex() || i == Metal.IRON.getIndex())
+                continue;
+
+            Item nugget = MaterialsSetup.NUGGETS.get(i).get();
+            itemGenerated(flake, "item/" + nugget.getRegistryName().getPath());
+
+            Item ingot = MaterialsSetup.INGOTS.get(i).get();
+            itemGenerated(flake, "item/" + ingot.getRegistryName().getPath());
+
+            Block block = MaterialsSetup.STORAGE_BLOCKS.get(i).get();
+            parentedBlock(block, "block/" + block.getRegistryName().getPath());
         }
 
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial (filled)");

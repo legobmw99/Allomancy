@@ -37,10 +37,10 @@ import java.util.Arrays;
 @OnlyIn(Dist.CLIENT)
 public class MetalSelectScreen extends Screen {
 
-    private static final String[] METAL_NAMES = Arrays.stream(Metal.values()).map(Metal::getDisplayName).toArray(String[]::new);
+    private static final String[] METAL_NAMES = Arrays.stream(Metal.values()).map(Metal::getName).toArray(String[]::new);
     private static final String GUI_METAL = "allomancy:textures/gui/metals/%s_symbol.png";
-    private static final String[] METAL_LOCAL = Arrays.stream(METAL_NAMES).map(s -> "metals." + s.toLowerCase()).toArray(String[]::new);
-    private static final ResourceLocation[] METAL_ICONS = Arrays.stream(METAL_NAMES).map(s -> new ResourceLocation(String.format(GUI_METAL, s.toLowerCase()))).toArray(ResourceLocation[]::new);
+    private static final String[] METAL_LOCAL = Arrays.stream(METAL_NAMES).map(s -> "metals." + s).toArray(String[]::new);
+    private static final ResourceLocation[] METAL_ICONS = Arrays.stream(METAL_NAMES).map(s -> new ResourceLocation(String.format(GUI_METAL, s))).toArray(ResourceLocation[]::new);
 
     int timeIn = PowersConfig.animate_selection.get() ? 0 : 16; // Config setting for whether the wheel animates open or instantly appears
     int slotSelected = -1;
