@@ -5,11 +5,14 @@
       "item": "allomancy:tin_flakes"
     },
     {
+      "item": "allomancy:tin_flakes"
+    },
+    {
       "item": "allomancy:lead_flakes"
     }
   ],
   "result": {
     "item": "allomancy:pewter_flakes",
-    "count": 2
+    "count": 3
   }
 }

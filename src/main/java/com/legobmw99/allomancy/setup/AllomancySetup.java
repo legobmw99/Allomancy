@@ -33,7 +33,7 @@ public class AllomancySetup {
     }
 
     public static Block.Properties createStandardBlockProperties() {
-        return Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F).harvestTool(ToolType.PICKAXE).harvestLevel(2);
+        return Block.Properties.create(Material.ROCK).hardnessAndResistance(2.1F).harvestTool(ToolType.PICKAXE).harvestLevel(2).setRequiresTool();
     }
 
     public static Item createStandardItem() {

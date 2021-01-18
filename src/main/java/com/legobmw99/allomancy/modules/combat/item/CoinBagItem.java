@@ -77,20 +77,27 @@ public class CoinBagItem extends ShootableItem {
     private Ammo getAmmoFromItem(Item itemIn) {
         switch (itemIn.getRegistryName().getPath()) {
             case "iron_nugget":
-                return Ammo.IRON;
             case "steel_nugget":
-                return Ammo.STEEL;
+            case "bronze_nugget":
+            case "copper_nugget":
+            case "nickel_nugget":
+                return Ammo.HEAVY;
+            case "bendalloy_nugget":
+            case "nicrosil_nugget":
+            case "electrum_nugget":
+            case "platinum_nugget":
+                return Ammo.MAGIC;
             default:
-                return Ammo.GOLD;
+                return Ammo.LIGHT;
         }
     }
 
     private enum Ammo {
-        IRON(5.0F, 2.0F, 2.25F, 2.5F),
-        STEEL(5.0F, 2.0F, 4.0F, 1.0F),
-        GOLD(4.0F, 2.0F, 4.0F, 1.0F);
+        HEAVY(5.0F, 2.0F, 2.25F, 2.5F),
+        MAGIC(5.5F, 2.0F, 4.0F, 1.0F),
+        LIGHT(4.0F, 2.0F, 4.0F, 1.0F);
 
-        // TODO other items
+        // TODO consider if should be more granular
 
         float damage, arg1, arg2, arg3;
 

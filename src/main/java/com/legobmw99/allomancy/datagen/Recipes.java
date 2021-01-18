@@ -70,8 +70,7 @@ public class Recipes extends RecipeProvider {
             // Grinder recipes
             Item flake = MaterialsSetup.FLAKES.get(i).get();
             String flakeType = flake.getRegistryName().getPath().substring(0, flake.getRegistryName().getPath().indexOf('_'));
-            buildShapless(consumer, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()),
-                          ing(ItemTags.makeWrapperTag("forge:" + "ingots/" + flakeType)));
+            buildShapless(consumer, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()), ing("forge:" + "ingots/" + flakeType));
 
             if (i == Metal.GOLD.getIndex() || i == Metal.IRON.getIndex()) {
                 continue;
@@ -92,25 +91,55 @@ public class Recipes extends RecipeProvider {
         }
 
 
-        // Mixing Recipes
+        // Mixing/Alloying Recipes
         // GRINDER
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), "allomancy:steel_flakes_from_mixing",
-                      ing(Items.COAL), ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), "allomancy:pewter_flakes_from_mixing",
-                      ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get()));
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), "allomancy:brass_flakes_from_mixing",
-                      ing(MaterialsSetup.FLAKES.get(Metal.ZINC.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BRONZE.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), "allomancy:bronze_flakes_from_mixing",
-                      ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.DURALUMIN.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), "allomancy:duralumin_flakes_from_mixing",
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("steel"), ing(Items.COAL),
+                      ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
+
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("pewter"),
+                      repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), 2, ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get())));
+
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("brass"),
+                      repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.ZINC.getIndex()).get())));
+
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BRONZE.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("bronze"),
+                      repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get())));
+
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.DURALUMIN.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("duralumin"),
                       repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get())));
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.ELECTRUM.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), "allomancy:electrum_flakes_from_mixing",
+
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.ELECTRUM.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("electrum"),
                       ing(MaterialsSetup.FLAKES.get(Metal.GOLD.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(MaterialsSetup.SILVER).get()));
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BENDALLOY.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), "allomancy:bendalloy_flakes_from_mixing",
-                      ing(MaterialsSetup.FLAKES.get(Metal.CADMIUM.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get()));
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.NICROSIL.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), "allomancy:nicrosil_flakes_from_mixing",
+
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BENDALLOY.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("bendalloy"),
+                      repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.CADMIUM.getIndex()).get()), 2, ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get())));
+
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.NICROSIL.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("nicrosil"),
                       repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get())));
-        // ALLOYS TODO
+
+        // ALLOYS
+        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.STEEL.getIndex()).get(), 4, Items.COAL, alloy_save("steel"), repeatWith(ing(Items.IRON_INGOT), 3, ing(Items.COAL)));
+
+        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.PEWTER.getIndex()).get(), 3, MaterialsSetup.INGOTS.get(Metal.TIN.getIndex()).get(), alloy_save("pewter"),
+                      repeatWith(ing("forge:ingots/tin"), 2, ing("forge:ingots/lead")));
+
+        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.BRASS.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.COPPER.getIndex()).get(), alloy_save("brass"),
+                      repeatWith(ing("forge:ingots/copper"), 3, ing("forge:ingots/zinc")));
+
+        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.BRONZE.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.COPPER.getIndex()).get(), alloy_save("bronze"),
+                      repeatWith(ing("forge:ingots/copper"), 3, ing("forge:ingots/tin")));
+
+        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.DURALUMIN.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(), alloy_save("duralumin"),
+                      repeatWith(ing("forge:ingots/aluminum"), 3, ing("forge:ingots/copper")));
+
+        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.ELECTRUM.getIndex()).get(), 2, MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get(), alloy_save("electrum"),
+                      ing("forge:ingots/silver"), ing(Items.GOLD_INGOT));
+
+        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.BENDALLOY.getIndex()).get(), 3, MaterialsSetup.INGOTS.get(Metal.CADMIUM.getIndex()).get(), alloy_save("bendalloy"),
+                      repeatWith(ing("forge:ingots/cadmium"), 2, ing("forge:ingots/lead")));
+
+        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.NICROSIL.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.CHROMIUM.getIndex()).get(), alloy_save("nicrosil"),
+                      repeatWith(ing("forge:ingots/chromium"), 3, ing(Items.IRON_INGOT)));
 
 
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
@@ -195,6 +224,14 @@ public class Recipes extends RecipeProvider {
 
     }
 
+    private String mixing_save(String metal) {
+        return "allomancy:" + metal + "_flakes_from_mixing";
+    }
+
+    private String alloy_save(String metal) {
+        return "allomancy:" + metal + "_ingot_from_alloying";
+    }
+
     protected void add(char c, ITag.INamedTag<Item> itemTag) {
         defaultIngredients.put(c, Ingredient.fromTag(itemTag));
     }
@@ -207,8 +244,12 @@ public class Recipes extends RecipeProvider {
         defaultIngredients.put(c, ingredient);
     }
 
-    protected Ingredient ing(ITag.INamedTag<Item> itemTag) {
-        return Ingredient.fromTag(itemTag);
+    protected Ingredient ing(String tag) {
+        return Ingredient.fromTag(ItemTags.makeWrapperTag(tag));
+    }
+
+    protected Ingredient ing(ITag.INamedTag<Item> tag) {
+        return Ingredient.fromTag(tag);
     }
 
     protected Ingredient ing(IItemProvider itemProvider) {

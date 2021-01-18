@@ -2,14 +2,20 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "allomancy:zinc_flakes"
+      "item": "allomancy:copper_flakes"
     },
     {
       "item": "allomancy:copper_flakes"
+    },
+    {
+      "item": "allomancy:copper_flakes"
+    },
+    {
+      "item": "allomancy:zinc_flakes"
     }
   ],
   "result": {
     "item": "allomancy:brass_flakes",
-    "count": 2
+    "count": 4
   }
 }

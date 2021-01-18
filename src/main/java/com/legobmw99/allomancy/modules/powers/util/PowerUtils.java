@@ -59,7 +59,7 @@ public class PowerUtils {
                                                                  goal.getClass().getName().contains("Attack") || goal.getClass().getName().contains("Anger");
 
     private static final Pattern ACTIVE_METAL_REGEX = Pattern.compile(
-            ".*(iron|steel|tin_|pewter|zinc|brass|copper|bronze|duralumin|chromium|nicrosil|gold|electrum|cadmium|bendalloy|lead_|silver).*");
+            ".*(iron|steel|tin_|pewter|zinc|brass|copper|bronze|duralumin|chromium|nicrosil|gold|electrum|cadmium|bendalloy|lead_|silver|platinum|nickle).*");
 
 
     public static boolean resourceContainsMetal(ResourceLocation input) {
