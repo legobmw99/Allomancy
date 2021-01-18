@@ -111,8 +111,8 @@ public class Recipes extends RecipeProvider {
                 ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));
         buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.DURALUMIN.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:duralumin_flakes_from_mixing",
-                ing(MaterialsSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()),
-                ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()));
+                repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()), 3,
+                        ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get())));
         buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.ELECTRUM.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:electrum_flakes_from_mixing",
                 ing(MaterialsSetup.FLAKES.get(Metal.GOLD.getIndex()).get()),
@@ -121,10 +121,10 @@ public class Recipes extends RecipeProvider {
                 "allomancy:bendalloy_flakes_from_mixing",
                 ing(MaterialsSetup.FLAKES.get(Metal.CADMIUM.getIndex()).get()),
                 ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get()));
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.NICROSIL.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.NICROSIL.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                 "allomancy:nicrosil_flakes_from_mixing",
-                ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()),
-                ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
+                repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), 3,
+                        ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get())));
         // ALLOYS TODO
 
 
@@ -231,10 +231,20 @@ public class Recipes extends RecipeProvider {
     }
 
     protected Ingredient[] repeat(Ingredient ing, int n) {
-        Ingredient[] out = new Ingredient[n];
+        return repeatWith(ing, n);
+    }
+
+    protected Ingredient[] repeatWith(Ingredient ing, int n, Ingredient... extras) {
+        int size = n + extras.length;
+        Ingredient[] out = new Ingredient[size];
         for (int i = 0; i < n; i++) {
             out[i] = ing;
         }
+
+        if (extras.length > 0) {
+            System.arraycopy(extras, 0, out, n, size - n);
+        }
+
         return out;
     }
 

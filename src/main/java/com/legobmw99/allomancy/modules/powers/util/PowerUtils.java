@@ -33,6 +33,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -43,6 +44,7 @@ import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 /**
  * Contains all static, common methods in one place
@@ -61,6 +63,14 @@ public class PowerUtils {
                     goal.getClass().getName().contains("Fireball") ||
                     goal.getClass().getName().contains("Attack") ||
                     goal.getClass().getName().contains("Anger");
+
+    private static final Pattern ACTIVE_METAL_REGEX = Pattern.compile(".*(iron|steel|tin_|pewter|zinc|brass|copper|bronze|duralumin|chromium|nicrosil|gold|electrum|cadmium|bendalloy|lead_|silver).*");
+
+
+    public static boolean resourceContainsMetal(ResourceLocation input) {
+        return ACTIVE_METAL_REGEX.matcher(input.getPath()).matches();
+    }
+
 
     /**
      * Block state wrapper on {@link PowerUtils#isBlockMetal}

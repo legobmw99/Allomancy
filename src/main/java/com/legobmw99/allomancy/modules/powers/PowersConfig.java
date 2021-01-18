@@ -1,19 +1,19 @@
 package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.combat.CombatSetup;
+import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
+import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import com.legobmw99.allomancy.setup.AllomancyConfig;
-import com.legobmw99.allomancy.setup.Metal;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class PowersConfig {
 
@@ -25,7 +25,8 @@ public class PowersConfig {
     public static ForgeConfigSpec.BooleanValue generate_whitelist;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
     public static Set<String> whitelist = new HashSet<>();
-    private static ArrayList<String> defaultList;
+
+    private static HashSet<String> defaultList;
 
     public static void init(ForgeConfigSpec.Builder common_builder, ForgeConfigSpec.Builder client_builder) {
 
@@ -59,60 +60,35 @@ public class PowersConfig {
         ModConfig cfg = e.getConfig();
         if (cfg.getSpec() == AllomancyConfig.COMMON_CONFIG) {
             if (generate_whitelist.get()) {
-                cfg_whitelist.set(default_whitelist());
+                ArrayList<String> list = new ArrayList<>(default_whitelist());
+                list.sort(String::compareTo);
+                cfg_whitelist.set(list);
                 generate_whitelist.set(false);
             }
             refresh_whitelist();
         }
     }
 
-    private static List<String> default_whitelist() {
-        defaultList = new ArrayList<>();
+    private static Set<String> default_whitelist() {
+        defaultList = new HashSet<>();
 
-        add(Items.IRON_AXE);
-        add(Items.GOLDEN_AXE);
         add(Items.CHAINMAIL_BOOTS);
-        add(Items.GOLDEN_BOOTS);
-        add(Items.IRON_BOOTS);
         add(Items.BUCKET);
         add(Items.LAVA_BUCKET);
         add(Items.MILK_BUCKET);
         add(Items.WATER_BUCKET);
         add(Items.CAULDRON);
         add(Items.COMPASS);
-        add(Items.FLINT_AND_STEEL);
         add(Items.CHAINMAIL_HELMET);
-        add(Items.GOLDEN_HELMET);
-        add(Items.IRON_HELMET);
-        add(Items.GOLDEN_HOE);
-        add(Items.IRON_HOE);
-        add(Items.GOLDEN_HORSE_ARMOR);
-        add(Items.IRON_HORSE_ARMOR);
         add(Items.CHAINMAIL_LEGGINGS);
-        add(Items.GOLDEN_LEGGINGS);
-        add(Items.IRON_LEGGINGS);
         add(Items.MINECART);
         add(Items.CHEST_MINECART);
         add(Items.HOPPER_MINECART);
         add(Items.FURNACE_MINECART);
         add(Items.TNT_MINECART);
-        add(Items.IRON_PICKAXE);
-        add(Items.GOLDEN_PICKAXE);
-        add(Items.IRON_CHESTPLATE);
         add(Items.CHAINMAIL_CHESTPLATE);
-        add(Items.GOLDEN_CHESTPLATE);
         add(Items.CLOCK);
-        add(Items.GOLDEN_SHOVEL);
-        add(Items.IRON_SHOVEL);
         add(Items.SHEARS);
-        add(Items.GOLDEN_APPLE);
-        add(Items.ENCHANTED_GOLDEN_APPLE);
-        add(Items.GOLDEN_CARROT);
-        add(Items.IRON_SWORD);
-        add(Items.IRON_INGOT);
-        add(Items.IRON_NUGGET);
-        add(Items.GOLD_INGOT);
-        add(Items.GOLD_NUGGET);
         add(Items.NETHERITE_INGOT);
         add(Items.NETHERITE_SCRAP); // Op?
         add(Items.NETHERITE_HELMET);
@@ -126,10 +102,7 @@ public class PowersConfig {
         add(Items.NETHERITE_AXE);
 
         add(Blocks.ANVIL);
-        add(Blocks.IRON_TRAPDOOR);
-        add(Blocks.IRON_DOOR);
         add(Blocks.CAULDRON);
-        add(Blocks.IRON_BARS);
         add(Blocks.HOPPER);
         add(Blocks.PISTON_HEAD);
         add(Blocks.MOVING_PISTON);
@@ -142,77 +115,37 @@ public class PowersConfig {
         add(Blocks.ACTIVATOR_RAIL);
         add(Blocks.DETECTOR_RAIL);
         add(Blocks.POWERED_RAIL);
-        add(Blocks.IRON_BLOCK);
-        add(Blocks.IRON_ORE);
-        add(Blocks.GOLD_BLOCK);
-        add(Blocks.GOLD_ORE);
         add(Blocks.LANTERN);
         add(Blocks.TRAPPED_CHEST);
         add(Blocks.TRIPWIRE);
-        add(Blocks.NETHER_GOLD_ORE);
         add(Blocks.SOUL_LANTERN);
         add(Blocks.NETHERITE_BLOCK);
         add(Blocks.ANCIENT_DEBRIS); // OP? TODO: consider if this should not be here, alongside scrap
         add(Blocks.LODESTONE);
         add(Blocks.GILDED_BLACKSTONE);
 
-        add("allomancy:vial");
-        add("allomancy:iron_lever");
-        add("allomancy:iron_button");
-        add("allomancy:lerasium_nugget");
-        add("allomancy:allomantic_grinder");
-        add("allomancy:coin_bag");
-        add("allomancy:cadmium_ore");
-        add("allomancy:chromium_ore");
-        add("allomancy:copper_ore");
-        add("allomancy:silver_ore");
-        add("allomancy:tin_ore");
-        add("allomancy:lead_ore");
-        add("allomancy:zinc_ore");
-        add("allomancy:cadmium_ingot");
-        add("allomancy:chromium_ingot");
-        add("allomancy:copper_ingot");
-        add("allomancy:silver_ingot");
-        add("allomancy:tin_ingot");
-        add("allomancy:lead_ingot");
-        add("allomancy:zinc_ingot");
-        add("allomancy:bronze_ingot");
-        add("allomancy:brass_ingot");
-        add("allomancy:steel_ingot");
-        add("allomancy:pewter_ingot");
-        add("allomancy:duralumin_ingot");
-        add("allomancy:nicrosil_ingot");
-        add("allomancy:electrum_ingot");
-        add("allomancy:bendalloy_ingot");
-
-        for (int i = 0; i < MaterialsSetup.METAL_ITEM_LEN; i++) {
-            add(MaterialsSetup.FLAKES.get(i).get());
-
-            if (i == Metal.GOLD.getIndex() || i == Metal.IRON.getIndex())
-                continue;
-
-            add(MaterialsSetup.NUGGETS.get(i).get());
-            add(MaterialsSetup.STORAGE_BLOCKS.get(i).get());
-        }
-
-        Allomancy.LOGGER.debug("Dumping registries");
-
-        ForgeRegistries.ITEMS.getValues().stream().map(i -> {
-            Allomancy.LOGGER.debug(i.getRegistryName());
-            return i;
-        }).collect(Collectors.toList());
-
-        // TODO do something here
+        add(ConsumeSetup.VIAL.get());
+        add(ConsumeSetup.LERASIUM_NUGGET.get());
+        add(ConsumeSetup.ALLOMANTIC_GRINDER.get());
+        add(CombatSetup.COIN_BAG.get());
 
 
-        defaultList.sort(String::compareTo);
+        ForgeRegistries.ITEMS.getValues()
+                .stream()
+                .map(ForgeRegistryEntry::getRegistryName)
+                .filter(Objects::nonNull)
+                .filter(PowerUtils::resourceContainsMetal)
+                .forEach(PowersConfig::add);
+
+        ForgeRegistries.BLOCKS.getValues()
+                .stream()
+                .map(ForgeRegistryEntry::getRegistryName)
+                .filter(Objects::nonNull)
+                .filter(PowerUtils::resourceContainsMetal)
+                .forEach(PowersConfig::add);
 
         return defaultList;
 
-    }
-
-    static boolean stringContainsItemFromList(String inputStr, String[] items) {
-        return Arrays.stream(items).anyMatch(inputStr::contains);
     }
 
 
@@ -221,13 +154,14 @@ public class PowersConfig {
         defaultList.add(s);
     }
 
-    private static void add(Item i) {
-        add(i.getRegistryName().toString());
+    private static void add(ResourceLocation r) {
+        add(r.toString());
     }
 
-    private static void add(Block b) {
-        add(b.getRegistryName().toString());
+    private static void add(ForgeRegistryEntry<?> i) {
+        add(i.getRegistryName());
     }
+
 
     public enum SCREEN_LOC {
         TOP_RIGHT,
