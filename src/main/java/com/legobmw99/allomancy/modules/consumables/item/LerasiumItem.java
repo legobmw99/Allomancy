@@ -59,8 +59,7 @@ public class LerasiumItem extends Item {
         lightning.setEffectOnly(true);
         lightning.moveForced(new Vector3d(x, y, z)); // see TridentEntity
         world.addEntity(lightning);
-        livingEntity.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE,
-                20, 0, true, false));
+        livingEntity.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 20, 0, true, false));
 
         return super.onItemUseFinish(stack, world, livingEntity);
     }

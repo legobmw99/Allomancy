@@ -30,19 +30,16 @@ public class Languages extends LanguageProvider {
         add(MaterialsSetup.ZINC_ORE.get(), "Zinc Ore");
         add(ExtrasSetup.IRON_BUTTON.get(), "Iron Button");
         add(ExtrasSetup.IRON_LEVER.get(), "Iron Lever");
-        add("block.allomancy.iron_activation.lore",
-                "This item seems too heavy to activate by ordinary means");
+        add("block.allomancy.iron_activation.lore", "This item seems too heavy to activate by ordinary means");
 
         add(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "Hand Grinder");
         add(ConsumeSetup.LERASIUM_NUGGET.get(), "Lerasium Nugget");
-        add("item.allomancy.lerasium_nugget.lore",
-                "This item is endowed with strange powers, perhaps you should ingest it?");
+        add("item.allomancy.lerasium_nugget.lore", "This item is endowed with strange powers, perhaps you should ingest it?");
         add(CombatSetup.MISTCLOAK.get(), "Mistcloak");
         add(CombatSetup.COIN_BAG.get(), "Coin Bag");
         add(CombatSetup.OBSIDIAN_DAGGER.get(), "Obsidian Dagger");
         add(CombatSetup.KOLOSS_BLADE.get(), "Koloss Blade");
-        add("item.allomancy.koloss_blade.lore",
-                "This item is too heavy for the average person to wield.");
+        add("item.allomancy.koloss_blade.lore", "This item is too heavy for the average person to wield.");
         add(ConsumeSetup.VIAL.get(), "Allomantic Vial");
         add("item.allomancy.vial.lore_count", "Contains %d metals");
         add("item.allomancy.vial.lore_inst", "Hold SHIFT to view");
@@ -50,8 +47,9 @@ public class Languages extends LanguageProvider {
         for (Metal mt : Metal.values()) {
             add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), getDisplayName(mt) + " Flakes");
 
-            if (mt == Metal.GOLD || mt == Metal.IRON)
+            if (mt == Metal.GOLD || mt == Metal.IRON) {
                 continue;
+            }
 
             add(MaterialsSetup.NUGGETS.get(mt.getIndex()).get(), getDisplayName(mt) + " Nugget");
             add(MaterialsSetup.INGOTS.get(mt.getIndex()).get(), getDisplayName(mt) + " Ingot");

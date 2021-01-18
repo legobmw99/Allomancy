@@ -58,11 +58,7 @@ public class LootTables extends LootTableProvider {
     // Useful boilerplate from McJtyLib
     protected void addSimpleBlock(String name, Block block) {
         Allomancy.LOGGER.debug("Creating Loot Table for block " + block.getRegistryName());
-        LootPool.Builder builder = LootPool.builder()
-                .name(name)
-                .rolls(ConstantRange.of(1))
-                .addEntry(ItemLootEntry.builder(block))
-                .acceptCondition(SurvivesExplosion.builder());
+        LootPool.Builder builder = LootPool.builder().name(name).rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(block)).acceptCondition(SurvivesExplosion.builder());
 
         lootTables.put(block, LootTable.builder().addLootPool(builder));
     }
@@ -79,24 +75,24 @@ public class LootTables extends LootTableProvider {
 
         // Lerasium Inject
         Allomancy.LOGGER.debug("Creating Loot Table for Lerasium inject");
-        LootPool.Builder leras_builder = LootPool.builder()
+        LootPool.Builder leras_builder = LootPool
+                .builder()
                 .name("main")
                 .rolls(ConstantRange.of(1))
                 .addEntry(ItemLootEntry.builder(ConsumeSetup.LERASIUM_NUGGET.get()).weight(4))
                 .addEntry(EmptyLootEntry.func_216167_a().weight(16));
-        tables.put(new ResourceLocation(Allomancy.MODID, "/inject/lerasium"),
-                LootTable.builder().addLootPool(leras_builder).build());
+        tables.put(new ResourceLocation(Allomancy.MODID, "/inject/lerasium"), LootTable.builder().addLootPool(leras_builder).build());
 
         CompoundNBT nbt = new CompoundNBT();
         nbt.putBoolean("Unbreakable", true);
         Allomancy.LOGGER.debug("Creating Loot Table for Obsidian Dagger inject");
-        LootPool.Builder dagger_builder = LootPool.builder()
+        LootPool.Builder dagger_builder = LootPool
+                .builder()
                 .name("main")
                 .rolls(ConstantRange.of(1))
                 .addEntry(ItemLootEntry.builder(CombatSetup.OBSIDIAN_DAGGER.get()).acceptFunction(SetNBT.builder(nbt)).weight(1))
                 .addEntry(EmptyLootEntry.func_216167_a().weight(19));
-        tables.put(new ResourceLocation(Allomancy.MODID, "/inject/obsidian_dagger"),
-                LootTable.builder().addLootPool(dagger_builder).build());
+        tables.put(new ResourceLocation(Allomancy.MODID, "/inject/obsidian_dagger"), LootTable.builder().addLootPool(dagger_builder).build());
 
 
         writeTables(cache, tables);

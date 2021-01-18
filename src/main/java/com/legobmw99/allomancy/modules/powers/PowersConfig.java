@@ -33,7 +33,8 @@ public class PowersConfig {
         common_builder.comment("Settings for the gameplay elements of the mod").push("Gameplay");
         random_mistings = common_builder.comment("Spawn players as a random Misting").define("random_mistings", true);
         generate_whitelist = common_builder.comment("Regenerate the metal whitelist").define("regenerate_whitelist", true);
-        cfg_whitelist = common_builder.comment("List of registry names of items and blocks that are counted as 'metal").defineList("whitelist", new ArrayList<>(), o -> o instanceof String);
+        cfg_whitelist = common_builder.comment("List of registry names of items and blocks that are counted as 'metal")
+                                      .defineList("whitelist", new ArrayList<>(), o -> o instanceof String);
         common_builder.pop();
 
         client_builder.push("Graphics");
@@ -131,18 +132,18 @@ public class PowersConfig {
 
 
         ForgeRegistries.ITEMS.getValues()
-                .stream()
-                .map(ForgeRegistryEntry::getRegistryName)
-                .filter(Objects::nonNull)
-                .filter(PowerUtils::resourceContainsMetal)
-                .forEach(PowersConfig::add);
+                             .stream()
+                             .map(ForgeRegistryEntry::getRegistryName)
+                             .filter(Objects::nonNull)
+                             .filter(PowerUtils::resourceContainsMetal)
+                             .forEach(PowersConfig::add);
 
         ForgeRegistries.BLOCKS.getValues()
-                .stream()
-                .map(ForgeRegistryEntry::getRegistryName)
-                .filter(Objects::nonNull)
-                .filter(PowerUtils::resourceContainsMetal)
-                .forEach(PowersConfig::add);
+                              .stream()
+                              .map(ForgeRegistryEntry::getRegistryName)
+                              .filter(Objects::nonNull)
+                              .filter(PowerUtils::resourceContainsMetal)
+                              .forEach(PowersConfig::add);
 
         return defaultList;
 

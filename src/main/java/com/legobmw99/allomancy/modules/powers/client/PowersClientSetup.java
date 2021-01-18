@@ -21,7 +21,8 @@ import org.lwjgl.glfw.GLFW;
 
 public class PowersClientSetup {
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Allomancy.MODID);
-    public static final RegistryObject<ParticleType<SoundParticleData>> SOUND_PARTICLE_TYPE = PARTICLES.register("sound_particle", () -> new ParticleType<SoundParticleData>(true, SoundParticleData.DESERIALIZER) {
+    public static final RegistryObject<ParticleType<SoundParticleData>> SOUND_PARTICLE_TYPE = PARTICLES.register("sound_particle", () -> new ParticleType<SoundParticleData>(true,
+                                                                                                                                                                             SoundParticleData.DESERIALIZER) {
         @Override
         public Codec<SoundParticleData> func_230522_e_() {
             return null;

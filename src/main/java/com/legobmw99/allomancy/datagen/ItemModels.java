@@ -45,8 +45,9 @@ public class ItemModels extends ItemModelProvider {
             Item flake = MaterialsSetup.FLAKES.get(i).get();
             itemGenerated(flake, "item/" + flake.getRegistryName().getPath());
 
-            if (i == Metal.GOLD.getIndex() || i == Metal.IRON.getIndex())
+            if (i == Metal.GOLD.getIndex() || i == Metal.IRON.getIndex()) {
                 continue;
+            }
 
             Item nugget = MaterialsSetup.NUGGETS.get(i).get();
             itemGenerated(nugget, "item/" + nugget.getRegistryName().getPath());
@@ -59,37 +60,36 @@ public class ItemModels extends ItemModelProvider {
         }
 
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial (filled)");
-        ModelFile mf = getBuilder("vial_filled").parent(getExistingFile(mcLoc("item/generated")))
-                .texture("layer0", modLoc("item/full_vial"));
+        ModelFile mf = getBuilder("vial_filled").parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc("item/full_vial"));
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial");
-        getBuilder("vial").parent(getExistingFile(mcLoc("item/generated")))
+        getBuilder("vial")
+                .parent(getExistingFile(mcLoc("item/generated")))
                 .texture("layer0", modLoc("item/vial"))
-                .override().predicate(mcLoc("custom_model_data"), 1).model(mf).end();
+                .override()
+                .predicate(mcLoc("custom_model_data"), 1)
+                .model(mf)
+                .end();
 
     }
 
     public void parentedBlock(Block block, String model) {
         Allomancy.LOGGER.debug("Creating Item Model for " + block.getRegistryName());
-        getBuilder(block.getRegistryName().getPath())
-                .parent(new ModelFile.UncheckedModelFile(modLoc(model)));
+        getBuilder(block.getRegistryName().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc(model)));
     }
 
     public void itemGenerated(Item item, String texture) {
         Allomancy.LOGGER.debug("Creating Item Model for " + item.getRegistryName());
-        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(mcLoc("item/generated")))
-                .texture("layer0", modLoc(texture));
+        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc(texture));
     }
 
     public void itemHandheld(Item item, String texture) {
         Allomancy.LOGGER.debug("Creating Item Model for " + item.getRegistryName());
-        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(mcLoc("item/handheld")))
-                .texture("layer0", modLoc(texture));
+        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(mcLoc("item/handheld"))).texture("layer0", modLoc(texture));
     }
 
     public void largeItemHandheld(Item item, String texture) {
         Allomancy.LOGGER.debug("Creating Large Item Model for " + item.getRegistryName());
-        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(modLoc("item/handheld_large")))
-                .texture("layer0", modLoc(texture));
+        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(modLoc("item/handheld_large"))).texture("layer0", modLoc(texture));
     }
 
     @Override

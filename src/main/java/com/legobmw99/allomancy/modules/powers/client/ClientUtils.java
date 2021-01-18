@@ -115,11 +115,9 @@ public class ClientUtils {
         }
         // play a sound effect
         if (capability.isBurning(metal)) {
-            player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1,
-                    5);
+            player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
         } else {
-            player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1,
-                    4);
+            player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
         }
     }
 }

@@ -1,7 +1,6 @@
 {
   "advancements.become_mistborn.desc": "Tienes un poder que la mayoria envidia...",
   "advancements.become_mistborn.title": "¡Vuelvete Mistborn!",
-
   "block.allomancy.aluminum_ore": "Mena de Aluminio",
   "block.allomancy.cadmium_ore": "Mena de Cadmio",
   "block.allomancy.chromium_ore": "Mena de Cromo",
@@ -13,14 +12,11 @@
   "block.allomancy.silver_ore": "Mena de Plata",
   "block.allomancy.tin_ore": "Mena de Estaño",
   "block.allomancy.zinc_ore": "Mena de Zinc",
-
   "commands.allomancy.addpower": "%s added Allomantic power %s",
   "commands.allomancy.getpowers": "%s currently has Allomantic powers: %s",
   "commands.allomancy.removepower": "%s removed Allomantic power %s",
   "commands.allomancy.unrecognized": "Unrecognized Allomancy power: '%s'",
-
   "entity.allomancy.nugget_projectile": "Nugget Projectile",
-
   "item.allomancy.allomantic_grinder": "Moledora Manual",
   "item.allomancy.aluminum_flakes": "Petalos de Aluminio",
   "item.allomancy.aluminum_ingot": "Lingote de Aluminio",
@@ -61,11 +57,9 @@
   "item.allomancy.zinc_flakes": "Petalos de Zinc",
   "item.allomancy.zinc_ingot": "Lingote de Zinc",
   "itemGroup.allomancy": "Alomancia",
-
   "key.burn": "Quemar Metales",
   "key.hud": "Mostrar Reservas",
   "key.categories.allomancy": "Alomancia",
-
   "metals.aluminum": "Aluminio",
   "metals.bendalloy": "Bendaleo",
   "metals.brass": "Latón",

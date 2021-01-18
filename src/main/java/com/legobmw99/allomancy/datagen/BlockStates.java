@@ -67,7 +67,8 @@ public class BlockStates extends BlockStateProvider {
                 for (Direction dir : IronButtonBlock.HORIZONTAL_FACING.getAllowedValues()) {
                     int yangle = (int) dir.getHorizontalAngle();
                     yangle = face != AttachFace.CEILING ? (yangle + 180) % 360 : yangle;
-                    builder.partialState()
+                    builder
+                            .partialState()
                             .with(IronButtonBlock.POWERED, powered)
                             .with(IronButtonBlock.FACE, face)
                             .with(IronButtonBlock.HORIZONTAL_FACING, dir)
@@ -121,33 +122,47 @@ public class BlockStates extends BlockStateProvider {
             }
         };
 
-        ModelFile lever_on = models().getBuilder("allomancy:iron_lever").ao(false)
+        ModelFile lever_on = models()
+                .getBuilder("allomancy:iron_lever")
+                .ao(false)
                 .texture("particle", mcLoc("block/iron_block"))
                 .texture("base", mcLoc("block/iron_block"))
                 .texture("lever", modLoc("block/iron_lever"))
                 .element()
-                .from(5, 0, 4).to(11, 3, 12)
+                .from(5, 0, 4)
+                .to(11, 3, 12)
                 .allFaces(base_generator)
                 .end()
                 .element()
-                .from(7, 1, 7).to(9, 11, 9)
+                .from(7, 1, 7)
+                .to(9, 11, 9)
                 .rotation()
-                .origin(8, 1, 8).axis(Direction.Axis.X).angle(-45F).end()
+                .origin(8, 1, 8)
+                .axis(Direction.Axis.X)
+                .angle(-45F)
+                .end()
                 .allFaces(lever_generator)
                 .end();
 
-        ModelFile lever_off = models().getBuilder("allomancy:iron_lever_off").ao(false)
+        ModelFile lever_off = models()
+                .getBuilder("allomancy:iron_lever_off")
+                .ao(false)
                 .texture("particle", mcLoc("block/iron_block"))
                 .texture("base", mcLoc("block/iron_block"))
                 .texture("lever", modLoc("block/iron_lever"))
                 .element()
-                .from(5, 0, 4).to(11, 3, 12)
+                .from(5, 0, 4)
+                .to(11, 3, 12)
                 .allFaces(base_generator)
                 .end()
                 .element()
-                .from(7, 1, 7).to(9, 11, 9)
+                .from(7, 1, 7)
+                .to(9, 11, 9)
                 .rotation()
-                .origin(8, 1, 8).axis(Direction.Axis.X).angle(45).end()
+                .origin(8, 1, 8)
+                .axis(Direction.Axis.X)
+                .angle(45)
+                .end()
                 .allFaces(lever_generator)
                 .end();
 
@@ -161,7 +176,8 @@ public class BlockStates extends BlockStateProvider {
                     int yangle = (int) dir.getHorizontalAngle();
                     yangle = face != AttachFace.CEILING ? (yangle + 180) % 360 : yangle;
 
-                    builder.partialState()
+                    builder
+                            .partialState()
                             .with(IronLeverBlock.POWERED, powered)
                             .with(IronLeverBlock.FACE, face)
                             .with(IronLeverBlock.HORIZONTAL_FACING, dir)

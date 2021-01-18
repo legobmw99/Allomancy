@@ -284,8 +284,9 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param dim The RegistryKey representing the dimension the death occured in
      */
     public void setDeathLoc(BlockPos pos, RegistryKey<World> dim) {
-        if (dim != null)
+        if (dim != null) {
             setDeathLoc(pos, dim.getLocation().toString());
+        }
     }
 
     /**
@@ -384,8 +385,9 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
     public void decEnhanced() {
-        if (isEnhanced())
+        if (isEnhanced()) {
             this.enhanced_time--;
+        }
     }
 
     public boolean isEnhanced() {
@@ -480,12 +482,10 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
         CompoundNBT position = (CompoundNBT) allomancy_data.get("position");
         if (position.contains("death_dimension")) {
-            this.setDeathLoc(new BlockPos(position.getInt("death_x"), position.getInt("death_y"), position.getInt("death_z")),
-                    position.getString("death_dimension"));
+            this.setDeathLoc(new BlockPos(position.getInt("death_x"), position.getInt("death_y"), position.getInt("death_z")), position.getString("death_dimension"));
         }
         if (position.contains("spawn_dimension")) {
-            this.setSpawnLoc(new BlockPos(position.getInt("spawn_x"), position.getInt("spawn_y"), position.getInt("spawn_z")),
-                    position.getString("spawn_dimension"));
+            this.setSpawnLoc(new BlockPos(position.getInt("spawn_x"), position.getInt("spawn_y"), position.getInt("spawn_z")), position.getString("spawn_dimension"));
         }
 
     }

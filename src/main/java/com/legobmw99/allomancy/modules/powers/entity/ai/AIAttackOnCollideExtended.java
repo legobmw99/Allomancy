@@ -43,14 +43,12 @@ public class AIAttackOnCollideExtended extends Goal {
 
     private int failedPathFindingPenalty;
 
-    public AIAttackOnCollideExtended(CreatureEntity par1EntityCreature,
-                                     Class par2Class, double par3, boolean par5) {
+    public AIAttackOnCollideExtended(CreatureEntity par1EntityCreature, Class par2Class, double par3, boolean par5) {
         this(par1EntityCreature, par3, par5);
         this.classTarget = par2Class;
     }
 
-    public AIAttackOnCollideExtended(CreatureEntity par1EntityCreature,
-                                     double par2, boolean par4) {
+    public AIAttackOnCollideExtended(CreatureEntity par1EntityCreature, double par2, boolean par4) {
         this.attacker = par1EntityCreature;
         this.worldObj = par1EntityCreature.world;
         this.speedTowardsTarget = par2;
@@ -69,9 +67,7 @@ public class AIAttackOnCollideExtended extends Goal {
             return false;
         } else if (!livingEntity.isAlive()) {
             return false;
-        } else if ((this.classTarget != null)
-                && !this.classTarget.isAssignableFrom(livingEntity
-                .getClass())) {
+        } else if ((this.classTarget != null) && !this.classTarget.isAssignableFrom(livingEntity.getClass())) {
             return false;
         } else {
             if (--this.field_75445_i <= 0) {
@@ -96,9 +92,7 @@ public class AIAttackOnCollideExtended extends Goal {
         }
         BlockPos pos1 = new BlockPos(livingEntity.getPositionVec());
 
-        return (livingEntity
-                .isAlive() && (!this.longMemory ? !this.attacker
-                .getNavigator().noPath() : this.attacker.isWithinHomeDistanceFromPosition(pos1)));
+        return (livingEntity.isAlive() && (!this.longMemory ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistanceFromPosition(pos1)));
     }
 
     /**
@@ -106,8 +100,7 @@ public class AIAttackOnCollideExtended extends Goal {
      */
     @Override
     public void startExecuting() {
-        this.attacker.getNavigator().setPath(this.entityPathEntity,
-                this.speedTowardsTarget);
+        this.attacker.getNavigator().setPath(this.entityPathEntity, this.speedTowardsTarget);
         this.field_75445_i = 0;
     }
 
@@ -128,23 +121,14 @@ public class AIAttackOnCollideExtended extends Goal {
         if (livingEntity == null) {
             return;
         }
-        this.attacker.getLookController().setLookPositionWithEntity(
-                livingEntity, 30.0F, 30.0F);
+        this.attacker.getLookController().setLookPositionWithEntity(livingEntity, 30.0F, 30.0F);
 
-        if ((this.longMemory || this.attacker.getEntitySenses().canSee(
-                livingEntity))
-                && (--this.field_75445_i <= 0)) {
-            this.field_75445_i = this.failedPathFindingPenalty + 4
-                    + this.attacker.getRNG().nextInt(7);
-            this.attacker.getNavigator().tryMoveToEntityLiving(
-                    livingEntity, this.speedTowardsTarget);
+        if ((this.longMemory || this.attacker.getEntitySenses().canSee(livingEntity)) && (--this.field_75445_i <= 0)) {
+            this.field_75445_i = this.failedPathFindingPenalty + 4 + this.attacker.getRNG().nextInt(7);
+            this.attacker.getNavigator().tryMoveToEntityLiving(livingEntity, this.speedTowardsTarget);
             if (this.attacker.getNavigator().getPath() != null) {
-                PathPoint finalPathPoint = this.attacker.getNavigator()
-                        .getPath().getFinalPathPoint();
-                if ((finalPathPoint != null)
-                        && (livingEntity.getDistanceSq(
-                        finalPathPoint.x, finalPathPoint.y,
-                        finalPathPoint.z) < 1)) {
+                PathPoint finalPathPoint = this.attacker.getNavigator().getPath().getFinalPathPoint();
+                if ((finalPathPoint != null) && (livingEntity.getDistanceSq(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)) {
                     this.failedPathFindingPenalty = 0;
                 } else {
                     this.failedPathFindingPenalty += 10;
@@ -155,8 +139,7 @@ public class AIAttackOnCollideExtended extends Goal {
         }
 
         this.attackTick = Math.max(this.attackTick - 1, 0);
-        double d0 = (this.attacker.getWidth() * 2.0F * this.attacker.getWidth() * 2.0F)
-                + livingEntity.getWidth();
+        double d0 = (this.attacker.getWidth() * 2.0F * this.attacker.getWidth() * 2.0F) + livingEntity.getWidth();
 
         if (this.attacker.getDistanceSq(livingEntity) <= d0) {
             if (this.attackTick <= 0) {
@@ -169,8 +152,7 @@ public class AIAttackOnCollideExtended extends Goal {
                 if (this.attacker instanceof MonsterEntity) {
                     this.attacker.attackEntityAsMob(livingEntity);
                 } else {
-                    livingEntity.attackEntityFrom(
-                            DamageSource.causeMobDamage(this.attacker), 3);
+                    livingEntity.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), 3);
                 }
             }
         }

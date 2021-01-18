@@ -20,8 +20,9 @@ public enum Metal {
 
     public static Metal getMetal(int index) {
         for (Metal metal : values()) {
-            if (metal.getIndex() == index)
+            if (metal.getIndex() == index) {
                 return metal;
+            }
         }
         return null;
     }

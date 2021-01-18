@@ -98,8 +98,9 @@ public class MetalSelectScreen extends Screen {
             }
 
             int gs = 0x40;
-            if (seg % 2 == 0)
+            if (seg % 2 == 0) {
                 gs += 0x19;
+            }
 
             gs = (!cap.hasPower(mt) || cap.getAmount(mt) == 0) ? 0 : gs;
 
@@ -109,8 +110,9 @@ public class MetalSelectScreen extends Screen {
             int a = 0x99;
 
 
-            if (seg == 0)
+            if (seg == 0) {
                 buf.pos(x, y, 0).color(r, g, b, a).endVertex(); //pos, color
+            }
 
 
             for (float i = 0; i < degPer + step / 2; i += step) {
@@ -118,8 +120,9 @@ public class MetalSelectScreen extends Screen {
                 float xp = x + MathHelper.cos(rad) * radius;
                 float yp = y + MathHelper.sin(rad) * radius;
 
-                if (i == 0)
+                if (i == 0) {
                     buf.pos(xp, yp, 0).color(r, g, b, a).endVertex();
+                }
                 buf.pos(xp, yp, 0).color(r, g, b, a).endVertex();
             }
         }
@@ -132,8 +135,9 @@ public class MetalSelectScreen extends Screen {
             Metal mt = Metal.getMetal(toMetalIndex(seg));
             boolean mouseInSector = cap.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
             float radius = Math.max(0F, Math.min((timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
-            if (mouseInSector)
+            if (mouseInSector) {
                 radius *= 1.025f;
+            }
 
 
             float rad = (seg + 0.5f) * degPer;
@@ -145,10 +149,12 @@ public class MetalSelectScreen extends Screen {
             String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + new TranslationTextComponent(METAL_LOCAL[toMetalIndex(seg)]).getString();
             int width = mc.getRenderManager().getFontRenderer().getStringWidth(name);
 
-            if (xsp < x)
+            if (xsp < x) {
                 xsp -= width - 8;
-            if (ysp < y)
+            }
+            if (ysp < y) {
                 ysp -= 9;
+            }
 
             mc.getRenderManager().getFontRenderer().drawStringWithShadow(matrixStack, name, xsp, ysp, 0xFFFFFF);
 
@@ -201,8 +207,7 @@ public class MetalSelectScreen extends Screen {
         if (slotSelected != -1) {
             Metal mt = Metal.getMetal(toMetalIndex(slotSelected));
             ClientUtils.toggleBurn(mt, cap);
-            mc.player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F,
-                    2.0F);
+            mc.player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F, 2.0F);
 
         }
     }

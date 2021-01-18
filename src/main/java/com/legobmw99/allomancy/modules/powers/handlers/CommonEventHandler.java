@@ -64,7 +64,8 @@ public class CommonEventHandler {
                     ItemStack flakes = new ItemStack(MaterialsSetup.FLAKES.get(randomMisting).get());
                     // Give the player one flake of their metal
                     if (!player.inventory.addItemStackToInventory(flakes)) {
-                        ItemEntity entity = new ItemEntity(player.getEntityWorld(), player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), flakes);
+                        ItemEntity entity = new ItemEntity(player.getEntityWorld(), player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(),
+                                                           flakes);
                         player.getEntityWorld().addEntity(entity);
                     }
                 }
@@ -94,7 +95,8 @@ public class CommonEventHandler {
                     }
                 }
 
-                if (player.world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) || !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
+                if (player.world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) ||
+                    !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
                     for (Metal mt : Metal.values()) {
                         cap.setAmount(mt, oldCap.getAmount(mt));
                     }
@@ -252,14 +254,15 @@ public class CommonEventHandler {
                             spawnLoc = cap.getSpawnLoc();
                         } else {
                             spawnDim = World.OVERWORLD; // no spawn --> use world spawn
-                            spawnLoc = new BlockPos(curPlayer.world.getWorldInfo().getSpawnX(),
-                                    curPlayer.world.getWorldInfo().getSpawnY(), curPlayer.world.getWorldInfo().getSpawnZ());
+                            spawnLoc = new BlockPos(curPlayer.world.getWorldInfo().getSpawnX(), curPlayer.world.getWorldInfo().getSpawnY(),
+                                                    curPlayer.world.getWorldInfo().getSpawnZ());
 
                         }
 
                         PowerUtils.teleport(curPlayer, world, spawnDim, spawnLoc);
-                        if (cap.isBurning(Metal.DURALUMIN))
+                        if (cap.isBurning(Metal.DURALUMIN)) {
                             cap.drainMetals(Metal.DURALUMIN);
+                        }
                         cap.drainMetals(Metal.ELECTRUM);
 
 
@@ -267,8 +270,9 @@ public class CommonEventHandler {
                         RegistryKey<World> deathDim = cap.getDeathDim();
                         if (deathDim != null) {
                             PowerUtils.teleport(curPlayer, world, deathDim, cap.getDeathLoc());
-                            if (cap.isBurning(Metal.DURALUMIN))
+                            if (cap.isBurning(Metal.DURALUMIN)) {
                                 cap.drainMetals(Metal.DURALUMIN);
+                            }
                             cap.drainMetals(Metal.GOLD);
                         }
                     }
@@ -310,8 +314,9 @@ public class CommonEventHandler {
                         int slowness_amplifier = cap.isEnhanced() ? 255 : 2; // Duralumin freezes entities
                         world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
                             entity.addPotionEffect(new EffectInstance(Effects.SLOW_FALLING, 10, 0, true, false));
-                            if (entity != curPlayer)
+                            if (entity != curPlayer) {
                                 entity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, slowness_amplifier, true, false));
+                            }
                         });
                     }
 
@@ -335,8 +340,7 @@ public class CommonEventHandler {
                     }
                     // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing, only if the amplifier is 5
                     if ((!cap.isBurning(Metal.TIN)) &&
-                            (curPlayer.getActivePotionEffect(Effects.NIGHT_VISION) != null &&
-                                    curPlayer.getActivePotionEffect(Effects.NIGHT_VISION).getAmplifier() == 5)) {
+                        (curPlayer.getActivePotionEffect(Effects.NIGHT_VISION) != null && curPlayer.getActivePotionEffect(Effects.NIGHT_VISION).getAmplifier() == 5)) {
                         curPlayer.removePotionEffect(Effects.NIGHT_VISION);
                     }
                     if (cap.isBurning(Metal.PEWTER)) {

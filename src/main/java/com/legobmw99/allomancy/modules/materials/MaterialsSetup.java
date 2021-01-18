@@ -27,11 +27,14 @@ public class MaterialsSetup {
     public static final List<RegistryObject<Item>> STORAGE_BLOCK_ITEMS = new ArrayList<>();
 
     public static final RegistryObject<Block> ALUMINUM_ORE = BLOCKS.register("aluminum_ore", AllomancySetup::createStandardBlock);
-    public static final RegistryObject<Item> ALUMINUM_ORE_ITEM = ITEMS.register("aluminum_ore", () -> new BlockItem(ALUMINUM_ORE.get(), AllomancySetup.createStandardItemProperties()));
+    public static final RegistryObject<Item> ALUMINUM_ORE_ITEM = ITEMS.register("aluminum_ore",
+                                                                                () -> new BlockItem(ALUMINUM_ORE.get(), AllomancySetup.createStandardItemProperties()));
     public static final RegistryObject<Block> CADMIUM_ORE = BLOCKS.register("cadmium_ore", AllomancySetup::createStandardBlock);
-    public static final RegistryObject<Item> CADMIUM_ORE_ITEM = ITEMS.register("cadmium_ore", () -> new BlockItem(CADMIUM_ORE.get(), AllomancySetup.createStandardItemProperties()));
+    public static final RegistryObject<Item> CADMIUM_ORE_ITEM = ITEMS.register("cadmium_ore",
+                                                                               () -> new BlockItem(CADMIUM_ORE.get(), AllomancySetup.createStandardItemProperties()));
     public static final RegistryObject<Block> CHROMIUM_ORE = BLOCKS.register("chromium_ore", AllomancySetup::createStandardBlock);
-    public static final RegistryObject<Item> CHROMIUM_ORE_ITEM = ITEMS.register("chromium_ore", () -> new BlockItem(CHROMIUM_ORE.get(), AllomancySetup.createStandardItemProperties()));
+    public static final RegistryObject<Item> CHROMIUM_ORE_ITEM = ITEMS.register("chromium_ore",
+                                                                                () -> new BlockItem(CHROMIUM_ORE.get(), AllomancySetup.createStandardItemProperties()));
     public static final RegistryObject<Block> COPPER_ORE = BLOCKS.register("copper_ore", AllomancySetup::createStandardBlock);
     public static final RegistryObject<Item> COPPER_ORE_ITEM = ITEMS.register("copper_ore", () -> new BlockItem(COPPER_ORE.get(), AllomancySetup.createStandardItemProperties()));
     public static final RegistryObject<Block> LEAD_ORE = BLOCKS.register("lead_ore", AllomancySetup::createStandardBlock);
@@ -61,7 +64,8 @@ public class MaterialsSetup {
                 NUGGETS.add(ITEMS.register(name + "_nugget", AllomancySetup::createStandardItem));
                 INGOTS.add(ITEMS.register(name + "_ingot", AllomancySetup::createStandardItem));
                 STORAGE_BLOCKS.add(BLOCKS.register(name + "_block", AllomancySetup::createStandardBlock));
-                STORAGE_BLOCK_ITEMS.add(ITEMS.register(name + "_block", () -> new BlockItem(STORAGE_BLOCKS.get(mt.getIndex()).get(), AllomancySetup.createStandardItemProperties())));
+                STORAGE_BLOCK_ITEMS.add(
+                        ITEMS.register(name + "_block", () -> new BlockItem(STORAGE_BLOCKS.get(mt.getIndex()).get(), AllomancySetup.createStandardItemProperties())));
             }
         }
         FLAKES.add(MaterialsSetup.ITEMS.register("lead_flakes", AllomancySetup::createStandardItem));

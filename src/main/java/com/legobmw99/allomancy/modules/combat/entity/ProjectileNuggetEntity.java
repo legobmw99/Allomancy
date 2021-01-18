@@ -24,10 +24,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-@OnlyIn(
-        value = Dist.CLIENT,
-        _interface = IRendersAsItem.class
-)
+@OnlyIn(value = Dist.CLIENT, _interface = IRendersAsItem.class)
 public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRendersAsItem {
     private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(ProjectileNuggetEntity.class, DataSerializers.ITEMSTACK);
 

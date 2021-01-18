@@ -31,11 +31,11 @@ public class Advancements extends AdvancementProvider {
     }
 
     private void registerAdvancements(Consumer<Advancement> consumer) {
-        Advancement.Builder.builder()
+        Advancement.Builder
+                .builder()
                 .withParent(Advancement.Builder.builder().build(new ResourceLocation("adventure/root"))) // hacky
                 .withDisplay(CombatSetup.MISTCLOAK.get(), new TranslationTextComponent("advancements.become_mistborn.title"),
-                        new TranslationTextComponent("advancements.become_mistborn.desc"),
-                        null, FrameType.CHALLENGE, true, true, true)
+                             new TranslationTextComponent("advancements.become_mistborn.desc"), null, FrameType.CHALLENGE, true, true, true)
                 .withCriterion("lerasium_nugget", ConsumeItemTrigger.Instance.forItem(ConsumeSetup.LERASIUM_NUGGET.get()))
                 .withRewards(AdvancementRewards.Builder.experience(100))
                 .register(consumer, "allomancy:main/become_mistborn");

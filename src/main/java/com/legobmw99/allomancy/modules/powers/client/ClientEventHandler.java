@@ -83,7 +83,8 @@ public class ClientEventHandler {
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (PowerUtils.isBlockStateMetal(this.mc.world.getBlockState(bp)) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
+                                if (PowerUtils.isBlockStateMetal(this.mc.world.getBlockState(bp)) ||
+                                    (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
                                     Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PULL * force_multiplier));
                                 }
                             }
@@ -113,7 +114,8 @@ public class ClientEventHandler {
 
                             if (trace.getType() == RayTraceResult.Type.BLOCK) {
                                 BlockPos bp = ((BlockRayTraceResult) trace).getPos();
-                                if (PowerUtils.isBlockStateMetal(this.mc.world.getBlockState(bp)) || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
+                                if (PowerUtils.isBlockStateMetal(this.mc.world.getBlockState(bp)) ||
+                                    (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
                                     Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PUSH * force_multiplier));
                                 }
                             }
@@ -312,8 +314,7 @@ public class ClientEventHandler {
         if (cap.isBurning(Metal.ELECTRUM)) {
             RegistryKey<World> spawnDim = cap.getSpawnDim();
             if (spawnDim == null && player.world.getDimensionKey() == World.OVERWORLD) { // overworld, no spawn --> use world spawn
-                BlockPos spawnLoc = new BlockPos(player.world.getWorldInfo().getSpawnX(),
-                        player.world.getWorldInfo().getSpawnY(), player.world.getWorldInfo().getSpawnZ());
+                BlockPos spawnLoc = new BlockPos(player.world.getWorldInfo().getSpawnX(), player.world.getWorldInfo().getSpawnY(), player.world.getWorldInfo().getSpawnZ());
                 ClientUtils.drawMetalLine(playervec, blockVec(spawnLoc), 3.0F, 0.7F, 0.8F, 0.2F);
 
             } else if (spawnDim != null && player.world.getDimensionKey() == spawnDim) {
@@ -356,8 +357,8 @@ public class ClientEventHandler {
                 motionX = ((posX - (event.getSound().getX() + .5)) * -0.7) / magnitude;
                 motionY = ((posY - (event.getSound().getY() + .2)) * -0.7) / magnitude;
                 motionZ = ((posZ - (event.getSound().getZ() + .5)) * -0.7) / magnitude;
-                this.mc.particles.addParticle(new SoundParticleData(sound.getCategory()), posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), posY + .2, posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX,
-                        motionY, motionZ);
+                this.mc.particles.addParticle(new SoundParticleData(sound.getCategory()), posX + (Math.sin(Math.toRadians(player.getRotationYawHead())) * -.7d), posY + .2,
+                                              posZ + (Math.cos(Math.toRadians(player.getRotationYawHead())) * .7d), motionX, motionY, motionZ);
             }
         }
     }

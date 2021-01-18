@@ -7,7 +7,6 @@ import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ItemTags extends ItemTagsProvider {
@@ -21,8 +20,9 @@ public class ItemTags extends ItemTagsProvider {
     protected void registerTags() {
 
         for (Metal mt : Metal.values()) {
-            if (mt == Metal.GOLD || mt == Metal.IRON)
+            if (mt == Metal.GOLD || mt == Metal.IRON) {
                 continue;
+            }
 
             addForgeTag("nuggets/" + mt.getName(), MaterialsSetup.NUGGETS.get(mt.getIndex()).get());
             addForgeTag("ingots/" + mt.getName(), MaterialsSetup.INGOTS.get(mt.getIndex()).get());

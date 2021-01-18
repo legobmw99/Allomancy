@@ -19,8 +19,8 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 public class VialItemRecipe extends SpecialRecipe {
-    private static final Ingredient INGREDIENT_FLAKES = Ingredient.fromItems(MaterialsSetup.FLAKES.subList(0, Metal.values().length).stream()
-            .map(RegistryObject::get).toArray(Item[]::new));
+    private static final Ingredient INGREDIENT_FLAKES = Ingredient.fromItems(
+            MaterialsSetup.FLAKES.subList(0, Metal.values().length).stream().map(RegistryObject::get).toArray(Item[]::new));
     private static final Ingredient INGREDIENT_VIAL = Ingredient.fromItems(ConsumeSetup.VIAL.get());
 
     private ItemStack item_result = ItemStack.EMPTY;

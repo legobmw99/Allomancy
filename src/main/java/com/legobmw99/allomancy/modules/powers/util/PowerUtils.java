@@ -54,17 +54,12 @@ public class PowerUtils {
 
     public static final byte PUSH = 1;
     public static final byte PULL = -1;
-    private static final Predicate<Goal> isAggroGoal = (goal) ->
-            goal instanceof CreeperSwellGoal ||
-                    goal instanceof AIAttackOnCollideExtended ||
-                    goal instanceof MeleeAttackGoal ||
-                    goal instanceof TargetGoal ||
-                    goal instanceof PanicGoal ||
-                    goal.getClass().getName().contains("Fireball") ||
-                    goal.getClass().getName().contains("Attack") ||
-                    goal.getClass().getName().contains("Anger");
+    private static final Predicate<Goal> isAggroGoal = (goal) -> goal instanceof CreeperSwellGoal || goal instanceof AIAttackOnCollideExtended || goal instanceof MeleeAttackGoal ||
+                                                                 goal instanceof TargetGoal || goal instanceof PanicGoal || goal.getClass().getName().contains("Fireball") ||
+                                                                 goal.getClass().getName().contains("Attack") || goal.getClass().getName().contains("Anger");
 
-    private static final Pattern ACTIVE_METAL_REGEX = Pattern.compile(".*(iron|steel|tin_|pewter|zinc|brass|copper|bronze|duralumin|chromium|nicrosil|gold|electrum|cadmium|bendalloy|lead_|silver).*");
+    private static final Pattern ACTIVE_METAL_REGEX = Pattern.compile(
+            ".*(iron|steel|tin_|pewter|zinc|brass|copper|bronze|duralumin|chromium|nicrosil|gold|electrum|cadmium|bendalloy|lead_|silver).*");
 
 
     public static boolean resourceContainsMetal(ResourceLocation input) {
@@ -159,8 +154,9 @@ public class PowerUtils {
         capHurt.drainMetals(Metal.values());
         player.clearActivePotions();
 
-        if (player instanceof ServerPlayerEntity)
+        if (player instanceof ServerPlayerEntity) {
             Network.sync(capHurt, player);
+        }
     }
 
     /**
@@ -179,9 +175,7 @@ public class PowerUtils {
         Vector3d vec = toMove.getPositionVec();
         double posX = vec.getX(), posY = vec.getY(), posZ = vec.getZ();
         // Calculate the length of the vector between the entity and anchor
-        magnitude = Math.sqrt(Math.pow((posX - (block.getX() + .5)), 2)
-                + Math.pow((posY - (block.getY() + .5)), 2)
-                + Math.pow((posZ - (block.getZ() + .5)), 2));
+        magnitude = Math.sqrt(Math.pow((posX - (block.getX() + .5)), 2) + Math.pow((posY - (block.getY() + .5)), 2) + Math.pow((posZ - (block.getZ() + .5)), 2));
         // Get a unit(-ish) vector in the direction of motion
         motionX = ((posX - (block.getX() + .5)) * directionScalar * (1.1) / magnitude);
         motionY = ((posY - (block.getY() + .5)) * directionScalar * (1.1) / magnitude);
@@ -189,10 +183,9 @@ public class PowerUtils {
         // Move along that vector, additively increasing motion until you max
         // out at the above values
         double x = toMove.getMotion().getX(), y = toMove.getMotion().getY(), z = toMove.getMotion().getZ();
-        toMove.setMotion(Math.abs(x + motionX) > 0.01
-                ? MathHelper.clamp(x + motionX, -Math.abs(motionX), motionX) : 0, Math.abs(y + motionY) > 0.01
-                ? MathHelper.clamp(y + motionY, -Math.abs(motionY), motionY) : 0, Math.abs(z + motionZ) > 0.01
-                ? MathHelper.clamp(z + motionZ, -Math.abs(motionZ), motionZ) : 0);
+        toMove.setMotion(Math.abs(x + motionX) > 0.01 ? MathHelper.clamp(x + motionX, -Math.abs(motionX), motionX) : 0,
+                         Math.abs(y + motionY) > 0.01 ? MathHelper.clamp(y + motionY, -Math.abs(motionY), motionY) : 0,
+                         Math.abs(z + motionZ) > 0.01 ? MathHelper.clamp(z + motionZ, -Math.abs(motionZ), motionZ) : 0);
 
         toMove.velocityChanged = true;
 
@@ -271,9 +264,8 @@ public class PowerUtils {
                     target.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>((PillagerEntity) target, 1.0D, 8.0F));
                 }
             } else {
-                target.world.createExplosion(target,
-                        target.getPositionVec().getX(), target.getPositionVec().getY(), target.getPositionVec().getZ(),
-                        1.2F, false, Explosion.Mode.BREAK);
+                target.world.createExplosion(target, target.getPositionVec().getX(), target.getPositionVec().getY(), target.getPositionVec().getZ(), 1.2F, false,
+                                             Explosion.Mode.BREAK);
                 target.remove();
             }
         } catch (Exception e) {
@@ -301,12 +293,14 @@ public class PowerUtils {
                 target.goalSelector.addGoal(7, new LookAtGoal(target, PlayerEntity.class, 6.0F));
 
                 if (target instanceof TameableEntity) {
-                    if (Math.random() < 0.3)
+                    if (Math.random() < 0.3) {
                         ((TameableEntity) target).setTamedBy(allomancer);
+                    }
                 }
                 if (target instanceof AbstractHorseEntity) {
-                    if (Math.random() < 0.3)
+                    if (Math.random() < 0.3) {
                         ((AbstractHorseEntity) target).setTamedBy(allomancer);
+                    }
                 }
                 if (target instanceof SheepEntity) {
                     target.goalSelector.addGoal(1, new EatGrassGoal(target));

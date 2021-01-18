@@ -31,8 +31,7 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyActivat
     }
 
     @Override
-    public boolean onBlockActivatedAllomantically(BlockState state, World world, BlockPos pos, PlayerEntity playerIn,
-                                                  boolean isPush) {
+    public boolean onBlockActivatedAllomantically(BlockState state, World world, BlockPos pos, PlayerEntity playerIn, boolean isPush) {
         state = state.func_235896_a_(POWERED); // formerly cycle
         if (world.isRemote) {
             return true;
