@@ -191,14 +191,26 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public boolean keyReleased(int keysym, int scancode, int p_keyReleased_3_) {
+    public boolean keyReleased(int keysym, int scancode, int modifiers) {
         if (PowersClientSetup.burn.matchesKey(keysym, scancode)) {
             mc.displayGuiScreen(null);
             mc.mouseHelper.grabMouse();
             return true;
         }
-        return super.keyReleased(keysym, scancode, p_keyReleased_3_);
+        return super.keyReleased(keysym, scancode, modifiers);
     }
+
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (PowersClientSetup.burn.matchesMouseKey(button)){
+            mc.displayGuiScreen(null);
+            mc.mouseHelper.grabMouse();
+            return true;
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
 
     /**
      * Toggles the metal the mouse is currently over

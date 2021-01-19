@@ -210,6 +210,23 @@ public class ClientEventHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onKeyInput(final InputEvent.KeyInputEvent event) {
+        if (event.getAction() == GLFW.GLFW_PRESS) {
+            acceptInput();
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public void onMouseInput(final InputEvent.MouseInputEvent event) {
+        if (event.getAction() == GLFW.GLFW_PRESS) {
+            acceptInput();
+        }
+    }
+
+    /**
+     *  Handles either mouse or button presses for the mod's keybinds
+     */
+    private void acceptInput() {
 
         boolean extras = false;
         if (PowersClientSetup.enable_more_keybinds) {
@@ -221,7 +238,7 @@ public class ClientEventHandler {
             }
         }
 
-        if (PowersClientSetup.burn.isPressed() || extras) {
+        if (PowersClientSetup.burn.isKeyDown() || extras) {
             PlayerEntity player = mc.player;
             AllomancyCapability cap;
             if (mc.currentScreen == null) {
@@ -232,10 +249,8 @@ public class ClientEventHandler {
 
                 if (extras) { // try one of the extra keybinds
                     for (int i = 0; i < PowersClientSetup.powers.length; i++) {
-                        if (PowersClientSetup.powers[i].isPressed()) {
-                            if (event.getAction() == GLFW.GLFW_PRESS) {
-                                ClientUtils.toggleBurn(Metal.getMetal(i), cap);
-                            }
+                        if (PowersClientSetup.powers[i].isKeyDown()) {
+                            ClientUtils.toggleBurn(Metal.getMetal(i), cap);
                         }
                     }
 
@@ -254,7 +269,7 @@ public class ClientEventHandler {
             }
         }
 
-        if (PowersClientSetup.hud.isPressed() && event.getAction() == GLFW.GLFW_PRESS) {
+        if (PowersClientSetup.hud.isKeyDown()) {
             PowersConfig.enable_overlay.set(!PowersConfig.enable_overlay.get());
         }
 
