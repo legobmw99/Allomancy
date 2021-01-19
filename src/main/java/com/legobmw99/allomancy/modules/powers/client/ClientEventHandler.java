@@ -23,7 +23,6 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -174,7 +173,7 @@ public class ClientEventHandler {
                 }
                 // Populate our list of nearby allomancy users
                 nearby_allomancers.clear();
-                if (cap.isBurning(Metal.BRONZE) && !cap.isBurning(Metal.COPPER)) {
+                if (cap.isBurning(Metal.BRONZE) && (cap.isEnhanced() || !cap.isBurning(Metal.COPPER))) {
                     List<PlayerEntity> nearby_players;
                     // Add metal burners to a list
                     BlockPos negative = new BlockPos(player.getPositionVec()).add(-30, -30, -30);
@@ -185,7 +184,7 @@ public class ClientEventHandler {
                     for (PlayerEntity otherPlayer : nearby_players) {
                         AllomancyCapability capOther = AllomancyCapability.forPlayer(otherPlayer);
                         if (capOther.isBurning(Metal.COPPER) && (!cap.isEnhanced() || capOther.isEnhanced())) {
-                            // player is inside a smoker cloud, should not detect
+                            // player is inside a smoker cloud, should not detect unless enhanced
                             nearby_allomancers.clear();
                             return;
                         } else {
@@ -303,7 +302,7 @@ public class ClientEventHandler {
         /*********************************************
          * BRONZE LINES                              *
          *********************************************/
-        if ((cap.isBurning(Metal.BRONZE) && !cap.isBurning(Metal.COPPER))) {
+        if ((cap.isBurning(Metal.BRONZE) && (cap.isEnhanced() || !cap.isBurning(Metal.COPPER)))) {
             for (PlayerEntity playerEntity : nearby_allomancers) {
                 ClientUtils.drawMetalLine(playervec, playerEntity.getPositionVec(), 5.0F, 0.7F, 0.15F, 0.15F);
             }
