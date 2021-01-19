@@ -73,6 +73,7 @@ public class Languages extends LanguageProvider {
 
         add("key.categories.allomancy", "Allomancy");
         add("key.burn", "Burn Metals");
+        add("key.hud", "Show HUD");
 
         add("commands.allomancy.getpowers", "%s currently has Allomantic powers: %s");
         add("commands.allomancy.addpower", "%s added Allomantic power %s");
