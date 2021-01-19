@@ -19,6 +19,7 @@ public class PowersConfig {
 
     public static ForgeConfigSpec.IntValue max_metal_detection;
     public static ForgeConfigSpec.BooleanValue animate_selection;
+    public static ForgeConfigSpec.BooleanValue enable_more_keybinds;
     public static ForgeConfigSpec.BooleanValue enable_overlay;
     public static ForgeConfigSpec.EnumValue<SCREEN_LOC> overlay_position;
     public static ForgeConfigSpec.BooleanValue random_mistings;
@@ -43,6 +44,12 @@ public class PowersConfig {
         enable_overlay = client_builder.comment("Enable the screen overlay").define("overlay_enabled", true);
         overlay_position = client_builder.comment("Screen Overlay Position").defineEnum("overlay_position", SCREEN_LOC.TOP_LEFT);
         client_builder.pop();
+
+        client_builder.push("Control");
+        enable_more_keybinds = client_builder.comment("Register extra keys, one for each metal, which toggle that metal specifically").define("advanced_keybinds", false);
+        client_builder.pop();
+
+
     }
 
     public static void refresh(final ModConfig.ModConfigEvent e) {

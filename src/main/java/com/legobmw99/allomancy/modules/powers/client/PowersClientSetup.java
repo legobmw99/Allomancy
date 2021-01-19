@@ -1,8 +1,10 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticle;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
+import com.legobmw99.allomancy.setup.Metal;
 import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -34,11 +36,26 @@ public class PowersClientSetup {
     @OnlyIn(Dist.CLIENT)
     public static KeyBinding burn;
 
+    public static boolean enable_more_keybinds;
+
+    @OnlyIn(Dist.CLIENT)
+    public static KeyBinding[] powers = new KeyBinding[Metal.values().length];
+
     public static void initKeyBindings() {
         burn = new KeyBinding("key.burn", GLFW.GLFW_KEY_V, "key.categories.allomancy");
-        hud = new KeyBinding("key.hud", -1, "key.categories.allomancy");
+        hud = new KeyBinding("key.hud", GLFW.GLFW_KEY_UNKNOWN, "key.categories.allomancy");
         ClientRegistry.registerKeyBinding(burn);
         ClientRegistry.registerKeyBinding(hud);
+
+        enable_more_keybinds = PowersConfig.enable_more_keybinds.get();
+
+        if (enable_more_keybinds){
+            for (int i = 0; i < powers.length; i++){
+                powers[i] = new KeyBinding("metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN, "key.categories.allomancy");
+                ClientRegistry.registerKeyBinding(powers[i]);
+            }
+        }
+
     }
 
     public static void register() {

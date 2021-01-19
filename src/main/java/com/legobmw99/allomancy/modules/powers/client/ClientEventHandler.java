@@ -19,6 +19,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -205,10 +206,22 @@ public class ClientEventHandler {
         }
     }
 
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onKeyInput(final InputEvent.KeyInputEvent event) {
-        if (PowersClientSetup.burn.isPressed()) {
+
+        boolean extras = false;
+        if (PowersClientSetup.enable_more_keybinds) {
+            for (KeyBinding key : PowersClientSetup.powers) {
+                if (key.isKeyDown()) {
+                    extras = true;
+                    break;
+                }
+            }
+        }
+
+        if (PowersClientSetup.burn.isPressed() || extras) {
             PlayerEntity player = mc.player;
             AllomancyCapability cap;
             if (mc.currentScreen == null) {
@@ -217,14 +230,26 @@ public class ClientEventHandler {
                 }
                 cap = AllomancyCapability.forPlayer(player);
 
-                int num_powers = cap.getPowerCount();
+                if (extras) { // try one of the extra keybinds
+                    for (int i = 0; i < PowersClientSetup.powers.length; i++) {
+                        if (PowersClientSetup.powers[i].isPressed()) {
+                            if (event.getAction() == GLFW.GLFW_PRESS) {
+                                ClientUtils.toggleBurn(Metal.getMetal(i), cap);
+                            }
+                        }
+                    }
 
-                if (num_powers == 0) {
-                    return;
-                } else if (num_powers == 1) {
-                    ClientUtils.toggleBurn(cap.getPowers()[0], cap);
-                } else {
-                    this.mc.displayGuiScreen(new MetalSelectScreen());
+                } else { // normal keypress
+
+                    int num_powers = cap.getPowerCount();
+
+                    if (num_powers == 0) {
+                        return;
+                    } else if (num_powers == 1) {
+                        ClientUtils.toggleBurn(cap.getPowers()[0], cap);
+                    } else {
+                        this.mc.displayGuiScreen(new MetalSelectScreen());
+                    }
                 }
             }
         }
@@ -232,6 +257,7 @@ public class ClientEventHandler {
         if (PowersClientSetup.hud.isPressed() && event.getAction() == GLFW.GLFW_PRESS) {
             PowersConfig.enable_overlay.set(!PowersConfig.enable_overlay.get());
         }
+
     }
 
     @OnlyIn(Dist.CLIENT)
