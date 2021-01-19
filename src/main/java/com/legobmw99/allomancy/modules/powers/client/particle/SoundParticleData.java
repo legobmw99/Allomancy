@@ -2,7 +2,6 @@ package com.legobmw99.allomancy.modules.powers.client.particle;
 
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;
@@ -15,7 +14,7 @@ public class SoundParticleData implements IParticleData {
     public static final IParticleData.IDeserializer<SoundParticleData> DESERIALIZER = new IParticleData.IDeserializer<SoundParticleData>() {
 
         @Override
-        public SoundParticleData deserialize(ParticleType<SoundParticleData> particleTypeIn, StringReader reader) throws CommandSyntaxException {
+        public SoundParticleData deserialize(ParticleType<SoundParticleData> particleTypeIn, StringReader reader) {
             return new SoundParticleData(SoundCategory.AMBIENT);
         }
 

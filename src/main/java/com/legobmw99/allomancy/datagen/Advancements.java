@@ -27,10 +27,10 @@ public class Advancements extends AdvancementProvider {
 
     public Advancements(DataGenerator generatorIn) {
         super(generatorIn);
-        gen = generatorIn;
+        this.gen = generatorIn;
     }
 
-    private void registerAdvancements(Consumer<Advancement> consumer) {
+    private static void registerAdvancements(Consumer<Advancement> consumer) {
         Advancement.Builder
                 .builder()
                 .withParent(Advancement.Builder.builder().build(new ResourceLocation("adventure/root"))) // hacky
@@ -43,7 +43,7 @@ public class Advancements extends AdvancementProvider {
     }
 
     @Override
-    public void act(DirectoryCache cache) throws IOException {
+    public void act(DirectoryCache cache) {
         Path outputFolder = this.gen.getOutputFolder();
         Consumer<Advancement> consumer = (advancement) -> {
 

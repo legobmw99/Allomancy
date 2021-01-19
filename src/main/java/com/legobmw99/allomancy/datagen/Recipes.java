@@ -62,7 +62,7 @@ public class Recipes extends RecipeProvider {
         buildSmeltingAndBlasting(consumer, MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).get(), MaterialsSetup.LEAD_ORE.get(), 0.4F);
         buildSmeltingAndBlasting(consumer, MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get(), MaterialsSetup.SILVER_ORE.get(), 1.0F);
 
-        buildShapless(consumer, ConsumeSetup.LERASIUM_NUGGET.get(), 1, Items.NETHER_STAR, ing(Items.NETHER_STAR), ing(Tags.Items.STORAGE_BLOCKS_GOLD));
+        buildShapeless(consumer, ConsumeSetup.LERASIUM_NUGGET.get(), 1, Items.NETHER_STAR, ing(Items.NETHER_STAR), ing(Tags.Items.STORAGE_BLOCKS_GOLD));
 
         // Most metal based recipes
         for (int i = 0; i < MaterialsSetup.METAL_ITEM_LEN; i++) {
@@ -70,7 +70,7 @@ public class Recipes extends RecipeProvider {
             // Grinder recipes
             Item flake = MaterialsSetup.FLAKES.get(i).get();
             String flakeType = flake.getRegistryName().getPath().substring(0, flake.getRegistryName().getPath().indexOf('_'));
-            buildShapless(consumer, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()), ing("forge:" + "ingots/" + flakeType));
+            buildShapeless(consumer, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()), ing("forge:" + "ingots/" + flakeType));
 
             if (i == Metal.GOLD.getIndex() || i == Metal.IRON.getIndex()) {
                 continue;
@@ -82,64 +82,64 @@ public class Recipes extends RecipeProvider {
             Item nugget = MaterialsSetup.NUGGETS.get(i).get();
 
             // building up
-            buildShapless(consumer, block, 1, ingot, repeat(ing(ingot), 9));
-            buildShapless(consumer, ingot, 1, nugget, "allomancy:" + ingot.getRegistryName().getPath() + "_from_nuggets", repeat(ing(nugget), 9));
+            buildShapeless(consumer, block, 1, ingot, repeat(ing(ingot), 9));
+            buildShapeless(consumer, ingot, 1, nugget, "allomancy:" + ingot.getRegistryName().getPath() + "_from_nuggets", repeat(ing(nugget), 9));
 
             // breaking down
-            buildShapless(consumer, ingot, 9, block, "allomancy:" + ingot.getRegistryName().getPath() + "_from_block", ing(block));
-            buildShapless(consumer, nugget, 9, ingot, ing(ingot));
+            buildShapeless(consumer, ingot, 9, block, "allomancy:" + ingot.getRegistryName().getPath() + "_from_block", ing(block));
+            buildShapeless(consumer, nugget, 9, ingot, ing(ingot));
         }
 
 
         // Mixing/Alloying Recipes
         // GRINDER
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("steel"), ing(Items.COAL),
-                      ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
+        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("steel"), ing(Items.COAL),
+                       ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
 
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("pewter"),
-                      repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), 2, ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get())));
+        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("pewter"),
+                       repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), 2, ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get())));
 
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("brass"),
-                      repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.ZINC.getIndex()).get())));
+        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("brass"),
+                       repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.ZINC.getIndex()).get())));
 
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BRONZE.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("bronze"),
-                      repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get())));
+        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.BRONZE.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("bronze"),
+                       repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get())));
 
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.DURALUMIN.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("duralumin"),
-                      repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get())));
+        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.DURALUMIN.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("duralumin"),
+                       repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get())));
 
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.ELECTRUM.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("electrum"),
-                      ing(MaterialsSetup.FLAKES.get(Metal.GOLD.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(MaterialsSetup.SILVER).get()));
+        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.ELECTRUM.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("electrum"),
+                       ing(MaterialsSetup.FLAKES.get(Metal.GOLD.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(MaterialsSetup.SILVER).get()));
 
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.BENDALLOY.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("bendalloy"),
-                      repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.CADMIUM.getIndex()).get()), 2, ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get())));
+        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.BENDALLOY.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("bendalloy"),
+                       repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.CADMIUM.getIndex()).get()), 2, ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get())));
 
-        buildShapless(consumer, MaterialsSetup.FLAKES.get(Metal.NICROSIL.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("nicrosil"),
-                      repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get())));
+        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.NICROSIL.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("nicrosil"),
+                       repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get())));
 
         // ALLOYS
-        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.STEEL.getIndex()).get(), 4, Items.COAL, alloy_save("steel"), repeatWith(ing(Items.IRON_INGOT), 3, ing(Items.COAL)));
+        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.STEEL.getIndex()).get(), 4, Items.COAL, alloy_save("steel"), repeatWith(ing(Items.IRON_INGOT), 3, ing(Items.COAL)));
 
-        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.PEWTER.getIndex()).get(), 3, MaterialsSetup.INGOTS.get(Metal.TIN.getIndex()).get(), alloy_save("pewter"),
-                      repeatWith(ing("forge:ingots/tin"), 2, ing("forge:ingots/lead")));
+        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.PEWTER.getIndex()).get(), 3, MaterialsSetup.INGOTS.get(Metal.TIN.getIndex()).get(), alloy_save("pewter"),
+                       repeatWith(ing("forge:ingots/tin"), 2, ing("forge:ingots/lead")));
 
-        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.BRASS.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.COPPER.getIndex()).get(), alloy_save("brass"),
-                      repeatWith(ing("forge:ingots/copper"), 3, ing("forge:ingots/zinc")));
+        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.BRASS.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.COPPER.getIndex()).get(), alloy_save("brass"),
+                       repeatWith(ing("forge:ingots/copper"), 3, ing("forge:ingots/zinc")));
 
-        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.BRONZE.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.COPPER.getIndex()).get(), alloy_save("bronze"),
-                      repeatWith(ing("forge:ingots/copper"), 3, ing("forge:ingots/tin")));
+        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.BRONZE.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.COPPER.getIndex()).get(), alloy_save("bronze"),
+                       repeatWith(ing("forge:ingots/copper"), 3, ing("forge:ingots/tin")));
 
-        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.DURALUMIN.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(), alloy_save("duralumin"),
-                      repeatWith(ing("forge:ingots/aluminum"), 3, ing("forge:ingots/copper")));
+        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.DURALUMIN.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(), alloy_save("duralumin"),
+                       repeatWith(ing("forge:ingots/aluminum"), 3, ing("forge:ingots/copper")));
 
-        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.ELECTRUM.getIndex()).get(), 2, MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get(), alloy_save("electrum"),
-                      ing("forge:ingots/silver"), ing(Items.GOLD_INGOT));
+        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.ELECTRUM.getIndex()).get(), 2, MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get(), alloy_save("electrum"),
+                       ing("forge:ingots/silver"), ing(Items.GOLD_INGOT));
 
-        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.BENDALLOY.getIndex()).get(), 3, MaterialsSetup.INGOTS.get(Metal.CADMIUM.getIndex()).get(), alloy_save("bendalloy"),
-                      repeatWith(ing("forge:ingots/cadmium"), 2, ing("forge:ingots/lead")));
+        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.BENDALLOY.getIndex()).get(), 3, MaterialsSetup.INGOTS.get(Metal.CADMIUM.getIndex()).get(), alloy_save("bendalloy"),
+                       repeatWith(ing("forge:ingots/cadmium"), 2, ing("forge:ingots/lead")));
 
-        buildShapless(consumer, MaterialsSetup.INGOTS.get(Metal.NICROSIL.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.CHROMIUM.getIndex()).get(), alloy_save("nicrosil"),
-                      repeatWith(ing("forge:ingots/chromium"), 3, ing(Items.IRON_INGOT)));
+        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.NICROSIL.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.CHROMIUM.getIndex()).get(), alloy_save("nicrosil"),
+                       repeatWith(ing("forge:ingots/chromium"), 3, ing(Items.IRON_INGOT)));
 
 
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
@@ -174,8 +174,8 @@ public class Recipes extends RecipeProvider {
         }
 
         for (Character c : characters) {
-            if (defaultIngredients.containsKey(c)) {
-                builder.key(c, defaultIngredients.get(c));
+            if (this.defaultIngredients.containsKey(c)) {
+                builder.key(c, this.defaultIngredients.get(c));
             }
         }
 
@@ -187,11 +187,11 @@ public class Recipes extends RecipeProvider {
     }
 
 
-    protected void buildShapless(Consumer<IFinishedRecipe> consumer, IItemProvider result, int count, Item criterion, Ingredient... ingredients) {
-        buildShapless(consumer, result, count, criterion, "", ingredients);
+    protected static void buildShapeless(Consumer<IFinishedRecipe> consumer, IItemProvider result, int count, Item criterion, Ingredient... ingredients) {
+        buildShapeless(consumer, result, count, criterion, "", ingredients);
     }
 
-    protected void buildShapless(Consumer<IFinishedRecipe> consumer, IItemProvider result, int count, Item criterion, String save, Ingredient... ingredients) {
+    protected static void buildShapeless(Consumer<IFinishedRecipe> consumer, IItemProvider result, int count, Item criterion, String save, Ingredient... ingredients) {
         Allomancy.LOGGER.debug("Creating Shapeless Recipe for " + result.asItem().getRegistryName() + " " + save);
 
         ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapelessRecipe(result, count);
@@ -202,7 +202,7 @@ public class Recipes extends RecipeProvider {
             builder.addIngredient(ingredient);
         }
 
-        if (save.equals("")) {
+        if (save.isEmpty()) {
             builder.build(consumer);
         } else {
             builder.build(consumer, save);
@@ -210,7 +210,7 @@ public class Recipes extends RecipeProvider {
     }
 
 
-    protected void buildSmeltingAndBlasting(Consumer<IFinishedRecipe> consumer, IItemProvider result, IItemProvider ingredient, float xp) {
+    protected static void buildSmeltingAndBlasting(Consumer<IFinishedRecipe> consumer, IItemProvider result, IItemProvider ingredient, float xp) {
         Allomancy.LOGGER.debug("Creating Smelting and Blasting Recipe for " + result.asItem().getRegistryName());
 
         CookingRecipeBuilder smelt = CookingRecipeBuilder.smeltingRecipe(ing(ingredient), result, xp, 200);
@@ -224,47 +224,47 @@ public class Recipes extends RecipeProvider {
 
     }
 
-    private String mixing_save(String metal) {
+    private static String mixing_save(String metal) {
         return "allomancy:" + metal + "_flakes_from_mixing";
     }
 
-    private String alloy_save(String metal) {
+    private static String alloy_save(String metal) {
         return "allomancy:" + metal + "_ingot_from_alloying";
     }
 
     protected void add(char c, ITag.INamedTag<Item> itemTag) {
-        defaultIngredients.put(c, Ingredient.fromTag(itemTag));
+        this.defaultIngredients.put(c, Ingredient.fromTag(itemTag));
     }
 
     protected void add(char c, IItemProvider itemProvider) {
-        defaultIngredients.put(c, Ingredient.fromItems(itemProvider));
+        this.defaultIngredients.put(c, Ingredient.fromItems(itemProvider));
     }
 
     protected void add(char c, Ingredient ingredient) {
-        defaultIngredients.put(c, ingredient);
+        this.defaultIngredients.put(c, ingredient);
     }
 
-    protected Ingredient ing(String tag) {
+    protected static Ingredient ing(String tag) {
         return Ingredient.fromTag(ItemTags.makeWrapperTag(tag));
     }
 
-    protected Ingredient ing(ITag.INamedTag<Item> tag) {
+    protected static Ingredient ing(ITag.INamedTag<Item> tag) {
         return Ingredient.fromTag(tag);
     }
 
-    protected Ingredient ing(IItemProvider itemProvider) {
+    protected static Ingredient ing(IItemProvider itemProvider) {
         return Ingredient.fromItems(itemProvider);
     }
 
-    protected Ingredient ing(Ingredient ingredient) {
+    protected static Ingredient ing(Ingredient ingredient) {
         return ingredient;
     }
 
-    protected Ingredient[] repeat(Ingredient ing, int n) {
+    protected static Ingredient[] repeat(Ingredient ing, int n) {
         return repeatWith(ing, n);
     }
 
-    protected Ingredient[] repeatWith(Ingredient ing, int n, Ingredient... extras) {
+    protected static Ingredient[] repeatWith(Ingredient ing, int n, Ingredient... extras) {
         int size = n + extras.length;
         Ingredient[] out = new Ingredient[size];
         for (int i = 0; i < n; i++) {

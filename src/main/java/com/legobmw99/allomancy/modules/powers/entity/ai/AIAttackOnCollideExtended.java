@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 import java.util.EnumSet;
 
 public class AIAttackOnCollideExtended extends Goal {
-    World worldObj;
-    CreatureEntity attacker;
+    final World worldObj;
+    final CreatureEntity attacker;
 
     /**
      * An amount of decrementing ticks that allows the entity to attack once the
@@ -26,13 +26,13 @@ public class AIAttackOnCollideExtended extends Goal {
     /**
      * The speed with which the mob will approach the target
      */
-    double speedTowardsTarget;
+    final double speedTowardsTarget;
 
     /**
      * When true, the mob will continue chasing its target, even if it can't
      * find a path to them right now.
      */
-    boolean longMemory;
+    final boolean longMemory;
 
     /**
      * The PathEntity of our entity.

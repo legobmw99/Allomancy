@@ -21,7 +21,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class AllomancySetup {
 
-    public static ItemGroup allomancy_group = new ItemGroup(Allomancy.MODID) {
+    public static final ItemGroup allomancy_group = new ItemGroup(Allomancy.MODID) {
         @Override
         public ItemStack createIcon() {
             return new ItemStack(CombatSetup.MISTCLOAK.get());

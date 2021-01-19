@@ -38,16 +38,16 @@ public class TryPushPullBlock {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity player = ctx.get().getSender();
-            BlockPos pos = blockPos;
+            BlockPos pos = this.blockPos;
             // Sanity check to make sure server has same configs and that the block is loaded in the server
             if ((player.world.isBlockLoaded(pos) && (PowerUtils.isBlockStateMetal(player.world.getBlockState(pos)))) // Check Block
-                || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && (!player.findAmmo(player.getHeldItemMainhand()).isEmpty()) && direction > 0)) {
+                || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && (!player.findAmmo(player.getHeldItemMainhand()).isEmpty()) && this.direction > 0)) {
                 // Check for the coin bag
                 if (player.world.getBlockState(pos).getBlock() instanceof IAllomanticallyActivatedBlock) {
                     ((IAllomanticallyActivatedBlock) player.world.getBlockState(pos).getBlock()).onBlockActivatedAllomantically(player.world.getBlockState(pos), player.world, pos,
-                                                                                                                                player, direction > 0);
+                                                                                                                                player, this.direction > 0);
                 } else {
-                    PowerUtils.move(direction, player, pos);
+                    PowerUtils.move(this.direction, player, pos);
                 }
             }
         });

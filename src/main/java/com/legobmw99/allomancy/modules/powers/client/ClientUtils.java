@@ -48,19 +48,15 @@ public class ClientUtils {
                 Vector3d vec3d = entity.getEyePosition(partialTicks);
                 boolean flag = false;
                 int i = 3;
-                double d1 = dist * dist;
+                double d1;
 
-                if (objectMouseOver != null) {
-                    d1 = objectMouseOver.getHitVec().squareDistanceTo(vec3d);
-                }
+                d1 = objectMouseOver.getHitVec().squareDistanceTo(vec3d);
 
                 Vector3d vec3d1 = entity.getLook(1.0F);
                 Vector3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
                 float f = 1.0F;
                 AxisAlignedBB axisalignedbb = entity.getBoundingBox().expand(vec3d1.scale(dist)).grow(1.0D, 1.0D, 1.0D);
-                EntityRayTraceResult entityraytraceresult = ProjectileHelper.rayTraceEntities(entity, vec3d, vec3d2, axisalignedbb, (e) -> {
-                    return true;
-                }, d1);
+                EntityRayTraceResult entityraytraceresult = ProjectileHelper.rayTraceEntities(entity, vec3d, vec3d2, axisalignedbb, (e) -> true, d1);
                 if (entityraytraceresult != null) {
                     Entity entity1 = entityraytraceresult.getEntity();
                     Vector3d vec3d3 = entityraytraceresult.getHitVec();

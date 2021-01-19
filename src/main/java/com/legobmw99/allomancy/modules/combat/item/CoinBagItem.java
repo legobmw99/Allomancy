@@ -20,7 +20,7 @@ public class CoinBagItem extends ShootableItem {
 
     public static final Predicate<ItemStack> NUGGETS = (stack) -> {
         Item item = stack.getItem();
-        return PowerUtils.resourceContainsMetal(item.getRegistryName()) && item.getRegistryName().getPath().contains("nugget");
+        return PowerUtils.doesResourceContainsMetal(item.getRegistryName()) && item.getRegistryName().getPath().contains("nugget");
     };
 
     public CoinBagItem() {
@@ -74,7 +74,7 @@ public class CoinBagItem extends ShootableItem {
         return 0;
     }
 
-    private Ammo getAmmoFromItem(Item itemIn) {
+    private static Ammo getAmmoFromItem(Item itemIn) {
         switch (itemIn.getRegistryName().getPath()) {
             case "iron_nugget":
             case "steel_nugget":
@@ -99,13 +99,17 @@ public class CoinBagItem extends ShootableItem {
 
         // TODO consider if should be more granular
 
-        float damage, arg1, arg2, arg3;
+        final float damage;
+        final float arg1;
+        final float arg2;
+        final float arg3;
 
+        @SuppressWarnings("SameParameterValue")
         Ammo(float damage, float v1, float v2, float v3) {
             this.damage = damage;
-            arg1 = v1;
-            arg2 = v2;
-            arg3 = v3;
+            this.arg1 = v1;
+            this.arg2 = v2;
+            this.arg3 = v3;
         }
     }
 }

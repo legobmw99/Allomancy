@@ -20,7 +20,7 @@ public class AllomancyPowerType implements ArgumentType<String> {
 
     protected static final AllomancyPowerType INSTANCE = new AllomancyPowerType();
     private static final Set<String> types = new HashSet<>(Arrays.asList(AllomancyPowerCommand.names));
-    private final DynamicCommandExceptionType unknown_power = new DynamicCommandExceptionType(str -> new TranslationTextComponent("commands.allomancy.unrecognized", str));
+    private static final DynamicCommandExceptionType unknown_power = new DynamicCommandExceptionType(o -> new TranslationTextComponent("commands.allomancy.unrecognized", o));
 
     public static AllomancyPowerType powerType() {
         return new AllomancyPowerType();

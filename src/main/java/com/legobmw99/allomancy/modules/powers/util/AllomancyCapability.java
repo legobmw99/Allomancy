@@ -38,7 +38,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     private final int[] metal_amounts;
     private final boolean[] burning_metals;
     private final LazyOptional<AllomancyCapability> handler;
-    private int damange_stored;
+    private int damage_stored;
     private String death_dimension;
     private BlockPos death_pos;
     private String spawn_dimension;
@@ -46,24 +46,24 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     private int enhanced_time;
 
     public AllomancyCapability() {
-        handler = LazyOptional.of(() -> this);
+        this.handler = LazyOptional.of(() -> this);
 
         int powers = Metal.values().length;
-        allomantic_powers = new boolean[powers];
-        Arrays.fill(allomantic_powers, false);
+        this.allomantic_powers = new boolean[powers];
+        Arrays.fill(this.allomantic_powers, false);
 
-        metal_amounts = new int[powers];
-        Arrays.fill(metal_amounts, 0);
+        this.metal_amounts = new int[powers];
+        Arrays.fill(this.metal_amounts, 0);
 
-        burn_time = Arrays.copyOf(MAX_BURN_TIME, powers);
+        this.burn_time = Arrays.copyOf(MAX_BURN_TIME, powers);
 
-        burning_metals = new boolean[powers];
-        Arrays.fill(burning_metals, false);
+        this.burning_metals = new boolean[powers];
+        Arrays.fill(this.burning_metals, false);
 
-        enhanced_time = 0;
-        damange_stored = 0;
-        death_pos = null;
-        spawn_pos = null;
+        this.enhanced_time = 0;
+        this.damage_stored = 0;
+        this.death_pos = null;
+        this.spawn_pos = null;
 
     }
 
@@ -71,9 +71,10 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * Retrieve data for a specific player
      *
      * @param player the player you want data for
-     * @return the AllomancyCapabilites data of the player
+     * @return the AllomancyCapabilities data of the player
      */
     public static AllomancyCapability forPlayer(Entity player) {
+        //noinspection ConstantConditions
         return player.getCapability(PLAYER_CAP).orElseThrow(() -> new RuntimeException("Capability not attached!"));
     }
 
@@ -118,7 +119,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return true if this capability has the power specified
      */
     public boolean hasPower(Metal metal) {
-        return allomantic_powers[metal.getIndex()];
+        return this.allomantic_powers[metal.getIndex()];
     }
 
     /**
@@ -128,7 +129,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      */
     public int getPowerCount() {
         int count = 0;
-        for (boolean power : allomantic_powers) {
+        for (boolean power : this.allomantic_powers) {
             if (power) {
                 count++;
             }
@@ -151,7 +152,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return true if the player has ALL powers
      */
     public boolean isMistborn() {
-        for (boolean power : allomantic_powers) {
+        for (boolean power : this.allomantic_powers) {
             if (!power) {
                 return false;
             }
@@ -163,7 +164,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * Sets the player as a Mistborn
      */
     public void setMistborn() {
-        Arrays.fill(allomantic_powers, true);
+        Arrays.fill(this.allomantic_powers, true);
     }
 
     /**
@@ -172,7 +173,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return true if the player has NO powers
      */
     public boolean isUninvested() {
-        for (boolean power : allomantic_powers) {
+        for (boolean power : this.allomantic_powers) {
             if (power) {
                 return false;
             }
@@ -184,7 +185,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * Sets the player as uninvested
      */
     public void setUninvested() {
-        Arrays.fill(allomantic_powers, false);
+        Arrays.fill(this.allomantic_powers, false);
     }
 
     /**
@@ -193,7 +194,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param metal the Metal to add
      */
     public void addPower(Metal metal) {
-        allomantic_powers[metal.getIndex()] = true;
+        this.allomantic_powers[metal.getIndex()] = true;
     }
 
     /**
@@ -202,7 +203,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param metal the Metal to remove
      */
     public void revokePower(Metal metal) {
-        allomantic_powers[metal.getIndex()] = false;
+        this.allomantic_powers[metal.getIndex()] = false;
     }
 
     /**
@@ -212,7 +213,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return true if the player is burning it
      */
     public boolean isBurning(Metal metal) {
-        return burning_metals[metal.getIndex()];
+        return this.burning_metals[metal.getIndex()];
     }
 
     /**
@@ -222,7 +223,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param metalBurning the value to set it to
      */
     public void setBurning(Metal metal, boolean metalBurning) {
-        burning_metals[metal.getIndex()] = metalBurning;
+        this.burning_metals[metal.getIndex()] = metalBurning;
     }
 
     /**
@@ -232,17 +233,17 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return the amount stored
      */
     public int getAmount(Metal metal) {
-        return metal_amounts[metal.getIndex()];
+        return this.metal_amounts[metal.getIndex()];
     }
 
     /**
-     * Sets the players amount of Metal to the given valuee
+     * Sets the players amount of Metal to the given value
      *
      * @param metal the Metal to set
      * @param amt   the amount stored
      */
     public void setAmount(Metal metal, int amt) {
-        metal_amounts[metal.getIndex()] = amt;
+        this.metal_amounts[metal.getIndex()] = amt;
     }
 
     /**
@@ -252,9 +253,9 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      */
     public void drainMetals(Metal... metals) {
         for (Metal mt : metals) {
-            metal_amounts[mt.getIndex()] = 0;
+            this.metal_amounts[mt.getIndex()] = 0;
             // So that they burn out next tick
-            burn_time[mt.getIndex()] = 1;
+            this.burn_time[mt.getIndex()] = 1;
         }
     }
 
@@ -264,7 +265,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return the amount of damage
      */
     public int getDamageStored() {
-        return damange_stored;
+        return this.damage_stored;
     }
 
     /**
@@ -273,14 +274,14 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param damageStored the amount of damage
      */
     public void setDamageStored(int damageStored) {
-        this.damange_stored = damageStored;
+        this.damage_stored = damageStored;
     }
 
     /**
      * Set the death location and dimension
      *
      * @param pos BlockPos of the death location
-     * @param dim The RegistryKey representing the dimension the death occured in
+     * @param dim The RegistryKey representing the dimension the death occurred in
      */
     public void setDeathLoc(BlockPos pos, RegistryKey<World> dim) {
         if (dim != null) {
@@ -292,7 +293,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * Set the death location and dimension
      *
      * @param pos      BlockPos of the death location
-     * @param dim_name A string representing the dimension the death occured in, e.g. minecraft:overworld
+     * @param dim_name A string representing the dimension the death occurred in, e.g. minecraft:overworld
      */
     protected void setDeathLoc(BlockPos pos, String dim_name) {
         this.death_pos = pos;
@@ -370,7 +371,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @return the burn time
      */
     protected int getBurnTime(Metal metal) {
-        return burn_time[metal.getIndex()];
+        return this.burn_time[metal.getIndex()];
     }
 
     /**
@@ -380,7 +381,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param burnTime the burn time
      */
     protected void setBurnTime(Metal metal, int burnTime) {
-        burn_time[metal.getIndex()] = burnTime;
+        this.burn_time[metal.getIndex()] = burnTime;
     }
 
     public void decEnhanced() {
@@ -400,7 +401,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        return PLAYER_CAP.orEmpty(cap, handler);
+        return PLAYER_CAP.orEmpty(cap, this.handler);
     }
 
     @Override

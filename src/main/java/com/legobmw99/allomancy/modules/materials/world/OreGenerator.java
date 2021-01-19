@@ -53,19 +53,19 @@ public class OreGenerator {
     }
 
     private static class OreData {
-        public int max_height;
-        public int min_height;
-        public int vein_size;
-        public int ores_per_chunk;
-        public Block ore_block;
-        public boolean config_enabled;
+        public final int max_height;
+        public final int min_height;
+        public final int vein_size;
+        public final int ores_per_chunk;
+        public final Block ore_block;
+        public final boolean config_enabled;
 
         /**
          * Construct an OreData with the given parameters
          *
          * @param max_height     the maximum height it can generate at
-         * @param min_height     the minumum height it can generate at
-         * @param vein_size      the vien size
+         * @param min_height     the minimum height it can generate at
+         * @param vein_size      the vein size
          * @param ores_per_chunk number of times it can generate per chunk
          * @param ore_block      the block to generate
          * @param config_enabled whether or not it is enabled in the configuration file

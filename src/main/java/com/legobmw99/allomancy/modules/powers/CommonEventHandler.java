@@ -176,7 +176,7 @@ public class CommonEventHandler {
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
             AllomancyCapability capHurt = AllomancyCapability.forPlayer(event.getEntityLiving());
             if (capHurt.isBurning(Metal.PEWTER)) {
-                if (capHurt.isEnhanced()) { // Duralumin invuln
+                if (capHurt.isEnhanced()) { // Duralumin invulnerability
                     Allomancy.LOGGER.debug("Canceling Damage");
                     event.setAmount(0);
                     event.setCanceled(true);
@@ -301,7 +301,7 @@ public class CommonEventHandler {
                                     if (te instanceof ITickableTileEntity) {
                                         ((ITickableTileEntity) te).tick();
                                     } else if (block.ticksRandomly()) {
-                                        block.randomTick((ServerWorld) world, bp, random);
+                                        block.randomTick((ServerWorld) world, bp, this.random);
                                     }
                                 }
                             });

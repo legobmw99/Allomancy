@@ -46,7 +46,7 @@ public class MetalOverlay {
             return;
         }
 
-        int renderX, renderY = 0;
+        int renderX, renderY;
 
         // Set the offsets of the overlay based on config
         switch (PowersConfig.overlay_position.get()) {

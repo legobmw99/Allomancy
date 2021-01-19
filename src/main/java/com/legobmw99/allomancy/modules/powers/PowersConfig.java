@@ -25,7 +25,7 @@ public class PowersConfig {
     public static ForgeConfigSpec.BooleanValue random_mistings;
     public static ForgeConfigSpec.BooleanValue generate_whitelist;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
-    public static Set<String> whitelist = new HashSet<>();
+    public static final Set<String> whitelist = new HashSet<>();
 
     private static HashSet<String> defaultList;
 
@@ -142,14 +142,14 @@ public class PowersConfig {
                              .stream()
                              .map(ForgeRegistryEntry::getRegistryName)
                              .filter(Objects::nonNull)
-                             .filter(PowerUtils::resourceContainsMetal)
+                             .filter(PowerUtils::doesResourceContainsMetal)
                              .forEach(PowersConfig::add);
 
         ForgeRegistries.BLOCKS.getValues()
                               .stream()
                               .map(ForgeRegistryEntry::getRegistryName)
                               .filter(Objects::nonNull)
-                              .filter(PowerUtils::resourceContainsMetal)
+                              .filter(PowerUtils::doesResourceContainsMetal)
                               .forEach(PowersConfig::add);
 
         return defaultList;
@@ -166,8 +166,8 @@ public class PowersConfig {
         add(r.toString());
     }
 
-    private static void add(ForgeRegistryEntry<?> i) {
-        add(i.getRegistryName());
+    private static void add(ForgeRegistryEntry<?> registryEntry) {
+        add(registryEntry.getRegistryName());
     }
 
 

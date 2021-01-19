@@ -17,7 +17,7 @@ public class AllomancyCapabilityPacket {
     /**
      * Packet for sending Allomancy player data to a client
      *
-     * @param data     the AllomancyCapabiltiy data for the player
+     * @param data     the AllomancyCapability data for the player
      * @param entityID the player's ID
      */
     public AllomancyCapabilityPacket(AllomancyCapability data, int entityID) {
@@ -40,10 +40,10 @@ public class AllomancyCapabilityPacket {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            PlayerEntity player = (PlayerEntity) Minecraft.getInstance().world.getEntityByID(entityID);
+            PlayerEntity player = (PlayerEntity) Minecraft.getInstance().world.getEntityByID(this.entityID);
             if (player != null) {
                 AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
-                playerCap.deserializeNBT(nbt);
+                playerCap.deserializeNBT(this.nbt);
             }
         });
         ctx.get().setPacketHandled(true);

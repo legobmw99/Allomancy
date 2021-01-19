@@ -53,8 +53,8 @@ public class ClientEventHandler {
     private final Set<BlockPos> metal_blocks = new HashSet<>();
     private final Set<PlayerEntity> nearby_allomancers = new HashSet<>();
 
-    private static Vector3d blockVec(BlockPos b) {
-        return new Vector3d(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5);
+    private static Vector3d blockVec(BlockPos blockPos) {
+        return new Vector3d(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -63,7 +63,7 @@ public class ClientEventHandler {
         // Run once per tick, only if in game, and only if there is a player
         if (event.phase == TickEvent.Phase.END && !this.mc.isGamePaused() && this.mc.player != null && this.mc.player.isAlive()) {
 
-            PlayerEntity player = mc.player;
+            PlayerEntity player = this.mc.player;
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
             if (!cap.isUninvested()) {
@@ -145,8 +145,8 @@ public class ClientEventHandler {
 
 
                 // Populate the metal lists
-                metal_blocks.clear();
-                metal_entities.clear();
+                this.metal_blocks.clear();
+                this.metal_entities.clear();
                 if (cap.isBurning(Metal.IRON) || cap.isBurning(Metal.STEEL)) {
                     List<Entity> entities;
                     Stream<BlockPos> blocks;
@@ -158,7 +158,7 @@ public class ClientEventHandler {
                     entities = player.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(negative, positive));
                     entities.forEach(entity -> {
                         if (PowerUtils.isEntityMetal(entity)) {
-                            metal_entities.add(entity);
+                            this.metal_entities.add(entity);
                         }
                     });
 
@@ -167,13 +167,13 @@ public class ClientEventHandler {
                     blocks.forEach(bp -> {
                         BlockPos imBlock = bp.toImmutable();
                         if (PowerUtils.isBlockStateMetal(player.world.getBlockState(imBlock))) {
-                            metal_blocks.add(imBlock);
+                            this.metal_blocks.add(imBlock);
                         }
                     });
 
                 }
                 // Populate our list of nearby allomancy users
-                nearby_allomancers.clear();
+                this.nearby_allomancers.clear();
                 if (cap.isBurning(Metal.BRONZE) && (cap.isEnhanced() || !cap.isBurning(Metal.COPPER))) {
                     List<PlayerEntity> nearby_players;
                     // Add metal burners to a list
@@ -186,7 +186,7 @@ public class ClientEventHandler {
                         AllomancyCapability capOther = AllomancyCapability.forPlayer(otherPlayer);
                         if (capOther.isBurning(Metal.COPPER) && (!cap.isEnhanced() || capOther.isEnhanced())) {
                             // player is inside a smoker cloud, should not detect unless enhanced
-                            nearby_allomancers.clear();
+                            this.nearby_allomancers.clear();
                             return;
                         } else {
                             boolean isBurning = false;
@@ -197,7 +197,7 @@ public class ClientEventHandler {
                                 }
                             }
                             if (isBurning) {
-                                nearby_allomancers.add(otherPlayer);
+                                this.nearby_allomancers.add(otherPlayer);
                             }
                         }
                     }
@@ -239,9 +239,9 @@ public class ClientEventHandler {
         }
 
         if (PowersClientSetup.burn.isKeyDown() || extras) {
-            PlayerEntity player = mc.player;
+            PlayerEntity player = this.mc.player;
             AllomancyCapability cap;
-            if (mc.currentScreen == null) {
+            if (this.mc.currentScreen == null) {
                 if (player == null || !this.mc.isGameFocused()) {
                     return;
                 }
@@ -298,7 +298,7 @@ public class ClientEventHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        PlayerEntity player = mc.player;
+        PlayerEntity player = this.mc.player;
         if (player == null || !player.isAlive()) {
             return;
         }
@@ -310,7 +310,7 @@ public class ClientEventHandler {
         }
 
 
-        Vector3d view = mc.gameRenderer.getActiveRenderInfo().getProjectedView();
+        Vector3d view = this.mc.gameRenderer.getActiveRenderInfo().getProjectedView();
         MatrixStack stack = event.getMatrixStack();
         stack.translate(-view.x, -view.y, -view.z);
 
@@ -331,12 +331,12 @@ public class ClientEventHandler {
          *********************************************/
         if ((cap.isBurning(Metal.IRON) || cap.isBurning(Metal.STEEL))) {
 
-            for (Entity entity : metal_entities) {
+            for (Entity entity : this.metal_entities) {
                 ClientUtils.drawMetalLine(playervec, entity.getPositionVec(), 1.5F, 0F, 0.6F, 1F);
             }
 
-            for (BlockPos b : metal_blocks) {
-                ClientUtils.drawMetalLine(playervec, blockVec(b), 1.5F, 0F, 0.6F, 1F);
+            for (BlockPos bp : this.metal_blocks) {
+                ClientUtils.drawMetalLine(playervec, blockVec(bp), 1.5F, 0F, 0.6F, 1F);
             }
         }
 
@@ -344,7 +344,7 @@ public class ClientEventHandler {
          * BRONZE LINES                              *
          *********************************************/
         if ((cap.isBurning(Metal.BRONZE) && (cap.isEnhanced() || !cap.isBurning(Metal.COPPER)))) {
-            for (PlayerEntity playerEntity : nearby_allomancers) {
+            for (PlayerEntity playerEntity : this.nearby_allomancers) {
                 ClientUtils.drawMetalLine(playervec, playerEntity.getPositionVec(), 5.0F, 0.7F, 0.15F, 0.15F);
             }
         }
@@ -382,7 +382,7 @@ public class ClientEventHandler {
     public void onSound(PlaySoundEvent event) {
         double motionX, motionY, motionZ, magnitude;
 
-        PlayerEntity player = mc.player;
+        PlayerEntity player = this.mc.player;
         ISound sound = event.getSound();
         if ((player == null) || (sound == null) || !player.isAlive()) {
             return;

@@ -86,7 +86,7 @@ public class Languages extends LanguageProvider {
         return "Allomancy Language";
     }
 
-    private String getDisplayName(Metal mt) {
+    private static String getDisplayName(Metal mt) {
         return mt.getName().substring(0, 1).toUpperCase() + mt.getName().substring(1);
     }
 }

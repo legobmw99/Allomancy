@@ -62,7 +62,7 @@ public class PowerUtils {
             ".*(iron|steel|tin_|pewter|zinc|brass|copper|bronze|duralumin|chromium|nicrosil|gold|electrum|cadmium|bendalloy|lead_|silver|platinum|nickle).*");
 
 
-    public static boolean resourceContainsMetal(ResourceLocation input) {
+    public static boolean doesResourceContainsMetal(ResourceLocation input) {
         return ACTIVE_METAL_REGEX.matcher(input.getPath()).matches();
     }
 
@@ -97,8 +97,8 @@ public class PowerUtils {
         return isOnWhitelist(item.getItem().getRegistryName().toString());
     }
 
-    private static boolean isOnWhitelist(String string) {
-        return PowersConfig.whitelist.contains(string);
+    private static boolean isOnWhitelist(String s) {
+        return PowersConfig.whitelist.contains(s);
     }
 
     /**
@@ -134,8 +134,8 @@ public class PowerUtils {
             if (isItemMetal(ent.getHeldItem(Hand.MAIN_HAND)) || isItemMetal(ent.getHeldItem(Hand.OFF_HAND))) {
                 return true;
             }
-            for (ItemStack i : ent.getArmorInventoryList()) {
-                if (isItemMetal(i)) {
+            for (ItemStack itemStack : ent.getArmorInventoryList()) {
+                if (isItemMetal(itemStack)) {
                     return true;
                 }
             }
@@ -145,7 +145,7 @@ public class PowerUtils {
     }
 
     /**
-     * Wipe all metals from the player and sync to tracking entities. Used by Alluminum and Nicrosil
+     * Wipe all metals from the player and sync to tracking entities. Used by Aluminum and Nicrosil
      *
      * @param player The player to wipe
      */

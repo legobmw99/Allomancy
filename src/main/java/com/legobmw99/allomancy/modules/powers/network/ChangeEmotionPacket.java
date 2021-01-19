@@ -38,12 +38,12 @@ public class ChangeEmotionPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             PlayerEntity allomancer = ctx.get().getSender();
-            CreatureEntity target = (CreatureEntity) allomancer.world.getEntityByID(entityID);
+            CreatureEntity target = (CreatureEntity) allomancer.world.getEntityByID(this.entityID);
             if (target == null) {
                 return;
             }
             boolean enhanced = AllomancyCapability.forPlayer(allomancer).isEnhanced();
-            if (make_aggressive) {
+            if (this.make_aggressive) {
                 PowerUtils.riotEntity(target, allomancer, enhanced);
             } else {
                 PowerUtils.sootheEntity(target, allomancer, enhanced);

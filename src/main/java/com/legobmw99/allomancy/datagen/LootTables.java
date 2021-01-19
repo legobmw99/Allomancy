@@ -31,7 +31,7 @@ public class LootTables extends LootTableProvider {
 
     public LootTables(DataGenerator dataGeneratorIn) {
         super(dataGeneratorIn);
-        gen = dataGeneratorIn;
+        this.gen = dataGeneratorIn;
     }
 
     private void addBlockTables() {
@@ -60,7 +60,7 @@ public class LootTables extends LootTableProvider {
         Allomancy.LOGGER.debug("Creating Loot Table for block " + block.getRegistryName());
         LootPool.Builder builder = LootPool.builder().name(name).rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(block)).acceptCondition(SurvivesExplosion.builder());
 
-        lootTables.put(block, LootTable.builder().addLootPool(builder));
+        this.lootTables.put(block, LootTable.builder().addLootPool(builder));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class LootTables extends LootTableProvider {
 
         Map<ResourceLocation, LootTable> tables;
         tables = new HashMap<>();
-        for (Map.Entry<Block, LootTable.Builder> entry : lootTables.entrySet()) {
+        for (Map.Entry<Block, LootTable.Builder> entry : this.lootTables.entrySet()) {
             tables.put(entry.getKey().getLootTable(), entry.getValue().setParameterSet(LootParameterSets.BLOCK).build());
         }
 

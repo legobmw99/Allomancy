@@ -32,7 +32,7 @@ public class UpdateBurnPacket {
     }
 
     public void encode(PacketBuffer buf) {
-        buf.writeEnumValue(mt);
+        buf.writeEnumValue(this.mt);
         buf.writeBoolean(this.value);
     }
 
@@ -42,16 +42,16 @@ public class UpdateBurnPacket {
             ServerPlayerEntity player = ctx.get().getSender();
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
-            if (cap.hasPower(mt) && cap.getAmount(mt) > 0) {
-                cap.setBurning(mt, value);
-                if (!value && mt == Metal.DURALUMIN) {
+            if (cap.hasPower(this.mt) && cap.getAmount(this.mt) > 0) {
+                cap.setBurning(this.mt, this.value);
+                if (!this.value && this.mt == Metal.DURALUMIN) {
                     cap.drainMetals(Arrays.stream(Metal.values()).filter(cap::isBurning).toArray(Metal[]::new));
                 }
-                if (!value && cap.isEnhanced()) {
-                    cap.drainMetals(mt);
+                if (!this.value && cap.isEnhanced()) {
+                    cap.drainMetals(this.mt);
                 }
             } else {
-                cap.setBurning(mt, false);
+                cap.setBurning(this.mt, false);
             }
             Network.sync(cap, player);
 

@@ -24,7 +24,7 @@ public enum Metal {
                 return metal;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Allomancy: Bad Metal Index");
     }
 
     public String getName() {
