@@ -2,7 +2,6 @@ package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.network.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
@@ -37,21 +36,18 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class CommonEventHandler {
 
-    private final Random random = new Random();
-
     @SubscribeEvent
-    public void onAttachCapability(final AttachCapabilitiesEvent<Entity> event) {
+    public static void onAttachCapability(final AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof PlayerEntity) {
             event.addCapability(AllomancyCapability.IDENTIFIER, new AllomancyCapability());
         }
     }
 
     @SubscribeEvent
-    public void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
+    public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getPlayer().world.isRemote) {
             if (event.getPlayer() instanceof ServerPlayerEntity) {
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
@@ -77,7 +73,7 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerClone(final PlayerEvent.Clone event) {
+    public static void onPlayerClone(final PlayerEvent.Clone event) {
         if (!event.getPlayer().world.isRemote()) {
 
             PlayerEntity player = event.getPlayer();
@@ -108,21 +104,21 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
+    public static void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
         if (!event.getPlayer().getEntityWorld().isRemote()) {
             Network.sync(event.getPlayer());
         }
     }
 
     @SubscribeEvent
-    public void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
+    public static void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
         if (!event.getPlayer().getEntityWorld().isRemote()) {
             Network.sync(event.getPlayer());
         }
     }
 
     @SubscribeEvent
-    public void onStartTracking(final net.minecraftforge.event.entity.player.PlayerEvent.StartTracking event) {
+    public static void onStartTracking(final net.minecraftforge.event.entity.player.PlayerEvent.StartTracking event) {
         if (!event.getTarget().world.isRemote) {
             if (event.getTarget() instanceof ServerPlayerEntity) {
                 ServerPlayerEntity playerEntity = (ServerPlayerEntity) event.getTarget();
@@ -132,7 +128,7 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public void onSetSpawn(final PlayerSetSpawnEvent event) {
+    public static void onSetSpawn(final PlayerSetSpawnEvent event) {
         PlayerEntity player = event.getPlayer();
         if (player instanceof ServerPlayerEntity) {
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
@@ -142,7 +138,7 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public void onLivingDeath(final LivingDeathEvent event) {
+    public static void onLivingDeath(final LivingDeathEvent event) {
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
@@ -152,7 +148,7 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public void onDamage(final LivingHurtEvent event) {
+    public static void onDamage(final LivingHurtEvent event) {
         // Increase outgoing damage for pewter burners
         if (event.getSource().getTrueSource() instanceof ServerPlayerEntity) {
             ServerPlayerEntity source = (ServerPlayerEntity) event.getSource().getTrueSource();
@@ -192,7 +188,7 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public void onWorldTick(final TickEvent.WorldTickEvent event) {
+    public static void onWorldTick(final TickEvent.WorldTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
 
             World world = event.world;
@@ -301,7 +297,7 @@ public class CommonEventHandler {
                                     if (te instanceof ITickableTileEntity) {
                                         ((ITickableTileEntity) te).tick();
                                     } else if (block.ticksRandomly()) {
-                                        block.randomTick((ServerWorld) world, bp, this.random);
+                                        block.randomTick((ServerWorld) world, bp, world.rand);
                                     }
                                 }
                             });
@@ -339,8 +335,9 @@ public class CommonEventHandler {
                         }
                     }
                     // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing, only if the amplifier is 5
-                    if ((!cap.isBurning(Metal.TIN)) &&
-                        (curPlayer.getActivePotionEffect(Effects.NIGHT_VISION) != null && curPlayer.getActivePotionEffect(Effects.NIGHT_VISION).getAmplifier() == 5)) {
+                    if (!cap.isBurning(Metal.TIN) && curPlayer.getActivePotionEffect(Effects.NIGHT_VISION) != null &&
+                        curPlayer.getActivePotionEffect(Effects.NIGHT_VISION).getAmplifier() == 5) {
+
                         curPlayer.removePotionEffect(Effects.NIGHT_VISION);
                     }
                     if (cap.isBurning(Metal.PEWTER)) {
@@ -369,7 +366,6 @@ public class CommonEventHandler {
                     if (cap.isEnhanced() && cap.isBurning(Metal.COPPER)) {
                         curPlayer.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 20, 50, true, false));
                     }
-
 
                 }
             }

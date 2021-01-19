@@ -10,7 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class LootTableInjector {
     @SubscribeEvent
-    public void onLootTableLoad(final LootTableLoadEvent event) {
+    public static void onLootTableLoad(final LootTableLoadEvent event) {
         String name = event.getName().toString();
         if (MaterialsConfig.generate_lerasium.get() &&
             (name.equals("minecraft:chests/simple_dungeon") || name.equals("minecraft:chests/desert_pyramid") || name.equals("minecraft:chests/jungle_temple") ||

@@ -89,7 +89,7 @@ public class MaterialsSetup {
     }
 
     public static void init(final FMLCommonSetupEvent e) {
-        MinecraftForge.EVENT_BUS.register(new LootTableInjector());
+        MinecraftForge.EVENT_BUS.register(LootTableInjector.class);
     }
 
 

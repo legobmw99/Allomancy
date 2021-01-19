@@ -27,7 +27,7 @@ public class PowersSetup {
         //Register our ArgumentType so it can be sent over network
         ArgumentTypes.register("allomancy_power", AllomancyPowerType.class, new ArgumentSerializer<>(AllomancyPowerType::powerType));
         AllomancyCapability.register();
-        MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
+        MinecraftForge.EVENT_BUS.register(CommonEventHandler.class);
     }
 
     public static void register() {
