@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.modules.powers.handlers;
+package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
@@ -223,7 +223,7 @@ public class CommonEventHandler {
                     // Run the necessary updates on the player's metals
                     // Ran AFTER duralumin and aluminum to make sure they function correctly
                     if (curPlayer instanceof ServerPlayerEntity) {
-                        AllomancyCapability.updateMetalBurnTime(cap, (ServerPlayerEntity) curPlayer);
+                        cap.updateMetalBurnTime((ServerPlayerEntity) curPlayer);
                     }
 
 

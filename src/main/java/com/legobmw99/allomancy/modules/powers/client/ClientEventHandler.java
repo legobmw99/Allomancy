@@ -23,6 +23,7 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.RegistryKey;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -217,7 +218,13 @@ public class ClientEventHandler {
                 }
                 cap = AllomancyCapability.forPlayer(player);
 
-                if (!cap.isUninvested()) {
+                int num_powers = cap.getPowerCount();
+
+                if (num_powers == 0) {
+                    return;
+                } else if (num_powers == 1) {
+                    ClientUtils.toggleBurn(cap.getPowers()[0], cap);
+                } else {
                     this.mc.displayGuiScreen(new MetalSelectScreen());
                 }
             }

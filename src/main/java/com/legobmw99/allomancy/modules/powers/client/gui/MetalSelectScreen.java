@@ -59,7 +59,7 @@ public class MetalSelectScreen extends Screen {
     }
 
     private static int toMetalIndex(int segment) {
-        return (segment + 8) % Metal.values().length;
+        return (segment + 5) % Metal.values().length;
     }
 
     @Override

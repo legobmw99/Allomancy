@@ -68,37 +68,6 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
     }
 
     /**
-     * Runs each worldTick, checking the burn times, abilities, and metal
-     * amounts. Then syncs to the client to make sure everyone is on the same
-     * page
-     *
-     * @param capability the AllomancyCapabilities data
-     * @param player     the player being checked
-     */
-    public static void updateMetalBurnTime(AllomancyCapability capability, ServerPlayerEntity player) {
-        for (Metal metal : Metal.values()) {
-            if (capability.isBurning(metal)) {
-                if (!capability.hasPower(metal)) {
-                    // put out any metals that the player shouldn't be able to burn
-                    capability.setBurning(metal, false);
-                    Network.sync(capability, player);
-                } else {
-                    capability.setBurnTime(metal, capability.getBurnTime(metal) - 1);
-                    if (capability.getBurnTime(metal) <= 0) {
-                        if (capability.getAmount(metal) <= 0) {
-                            capability.setBurning(metal, false);
-                        } else {
-                            capability.setAmount(metal, capability.getAmount(metal) - 1);
-                        }
-                        capability.setBurnTime(metal, MAX_BURN_TIME[metal.getIndex()]);
-                        Network.sync(capability, player);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Retrieve data for a specific player
      *
      * @param player the player you want data for
@@ -110,6 +79,36 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     public static void register() {
         CapabilityManager.INSTANCE.register(AllomancyCapability.class, new AllomancyCapability.Storage(), () -> null);
+    }
+
+    /**
+     * Called each worldTick, checking the burn times, abilities, and metal
+     * amounts. Then syncs to the client to make sure everyone is on the same
+     * page
+     *
+     * @param player     the player being checked
+     */
+    public void updateMetalBurnTime(ServerPlayerEntity player) {
+        for (Metal metal : Metal.values()) {
+            if (this.isBurning(metal)) {
+                if (!this.hasPower(metal)) {
+                    // put out any metals that the player shouldn't be able to burn
+                    this.setBurning(metal, false);
+                    Network.sync(this, player);
+                } else {
+                    this.setBurnTime(metal, this.getBurnTime(metal) - 1);
+                    if (this.getBurnTime(metal) <= 0) {
+                        if (this.getAmount(metal) <= 0) {
+                            this.setBurning(metal, false);
+                        } else {
+                            this.setAmount(metal, this.getAmount(metal) - 1);
+                        }
+                        this.setBurnTime(metal, MAX_BURN_TIME[metal.getIndex()]);
+                        Network.sync(this, player);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -449,17 +448,6 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
 
     @Override
     public void deserializeNBT(CompoundNBT allomancy_data) {
-
-        if (allomancy_data.contains("allomancyPower")) {
-            byte old_power = allomancy_data.getByte("allomancyPower");
-            if (old_power != -1) {
-                if (old_power == 8) {
-                    this.setMistborn();
-                } else {
-                    this.addPower(Metal.getMetal(old_power));
-                }
-            }
-        }
 
         CompoundNBT abilities = (CompoundNBT) allomancy_data.get("abilities");
         for (Metal mt : Metal.values()) {

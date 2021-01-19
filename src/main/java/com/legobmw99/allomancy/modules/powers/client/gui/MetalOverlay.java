@@ -75,9 +75,8 @@ public class MetalOverlay {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
 
 
-
         /*
-         * The rendering for a the overlay
+         * The rendering for the overlay
          */
 
         for (Metal mt : Metal.values()) {
@@ -108,8 +107,8 @@ public class MetalOverlay {
         }
     }
 
-    private static void blit(int x, int y, int p_blit_3, int p_blit_4, int p_blit_5, int p_blit_6) {
+    private static void blit(int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
         ForgeIngameGui gui = new ForgeIngameGui(Minecraft.getInstance());
-        ForgeIngameGui.blit(new MatrixStack(), x, y, gui.getBlitOffset(), p_blit_3, p_blit_4, p_blit_5, p_blit_6, 128, 128);
+        ForgeIngameGui.blit(new MatrixStack(), x, y, gui.getBlitOffset(), uOffset, vOffset, uWidth, vHeight, 128, 128);
     }
 }

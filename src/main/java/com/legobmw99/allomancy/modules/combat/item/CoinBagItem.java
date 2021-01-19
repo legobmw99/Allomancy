@@ -20,7 +20,7 @@ public class CoinBagItem extends ShootableItem {
 
     public static final Predicate<ItemStack> NUGGETS = (stack) -> {
         Item item = stack.getItem();
-        return PowerUtils.resourceContainsMetal(item.getRegistryName()) || item.getRegistryName().getPath().contains("nugget");
+        return PowerUtils.resourceContainsMetal(item.getRegistryName()) && item.getRegistryName().getPath().contains("nugget");
     };
 
     public CoinBagItem() {
