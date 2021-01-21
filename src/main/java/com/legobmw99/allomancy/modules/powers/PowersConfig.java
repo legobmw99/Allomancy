@@ -31,21 +31,21 @@ public class PowersConfig {
 
     public static void init(ForgeConfigSpec.Builder common_builder, ForgeConfigSpec.Builder client_builder) {
 
-        common_builder.comment("Settings for the gameplay elements of the mod").push("Gameplay");
+        common_builder.comment("Settings for the gameplay elements of the mod").push("gameplay");
         random_mistings = common_builder.comment("Spawn players as a random Misting").define("random_mistings", true);
         generate_whitelist = common_builder.comment("Regenerate the metal whitelist").define("regenerate_whitelist", true);
         cfg_whitelist = common_builder.comment("List of registry names of items and blocks that are counted as 'metal")
                                       .defineList("whitelist", new ArrayList<>(), o -> o instanceof String);
         common_builder.pop();
 
-        client_builder.push("Graphics");
+        client_builder.push("graphics");
         max_metal_detection = client_builder.comment("Maximum iron/steelsight distance").defineInRange("max_metal_distance", 15, 3, 30);
         animate_selection = client_builder.comment("Animate the selection wheel").define("animate_selection", true);
         enable_overlay = client_builder.comment("Enable the screen overlay").define("overlay_enabled", true);
         overlay_position = client_builder.comment("Screen Overlay Position").defineEnum("overlay_position", SCREEN_LOC.TOP_LEFT);
         client_builder.pop();
 
-        client_builder.push("Control");
+        client_builder.push("controls");
         enable_more_keybinds = client_builder.comment("Register extra keys, one for each metal, which toggle that metal specifically").define("advanced_keybinds", false);
         client_builder.pop();
 
