@@ -118,7 +118,8 @@ public class Recipes extends RecipeProvider {
                        repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get())));
 
         // ALLOYS
-        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.STEEL.getIndex()).get(), 4, Items.COAL, alloy_save("steel"), repeatWith(ing(Items.IRON_INGOT), 3, ing(Items.COAL)));
+        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.STEEL.getIndex()).get(), 4, Items.COAL, alloy_save("steel"),
+                       repeatWith(ing(Items.IRON_INGOT), 3, ing(Items.COAL)));
 
         buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.PEWTER.getIndex()).get(), 3, MaterialsSetup.INGOTS.get(Metal.TIN.getIndex()).get(), alloy_save("pewter"),
                        repeatWith(ing("forge:ingots/tin"), 2, ing("forge:ingots/lead")));
@@ -129,8 +130,8 @@ public class Recipes extends RecipeProvider {
         buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.BRONZE.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.COPPER.getIndex()).get(), alloy_save("bronze"),
                        repeatWith(ing("forge:ingots/copper"), 3, ing("forge:ingots/tin")));
 
-        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.DURALUMIN.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(), alloy_save("duralumin"),
-                       repeatWith(ing("forge:ingots/aluminum"), 3, ing("forge:ingots/copper")));
+        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.DURALUMIN.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(),
+                       alloy_save("duralumin"), repeatWith(ing("forge:ingots/aluminum"), 3, ing("forge:ingots/copper")));
 
         buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.ELECTRUM.getIndex()).get(), 2, MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get(), alloy_save("electrum"),
                        ing("forge:ingots/silver"), ing(Items.GOLD_INGOT));

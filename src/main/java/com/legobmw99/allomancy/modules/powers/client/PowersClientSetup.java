@@ -49,8 +49,8 @@ public class PowersClientSetup {
 
         enable_more_keybinds = PowersConfig.enable_more_keybinds.get();
 
-        if (enable_more_keybinds){
-            for (int i = 0; i < powers.length; i++){
+        if (enable_more_keybinds) {
+            for (int i = 0; i < powers.length; i++) {
                 powers[i] = new KeyBinding("metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN, "key.categories.allomancy");
                 ClientRegistry.registerKeyBinding(powers[i]);
             }

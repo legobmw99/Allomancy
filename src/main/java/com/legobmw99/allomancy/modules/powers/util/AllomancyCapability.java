@@ -87,7 +87,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * amounts. Then syncs to the client to make sure everyone is on the same
      * page
      *
-     * @param player     the player being checked
+     * @param player the player being checked
      */
     public void updateMetalBurnTime(ServerPlayerEntity player) {
         for (Metal metal : Metal.values()) {

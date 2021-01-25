@@ -203,7 +203,7 @@ public class MetalSelectScreen extends Screen {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (PowersClientSetup.burn.matchesMouseKey(button)){
+        if (PowersClientSetup.burn.matchesMouseKey(button)) {
             this.mc.displayGuiScreen(null);
             this.mc.mouseHelper.grabMouse();
             return true;

@@ -11,7 +11,6 @@ public class CombatClientSetup {
     @OnlyIn(Dist.CLIENT)
     public static void registerEntityRenders() {
         //Use renderSnowball for nugget projectiles
-        RenderingRegistry.registerEntityRenderingHandler(CombatSetup.NUGGET_PROJECTILE.get(),
-                                                         manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer()));
+        RenderingRegistry.registerEntityRenderingHandler(CombatSetup.NUGGET_PROJECTILE.get(), manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer()));
     }
 }

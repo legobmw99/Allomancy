@@ -36,20 +36,25 @@ public class AllomancyPowerCommand {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
 
         LiteralArgumentBuilder<CommandSource> root = Commands.literal("allomancy").requires(permissions(0));
-        root.then(Commands.literal("get")
+        root.then(Commands
+                          .literal("get")
                           .requires(permissions(0))
                           .executes(ctx -> getPowers(ctx, false))
                           .then(Commands.argument("targets", EntityArgument.players()).executes(ctx -> getPowers(ctx, true))));
 
-        root.then(Commands.literal("add")
+        root.then(Commands
+                          .literal("add")
                           .requires(permissions(2))
-                          .then(Commands.argument("type", AllomancyPowerType.INSTANCE)
+                          .then(Commands
+                                        .argument("type", AllomancyPowerType.INSTANCE)
                                         .executes(ctx -> addPower(ctx, false))
                                         .then(Commands.argument("targets", EntityArgument.players()).executes(ctx -> addPower(ctx, true)))));
 
-        root.then(Commands.literal("remove")
+        root.then(Commands
+                          .literal("remove")
                           .requires(permissions(2))
-                          .then(Commands.argument("type", AllomancyPowerType.INSTANCE)
+                          .then(Commands
+                                        .argument("type", AllomancyPowerType.INSTANCE)
                                         .executes(ctx -> removePower(ctx, false))
                                         .then(Commands.argument("targets", EntityArgument.players()).executes(ctx -> removePower(ctx, true)))));
 

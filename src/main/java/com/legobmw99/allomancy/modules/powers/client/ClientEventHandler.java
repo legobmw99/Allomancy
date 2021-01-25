@@ -224,7 +224,7 @@ public class ClientEventHandler {
     }
 
     /**
-     *  Handles either mouse or button presses for the mod's keybinds
+     * Handles either mouse or button presses for the mod's keybinds
      */
     private void acceptInput() {
 
