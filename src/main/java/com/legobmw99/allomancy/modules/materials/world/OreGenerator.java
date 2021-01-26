@@ -1,8 +1,13 @@
 package com.legobmw99.allomancy.modules.materials.world;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.block.Block;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.placement.Placement;
@@ -31,18 +36,33 @@ public class OreGenerator {
         ores.add(new OreData(zinc_max_y, zinc_min_y, zinc_size, zinc_density, MaterialsSetup.ZINC_ORE, generate_zinc));
     }
 
+    public static void registerFeatures() {
+        Registry<ConfiguredFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_FEATURE;
+        for (OreData ore : ores) {
+            ResourceLocation block = ore.ore_block.getRegistryName();
+            Allomancy.LOGGER.info("Registering configured feature generation for block " + block.toString());
+            ore.feature = featureFromData(ore);
+            Registry.register(registry, block, ore.feature);
+        }
+    }
+
     public static void registerGeneration(BiomeLoadingEvent event) {
         BiomeGenerationSettingsBuilder generation = event.getGeneration();
         for (OreData ore : ores) {
             if (ore.config_enabled) {
-                generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
-                        .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, ore.ore_block.getDefaultState(), ore.vein_size))
-                        .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(ore.min_height, ore.min_height, ore.max_height)))
-                        .square()
-                        .func_242731_b(ore.ores_per_chunk));
+                generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, featureFromData(ore));
             }
         }
     }
+
+    private static ConfiguredFeature<?, ?> featureFromData(OreData ore) {
+        return Feature.ORE
+                .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, ore.ore_block.getDefaultState(), ore.vein_size))
+                .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(ore.min_height, ore.min_height, ore.max_height)))
+                .square()
+                .func_242731_b(ore.ores_per_chunk);
+    }
+
 
     private static class OreData {
         public final int max_height;
@@ -51,6 +71,7 @@ public class OreGenerator {
         public final int ores_per_chunk;
         public final Block ore_block;
         public final boolean config_enabled;
+        public ConfiguredFeature<?, ?> feature = null;
 
         /**
          * Construct an OreData with the given parameters

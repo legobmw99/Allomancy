@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.modules.materials;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
+import com.legobmw99.allomancy.modules.materials.world.OreGenerator;
 import com.legobmw99.allomancy.setup.AllomancySetup;
 import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.block.Block;
@@ -20,6 +21,7 @@ import java.util.List;
 public class MaterialsSetup {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Allomancy.MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Allomancy.MODID);
+
     public static final List<RegistryObject<Item>> FLAKES = new ArrayList<>();
     public static final List<RegistryObject<Item>> NUGGETS = new ArrayList<>();
     public static final List<RegistryObject<Item>> INGOTS = new ArrayList<>();
@@ -90,6 +92,7 @@ public class MaterialsSetup {
 
     public static void init(final FMLCommonSetupEvent e) {
         MinecraftForge.EVENT_BUS.register(LootTableInjector.class);
+        OreGenerator.registerFeatures();
     }
 
 
