@@ -50,7 +50,7 @@ public class OreGenerator {
         BiomeGenerationSettingsBuilder generation = event.getGeneration();
         for (OreData ore : ores) {
             if (ore.config_enabled) {
-                generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, featureFromData(ore));
+                generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ore.feature);
             }
         }
     }
