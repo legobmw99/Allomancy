@@ -160,7 +160,7 @@ public class PowersConfig {
 
 
     private static void add(String s) {
-        Allomancy.LOGGER.debug("Adding " + s + " to the default whitelist!");
+        Allomancy.LOGGER.info("Adding " + s + " to the default whitelist!");
         defaultList.add(s);
     }
 
