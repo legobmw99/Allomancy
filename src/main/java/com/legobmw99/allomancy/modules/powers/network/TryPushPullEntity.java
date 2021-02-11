@@ -54,7 +54,7 @@ public class TryPushPullEntity {
                         // Depends if the minecart is filled
                     } else if (target instanceof AbstractMinecartEntity) {
                         if (target.isBeingRidden()) {
-                            if (!target.isRidingOrBeingRiddenBy(player)) {
+                            if (!target.isPassenger(player)) {
                                 PowerUtils.move(this.direction / 2.0, target, new BlockPos(player.getPositionVec()));
                                 PowerUtils.move(this.direction / 2.0, player, new BlockPos(target.getPositionVec()));
                             }
