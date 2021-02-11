@@ -1,5 +1,7 @@
 package com.legobmw99.allomancy.setup;
 
+import java.util.Locale;
+
 public enum Metal {
     IRON,
     STEEL,
@@ -28,7 +30,7 @@ public enum Metal {
     }
 
     public String getName() {
-        return super.name().toLowerCase();
+        return name().toLowerCase(Locale.ROOT);
     }
 
     public int getIndex() {
