@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "allomancy:pewter_flakes"
+    }
+  ],
+  "result": {
+    "item": "allomancy:pewter_pattern"
+  }
+}

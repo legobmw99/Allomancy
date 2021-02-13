@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:zinc_pattern"
+    ]
+  },
+  "criteria": {
+    "has_zinc_flakes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "allomancy:zinc_flakes"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:zinc_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_zinc_flakes",
+      "has_the_recipe"
+    ]
+  ]
+}

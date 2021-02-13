@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:duralumin_pattern"
+    ]
+  },
+  "criteria": {
+    "has_duralumin_flakes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "allomancy:duralumin_flakes"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:duralumin_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_duralumin_flakes",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:bendalloy_pattern"
+    ]
+  },
+  "criteria": {
+    "has_bendalloy_flakes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "allomancy:bendalloy_flakes"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:bendalloy_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_bendalloy_flakes",
+      "has_the_recipe"
+    ]
+  ]
+}

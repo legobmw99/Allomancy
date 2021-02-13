@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:tin_pattern"
+    ]
+  },
+  "criteria": {
+    "has_tin_flakes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "allomancy:tin_flakes"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:tin_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_tin_flakes",
+      "has_the_recipe"
+    ]
+  ]
+}

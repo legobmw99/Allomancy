@@ -38,7 +38,84 @@ public class Recipes extends RecipeProvider {
         add('O', Tags.Items.OBSIDIAN);
         add('C', Items.COBBLESTONE);
 
+    }
 
+    protected static void buildShapeless(Consumer<IFinishedRecipe> consumer, IItemProvider result, int count, Item criterion, Ingredient... ingredients) {
+        buildShapeless(consumer, result, count, criterion, "", ingredients);
+    }
+
+    protected static void buildShapeless(Consumer<IFinishedRecipe> consumer, IItemProvider result, int count, Item criterion, String save, Ingredient... ingredients) {
+        Allomancy.LOGGER.debug("Creating Shapeless Recipe for " + result.asItem().getRegistryName() + " " + save);
+
+        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapelessRecipe(result, count);
+
+        builder.addCriterion("has_" + criterion.getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(criterion));
+
+        for (Ingredient ingredient : ingredients) {
+            builder.addIngredient(ingredient);
+        }
+
+        if (save.isEmpty()) {
+            builder.build(consumer);
+        } else {
+            builder.build(consumer, save);
+        }
+    }
+
+    protected static void buildSmeltingAndBlasting(Consumer<IFinishedRecipe> consumer, IItemProvider result, IItemProvider ingredient, float xp) {
+        Allomancy.LOGGER.debug("Creating Smelting and Blasting Recipe for " + result.asItem().getRegistryName());
+
+        CookingRecipeBuilder smelt = CookingRecipeBuilder.smeltingRecipe(ing(ingredient), result, xp, 200);
+        CookingRecipeBuilder blast = CookingRecipeBuilder.blastingRecipe(ing(ingredient), result, xp, 100);
+
+        smelt.addCriterion("has_" + ingredient.asItem().getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(ingredient));
+        blast.addCriterion("has_" + ingredient.asItem().getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(ingredient));
+
+        smelt.build(consumer);
+        blast.build(consumer, result.asItem().getRegistryName() + "_from_blasting");
+
+    }
+
+    private static String mixing_save(String metal) {
+        return "allomancy:" + metal + "_flakes_from_mixing";
+    }
+
+    private static String alloy_save(String metal) {
+        return "allomancy:" + metal + "_ingot_from_alloying";
+    }
+
+    protected static Ingredient ing(String tag) {
+        return Ingredient.fromTag(ItemTags.makeWrapperTag(tag));
+    }
+
+    protected static Ingredient ing(ITag.INamedTag<Item> tag) {
+        return Ingredient.fromTag(tag);
+    }
+
+    protected static Ingredient ing(IItemProvider itemProvider) {
+        return Ingredient.fromItems(itemProvider);
+    }
+
+    protected static Ingredient ing(Ingredient ingredient) {
+        return ingredient;
+    }
+
+    protected static Ingredient[] repeat(Ingredient ing, int n) {
+        return repeatWith(ing, n);
+    }
+
+    protected static Ingredient[] repeatWith(Ingredient ing, int n, Ingredient... extras) {
+        int size = n + extras.length;
+        Ingredient[] out = new Ingredient[size];
+        for (int i = 0; i < n; i++) {
+            out[i] = ing;
+        }
+
+        if (extras.length > 0) {
+            System.arraycopy(extras, 0, out, n, size - n);
+        }
+
+        return out;
     }
 
     @Override
@@ -90,6 +167,11 @@ public class Recipes extends RecipeProvider {
             buildShapeless(consumer, nugget, 9, ingot, ing(ingot));
         }
 
+        // pattern recipes
+        for (Metal mt : Metal.values()) {
+            buildShapeless(consumer, ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), 1, MaterialsSetup.FLAKES.get(mt.getIndex()).get(),
+                           ing(Items.PAPER), ing(MaterialsSetup.FLAKES.get(mt.getIndex()).get()));
+        }
 
         // Mixing/Alloying Recipes
         // GRINDER
@@ -160,7 +242,6 @@ public class Recipes extends RecipeProvider {
 
     }
 
-
     protected void buildShaped(Consumer<IFinishedRecipe> consumer, IItemProvider result, int count, Item criterion, String... lines) {
         Allomancy.LOGGER.debug("Creating Shaped Recipe for " + result.asItem().getRegistryName());
 
@@ -187,52 +268,6 @@ public class Recipes extends RecipeProvider {
         buildShaped(consumer, result, 1, criterion, lines);
     }
 
-
-    protected static void buildShapeless(Consumer<IFinishedRecipe> consumer, IItemProvider result, int count, Item criterion, Ingredient... ingredients) {
-        buildShapeless(consumer, result, count, criterion, "", ingredients);
-    }
-
-    protected static void buildShapeless(Consumer<IFinishedRecipe> consumer, IItemProvider result, int count, Item criterion, String save, Ingredient... ingredients) {
-        Allomancy.LOGGER.debug("Creating Shapeless Recipe for " + result.asItem().getRegistryName() + " " + save);
-
-        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapelessRecipe(result, count);
-
-        builder.addCriterion("has_" + criterion.getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(criterion));
-
-        for (Ingredient ingredient : ingredients) {
-            builder.addIngredient(ingredient);
-        }
-
-        if (save.isEmpty()) {
-            builder.build(consumer);
-        } else {
-            builder.build(consumer, save);
-        }
-    }
-
-
-    protected static void buildSmeltingAndBlasting(Consumer<IFinishedRecipe> consumer, IItemProvider result, IItemProvider ingredient, float xp) {
-        Allomancy.LOGGER.debug("Creating Smelting and Blasting Recipe for " + result.asItem().getRegistryName());
-
-        CookingRecipeBuilder smelt = CookingRecipeBuilder.smeltingRecipe(ing(ingredient), result, xp, 200);
-        CookingRecipeBuilder blast = CookingRecipeBuilder.blastingRecipe(ing(ingredient), result, xp, 100);
-
-        smelt.addCriterion("has_" + ingredient.asItem().getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(ingredient));
-        blast.addCriterion("has_" + ingredient.asItem().getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(ingredient));
-
-        smelt.build(consumer);
-        blast.build(consumer, result.asItem().getRegistryName() + "_from_blasting");
-
-    }
-
-    private static String mixing_save(String metal) {
-        return "allomancy:" + metal + "_flakes_from_mixing";
-    }
-
-    private static String alloy_save(String metal) {
-        return "allomancy:" + metal + "_ingot_from_alloying";
-    }
-
     protected void add(char c, ITag.INamedTag<Item> itemTag) {
         this.defaultIngredients.put(c, Ingredient.fromTag(itemTag));
     }
@@ -244,41 +279,6 @@ public class Recipes extends RecipeProvider {
     protected void add(char c, Ingredient ingredient) {
         this.defaultIngredients.put(c, ingredient);
     }
-
-    protected static Ingredient ing(String tag) {
-        return Ingredient.fromTag(ItemTags.makeWrapperTag(tag));
-    }
-
-    protected static Ingredient ing(ITag.INamedTag<Item> tag) {
-        return Ingredient.fromTag(tag);
-    }
-
-    protected static Ingredient ing(IItemProvider itemProvider) {
-        return Ingredient.fromItems(itemProvider);
-    }
-
-    protected static Ingredient ing(Ingredient ingredient) {
-        return ingredient;
-    }
-
-    protected static Ingredient[] repeat(Ingredient ing, int n) {
-        return repeatWith(ing, n);
-    }
-
-    protected static Ingredient[] repeatWith(Ingredient ing, int n, Ingredient... extras) {
-        int size = n + extras.length;
-        Ingredient[] out = new Ingredient[size];
-        for (int i = 0; i < n; i++) {
-            out[i] = ing;
-        }
-
-        if (extras.length > 0) {
-            System.arraycopy(extras, 0, out, n, size - n);
-        }
-
-        return out;
-    }
-
 
     @Override
     public String getName() {

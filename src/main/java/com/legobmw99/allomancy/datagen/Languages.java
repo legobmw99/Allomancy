@@ -6,9 +6,15 @@ import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.setup.Metal;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.item.DyeColor;
 import net.minecraftforge.common.data.LanguageProvider;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class Languages extends LanguageProvider {
+
+
     public Languages(DataGenerator gen, String modid, String locale) {
         super(gen, modid, locale);
     }
@@ -47,6 +53,9 @@ public class Languages extends LanguageProvider {
         for (Metal mt : Metal.values()) {
             add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), getDisplayName(mt) + " Flakes");
 
+            add(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), "Banner Pattern");
+            add("item.allomancy." + mt.getName() + "_pattern.desc", getDisplayName(mt) + " Symbol");
+
             if (mt == Metal.GOLD || mt == Metal.IRON) {
                 continue;
             }
@@ -79,6 +88,14 @@ public class Languages extends LanguageProvider {
         add("commands.allomancy.addpower", "%s added Allomantic power %s");
         add("commands.allomancy.removepower", "%s removed Allomantic power %s");
         add("commands.allomancy.unrecognized", "Unrecognized Allomancy power: '%s'");
+
+        for (DyeColor color : DyeColor.values()) {
+            for (Metal mt : Metal.values()) {
+                add("block.minecraft.banner.allomancy_" + mt.getName() + "." + color.getTranslationKey(),
+                    getDisplayName(color) + " " + getDisplayName(mt) + " Symbol");
+            }
+        }
+
     }
 
     @Override
@@ -87,6 +104,15 @@ public class Languages extends LanguageProvider {
     }
 
     private static String getDisplayName(Metal mt) {
-        return mt.getName().substring(0, 1).toUpperCase() + mt.getName().substring(1);
+        return toTitleCase(mt.getName());
+    }
+
+    private String getDisplayName(DyeColor color){
+        String[] trans = color.getTranslationKey().split("_");
+        return Arrays.stream(trans).map(Languages::toTitleCase).collect(Collectors.joining(" "));
+    }
+
+    private static String toTitleCase(String in) {
+        return in.substring(0, 1).toUpperCase() + in.substring(1);
     }
 }

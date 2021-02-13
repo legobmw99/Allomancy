@@ -45,6 +45,11 @@ public class ItemModels extends ItemModelProvider {
             Item flake = MaterialsSetup.FLAKES.get(i).get();
             itemGenerated(flake, "item/" + flake.getRegistryName().getPath());
 
+            if (i <= Metal.BENDALLOY.getIndex()) {
+                Item pattern_item = ExtrasSetup.PATTERN_ITEMS.get(i).get();
+                itemGenerated(pattern_item, "item/" + pattern_item.getRegistryName().getPath());
+            }
+
             if (i == Metal.GOLD.getIndex() || i == Metal.IRON.getIndex()) {
                 continue;
             }
@@ -57,6 +62,7 @@ public class ItemModels extends ItemModelProvider {
 
             Block block = MaterialsSetup.STORAGE_BLOCKS.get(i).get();
             parentedBlock(block, "block/" + block.getRegistryName().getPath());
+
         }
 
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial (filled)");
