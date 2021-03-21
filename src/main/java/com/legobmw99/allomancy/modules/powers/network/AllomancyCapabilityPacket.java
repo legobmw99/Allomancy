@@ -30,17 +30,17 @@ public class AllomancyCapabilityPacket {
     }
 
     public static AllomancyCapabilityPacket decode(PacketBuffer buf) {
-        return new AllomancyCapabilityPacket(buf.readCompoundTag(), buf.readInt());
+        return new AllomancyCapabilityPacket(buf.readNbt(), buf.readInt());
     }
 
     public void encode(PacketBuffer buf) {
-        buf.writeCompoundTag(this.nbt);
+        buf.writeNbt(this.nbt);
         buf.writeInt(this.entityID);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            PlayerEntity player = (PlayerEntity) Minecraft.getInstance().world.getEntityByID(this.entityID);
+            PlayerEntity player = (PlayerEntity) Minecraft.getInstance().level.getEntity(this.entityID);
             if (player != null) {
                 AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
                 playerCap.deserializeNBT(this.nbt);

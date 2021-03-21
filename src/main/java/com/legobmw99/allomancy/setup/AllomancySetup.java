@@ -23,17 +23,17 @@ public class AllomancySetup {
 
     public static final ItemGroup allomancy_group = new ItemGroup(Allomancy.MODID) {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(CombatSetup.MISTCLOAK.get());
         }
     };
 
     public static Item.Properties createStandardItemProperties() {
-        return new Item.Properties().group(allomancy_group).maxStackSize(64);
+        return new Item.Properties().tab(allomancy_group).stacksTo(64);
     }
 
     public static Block.Properties createStandardBlockProperties() {
-        return Block.Properties.create(Material.ROCK).hardnessAndResistance(2.1F).harvestTool(ToolType.PICKAXE).harvestLevel(2).setRequiresTool();
+        return Block.Properties.of(Material.STONE).strength(2.1F).harvestTool(ToolType.PICKAXE).harvestLevel(2).requiresCorrectToolForDrops();
     }
 
     public static Item createStandardItem() {
@@ -55,7 +55,7 @@ public class AllomancySetup {
     }
 
     private static IFormattableTextComponent addColor(IFormattableTextComponent text, TextFormatting color) {
-        text.setStyle(text.getStyle().setColor(Color.fromTextFormatting(color)));
+        text.setStyle(text.getStyle().withColor(Color.fromLegacyFormat(color)));
         return text;
     }
 

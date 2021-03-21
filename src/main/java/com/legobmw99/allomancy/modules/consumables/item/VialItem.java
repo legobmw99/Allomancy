@@ -28,12 +28,12 @@ import java.util.List;
 public class VialItem extends Item {
 
     public VialItem() {
-        super(AllomancySetup.createStandardItemProperties().maxStackSize(32));
+        super(AllomancySetup.createStandardItemProperties().stacksTo(32));
     }
 
 
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World world, LivingEntity livingEntity) {
+    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity livingEntity) {
 
         AllomancyCapability cap;
         cap = AllomancyCapability.forPlayer(livingEntity);
@@ -51,11 +51,11 @@ public class VialItem extends Item {
             }
         }
 
-        if (!((PlayerEntity) (livingEntity)).abilities.isCreativeMode) {
+        if (!((PlayerEntity) (livingEntity)).abilities.instabuild) {
             stack.shrink(1);
 
-            if (!((PlayerEntity) livingEntity).inventory.addItemStackToInventory(new ItemStack(ConsumeSetup.VIAL.get(), 1))) {
-                world.addEntity(new ItemEntity(world, livingEntity.getPosX(), livingEntity.getPosY(), livingEntity.getPosZ(), new ItemStack(ConsumeSetup.VIAL.get(), 1)));
+            if (!((PlayerEntity) livingEntity).inventory.add(new ItemStack(ConsumeSetup.VIAL.get(), 1))) {
+                world.addFreshEntity(new ItemEntity(world, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), new ItemStack(ConsumeSetup.VIAL.get(), 1)));
             }
         }
 
@@ -68,18 +68,18 @@ public class VialItem extends Item {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
+    public UseAction getUseAnimation(ItemStack stack) {
         return UseAction.DRINK;
     }
 
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand hand) {
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand hand) {
         AllomancyCapability cap;
         cap = AllomancyCapability.forPlayer(playerIn);
         //If all the ones being filled are full, don't allow
         int filling = 0, full = 0;
-        ItemStack itemStackIn = playerIn.getHeldItem(hand);
+        ItemStack itemStackIn = playerIn.getItemInHand(hand);
         if (itemStackIn.hasTag()) {
             for (Metal mt : Metal.values()) {
                 if (itemStackIn.getTag().contains(mt.getName()) && itemStackIn.getTag().getBoolean(mt.getName())) {
@@ -94,7 +94,7 @@ public class VialItem extends Item {
                 return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
             }
 
-            playerIn.setActiveHand(hand);
+            playerIn.startUsingItem(hand);
             return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
         }
         return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
@@ -103,8 +103,8 @@ public class VialItem extends Item {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (stack.hasTag()) {
             boolean full_display = Screen.hasShiftDown();
             int count = 0;
@@ -134,7 +134,7 @@ public class VialItem extends Item {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         if (group == AllomancySetup.allomancy_group) {
             items.add(new ItemStack(this, 1));
 

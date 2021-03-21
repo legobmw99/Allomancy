@@ -28,18 +28,18 @@ import java.util.List;
 public class IronButtonBlock extends AbstractButtonBlock implements IAllomanticallyActivatedBlock {
 
     public IronButtonBlock() {
-        super(false, Block.Properties.create(Material.IRON).doesNotBlockMovement().hardnessAndResistance(1.0F).harvestLevel(2).harvestTool(ToolType.PICKAXE));
+        super(false, Block.Properties.of(Material.METAL).noCollission().strength(1.0F).harvestLevel(2).harvestTool(ToolType.PICKAXE));
     }
 
     @Override
     public boolean onBlockActivatedAllomantically(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean isPush) {
-        if (state.get(POWERED) || world.isRemote) {
+        if (state.getValue(POWERED) || world.isClientSide) {
             return true;
         } else if (isPush) {
-            world.setBlockState(pos, state.with(POWERED, true), 3);
+            world.setBlock(pos, state.setValue(POWERED, true), 3);
             this.playSound(player, world, pos, true);
             this.updateNeighbors(state, world, pos);
-            world.getPendingBlockTicks().scheduleTick(pos, this, 20);
+            world.getBlockTicks().scheduleTick(pos, this, 20);
             return true;
         } else {
             return false;
@@ -47,26 +47,26 @@ public class IronButtonBlock extends AbstractButtonBlock implements IAllomantica
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         return ActionResultType.FAIL;
     }
 
 
     @Override
-    protected SoundEvent getSoundEvent(boolean on) {
-        return on ? SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON : SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF;
+    protected SoundEvent getSound(boolean on) {
+        return on ? SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON : SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF;
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         IFormattableTextComponent lore = AllomancySetup.addColorToText("block.allomancy.iron_activation.lore", TextFormatting.GRAY);
         tooltip.add(lore);
     }
 
 
     private void updateNeighbors(BlockState state, World world, BlockPos pos) {
-        world.notifyNeighborsOfStateChange(pos, this);
-        world.notifyNeighborsOfStateChange(pos.offset(getFacing(state).getOpposite()), this);
+        world.updateNeighborsAt(pos, this);
+        world.updateNeighborsAt(pos.relative(getConnectedDirection(state).getOpposite()), this);
     }
 }

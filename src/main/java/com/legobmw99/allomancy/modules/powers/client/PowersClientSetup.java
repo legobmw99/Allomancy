@@ -26,7 +26,7 @@ public class PowersClientSetup {
     public static final RegistryObject<ParticleType<SoundParticleData>> SOUND_PARTICLE_TYPE = PARTICLES.register("sound_particle", () -> new ParticleType<SoundParticleData>(true,
                                                                                                                                                                              SoundParticleData.DESERIALIZER) {
         @Override
-        public Codec<SoundParticleData> func_230522_e_() {
+        public Codec<SoundParticleData> codec() {
             return null;
         }
     });
@@ -65,7 +65,7 @@ public class PowersClientSetup {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void registerParticle(ParticleFactoryRegisterEvent event) {
         Allomancy.LOGGER.info("Allomancy: Registering custom particles");
-        Minecraft.getInstance().particles.registerFactory(PowersClientSetup.SOUND_PARTICLE_TYPE.get(), SoundParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(PowersClientSetup.SOUND_PARTICLE_TYPE.get(), SoundParticle.Factory::new);
     }
 
 }

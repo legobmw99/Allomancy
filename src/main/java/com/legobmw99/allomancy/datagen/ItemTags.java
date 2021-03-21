@@ -17,7 +17,7 @@ public class ItemTags extends ItemTagsProvider {
     }
 
     @Override
-    protected void registerTags() {
+    protected void addTags() {
 
         for (Metal mt : Metal.values()) {
             if (mt == Metal.GOLD || mt == Metal.IRON) {
@@ -55,7 +55,7 @@ public class ItemTags extends ItemTagsProvider {
         // see ForgeItemTagsProvider
         Allomancy.LOGGER.debug("Creating item tag for forge:" + name);
 
-        getOrCreateBuilder(net.minecraft.tags.ItemTags.makeWrapperTag("forge:" + name)).replace(false).add(items);
+        tag(net.minecraft.tags.ItemTags.bind("forge:" + name)).replace(false).add(items);
     }
 
 

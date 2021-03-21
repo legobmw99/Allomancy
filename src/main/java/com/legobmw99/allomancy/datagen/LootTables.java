@@ -58,41 +58,46 @@ public class LootTables extends LootTableProvider {
     // Useful boilerplate from McJtyLib
     protected void addSimpleBlock(String name, Block block) {
         Allomancy.LOGGER.debug("Creating Loot Table for block " + block.getRegistryName());
-        LootPool.Builder builder = LootPool.builder().name(name).rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(block)).acceptCondition(SurvivesExplosion.builder());
+        LootPool.Builder builder = LootPool
+                .lootPool()
+                .name(name)
+                .setRolls(ConstantRange.exactly(1))
+                .add(ItemLootEntry.lootTableItem(block))
+                .when(SurvivesExplosion.survivesExplosion());
 
-        this.lootTables.put(block, LootTable.builder().addLootPool(builder));
+        this.lootTables.put(block, LootTable.lootTable().withPool(builder));
     }
 
     @Override
-    public void act(DirectoryCache cache) {
+    public void run(DirectoryCache cache) {
         addBlockTables();
 
         Map<ResourceLocation, LootTable> tables;
         tables = new HashMap<>();
         for (Map.Entry<Block, LootTable.Builder> entry : this.lootTables.entrySet()) {
-            tables.put(entry.getKey().getLootTable(), entry.getValue().setParameterSet(LootParameterSets.BLOCK).build());
+            tables.put(entry.getKey().getLootTable(), entry.getValue().setParamSet(LootParameterSets.BLOCK).build());
         }
 
         // Lerasium Inject
         Allomancy.LOGGER.debug("Creating Loot Table for Lerasium inject");
         LootPool.Builder leras_builder = LootPool
-                .builder()
+                .lootPool()
                 .name("main")
-                .rolls(ConstantRange.of(1))
-                .addEntry(ItemLootEntry.builder(ConsumeSetup.LERASIUM_NUGGET.get()).weight(4))
-                .addEntry(EmptyLootEntry.func_216167_a().weight(16));
-        tables.put(new ResourceLocation(Allomancy.MODID, "/inject/lerasium"), LootTable.builder().addLootPool(leras_builder).build());
+                .setRolls(ConstantRange.exactly(1))
+                .add(ItemLootEntry.lootTableItem(ConsumeSetup.LERASIUM_NUGGET.get()).setWeight(4))
+                .add(EmptyLootEntry.emptyItem().setWeight(16));
+        tables.put(new ResourceLocation(Allomancy.MODID, "/inject/lerasium"), LootTable.lootTable().withPool(leras_builder).build());
 
         CompoundNBT nbt = new CompoundNBT();
         nbt.putBoolean("Unbreakable", true);
         Allomancy.LOGGER.debug("Creating Loot Table for Obsidian Dagger inject");
         LootPool.Builder dagger_builder = LootPool
-                .builder()
+                .lootPool()
                 .name("main")
-                .rolls(ConstantRange.of(1))
-                .addEntry(ItemLootEntry.builder(CombatSetup.OBSIDIAN_DAGGER.get()).acceptFunction(SetNBT.builder(nbt)).weight(1))
-                .addEntry(EmptyLootEntry.func_216167_a().weight(19));
-        tables.put(new ResourceLocation(Allomancy.MODID, "/inject/obsidian_dagger"), LootTable.builder().addLootPool(dagger_builder).build());
+                .setRolls(ConstantRange.exactly(1))
+                .add(ItemLootEntry.lootTableItem(CombatSetup.OBSIDIAN_DAGGER.get()).apply(SetNBT.setTag(nbt)).setWeight(1))
+                .add(EmptyLootEntry.emptyItem().setWeight(19));
+        tables.put(new ResourceLocation(Allomancy.MODID, "/inject/obsidian_dagger"), LootTable.lootTable().withPool(dagger_builder).build());
 
 
         writeTables(cache, tables);
@@ -103,7 +108,7 @@ public class LootTables extends LootTableProvider {
         tables.forEach((key, lootTable) -> {
             Path path = outputFolder.resolve("data/" + key.getNamespace() + "/loot_tables/" + key.getPath() + ".json");
             try {
-                IDataProvider.save(GSON, cache, LootTableManager.toJson(lootTable), path);
+                IDataProvider.save(GSON, cache, LootTableManager.serialize(lootTable), path);
             } catch (IOException e) {
                 Allomancy.LOGGER.error("Couldn't write loot table {}", path, e);
             }

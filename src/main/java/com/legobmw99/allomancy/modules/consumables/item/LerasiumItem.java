@@ -25,19 +25,19 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class LerasiumItem extends Item {
-    private static final Food lerasium = new Food.Builder().fastToEat().setAlwaysEdible().saturation(0).hunger(0).build();
+    private static final Food lerasium = new Food.Builder().fast().alwaysEat().saturationMod(0).nutrition(0).build();
 
     public LerasiumItem() {
-        super(AllomancySetup.createStandardItemProperties().rarity(Rarity.EPIC).maxStackSize(1).food(lerasium));
+        super(AllomancySetup.createStandardItemProperties().rarity(Rarity.EPIC).stacksTo(1).food(lerasium));
     }
 
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-        ItemStack itemStackIn = player.getHeldItem(hand);
+        ItemStack itemStackIn = player.getItemInHand(hand);
         if (!cap.isMistborn()) {
-            player.setActiveHand(hand);
+            player.startUsingItem(hand);
             return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
 
         } else {
@@ -46,28 +46,28 @@ public class LerasiumItem extends Item {
     }
 
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World world, LivingEntity livingEntity) {
+    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity livingEntity) {
         AllomancyCapability cap = AllomancyCapability.forPlayer(livingEntity);
-        double x = livingEntity.getPositionVec().getX();
-        double y = livingEntity.getPositionVec().getY() + 3;
-        double z = livingEntity.getPositionVec().getZ();
+        double x = livingEntity.position().x();
+        double y = livingEntity.position().y() + 3;
+        double z = livingEntity.position().z();
         if (!cap.isMistborn()) {
             cap.setMistborn();
         }
         //Fancy shmancy effects
         LightningBoltEntity lightning = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
-        lightning.setEffectOnly(true);
-        lightning.moveForced(new Vector3d(x, y, z)); // see TridentEntity
-        world.addEntity(lightning);
-        livingEntity.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 20, 0, true, false));
+        lightning.setVisualOnly(true);
+        lightning.moveTo(new Vector3d(x, y, z)); // see TridentEntity
+        world.addFreshEntity(lightning);
+        livingEntity.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 20, 0, true, false));
 
-        return super.onItemUseFinish(stack, world, livingEntity);
+        return super.finishUsingItem(stack, world, livingEntity);
     }
 
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         ITextComponent lore = AllomancySetup.addColorToText("item.allomancy.lerasium_nugget.lore", TextFormatting.LIGHT_PURPLE);
         tooltip.add(lore);
 
@@ -79,7 +79,7 @@ public class LerasiumItem extends Item {
     }
 
     @Override
-    public boolean hasEffect(ItemStack par1ItemStack) {
+    public boolean isFoil(ItemStack par1ItemStack) {
         //Add enchantment glint
         return true;
     }

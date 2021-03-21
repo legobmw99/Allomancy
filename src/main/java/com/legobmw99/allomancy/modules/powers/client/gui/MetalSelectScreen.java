@@ -79,7 +79,7 @@ public class MetalSelectScreen extends Screen {
         this.slotSelected = -1;
 
         Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buf = tess.getBuffer();
+        BufferBuilder buf = tess.getBuilder();
 
 
         RenderSystem.disableCull();
@@ -111,7 +111,7 @@ public class MetalSelectScreen extends Screen {
 
 
             if (seg == 0) {
-                buf.pos(x, y, 0).color(r, g, b, a).endVertex(); //pos, color
+                buf.vertex(x, y, 0).color(r, g, b, a).endVertex(); //pos, color
             }
 
 
@@ -121,12 +121,12 @@ public class MetalSelectScreen extends Screen {
                 float yp = y + MathHelper.sin(rad) * radius;
 
                 if (v == 0) {
-                    buf.pos(xp, yp, 0).color(r, g, b, a).endVertex();
+                    buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
                 }
-                buf.pos(xp, yp, 0).color(r, g, b, a).endVertex();
+                buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
             }
         }
-        tess.draw();
+        tess.end();
 
         RenderSystem.shadeModel(GL11.GL_FLAT);
         RenderSystem.enableTexture();
@@ -147,7 +147,7 @@ public class MetalSelectScreen extends Screen {
             float xsp = xp - 4;
             float ysp = yp;
             String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + new TranslationTextComponent(METAL_LOCAL[toMetalIndex(seg)]).getString();
-            int width = this.mc.getRenderManager().getFontRenderer().getStringWidth(name);
+            int width = this.mc.getEntityRenderDispatcher().getFont().width(name);
 
             if (xsp < x) {
                 xsp -= width - 8;
@@ -156,13 +156,13 @@ public class MetalSelectScreen extends Screen {
                 ysp -= 9;
             }
 
-            this.mc.getRenderManager().getFontRenderer().drawStringWithShadow(matrixStack, name, xsp, ysp, 0xFFFFFF);
+            this.mc.getEntityRenderDispatcher().getFont().drawShadow(matrixStack, name, xsp, ysp, 0xFFFFFF);
 
             double mod = 0.8;
             int xdp = (int) ((xp - x) * mod + x);
             int ydp = (int) ((yp - y) * mod + y);
 
-            this.mc.getRenderManager().textureManager.bindTexture(METAL_ICONS[toMetalIndex(seg)]);
+            this.mc.getEntityRenderDispatcher().textureManager.bind(METAL_ICONS[toMetalIndex(seg)]);
             RenderSystem.color4f(1, 1, 1, 1);
             blit(matrixStack, xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
@@ -171,9 +171,9 @@ public class MetalSelectScreen extends Screen {
         RenderSystem.enableRescaleNormal();
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        RenderHelper.enableStandardItemLighting();
+        RenderHelper.turnBackOn();
 
-        RenderHelper.disableStandardItemLighting();
+        RenderHelper.turnOff();
         RenderSystem.disableBlend();
         RenderSystem.disableRescaleNormal();
 
@@ -192,9 +192,9 @@ public class MetalSelectScreen extends Screen {
 
     @Override
     public boolean keyReleased(int keysym, int scancode, int modifiers) {
-        if (PowersClientSetup.burn.matchesKey(keysym, scancode)) {
-            this.mc.displayGuiScreen(null);
-            this.mc.mouseHelper.grabMouse();
+        if (PowersClientSetup.burn.matches(keysym, scancode)) {
+            this.mc.setScreen(null);
+            this.mc.mouseHandler.grabMouse();
             return true;
         }
         return super.keyReleased(keysym, scancode, modifiers);
@@ -203,9 +203,9 @@ public class MetalSelectScreen extends Screen {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (PowersClientSetup.burn.matchesMouseKey(button)) {
-            this.mc.displayGuiScreen(null);
-            this.mc.mouseHelper.grabMouse();
+        if (PowersClientSetup.burn.matchesMouse(button)) {
+            this.mc.setScreen(null);
+            this.mc.mouseHandler.grabMouse();
             return true;
         }
         return super.mouseReleased(mouseX, mouseY, button);

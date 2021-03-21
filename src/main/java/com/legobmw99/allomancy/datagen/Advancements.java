@@ -32,24 +32,24 @@ public class Advancements extends AdvancementProvider {
 
     private static void registerAdvancements(Consumer<Advancement> consumer) {
         Advancement.Builder
-                .builder()
-                .withParent(Advancement.Builder.builder().build(new ResourceLocation("adventure/root"))) // hacky
-                .withDisplay(CombatSetup.MISTCLOAK.get(), new TranslationTextComponent("advancements.become_mistborn.title"),
-                             new TranslationTextComponent("advancements.become_mistborn.desc"), null, FrameType.CHALLENGE, true, true, true)
-                .withCriterion("lerasium_nugget", ConsumeItemTrigger.Instance.forItem(ConsumeSetup.LERASIUM_NUGGET.get()))
-                .withRewards(AdvancementRewards.Builder.experience(100))
-                .register(consumer, "allomancy:main/become_mistborn");
+                .advancement()
+                .parent(Advancement.Builder.advancement().build(new ResourceLocation("adventure/root"))) // hacky
+                .display(CombatSetup.MISTCLOAK.get(), new TranslationTextComponent("advancements.become_mistborn.title"),
+                         new TranslationTextComponent("advancements.become_mistborn.desc"), null, FrameType.CHALLENGE, true, true, true)
+                .addCriterion("lerasium_nugget", ConsumeItemTrigger.Instance.usedItem(ConsumeSetup.LERASIUM_NUGGET.get()))
+                .rewards(AdvancementRewards.Builder.experience(100))
+                .save(consumer, "allomancy:main/become_mistborn");
 
     }
 
     @Override
-    public void act(DirectoryCache cache) {
+    public void run(DirectoryCache cache) {
         Path outputFolder = this.gen.getOutputFolder();
         Consumer<Advancement> consumer = (advancement) -> {
 
             Path path = outputFolder.resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
             try {
-                IDataProvider.save(GSON, cache, advancement.copy().serialize(), path);
+                IDataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path);
                 Allomancy.LOGGER.debug("Creating advancement " + advancement.getId());
             } catch (IOException ioexception) {
                 Allomancy.LOGGER.error("Couldn't save advancement {}", path, ioexception);

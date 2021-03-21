@@ -7,11 +7,11 @@ import net.minecraft.item.ItemStack;
 public class GrinderItem extends Item {
 
     public GrinderItem() {
-        super(AllomancySetup.createStandardItemProperties().maxStackSize(1));
+        super(AllomancySetup.createStandardItemProperties().stacksTo(1));
     }
 
     @Override
-    public boolean hasContainerItem() {
+    public boolean hasCraftingRemainingItem() {
         return true;
     }
 

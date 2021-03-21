@@ -16,7 +16,7 @@ public class BlockTags extends BlockTagsProvider {
     }
 
     @Override
-    protected void registerTags() {
+    protected void addTags() {
         addForgeTag("ores/aluminum", MaterialsSetup.ALUMINUM_ORE.get());
         addForgeTag("ores/cadmium", MaterialsSetup.CADMIUM_ORE.get());
         addForgeTag("ores/chromium", MaterialsSetup.CHROMIUM_ORE.get());
@@ -41,7 +41,7 @@ public class BlockTags extends BlockTagsProvider {
 
     private void addForgeTag(String name, Block... items) {
         Allomancy.LOGGER.debug("Creating block tag for forge:" + name);
-        getOrCreateBuilder(net.minecraft.tags.BlockTags.makeWrapperTag("forge:" + name)).replace(false).add(items);
+        tag(net.minecraft.tags.BlockTags.bind("forge:" + name)).replace(false).add(items);
     }
 
 

@@ -19,9 +19,9 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 public class VialItemRecipe extends SpecialRecipe {
-    private static final Ingredient INGREDIENT_FLAKES = Ingredient.fromItems(
+    private static final Ingredient INGREDIENT_FLAKES = Ingredient.of(
             MaterialsSetup.FLAKES.subList(0, Metal.values().length).stream().map(RegistryObject::get).toArray(Item[]::new));
-    private static final Ingredient INGREDIENT_VIAL = Ingredient.fromItems(ConsumeSetup.VIAL.get());
+    private static final Ingredient INGREDIENT_VIAL = Ingredient.of(ConsumeSetup.VIAL.get());
 
     private ItemStack item_result = ItemStack.EMPTY;
 
@@ -38,8 +38,8 @@ public class VialItemRecipe extends SpecialRecipe {
         Arrays.fill(metals, false);
         boolean[] ingredients = {false, false};
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack itemstack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack itemstack = inv.getItem(i);
             if (!itemstack.isEmpty()) {
                 if (INGREDIENT_FLAKES.test(itemstack)) {
                     for (Metal mt : Metal.values()) {
@@ -89,22 +89,22 @@ public class VialItemRecipe extends SpecialRecipe {
 
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) { //getCraftingResult
+    public ItemStack assemble(CraftingInventory inv) { //getCraftingResult
         return this.item_result.copy();
     }
 
     @Override
-    public boolean isDynamic() {
+    public boolean isSpecial() {
         return true;
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return this.item_result;
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 2;
     }
 

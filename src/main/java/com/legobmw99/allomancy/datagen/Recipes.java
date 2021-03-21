@@ -47,32 +47,32 @@ public class Recipes extends RecipeProvider {
     protected static void buildShapeless(Consumer<IFinishedRecipe> consumer, IItemProvider result, int count, Item criterion, String save, Ingredient... ingredients) {
         Allomancy.LOGGER.debug("Creating Shapeless Recipe for " + result.asItem().getRegistryName() + " " + save);
 
-        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapelessRecipe(result, count);
+        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(result, count);
 
-        builder.addCriterion("has_" + criterion.getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(criterion));
+        builder.unlockedBy("has_" + criterion.getRegistryName().getPath(), InventoryChangeTrigger.Instance.hasItems(criterion));
 
         for (Ingredient ingredient : ingredients) {
-            builder.addIngredient(ingredient);
+            builder.requires(ingredient);
         }
 
         if (save.isEmpty()) {
-            builder.build(consumer);
+            builder.save(consumer);
         } else {
-            builder.build(consumer, save);
+            builder.save(consumer, save);
         }
     }
 
     protected static void buildSmeltingAndBlasting(Consumer<IFinishedRecipe> consumer, IItemProvider result, IItemProvider ingredient, float xp) {
         Allomancy.LOGGER.debug("Creating Smelting and Blasting Recipe for " + result.asItem().getRegistryName());
 
-        CookingRecipeBuilder smelt = CookingRecipeBuilder.smeltingRecipe(ing(ingredient), result, xp, 200);
-        CookingRecipeBuilder blast = CookingRecipeBuilder.blastingRecipe(ing(ingredient), result, xp, 100);
+        CookingRecipeBuilder smelt = CookingRecipeBuilder.smelting(ing(ingredient), result, xp, 200);
+        CookingRecipeBuilder blast = CookingRecipeBuilder.blasting(ing(ingredient), result, xp, 100);
 
-        smelt.addCriterion("has_" + ingredient.asItem().getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(ingredient));
-        blast.addCriterion("has_" + ingredient.asItem().getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(ingredient));
+        smelt.unlockedBy("has_" + ingredient.asItem().getRegistryName().getPath(), InventoryChangeTrigger.Instance.hasItems(ingredient));
+        blast.unlockedBy("has_" + ingredient.asItem().getRegistryName().getPath(), InventoryChangeTrigger.Instance.hasItems(ingredient));
 
-        smelt.build(consumer);
-        blast.build(consumer, result.asItem().getRegistryName() + "_from_blasting");
+        smelt.save(consumer);
+        blast.save(consumer, result.asItem().getRegistryName() + "_from_blasting");
 
     }
 
@@ -85,15 +85,15 @@ public class Recipes extends RecipeProvider {
     }
 
     protected static Ingredient ing(String tag) {
-        return Ingredient.fromTag(ItemTags.makeWrapperTag(tag));
+        return Ingredient.of(ItemTags.bind(tag));
     }
 
     protected static Ingredient ing(ITag.INamedTag<Item> tag) {
-        return Ingredient.fromTag(tag);
+        return Ingredient.of(tag);
     }
 
     protected static Ingredient ing(IItemProvider itemProvider) {
-        return Ingredient.fromItems(itemProvider);
+        return Ingredient.of(itemProvider);
     }
 
     protected static Ingredient ing(Ingredient ingredient) {
@@ -119,7 +119,7 @@ public class Recipes extends RecipeProvider {
     }
 
     @Override
-    protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
         // Basic Shaped Recipes
         buildShaped(consumer, ExtrasSetup.IRON_LEVER.get(), Items.IRON_INGOT, "s", "I");
         buildShaped(consumer, ExtrasSetup.IRON_BUTTON.get(), Items.IRON_INGOT, "i", "I");
@@ -169,8 +169,8 @@ public class Recipes extends RecipeProvider {
 
         // pattern recipes
         for (Metal mt : Metal.values()) {
-            buildShapeless(consumer, ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), 1, MaterialsSetup.FLAKES.get(mt.getIndex()).get(),
-                           ing(Items.PAPER), ing(MaterialsSetup.FLAKES.get(mt.getIndex()).get()));
+            buildShapeless(consumer, ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), 1, MaterialsSetup.FLAKES.get(mt.getIndex()).get(), ing(Items.PAPER),
+                           ing(MaterialsSetup.FLAKES.get(mt.getIndex()).get()));
         }
 
         // Mixing/Alloying Recipes
@@ -227,41 +227,41 @@ public class Recipes extends RecipeProvider {
 
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
         ShapedRecipeBuilder
-                .shapedRecipe(CombatSetup.COIN_BAG.get())
-                .addCriterion("has_gold_nugget", InventoryChangeTrigger.Instance.forItems(CombatSetup.MISTCLOAK.get()))
-                .key('#', Items.LEAD)
-                .key('l', Items.LEATHER)
-                .key('g', Items.GOLD_NUGGET)
-                .patternLine(" #g")
-                .patternLine("l l")
-                .patternLine(" l ")
-                .build(consumer);
+                .shaped(CombatSetup.COIN_BAG.get())
+                .unlockedBy("has_gold_nugget", InventoryChangeTrigger.Instance.hasItems(CombatSetup.MISTCLOAK.get()))
+                .define('#', Items.LEAD)
+                .define('l', Items.LEATHER)
+                .define('g', Items.GOLD_NUGGET)
+                .pattern(" #g")
+                .pattern("l l")
+                .pattern(" l ")
+                .save(consumer);
 
         Allomancy.LOGGER.debug("Creating Special Recipe for Vial Filling");
-        CustomRecipeBuilder.customRecipe(ConsumeSetup.VIAL_RECIPE_SERIALIZER.get()).build(consumer, "allomancy:vial_filling_recipe");
+        CustomRecipeBuilder.special(ConsumeSetup.VIAL_RECIPE_SERIALIZER.get()).save(consumer, "allomancy:vial_filling_recipe");
 
     }
 
     protected void buildShaped(Consumer<IFinishedRecipe> consumer, IItemProvider result, int count, Item criterion, String... lines) {
         Allomancy.LOGGER.debug("Creating Shaped Recipe for " + result.asItem().getRegistryName());
 
-        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shapedRecipe(result, count);
+        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(result, count);
 
-        builder.addCriterion("has_" + criterion.getRegistryName().getPath(), InventoryChangeTrigger.Instance.forItems(criterion));
+        builder.unlockedBy("has_" + criterion.getRegistryName().getPath(), InventoryChangeTrigger.Instance.hasItems(criterion));
 
         Set<Character> characters = new HashSet<>();
         for (String line : lines) {
-            builder.patternLine(line);
+            builder.pattern(line);
             line.chars().forEach(value -> characters.add((char) value));
         }
 
         for (Character c : characters) {
             if (this.defaultIngredients.containsKey(c)) {
-                builder.key(c, this.defaultIngredients.get(c));
+                builder.define(c, this.defaultIngredients.get(c));
             }
         }
 
-        builder.build(consumer);
+        builder.save(consumer);
     }
 
     protected void buildShaped(Consumer<IFinishedRecipe> consumer, IItemProvider result, Item criterion, String... lines) {
@@ -269,11 +269,11 @@ public class Recipes extends RecipeProvider {
     }
 
     protected void add(char c, ITag.INamedTag<Item> itemTag) {
-        this.defaultIngredients.put(c, Ingredient.fromTag(itemTag));
+        this.defaultIngredients.put(c, Ingredient.of(itemTag));
     }
 
     protected void add(char c, IItemProvider itemProvider) {
-        this.defaultIngredients.put(c, Ingredient.fromItems(itemProvider));
+        this.defaultIngredients.put(c, Ingredient.of(itemProvider));
     }
 
     protected void add(char c, Ingredient ingredient) {

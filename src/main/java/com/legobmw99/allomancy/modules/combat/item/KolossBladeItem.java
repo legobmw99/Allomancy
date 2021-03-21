@@ -20,7 +20,7 @@ import java.util.List;
 
 public class KolossBladeItem extends SwordItem {
     public KolossBladeItem() {
-        super(ItemTier.STONE, 9, -2.6F, new Item.Properties().group(ItemGroup.COMBAT));
+        super(ItemTier.STONE, 9, -2.6F, new Item.Properties().tab(ItemGroup.TAB_COMBAT));
     }
 
     @Override
@@ -29,11 +29,11 @@ public class KolossBladeItem extends SwordItem {
         if (entityIn != null && entityIn instanceof PlayerEntity && entityIn.getCapability(AllomancyCapability.PLAYER_CAP).isPresent()) {
             PlayerEntity player = (PlayerEntity) entityIn;
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-            if (isSelected && (player.getHeldItemOffhand() != stack)) {
+            if (isSelected && (player.getOffhandItem() != stack)) {
                 if (!cap.isBurning(Metal.PEWTER)) {
-                    player.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 10, 10, true, false));
-                    player.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10, 10, true, false));
-                    player.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 0, true, false));
+                    player.addEffect(new EffectInstance(Effects.DIG_SLOWDOWN, 10, 10, true, false));
+                    player.addEffect(new EffectInstance(Effects.WEAKNESS, 10, 10, true, false));
+                    player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 10, 0, true, false));
                 }
             }
         }
@@ -45,14 +45,14 @@ public class KolossBladeItem extends SwordItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         ITextComponent lore = AllomancySetup.addColorToText("item.allomancy.koloss_blade.lore", TextFormatting.GRAY);
         tooltip.add(lore);
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState blockIn) {
+    public boolean isCorrectToolForDrops(BlockState blockIn) {
         return false;
     }
 }

@@ -44,32 +44,32 @@ public class TryPushPullEntity {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity player = ctx.get().getSender();
-            Entity target = player.world.getEntityByID(this.entityIDOther);
+            Entity target = player.level.getEntity(this.entityIDOther);
             if (target != null) {
                 if (PowerUtils.isEntityMetal(target)) {
                     // The player moves
                     if (target instanceof IronGolemEntity || target instanceof ItemFrameEntity) {
-                        PowerUtils.move(this.direction, player, new BlockPos(target.getPositionVec()));
+                        PowerUtils.move(this.direction, player, new BlockPos(target.position()));
 
                         // Depends if the minecart is filled
                     } else if (target instanceof AbstractMinecartEntity) {
-                        if (target.isBeingRidden()) {
-                            if (!target.isPassenger(player)) {
-                                PowerUtils.move(this.direction / 2.0, target, new BlockPos(player.getPositionVec()));
-                                PowerUtils.move(this.direction / 2.0, player, new BlockPos(target.getPositionVec()));
+                        if (target.isVehicle()) {
+                            if (!target.hasPassenger(player)) {
+                                PowerUtils.move(this.direction / 2.0, target, new BlockPos(player.position()));
+                                PowerUtils.move(this.direction / 2.0, player, new BlockPos(target.position()));
                             }
                         } else {
-                            PowerUtils.move(this.direction, target, new BlockPos(player.getPositionVec()));
+                            PowerUtils.move(this.direction, target, new BlockPos(player.position()));
                         }
                         // The target moves
                     } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity) {
-                        PowerUtils.move(this.direction / 2.0, target, new BlockPos(player.getPositionVec()).down());
+                        PowerUtils.move(this.direction / 2.0, target, new BlockPos(player.position()).below());
 
                         // Split the difference
                     } else if (!(target instanceof ProjectileItemEntity)) {
-                        PowerUtils.move(this.direction / 2.0, target, new BlockPos(player.getPositionVec()));
+                        PowerUtils.move(this.direction / 2.0, target, new BlockPos(player.position()));
 
-                        PowerUtils.move(this.direction / 2.0, player, new BlockPos(target.getPositionVec()));
+                        PowerUtils.move(this.direction / 2.0, player, new BlockPos(target.position()));
                     }
                 }
             }

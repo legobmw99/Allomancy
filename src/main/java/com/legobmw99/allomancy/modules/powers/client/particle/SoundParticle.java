@@ -12,13 +12,13 @@ public class SoundParticle extends SpriteTexturedParticle {
     public SoundParticle(World world, double x, double y, double z, double motionX, double motionY, double motionZ, SoundCategory typeIn) {
         super((ClientWorld) world, x, y, z, motionX, motionY, motionZ);
 
-        this.motionX = motionX;
-        this.motionY = motionY + 0.009D;
-        this.motionZ = motionZ;
-        this.particleScale *= 1.5F;
-        this.canCollide = false;
-        setAlphaF(1.0F);
-        setMaxAge(20);
+        this.xd = motionX;
+        this.yd = motionY + 0.009D;
+        this.zd = motionZ;
+        this.quadSize *= 1.5F;
+        this.hasPhysics = false;
+        setAlpha(1.0F);
+        setLifetime(20);
 
         switch (typeIn) {
             case HOSTILE: // red
@@ -39,13 +39,13 @@ public class SoundParticle extends SpriteTexturedParticle {
     @Override
     public void tick() {
 
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
-        if (this.age++ >= this.maxAge) {
-            this.setExpired();
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+        if (this.age++ >= this.lifetime) {
+            this.remove();
         } else {
-            this.move(this.motionX, this.motionY, this.motionZ);
+            this.move(this.xd, this.yd, this.zd);
         }
 
     }
@@ -64,9 +64,9 @@ public class SoundParticle extends SpriteTexturedParticle {
             this.spriteSet = sprite;
         }
 
-        public Particle makeParticle(SoundParticleData data, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        public Particle createParticle(SoundParticleData data, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             SoundParticle sp = new SoundParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, data.getSoundType());
-            sp.selectSpriteRandomly(this.spriteSet);
+            sp.pickSprite(this.spriteSet);
             return sp;
         }
     }

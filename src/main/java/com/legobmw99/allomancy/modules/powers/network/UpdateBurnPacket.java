@@ -28,11 +28,11 @@ public class UpdateBurnPacket {
     }
 
     public static UpdateBurnPacket decode(PacketBuffer buf) {
-        return new UpdateBurnPacket(buf.readEnumValue(Metal.class), buf.readBoolean());
+        return new UpdateBurnPacket(buf.readEnum(Metal.class), buf.readBoolean());
     }
 
     public void encode(PacketBuffer buf) {
-        buf.writeEnumValue(this.mt);
+        buf.writeEnum(this.mt);
         buf.writeBoolean(this.value);
     }
 

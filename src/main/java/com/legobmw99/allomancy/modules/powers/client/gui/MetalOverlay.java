@@ -34,7 +34,7 @@ public class MetalOverlay {
     public static void drawMetalOverlay() {
         Minecraft mc = Minecraft.getInstance();
         ClientPlayerEntity player = mc.player;
-        MainWindow res = mc.getMainWindow();
+        MainWindow res = mc.getWindow();
 
         if (!player.isAlive()) {
             return;
@@ -51,16 +51,16 @@ public class MetalOverlay {
         // Set the offsets of the overlay based on config
         switch (PowersConfig.overlay_position.get()) {
             case TOP_RIGHT:
-                renderX = res.getScaledWidth() - 145;
+                renderX = res.getGuiScaledWidth() - 145;
                 renderY = 10;
                 break;
             case BOTTOM_RIGHT:
-                renderX = res.getScaledWidth() - 145;
-                renderY = res.getScaledHeight() - 50;
+                renderX = res.getGuiScaledWidth() - 145;
+                renderY = res.getGuiScaledHeight() - 50;
                 break;
             case BOTTOM_LEFT:
                 renderX = 5;
-                renderY = res.getScaledHeight() - 50;
+                renderY = res.getGuiScaledHeight() - 50;
                 break;
             default: // TOP_LEFT
                 renderX = 5;
@@ -69,10 +69,10 @@ public class MetalOverlay {
         }
 
         ForgeIngameGui gui = new ForgeIngameGui(mc);
-        mc.getTextureManager().bindTexture(meterLoc);
+        mc.getTextureManager().bind(meterLoc);
         Texture obj;
         obj = mc.getTextureManager().getTexture(meterLoc);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getGlTextureId());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getId());
 
 
         /*

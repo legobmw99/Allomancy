@@ -91,8 +91,7 @@ public class Languages extends LanguageProvider {
 
         for (DyeColor color : DyeColor.values()) {
             for (Metal mt : Metal.values()) {
-                add("block.minecraft.banner.allomancy_" + mt.getName() + "." + color.getTranslationKey(),
-                    getDisplayName(color) + " " + getDisplayName(mt) + " Symbol");
+                add("block.minecraft.banner.allomancy_" + mt.getName() + "." + color.getName(), getDisplayName(color) + " " + getDisplayName(mt) + " Symbol");
             }
         }
 
@@ -107,8 +106,8 @@ public class Languages extends LanguageProvider {
         return toTitleCase(mt.getName());
     }
 
-    private String getDisplayName(DyeColor color){
-        String[] trans = color.getTranslationKey().split("_");
+    private String getDisplayName(DyeColor color) {
+        String[] trans = color.getName().split("_");
         return Arrays.stream(trans).map(Languages::toTitleCase).collect(Collectors.joining(" "));
     }
 

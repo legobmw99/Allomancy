@@ -48,7 +48,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
-        if (!event.getPlayer().world.isRemote) {
+        if (!event.getPlayer().level.isClientSide) {
             if (event.getPlayer() instanceof ServerPlayerEntity) {
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
                 AllomancyCapability cap = AllomancyCapability.forPlayer(player);
@@ -59,10 +59,9 @@ public class CommonEventHandler {
                     cap.addPower(Metal.getMetal(randomMisting));
                     ItemStack flakes = new ItemStack(MaterialsSetup.FLAKES.get(randomMisting).get());
                     // Give the player one flake of their metal
-                    if (!player.inventory.addItemStackToInventory(flakes)) {
-                        ItemEntity entity = new ItemEntity(player.getEntityWorld(), player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(),
-                                                           flakes);
-                        player.getEntityWorld().addEntity(entity);
+                    if (!player.inventory.add(flakes)) {
+                        ItemEntity entity = new ItemEntity(player.getCommandSenderWorld(), player.position().x(), player.position().y(), player.position().z(), flakes);
+                        player.getCommandSenderWorld().addFreshEntity(entity);
                     }
                 }
 
@@ -74,7 +73,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onPlayerClone(final PlayerEvent.Clone event) {
-        if (!event.getPlayer().world.isRemote()) {
+        if (!event.getPlayer().level.isClientSide()) {
 
             PlayerEntity player = event.getPlayer();
             AllomancyCapability cap = AllomancyCapability.forPlayer(player); // the clone's cap
@@ -91,7 +90,7 @@ public class CommonEventHandler {
                     }
                 }
 
-                if (player.world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) ||
+                if (player.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) ||
                     !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
                     for (Metal mt : Metal.values()) {
                         cap.setAmount(mt, oldCap.getAmount(mt));
@@ -105,24 +104,24 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.getPlayer().getEntityWorld().isRemote()) {
+        if (!event.getPlayer().getCommandSenderWorld().isClientSide()) {
             Network.sync(event.getPlayer());
         }
     }
 
     @SubscribeEvent
     public static void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (!event.getPlayer().getEntityWorld().isRemote()) {
+        if (!event.getPlayer().getCommandSenderWorld().isClientSide()) {
             Network.sync(event.getPlayer());
         }
     }
 
     @SubscribeEvent
     public static void onStartTracking(final net.minecraftforge.event.entity.player.PlayerEvent.StartTracking event) {
-        if (!event.getTarget().world.isRemote) {
+        if (!event.getTarget().level.isClientSide) {
             if (event.getTarget() instanceof ServerPlayerEntity) {
                 ServerPlayerEntity playerEntity = (ServerPlayerEntity) event.getTarget();
-                Network.sendTo(new AllomancyCapabilityPacket(AllomancyCapability.forPlayer(playerEntity), playerEntity.getEntityId()), (ServerPlayerEntity) event.getPlayer());
+                Network.sendTo(new AllomancyCapabilityPacket(AllomancyCapability.forPlayer(playerEntity), playerEntity.getId()), (ServerPlayerEntity) event.getPlayer());
             }
         }
     }
@@ -142,7 +141,7 @@ public class CommonEventHandler {
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
             AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-            cap.setDeathLoc(new BlockPos(player.getPositionVec()), player.world.getDimensionKey());
+            cap.setDeathLoc(new BlockPos(player.position()), player.level.dimension());
             Network.sync(cap, player);
         }
     }
@@ -150,8 +149,8 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void onDamage(final LivingHurtEvent event) {
         // Increase outgoing damage for pewter burners
-        if (event.getSource().getTrueSource() instanceof ServerPlayerEntity) {
-            ServerPlayerEntity source = (ServerPlayerEntity) event.getSource().getTrueSource();
+        if (event.getSource().getEntity() instanceof ServerPlayerEntity) {
+            ServerPlayerEntity source = (ServerPlayerEntity) event.getSource().getEntity();
             AllomancyCapability cap = AllomancyCapability.forPlayer(source);
 
             if (cap.isBurning(Metal.PEWTER)) {
@@ -192,7 +191,7 @@ public class CommonEventHandler {
         if (event.phase == TickEvent.Phase.END) {
 
             World world = event.world;
-            List<? extends PlayerEntity> list = world.getPlayers();
+            List<? extends PlayerEntity> list = world.players();
             for (int enti = list.size() - 1; enti >= 0; enti--) {
                 PlayerEntity curPlayer = list.get(enti);
                 AllomancyCapability cap = AllomancyCapability.forPlayer(curPlayer);
@@ -206,11 +205,11 @@ public class CommonEventHandler {
                     }
                     if (cap.isBurning(Metal.DURALUMIN) && !cap.isEnhanced()) {
                         cap.setEnhanced(2);
-                        Network.sync(new UpdateEnhancedPacket(2, curPlayer.getEntityId()), curPlayer);
+                        Network.sync(new UpdateEnhancedPacket(2, curPlayer.getId()), curPlayer);
                     } else if (!cap.isBurning(Metal.DURALUMIN) && cap.isEnhanced()) {
                         cap.decEnhanced();
                         if (!cap.isEnhanced()) { //Enhancement ran out this tick
-                            Network.sync(new UpdateEnhancedPacket(false, curPlayer.getEntityId()), curPlayer);
+                            Network.sync(new UpdateEnhancedPacket(false, curPlayer.getId()), curPlayer);
                             cap.drainMetals(Arrays.stream(Metal.values()).filter(cap::isBurning).toArray(Metal[]::new));
                         }
                     }
@@ -229,9 +228,9 @@ public class CommonEventHandler {
                     if (cap.isEnhanced() && cap.isBurning(Metal.CHROMIUM)) {
                         if (world instanceof ServerWorld) {
                             int max = 20;
-                            BlockPos negative = new BlockPos(curPlayer.getPositionVec()).add(-max, -max, -max);
-                            BlockPos positive = new BlockPos(curPlayer.getPositionVec()).add(max, max, max);
-                            world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(negative, positive)).forEach(otherPlayer -> {
+                            BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
+                            BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
+                            world.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(negative, positive)).forEach(otherPlayer -> {
                                 AllomancyCapability capOther = AllomancyCapability.forPlayer(otherPlayer);
                                 capOther.drainMetals(Metal.values());
                             });
@@ -250,8 +249,8 @@ public class CommonEventHandler {
                             spawnLoc = cap.getSpawnLoc();
                         } else {
                             spawnDim = World.OVERWORLD; // no spawn --> use world spawn
-                            spawnLoc = new BlockPos(curPlayer.world.getWorldInfo().getSpawnX(), curPlayer.world.getWorldInfo().getSpawnY(),
-                                                    curPlayer.world.getWorldInfo().getSpawnZ());
+                            spawnLoc = new BlockPos(curPlayer.level.getLevelData().getXSpawn(), curPlayer.level.getLevelData().getYSpawn(),
+                                                    curPlayer.level.getLevelData().getZSpawn());
 
                         }
 
@@ -278,26 +277,26 @@ public class CommonEventHandler {
                      * BENDALLOY AND CADMIUM                     *
                      *********************************************/
                     if (cap.isBurning(Metal.BENDALLOY) && !cap.isBurning(Metal.CADMIUM)) {
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 10, 3, true, false));
-                        curPlayer.livingTick();
-                        curPlayer.livingTick();
+                        curPlayer.addEffect(new EffectInstance(Effects.DIG_SPEED, 10, 3, true, false));
+                        curPlayer.aiStep();
+                        curPlayer.aiStep();
 
                         if (world instanceof ServerWorld) {
                             int max = cap.isEnhanced() ? 10 : 5;
-                            BlockPos negative = new BlockPos(curPlayer.getPositionVec()).add(-max, -max, -max);
-                            BlockPos positive = new BlockPos(curPlayer.getPositionVec()).add(max, max, max);
-                            world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
-                                entity.livingTick();
-                                entity.livingTick();
+                            BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
+                            BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
+                            world.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
+                                entity.aiStep();
+                                entity.aiStep();
                             });
-                            BlockPos.getAllInBox(negative, positive).forEach(bp -> {
+                            BlockPos.betweenClosedStream(negative, positive).forEach(bp -> {
                                 BlockState block = world.getBlockState(bp);
-                                TileEntity te = world.getTileEntity(bp);
+                                TileEntity te = world.getBlockEntity(bp);
                                 for (int i = 0; i < max * 4 / (te == null ? 10 : 1); i++) {
                                     if (te instanceof ITickableTileEntity) {
                                         ((ITickableTileEntity) te).tick();
-                                    } else if (block.ticksRandomly()) {
-                                        block.randomTick((ServerWorld) world, bp, world.rand);
+                                    } else if (block.isRandomlyTicking()) {
+                                        block.randomTick((ServerWorld) world, bp, world.random);
                                     }
                                 }
                             });
@@ -305,13 +304,13 @@ public class CommonEventHandler {
                     }
                     if (cap.isBurning(Metal.CADMIUM) && !cap.isBurning(Metal.BENDALLOY)) {
                         int max = cap.isEnhanced() ? 20 : 10;
-                        BlockPos negative = new BlockPos(curPlayer.getPositionVec()).add(-max, -max, -max);
-                        BlockPos positive = new BlockPos(curPlayer.getPositionVec()).add(max, max, max);
+                        BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
+                        BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
                         int slowness_amplifier = cap.isEnhanced() ? 255 : 2; // Duralumin freezes entities
-                        world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
-                            entity.addPotionEffect(new EffectInstance(Effects.SLOW_FALLING, 10, 0, true, false));
+                        world.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(negative, positive)).forEach(entity -> {
+                            entity.addEffect(new EffectInstance(Effects.SLOW_FALLING, 10, 0, true, false));
                             if (entity != curPlayer) {
-                                entity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, slowness_amplifier, true, false));
+                                entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 10, slowness_amplifier, true, false));
                             }
                         });
                     }
@@ -322,32 +321,31 @@ public class CommonEventHandler {
                      *********************************************/
                     if (cap.isBurning(Metal.TIN)) {
                         // Add night vision to tin-burners
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, Short.MAX_VALUE, 5, true, false));
+                        curPlayer.addEffect(new EffectInstance(Effects.NIGHT_VISION, Short.MAX_VALUE, 5, true, false));
                         if (cap.isEnhanced()) { // Tin and Duralumin is too much to handle
-                            curPlayer.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100, 150, true, false));
-                            if (world.rand.nextInt(50) == 0) {
-                                curPlayer.addPotionEffect(new EffectInstance(Effects.NAUSEA, 100, 0, true, false));
+                            curPlayer.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 150, true, false));
+                            if (world.random.nextInt(50) == 0) {
+                                curPlayer.addEffect(new EffectInstance(Effects.CONFUSION, 100, 0, true, false));
                             }
                         } else { // Remove blindness from normal tin burners
-                            if (curPlayer.isPotionActive(Effects.BLINDNESS)) {
-                                curPlayer.removePotionEffect(Effects.BLINDNESS);
+                            if (curPlayer.hasEffect(Effects.BLINDNESS)) {
+                                curPlayer.removeEffect(Effects.BLINDNESS);
                             }
                         }
                     }
                     // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing, only if the amplifier is 5
-                    if (!cap.isBurning(Metal.TIN) && curPlayer.getActivePotionEffect(Effects.NIGHT_VISION) != null &&
-                        curPlayer.getActivePotionEffect(Effects.NIGHT_VISION).getAmplifier() == 5) {
+                    if (!cap.isBurning(Metal.TIN) && curPlayer.getEffect(Effects.NIGHT_VISION) != null && curPlayer.getEffect(Effects.NIGHT_VISION).getAmplifier() == 5) {
 
-                        curPlayer.removePotionEffect(Effects.NIGHT_VISION);
+                        curPlayer.removeEffect(Effects.NIGHT_VISION);
                     }
                     if (cap.isBurning(Metal.PEWTER)) {
                         //Add jump boost and speed to pewter burners
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 10, 1, true, false));
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, 10, 0, true, false));
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.HASTE, 10, 1, true, false));
+                        curPlayer.addEffect(new EffectInstance(Effects.JUMP, 10, 1, true, false));
+                        curPlayer.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 10, 0, true, false));
+                        curPlayer.addEffect(new EffectInstance(Effects.DIG_SPEED, 10, 1, true, false));
 
                         if (cap.getDamageStored() > 0) {
-                            if (world.rand.nextInt(200) == 0) {
+                            if (world.random.nextInt(200) == 0) {
                                 cap.setDamageStored(cap.getDamageStored() - 1);
                             }
                         }
@@ -356,7 +354,7 @@ public class CommonEventHandler {
                     // Damage the player if they have stored damage and pewter cuts out
                     if (!cap.isBurning(Metal.PEWTER) && (cap.getDamageStored() > 0)) {
                         cap.setDamageStored(cap.getDamageStored() - 1);
-                        curPlayer.attackEntityFrom(DamageSource.MAGIC, 2);
+                        curPlayer.hurt(DamageSource.MAGIC, 2);
                     }
 
 
@@ -364,7 +362,7 @@ public class CommonEventHandler {
                      * COPPER (enhanced)                      *
                      *********************************************/
                     if (cap.isEnhanced() && cap.isBurning(Metal.COPPER)) {
-                        curPlayer.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 20, 50, true, false));
+                        curPlayer.addEffect(new EffectInstance(Effects.INVISIBILITY, 20, 50, true, false));
                     }
 
                 }

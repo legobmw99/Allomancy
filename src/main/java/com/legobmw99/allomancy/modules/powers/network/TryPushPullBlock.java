@@ -40,11 +40,11 @@ public class TryPushPullBlock {
             ServerPlayerEntity player = ctx.get().getSender();
             BlockPos pos = this.blockPos;
             // Sanity check to make sure server has same configs and that the block is loaded in the server
-            if ((player.world.isBlockLoaded(pos) && (PowerUtils.isBlockStateMetal(player.world.getBlockState(pos)))) // Check Block
-                || (player.getHeldItemMainhand().getItem() == CombatSetup.COIN_BAG.get() && (!player.findAmmo(player.getHeldItemMainhand()).isEmpty()) && this.direction > 0)) {
+            if ((player.level.hasChunkAt(pos) && (PowerUtils.isBlockStateMetal(player.level.getBlockState(pos)))) // Check Block
+                || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() && (!player.getProjectile(player.getMainHandItem()).isEmpty()) && this.direction > 0)) {
                 // Check for the coin bag
-                if (player.world.getBlockState(pos).getBlock() instanceof IAllomanticallyActivatedBlock) {
-                    ((IAllomanticallyActivatedBlock) player.world.getBlockState(pos).getBlock()).onBlockActivatedAllomantically(player.world.getBlockState(pos), player.world, pos,
+                if (player.level.getBlockState(pos).getBlock() instanceof IAllomanticallyActivatedBlock) {
+                    ((IAllomanticallyActivatedBlock) player.level.getBlockState(pos).getBlock()).onBlockActivatedAllomantically(player.level.getBlockState(pos), player.level, pos,
                                                                                                                                 player, this.direction > 0);
                 } else {
                     PowerUtils.move(this.direction, player, pos);

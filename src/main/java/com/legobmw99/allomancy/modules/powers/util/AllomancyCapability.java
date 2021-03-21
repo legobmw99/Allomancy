@@ -285,7 +285,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      */
     public void setDeathLoc(BlockPos pos, RegistryKey<World> dim) {
         if (dim != null) {
-            setDeathLoc(pos, dim.getLocation().toString());
+            setDeathLoc(pos, dim.location().toString());
         }
     }
 
@@ -318,7 +318,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         if (this.death_dimension == null) {
             return null;
         }
-        return RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(this.death_dimension));
+        return RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(this.death_dimension));
 
     }
 
@@ -329,7 +329,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
      * @param dim The RegistryKey representing the spawn dimension
      */
     public void setSpawnLoc(BlockPos pos, RegistryKey<World> dim) {
-        setSpawnLoc(pos, dim.getLocation().toString());
+        setSpawnLoc(pos, dim.location().toString());
     }
 
     /**
@@ -361,7 +361,7 @@ public class AllomancyCapability implements ICapabilitySerializable<CompoundNBT>
         if (this.spawn_dimension == null) {
             return null;
         }
-        return RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(this.spawn_dimension));
+        return RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(this.spawn_dimension));
     }
 
     /**

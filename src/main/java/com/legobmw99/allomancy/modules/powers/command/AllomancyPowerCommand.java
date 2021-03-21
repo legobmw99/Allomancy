@@ -30,7 +30,7 @@ public class AllomancyPowerCommand {
     }
 
     private static Predicate<CommandSource> permissions(int level) {
-        return (player) -> player.hasPermissionLevel(level);
+        return (player) -> player.hasPermission(level);
     }
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
@@ -73,7 +73,7 @@ public class AllomancyPowerCommand {
                 i++;
             }
         } else {
-            getPowers(ctx, ctx.getSource().asPlayer());
+            getPowers(ctx, ctx.getSource().getPlayerOrException());
             i = 1;
         }
 
@@ -98,7 +98,7 @@ public class AllomancyPowerCommand {
                 }
             }
         }
-        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
+        ctx.getSource().sendSuccess(new TranslationTextComponent("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
     }
 
     private static int addPower(CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
@@ -109,7 +109,7 @@ public class AllomancyPowerCommand {
                 i++;
             }
         } else {
-            addPower(ctx, ctx.getSource().asPlayer());
+            addPower(ctx, ctx.getSource().getPlayerOrException());
             i = 1;
         }
         return i;
@@ -125,8 +125,8 @@ public class AllomancyPowerCommand {
             cap.addPower(mt);
         }
 
-        Network.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
-        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.addpower", player.getDisplayName(), type), true);
+        Network.sendTo(new AllomancyCapabilityPacket(cap, player.getId()), player);
+        ctx.getSource().sendSuccess(new TranslationTextComponent("commands.allomancy.addpower", player.getDisplayName(), type), true);
     }
 
     private static int removePower(CommandContext<CommandSource> ctx, boolean hasPlayer) throws CommandSyntaxException {
@@ -137,7 +137,7 @@ public class AllomancyPowerCommand {
                 i++;
             }
         } else {
-            removePower(ctx, ctx.getSource().asPlayer());
+            removePower(ctx, ctx.getSource().getPlayerOrException());
             i = 1;
         }
         return i;
@@ -153,8 +153,8 @@ public class AllomancyPowerCommand {
             cap.revokePower(mt);
         }
 
-        Network.sendTo(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
-        ctx.getSource().sendFeedback(new TranslationTextComponent("commands.allomancy.removepower", player.getDisplayName(), type), true);
+        Network.sendTo(new AllomancyCapabilityPacket(cap, player.getId()), player);
+        ctx.getSource().sendSuccess(new TranslationTextComponent("commands.allomancy.removepower", player.getDisplayName(), type), true);
     }
 
 

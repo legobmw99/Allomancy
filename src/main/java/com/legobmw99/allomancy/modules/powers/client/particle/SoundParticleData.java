@@ -14,13 +14,13 @@ public class SoundParticleData implements IParticleData {
     public static final IParticleData.IDeserializer<SoundParticleData> DESERIALIZER = new IParticleData.IDeserializer<SoundParticleData>() {
 
         @Override
-        public SoundParticleData deserialize(ParticleType<SoundParticleData> particleTypeIn, StringReader reader) {
+        public SoundParticleData fromCommand(ParticleType<SoundParticleData> particleTypeIn, StringReader reader) {
             return new SoundParticleData(SoundCategory.AMBIENT);
         }
 
         @Override
-        public SoundParticleData read(ParticleType<SoundParticleData> particleTypeIn, PacketBuffer buffer) {
-            return new SoundParticleData(buffer.readEnumValue(SoundCategory.class));
+        public SoundParticleData fromNetwork(ParticleType<SoundParticleData> particleTypeIn, PacketBuffer buffer) {
+            return new SoundParticleData(buffer.readEnum(SoundCategory.class));
         }
     };
     private final SoundCategory type;
@@ -39,12 +39,12 @@ public class SoundParticleData implements IParticleData {
     }
 
     @Override
-    public void write(PacketBuffer buffer) {
-        buffer.writeEnumValue(this.type);
+    public void writeToNetwork(PacketBuffer buffer) {
+        buffer.writeEnum(this.type);
     }
 
     @Override
-    public String getParameters() {
+    public String writeToString() {
         return Registry.PARTICLE_TYPE.getKey(this.getType()) + " " + this.type.toString();
     }
 }

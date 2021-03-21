@@ -38,7 +38,7 @@ public class Network {
 
     public static void sendTo(Object msg, ServerPlayerEntity player) {
         if (!(player instanceof FakePlayer)) {
-            INSTANCE.sendTo(msg, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+            INSTANCE.sendTo(msg, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 
@@ -52,7 +52,7 @@ public class Network {
     }
 
     public static void sync(AllomancyCapability cap, PlayerEntity player) {
-        sync(new AllomancyCapabilityPacket(cap, player.getEntityId()), player);
+        sync(new AllomancyCapabilityPacket(cap, player.getId()), player);
     }
 
     public static void sync(Object msg, PlayerEntity player) {

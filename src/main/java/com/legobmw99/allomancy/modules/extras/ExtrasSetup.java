@@ -26,8 +26,9 @@ public class ExtrasSetup {
     public static final RegistryObject<IronButtonBlock> IRON_BUTTON = BLOCKS.register("iron_button", IronButtonBlock::new);
     public static final RegistryObject<IronLeverBlock> IRON_LEVER = BLOCKS.register("iron_lever", IronLeverBlock::new);
     public static final RegistryObject<Item> IRON_BUTTON_ITEM = ITEMS.register("iron_button",
-                                                                               () -> new BlockItem(IRON_BUTTON.get(), new Item.Properties().group(ItemGroup.REDSTONE)));
-    public static final RegistryObject<Item> IRON_LEVER_ITEM = ITEMS.register("iron_lever", () -> new BlockItem(IRON_LEVER.get(), new Item.Properties().group(ItemGroup.REDSTONE)));
+                                                                               () -> new BlockItem(IRON_BUTTON.get(), new Item.Properties().tab(ItemGroup.TAB_REDSTONE)));
+    public static final RegistryObject<Item> IRON_LEVER_ITEM = ITEMS.register("iron_lever",
+                                                                              () -> new BlockItem(IRON_LEVER.get(), new Item.Properties().tab(ItemGroup.TAB_REDSTONE)));
 
     public static final List<BannerPattern> PATTERNS = new ArrayList<>();
     public static final List<RegistryObject<Item>> PATTERN_ITEMS = new ArrayList<>();
@@ -37,8 +38,7 @@ public class ExtrasSetup {
         for (Metal mt : Metal.values()) {
             String name = mt.getName();
             BannerPattern pattern = BannerPattern.create("ALLOMANCY" + mt.name(), "allomancy_" + name, "allomancy_" + name, true);
-            RegistryObject<Item> pattern_item = ITEMS.register(name + "_pattern",
-                                                               () -> new BannerPatternItem(pattern, AllomancySetup.createStandardItemProperties().maxStackSize(1)));
+            RegistryObject<Item> pattern_item = ITEMS.register(name + "_pattern", () -> new BannerPatternItem(pattern, AllomancySetup.createStandardItemProperties().stacksTo(1)));
             PATTERNS.add(pattern);
             PATTERN_ITEMS.add(pattern_item);
         }

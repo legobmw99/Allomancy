@@ -38,7 +38,7 @@ public class ChangeEmotionPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             PlayerEntity allomancer = ctx.get().getSender();
-            CreatureEntity target = (CreatureEntity) allomancer.world.getEntityByID(this.entityID);
+            CreatureEntity target = (CreatureEntity) allomancer.level.getEntity(this.entityID);
             if (target == null) {
                 return;
             }

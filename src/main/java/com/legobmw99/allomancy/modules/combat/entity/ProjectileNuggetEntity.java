@@ -26,7 +26,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 @OnlyIn(value = Dist.CLIENT, _interface = IRendersAsItem.class)
 public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRendersAsItem {
-    private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(ProjectileNuggetEntity.class, DataSerializers.ITEMSTACK);
+    private static final DataParameter<ItemStack> ITEM = EntityDataManager.defineId(ProjectileNuggetEntity.class, DataSerializers.ITEM_STACK);
 
     private float damage;
     private boolean dropItem = true;
@@ -36,7 +36,7 @@ public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRen
         this.damage = damageIn;
 
         if (!itemIn.isEmpty()) {
-            this.dataManager.set(ITEM, itemIn.copy());
+            this.entityData.set(ITEM, itemIn.copy());
         }
     }
 
@@ -44,12 +44,12 @@ public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRen
         super(CombatSetup.NUGGET_PROJECTILE.get(), livingEntityIn, worldIn);
         if (livingEntityIn instanceof PlayerEntity) {
             PlayerEntity ep = (PlayerEntity) livingEntityIn;
-            if (ep.abilities.isCreativeMode) {
+            if (ep.abilities.instabuild) {
                 this.dropItem = false;
             }
         }
         if (!itemIn.isEmpty()) {
-            this.dataManager.set(ITEM, itemIn.copy());
+            this.entityData.set(ITEM, itemIn.copy());
         }
         this.damage = damageIn;
     }
@@ -64,32 +64,32 @@ public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRen
         if (other instanceof ProjectileNuggetEntity) {
             ProjectileNuggetEntity nugget = (ProjectileNuggetEntity) other;
 
-            this.dataManager.set(ITEM, nugget.getItem().copy());
+            this.entityData.set(ITEM, nugget.getItem().copy());
             this.damage = nugget.getDamage();
         }
     }
 
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(ITEM, ItemStack.EMPTY);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ITEM, ItemStack.EMPTY);
     }
 
 
     @Override
-    protected void onImpact(RayTraceResult rayTraceResult) {
+    protected void onHit(RayTraceResult rayTraceResult) {
         // I think this is .getThrower() or equiv
-        if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY && ((EntityRayTraceResult) rayTraceResult).getEntity() == this.func_234616_v_()) {
+        if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY && ((EntityRayTraceResult) rayTraceResult).getEntity() == this.getOwner()) {
             return;
         }
 
         if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY) {
-            ((EntityRayTraceResult) rayTraceResult).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), this.damage);
+            ((EntityRayTraceResult) rayTraceResult).getEntity().hurt(DamageSource.thrown(this, this.getOwner()), this.damage);
         }
 
-        if (!this.world.isRemote) {
-            ItemStack ammo = new ItemStack(this.dataManager.get(ITEM).getItem(), 1);
-            if (this.world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS) && rayTraceResult.getType() != RayTraceResult.Type.ENTITY && this.dropItem) {
-                this.world.addEntity(new ItemEntity(this.world, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), ammo));
+        if (!this.level.isClientSide) {
+            ItemStack ammo = new ItemStack(this.entityData.get(ITEM).getItem(), 1);
+            if (this.level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && rayTraceResult.getType() != RayTraceResult.Type.ENTITY && this.dropItem) {
+                this.level.addFreshEntity(new ItemEntity(this.level, this.position().x(), this.position().y(), this.position().z(), ammo));
             }
 
             this.remove();
@@ -97,7 +97,7 @@ public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRen
     }
 
     public ItemStack getItem() {
-        return this.dataManager.get(ITEM).isEmpty() ? new ItemStack(this.getDefaultItem()) : this.dataManager.get(ITEM);
+        return this.entityData.get(ITEM).isEmpty() ? new ItemStack(this.getDefaultItem()) : this.entityData.get(ITEM);
     }
 
     public float getDamage() {
@@ -110,10 +110,10 @@ public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRen
         return Items.GOLD_NUGGET;
     }
 
-
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
+
 
 }

@@ -24,54 +24,7 @@ public class CoinBagItem extends ShootableItem {
     };
 
     public CoinBagItem() {
-        super(AllomancySetup.createStandardItemProperties().maxStackSize(1));
-    }
-
-    @Nonnull
-    public Predicate<ItemStack> getInventoryAmmoPredicate() {
-        return NUGGETS;
-    }
-
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack itemstack = player.findAmmo(player.getHeldItem(hand));
-        if (itemstack.getItem() instanceof ArrowItem) { // the above get function has silly default behavior
-            itemstack = new ItemStack(Items.GOLD_NUGGET, 1);
-        }
-
-        if (AllomancyCapability.forPlayer(player).isBurning(Metal.STEEL)) {    // make sure there is always an item available
-            if (!world.isRemote) {
-
-                Ammo type = getAmmoFromItem(itemstack.getItem());
-
-                ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, type.damage);
-                //          formerly called .shoot()
-                nugget_projectile.func_234612_a_(player, player.rotationPitch, player.rotationYawHead, type.arg1, type.arg2, type.arg3);
-                world.addEntity(nugget_projectile);
-
-
-                if (!player.abilities.isCreativeMode) {
-                    itemstack.shrink(1);
-                }
-
-                return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(hand));
-
-            }
-
-
-        }
-        return new ActionResult<>(ActionResultType.FAIL, player.getHeldItem(hand));
-
-    }
-
-    @Override
-    public int getItemEnchantability() {
-        return 0;
-    }
-
-    @Override
-    public int func_230305_d_() { // TODO figure out what this does - new in 1.16, possibly speed?
-        return 0;
+        super(AllomancySetup.createStandardItemProperties().stacksTo(1));
     }
 
     private static Ammo getAmmoFromItem(Item itemIn) {
@@ -90,6 +43,53 @@ public class CoinBagItem extends ShootableItem {
             default:
                 return Ammo.LIGHT;
         }
+    }
+
+    @Nonnull
+    public Predicate<ItemStack> getAllSupportedProjectiles() {
+        return NUGGETS;
+    }
+
+    @Override
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemstack = player.getProjectile(player.getItemInHand(hand));
+        if (itemstack.getItem() instanceof ArrowItem) { // the above get function has silly default behavior
+            itemstack = new ItemStack(Items.GOLD_NUGGET, 1);
+        }
+
+        if (AllomancyCapability.forPlayer(player).isBurning(Metal.STEEL)) {    // make sure there is always an item available
+            if (!world.isClientSide) {
+
+                Ammo type = getAmmoFromItem(itemstack.getItem());
+
+                ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, type.damage);
+                //          formerly called .shoot()
+                nugget_projectile.shootFromRotation(player, player.xRot, player.yHeadRot, type.arg1, type.arg2, type.arg3);
+                world.addFreshEntity(nugget_projectile);
+
+
+                if (!player.abilities.instabuild) {
+                    itemstack.shrink(1);
+                }
+
+                return new ActionResult<>(ActionResultType.SUCCESS, player.getItemInHand(hand));
+
+            }
+
+
+        }
+        return new ActionResult<>(ActionResultType.FAIL, player.getItemInHand(hand));
+
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+        return 0;
+    }
+
+    @Override
+    public int getDefaultProjectileRange() { // TODO figure out what this does - new in 1.16, possibly speed?
+        return 0;
     }
 
     private enum Ammo {

@@ -29,39 +29,39 @@ public class CombatSetup {
     public static final RegistryObject<ObsidianDaggerItem> OBSIDIAN_DAGGER = ITEMS.register("obsidian_dagger", ObsidianDaggerItem::new);
     public static final RegistryObject<KolossBladeItem> KOLOSS_BLADE = ITEMS.register("koloss_blade", KolossBladeItem::new);
     public static final RegistryObject<EntityType<ProjectileNuggetEntity>> NUGGET_PROJECTILE = ENTITIES.register("nugget_projectile",
-                                                                                                                 () -> EntityType.Builder.<ProjectileNuggetEntity>create(
+                                                                                                                 () -> EntityType.Builder.<ProjectileNuggetEntity>of(
                                                                                                                          ProjectileNuggetEntity::new, EntityClassification.MISC)
                                                                                                                          .setShouldReceiveVelocityUpdates(true)
                                                                                                                          .setUpdateInterval(20)
                                                                                                                          .setCustomClientFactory(
                                                                                                                                  (spawnEntity, world) -> new ProjectileNuggetEntity(
                                                                                                                                          world, spawnEntity.getEntity()))
-                                                                                                                         .size(0.25F, 0.25F)
+                                                                                                                         .sized(0.25F, 0.25F)
                                                                                                                          .build("nugget_projectile"));
     public static final IArmorMaterial WoolArmor = new IArmorMaterial() {
         @Override
-        public int getDurability(EquipmentSlotType slotIn) {
+        public int getDurabilityForSlot(EquipmentSlotType slotIn) {
             return 50;
         }
 
         @Override
-        public int getDamageReductionAmount(EquipmentSlotType slotIn) {
+        public int getDefenseForSlot(EquipmentSlotType slotIn) {
             return slotIn == EquipmentSlotType.CHEST ? 4 : 0;
         }
 
         @Override
-        public int getEnchantability() {
+        public int getEnchantmentValue() {
             return 15;
         }
 
         @Override
-        public SoundEvent getSoundEvent() {
-            return SoundEvents.ITEM_ARMOR_EQUIP_LEATHER;
+        public SoundEvent getEquipSound() {
+            return SoundEvents.ARMOR_EQUIP_LEATHER;
         }
 
         @Override
-        public Ingredient getRepairMaterial() {
-            return Ingredient.fromItems(Items.GRAY_WOOL);
+        public Ingredient getRepairIngredient() {
+            return Ingredient.of(Items.GRAY_WOOL);
         }
 
         @Override

@@ -15,43 +15,43 @@ public class ObsidianDaggerItem extends SwordItem {
 
     private static final IItemTier tier = new IItemTier() {
         @Override
-        public int getMaxUses() {
+        public int getUses() {
             return 8;
         }
 
         @Override
-        public float getEfficiency() {
+        public float getSpeed() {
             return 0;
         }
 
         @Override
-        public float getAttackDamage() {
+        public float getAttackDamageBonus() {
             return ATTACK_DAMAGE;
         }
 
         @Override
-        public int getHarvestLevel() {
+        public int getLevel() {
             return 0;
         }
 
         @Override
-        public int getEnchantability() {
+        public int getEnchantmentValue() {
             return 1;
         }
 
         @Override
-        public Ingredient getRepairMaterial() {
-            return Ingredient.fromItems(Blocks.OBSIDIAN);
+        public Ingredient getRepairIngredient() {
+            return Ingredient.of(Blocks.OBSIDIAN);
         }
     };
 
     public ObsidianDaggerItem() {
-        super(tier, ATTACK_DAMAGE, ATTACK_SPEED, new Item.Properties().group(ItemGroup.COMBAT));
+        super(tier, ATTACK_DAMAGE, ATTACK_SPEED, new Item.Properties().tab(ItemGroup.TAB_COMBAT));
     }
 
     // prevent dagger from mining
     @Override
-    public boolean canHarvestBlock(BlockState blockIn) {
+    public boolean isCorrectToolForDrops(BlockState blockIn) {
         return false;
     }
 

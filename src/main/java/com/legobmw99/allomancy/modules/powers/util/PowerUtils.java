@@ -115,7 +115,7 @@ public class PowerUtils {
             return isItemMetal(((ItemEntity) entity).getItem());
         }
         if (entity instanceof ItemFrameEntity) {
-            return isItemMetal(((ItemFrameEntity) entity).getDisplayedItem());
+            return isItemMetal(((ItemFrameEntity) entity).getItem());
         }
         if (entity instanceof FallingBlockEntity) {
             return isBlockStateMetal(((FallingBlockEntity) entity).getBlockState());
@@ -131,10 +131,10 @@ public class PowerUtils {
             if (ent instanceof IronGolemEntity) {
                 return true;
             }
-            if (isItemMetal(ent.getHeldItem(Hand.MAIN_HAND)) || isItemMetal(ent.getHeldItem(Hand.OFF_HAND))) {
+            if (isItemMetal(ent.getItemInHand(Hand.MAIN_HAND)) || isItemMetal(ent.getItemInHand(Hand.OFF_HAND))) {
                 return true;
             }
-            for (ItemStack itemStack : ent.getArmorInventoryList()) {
+            for (ItemStack itemStack : ent.getArmorSlots()) {
                 if (isItemMetal(itemStack)) {
                     return true;
                 }
@@ -152,7 +152,7 @@ public class PowerUtils {
     public static void wipePlayer(PlayerEntity player) {
         AllomancyCapability capHurt = AllomancyCapability.forPlayer(player);
         capHurt.drainMetals(Metal.values());
-        player.clearActivePotions();
+        player.removeAllEffects();
 
         if (player instanceof ServerPlayerEntity) {
             Network.sync(capHurt, player);
@@ -170,10 +170,10 @@ public class PowerUtils {
 
         double motionX, motionY, motionZ, magnitude;
         if (toMove.isPassenger()) {
-            toMove = toMove.getRidingEntity();
+            toMove = toMove.getVehicle();
         }
-        Vector3d vec = toMove.getPositionVec();
-        double posX = vec.getX(), posY = vec.getY(), posZ = vec.getZ();
+        Vector3d vec = toMove.position();
+        double posX = vec.x(), posY = vec.y(), posZ = vec.z();
         // Calculate the length of the vector between the entity and anchor
         magnitude = Math.sqrt(Math.pow((posX - (block.getX() + .5)), 2) + Math.pow((posY - (block.getY() + .5)), 2) + Math.pow((posZ - (block.getZ() + .5)), 2));
         // Get a unit(-ish) vector in the direction of motion
@@ -182,12 +182,12 @@ public class PowerUtils {
         motionZ = ((posZ - (block.getZ() + .5)) * directionScalar * (1.1) / magnitude);
         // Move along that vector, additively increasing motion until you max
         // out at the above values
-        double x = toMove.getMotion().getX(), y = toMove.getMotion().getY(), z = toMove.getMotion().getZ();
-        toMove.setMotion(Math.abs(x + motionX) > 0.01 ? MathHelper.clamp(x + motionX, -Math.abs(motionX), motionX) : 0,
-                         Math.abs(y + motionY) > 0.01 ? MathHelper.clamp(y + motionY, -Math.abs(motionY), motionY) : 0,
-                         Math.abs(z + motionZ) > 0.01 ? MathHelper.clamp(z + motionZ, -Math.abs(motionZ), motionZ) : 0);
+        double x = toMove.getDeltaMovement().x(), y = toMove.getDeltaMovement().y(), z = toMove.getDeltaMovement().z();
+        toMove.setDeltaMovement(Math.abs(x + motionX) > 0.01 ? MathHelper.clamp(x + motionX, -Math.abs(motionX), motionX) : 0,
+                                Math.abs(y + motionY) > 0.01 ? MathHelper.clamp(y + motionY, -Math.abs(motionY), motionY) : 0,
+                                Math.abs(z + motionZ) > 0.01 ? MathHelper.clamp(z + motionZ, -Math.abs(motionZ), motionZ) : 0);
 
-        toMove.velocityChanged = true;
+        toMove.hurtMarked = true;
 
         // Only save players from fall damage
         if (toMove instanceof ServerPlayerEntity && Math.abs(directionScalar) <= 1) {
@@ -204,25 +204,25 @@ public class PowerUtils {
      * @param pos       BlockPos to move the player to using {@link Entity#teleportKeepLoaded}
      */
     public static void teleport(PlayerEntity player, World world, RegistryKey<World> dimension, BlockPos pos) {
-        if (!world.isRemote) {
+        if (!world.isClientSide) {
             if (player != null) {
                 if (player.isPassenger()) {
                     player.stopRiding();
                 }
 
-                if (player.world.getDimensionKey() != dimension) {
+                if (player.level.dimension() != dimension) {
                     //change dimension
-                    player = (PlayerEntity) player.changeDimension(world.getServer().getWorld(dimension), new ITeleporter() {
+                    player = (PlayerEntity) player.changeDimension(world.getServer().getLevel(dimension), new ITeleporter() {
                         @Override
                         public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
                             Entity repositionedEntity = repositionEntity.apply(false);
-                            repositionedEntity.setPositionAndUpdate(pos.getX(), pos.getY(), pos.getZ());
+                            repositionedEntity.teleportTo(pos.getX(), pos.getY(), pos.getZ());
                             return repositionedEntity;
                         }
                     });
                 }
 
-                player.teleportKeepLoaded(pos.getX(), pos.getY() + 1.5, pos.getZ());
+                player.teleportToWithTicket(pos.getX(), pos.getY() + 1.5, pos.getZ());
                 player.fallDistance = 0.0F;
             }
         }
@@ -232,21 +232,21 @@ public class PowerUtils {
         try {
             if (!enhanced) {
                 //Enable Targeting goals
-                target.targetSelector.enableFlag(Goal.Flag.TARGET);
+                target.targetSelector.enableControlFlag(Goal.Flag.TARGET);
                 //Add new goals
-                target.setAttackTarget(allomancer);
-                target.setRevengeTarget(allomancer);
+                target.setTarget(allomancer);
+                target.setLastHurtByMob(allomancer);
                 // TODO: try to use PrioritizedGoal::startExecuting for already hostiles
                 target.targetSelector.addGoal(1, new AIAttackOnCollideExtended(target, 1d, false));
                 target.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(target, PlayerEntity.class, false));
                 target.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(target, target.getClass(), false));
                 target.goalSelector.addGoal(4, new LookRandomlyGoal(target));
-                target.targetSelector.addGoal(2, new HurtByTargetGoal(target).setCallsForHelp());
+                target.targetSelector.addGoal(2, new HurtByTargetGoal(target).setAlertOthers());
                 if (target.getAttribute(Attributes.ATTACK_DAMAGE) != null && !(target instanceof GuardianEntity)) {
                     target.goalSelector.addGoal(3, new MeleeAttackGoal(target, 1.2D, true));
                 }
 
-                target.setAggroed(true);
+                target.setAggressive(true);
 
                 if (target instanceof CreeperEntity) {
                     target.goalSelector.addGoal(1, new CreeperSwellGoal((CreeperEntity) target));
@@ -264,8 +264,7 @@ public class PowerUtils {
                     target.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>((PillagerEntity) target, 1.0D, 8.0F));
                 }
             } else {
-                target.world.createExplosion(target, target.getPositionVec().getX(), target.getPositionVec().getY(), target.getPositionVec().getZ(), 1.2F, false,
-                                             Explosion.Mode.BREAK);
+                target.level.explode(target, target.position().x(), target.position().y(), target.position().z(), 1.2F, false, Explosion.Mode.BREAK);
                 target.remove();
             }
         } catch (Exception e) {
@@ -276,43 +275,43 @@ public class PowerUtils {
     public static void sootheEntity(CreatureEntity target, PlayerEntity allomancer, boolean enhanced) {
         try {
             if (!enhanced) {
-                if (target.isAIDisabled()) {
-                    target.setNoAI(false);
+                if (target.isNoAi()) {
+                    target.setNoAi(false);
                 }
                 // Reset all current aggro goals
-                target.goalSelector.getRunningGoals().filter(isAggroGoal).forEach(PrioritizedGoal::resetTask);
-                target.targetSelector.getRunningGoals().filter(isAggroGoal).forEach(PrioritizedGoal::resetTask);
+                target.goalSelector.getRunningGoals().filter(isAggroGoal).forEach(PrioritizedGoal::stop);
+                target.targetSelector.getRunningGoals().filter(isAggroGoal).forEach(PrioritizedGoal::stop);
                 target.goalSelector.tick();
                 target.targetSelector.tick();
-                target.setAttackTarget(null);
-                target.setRevengeTarget(null);
+                target.setTarget(null);
+                target.setLastHurtByMob(null);
                 //Disable targeting as a whole
-                target.targetSelector.disableFlag(Goal.Flag.TARGET);
-                target.setAggroed(false);
+                target.targetSelector.disableControlFlag(Goal.Flag.TARGET);
+                target.setAggressive(false);
                 //Add new goals
                 target.goalSelector.addGoal(7, new LookAtGoal(target, PlayerEntity.class, 6.0F));
 
                 if (target instanceof TameableEntity) {
                     if (Math.random() < 0.3) {
-                        ((TameableEntity) target).setTamedBy(allomancer);
+                        ((TameableEntity) target).tame(allomancer);
                     }
                 }
                 if (target instanceof AbstractHorseEntity) {
                     if (Math.random() < 0.3) {
-                        ((AbstractHorseEntity) target).setTamedBy(allomancer);
+                        ((AbstractHorseEntity) target).tameWithName(allomancer);
                     }
                 }
                 if (target instanceof SheepEntity) {
                     target.goalSelector.addGoal(1, new EatGrassGoal(target));
                 }
                 if (target instanceof VillagerEntity) {
-                    ((VillagerEntity) target).updateReputation(IReputationType.TRADE, allomancer);
+                    ((VillagerEntity) target).onReputationEventFrom(IReputationType.TRADE, allomancer);
                 }
                 if (target instanceof WanderingTraderEntity) {
                     target.goalSelector.addGoal(1, new TradeWithPlayerGoal((AbstractVillagerEntity) target));
                 }
             } else { // Completely remove all ai if enhanced
-                target.setNoAI(true);
+                target.setNoAi(true);
             }
 
         } catch (Exception e) {

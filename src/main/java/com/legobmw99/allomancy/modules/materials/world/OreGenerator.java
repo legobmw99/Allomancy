@@ -50,17 +50,17 @@ public class OreGenerator {
         BiomeGenerationSettingsBuilder generation = event.getGeneration();
         for (OreData ore : ores) {
             if (ore.config_enabled) {
-                generation.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ore.feature);
+                generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ore.feature);
             }
         }
     }
 
     private static ConfiguredFeature<?, ?> featureFromData(OreData ore) {
         return Feature.ORE
-                .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, ore.ore_block.getDefaultState(), ore.vein_size))
-                .withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(ore.min_height, ore.min_height, ore.max_height)))
-                .square()
-                .func_242731_b(ore.ores_per_chunk);
+                .configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.ore_block.defaultBlockState(), ore.vein_size))
+                .decorated(Placement.RANGE.configured(new TopSolidRangeConfig(ore.min_height, ore.min_height, ore.max_height)))
+                .squared()
+                .count(ore.ores_per_chunk);
     }
 
 

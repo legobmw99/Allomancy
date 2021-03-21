@@ -39,28 +39,28 @@ public class ClientUtils {
     @Nullable
     public static RayTraceResult getMouseOverExtended(float dist) {
         mc = Minecraft.getInstance();
-        float partialTicks = mc.getRenderPartialTicks();
+        float partialTicks = mc.getFrameTime();
         RayTraceResult objectMouseOver = null;
-        Entity entity = mc.getRenderViewEntity();
+        Entity entity = mc.getCameraEntity();
         if (entity != null) {
-            if (mc.world != null) {
+            if (mc.level != null) {
                 objectMouseOver = entity.pick(dist, partialTicks, false);
                 Vector3d vec3d = entity.getEyePosition(partialTicks);
                 boolean flag = false;
                 int i = 3;
                 double d1;
 
-                d1 = objectMouseOver.getHitVec().squareDistanceTo(vec3d);
+                d1 = objectMouseOver.getLocation().distanceToSqr(vec3d);
 
-                Vector3d vec3d1 = entity.getLook(1.0F);
+                Vector3d vec3d1 = entity.getViewVector(1.0F);
                 Vector3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
                 float f = 1.0F;
-                AxisAlignedBB axisalignedbb = entity.getBoundingBox().expand(vec3d1.scale(dist)).grow(1.0D, 1.0D, 1.0D);
-                EntityRayTraceResult entityraytraceresult = ProjectileHelper.rayTraceEntities(entity, vec3d, vec3d2, axisalignedbb, (e) -> true, d1);
+                AxisAlignedBB axisalignedbb = entity.getBoundingBox().expandTowards(vec3d1.scale(dist)).inflate(1.0D, 1.0D, 1.0D);
+                EntityRayTraceResult entityraytraceresult = ProjectileHelper.getEntityHitResult(entity, vec3d, vec3d2, axisalignedbb, (e) -> true, d1);
                 if (entityraytraceresult != null) {
                     Entity entity1 = entityraytraceresult.getEntity();
-                    Vector3d vec3d3 = entityraytraceresult.getHitVec();
-                    double d2 = vec3d.squareDistanceTo(vec3d3);
+                    Vector3d vec3d3 = entityraytraceresult.getLocation();
+                    double d2 = vec3d.distanceToSqr(vec3d3);
                     if (d2 < d1) {
                         objectMouseOver = entityraytraceresult;
                     }
@@ -84,12 +84,12 @@ public class ClientUtils {
         RenderSystem.lineWidth(width);
 
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
+        BufferBuilder buffer = tessellator.getBuilder();
 
         buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-        buffer.pos(player.getX(), player.getY(), player.getZ()).color(r, g, b, 0.8f).endVertex();
-        buffer.pos(dest.getX(), dest.getY(), dest.getZ()).color(r, g, b, 0.8f).endVertex();
-        tessellator.draw();
+        buffer.vertex(player.x(), player.y(), player.z()).color(r, g, b, 0.8f).endVertex();
+        buffer.vertex(dest.x(), dest.y(), dest.z()).color(r, g, b, 0.8f).endVertex();
+        tessellator.end();
     }
 
 

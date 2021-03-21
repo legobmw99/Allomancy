@@ -59,19 +59,19 @@ public class BlockStates extends BlockStateProvider {
         ModelFile pressed = models().withExistingParent("allomancy:iron_button_pressed", mcLoc("block/button_pressed")).texture("texture", mcLoc("block/iron_block"));
 
         VariantBlockStateBuilder builder = getVariantBuilder(ExtrasSetup.IRON_BUTTON.get());
-        for (Boolean powered : IronButtonBlock.POWERED.getAllowedValues()) {
+        for (Boolean powered : IronButtonBlock.POWERED.getPossibleValues()) {
             ModelFile model = powered ? pressed : button;
-            for (AttachFace face : IronButtonBlock.FACE.getAllowedValues()) {
+            for (AttachFace face : IronButtonBlock.FACE.getPossibleValues()) {
                 int xangle = (face == AttachFace.CEILING) ? 180 : (face == AttachFace.WALL) ? 90 : 0;
                 boolean uvlock = face == AttachFace.WALL;
-                for (Direction dir : IronButtonBlock.HORIZONTAL_FACING.getAllowedValues()) {
-                    int yangle = (int) dir.getHorizontalAngle();
+                for (Direction dir : IronButtonBlock.FACING.getPossibleValues()) {
+                    int yangle = (int) dir.toYRot();
                     yangle = face != AttachFace.CEILING ? (yangle + 180) % 360 : yangle;
                     builder
                             .partialState()
                             .with(IronButtonBlock.POWERED, powered)
                             .with(IronButtonBlock.FACE, face)
-                            .with(IronButtonBlock.HORIZONTAL_FACING, dir)
+                            .with(IronButtonBlock.FACING, dir)
                             .modelForState()
                             .modelFile(model)
                             .uvLock(uvlock)
@@ -167,20 +167,20 @@ public class BlockStates extends BlockStateProvider {
                 .end();
 
         VariantBlockStateBuilder builder = getVariantBuilder(ExtrasSetup.IRON_LEVER.get());
-        for (Boolean powered : IronLeverBlock.POWERED.getAllowedValues()) {
+        for (Boolean powered : IronLeverBlock.POWERED.getPossibleValues()) {
             ModelFile model = powered ? lever_on : lever_off;
-            for (AttachFace face : IronLeverBlock.FACE.getAllowedValues()) {
+            for (AttachFace face : IronLeverBlock.FACE.getPossibleValues()) {
                 int xangle = (face == AttachFace.CEILING) ? 180 : (face == AttachFace.WALL) ? 90 : 0;
 
-                for (Direction dir : IronLeverBlock.HORIZONTAL_FACING.getAllowedValues()) {
-                    int yangle = (int) dir.getHorizontalAngle();
+                for (Direction dir : IronLeverBlock.FACING.getPossibleValues()) {
+                    int yangle = (int) dir.toYRot();
                     yangle = face != AttachFace.CEILING ? (yangle + 180) % 360 : yangle;
 
                     builder
                             .partialState()
                             .with(IronLeverBlock.POWERED, powered)
                             .with(IronLeverBlock.FACE, face)
-                            .with(IronLeverBlock.HORIZONTAL_FACING, dir)
+                            .with(IronLeverBlock.FACING, dir)
                             .modelForState()
                             .modelFile(model)
                             .rotationY(yangle)

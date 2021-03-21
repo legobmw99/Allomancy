@@ -39,7 +39,7 @@ public class AIAttackOnCollideExtended extends Goal {
      */
     Path entityPathEntity;
     Class<?> classTarget;
-    private int field_75445_i;
+    private int ticksUntilNextPathRecalculation;
 
     private int failedPathFindingPenalty;
 
@@ -50,18 +50,18 @@ public class AIAttackOnCollideExtended extends Goal {
 
     public AIAttackOnCollideExtended(CreatureEntity par1EntityCreature, double par2, boolean par4) {
         this.attacker = par1EntityCreature;
-        this.worldObj = par1EntityCreature.world;
+        this.worldObj = par1EntityCreature.level;
         this.speedTowardsTarget = par2;
         this.longMemory = par4;
-        this.setMutexFlags(EnumSet.of(Flag.TARGET));
+        this.setFlags(EnumSet.of(Flag.TARGET));
     }
 
     /**
      * Returns whether the EntityAIBase should begin execution.
      */
     @Override
-    public boolean shouldExecute() {
-        LivingEntity livingEntity = this.attacker.getAttackTarget();
+    public boolean canUse() {
+        LivingEntity livingEntity = this.attacker.getTarget();
 
         if (livingEntity == null) {
             return false;
@@ -70,9 +70,9 @@ public class AIAttackOnCollideExtended extends Goal {
         } else if ((this.classTarget != null) && !this.classTarget.isAssignableFrom(livingEntity.getClass())) {
             return false;
         } else {
-            if (--this.field_75445_i <= 0) {
-                this.entityPathEntity = this.attacker.getNavigator().getPathToEntity(livingEntity, 0);
-                this.field_75445_i = 4 + this.attacker.getRNG().nextInt(7);
+            if (--this.ticksUntilNextPathRecalculation <= 0) {
+                this.entityPathEntity = this.attacker.getNavigation().createPath(livingEntity, 0);
+                this.ticksUntilNextPathRecalculation = 4 + this.attacker.getRandom().nextInt(7);
                 return this.entityPathEntity != null;
             } else {
                 return true;
@@ -84,32 +84,32 @@ public class AIAttackOnCollideExtended extends Goal {
      * Returns whether an in-progress EntityAIBase should continue executing
      */
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
 
-        LivingEntity livingEntity = this.attacker.getAttackTarget();
+        LivingEntity livingEntity = this.attacker.getTarget();
         if (livingEntity == null) {
             return false;
         }
-        BlockPos pos1 = new BlockPos(livingEntity.getPositionVec());
+        BlockPos pos1 = new BlockPos(livingEntity.position());
 
-        return (livingEntity.isAlive() && (!this.longMemory ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistanceFromPosition(pos1)));
+        return (livingEntity.isAlive() && (!this.longMemory ? !this.attacker.getNavigation().isDone() : this.attacker.isWithinRestriction(pos1)));
     }
 
     /**
      * Execute a one shot goal or start executing a continuous goal
      */
     @Override
-    public void startExecuting() {
-        this.attacker.getNavigator().setPath(this.entityPathEntity, this.speedTowardsTarget);
-        this.field_75445_i = 0;
+    public void start() {
+        this.attacker.getNavigation().moveTo(this.entityPathEntity, this.speedTowardsTarget);
+        this.ticksUntilNextPathRecalculation = 0;
     }
 
     /**
      * Resets the goal
      */
     @Override
-    public void resetTask() {
-        this.attacker.getNavigator().clearPath();
+    public void stop() {
+        this.attacker.getNavigation().stop();
     }
 
     /**
@@ -117,18 +117,18 @@ public class AIAttackOnCollideExtended extends Goal {
      */
     @Override
     public void tick() {
-        LivingEntity livingEntity = this.attacker.getAttackTarget();
+        LivingEntity livingEntity = this.attacker.getTarget();
         if (livingEntity == null) {
             return;
         }
-        this.attacker.getLookController().setLookPositionWithEntity(livingEntity, 30.0F, 30.0F);
+        this.attacker.getLookControl().setLookAt(livingEntity, 30.0F, 30.0F);
 
-        if ((this.longMemory || this.attacker.getEntitySenses().canSee(livingEntity)) && (--this.field_75445_i <= 0)) {
-            this.field_75445_i = this.failedPathFindingPenalty + 4 + this.attacker.getRNG().nextInt(7);
-            this.attacker.getNavigator().tryMoveToEntityLiving(livingEntity, this.speedTowardsTarget);
-            if (this.attacker.getNavigator().getPath() != null) {
-                PathPoint finalPathPoint = this.attacker.getNavigator().getPath().getFinalPathPoint();
-                if ((finalPathPoint != null) && (livingEntity.getDistanceSq(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)) {
+        if ((this.longMemory || this.attacker.getSensing().canSee(livingEntity)) && (--this.ticksUntilNextPathRecalculation <= 0)) {
+            this.ticksUntilNextPathRecalculation = this.failedPathFindingPenalty + 4 + this.attacker.getRandom().nextInt(7);
+            this.attacker.getNavigation().moveTo(livingEntity, this.speedTowardsTarget);
+            if (this.attacker.getNavigation().getPath() != null) {
+                PathPoint finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
+                if ((finalPathPoint != null) && (livingEntity.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)) {
                     this.failedPathFindingPenalty = 0;
                 } else {
                     this.failedPathFindingPenalty += 10;
@@ -139,20 +139,20 @@ public class AIAttackOnCollideExtended extends Goal {
         }
 
         this.attackTick = Math.max(this.attackTick - 1, 0);
-        double d0 = (this.attacker.getWidth() * 2.0F * this.attacker.getWidth() * 2.0F) + livingEntity.getWidth();
+        double d0 = (this.attacker.getBbWidth() * 2.0F * this.attacker.getBbWidth() * 2.0F) + livingEntity.getBbWidth();
 
-        if (this.attacker.getDistanceSq(livingEntity) <= d0) {
+        if (this.attacker.distanceToSqr(livingEntity) <= d0) {
             if (this.attackTick <= 0) {
                 this.attackTick = 20;
 
-                if (!this.attacker.getHeldItemMainhand().isEmpty()) {
-                    this.attacker.swingArm(Hand.MAIN_HAND);
+                if (!this.attacker.getMainHandItem().isEmpty()) {
+                    this.attacker.swing(Hand.MAIN_HAND);
                 }
 
                 if (this.attacker instanceof MonsterEntity) {
-                    this.attacker.attackEntityAsMob(livingEntity);
+                    this.attacker.doHurtTarget(livingEntity);
                 } else {
-                    livingEntity.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), 3);
+                    livingEntity.hurt(DamageSource.mobAttack(this.attacker), 3);
                 }
             }
         }

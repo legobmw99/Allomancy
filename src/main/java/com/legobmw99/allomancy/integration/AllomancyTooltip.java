@@ -31,7 +31,7 @@ public class AllomancyTooltip implements IEntityComponentProvider {
                             if (text == null) {
                                 text = translateMetal(mt);
                             } else {
-                                text = text.appendString(", ").append(translateMetal(mt));
+                                text = text.append(", ").append(translateMetal(mt));
                             }
                         }
                     }
