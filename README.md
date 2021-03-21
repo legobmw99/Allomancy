@@ -4,7 +4,7 @@ Allomancy 4.3.0
 
 This mod adds the basics of [Allomancy](http://coppermind.net/wiki/Allomancy) from Brandon Sanderson's book series *Mistborn*. 
 
-This mod is currently updated for `Minecraft 1.16.4` and `Forge 35.1.3`
+This mod is currently updated for `Minecraft 1.16.5` and `Forge 36.1.0`
 
 Please verify and report any issues!
 
