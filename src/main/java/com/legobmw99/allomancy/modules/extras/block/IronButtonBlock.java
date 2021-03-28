@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.extras.block;
 
-import com.legobmw99.allomancy.api.block.IAllomanticallyActivatedBlock;
-import com.legobmw99.allomancy.setup.AllomancySetup;
+import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
 import net.minecraft.block.AbstractButtonBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -25,14 +25,14 @@ import net.minecraftforge.common.ToolType;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class IronButtonBlock extends AbstractButtonBlock implements IAllomanticallyActivatedBlock {
+public class IronButtonBlock extends AbstractButtonBlock implements IAllomanticallyUsableBlock {
 
     public IronButtonBlock() {
         super(false, Block.Properties.of(Material.METAL).noCollission().strength(1.0F).harvestLevel(2).harvestTool(ToolType.PICKAXE));
     }
 
     @Override
-    public boolean onBlockActivatedAllomantically(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean isPush) {
+    public boolean useAllomantically(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean isPush) {
         if (state.getValue(POWERED) || world.isClientSide) {
             return true;
         } else if (isPush) {
@@ -60,7 +60,7 @@ public class IronButtonBlock extends AbstractButtonBlock implements IAllomantica
     @Override
     public void appendHoverText(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        IFormattableTextComponent lore = AllomancySetup.addColorToText("block.allomancy.iron_activation.lore", TextFormatting.GRAY);
+        IFormattableTextComponent lore = Allomancy.addColorToText("block.allomancy.iron_activation.lore", TextFormatting.GRAY);
         tooltip.add(lore);
     }
 

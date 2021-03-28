@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
-import com.legobmw99.allomancy.api.block.IAllomanticallyActivatedBlock;
+import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -43,9 +43,9 @@ public class TryPushPullBlock {
             if ((player.level.hasChunkAt(pos) && (PowerUtils.isBlockStateMetal(player.level.getBlockState(pos)))) // Check Block
                 || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() && (!player.getProjectile(player.getMainHandItem()).isEmpty()) && this.direction > 0)) {
                 // Check for the coin bag
-                if (player.level.getBlockState(pos).getBlock() instanceof IAllomanticallyActivatedBlock) {
-                    ((IAllomanticallyActivatedBlock) player.level.getBlockState(pos).getBlock()).onBlockActivatedAllomantically(player.level.getBlockState(pos), player.level, pos,
-                                                                                                                                player, this.direction > 0);
+                if (player.level.getBlockState(pos).getBlock() instanceof IAllomanticallyUsableBlock) {
+                    ((IAllomanticallyUsableBlock) player.level.getBlockState(pos).getBlock()).useAllomantically(player.level.getBlockState(pos), player.level, pos,
+                                                                                                                player, this.direction > 0);
                 } else {
                     PowerUtils.move(this.direction, player, pos);
                 }

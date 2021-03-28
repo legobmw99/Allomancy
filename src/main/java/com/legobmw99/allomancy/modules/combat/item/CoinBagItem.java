@@ -1,10 +1,10 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
-import com.legobmw99.allomancy.setup.AllomancySetup;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
@@ -24,7 +24,7 @@ public class CoinBagItem extends ShootableItem {
     };
 
     public CoinBagItem() {
-        super(AllomancySetup.createStandardItemProperties().stacksTo(1));
+        super(Allomancy.createStandardItemProperties().stacksTo(1));
     }
 
     private static Ammo getAmmoFromItem(Item itemIn) {

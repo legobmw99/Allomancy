@@ -3,8 +3,7 @@ package com.legobmw99.allomancy.modules.extras;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
-import com.legobmw99.allomancy.setup.AllomancySetup;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.block.Block;
 import net.minecraft.item.BannerPatternItem;
 import net.minecraft.item.BlockItem;
@@ -38,7 +37,7 @@ public class ExtrasSetup {
         for (Metal mt : Metal.values()) {
             String name = mt.getName();
             BannerPattern pattern = BannerPattern.create("ALLOMANCY" + mt.name(), "allomancy_" + name, "allomancy_" + name, true);
-            RegistryObject<Item> pattern_item = ITEMS.register(name + "_pattern", () -> new BannerPatternItem(pattern, AllomancySetup.createStandardItemProperties().stacksTo(1)));
+            RegistryObject<Item> pattern_item = ITEMS.register(name + "_pattern", () -> new BannerPatternItem(pattern, Allomancy.createStandardItemProperties().stacksTo(1)));
             PATTERNS.add(pattern);
             PATTERN_ITEMS.add(pattern_item);
         }

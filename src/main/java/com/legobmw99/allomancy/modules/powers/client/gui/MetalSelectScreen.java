@@ -13,7 +13,7 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.ClientUtils;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;

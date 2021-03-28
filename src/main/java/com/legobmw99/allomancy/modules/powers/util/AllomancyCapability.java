@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.powers.util;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;

@@ -13,7 +13,7 @@ import net.minecraft.world.World;
  * @author legobmw99
  * @see IronLeverBlock
  */
-public interface IAllomanticallyActivatedBlock {
+public interface IAllomanticallyUsableBlock {
 
     /**
      * Called when the block is steelpushed or ironpulled
@@ -21,5 +21,5 @@ public interface IAllomanticallyActivatedBlock {
      * @param isPush whether or not the activation is Steel
      * @return whether or not the block was activated
      */
-    boolean onBlockActivatedAllomantically(BlockState state, World world, BlockPos pos, PlayerEntity playerIn, boolean isPush);
+    boolean useAllomantically(BlockState state, World world, BlockPos pos, PlayerEntity playerIn, boolean isPush);
 }

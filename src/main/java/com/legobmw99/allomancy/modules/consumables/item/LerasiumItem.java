@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.AllomancySetup;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -28,7 +28,7 @@ public class LerasiumItem extends Item {
     private static final Food lerasium = new Food.Builder().fast().alwaysEat().saturationMod(0).nutrition(0).build();
 
     public LerasiumItem() {
-        super(AllomancySetup.createStandardItemProperties().rarity(Rarity.EPIC).stacksTo(1).food(lerasium));
+        super(Allomancy.createStandardItemProperties().rarity(Rarity.EPIC).stacksTo(1).food(lerasium));
     }
 
 
@@ -68,7 +68,7 @@ public class LerasiumItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        ITextComponent lore = AllomancySetup.addColorToText("item.allomancy.lerasium_nugget.lore", TextFormatting.LIGHT_PURPLE);
+        ITextComponent lore = Allomancy.addColorToText("item.allomancy.lerasium_nugget.lore", TextFormatting.LIGHT_PURPLE);
         tooltip.add(lore);
 
     }

@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.modules.powers.command;
 import com.legobmw99.allomancy.modules.powers.network.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;

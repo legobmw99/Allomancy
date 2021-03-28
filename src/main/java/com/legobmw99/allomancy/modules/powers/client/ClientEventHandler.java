@@ -12,7 +12,7 @@ import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;

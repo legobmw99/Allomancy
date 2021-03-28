@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;

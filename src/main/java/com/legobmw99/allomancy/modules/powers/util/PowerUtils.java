@@ -6,7 +6,7 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIAttackOnCollideExtended;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIEvilAttack;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureEntity;

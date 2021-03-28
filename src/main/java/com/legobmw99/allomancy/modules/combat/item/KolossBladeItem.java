@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.AllomancySetup;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -47,7 +47,7 @@ public class KolossBladeItem extends SwordItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        ITextComponent lore = AllomancySetup.addColorToText("item.allomancy.koloss_blade.lore", TextFormatting.GRAY);
+        ITextComponent lore = Allomancy.addColorToText("item.allomancy.koloss_blade.lore", TextFormatting.GRAY);
         tooltip.add(lore);
     }
 

@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
-import com.legobmw99.allomancy.setup.AllomancyConfig;
+import com.legobmw99.allomancy.util.AllomancyConfig;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;

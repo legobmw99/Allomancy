@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.modules.powers.client;
 import com.legobmw99.allomancy.modules.powers.network.UpdateBurnPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;

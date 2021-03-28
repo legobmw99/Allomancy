@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.integration;
 
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import mcp.mobius.waila.api.IEntityAccessor;
 import mcp.mobius.waila.api.IEntityComponentProvider;
 import mcp.mobius.waila.api.IPluginConfig;

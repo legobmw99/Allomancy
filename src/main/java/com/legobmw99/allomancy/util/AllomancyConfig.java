@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.setup;
+package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.modules.materials.MaterialsConfig;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;

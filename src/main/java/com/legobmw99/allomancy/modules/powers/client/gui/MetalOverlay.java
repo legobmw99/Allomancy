@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.powers.client.gui;
 
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;

@@ -1,9 +1,9 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.setup.AllomancySetup;
-import com.legobmw99.allomancy.setup.Metal;
+import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -28,7 +28,7 @@ import java.util.List;
 public class VialItem extends Item {
 
     public VialItem() {
-        super(AllomancySetup.createStandardItemProperties().stacksTo(32));
+        super(Allomancy.createStandardItemProperties().stacksTo(32));
     }
 
 
@@ -112,15 +112,15 @@ public class VialItem extends Item {
                 if (stack.getTag().getBoolean(mt.getName())) {
                     count++;
                     if (full_display) {
-                        IFormattableTextComponent metal = AllomancySetup.addColorToText("metals." + mt.getName(), TextFormatting.GRAY);
+                        IFormattableTextComponent metal = Allomancy.addColorToText("metals." + mt.getName(), TextFormatting.GRAY);
                         tooltip.add(metal);
                     }
                 }
             }
             if (!full_display) {
-                IFormattableTextComponent lcount = AllomancySetup.addColorToText("item.allomancy.vial.lore_count", TextFormatting.GRAY, count);
+                IFormattableTextComponent lcount = Allomancy.addColorToText("item.allomancy.vial.lore_count", TextFormatting.GRAY, count);
                 tooltip.add(lcount);
-                IFormattableTextComponent linst = AllomancySetup.addColorToText("item.allomancy.vial.lore_inst", TextFormatting.GRAY);
+                IFormattableTextComponent linst = Allomancy.addColorToText("item.allomancy.vial.lore_inst", TextFormatting.GRAY);
                 tooltip.add(linst);
 
             }
@@ -135,7 +135,7 @@ public class VialItem extends Item {
 
     @Override
     public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
-        if (group == AllomancySetup.allomancy_group) {
+        if (group == Allomancy.allomancy_group) {
             items.add(new ItemStack(this, 1));
 
             ItemStack resultItem = new ItemStack(ConsumeSetup.VIAL.get(), 1);
