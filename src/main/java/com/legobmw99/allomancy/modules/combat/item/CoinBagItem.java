@@ -88,8 +88,8 @@ public class CoinBagItem extends ShootableItem {
     }
 
     @Override
-    public int getDefaultProjectileRange() { // TODO figure out what this does - new in 1.16, possibly speed?
-        return 0;
+    public int getDefaultProjectileRange() {
+        return 20;
     }
 
     private enum Ammo {

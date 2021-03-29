@@ -63,11 +63,11 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mx, int my, float partialTicks) { // render
+    public void render(MatrixStack matrixStack, int mx, int my, float partialTicks) {
         super.render(matrixStack, mx, my, partialTicks);
 
-        int x = this.width / 2; //width
-        int y = this.height / 2; //height
+        int x = this.width / 2;
+        int y = this.height / 2;
         int maxRadius = 80;
 
         double angle = mouseAngle(x, y, mx, my);
@@ -111,7 +111,7 @@ public class MetalSelectScreen extends Screen {
 
 
             if (seg == 0) {
-                buf.vertex(x, y, 0).color(r, g, b, a).endVertex(); //pos, color
+                buf.vertex(x, y, 0).color(r, g, b, a).endVertex();
             }
 
 
@@ -180,7 +180,7 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) { //mouseClicked
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         toggleSelected();
         return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
@@ -224,7 +224,7 @@ public class MetalSelectScreen extends Screen {
         }
     }
 
-    @Override // isPauseScreen?
+    @Override
     public boolean isPauseScreen() {
         return false;
     }

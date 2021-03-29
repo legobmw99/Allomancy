@@ -292,7 +292,7 @@ public class ClientEventHandler {
             return;
         }
 
-        MetalOverlay.drawMetalOverlay();
+        MetalOverlay.drawMetalOverlay(event.getMatrixStack());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -312,6 +312,7 @@ public class ClientEventHandler {
 
         Vector3d view = this.mc.gameRenderer.getMainCamera().getPosition();
         MatrixStack stack = event.getMatrixStack();
+        stack.pushPose();
         stack.translate(-view.x, -view.y, -view.z);
 
         // TODO investigate depreciation
@@ -375,6 +376,7 @@ public class ClientEventHandler {
         RenderSystem.depthMask(true);
         RenderSystem.enableTexture();
         RenderSystem.popMatrix();
+        stack.popPose();
     }
 
     @OnlyIn(Dist.CLIENT)
