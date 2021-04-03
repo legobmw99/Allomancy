@@ -39,7 +39,7 @@ public class PowersClientSetup {
     public static boolean enable_more_keybinds;
 
     @OnlyIn(Dist.CLIENT)
-    public static final KeyBinding[] powers = new KeyBinding[Metal.values().length];
+    public static KeyBinding[] powers;
 
     public static void initKeyBindings() {
         burn = new KeyBinding("key.burn", GLFW.GLFW_KEY_V, "key.categories.allomancy");
@@ -50,6 +50,7 @@ public class PowersClientSetup {
         enable_more_keybinds = PowersConfig.enable_more_keybinds.get();
 
         if (enable_more_keybinds) {
+            powers = new KeyBinding[Metal.values().length];
             for (int i = 0; i < powers.length; i++) {
                 powers[i] = new KeyBinding("metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN, "key.categories.allomancy");
                 ClientRegistry.registerKeyBinding(powers[i]);
