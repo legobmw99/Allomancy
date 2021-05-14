@@ -16,7 +16,7 @@ public class ObsidianDaggerItem extends SwordItem {
     private static final IItemTier tier = new IItemTier() {
         @Override
         public int getUses() {
-            return 8;
+            return 3;
         }
 
         @Override

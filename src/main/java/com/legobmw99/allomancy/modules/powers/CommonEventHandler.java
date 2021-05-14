@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.network.AllomancyCapabilityPacket;
 import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
@@ -154,8 +155,13 @@ public class CommonEventHandler {
             AllomancyCapability cap = AllomancyCapability.forPlayer(source);
 
             if (cap.isBurning(Metal.PEWTER)) {
-                if (cap.isEnhanced()) { // Duralumin OHK
-                    event.setAmount(event.getAmount() + 500);
+                if (cap.isEnhanced()) {
+                    if (source.getMainHandItem().getItem() instanceof KolossBladeItem){
+                        event.setAmount(550); // Duralumin OHK with Koloss blade
+                        PowerUtils.wipePlayer(source);
+                    } else {
+                        event.setAmount(event.getAmount() * 3);
+                    }
                 } else {
                     event.setAmount(event.getAmount() + 2);
                 }
@@ -181,6 +187,7 @@ public class CommonEventHandler {
                     event.setAmount(event.getAmount() - 2);
                     // Note that they took damage, will come in to play if they stop burning
                     capHurt.setDamageStored(capHurt.getDamageStored() + 1);
+                    Network.sync(capHurt, (ServerPlayerEntity) event.getEntityLiving());
                 }
             }
         }

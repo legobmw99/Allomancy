@@ -10,7 +10,7 @@
 package com.legobmw99.allomancy.modules.powers.client.gui;
 
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
-import com.legobmw99.allomancy.modules.powers.client.ClientUtils;
+import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.util.Metal;

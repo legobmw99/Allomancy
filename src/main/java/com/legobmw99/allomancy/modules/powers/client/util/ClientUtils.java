@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.modules.powers.client;
+package com.legobmw99.allomancy.modules.powers.client.util;
 
 import com.legobmw99.allomancy.modules.powers.network.UpdateBurnPacket;
 import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
@@ -88,7 +88,7 @@ public class ClientUtils {
 
         buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
         buffer.vertex(player.x(), player.y(), player.z()).color(r, g, b, 0.8f).endVertex();
-        buffer.vertex(dest.x(), dest.y(), dest.z()).color(r, g, b, 0.8f).endVertex();
+        buffer.vertex(dest.x(), dest.y(), dest.z()).color(r, g, b, 0.6f).endVertex();
         tessellator.end();
     }
 

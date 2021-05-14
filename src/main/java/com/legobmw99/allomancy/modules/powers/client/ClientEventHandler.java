@@ -5,6 +5,8 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
+import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
+import com.legobmw99.allomancy.modules.powers.client.util.MetalBlockBlob;
 import com.legobmw99.allomancy.modules.powers.network.ChangeEmotionPacket;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullBlock;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullEntity;
@@ -42,6 +44,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ClientEventHandler {
@@ -50,7 +53,8 @@ public class ClientEventHandler {
     private final Minecraft mc = Minecraft.getInstance();
 
     private final Set<Entity> metal_entities = new HashSet<>();
-    private final Set<BlockPos> metal_blocks = new HashSet<>();
+    private final Set<MetalBlockBlob> metal_blobs = new HashSet<>();
+
     private final Set<PlayerEntity> nearby_allomancers = new HashSet<>();
 
     private static Vector3d blockVec(BlockPos blockPos) {
@@ -145,7 +149,7 @@ public class ClientEventHandler {
 
 
                 // Populate the metal lists
-                this.metal_blocks.clear();
+                this.metal_blobs.clear();
                 this.metal_entities.clear();
                 if (cap.isBurning(Metal.IRON) || cap.isBurning(Metal.STEEL)) {
                     List<Entity> entities;
@@ -156,19 +160,26 @@ public class ClientEventHandler {
 
                     // Add metal entities to metal list
                     entities = player.level.getEntitiesOfClass(Entity.class, new AxisAlignedBB(negative, positive));
-                    entities.forEach(entity -> {
-                        if (PowerUtils.isEntityMetal(entity)) {
-                            this.metal_entities.add(entity);
-                        }
-                    });
+                    entities.stream().filter(PowerUtils::isEntityMetal).filter(e -> !e.equals(player)).forEach(this.metal_entities::add);
 
-                    // Add metal blocks to metal list
+                    // Add metal blobs to metal list
                     blocks = BlockPos.betweenClosedStream(negative, positive);
-                    blocks.forEach(bp -> {
-                        BlockPos imBlock = bp.immutable();
-                        if (PowerUtils.isBlockStateMetal(player.level.getBlockState(imBlock))) {
-                            this.metal_blocks.add(imBlock);
+                    blocks.map(BlockPos::immutable).filter(bp -> PowerUtils.isBlockStateMetal(player.level.getBlockState(bp))).forEach(bp -> {
+                        Set<MetalBlockBlob> matches = this.metal_blobs.stream().filter(mbl -> mbl.isMatch(bp)).collect(Collectors.toSet());
+                        switch (matches.size()) {
+                            case 0: // new blob
+                                this.metal_blobs.add(new MetalBlockBlob(bp));
+                                break;
+                            case 1: // add to existing blob
+                                matches.stream().findAny().get().add(bp);
+                                break;
+                            default: // this block serves as a bridge between (possibly many) existing blobs
+                                this.metal_blobs.removeAll(matches);
+                                this.metal_blobs.add(matches.stream().reduce(new MetalBlockBlob(bp), MetalBlockBlob::merge));
+                                break;
+
                         }
+
                     });
 
                 }
@@ -325,8 +336,7 @@ public class ClientEventHandler {
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.enableBlend();
 
-
-        Vector3d playervec = view.add(0, -.1, 0);
+        Vector3d playervec = view.add(0, -0.1, 0);
         /*********************************************
          * IRON AND STEEL LINES                      *
          *********************************************/
@@ -336,8 +346,8 @@ public class ClientEventHandler {
                 ClientUtils.drawMetalLine(playervec, entity.position(), 1.5F, 0F, 0.6F, 1F);
             }
 
-            for (BlockPos bp : this.metal_blocks) {
-                ClientUtils.drawMetalLine(playervec, blockVec(bp), 1.5F, 0F, 0.6F, 1F);
+            for (MetalBlockBlob mb : this.metal_blobs) {
+                ClientUtils.drawMetalLine(playervec, mb.getCenter(), MathHelper.clamp(0.3F + mb.size() * 0.3F, 0.5F, 7.5F), 0F, 0.6F, 1F);
             }
         }
 
