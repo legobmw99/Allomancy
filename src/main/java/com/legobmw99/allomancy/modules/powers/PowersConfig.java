@@ -97,6 +97,7 @@ public class PowersConfig {
         add(Items.CHAINMAIL_CHESTPLATE);
         add(Items.CLOCK);
         add(Items.SHEARS);
+        add(Items.SHIELD);
         add(Items.NETHERITE_INGOT);
         add(Items.NETHERITE_SCRAP); // Op?
         add(Items.NETHERITE_HELMET);
@@ -111,6 +112,7 @@ public class PowersConfig {
 
         add(Blocks.ANVIL);
         add(Blocks.CAULDRON);
+        add(Blocks.CHAIN);
         add(Blocks.HOPPER);
         add(Blocks.PISTON_HEAD);
         add(Blocks.MOVING_PISTON);
