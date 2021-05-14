@@ -1,14 +1,17 @@
 package com.legobmw99.allomancy.modules.powers.client.util;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class MetalBlockBlob {
 
-    private Set<BlockPos> blocks = new HashSet<>();
+    private static final World level = Minecraft.getInstance().level;
+    private final Set<BlockPos> blocks = new HashSet<>();
     private Vector3d center = null;
 
     public MetalBlockBlob(BlockPos initial) {
@@ -41,15 +44,25 @@ public class MetalBlockBlob {
         return this.blocks.size();
     }
 
+    private Vector3d getCenterOfBlock(BlockPos pos) {
+        try {
+            return Vector3d.atLowerCornerOf(pos).add(level.getBlockState(pos).getBlockState().getShape(level, pos).bounds().getCenter());
+        } catch (UnsupportedOperationException e) {
+            return Vector3d.atCenterOf(pos);
+        }
+    }
+
     public boolean add(BlockPos pos) {
         pos = pos.immutable();
 
         if (this.blocks.add(pos)) {
+
             if (this.center == null) {
-                this.center = Vector3d.atCenterOf(pos);
+                this.center = getCenterOfBlock(pos);
             } else {
                 int count = this.blocks.size();
-                this.center = this.center.scale(count - 1).add(Vector3d.atCenterOf(pos)).scale(1.0D / count);
+                this.center = this.center.scale(count - 1).add(getCenterOfBlock(pos)).scale(1.0D / count);
+
             }
             return true;
         }

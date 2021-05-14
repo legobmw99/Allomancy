@@ -87,8 +87,8 @@ public class ClientUtils {
         BufferBuilder buffer = tessellator.getBuilder();
 
         buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-        buffer.vertex(player.x(), player.y(), player.z()).color(r, g, b, 0.8f).endVertex();
-        buffer.vertex(dest.x(), dest.y(), dest.z()).color(r, g, b, 0.6f).endVertex();
+        buffer.vertex(player.x(), player.y(), player.z()).color(r, g, b, 0.5f).endVertex();
+        buffer.vertex(dest.x(), dest.y(), dest.z()).color(r, g, b, 0.5f).endVertex();
         tessellator.end();
     }
 

@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.ItemFrameEntity;
@@ -62,7 +63,7 @@ public class TryPushPullEntity {
                             PowerUtils.move(this.direction, target, new BlockPos(player.position()));
                         }
                         // The target moves
-                    } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity) {
+                    } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity || target instanceof ArmorStandEntity) {
                         PowerUtils.move(this.direction / 2.0, target, new BlockPos(player.position()).below());
 
                         // Split the difference

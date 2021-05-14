@@ -54,7 +54,6 @@ public class ClientEventHandler {
 
     private final Set<Entity> metal_entities = new HashSet<>();
     private final Set<MetalBlockBlob> metal_blobs = new HashSet<>();
-
     private final Set<PlayerEntity> nearby_allomancers = new HashSet<>();
 
     private static Vector3d blockVec(BlockPos blockPos) {
@@ -310,7 +309,7 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
         PlayerEntity player = this.mc.player;
-        if (player == null || !player.isAlive()) {
+        if (player == null || !player.isAlive() || this.mc.options.getCameraType().isMirrored()) {
             return;
         }
 
@@ -321,9 +320,9 @@ public class ClientEventHandler {
         }
 
 
-        Vector3d view = this.mc.gameRenderer.getMainCamera().getPosition();
         MatrixStack stack = event.getMatrixStack();
         stack.pushPose();
+        Vector3d view = this.mc.cameraEntity.getEyePosition(event.getPartialTicks());
         stack.translate(-view.x, -view.y, -view.z);
 
         // TODO investigate depreciation
@@ -336,7 +335,13 @@ public class ClientEventHandler {
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.enableBlend();
 
-        Vector3d playervec = view.add(0, -0.1, 0);
+        double dist = 1;
+        double yaw = ((mc.player.yRot + 90) * Math.PI) / 180;
+        double pitch = ((mc.player.xRot + 90) * Math.PI) / 180;
+
+        Vector3d playervec = view.add(MathHelper.sin((float) pitch) * MathHelper.cos((float) yaw) * dist, MathHelper.cos((float) pitch) * dist - 0.35,
+                                      MathHelper.sin((float) pitch) * MathHelper.sin((float) yaw) * dist);
+
         /*********************************************
          * IRON AND STEEL LINES                      *
          *********************************************/
@@ -347,7 +352,7 @@ public class ClientEventHandler {
             }
 
             for (MetalBlockBlob mb : this.metal_blobs) {
-                ClientUtils.drawMetalLine(playervec, mb.getCenter(), MathHelper.clamp(0.3F + mb.size() * 0.3F, 0.5F, 7.5F), 0F, 0.6F, 1F);
+                ClientUtils.drawMetalLine(playervec, mb.getCenter(), MathHelper.clamp(0.3F + mb.size() * 0.4F, 0.5F, 7.5F), 0F, 0.6F, 1F);
             }
         }
 

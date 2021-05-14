@@ -39,7 +39,7 @@ public class PowersConfig {
         common_builder.pop();
 
         client_builder.push("graphics");
-        max_metal_detection = client_builder.comment("Maximum iron/steelsight distance").defineInRange("max_metal_distance", 15, 3, 30);
+        max_metal_detection = client_builder.comment("Maximum iron/steelsight distance. Can have a HUGE impact on performance").defineInRange("max_metal_distance", 15, 3, 30);
         animate_selection = client_builder.comment("Animate the selection wheel").define("animate_selection", true);
         enable_overlay = client_builder.comment("Enable the screen overlay").define("overlay_enabled", true);
         overlay_position = client_builder.comment("Screen Overlay Position").defineEnum("overlay_position", SCREEN_LOC.TOP_LEFT);
