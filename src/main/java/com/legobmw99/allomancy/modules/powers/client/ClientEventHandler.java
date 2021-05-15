@@ -56,9 +56,7 @@ public class ClientEventHandler {
     private final Set<MetalBlockBlob> metal_blobs = new HashSet<>();
     private final Set<PlayerEntity> nearby_allomancers = new HashSet<>();
 
-    private static Vector3d blockVec(BlockPos blockPos) {
-        return new Vector3d(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5);
-    }
+    private int tickOffset = 0;
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -146,68 +144,66 @@ public class ClientEventHandler {
                     }
                 }
 
+                tickOffset = (tickOffset + 1) % 2;
 
-                // Populate the metal lists
-                this.metal_blobs.clear();
-                this.metal_entities.clear();
-                if (cap.isBurning(Metal.IRON) || cap.isBurning(Metal.STEEL)) {
-                    List<Entity> entities;
-                    Stream<BlockPos> blocks;
-                    int max = PowersConfig.max_metal_detection.get();
-                    BlockPos negative = new BlockPos(player.position()).offset(-max, -max, -max);
-                    BlockPos positive = new BlockPos(player.position()).offset(max, max, max);
+                if (tickOffset == 0) {
+                    // Populate the metal lists
+                    this.metal_blobs.clear();
+                    this.metal_entities.clear();
+                    if (cap.isBurning(Metal.IRON) || cap.isBurning(Metal.STEEL)) {
+                        int max = PowersConfig.max_metal_detection.get();
+                        BlockPos negative = player.blockPosition().offset(-max, -max, -max);
+                        BlockPos positive = player.blockPosition().offset(max, max, max);
 
-                    // Add metal entities to metal list
-                    entities = player.level.getEntitiesOfClass(Entity.class, new AxisAlignedBB(negative, positive));
-                    entities.stream().filter(PowerUtils::isEntityMetal).filter(e -> !e.equals(player)).forEach(this.metal_entities::add);
+                        // Add metal entities to metal list
+                        List<Entity> entities = player.level.getEntitiesOfClass(Entity.class, new AxisAlignedBB(negative, positive));
+                        entities.stream().filter(PowerUtils::isEntityMetal).filter(e -> !e.equals(player)).forEach(this.metal_entities::add);
 
-                    // Add metal blobs to metal list
-                    blocks = BlockPos.betweenClosedStream(negative, positive);
-                    blocks.map(BlockPos::immutable).filter(bp -> PowerUtils.isBlockStateMetal(player.level.getBlockState(bp))).forEach(bp -> {
-                        Set<MetalBlockBlob> matches = this.metal_blobs.stream().filter(mbl -> mbl.isMatch(bp)).collect(Collectors.toSet());
-                        switch (matches.size()) {
-                            case 0: // new blob
-                                this.metal_blobs.add(new MetalBlockBlob(bp));
-                                break;
-                            case 1: // add to existing blob
-                                matches.stream().findAny().get().add(bp);
-                                break;
-                            default: // this block serves as a bridge between (possibly many) existing blobs
-                                this.metal_blobs.removeAll(matches);
-                                this.metal_blobs.add(matches.stream().reduce(new MetalBlockBlob(bp), MetalBlockBlob::merge));
-                                break;
-
-                        }
-
-                    });
-
-                }
-                // Populate our list of nearby allomancy users
-                this.nearby_allomancers.clear();
-                if (cap.isBurning(Metal.BRONZE) && (cap.isEnhanced() || !cap.isBurning(Metal.COPPER))) {
-                    List<PlayerEntity> nearby_players;
-                    // Add metal burners to a list
-                    BlockPos negative = new BlockPos(player.position()).offset(-30, -30, -30);
-                    BlockPos positive = new BlockPos(player.position()).offset(30, 30, 30);
-                    // Add entities to metal list
-                    nearby_players = player.level.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(negative, positive), entity -> entity != null && entity != player);
-
-                    for (PlayerEntity otherPlayer : nearby_players) {
-                        AllomancyCapability capOther = AllomancyCapability.forPlayer(otherPlayer);
-                        if (capOther.isBurning(Metal.COPPER) && (!cap.isEnhanced() || capOther.isEnhanced())) {
-                            // player is inside a smoker cloud, should not detect unless enhanced
-                            this.nearby_allomancers.clear();
-                            return;
-                        } else {
-                            boolean isBurning = false;
-                            for (Metal mt : Metal.values()) {
-                                if (capOther.isBurning(mt)) {
-                                    isBurning = true;
+                        // Add metal blobs to metal list
+                        Stream<BlockPos> blocks = BlockPos.betweenClosedStream(negative, positive);
+                        blocks.filter(bp -> PowerUtils.isBlockStateMetal(player.level.getBlockState(bp))).forEach(bp -> {
+                            Set<MetalBlockBlob> matches = this.metal_blobs.stream().filter(mbl -> mbl.isMatch(bp)).collect(Collectors.toSet());
+                            switch (matches.size()) {
+                                case 0: // new blob
+                                    this.metal_blobs.add(new MetalBlockBlob(bp));
                                     break;
-                                }
+                                case 1: // add to existing blob
+                                    matches.stream().findAny().get().add(bp);
+                                    break;
+                                default: // this block serves as a bridge between (possibly many) existing blobs
+                                    this.metal_blobs.removeAll(matches);
+                                    MetalBlockBlob mbb = matches.stream().reduce(null, MetalBlockBlob::merge);
+                                    mbb.add(bp);
+                                    this.metal_blobs.add(mbb);
+                                    break;
+
                             }
-                            if (isBurning) {
-                                this.nearby_allomancers.add(otherPlayer);
+
+                        });
+
+                    }
+                    // Populate our list of nearby allomancy users
+                    this.nearby_allomancers.clear();
+                    if (cap.isBurning(Metal.BRONZE) && (cap.isEnhanced() || !cap.isBurning(Metal.COPPER))) {
+                        // Add metal burners to a list
+                        BlockPos negative = player.blockPosition().offset(-30, -30, -30);
+                        BlockPos positive = player.blockPosition().offset(30, 30, 30);
+                        List<PlayerEntity> nearby_players = player.level.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(negative, positive),
+                                                                                            entity -> entity != null && entity != player);
+
+                        for (PlayerEntity otherPlayer : nearby_players) {
+                            AllomancyCapability capOther = AllomancyCapability.forPlayer(otherPlayer);
+                            if (capOther.isBurning(Metal.COPPER) && (!cap.isEnhanced() || capOther.isEnhanced())) {
+                                // player is inside a smoker cloud, should not detect unless enhanced
+                                this.nearby_allomancers.clear();
+                                return;
+                            } else {
+                                for (Metal mt : Metal.values()) {
+                                    if (capOther.isBurning(mt)) {
+                                        this.nearby_allomancers.add(otherPlayer);
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
@@ -371,17 +367,17 @@ public class ClientEventHandler {
         if (cap.isBurning(Metal.GOLD)) {
             RegistryKey<World> deathDim = cap.getDeathDim();
             if (deathDim != null && player.level.dimension() == deathDim) { //world .getDim (look for return type matches)
-                ClientUtils.drawMetalLine(playervec, blockVec(cap.getDeathLoc()), 3.0F, 0.9F, 0.85F, 0.0F);
+                ClientUtils.drawMetalLine(playervec, Vector3d.atCenterOf(cap.getDeathLoc()), 3.0F, 0.9F, 0.85F, 0.0F);
             }
         }
         if (cap.isBurning(Metal.ELECTRUM)) {
             RegistryKey<World> spawnDim = cap.getSpawnDim();
             if (spawnDim == null && player.level.dimension() == World.OVERWORLD) { // overworld, no spawn --> use world spawn
                 BlockPos spawnLoc = new BlockPos(player.level.getLevelData().getXSpawn(), player.level.getLevelData().getYSpawn(), player.level.getLevelData().getZSpawn());
-                ClientUtils.drawMetalLine(playervec, blockVec(spawnLoc), 3.0F, 0.7F, 0.8F, 0.2F);
+                ClientUtils.drawMetalLine(playervec, Vector3d.atCenterOf(spawnLoc), 3.0F, 0.7F, 0.8F, 0.2F);
 
             } else if (spawnDim != null && player.level.dimension() == spawnDim) {
-                ClientUtils.drawMetalLine(playervec, blockVec(cap.getSpawnLoc()), 3.0F, 0.7F, 0.8F, 0.2F);
+                ClientUtils.drawMetalLine(playervec, Vector3d.atCenterOf(cap.getSpawnLoc()), 3.0F, 0.7F, 0.8F, 0.2F);
             }
         }
 
