@@ -168,32 +168,38 @@ public class PowerUtils {
      */
     public static void move(double directionScalar, Entity toMove, BlockPos block) {
 
-        double motionX, motionY, motionZ, magnitude;
         if (toMove.isPassenger()) {
             toMove = toMove.getVehicle();
         }
-        Vector3d vec = toMove.position();
-        double posX = vec.x(), posY = vec.y(), posZ = vec.z();
-        // Calculate the length of the vector between the entity and anchor
-        magnitude = Math.sqrt(Math.pow((posX - (block.getX() + .5)), 2) + Math.pow((posY - (block.getY() + .5)), 2) + Math.pow((posZ - (block.getZ() + .5)), 2));
-        // Get a unit(-ish) vector in the direction of motion
-        motionX = ((posX - (block.getX() + .5)) * directionScalar * (1.1) / magnitude);
-        motionY = ((posY - (block.getY() + .5)) * directionScalar * (1.1) / magnitude);
-        motionZ = ((posZ - (block.getZ() + .5)) * directionScalar * (1.1) / magnitude);
-        // Move along that vector, additively increasing motion until you max
-        // out at the above values
-        double x = toMove.getDeltaMovement().x(), y = toMove.getDeltaMovement().y(), z = toMove.getDeltaMovement().z();
-        toMove.setDeltaMovement(Math.abs(x + motionX) > 0.01 ? MathHelper.clamp(x + motionX, -Math.abs(motionX), motionX) : 0,
-                                Math.abs(y + motionY) > 0.01 ? MathHelper.clamp(y + motionY, -Math.abs(motionY), motionY) : 0,
-                                Math.abs(z + motionZ) > 0.01 ? MathHelper.clamp(z + motionZ, -Math.abs(motionZ), motionZ) : 0);
 
+        Vector3d motion = toMove.position().subtract(Vector3d.atCenterOf(block)).normalize().scale(directionScalar * 1.1);
+        Vector3d mod = clamp(cutoff(motion.add(toMove.getDeltaMovement()), 0.1), abs(motion).reverse(), abs(motion));
+        toMove.setDeltaMovement(mod);
         toMove.hurtMarked = true;
 
         // Only save players from fall damage
-        if (toMove instanceof ServerPlayerEntity && Math.abs(directionScalar) <= 1) {
+        if (toMove instanceof ServerPlayerEntity) {
             toMove.fallDistance = 0;
         }
     }
+
+
+    /*
+     * Three helper functions for working with Vector3ds
+     */
+    private static Vector3d clamp(Vector3d value, Vector3d min, Vector3d max) {
+        return new Vector3d(MathHelper.clamp(value.x, min.x, max.x), MathHelper.clamp(value.y, min.y, max.y), MathHelper.clamp(value.z, min.z, max.z));
+    }
+
+    private static Vector3d abs(Vector3d vec) {
+        return new Vector3d(Math.abs(vec.x), Math.abs(vec.y), Math.abs(vec.z));
+    }
+
+    private static Vector3d cutoff(Vector3d value, double e) {
+        Vector3d mag = abs(value);
+        return new Vector3d(mag.x < e ? 0 : value.x, mag.y < e ? 0 : value.y, mag.z < e ? 0 : value.z);
+    }
+
 
     /**
      * Teleports a player to the given dimension and blockpos
@@ -201,7 +207,7 @@ public class PowerUtils {
      * @param player    The player to move
      * @param world     The server world. Fails if clientside
      * @param dimension Dimension to call {@link Entity#changeDimension} on
-     * @param pos       BlockPos to move the player to using {@link Entity#teleportKeepLoaded}
+     * @param pos       BlockPos to move the player to using {@link Entity#teleportToWithTicket}
      */
     public static void teleport(PlayerEntity player, World world, RegistryKey<World> dimension, BlockPos pos) {
         if (!world.isClientSide) {

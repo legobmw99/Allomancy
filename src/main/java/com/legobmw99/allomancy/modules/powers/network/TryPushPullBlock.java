@@ -39,14 +39,15 @@ public class TryPushPullBlock {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity player = ctx.get().getSender();
             BlockPos pos = this.blockPos;
-            // Sanity check to make sure server has same configs and that the block is loaded in the server
-            if ((player.level.hasChunkAt(pos) && (PowerUtils.isBlockStateMetal(player.level.getBlockState(pos)))) // Check Block
-                || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() && (!player.getProjectile(player.getMainHandItem()).isEmpty()) && this.direction > 0)) {
-                // Check for the coin bag
+            // Sanity check to make sure  the block is loaded in the server
+            if (player.level.hasChunkAt(pos)) {
+                // activate blocks
                 if (player.level.getBlockState(pos).getBlock() instanceof IAllomanticallyUsableBlock) {
-                    ((IAllomanticallyUsableBlock) player.level.getBlockState(pos).getBlock()).useAllomantically(player.level.getBlockState(pos), player.level, pos,
-                                                                                                                player, this.direction > 0);
-                } else {
+                    ((IAllomanticallyUsableBlock) player.level.getBlockState(pos).getBlock()).useAllomantically(player.level.getBlockState(pos), player.level, pos, player,
+                                                                                                                this.direction > 0);
+                } else if (PowerUtils.isBlockStateMetal(player.level.getBlockState(pos)) // Check whitelist on server
+                           || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() // check coin bag
+                               && (!player.getProjectile(player.getMainHandItem()).isEmpty()) && this.direction > 0)) {
                     PowerUtils.move(this.direction, player, pos);
                 }
             }
