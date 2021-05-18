@@ -84,6 +84,10 @@ public class PowersConfig {
         add(Items.BUCKET);
         add(Items.LAVA_BUCKET);
         add(Items.MILK_BUCKET);
+        add(Items.COD_BUCKET);
+        add(Items.PUFFERFISH_BUCKET);
+        add(Items.SALMON_BUCKET);
+        add(Items.TROPICAL_FISH_BUCKET);
         add(Items.WATER_BUCKET);
         add(Items.CAULDRON);
         add(Items.COMPASS);
@@ -109,14 +113,20 @@ public class PowersConfig {
         add(Items.NETHERITE_SHOVEL);
         add(Items.NETHERITE_SWORD);
         add(Items.NETHERITE_AXE);
+        add(Items.CROSSBOW);
 
         add(Blocks.ANVIL);
+        add(Blocks.CHIPPED_ANVIL);
+        add(Blocks.DAMAGED_ANVIL);
         add(Blocks.CAULDRON);
+        add(Blocks.SMITHING_TABLE);
+        add(Blocks.STONECUTTER);
         add(Blocks.CHAIN);
         add(Blocks.HOPPER);
         add(Blocks.PISTON_HEAD);
         add(Blocks.MOVING_PISTON);
         add(Blocks.STICKY_PISTON);
+        add(Blocks.BLAST_FURNACE);
         add(Blocks.BELL);
         add(Blocks.PISTON);
         add(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE);
@@ -127,7 +137,7 @@ public class PowersConfig {
         add(Blocks.POWERED_RAIL);
         add(Blocks.LANTERN);
         add(Blocks.TRAPPED_CHEST);
-        add(Blocks.TRIPWIRE);
+        add(Blocks.TRIPWIRE_HOOK);
         add(Blocks.SOUL_LANTERN);
         add(Blocks.NETHERITE_BLOCK);
         add(Blocks.ANCIENT_DEBRIS); // OP? TODO: consider if this should not be here, alongside scrap
