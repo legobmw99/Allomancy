@@ -15,7 +15,9 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public class Network {
 
-    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Allomancy.MODID, "networking"), () -> "1.0", s -> true, s -> true);
+    private static final String VERSION = "1.1";
+    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Allomancy.MODID, "networking"), () -> VERSION, VERSION::equals,
+                                                                                  VERSION::equals);
 
     private static int index = 0;
 

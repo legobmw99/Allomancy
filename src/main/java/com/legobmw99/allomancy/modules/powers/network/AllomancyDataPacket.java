@@ -8,12 +8,13 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class AllomancyDataPacket {
 
     private final CompoundNBT nbt;
-    private final int entityID;
+    private final UUID uuid;
 
     /**
      * Packet for sending Allomancy player data to a client
@@ -22,28 +23,29 @@ public class AllomancyDataPacket {
      * @param player the player
      */
     public AllomancyDataPacket(IAllomancyData data, PlayerEntity player) {
-        this.entityID = player.getId();
+        this.uuid = player.getUUID();
         this.nbt = (data != null && AllomancyCapability.PLAYER_CAP != null) ? (CompoundNBT) AllomancyCapability.PLAYER_CAP.writeNBT(data, null) : new CompoundNBT();
 
     }
 
-    private AllomancyDataPacket(CompoundNBT nbt, int entityID) {
+    private AllomancyDataPacket(CompoundNBT nbt, UUID uuid) {
         this.nbt = nbt;
-        this.entityID = entityID;
+        this.uuid = uuid;
     }
 
     public static AllomancyDataPacket decode(PacketBuffer buf) {
-        return new AllomancyDataPacket(buf.readNbt(), buf.readInt());
+        return new AllomancyDataPacket(buf.readNbt(), buf.readUUID());
     }
 
     public void encode(PacketBuffer buf) {
         buf.writeNbt(this.nbt);
-        buf.writeInt(this.entityID);
+        buf.writeUUID(this.uuid);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            PlayerEntity player = (PlayerEntity) Minecraft.getInstance().level.getEntity(this.entityID);
+            PlayerEntity player = Minecraft.getInstance().level.getPlayerByUUID(this.uuid);
+
             if (player != null && AllomancyCapability.PLAYER_CAP != null) {
                 player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(cap -> AllomancyCapability.PLAYER_CAP.readNBT(cap, null, this.nbt));
             }
