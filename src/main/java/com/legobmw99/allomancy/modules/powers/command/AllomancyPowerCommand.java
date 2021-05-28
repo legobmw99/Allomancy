@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.powers.command;
 
-import com.legobmw99.allomancy.modules.powers.network.AllomancyCapabilityPacket;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.network.AllomancyDataPacket;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.util.Metal;
 import com.mojang.brigadier.CommandDispatcher;
@@ -81,23 +81,24 @@ public class AllomancyPowerCommand {
     }
 
     private static void getPowers(CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
-        AllomancyCapability cap = AllomancyCapability.forPlayer(player);
         StringBuilder powers = new StringBuilder();
-        if (cap.isMistborn()) {
-            powers.append("all");
-        } else if (cap.isUninvested()) {
-            powers.append("none");
-        } else {
-            for (Metal mt : Metal.values()) {
-                if (cap.hasPower(mt)) {
-                    if (powers.length() == 0) {
-                        powers.append(mt.getName());
-                    } else {
-                        powers.append(", ").append(mt.getName());
+        player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            if (data.isMistborn()) {
+                powers.append("all");
+            } else if (data.isUninvested()) {
+                powers.append("none");
+            } else {
+                for (Metal mt : Metal.values()) {
+                    if (data.hasPower(mt)) {
+                        if (powers.length() == 0) {
+                            powers.append(mt.getName());
+                        } else {
+                            powers.append(", ").append(mt.getName());
+                        }
                     }
                 }
             }
-        }
+        });
         ctx.getSource().sendSuccess(new TranslationTextComponent("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
     }
 
@@ -116,16 +117,17 @@ public class AllomancyPowerCommand {
     }
 
     private static void addPower(CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
-        AllomancyCapability cap = AllomancyCapability.forPlayer(player);
         String type = ctx.getArgument("type", String.class);
-        if (type.equalsIgnoreCase("all")) {
-            cap.setMistborn();
-        } else {
-            Metal mt = Metal.valueOf(type.toUpperCase());
-            cap.addPower(mt);
-        }
+        player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            if (type.equalsIgnoreCase("all")) {
+                data.setMistborn();
+            } else {
+                Metal mt = Metal.valueOf(type.toUpperCase());
+                data.addPower(mt);
+            }
 
-        Network.sendTo(new AllomancyCapabilityPacket(cap, player.getId()), player);
+            Network.sendTo(new AllomancyDataPacket(data, player), player);
+        });
         ctx.getSource().sendSuccess(new TranslationTextComponent("commands.allomancy.addpower", player.getDisplayName(), type), true);
     }
 
@@ -144,16 +146,17 @@ public class AllomancyPowerCommand {
     }
 
     private static void removePower(CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
-        AllomancyCapability cap = AllomancyCapability.forPlayer(player);
         String type = ctx.getArgument("type", String.class);
-        if (type.equalsIgnoreCase("all")) {
-            cap.setUninvested();
-        } else {
-            Metal mt = Metal.valueOf(type.toUpperCase());
-            cap.revokePower(mt);
-        }
+        player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            if (type.equalsIgnoreCase("all")) {
+                data.setUninvested();
+            } else {
+                Metal mt = Metal.valueOf(type.toUpperCase());
+                data.revokePower(mt);
+            }
+            Network.sendTo(new AllomancyDataPacket(data, player), player);
+        });
 
-        Network.sendTo(new AllomancyCapabilityPacket(cap, player.getId()), player);
         ctx.getSource().sendSuccess(new TranslationTextComponent("commands.allomancy.removepower", player.getDisplayName(), type), true);
     }
 

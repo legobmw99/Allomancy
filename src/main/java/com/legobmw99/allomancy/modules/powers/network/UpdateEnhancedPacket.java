@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,16 +40,17 @@ public class UpdateEnhancedPacket {
             if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) { // Update player of own status
                 PlayerEntity player = (PlayerEntity) ctx.get().getSender().level.getEntity(this.entityID);
                 if (player != null) {
-                    AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
-                    playerCap.setEnhanced(this.enhance_time);
-
-                    Network.sync(new UpdateEnhancedPacket(this.enhance_time, this.entityID), player);
+                    player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+                        data.setEnhanced(this.enhance_time);
+                        Network.sync(new UpdateEnhancedPacket(this.enhance_time, this.entityID), player);
+                    });
                 }
             } else {
                 PlayerEntity player = (PlayerEntity) Minecraft.getInstance().level.getEntity(this.entityID);
                 if (player != null) {
-                    AllomancyCapability playerCap = AllomancyCapability.forPlayer(player);
-                    playerCap.setEnhanced(this.enhance_time);
+                    player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+                        data.setEnhanced(this.enhance_time);
+                    });
                 }
             }
 

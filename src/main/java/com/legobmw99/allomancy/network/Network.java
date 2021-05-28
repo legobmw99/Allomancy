@@ -1,8 +1,9 @@
 package com.legobmw99.allomancy.network;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.IAllomancyData;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import com.legobmw99.allomancy.modules.powers.network.*;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -23,8 +24,7 @@ public class Network {
     }
 
     public static void registerPackets() {
-        INSTANCE.registerMessage(nextIndex(), AllomancyCapabilityPacket.class, AllomancyCapabilityPacket::encode, AllomancyCapabilityPacket::decode,
-                                 AllomancyCapabilityPacket::handle);
+        INSTANCE.registerMessage(nextIndex(), AllomancyDataPacket.class, AllomancyDataPacket::encode, AllomancyDataPacket::decode, AllomancyDataPacket::handle);
         INSTANCE.registerMessage(nextIndex(), UpdateBurnPacket.class, UpdateBurnPacket::encode, UpdateBurnPacket::decode, UpdateBurnPacket::handle);
         INSTANCE.registerMessage(nextIndex(), ChangeEmotionPacket.class, ChangeEmotionPacket::encode, ChangeEmotionPacket::decode, ChangeEmotionPacket::handle);
         INSTANCE.registerMessage(nextIndex(), TryPushPullEntity.class, TryPushPullEntity::encode, TryPushPullEntity::decode, TryPushPullEntity::handle);
@@ -47,12 +47,11 @@ public class Network {
     }
 
     public static void sync(PlayerEntity player) {
-        AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-        sync(cap, player);
+        player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> sync(data, player));
     }
 
-    public static void sync(AllomancyCapability cap, PlayerEntity player) {
-        sync(new AllomancyCapabilityPacket(cap, player.getId()), player);
+    public static void sync(IAllomancyData cap, PlayerEntity player) {
+        sync(new AllomancyDataPacket(cap, player), player);
     }
 
     public static void sync(Object msg, PlayerEntity player) {

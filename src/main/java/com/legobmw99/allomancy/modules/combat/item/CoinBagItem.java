@@ -2,8 +2,8 @@ package com.legobmw99.allomancy.modules.combat.item;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
-import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
+import com.legobmw99.allomancy.modules.powers.PowerUtils;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
@@ -57,7 +57,8 @@ public class CoinBagItem extends ShootableItem {
             itemstack = new ItemStack(Items.GOLD_NUGGET, 1);
         }
 
-        if (AllomancyCapability.forPlayer(player).isBurning(Metal.STEEL)) {    // make sure there is always an item available
+
+        if (player.getCapability(AllomancyCapability.PLAYER_CAP).filter(d -> d.isBurning(Metal.STEEL)).isPresent()) {
             if (!world.isClientSide) {
 
                 Ammo type = getAmmoFromItem(itemstack.getItem());

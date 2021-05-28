@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.powers.client.gui;
 
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import com.legobmw99.allomancy.util.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.MainWindow;
@@ -30,6 +30,7 @@ public class MetalOverlay {
 
     /**
      * Draws the overlay for the metals
+     *
      * @param matrix
      */
     public static void drawMetalOverlay(MatrixStack matrix) {
@@ -40,13 +41,6 @@ public class MetalOverlay {
         if (!player.isAlive()) {
             return;
         }
-
-        AllomancyCapability cap = AllomancyCapability.forPlayer(player);
-
-        if (cap.isUninvested()) {
-            return;
-        }
-
         int renderX, renderY;
 
         // Set the offsets of the overlay based on config
@@ -75,27 +69,32 @@ public class MetalOverlay {
         obj = mc.getTextureManager().getTexture(meterLoc);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getId());
 
+        player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
 
-        /*
-         * The rendering for the overlay
-         */
-
-        for (Metal mt : Metal.values()) {
-            if (cap.hasPower(mt)) {
-                int metalY = 9 - cap.getAmount(mt);
-                int i = mt.getIndex();
-                int offset = (i / 2) * 4; // Adding a gap between pairs
-                // Draw the bars first
-                blit(matrix, gui, renderX + 1 + (7 * i) + offset, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
-                // Draw the gauges second, so that highlights and decorations show over the bar.
-                blit(matrix, gui, renderX + (7 * i) + offset, renderY, 0, 0, 5, 20);
-                // Draw the fire if it is burning
-                if (cap.isBurning(mt)) {
-                    blit(matrix,gui, renderX + (7 * i) + offset, renderY + 4 + metalY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
-                }
+            if (data.isUninvested()) {
+                return;
             }
 
-        }
+            /*
+             * The rendering for the overlay
+             */
+            for (Metal mt : Metal.values()) {
+                if (data.hasPower(mt)) {
+                    int metalY = 9 - data.getAmount(mt);
+                    int i = mt.getIndex();
+                    int offset = (i / 2) * 4; // Adding a gap between pairs
+                    // Draw the bars first
+                    blit(matrix, gui, renderX + 1 + (7 * i) + offset, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
+                    // Draw the gauges second, so that highlights and decorations show over the bar.
+                    blit(matrix, gui, renderX + (7 * i) + offset, renderY, 0, 0, 5, 20);
+                    // Draw the fire if it is burning
+                    if (data.isBurning(mt)) {
+                        blit(matrix, gui, renderX + (7 * i) + offset, renderY + 4 + metalY, Frames[currentFrame].x, Frames[currentFrame].y, 5, 3);
+                    }
+                }
+
+            }
+        });
 
         // Update the animation counters
         animationCounter++;

@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
-import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
+import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;

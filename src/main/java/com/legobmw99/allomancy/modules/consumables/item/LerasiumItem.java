@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -33,30 +33,28 @@ public class LerasiumItem extends Item {
 
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        AllomancyCapability cap = AllomancyCapability.forPlayer(player);
         ItemStack itemStackIn = player.getItemInHand(hand);
-        if (!cap.isMistborn()) {
+        if (player.getCapability(AllomancyCapability.PLAYER_CAP).filter(data -> !data.isMistborn()).isPresent()) {
             player.startUsingItem(hand);
             return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
-
-        } else {
-            return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
         }
+
+        return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
+
     }
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity livingEntity) {
-        AllomancyCapability cap = AllomancyCapability.forPlayer(livingEntity);
-        double x = livingEntity.position().x();
-        double y = livingEntity.position().y() + 3;
-        double z = livingEntity.position().z();
-        if (!cap.isMistborn()) {
-            cap.setMistborn();
-        }
+
+        livingEntity.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            if (!data.isMistborn()) {
+                data.setMistborn();
+            }
+        });
         //Fancy shmancy effects
         LightningBoltEntity lightning = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
         lightning.setVisualOnly(true);
-        lightning.moveTo(x, y, z); // see TridentEntity
+        lightning.moveTo(livingEntity.position().add(0, 3, 0));
         world.addFreshEntity(lightning);
         livingEntity.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 20, 0, true, false));
 

@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
-import com.legobmw99.allomancy.modules.powers.util.PowerUtils;
+import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.FallingBlockEntity;
@@ -64,6 +64,7 @@ public class TryPushPullEntity {
                 }
             }
 
-        }); ctx.get().setPacketHandled(true);
+        });
+        ctx.get().setPacketHandled(true);
     }
 }

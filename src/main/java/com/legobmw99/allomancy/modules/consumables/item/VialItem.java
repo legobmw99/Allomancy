@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -35,21 +35,19 @@ public class VialItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity livingEntity) {
 
-        AllomancyCapability cap;
-        cap = AllomancyCapability.forPlayer(livingEntity);
-
-
         if (!stack.hasTag()) {
             return stack;
         }
 
-        for (Metal mt : Metal.values()) {
-            if (stack.getTag().contains(mt.getName()) && stack.getTag().getBoolean(mt.getName())) {
-                if (cap.getAmount(mt) < 10) {
-                    cap.setAmount(mt, cap.getAmount(mt) + 1);
+        livingEntity.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            for (Metal mt : Metal.values()) {
+                if (stack.getTag().contains(mt.getName()) && stack.getTag().getBoolean(mt.getName())) {
+                    if (data.getAmount(mt) < 10) {
+                        data.setAmount(mt, data.getAmount(mt) + 1);
+                    }
                 }
             }
-        }
+        });
 
         if (!((PlayerEntity) (livingEntity)).abilities.instabuild) {
             stack.shrink(1);
@@ -75,29 +73,30 @@ public class VialItem extends Item {
 
     @Override
     public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand hand) {
-        AllomancyCapability cap;
-        cap = AllomancyCapability.forPlayer(playerIn);
-        //If all the ones being filled are full, don't allow
-        int filling = 0, full = 0;
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
-        if (itemStackIn.hasTag()) {
-            for (Metal mt : Metal.values()) {
-                if (itemStackIn.getTag().contains(mt.getName()) && itemStackIn.getTag().getBoolean(mt.getName())) {
-                    filling++;
-                    if (cap.getAmount(mt) >= 10) {
-                        full++;
+        ActionResult<ItemStack> res = playerIn.getCapability(AllomancyCapability.PLAYER_CAP).map(data -> {
+            //If all the ones being filled are full, don't allow
+            int filling = 0, full = 0;
+            if (itemStackIn.hasTag()) {
+                for (Metal mt : Metal.values()) {
+                    if (itemStackIn.getTag().contains(mt.getName()) && itemStackIn.getTag().getBoolean(mt.getName())) {
+                        filling++;
+                        if (data.getAmount(mt) >= 10) {
+                            full++;
+                        }
                     }
                 }
-            }
 
-            if (filling == full) {
-                return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
-            }
+                if (filling == full) {
+                    return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
+                }
 
-            playerIn.startUsingItem(hand);
-            return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
-        }
-        return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
+                playerIn.startUsingItem(hand);
+                return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
+            }
+            return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
+        }).orElse(new ActionResult<>(ActionResultType.FAIL, itemStackIn));
+        return res;
     }
 
 

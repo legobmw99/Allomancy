@@ -1,4 +1,4 @@
-/**
+/*
  * This class was modified from one created by <Vazkii>. The original is
  * distributed as part of the Psi Mod.
  * This code is used under the
@@ -10,9 +10,9 @@
 package com.legobmw99.allomancy.modules.powers.client.gui;
 
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
-import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import com.legobmw99.allomancy.util.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -41,17 +41,13 @@ public class MetalSelectScreen extends Screen {
     private static final String GUI_METAL = "allomancy:textures/gui/metals/%s_symbol.png";
     private static final String[] METAL_LOCAL = Arrays.stream(METAL_NAMES).map(s -> "metals." + s).toArray(String[]::new);
     private static final ResourceLocation[] METAL_ICONS = Arrays.stream(METAL_NAMES).map(s -> new ResourceLocation(String.format(GUI_METAL, s))).toArray(ResourceLocation[]::new);
-
+    final Minecraft mc;
     int timeIn = PowersConfig.animate_selection.get() ? 0 : 16; // Config setting for whether the wheel animates open or instantly appears
     int slotSelected = -1;
-    final AllomancyCapability cap;
-    final Minecraft mc;
 
     public MetalSelectScreen() {
         super(new StringTextComponent("allomancy_gui"));
         this.mc = Minecraft.getInstance();
-        this.cap = AllomancyCapability.forPlayer(this.mc.player);
-
     }
 
     private static double mouseAngle(int x, int y, int mx, int my) {
@@ -66,116 +62,119 @@ public class MetalSelectScreen extends Screen {
     public void render(MatrixStack matrixStack, int mx, int my, float partialTicks) {
         super.render(matrixStack, mx, my, partialTicks);
 
-        int x = this.width / 2;
-        int y = this.height / 2;
-        int maxRadius = 80;
+        this.mc.player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
 
-        double angle = mouseAngle(x, y, mx, my);
+            int x = this.width / 2;
+            int y = this.height / 2;
+            int maxRadius = 80;
 
-        int segments = METAL_NAMES.length;
-        float step = (float) Math.PI / 180;
-        float degPer = (float) Math.PI * 2 / segments;
+            double angle = mouseAngle(x, y, mx, my);
 
-        this.slotSelected = -1;
+            int segments = METAL_NAMES.length;
+            float step = (float) Math.PI / 180;
+            float degPer = (float) Math.PI * 2 / segments;
 
-        Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buf = tess.getBuilder();
+            this.slotSelected = -1;
+
+            Tessellator tess = Tessellator.getInstance();
+            BufferBuilder buf = tess.getBuilder();
 
 
-        RenderSystem.disableCull();
-        RenderSystem.disableTexture();
-        RenderSystem.enableBlend();
-        RenderSystem.shadeModel(GL11.GL_FLAT);
-        buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+            RenderSystem.disableCull();
+            RenderSystem.disableTexture();
+            RenderSystem.enableBlend();
+            RenderSystem.shadeModel(GL11.GL_FLAT);
+            buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
 
-        for (int seg = 0; seg < segments; seg++) {
-            Metal mt = Metal.getMetal(toMetalIndex(seg));
-            boolean mouseInSector = this.cap.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
-            float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
-            if (mouseInSector) {
-                this.slotSelected = seg;
-                radius *= 1.025f;
+            for (int seg = 0; seg < segments; seg++) {
+                Metal mt = Metal.getMetal(toMetalIndex(seg));
+                boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
+                float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+                if (mouseInSector) {
+                    this.slotSelected = seg;
+                    radius *= 1.025f;
+                }
+
+                int gs = 0x40;
+                if (seg % 2 == 0) {
+                    gs += 0x19;
+                }
+
+                gs = (!data.hasPower(mt) || data.getAmount(mt) == 0) ? 0 : gs;
+
+                int r = data.isBurning(mt) ? 0xFF : gs;
+                int g = gs;
+                int b = gs;
+                int a = 0x99;
+
+
+                if (seg == 0) {
+                    buf.vertex(x, y, 0).color(r, g, b, a).endVertex();
+                }
+
+
+                for (float v = 0; v < degPer + step / 2; v += step) {
+                    float rad = v + seg * degPer;
+                    float xp = x + MathHelper.cos(rad) * radius;
+                    float yp = y + MathHelper.sin(rad) * radius;
+
+                    if (v == 0) {
+                        buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
+                    }
+                    buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
+                }
             }
+            tess.end();
 
-            int gs = 0x40;
-            if (seg % 2 == 0) {
-                gs += 0x19;
-            }
+            RenderSystem.shadeModel(GL11.GL_FLAT);
+            RenderSystem.enableTexture();
 
-            gs = (!this.cap.hasPower(mt) || this.cap.getAmount(mt) == 0) ? 0 : gs;
-
-            int r = this.cap.isBurning(mt) ? 0xFF : gs;
-            int g = gs;
-            int b = gs;
-            int a = 0x99;
-
-
-            if (seg == 0) {
-                buf.vertex(x, y, 0).color(r, g, b, a).endVertex();
-            }
+            for (int seg = 0; seg < segments; seg++) {
+                Metal mt = Metal.getMetal(toMetalIndex(seg));
+                boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
+                float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+                if (mouseInSector) {
+                    radius *= 1.025f;
+                }
 
 
-            for (float v = 0; v < degPer + step / 2; v += step) {
-                float rad = v + seg * degPer;
+                float rad = (seg + 0.5f) * degPer;
                 float xp = x + MathHelper.cos(rad) * radius;
                 float yp = y + MathHelper.sin(rad) * radius;
 
-                if (v == 0) {
-                    buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
+                float xsp = xp - 4;
+                float ysp = yp;
+                String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + new TranslationTextComponent(METAL_LOCAL[toMetalIndex(seg)]).getString();
+                int width = this.mc.getEntityRenderDispatcher().getFont().width(name);
+
+                if (xsp < x) {
+                    xsp -= width - 8;
                 }
-                buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
-            }
-        }
-        tess.end();
+                if (ysp < y) {
+                    ysp -= 9;
+                }
 
-        RenderSystem.shadeModel(GL11.GL_FLAT);
-        RenderSystem.enableTexture();
+                this.mc.getEntityRenderDispatcher().getFont().drawShadow(matrixStack, name, xsp, ysp, 0xFFFFFF);
 
-        for (int seg = 0; seg < segments; seg++) {
-            Metal mt = Metal.getMetal(toMetalIndex(seg));
-            boolean mouseInSector = this.cap.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
-            float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
-            if (mouseInSector) {
-                radius *= 1.025f;
-            }
+                double mod = 0.8;
+                int xdp = (int) ((xp - x) * mod + x);
+                int ydp = (int) ((yp - y) * mod + y);
 
+                this.mc.getEntityRenderDispatcher().textureManager.bind(METAL_ICONS[toMetalIndex(seg)]);
+                RenderSystem.color4f(1, 1, 1, 1);
+                blit(matrixStack, xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
-            float rad = (seg + 0.5f) * degPer;
-            float xp = x + MathHelper.cos(rad) * radius;
-            float yp = y + MathHelper.sin(rad) * radius;
-
-            float xsp = xp - 4;
-            float ysp = yp;
-            String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + new TranslationTextComponent(METAL_LOCAL[toMetalIndex(seg)]).getString();
-            int width = this.mc.getEntityRenderDispatcher().getFont().width(name);
-
-            if (xsp < x) {
-                xsp -= width - 8;
-            }
-            if (ysp < y) {
-                ysp -= 9;
             }
 
-            this.mc.getEntityRenderDispatcher().getFont().drawShadow(matrixStack, name, xsp, ysp, 0xFFFFFF);
+            RenderSystem.enableRescaleNormal();
+            RenderSystem.enableBlend();
+            RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+            RenderHelper.turnBackOn();
 
-            double mod = 0.8;
-            int xdp = (int) ((xp - x) * mod + x);
-            int ydp = (int) ((yp - y) * mod + y);
-
-            this.mc.getEntityRenderDispatcher().textureManager.bind(METAL_ICONS[toMetalIndex(seg)]);
-            RenderSystem.color4f(1, 1, 1, 1);
-            blit(matrixStack, xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
-
-        }
-
-        RenderSystem.enableRescaleNormal();
-        RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        RenderHelper.turnBackOn();
-
-        RenderHelper.turnOff();
-        RenderSystem.disableBlend();
-        RenderSystem.disableRescaleNormal();
+            RenderHelper.turnOff();
+            RenderSystem.disableBlend();
+            RenderSystem.disableRescaleNormal();
+        });
 
     }
 
@@ -218,9 +217,10 @@ public class MetalSelectScreen extends Screen {
     private void toggleSelected() {
         if (this.slotSelected != -1) {
             Metal mt = Metal.getMetal(toMetalIndex(this.slotSelected));
-            ClientUtils.toggleBurn(mt, this.cap);
-            this.mc.player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F, 2.0F);
-
+            this.mc.player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+                ClientUtils.toggleBurn(mt, data);
+                this.mc.player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F, 2.0F);
+            });
         }
     }
 

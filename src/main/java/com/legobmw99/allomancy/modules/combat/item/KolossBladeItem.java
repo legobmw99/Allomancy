@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -26,22 +26,24 @@ public class KolossBladeItem extends SwordItem {
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        if (entityIn != null && entityIn instanceof PlayerEntity && entityIn.getCapability(AllomancyCapability.PLAYER_CAP).isPresent()) {
+        if (entityIn != null && entityIn instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) entityIn;
-            AllomancyCapability cap = AllomancyCapability.forPlayer(player);
+
             if (isSelected && (player.getOffhandItem() != stack)) {
-                if (!cap.isBurning(Metal.PEWTER)) {
-                    player.addEffect(new EffectInstance(Effects.DIG_SLOWDOWN, 10, 10, true, false));
-                    player.addEffect(new EffectInstance(Effects.WEAKNESS, 10, 10, true, false));
-                    player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 10, 0, true, false));
-                }
+                player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+                    if (!data.isBurning(Metal.PEWTER)) {
+                        player.addEffect(new EffectInstance(Effects.DIG_SLOWDOWN, 10, 10, true, false));
+                        player.addEffect(new EffectInstance(Effects.WEAKNESS, 10, 10, true, false));
+                        player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 10, 0, true, false));
+                    }
+                });
             }
         }
     }
 
     @Override
     public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
-        return (attacker instanceof PlayerEntity) && (AllomancyCapability.forPlayer(attacker).isBurning(Metal.PEWTER));
+        return (attacker instanceof PlayerEntity) && (attacker.getCapability(AllomancyCapability.PLAYER_CAP).filter(d -> d.isBurning(Metal.PEWTER)).isPresent());
     }
 
     @Override

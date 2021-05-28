@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.powers.client.util;
 
+import com.legobmw99.allomancy.api.IAllomancyData;
 import com.legobmw99.allomancy.modules.powers.network.UpdateBurnPacket;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.util.Metal;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -99,7 +99,7 @@ public class ClientUtils {
      * @param metal      the index of the metal to toggle
      * @param capability the capability being handled
      */
-    public static void toggleBurn(Metal metal, AllomancyCapability capability) {
+    public static void toggleBurn(Metal metal, IAllomancyData capability) {
         if (!capability.hasPower(metal)) {
             return;
         }

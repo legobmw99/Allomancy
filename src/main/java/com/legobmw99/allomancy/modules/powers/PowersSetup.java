@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.modules.powers.client.ClientEventHandler;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerCommand;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerType;
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraftforge.common.MinecraftForge;

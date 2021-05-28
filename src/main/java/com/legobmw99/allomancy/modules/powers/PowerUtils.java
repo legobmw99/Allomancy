@@ -1,8 +1,8 @@
-package com.legobmw99.allomancy.modules.powers.util;
+package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
-import com.legobmw99.allomancy.modules.powers.PowersConfig;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIAttackOnCollideExtended;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIEvilAttack;
 import com.legobmw99.allomancy.network.Network;
@@ -150,13 +150,14 @@ public class PowerUtils {
      * @param player The player to wipe
      */
     public static void wipePlayer(PlayerEntity player) {
-        AllomancyCapability capHurt = AllomancyCapability.forPlayer(player);
-        capHurt.drainMetals(Metal.values());
-        player.removeAllEffects();
+        player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            data.drainMetals(Metal.values());
+            player.removeAllEffects();
 
-        if (player instanceof ServerPlayerEntity) {
-            Network.sync(capHurt, player);
-        }
+            if (player instanceof ServerPlayerEntity) {
+                Network.sync(data, player);
+            }
+        });
     }
 
     /**

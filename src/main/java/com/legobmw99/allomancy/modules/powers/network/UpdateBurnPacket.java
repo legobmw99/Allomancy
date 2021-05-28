@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
-import com.legobmw99.allomancy.modules.powers.util.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -40,20 +40,21 @@ public class UpdateBurnPacket {
         ctx.get().enqueueWork(() -> {
 
             ServerPlayerEntity player = ctx.get().getSender();
-            AllomancyCapability cap = AllomancyCapability.forPlayer(player);
 
-            if (cap.hasPower(this.mt) && cap.getAmount(this.mt) > 0) {
-                cap.setBurning(this.mt, this.value);
-                if (!this.value && this.mt == Metal.DURALUMIN) {
-                    cap.drainMetals(Arrays.stream(Metal.values()).filter(cap::isBurning).toArray(Metal[]::new));
+            player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+                if (data.hasPower(this.mt) && data.getAmount(this.mt) > 0) {
+                    data.setBurning(this.mt, this.value);
+                    if (!this.value && this.mt == Metal.DURALUMIN) {
+                        data.drainMetals(Arrays.stream(Metal.values()).filter(data::isBurning).toArray(Metal[]::new));
+                    }
+                    if (!this.value && data.isEnhanced()) {
+                        data.drainMetals(this.mt);
+                    }
+                } else {
+                    data.setBurning(this.mt, false);
                 }
-                if (!this.value && cap.isEnhanced()) {
-                    cap.drainMetals(this.mt);
-                }
-            } else {
-                cap.setBurning(this.mt, false);
-            }
-            Network.sync(cap, player);
+                Network.sync(data, player);
+            });
 
         });
         ctx.get().setPacketHandled(true);
