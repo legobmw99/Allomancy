@@ -15,7 +15,7 @@ public interface IAllomancyData {
      *
      * @param player the player being checked
      */
-    void updateMetalBurnTime(ServerPlayerEntity player);
+    void tickBurning(ServerPlayerEntity player);
 
     /**
      * Get if the player has the supplied power

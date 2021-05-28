@@ -48,7 +48,7 @@ public class DefaultAllomancyData implements IAllomancyData {
     }
 
 
-    public void updateMetalBurnTime(ServerPlayerEntity player) {
+    public void tickBurning(ServerPlayerEntity player) {
         for (Metal metal : Metal.values()) {
             if (this.isBurning(metal)) {
                 if (!this.hasPower(metal)) {

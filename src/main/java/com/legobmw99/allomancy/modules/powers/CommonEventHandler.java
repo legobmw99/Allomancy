@@ -227,7 +227,7 @@ public class CommonEventHandler {
                         // Run the necessary updates on the player's metals
                         // Ran AFTER duralumin and aluminum to make sure they function correctly
                         if (curPlayer instanceof ServerPlayerEntity) {
-                            data.updateMetalBurnTime((ServerPlayerEntity) curPlayer);
+                            data.tickBurning((ServerPlayerEntity) curPlayer);
                         }
 
 
