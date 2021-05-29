@@ -40,7 +40,7 @@ public class TryPushPullBlock {
             ServerPlayerEntity player = ctx.get().getSender();
             BlockPos pos = this.blockPos;
             // Sanity check to make sure  the block is loaded in the server
-            if (player.level.hasChunkAt(pos)) {
+            if (player.level.isLoaded(pos)) {
                 // activate blocks
                 if (player.level.getBlockState(pos).getBlock() instanceof IAllomanticallyUsableBlock) {
                     ((IAllomanticallyUsableBlock) player.level.getBlockState(pos).getBlock()).useAllomantically(player.level.getBlockState(pos), player.level, pos, player,

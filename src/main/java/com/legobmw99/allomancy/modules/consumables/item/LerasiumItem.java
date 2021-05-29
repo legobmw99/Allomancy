@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.IAllomancyData;
 import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
@@ -46,11 +47,7 @@ public class LerasiumItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity livingEntity) {
 
-        livingEntity.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
-            if (!data.isMistborn()) {
-                data.setMistborn();
-            }
-        });
+        livingEntity.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(IAllomancyData::setMistborn);
         //Fancy shmancy effects
         LightningBoltEntity lightning = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
         lightning.setVisualOnly(true);
