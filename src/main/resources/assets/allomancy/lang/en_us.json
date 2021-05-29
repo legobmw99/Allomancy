@@ -285,6 +285,8 @@
   "block.minecraft.banner.allomancy_zinc.white": "White Zinc Symbol",
   "block.minecraft.banner.allomancy_zinc.yellow": "Yellow Zinc Symbol",
   "commands.allomancy.addpower": "%s added Allomantic power %s",
+  "commands.allomancy.err_add": "Unable to add power %s, already had",
+  "commands.allomancy.err_remove": "Unable to remove power %s, did not have",
   "commands.allomancy.getpowers": "%s currently has Allomantic powers: %s",
   "commands.allomancy.removepower": "%s removed Allomantic power %s",
   "commands.allomancy.unrecognized": "Unrecognized Allomancy power: '%s'",

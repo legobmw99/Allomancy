@@ -19,6 +19,14 @@ public class Languages extends LanguageProvider {
         super(gen, modid, locale);
     }
 
+    private static String getDisplayName(Metal mt) {
+        return toTitleCase(mt.getName());
+    }
+
+    private static String toTitleCase(String in) {
+        return in.substring(0, 1).toUpperCase() + in.substring(1);
+    }
+
     @Override
     protected void addTranslations() {
         add("itemGroup.allomancy", "Allomancy");
@@ -88,6 +96,8 @@ public class Languages extends LanguageProvider {
         add("commands.allomancy.addpower", "%s added Allomantic power %s");
         add("commands.allomancy.removepower", "%s removed Allomantic power %s");
         add("commands.allomancy.unrecognized", "Unrecognized Allomancy power: '%s'");
+        add("commands.allomancy.err_add", "Unable to add power %s, already had");
+        add("commands.allomancy.err_remove", "Unable to remove power %s, did not have");
 
         for (DyeColor color : DyeColor.values()) {
             for (Metal mt : Metal.values()) {
@@ -102,16 +112,8 @@ public class Languages extends LanguageProvider {
         return "Allomancy Language";
     }
 
-    private static String getDisplayName(Metal mt) {
-        return toTitleCase(mt.getName());
-    }
-
     private String getDisplayName(DyeColor color) {
         String[] trans = color.getName().split("_");
         return Arrays.stream(trans).map(Languages::toTitleCase).collect(Collectors.joining(" "));
-    }
-
-    private static String toTitleCase(String in) {
-        return in.substring(0, 1).toUpperCase() + in.substring(1);
     }
 }

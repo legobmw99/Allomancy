@@ -49,26 +49,31 @@ public class DefaultAllomancyData implements IAllomancyData {
 
 
     public void tickBurning(ServerPlayerEntity player) {
+        boolean sync = false;
         for (Metal metal : Metal.values()) {
             if (this.isBurning(metal)) {
                 if (!this.hasPower(metal)) {
                     // put out any metals that the player shouldn't be able to burn
                     this.setBurning(metal, false);
-                    Network.sync(this, player);
+                    sync = true;
                 } else {
                     this.setBurnTime(metal, this.getBurnTime(metal) - 1);
                     if (this.getBurnTime(metal) <= 0) {
                         if (this.getAmount(metal) <= 0) {
                             this.setBurning(metal, false);
+                            sync = true;
                         } else {
                             this.setAmount(metal, this.getAmount(metal) - 1);
                         }
                         this.setBurnTime(metal, MAX_BURN_TIME[metal.getIndex()]);
-                        Network.sync(this, player);
                     }
                 }
             }
         }
+        if (sync) {
+            Network.sync(this, player);
+        }
+
     }
 
 
