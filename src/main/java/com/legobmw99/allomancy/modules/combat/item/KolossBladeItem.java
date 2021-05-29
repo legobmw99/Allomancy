@@ -30,7 +30,8 @@ public class KolossBladeItem extends SwordItem {
             PlayerEntity player = (PlayerEntity) entityIn;
 
             if (isSelected && (player.getOffhandItem() != stack)) {
-                if (!player.hasEffect(Effects.DAMAGE_BOOST) && !player.getCapability(AllomancyCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.PEWTER)).isPresent()) {
+                if (!(player.hasEffect(Effects.DAMAGE_BOOST) && player.getEffect(Effects.DAMAGE_BOOST).getAmplifier() >= 2) &&
+                    !player.getCapability(AllomancyCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.PEWTER)).isPresent()) {
                     player.addEffect(new EffectInstance(Effects.DIG_SLOWDOWN, 10, 10, true, false));
                     player.addEffect(new EffectInstance(Effects.WEAKNESS, 10, 10, true, false));
                     player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 10, 0, true, false));
