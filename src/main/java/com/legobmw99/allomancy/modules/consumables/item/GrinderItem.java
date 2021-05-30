@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 public class GrinderItem extends Item {
 
     public GrinderItem() {
-        super(Allomancy.createStandardItemProperties().stacksTo(1));
+        super(Allomancy.createStandardItemProperties().setNoRepair().defaultDurability(256));
     }
 
     @Override
@@ -21,7 +21,17 @@ public class GrinderItem extends Item {
     }
 
     @Override
+    public boolean isDamageable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
-        return itemStack.copy();
+        ItemStack damaged = itemStack.copy();
+        damaged.setDamageValue(damaged.getDamageValue() + 1);
+        if (damaged.getDamageValue() >= damaged.getMaxDamage()) {
+            damaged.setCount(0);
+        }
+        return damaged;
     }
 }
