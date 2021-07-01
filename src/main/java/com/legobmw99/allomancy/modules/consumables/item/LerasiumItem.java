@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.api.IAllomancyData;
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
+import com.legobmw99.allomancy.api.data.IAllomancerData;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -35,7 +35,7 @@ public class LerasiumItem extends Item {
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStackIn = player.getItemInHand(hand);
-        if (player.getCapability(AllomancyCapability.PLAYER_CAP).filter(data -> !data.isMistborn()).isPresent()) {
+        if (player.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> !data.isMistborn()).isPresent()) {
             player.startUsingItem(hand);
             return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
         }
@@ -47,7 +47,7 @@ public class LerasiumItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity livingEntity) {
 
-        livingEntity.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(IAllomancyData::setMistborn);
+        livingEntity.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(IAllomancerData::setMistborn);
         //Fancy shmancy effects
         LightningBoltEntity lightning = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
         lightning.setVisualOnly(true);

@@ -2,11 +2,11 @@ package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIAttackOnCollideExtended;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIEvilAttack;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureEntity;
@@ -150,7 +150,7 @@ public class PowerUtils {
      * @param player The player to wipe
      */
     public static void wipePlayer(PlayerEntity player) {
-        player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
             data.drainMetals(Metal.values());
             player.removeAllEffects();
 

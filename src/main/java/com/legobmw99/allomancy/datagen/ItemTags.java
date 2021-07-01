@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
@@ -20,7 +20,7 @@ public class ItemTags extends ItemTagsProvider {
     protected void addTags() {
 
         for (Metal mt : Metal.values()) {
-            if (mt == Metal.GOLD || mt == Metal.IRON) {
+            if (mt.isVanilla()) {
                 continue;
             }
 

@@ -5,7 +5,7 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
@@ -48,11 +48,12 @@ public class ItemModels extends ItemModelProvider {
             if (i <= Metal.BENDALLOY.getIndex()) {
                 Item pattern_item = ExtrasSetup.PATTERN_ITEMS.get(i).get();
                 itemGenerated(pattern_item, "item/" + pattern_item.getRegistryName().getPath());
+
+                if (Metal.getMetal(i).isVanilla()){
+                    continue;
+                }
             }
 
-            if (i == Metal.GOLD.getIndex() || i == Metal.IRON.getIndex()) {
-                continue;
-            }
 
             Item nugget = MaterialsSetup.NUGGETS.get(i).get();
             itemGenerated(nugget, "item/" + nugget.getRegistryName().getPath());

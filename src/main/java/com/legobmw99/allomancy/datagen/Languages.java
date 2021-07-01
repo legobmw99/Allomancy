@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.DyeColor;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -64,7 +64,7 @@ public class Languages extends LanguageProvider {
             add(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), "Banner Pattern");
             add("item.allomancy." + mt.getName() + "_pattern.desc", getDisplayName(mt) + " Symbol");
 
-            if (mt == Metal.GOLD || mt == Metal.IRON) {
+            if (mt.isVanilla()) {
                 continue;
             }
 

@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.modules.extras;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.block.Block;
 import net.minecraft.item.BannerPatternItem;
 import net.minecraft.item.BlockItem;

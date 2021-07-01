@@ -1,9 +1,9 @@
 package com.legobmw99.allomancy.modules.powers.client.util;
 
-import com.legobmw99.allomancy.api.IAllomancyData;
+import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.modules.powers.network.UpdateBurnPacket;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -99,7 +99,7 @@ public class ClientUtils {
      * @param metal      the index of the metal to toggle
      * @param capability the capability being handled
      */
-    public static void toggleBurn(Metal metal, IAllomancyData capability) {
+    public static void toggleBurn(Metal metal, IAllomancerData capability) {
         if (!capability.hasPower(metal)) {
             return;
         }

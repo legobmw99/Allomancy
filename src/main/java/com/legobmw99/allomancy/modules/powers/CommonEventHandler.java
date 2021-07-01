@@ -3,18 +3,22 @@ package com.legobmw99.allomancy.modules.powers;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
-import com.legobmw99.allomancy.modules.powers.data.AllomancyDataProvider;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerDataProvider;
 import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -35,14 +39,16 @@ import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onAttachCapability(final AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof PlayerEntity) {
-            AllomancyDataProvider provider = new AllomancyDataProvider();
-            event.addCapability(AllomancyCapability.IDENTIFIER, provider);
+            AllomancerDataProvider provider = new AllomancerDataProvider();
+            event.addCapability(AllomancerCapability.IDENTIFIER, provider);
             event.addListener(provider::invalidate);
         }
     }
@@ -53,7 +59,7 @@ public class CommonEventHandler {
             if (event.getPlayer() instanceof ServerPlayerEntity) {
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 
-                player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+                player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                     //Handle random misting case
                     if (PowersConfig.random_mistings.get() && data.isUninvested()) {
                         byte randomMisting = (byte) (Math.random() * Metal.values().length);
@@ -78,9 +84,9 @@ public class CommonEventHandler {
         if (!event.getPlayer().level.isClientSide()) {
 
             PlayerEntity player = event.getPlayer();
-            player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
 
-                event.getOriginal().getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(oldData -> {
+                event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(oldData -> {
                     data.setDeathLoc(oldData.getDeathLoc(), oldData.getDeathDim());
                     if (!oldData.isUninvested()) { // make sure the new player has the same power status
                         for (Metal mt : Metal.values()) {
@@ -131,7 +137,7 @@ public class CommonEventHandler {
     public static void onSetSpawn(final PlayerSetSpawnEvent event) {
         PlayerEntity player = event.getPlayer();
         if (player instanceof ServerPlayerEntity) {
-            player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 data.setSpawnLoc(event.getNewSpawn(), event.getSpawnWorld());
                 Network.sync(data, player);
             });
@@ -142,7 +148,7 @@ public class CommonEventHandler {
     public static void onLivingDeath(final LivingDeathEvent event) {
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
-            player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 data.setDeathLoc(new BlockPos(player.position()), player.level.dimension());
                 Network.sync(data, player);
             });
@@ -154,7 +160,7 @@ public class CommonEventHandler {
         // Increase outgoing damage for pewter burners
         if (event.getSource().getEntity() instanceof ServerPlayerEntity) {
             ServerPlayerEntity source = (ServerPlayerEntity) event.getSource().getEntity();
-            source.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            source.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
 
                 if (data.isBurning(Metal.PEWTER)) {
                     if (data.isEnhanced()) {
@@ -179,7 +185,7 @@ public class CommonEventHandler {
 
         // Reduce incoming damage for pewter burners
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
-            event.getEntityLiving().getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            event.getEntityLiving().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 if (data.isBurning(Metal.PEWTER)) {
                     if (data.isEnhanced()) { // Duralumin invulnerability
                         Allomancy.LOGGER.debug("Canceling Damage");
@@ -203,7 +209,7 @@ public class CommonEventHandler {
         if (event.phase == TickEvent.Phase.END) {
 
             event.world.players().forEach(curPlayer -> {
-                curPlayer.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+                curPlayer.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                     if (!data.isUninvested()) {
 
                         /*********************************************
@@ -240,7 +246,7 @@ public class CommonEventHandler {
                                 BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
                                 BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
                                 event.world.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(negative, positive)).forEach(otherPlayer -> {
-                                    otherPlayer.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(otherData -> otherData.drainMetals(Metal.values()));
+                                    otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(otherData -> otherData.drainMetals(Metal.values()));
                                 });
                             }
                         }
@@ -371,6 +377,25 @@ public class CommonEventHandler {
                          *********************************************/
                         if (data.isEnhanced() && data.isBurning(Metal.COPPER)) {
                             curPlayer.addEffect(new EffectInstance(Effects.INVISIBILITY, 20, 50, true, false));
+                        }
+
+                        if (false) { //todo
+                            BlockPos negative = curPlayer.blockPosition().offset(-30, -30, -30);
+                            BlockPos positive = curPlayer.blockPosition().offset(30, 30, 30);
+                            List<MobEntity> nearby_players = curPlayer.level.getEntitiesOfClass(MobEntity.class, new AxisAlignedBB(negative, positive), Objects::nonNull);
+
+                            for (MobEntity mob : nearby_players){
+                                Path path = mob.getNavigation().getPath();
+                                if (path != null){
+                                    int count = path.getNodeCount();
+                                    for (int i = 0; i < count; i++) {
+                                        PathPoint point = path.getNode(i);
+                                        System.out.println(point);
+                                        // TODO this would be atium? need a packet and a renderer
+                                        event.world.addParticle(ParticleTypes.EXPLOSION, point.x + 0.5, point.y + 0.5, point.z + 0.5, 0, 0 ,0);
+                                    }
+                                }
+                            }
                         }
 
                     }

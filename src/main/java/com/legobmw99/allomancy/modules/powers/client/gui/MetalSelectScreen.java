@@ -12,8 +12,8 @@ package com.legobmw99.allomancy.modules.powers.client.gui;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -62,7 +62,7 @@ public class MetalSelectScreen extends Screen {
     public void render(MatrixStack matrixStack, int mx, int my, float partialTicks) {
         super.render(matrixStack, mx, my, partialTicks);
 
-        this.mc.player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+        this.mc.player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
 
             int x = this.width / 2;
             int y = this.height / 2;
@@ -217,7 +217,7 @@ public class MetalSelectScreen extends Screen {
     private void toggleSelected() {
         if (this.slotSelected != -1) {
             Metal mt = Metal.getMetal(toMetalIndex(this.slotSelected));
-            this.mc.player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            this.mc.player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 ClientUtils.toggleBurn(mt, data);
                 this.mc.player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F, 2.0F);
             });
