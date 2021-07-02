@@ -62,8 +62,11 @@ public class CoinBagItem extends ShootableItem {
             if (!world.isClientSide) {
 
                 Ammo type = getAmmoFromItem(itemstack.getItem());
-
-                ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, type.damage);
+                float dmg=type.damage; 
+                if (player.getCapability(AllomancyCapability.PLAYER_CAP).filter(d -> d.isEnhanced()).isPresent()) {
+                    dmg*=2.0F;
+                }
+                ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, dmg);
                 //          formerly called .shoot()
                 nugget_projectile.shootFromRotation(player, player.xRot, player.yHeadRot, type.arg1, type.arg2, type.arg3);
                 world.addFreshEntity(nugget_projectile);
