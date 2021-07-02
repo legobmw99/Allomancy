@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.modules.combat.item;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.util.Metal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
@@ -58,12 +58,12 @@ public class CoinBagItem extends ShootableItem {
         }
 
 
-        if (player.getCapability(AllomancyCapability.PLAYER_CAP).filter(d -> d.isBurning(Metal.STEEL)).isPresent()) {
+        if (player.getCapability(AllomancerCapability.PLAYER_CAP).filter(d -> d.isBurning(Metal.STEEL)).isPresent()) {
             if (!world.isClientSide) {
 
                 Ammo type = getAmmoFromItem(itemstack.getItem());
                 float dmg=type.damage; 
-                if (player.getCapability(AllomancyCapability.PLAYER_CAP).filter(d -> d.isEnhanced()).isPresent()) {
+                if (player.getCapability(AllomancerCapability.PLAYER_CAP).filter(d -> d.isEnhanced()).isPresent()) {
                     dmg*=2.0F;
                 }
                 ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, dmg);
