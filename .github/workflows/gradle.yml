@@ -2,7 +2,7 @@ name: Allomancy build
 
 on:
   push:
-    branches: [ maim ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
