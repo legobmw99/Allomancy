@@ -8,13 +8,13 @@ import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
 import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
 import com.legobmw99.allomancy.modules.powers.client.util.MetalBlockBlob;
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.modules.powers.network.ChangeEmotionPacket;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullBlock;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullEntity;
 import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -40,10 +40,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,7 +62,7 @@ public class ClientEventHandler {
         if (event.phase == TickEvent.Phase.END && !this.mc.isPaused() && this.mc.player != null && this.mc.player.isAlive()) {
 
             PlayerEntity player = this.mc.player;
-            player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 if (!data.isUninvested()) {
                     // Duralumin makes you move much quicker and reach much further
                     int force_multiplier = data.isEnhanced() ? 4 : 1;
@@ -155,8 +152,8 @@ public class ClientEventHandler {
                             BlockPos positive = player.blockPosition().offset(max, max, max);
 
                             // Add metal entities to metal list
-                            List<Entity> entities = player.level.getEntitiesOfClass(Entity.class, new AxisAlignedBB(negative, positive));
-                            entities.stream().filter(PowerUtils::isEntityMetal).filter(e -> !e.equals(player)).forEach(this.metal_entities::add);
+                            this.metal_entities.addAll(
+                                    player.level.getEntitiesOfClass(Entity.class, new AxisAlignedBB(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
 
                             // Add metal blobs to metal list
                             Stream<BlockPos> blocks = BlockPos.betweenClosedStream(negative, positive);
@@ -193,7 +190,7 @@ public class ClientEventHandler {
 
                             for (PlayerEntity otherPlayer : nearby_players) {
 
-                                boolean cont = otherPlayer.getCapability(AllomancyCapability.PLAYER_CAP).map(otherData -> {
+                                boolean cont = otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).map(otherData -> {
                                     if (otherData.isBurning(Metal.COPPER) && (!data.isEnhanced() || otherData.isEnhanced())) {
                                         return false;
                                     }
@@ -248,7 +245,7 @@ public class ClientEventHandler {
                     return;
                 }
 
-                player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+                player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                     if (extras) { // try one of the extra keybinds
                         for (int i = 0; i < PowersClientSetup.powers.length; i++) {
                             if (PowersClientSetup.powers[i].isDown()) {
@@ -307,7 +304,7 @@ public class ClientEventHandler {
             return;
         }
 
-        player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
 
             if (data.isUninvested()) {
                 return;
@@ -398,7 +395,7 @@ public class ClientEventHandler {
             return;
         }
 
-        player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
             double motionX, motionY, motionZ, magnitude;
 
             if (data.isBurning(Metal.TIN)) {

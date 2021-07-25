@@ -1,9 +1,9 @@
-package com.legobmw99.allomancy.util;
+package com.legobmw99.allomancy.api.enums;
 
 import java.util.Locale;
 
 public enum Metal {
-    IRON,
+    IRON(true),
     STEEL,
     TIN,
     PEWTER,
@@ -15,10 +15,26 @@ public enum Metal {
     DURALUMIN,
     CHROMIUM,
     NICROSIL,
-    GOLD,
+    GOLD(true),
     ELECTRUM,
     CADMIUM,
     BENDALLOY;
+
+
+    private final boolean vanilla;
+
+    public boolean isVanilla(){
+        return this.vanilla;
+    }
+
+    Metal(){
+        this(false);
+    }
+
+    Metal(boolean isVanilla){
+        this.vanilla = isVanilla;
+    }
+
 
     public static Metal getMetal(int index) {
         for (Metal metal : values()) {

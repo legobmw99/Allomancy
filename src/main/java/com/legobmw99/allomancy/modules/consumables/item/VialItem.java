@@ -2,8 +2,8 @@ package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -39,7 +39,7 @@ public class VialItem extends Item {
             return stack;
         }
 
-        livingEntity.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+        livingEntity.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
             for (Metal mt : Metal.values()) {
                 if (stack.getTag().contains(mt.getName()) && stack.getTag().getBoolean(mt.getName())) {
                     if (data.getAmount(mt) < 10) {
@@ -74,7 +74,7 @@ public class VialItem extends Item {
     @Override
     public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
-        ActionResult<ItemStack> res = playerIn.getCapability(AllomancyCapability.PLAYER_CAP).map(data -> {
+        ActionResult<ItemStack> res = playerIn.getCapability(AllomancerCapability.PLAYER_CAP).map(data -> {
             //If all the ones being filled are full, don't allow
             int filling = 0, full = 0;
             if (itemStackIn.hasTag()) {

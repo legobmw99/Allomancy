@@ -5,7 +5,7 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
@@ -149,7 +149,7 @@ public class Recipes extends RecipeProvider {
             String flakeType = flake.getRegistryName().getPath().substring(0, flake.getRegistryName().getPath().indexOf('_'));
             buildShapeless(consumer, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()), ing("forge:" + "ingots/" + flakeType));
 
-            if (i == Metal.GOLD.getIndex() || i == Metal.IRON.getIndex()) {
+            if (i < Metal.values().length && Metal.getMetal(i).isVanilla()) {
                 continue;
             }
 

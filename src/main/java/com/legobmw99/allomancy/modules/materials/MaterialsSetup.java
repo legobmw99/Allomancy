@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.modules.materials;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
 import com.legobmw99.allomancy.modules.materials.world.OreGenerator;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -53,7 +53,7 @@ public class MaterialsSetup {
             String name = mt.getName();
             FLAKES.add(MaterialsSetup.ITEMS.register(name + "_flakes", Allomancy::createStandardItem));
 
-            if (mt == Metal.GOLD || mt == Metal.IRON) {
+            if (mt.isVanilla()) {
                 NUGGETS.add(null);
                 INGOTS.add(null);
                 STORAGE_BLOCKS.add(null);

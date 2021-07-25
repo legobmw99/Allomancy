@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
-import com.legobmw99.allomancy.api.IAllomancyData;
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
+import com.legobmw99.allomancy.api.data.IAllomancerData;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class AllomancyDataPacket {
+public class AllomancerDataPacket {
 
     private final CompoundNBT nbt;
     private final UUID uuid;
@@ -19,22 +19,22 @@ public class AllomancyDataPacket {
     /**
      * Packet for sending Allomancy player data to a client
      *
-     * @param data   the AllomancyCapability data for the player
+     * @param data   the AllomancerCapability data for the player
      * @param player the player
      */
-    public AllomancyDataPacket(IAllomancyData data, PlayerEntity player) {
+    public AllomancerDataPacket(IAllomancerData data, PlayerEntity player) {
         this.uuid = player.getUUID();
-        this.nbt = (data != null && AllomancyCapability.PLAYER_CAP != null) ? (CompoundNBT) AllomancyCapability.PLAYER_CAP.writeNBT(data, null) : new CompoundNBT();
+        this.nbt = (data != null && AllomancerCapability.PLAYER_CAP != null) ? (CompoundNBT) AllomancerCapability.PLAYER_CAP.writeNBT(data, null) : new CompoundNBT();
 
     }
 
-    private AllomancyDataPacket(CompoundNBT nbt, UUID uuid) {
+    private AllomancerDataPacket(CompoundNBT nbt, UUID uuid) {
         this.nbt = nbt;
         this.uuid = uuid;
     }
 
-    public static AllomancyDataPacket decode(PacketBuffer buf) {
-        return new AllomancyDataPacket(buf.readNbt(), buf.readUUID());
+    public static AllomancerDataPacket decode(PacketBuffer buf) {
+        return new AllomancerDataPacket(buf.readNbt(), buf.readUUID());
     }
 
     public void encode(PacketBuffer buf) {
@@ -46,8 +46,8 @@ public class AllomancyDataPacket {
         ctx.get().enqueueWork(() -> {
             PlayerEntity player = Minecraft.getInstance().level.getPlayerByUUID(this.uuid);
 
-            if (player != null && AllomancyCapability.PLAYER_CAP != null) {
-                player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(cap -> AllomancyCapability.PLAYER_CAP.readNBT(cap, null, this.nbt));
+            if (player != null && AllomancerCapability.PLAYER_CAP != null) {
+                player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(cap -> AllomancerCapability.PLAYER_CAP.readNBT(cap, null, this.nbt));
             }
         });
         ctx.get().setPacketHandled(true);

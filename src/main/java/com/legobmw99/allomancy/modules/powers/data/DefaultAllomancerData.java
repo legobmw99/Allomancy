@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.powers.data;
 
-import com.legobmw99.allomancy.api.IAllomancyData;
+import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import java.util.Arrays;
 
-public class DefaultAllomancyData implements IAllomancyData {
+public class DefaultAllomancerData implements IAllomancerData {
 
     private static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
 
@@ -27,7 +27,7 @@ public class DefaultAllomancyData implements IAllomancyData {
     private BlockPos spawn_pos;
     private int enhanced_time;
 
-    public DefaultAllomancyData() {
+    public DefaultAllomancerData() {
 
         int powers = Metal.values().length;
         this.allomantic_powers = new boolean[powers];

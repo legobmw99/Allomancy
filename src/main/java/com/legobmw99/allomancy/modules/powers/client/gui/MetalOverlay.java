@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.powers.client.gui;
 
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -69,7 +69,7 @@ public class MetalOverlay {
         obj = mc.getTextureManager().getTexture(meterLoc);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getId());
 
-        player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
 
             if (data.isUninvested()) {
                 return;

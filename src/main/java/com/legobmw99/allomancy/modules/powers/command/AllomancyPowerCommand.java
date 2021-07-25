@@ -1,9 +1,9 @@
 package com.legobmw99.allomancy.modules.powers.command;
 
-import com.legobmw99.allomancy.api.IAllomancyData;
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
+import com.legobmw99.allomancy.api.data.IAllomancerData;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -18,6 +18,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.NonNullConsumer;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -25,23 +26,21 @@ import java.util.function.Predicate;
 
 public class AllomancyPowerCommand {
 
-    protected static final String[] names = new String[Metal.values().length + 2];
     private static final DynamicCommandExceptionType ERROR_CANT_ADD = new DynamicCommandExceptionType(s -> new TranslationTextComponent("commands.allomancy.err_add", s));
     private static final DynamicCommandExceptionType ERROR_CANT_REMOVE = new DynamicCommandExceptionType(s -> new TranslationTextComponent("commands.allomancy.err_remove", s));
-
-    static {
-        int i = 0;
-        for (Metal mt : Metal.values()) {
-            names[i++] = mt.getName();
-        }
-        names[i++] = "random";
-        names[i] = "all";
-
-    }
 
     private static Predicate<CommandSource> permissions(int level) {
         return (player) -> player.hasPermission(level);
     }
+
+    private static Collection<ServerPlayerEntity> sender(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
+        return Collections.singleton(ctx.getSource().getPlayerOrException());
+    }
+
+    private static Collection<ServerPlayerEntity> target(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
+        return EntityArgument.getPlayers(ctx, "target");
+    }
+
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
 
@@ -49,28 +48,28 @@ public class AllomancyPowerCommand {
         root.then(Commands
                           .literal("get")
                           .requires(permissions(0))
-                          .executes(ctx -> handleMultiPlayer(ctx, false, AllomancyPowerCommand::getPowers))
-                          .then(Commands.argument("targets", EntityArgument.players()).executes(ctx -> handleMultiPlayer(ctx, true, AllomancyPowerCommand::getPowers))));
+                          .executes(ctx -> handleMultiPlayer(ctx, sender(ctx), AllomancyPowerCommand::getPowers))
+                          .then(Commands.argument("targets", EntityArgument.players()).executes(ctx -> handleMultiPlayer(ctx, target(ctx), AllomancyPowerCommand::getPowers))));
 
         root.then(Commands
                           .literal("add")
                           .requires(permissions(2))
                           .then(Commands
                                         .argument("type", AllomancyPowerType.INSTANCE)
-                                        .executes(ctx -> handleMultiPlayer(ctx, false, AllomancyPowerCommand::addPower))
+                                        .executes(ctx -> handleMultiPlayer(ctx, sender(ctx), AllomancyPowerCommand::addPower))
                                         .then(Commands
                                                       .argument("targets", EntityArgument.players())
-                                                      .executes(ctx -> handleMultiPlayer(ctx, true, AllomancyPowerCommand::addPower)))));
+                                                      .executes(ctx -> handleMultiPlayer(ctx, target(ctx), AllomancyPowerCommand::addPower)))));
 
         root.then(Commands
                           .literal("remove")
                           .requires(permissions(2))
                           .then(Commands
                                         .argument("type", AllomancyPowerType.INSTANCE)
-                                        .executes(ctx -> handleMultiPlayer(ctx, false, AllomancyPowerCommand::removePower))
+                                        .executes(ctx -> handleMultiPlayer(ctx, sender(ctx), AllomancyPowerCommand::removePower))
                                         .then(Commands
                                                       .argument("targets", EntityArgument.players())
-                                                      .executes(ctx -> handleMultiPlayer(ctx, true, AllomancyPowerCommand::removePower)))));
+                                                      .executes(ctx -> handleMultiPlayer(ctx, target(ctx), AllomancyPowerCommand::removePower)))));
 
 
         LiteralCommandNode<CommandSource> command = dispatcher.register(root);
@@ -82,31 +81,28 @@ public class AllomancyPowerCommand {
     /**
      * Abstraction to handle possibly multiple players
      *
-     * @param ctx       Command context
-     * @param hasPlayer If true, command had player(s) in the "targets" argument
-     * @param toApply   Function to apply to all players or sender
+     * @param ctx     Command context
+     * @param players Collection of players
+     * @param toApply Function to apply to all players or sender
      * @return The number of players successfully applied to
      * @throws CommandSyntaxException
      */
     private static int handleMultiPlayer(CommandContext<CommandSource> ctx,
-                                         boolean hasPlayer,
+                                         Collection<ServerPlayerEntity> players,
                                          CheckedBiCon<CommandContext<CommandSource>, ServerPlayerEntity> toApply) throws CommandSyntaxException {
         int i = 0;
-        if (hasPlayer) {
-            for (ServerPlayerEntity p : EntityArgument.getPlayers(ctx, "targets")) {
-                toApply.accept(ctx, p);
-                i++;
-            }
-        } else {
-            toApply.accept(ctx, ctx.getSource().getPlayerOrException());
-            i = 1;
+
+        for (ServerPlayerEntity p : players) {
+            toApply.accept(ctx, p);
+            i++;
         }
+
         return i;
     }
 
     private static void getPowers(CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
         StringBuilder powers = new StringBuilder();
-        player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
             if (data.isMistborn()) {
                 powers.append("all");
             } else if (data.isUninvested()) {
@@ -127,12 +123,12 @@ public class AllomancyPowerCommand {
     }
 
     private static void addPower(CommandContext<CommandSource> ctx, ServerPlayerEntity player) throws CommandSyntaxException {
-        handlePowerChange(ctx, player, IAllomancyData::setMistborn, data -> (mt -> !data.hasPower(mt)), mt -> (data -> data.addPower(mt)), ERROR_CANT_ADD::create,
+        handlePowerChange(ctx, player, IAllomancerData::setMistborn, data -> (mt -> !data.hasPower(mt)), mt -> (data -> data.addPower(mt)), ERROR_CANT_ADD::create,
                           "commands.allomancy.addpower");
     }
 
     private static void removePower(CommandContext<CommandSource> ctx, ServerPlayerEntity player) throws CommandSyntaxException {
-        handlePowerChange(ctx, player, IAllomancyData::setUninvested, (data) -> data::hasPower, (mt) -> (data -> data.revokePower(mt)), ERROR_CANT_REMOVE::create,
+        handlePowerChange(ctx, player, IAllomancerData::setUninvested, (data) -> data::hasPower, (mt) -> (data -> data.revokePower(mt)), ERROR_CANT_REMOVE::create,
                           "commands.allomancy.removepower");
     }
 
@@ -150,28 +146,28 @@ public class AllomancyPowerCommand {
      */
     private static void handlePowerChange(CommandContext<CommandSource> ctx,
                                           ServerPlayerEntity player,
-                                          NonNullConsumer<IAllomancyData> all,
-                                          Function<IAllomancyData, Predicate<Metal>> filterFunction,
-                                          Function<Metal, NonNullConsumer<IAllomancyData>> single,
+                                          NonNullConsumer<IAllomancerData> all,
+                                          Function<IAllomancerData, Predicate<Metal>> filterFunction,
+                                          Function<Metal, NonNullConsumer<IAllomancerData>> single,
                                           Function<String, CommandSyntaxException> exception,
                                           String success) throws CommandSyntaxException {
 
         String type = ctx.getArgument("type", String.class);
 
         if (type.equalsIgnoreCase("all")) {
-            player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(all);
+            player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(all);
         } else {
-            Predicate<Metal> filter = player.getCapability(AllomancyCapability.PLAYER_CAP).map(filterFunction::apply).orElse((m) -> false);
+            Predicate<Metal> filter = player.getCapability(AllomancerCapability.PLAYER_CAP).map(filterFunction::apply).orElse((m) -> false);
 
             if (type.equalsIgnoreCase("random")) {
                 List<Metal> metalList = Arrays.asList(Metal.values());
                 Collections.shuffle(metalList);
                 Metal mt = metalList.stream().filter(filter).findFirst().orElseThrow(() -> exception.apply(type));
-                player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(single.apply(mt));
+                player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(single.apply(mt));
             } else {
                 Metal mt = Metal.valueOf(type.toUpperCase());
                 if (filter.test(mt)) {
-                    player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(single.apply(mt));
+                    player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(single.apply(mt));
                 } else {
                     throw exception.apply(type);
                 }

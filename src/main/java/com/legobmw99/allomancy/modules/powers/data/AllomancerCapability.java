@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.powers.data;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.api.IAllomancyData;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.data.IAllomancerData;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -12,21 +12,21 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
-public class AllomancyCapability {
+public class AllomancerCapability {
 
-    @CapabilityInject(IAllomancyData.class)
-    public static final Capability<IAllomancyData> PLAYER_CAP = null;
+    @CapabilityInject(IAllomancerData.class)
+    public static final Capability<IAllomancerData> PLAYER_CAP = null;
 
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "allomancy_data");
 
     public static void register() {
-        CapabilityManager.INSTANCE.register(IAllomancyData.class, new Storage(), DefaultAllomancyData::new);
+        CapabilityManager.INSTANCE.register(IAllomancerData.class, new Storage(), DefaultAllomancerData::new);
     }
 
-    public static class Storage implements Capability.IStorage<IAllomancyData> {
+    public static class Storage implements Capability.IStorage<IAllomancerData> {
 
         @Override
-        public INBT writeNBT(Capability<IAllomancyData> capability, IAllomancyData data, Direction side) {
+        public INBT writeNBT(Capability<IAllomancerData> capability, IAllomancerData data, Direction side) {
             CompoundNBT allomancy_data = new CompoundNBT();
 
             CompoundNBT abilities = new CompoundNBT();
@@ -70,7 +70,7 @@ public class AllomancyCapability {
         }
 
         @Override
-        public void readNBT(Capability<IAllomancyData> capability, IAllomancyData data, Direction side, INBT nbt) {
+        public void readNBT(Capability<IAllomancerData> capability, IAllomancerData data, Direction side, INBT nbt) {
             CompoundNBT allomancy_data = (CompoundNBT) nbt;
             CompoundNBT abilities = (CompoundNBT) allomancy_data.get("abilities");
             for (Metal mt : Metal.values()) {

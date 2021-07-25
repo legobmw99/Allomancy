@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -41,7 +41,7 @@ public class UpdateBurnPacket {
 
             ServerPlayerEntity player = ctx.get().getSender();
 
-            player.getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(data -> {
+            player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 if (data.hasPower(this.mt) && data.getAmount(this.mt) > 0) {
                     data.setBurning(this.mt, this.value);
                     if (!this.value && this.mt == Metal.DURALUMIN) {

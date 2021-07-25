@@ -1,12 +1,12 @@
-package com.legobmw99.allomancy.api;
+package com.legobmw99.allomancy.api.data;
 
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public interface IAllomancyData {
+public interface IAllomancerData {
 
     /**
      * Called each worldTick, checking the burn times, abilities, and metal

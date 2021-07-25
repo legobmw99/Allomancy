@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.integration;
 
-import com.legobmw99.allomancy.modules.powers.data.AllomancyCapability;
-import com.legobmw99.allomancy.util.Metal;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.api.enums.Metal;
 import mcp.mobius.waila.api.IEntityAccessor;
 import mcp.mobius.waila.api.IEntityComponentProvider;
 import mcp.mobius.waila.api.IPluginConfig;
@@ -21,9 +21,9 @@ public class AllomancyTooltip implements IEntityComponentProvider {
 
     @Override
     public void appendBody(List<ITextComponent> tooltip, IEntityAccessor accessor, IPluginConfig config) {
-        accessor.getPlayer().getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(cap -> {
+        accessor.getPlayer().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(cap -> {
             if (cap.isBurning(Metal.BRONZE) && (cap.isEnhanced() || !cap.isBurning(Metal.COPPER))) {
-                accessor.getEntity().getCapability(AllomancyCapability.PLAYER_CAP).ifPresent(capOther -> {
+                accessor.getEntity().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(capOther -> {
                     if (!capOther.isBurning(Metal.COPPER) || (cap.isEnhanced() && !capOther.isEnhanced())) {
 
                         IFormattableTextComponent text = null;
