@@ -1,13 +1,13 @@
 package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerDataProvider;
 import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -208,7 +208,10 @@ public class CommonEventHandler {
     public static void onWorldTick(final TickEvent.WorldTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
 
-            event.world.players().forEach(curPlayer -> {
+            World world = event.world;
+            List<? extends PlayerEntity> list = world.players();
+            for (int enti = list.size() - 1; enti >= 0; enti--) {
+                PlayerEntity curPlayer = list.get(enti);
                 curPlayer.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                     if (!data.isUninvested()) {
 
@@ -384,15 +387,15 @@ public class CommonEventHandler {
                             BlockPos positive = curPlayer.blockPosition().offset(30, 30, 30);
                             List<MobEntity> nearby_players = curPlayer.level.getEntitiesOfClass(MobEntity.class, new AxisAlignedBB(negative, positive), Objects::nonNull);
 
-                            for (MobEntity mob : nearby_players){
+                            for (MobEntity mob : nearby_players) {
                                 Path path = mob.getNavigation().getPath();
-                                if (path != null){
+                                if (path != null) {
                                     int count = path.getNodeCount();
                                     for (int i = 0; i < count; i++) {
                                         PathPoint point = path.getNode(i);
                                         System.out.println(point);
                                         // TODO this would be atium? need a packet and a renderer
-                                        event.world.addParticle(ParticleTypes.EXPLOSION, point.x + 0.5, point.y + 0.5, point.z + 0.5, 0, 0 ,0);
+                                        event.world.addParticle(ParticleTypes.EXPLOSION, point.x + 0.5, point.y + 0.5, point.z + 0.5, 0, 0, 0);
                                     }
                                 }
                             }
@@ -400,7 +403,7 @@ public class CommonEventHandler {
 
                     }
                 });
-            });
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ public class AllomancerDataProvider implements ICapabilitySerializable<CompoundN
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        return this.dataOptional.cast();
+        return AllomancerCapability.PLAYER_CAP.orEmpty(cap, this.dataOptional.cast());
     }
 
     @Override
