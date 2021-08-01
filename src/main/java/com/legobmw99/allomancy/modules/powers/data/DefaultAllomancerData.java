@@ -61,10 +61,10 @@ public class DefaultAllomancerData implements IAllomancerData {
                     if (this.getBurnTime(metal) <= 0) {
                         if (this.getAmount(metal) <= 0) {
                             this.setBurning(metal, false);
-                            sync = true;
                         } else {
                             this.setAmount(metal, this.getAmount(metal) - 1);
                         }
+                        sync = true;
                         this.setBurnTime(metal, MAX_BURN_TIME[metal.getIndex()]);
                     }
                 }
