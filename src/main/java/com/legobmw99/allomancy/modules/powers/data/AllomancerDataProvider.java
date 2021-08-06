@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.powers.data;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -10,7 +10,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AllomancerDataProvider implements ICapabilitySerializable<CompoundNBT> {
+public class AllomancerDataProvider implements ICapabilitySerializable<CompoundTag> {
 
     private final DefaultAllomancerData data = new DefaultAllomancerData();
     private final LazyOptional<IAllomancerData> dataOptional = LazyOptional.of(() -> this.data);
@@ -22,19 +22,19 @@ public class AllomancerDataProvider implements ICapabilitySerializable<CompoundN
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
         if (AllomancerCapability.PLAYER_CAP == null) {
-            return new CompoundNBT();
+            return new CompoundTag();
         } else {
-            return (CompoundNBT) AllomancerCapability.PLAYER_CAP.writeNBT(this.data, null);
+            return this.data.save();
         }
 
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag allomancy_data) {
         if (AllomancerCapability.PLAYER_CAP != null) {
-            AllomancerCapability.PLAYER_CAP.readNBT(this.data, null, nbt);
+            this.data.load(allomancy_data);
         }
     }
 

@@ -3,10 +3,10 @@ package com.legobmw99.allomancy.modules.powers.network;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -26,11 +26,11 @@ public class UpdateEnhancedPacket {
         this.entityID = entityID;
     }
 
-    public static UpdateEnhancedPacket decode(PacketBuffer buf) {
+    public static UpdateEnhancedPacket decode(FriendlyByteBuf buf) {
         return new UpdateEnhancedPacket(buf.readInt(), buf.readInt());
     }
 
-    public void encode(PacketBuffer buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeInt(this.enhance_time);
         buf.writeInt(this.entityID);
     }
@@ -38,7 +38,7 @@ public class UpdateEnhancedPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) { // Update player of own status
-                PlayerEntity player = (PlayerEntity) ctx.get().getSender().level.getEntity(this.entityID);
+                Player player = (Player) ctx.get().getSender().level.getEntity(this.entityID);
                 if (player != null) {
                     player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                         data.setEnhanced(this.enhance_time);
@@ -46,7 +46,7 @@ public class UpdateEnhancedPacket {
                     });
                 }
             } else {
-                PlayerEntity player = (PlayerEntity) Minecraft.getInstance().level.getEntity(this.entityID);
+                Player player = (Player) Minecraft.getInstance().level.getEntity(this.entityID);
                 if (player != null) {
                     player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                         data.setEnhanced(this.enhance_time);

@@ -1,17 +1,17 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ArmorStandEntity;
-import net.minecraft.entity.item.FallingBlockEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -32,31 +32,31 @@ public class TryPushPullEntity {
 
     }
 
-    public static TryPushPullEntity decode(PacketBuffer buf) {
+    public static TryPushPullEntity decode(FriendlyByteBuf buf) {
         return new TryPushPullEntity(buf.readInt(), buf.readInt());
     }
 
-    public void encode(PacketBuffer buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeInt(this.entityIDOther);
         buf.writeInt(this.direction);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerPlayerEntity player = ctx.get().getSender();
+            ServerPlayer player = ctx.get().getSender();
             Entity target = player.level.getEntity(this.entityIDOther);
             if (target != null) {
                 if (PowerUtils.isEntityMetal(target)) {
                     // The player moves
-                    if (target instanceof IronGolemEntity || target instanceof ItemFrameEntity) {
+                    if (target instanceof IronGolem || target instanceof ItemFrame) {
                         PowerUtils.move(this.direction, player, target.blockPosition());
 
-                    } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity || target instanceof ArmorStandEntity ||
-                               (target instanceof AbstractMinecartEntity && !target.isVehicle())) {
+                    } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity || target instanceof ArmorStand ||
+                               (target instanceof AbstractMinecart && !target.isVehicle())) {
                         PowerUtils.move(this.direction / 2.0, target, player.blockPosition());
 
                         // Split the difference
-                    } else if (!(target instanceof ProjectileItemEntity)) {
+                    } else if (!(target instanceof ThrowableItemProjectile)) {
                         PowerUtils.move(this.direction / 2.0, target, player.blockPosition());
 
                         PowerUtils.move(this.direction / 2.0, player, target.blockPosition());

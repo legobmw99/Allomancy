@@ -8,8 +8,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,7 +21,7 @@ public class AllomancyPowerType implements ArgumentType<String> {
 
     public static final AllomancyPowerType INSTANCE = new AllomancyPowerType();
     private static final Set<String> types = Arrays.stream(Metal.values()).map(Metal::getName).collect(Collectors.toSet());
-    private static final DynamicCommandExceptionType unknown_power = new DynamicCommandExceptionType(o -> new TranslationTextComponent("commands.allomancy.unrecognized", o));
+    private static final DynamicCommandExceptionType unknown_power = new DynamicCommandExceptionType(o -> new TranslatableComponent("commands.allomancy.unrecognized", o));
 
     static {
         types.add("all");
@@ -39,7 +39,7 @@ public class AllomancyPowerType implements ArgumentType<String> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        return ISuggestionProvider.suggest(types, builder).toCompletableFuture();
+        return SharedSuggestionProvider.suggest(types, builder).toCompletableFuture();
     }
 
     @Override

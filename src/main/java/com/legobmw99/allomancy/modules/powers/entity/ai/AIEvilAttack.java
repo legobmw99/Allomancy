@@ -1,11 +1,11 @@
 package com.legobmw99.allomancy.modules.powers.entity.ai;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.animal.Rabbit;
 
 public class AIEvilAttack extends MeleeAttackGoal {
-    public AIEvilAttack(RabbitEntity rabbit) {
+    public AIEvilAttack(Rabbit rabbit) {
         super(rabbit, 1.4D, true);
     }
 

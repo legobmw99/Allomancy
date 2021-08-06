@@ -1,37 +1,37 @@
 package com.legobmw99.allomancy.modules.combat.entity;
 
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRendersAsItem;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ItemSupplier;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-@OnlyIn(value = Dist.CLIENT, _interface = IRendersAsItem.class)
-public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRendersAsItem {
-    private static final DataParameter<ItemStack> ITEM = EntityDataManager.defineId(ProjectileNuggetEntity.class, DataSerializers.ITEM_STACK);
+@OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
+public class ProjectileNuggetEntity extends ThrowableItemProjectile implements ItemSupplier {
+    private static final EntityDataAccessor<ItemStack> ITEM = SynchedEntityData.defineId(ProjectileNuggetEntity.class, EntityDataSerializers.ITEM_STACK);
 
     private float damage;
     private boolean dropItem = true;
 
-    public ProjectileNuggetEntity(double x, double y, double z, World worldIn, ItemStack itemIn, float damageIn) {
+    public ProjectileNuggetEntity(double x, double y, double z, Level worldIn, ItemStack itemIn, float damageIn) {
         super(CombatSetup.NUGGET_PROJECTILE.get(), x, y, z, worldIn);
         this.damage = damageIn;
 
@@ -40,11 +40,11 @@ public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRen
         }
     }
 
-    public ProjectileNuggetEntity(LivingEntity livingEntityIn, World worldIn, ItemStack itemIn, float damageIn) {
+    public ProjectileNuggetEntity(LivingEntity livingEntityIn, Level worldIn, ItemStack itemIn, float damageIn) {
         super(CombatSetup.NUGGET_PROJECTILE.get(), livingEntityIn, worldIn);
-        if (livingEntityIn instanceof PlayerEntity) {
-            PlayerEntity ep = (PlayerEntity) livingEntityIn;
-            if (ep.abilities.instabuild) {
+        if (livingEntityIn instanceof Player) {
+            Player ep = (Player) livingEntityIn;
+            if (ep.getAbilities().instabuild) {
                 this.dropItem = false;
             }
         }
@@ -54,12 +54,12 @@ public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRen
         this.damage = damageIn;
     }
 
-    public ProjectileNuggetEntity(EntityType<ProjectileNuggetEntity> entityEntityType, World world) {
+    public ProjectileNuggetEntity(EntityType<ProjectileNuggetEntity> entityEntityType, Level world) {
         super(CombatSetup.NUGGET_PROJECTILE.get(), world);
         this.damage = 0;
     }
 
-    public ProjectileNuggetEntity(World world, Entity other) {
+    public ProjectileNuggetEntity(Level world, Entity other) {
         this(CombatSetup.NUGGET_PROJECTILE.get(), world);
         if (other instanceof ProjectileNuggetEntity) {
             ProjectileNuggetEntity nugget = (ProjectileNuggetEntity) other;
@@ -76,23 +76,23 @@ public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRen
 
 
     @Override
-    protected void onHit(RayTraceResult rayTraceResult) {
+    protected void onHit(HitResult rayTraceResult) {
         // I think this is .getThrower() or equiv
-        if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY && ((EntityRayTraceResult) rayTraceResult).getEntity() == this.getOwner()) {
+        if (rayTraceResult.getType() == HitResult.Type.ENTITY && ((EntityHitResult) rayTraceResult).getEntity() == this.getOwner()) {
             return;
         }
 
-        if (rayTraceResult.getType() == RayTraceResult.Type.ENTITY) {
-            ((EntityRayTraceResult) rayTraceResult).getEntity().hurt(DamageSource.thrown(this, this.getOwner()), this.damage);
+        if (rayTraceResult.getType() == HitResult.Type.ENTITY) {
+            ((EntityHitResult) rayTraceResult).getEntity().hurt(DamageSource.thrown(this, this.getOwner()), this.damage);
         }
 
         if (!this.level.isClientSide) {
             ItemStack ammo = new ItemStack(this.entityData.get(ITEM).getItem(), 1);
-            if (this.level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && rayTraceResult.getType() != RayTraceResult.Type.ENTITY && this.dropItem) {
+            if (this.level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && rayTraceResult.getType() != HitResult.Type.ENTITY && this.dropItem) {
                 this.level.addFreshEntity(new ItemEntity(this.level, this.position().x(), this.position().y(), this.position().z(), ammo));
             }
 
-            this.remove();
+            this.remove(false);
         }
     }
 
@@ -111,7 +111,7 @@ public class ProjectileNuggetEntity extends ProjectileItemEntity implements IRen
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

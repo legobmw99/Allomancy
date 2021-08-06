@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.Allomancy;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class GrinderItem extends Item {
 

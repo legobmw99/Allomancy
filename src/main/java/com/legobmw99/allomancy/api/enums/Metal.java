@@ -9,7 +9,7 @@ public enum Metal {
     PEWTER,
     ZINC,
     BRASS,
-    COPPER,
+    COPPER(true),
     BRONZE,
     ALUMINUM,
     DURALUMIN,
@@ -23,18 +23,13 @@ public enum Metal {
 
     private final boolean vanilla;
 
-    public boolean isVanilla(){
-        return this.vanilla;
-    }
-
-    Metal(){
+    Metal() {
         this(false);
     }
 
-    Metal(boolean isVanilla){
+    Metal(boolean isVanilla) {
         this.vanilla = isVanilla;
     }
-
 
     public static Metal getMetal(int index) {
         for (Metal metal : values()) {
@@ -43,6 +38,10 @@ public enum Metal {
             }
         }
         throw new IllegalArgumentException("Allomancy: Bad Metal Index");
+    }
+
+    public boolean isVanilla() {
+        return this.vanilla;
     }
 
     public String getName() {

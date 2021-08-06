@@ -4,11 +4,12 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.util.AllomancyConfig;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -51,7 +52,7 @@ public class PowersConfig {
 
     }
 
-    public static void refresh(final ModConfig.ModConfigEvent e) {
+    public static void refresh(final ModConfigEvent e) {
         ModConfig cfg = e.getConfig();
         if (cfg.getSpec() == AllomancyConfig.COMMON_CONFIG) {
             refresh_whitelist();
@@ -63,7 +64,7 @@ public class PowersConfig {
         whitelist.addAll(cfg_whitelist.get());
     }
 
-    public static void load_whitelist(final ModConfig.Loading e) {
+    public static void load_whitelist(final ModConfigEvent.Loading e) {
         ModConfig cfg = e.getConfig();
         if (cfg.getSpec() == AllomancyConfig.COMMON_CONFIG) {
             if (generate_whitelist.get()) {

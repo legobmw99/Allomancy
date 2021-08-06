@@ -9,7 +9,6 @@ public class MaterialsConfig {
     public static ForgeConfigSpec.BooleanValue generate_aluminum;
     public static ForgeConfigSpec.BooleanValue generate_cadmium;
     public static ForgeConfigSpec.BooleanValue generate_chromium;
-    public static ForgeConfigSpec.BooleanValue generate_copper;
     public static ForgeConfigSpec.BooleanValue generate_lead;
     public static ForgeConfigSpec.BooleanValue generate_tin;
     public static ForgeConfigSpec.BooleanValue generate_silver;
@@ -18,7 +17,6 @@ public class MaterialsConfig {
     public static ForgeConfigSpec.IntValue aluminum_density;
     public static ForgeConfigSpec.IntValue cadmium_density;
     public static ForgeConfigSpec.IntValue chromium_density;
-    public static ForgeConfigSpec.IntValue copper_density;
     public static ForgeConfigSpec.IntValue lead_density;
     public static ForgeConfigSpec.IntValue tin_density;
     public static ForgeConfigSpec.IntValue silver_density;
@@ -27,7 +25,6 @@ public class MaterialsConfig {
     public static ForgeConfigSpec.IntValue aluminum_size;
     public static ForgeConfigSpec.IntValue cadmium_size;
     public static ForgeConfigSpec.IntValue chromium_size;
-    public static ForgeConfigSpec.IntValue copper_size;
     public static ForgeConfigSpec.IntValue lead_size;
     public static ForgeConfigSpec.IntValue tin_size;
     public static ForgeConfigSpec.IntValue silver_size;
@@ -39,8 +36,6 @@ public class MaterialsConfig {
     public static ForgeConfigSpec.IntValue cadmium_max_y;
     public static ForgeConfigSpec.IntValue chromium_min_y;
     public static ForgeConfigSpec.IntValue chromium_max_y;
-    public static ForgeConfigSpec.IntValue copper_min_y;
-    public static ForgeConfigSpec.IntValue copper_max_y;
     public static ForgeConfigSpec.IntValue lead_min_y;
     public static ForgeConfigSpec.IntValue lead_max_y;
     public static ForgeConfigSpec.IntValue silver_min_y;
@@ -75,14 +70,6 @@ public class MaterialsConfig {
         chromium_size = common_builder.comment("Vein size of Chromium Ore").defineInRange("chromium_size", 6, 1, 60);
         chromium_min_y = common_builder.comment("Minimum Y Level to Generate Chromium").defineInRange("chromium_min_y", 20, 1, 256);
         chromium_max_y = common_builder.comment("Maximum Y Level to Generate Chromium").defineInRange("chromium_max_y", 45, 1, 256);
-        common_builder.pop();
-
-        common_builder.push("copper");
-        generate_copper = common_builder.comment("Generate Copper Ore").define("generate_copper", true);
-        copper_density = common_builder.comment("Density of Copper Ore").defineInRange("copper_density", 15, 1, 40);
-        copper_size = common_builder.comment("Vein size of Copper Ore").defineInRange("copper_size", 9, 1, 60);
-        copper_min_y = common_builder.comment("Minimum Y Level to Generate Copper").defineInRange("copper_min_y", 30, 1, 256);
-        copper_max_y = common_builder.comment("Maximum Y Level to Generate Copper").defineInRange("copper_max_y", 70, 1, 256);
         common_builder.pop();
 
         common_builder.push("lead");

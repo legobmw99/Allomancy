@@ -1,16 +1,16 @@
 package com.legobmw99.allomancy.modules.powers.client.particle;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class SoundParticle extends SpriteTexturedParticle {
-    public SoundParticle(World world, double x, double y, double z, double motionX, double motionY, double motionZ, SoundCategory typeIn) {
-        super((ClientWorld) world, x, y, z, motionX, motionY, motionZ);
+public class SoundParticle extends TextureSheetParticle {
+    public SoundParticle(Level world, double x, double y, double z, double motionX, double motionY, double motionZ, SoundSource typeIn) {
+        super((ClientLevel) world, x, y, z, motionX, motionY, motionZ);
 
         this.xd = motionX;
         this.yd = motionY + 0.009D;
@@ -51,20 +51,20 @@ public class SoundParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
 
     @OnlyIn(Dist.CLIENT)
-    public static class Factory implements IParticleFactory<SoundParticleData> {
-        private final IAnimatedSprite spriteSet;
+    public static class Factory implements ParticleProvider<SoundParticleData> {
+        private final SpriteSet spriteSet;
 
-        public Factory(IAnimatedSprite sprite) {
+        public Factory(SpriteSet sprite) {
             this.spriteSet = sprite;
         }
 
-        public Particle createParticle(SoundParticleData data, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        public Particle createParticle(SoundParticleData data, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             SoundParticle sp = new SoundParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, data.getSoundType());
             sp.pickSprite(this.spriteSet);
             return sp;

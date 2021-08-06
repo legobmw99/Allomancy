@@ -1,15 +1,16 @@
 package com.legobmw99.allomancy.datagen;
 
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.DyeColor;
+import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class Languages extends LanguageProvider {
@@ -24,24 +25,28 @@ public class Languages extends LanguageProvider {
     }
 
     private static String toTitleCase(String in) {
-        return in.substring(0, 1).toUpperCase() + in.substring(1);
+        return in.substring(0, 1).toUpperCase(Locale.US) + in.substring(1);
     }
 
     @Override
     protected void addTranslations() {
         add("itemGroup.allomancy", "Allomancy");
-        for (Metal mt : Metal.values()) {
-            add("metals." + mt.getName(), getDisplayName(mt));
-        }
 
-        add(MaterialsSetup.ALUMINUM_ORE.get(), "Aluminum Ore");
-        add(MaterialsSetup.CADMIUM_ORE.get(), "Cadmium Ore");
-        add(MaterialsSetup.CHROMIUM_ORE.get(), "Chromium Ore");
-        add(MaterialsSetup.COPPER_ORE.get(), "Copper Ore");
-        add(MaterialsSetup.LEAD_ORE.get(), "Lead Ore");
-        add(MaterialsSetup.SILVER_ORE.get(), "Silver Ore");
-        add(MaterialsSetup.TIN_ORE.get(), "Tin Ore");
-        add(MaterialsSetup.ZINC_ORE.get(), "Zinc Ore");
+
+        for (int i = 0; i < MaterialsSetup.ORE_METALS.length; i++) {
+            String metal = MaterialsSetup.ORE_METALS[i];
+            var ore = MaterialsSetup.ORE_BLOCKS.get(i).get();
+            var ds = MaterialsSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
+            var rawb = MaterialsSetup.RAW_ORE_BLOCKS.get(i).get();
+            var raw = MaterialsSetup.RAW_ORE_ITEMS.get(i).get();
+
+            add(ore, toTitleCase(metal) + " Ore");
+            add(ds, "Deepslate " + toTitleCase(metal) + " Ore");
+            add(rawb, "Block of Raw " + toTitleCase(metal));
+            add(raw, "Raw " + toTitleCase(metal));
+
+        }
+        
         add(ExtrasSetup.IRON_BUTTON.get(), "Iron Button");
         add(ExtrasSetup.IRON_LEVER.get(), "Iron Lever");
         add("block.allomancy.iron_activation.lore", "This item seems too heavy to activate by ordinary means");
@@ -59,6 +64,8 @@ public class Languages extends LanguageProvider {
         add("item.allomancy.vial.lore_inst", "Hold SHIFT to view");
 
         for (Metal mt : Metal.values()) {
+            add("metals." + mt.getName(), getDisplayName(mt));
+
             add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), getDisplayName(mt) + " Flakes");
 
             add(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), "Banner Pattern");

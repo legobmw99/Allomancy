@@ -1,14 +1,14 @@
 package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.api.enums.Metal;
-import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -31,14 +31,21 @@ public class ItemModels extends ItemModelProvider {
         itemGenerated(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "item/allomantic_grinder");
         itemGenerated(ConsumeSetup.LERASIUM_NUGGET.get(), "item/lerasium_nugget");
 
-        parentedBlock(MaterialsSetup.ALUMINUM_ORE.get(), "block/aluminum_ore");
-        parentedBlock(MaterialsSetup.CADMIUM_ORE.get(), "block/cadmium_ore");
-        parentedBlock(MaterialsSetup.CHROMIUM_ORE.get(), "block/chromium_ore");
-        parentedBlock(MaterialsSetup.COPPER_ORE.get(), "block/copper_ore");
-        parentedBlock(MaterialsSetup.LEAD_ORE.get(), "block/lead_ore");
-        parentedBlock(MaterialsSetup.SILVER_ORE.get(), "block/silver_ore");
-        parentedBlock(MaterialsSetup.TIN_ORE.get(), "block/tin_ore");
-        parentedBlock(MaterialsSetup.ZINC_ORE.get(), "block/zinc_ore");
+        for (var rblock : MaterialsSetup.ORE_BLOCKS) {
+            Block block = rblock.get();
+            String path = block.getRegistryName().getPath();
+            parentedBlock(block, "block/" + path);
+        }
+        for (var rblock : MaterialsSetup.DEEPSLATE_ORE_BLOCKS) {
+            Block block = rblock.get();
+            String path = block.getRegistryName().getPath();
+            parentedBlock(block, "block/" + path);
+        }
+        for (var rblock : MaterialsSetup.RAW_ORE_BLOCKS) {
+            Block block = rblock.get();
+            String path = block.getRegistryName().getPath();
+            parentedBlock(block, "block/" + path);
+        }
 
         for (int i = 0; i < MaterialsSetup.METAL_ITEM_LEN; i++) {
 
@@ -49,7 +56,7 @@ public class ItemModels extends ItemModelProvider {
                 Item pattern_item = ExtrasSetup.PATTERN_ITEMS.get(i).get();
                 itemGenerated(pattern_item, "item/" + pattern_item.getRegistryName().getPath());
 
-                if (Metal.getMetal(i).isVanilla()){
+                if (Metal.getMetal(i).isVanilla()) {
                     continue;
                 }
             }
@@ -67,7 +74,7 @@ public class ItemModels extends ItemModelProvider {
         }
 
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial (filled)");
-        ModelFile mf = getBuilder("vial_filled").parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc("item/full_vial"));
+        var mf = getBuilder("vial_filled").parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc("item/full_vial"));
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial");
         getBuilder("vial")
                 .parent(getExistingFile(mcLoc("item/generated")))

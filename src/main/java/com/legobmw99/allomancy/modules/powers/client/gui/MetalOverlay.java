@@ -1,16 +1,16 @@
 package com.legobmw99.allomancy.modules.powers.client.gui;
 
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
-import com.legobmw99.allomancy.api.enums.Metal;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.texture.Texture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.ForgeIngameGui;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -33,10 +33,10 @@ public class MetalOverlay {
      *
      * @param matrix
      */
-    public static void drawMetalOverlay(MatrixStack matrix) {
+    public static void drawMetalOverlay(PoseStack matrix) {
         Minecraft mc = Minecraft.getInstance();
-        ClientPlayerEntity player = mc.player;
-        MainWindow res = mc.getWindow();
+        LocalPlayer player = mc.player;
+        Window res = mc.getWindow();
 
         if (!player.isAlive()) {
             return;
@@ -64,10 +64,8 @@ public class MetalOverlay {
         }
 
         ForgeIngameGui gui = new ForgeIngameGui(mc);
-        mc.getTextureManager().bind(meterLoc);
-        Texture obj;
-        obj = mc.getTextureManager().getTexture(meterLoc);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.getId());
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, meterLoc);
 
         player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
 
@@ -107,7 +105,7 @@ public class MetalOverlay {
         }
     }
 
-    private static void blit(MatrixStack matrix, ForgeIngameGui gui, int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
+    private static void blit(PoseStack matrix, ForgeIngameGui gui, int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
         ForgeIngameGui.blit(matrix, x, y, gui.getBlitOffset(), uOffset, vOffset, uWidth, vHeight, 128, 128);
     }
 }

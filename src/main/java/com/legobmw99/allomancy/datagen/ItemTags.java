@@ -1,13 +1,16 @@
 package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.api.enums.Metal;
-import net.minecraft.data.BlockTagsProvider;
+import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.item.Item;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.OreBlock;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.fmllegacy.RegistryObject;
 
 public class ItemTags extends ItemTagsProvider {
 
@@ -40,14 +43,17 @@ public class ItemTags extends ItemTagsProvider {
         addForgeTag("blocks/silver", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).get());
         addForgeTag("storage_blocks/silver", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).get());
 
-        addForgeTag("ores/lead", MaterialsSetup.LEAD_ORE_ITEM.get());
-        addForgeTag("ores/tin", MaterialsSetup.TIN_ORE_ITEM.get());
-        addForgeTag("ores/copper", MaterialsSetup.COPPER_ORE_ITEM.get());
-        addForgeTag("ores/zinc", MaterialsSetup.ZINC_ORE_ITEM.get());
-        addForgeTag("ores/aluminum", MaterialsSetup.ALUMINUM_ORE_ITEM.get());
-        addForgeTag("ores/cadmium", MaterialsSetup.CADMIUM_ORE_ITEM.get());
-        addForgeTag("ores/chromium", MaterialsSetup.CHROMIUM_ORE_ITEM.get());
-        addForgeTag("ores/silver", MaterialsSetup.SILVER_ORE_ITEM.get());
+        for (var rblock : MaterialsSetup.ORE_BLOCKS_ITEMS) {
+            var block = rblock.get();
+            String path = block.getRegistryName().getPath();
+            addForgeTag("ores/"+path, block);
+        }
+
+        for (var rblock : MaterialsSetup.DEEPSLATE_ORE_BLOCKS_ITEMS) {
+            var block = rblock.get();
+            String path = block.getRegistryName().getPath();
+            addForgeTag("ores/"+path, block);
+        }
 
     }
 

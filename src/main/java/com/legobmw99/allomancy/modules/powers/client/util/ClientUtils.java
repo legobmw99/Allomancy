@@ -1,26 +1,26 @@
 package com.legobmw99.allomancy.modules.powers.client.util;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.network.UpdateBurnPacket;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.api.enums.Metal;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 public class ClientUtils {
 
     private static Minecraft mc = Minecraft.getInstance();
-    private static final ClientPlayerEntity player = mc.player;
+    private static final LocalPlayer player = mc.player;
 
     /**
      * Adapted from vanilla, allows getting mouseover at given distances
@@ -37,29 +37,29 @@ public class ClientUtils {
      * @return a RayTraceResult for the requested raytrace
      */
     @Nullable
-    public static RayTraceResult getMouseOverExtended(float dist) {
+    public static HitResult getMouseOverExtended(float dist) {
         mc = Minecraft.getInstance();
         float partialTicks = mc.getFrameTime();
-        RayTraceResult objectMouseOver = null;
+        HitResult objectMouseOver = null;
         Entity entity = mc.getCameraEntity();
         if (entity != null) {
             if (mc.level != null) {
                 objectMouseOver = entity.pick(dist, partialTicks, false);
-                Vector3d vec3d = entity.getEyePosition(partialTicks);
+                Vec3 vec3d = entity.getEyePosition(partialTicks);
                 boolean flag = false;
                 int i = 3;
                 double d1;
 
                 d1 = objectMouseOver.getLocation().distanceToSqr(vec3d);
 
-                Vector3d vec3d1 = entity.getViewVector(1.0F);
-                Vector3d vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
+                Vec3 vec3d1 = entity.getViewVector(1.0F);
+                Vec3 vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
                 float f = 1.0F;
-                AxisAlignedBB axisalignedbb = entity.getBoundingBox().expandTowards(vec3d1.scale(dist)).inflate(1.0D, 1.0D, 1.0D);
-                EntityRayTraceResult entityraytraceresult = ProjectileHelper.getEntityHitResult(entity, vec3d, vec3d2, axisalignedbb, (e) -> true, d1);
+                AABB axisalignedbb = entity.getBoundingBox().expandTowards(vec3d1.scale(dist)).inflate(1.0D, 1.0D, 1.0D);
+                EntityHitResult entityraytraceresult = ProjectileUtil.getEntityHitResult(entity, vec3d, vec3d2, axisalignedbb, (e) -> true, d1);
                 if (entityraytraceresult != null) {
                     Entity entity1 = entityraytraceresult.getEntity();
-                    Vector3d vec3d3 = entityraytraceresult.getLocation();
+                    Vec3 vec3d3 = entityraytraceresult.getLocation();
                     double d2 = vec3d.distanceToSqr(vec3d3);
                     if (d2 < d1) {
                         objectMouseOver = entityraytraceresult;
@@ -80,16 +80,18 @@ public class ClientUtils {
      * @param dest
      * @param width  the width of the line
      */
-    public static void drawMetalLine(Vector3d player, Vector3d dest, float width, float r, float g, float b) {
+    public static void drawMetalLine(Vec3 player, Vec3 dest, float width, float r, float g, float b) {
         RenderSystem.lineWidth(width);
 
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buffer = tessellator.getBuilder();
 
-        buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+        buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
         buffer.vertex(player.x(), player.y(), player.z()).color(r, g, b, 0.5f).endVertex();
         buffer.vertex(dest.x(), dest.y(), dest.z()).color(r, g, b, 0.5f).endVertex();
         tessellator.end();
+        RenderSystem.lineWidth(width);
+
     }
 
 

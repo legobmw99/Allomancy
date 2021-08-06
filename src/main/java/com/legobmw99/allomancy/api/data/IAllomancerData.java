@@ -1,10 +1,11 @@
 package com.legobmw99.allomancy.api.data;
 
 import com.legobmw99.allomancy.api.enums.Metal;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 
 public interface IAllomancerData {
 
@@ -15,7 +16,7 @@ public interface IAllomancerData {
      *
      * @param player the player being checked
      */
-    void tickBurning(ServerPlayerEntity player);
+    void tickBurning(ServerPlayer player);
 
     /**
      * Get if the player has the supplied power
@@ -136,7 +137,7 @@ public interface IAllomancerData {
      * @param pos BlockPos of the death location
      * @param dim The RegistryKey representing the dimension the death occurred in
      */
-    void setDeathLoc(BlockPos pos, RegistryKey<World> dim);
+    void setDeathLoc(BlockPos pos, ResourceKey<Level> dim);
 
     void setDeathLoc(BlockPos pos, String dim_name);
 
@@ -152,7 +153,7 @@ public interface IAllomancerData {
      *
      * @return RegistryKey corresponding to the dimension, or null
      */
-    RegistryKey<World> getDeathDim();
+    ResourceKey<Level> getDeathDim();
 
     /**
      * Set the spawn location and dimension
@@ -160,7 +161,7 @@ public interface IAllomancerData {
      * @param pos BlockPos of the spawn point
      * @param dim The RegistryKey representing the spawn dimension
      */
-    void setSpawnLoc(BlockPos pos, RegistryKey<World> dim);
+    void setSpawnLoc(BlockPos pos, ResourceKey<Level> dim);
 
     void setSpawnLoc(BlockPos pos, String dim_name);
 
@@ -176,12 +177,16 @@ public interface IAllomancerData {
      *
      * @return RegistryKey corresponding to the dimension, or null
      */
-    RegistryKey<World> getSpawnDim();
+    ResourceKey<Level> getSpawnDim();
 
     void decEnhanced();
 
     boolean isEnhanced();
 
     void setEnhanced(int time);
+
+    void load(CompoundTag nbt);
+
+    CompoundTag save();
 
 }

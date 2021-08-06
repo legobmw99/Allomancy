@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.util;
 import com.legobmw99.allomancy.modules.materials.MaterialsConfig;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 
 public class AllomancyConfig {
@@ -21,12 +21,12 @@ public class AllomancyConfig {
         CLIENT_CONFIG = CLIENT_BUILDER.build();
     }
 
-    public static void onReload(final ModConfig.Reloading e) {
+    public static void onReload(final ModConfigEvent.Reloading e) {
         PowersConfig.refresh(e);
     }
 
 
-    public static void onLoad(final ModConfig.Loading e) {
+    public static void onLoad(final ModConfigEvent.Loading e) {
         PowersConfig.load_whitelist(e);
     }
 

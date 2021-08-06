@@ -9,25 +9,22 @@
  */
 package com.legobmw99.allomancy.modules.powers.client.gui;
 
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
-import com.legobmw99.allomancy.api.enums.Metal;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -46,12 +43,12 @@ public class MetalSelectScreen extends Screen {
     int slotSelected = -1;
 
     public MetalSelectScreen() {
-        super(new StringTextComponent("allomancy_gui"));
+        super(new TextComponent("allomancy_gui"));
         this.mc = Minecraft.getInstance();
     }
 
     private static double mouseAngle(int x, int y, int mx, int my) {
-        return (MathHelper.atan2(my - y, mx - x) + Math.PI * 2) % (Math.PI * 2);
+        return (Mth.atan2(my - y, mx - x) + Math.PI * 2) % (Math.PI * 2);
     }
 
     private static int toMetalIndex(int segment) {
@@ -59,7 +56,7 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mx, int my, float partialTicks) {
+    public void render(PoseStack matrixStack, int mx, int my, float partialTicks) {
         super.render(matrixStack, mx, my, partialTicks);
 
         this.mc.player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
@@ -76,15 +73,16 @@ public class MetalSelectScreen extends Screen {
 
             this.slotSelected = -1;
 
-            Tessellator tess = Tessellator.getInstance();
+            Tesselator tess = Tesselator.getInstance();
             BufferBuilder buf = tess.getBuilder();
 
 
             RenderSystem.disableCull();
             RenderSystem.disableTexture();
             RenderSystem.enableBlend();
-            RenderSystem.shadeModel(GL11.GL_FLAT);
-            buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+            buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
 
             for (int seg = 0; seg < segments; seg++) {
                 Metal mt = Metal.getMetal(toMetalIndex(seg));
@@ -115,8 +113,8 @@ public class MetalSelectScreen extends Screen {
 
                 for (float v = 0; v < degPer + step / 2; v += step) {
                     float rad = v + seg * degPer;
-                    float xp = x + MathHelper.cos(rad) * radius;
-                    float yp = y + MathHelper.sin(rad) * radius;
+                    float xp = x + Mth.cos(rad) * radius;
+                    float yp = y + Mth.sin(rad) * radius;
 
                     if (v == 0) {
                         buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
@@ -126,7 +124,6 @@ public class MetalSelectScreen extends Screen {
             }
             tess.end();
 
-            RenderSystem.shadeModel(GL11.GL_FLAT);
             RenderSystem.enableTexture();
 
             for (int seg = 0; seg < segments; seg++) {
@@ -139,41 +136,35 @@ public class MetalSelectScreen extends Screen {
 
 
                 float rad = (seg + 0.5f) * degPer;
-                float xp = x + MathHelper.cos(rad) * radius;
-                float yp = y + MathHelper.sin(rad) * radius;
+                float xp = x + Mth.cos(rad) * radius;
+                float yp = y + Mth.sin(rad) * radius;
 
                 float xsp = xp - 4;
                 float ysp = yp;
-                String name = (mouseInSector ? TextFormatting.UNDERLINE : TextFormatting.RESET) + new TranslationTextComponent(METAL_LOCAL[toMetalIndex(seg)]).getString();
-                int width = this.mc.getEntityRenderDispatcher().getFont().width(name);
+                String name = (mouseInSector ? ChatFormatting.UNDERLINE : ChatFormatting.RESET) + new TranslatableComponent(METAL_LOCAL[toMetalIndex(seg)]).getString();
+                int textwidth = this.mc.font.width(name);
 
                 if (xsp < x) {
-                    xsp -= width - 8;
+                    xsp -= textwidth - 8;
                 }
                 if (ysp < y) {
                     ysp -= 9;
                 }
 
-                this.mc.getEntityRenderDispatcher().getFont().drawShadow(matrixStack, name, xsp, ysp, 0xFFFFFF);
+                this.mc.font.drawShadow(matrixStack, name, xsp, ysp, 0xFFFFFF);
 
                 double mod = 0.8;
                 int xdp = (int) ((xp - x) * mod + x);
                 int ydp = (int) ((yp - y) * mod + y);
-
-                this.mc.getEntityRenderDispatcher().textureManager.bind(METAL_ICONS[toMetalIndex(seg)]);
-                RenderSystem.color4f(1, 1, 1, 1);
+                RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                RenderSystem.setShaderTexture(0, METAL_ICONS[toMetalIndex(seg)]);
                 blit(matrixStack, xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
             }
 
-            RenderSystem.enableRescaleNormal();
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-            RenderHelper.turnBackOn();
-
-            RenderHelper.turnOff();
             RenderSystem.disableBlend();
-            RenderSystem.disableRescaleNormal();
         });
 
     }

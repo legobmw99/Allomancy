@@ -5,13 +5,14 @@ import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import net.minecraft.block.Block;
+import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.state.properties.AttachFace;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 
 import java.util.function.BiConsumer;
 
@@ -23,14 +24,23 @@ public class BlockStates extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        singleTextureBlock(MaterialsSetup.ALUMINUM_ORE.get(), "aluminum_ore", "block/aluminum_ore");
-        singleTextureBlock(MaterialsSetup.CADMIUM_ORE.get(), "cadmium_ore", "block/cadmium_ore");
-        singleTextureBlock(MaterialsSetup.CHROMIUM_ORE.get(), "chromium_ore", "block/chromium_ore");
-        singleTextureBlock(MaterialsSetup.COPPER_ORE.get(), "copper_ore", "block/copper_ore");
-        singleTextureBlock(MaterialsSetup.LEAD_ORE.get(), "lead_ore", "block/lead_ore");
-        singleTextureBlock(MaterialsSetup.SILVER_ORE.get(), "silver_ore", "block/silver_ore");
-        singleTextureBlock(MaterialsSetup.TIN_ORE.get(), "tin_ore", "block/tin_ore");
-        singleTextureBlock(MaterialsSetup.ZINC_ORE.get(), "zinc_ore", "block/zinc_ore");
+        for (var rblock : MaterialsSetup.ORE_BLOCKS) {
+            Block block = rblock.get();
+            String path = block.getRegistryName().getPath();
+            singleTextureBlock(block, path, "block/" + path);
+        }
+
+        for (var rblock : MaterialsSetup.DEEPSLATE_ORE_BLOCKS) {
+            Block block = rblock.get();
+            String path = block.getRegistryName().getPath();
+            singleTextureBlock(block, path, "block/" + path);
+        }
+
+        for (RegistryObject<Block> rblock : MaterialsSetup.RAW_ORE_BLOCKS) {
+            Block block = rblock.get();
+            String path = block.getRegistryName().getPath();
+            singleTextureBlock(block, path, "block/" + path);
+        }
 
         for (RegistryObject<Block> rblock : MaterialsSetup.STORAGE_BLOCKS) {
             if (rblock != null) {

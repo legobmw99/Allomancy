@@ -1,39 +1,35 @@
 package com.legobmw99.allomancy.modules.powers.entity.ai;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
 
 public class AIAttackOnCollideExtended extends Goal {
-    final World worldObj;
-    final CreatureEntity attacker;
-
-    /**
-     * An amount of decrementing ticks that allows the entity to attack once the
-     * tick reaches 0.
-     */
-    int attackTick;
-
+    final Level worldObj;
+    final PathfinderMob attacker;
     /**
      * The speed with which the mob will approach the target
      */
     final double speedTowardsTarget;
-
     /**
      * When true, the mob will continue chasing its target, even if it can't
      * find a path to them right now.
      */
     final boolean longMemory;
-
+    /**
+     * An amount of decrementing ticks that allows the entity to attack once the
+     * tick reaches 0.
+     */
+    int attackTick;
     /**
      * The PathEntity of our entity.
      */
@@ -43,12 +39,12 @@ public class AIAttackOnCollideExtended extends Goal {
 
     private int failedPathFindingPenalty;
 
-    public AIAttackOnCollideExtended(CreatureEntity par1EntityCreature, Class par2Class, double par3, boolean par5) {
+    public AIAttackOnCollideExtended(PathfinderMob par1EntityCreature, Class par2Class, double par3, boolean par5) {
         this(par1EntityCreature, par3, par5);
         this.classTarget = par2Class;
     }
 
-    public AIAttackOnCollideExtended(CreatureEntity par1EntityCreature, double par2, boolean par4) {
+    public AIAttackOnCollideExtended(PathfinderMob par1EntityCreature, double par2, boolean par4) {
         this.attacker = par1EntityCreature;
         this.worldObj = par1EntityCreature.level;
         this.speedTowardsTarget = par2;
@@ -123,11 +119,11 @@ public class AIAttackOnCollideExtended extends Goal {
         }
         this.attacker.getLookControl().setLookAt(livingEntity, 30.0F, 30.0F);
 
-        if ((this.longMemory || this.attacker.getSensing().canSee(livingEntity)) && (--this.ticksUntilNextPathRecalculation <= 0)) {
+        if ((this.longMemory || this.attacker.getSensing().hasLineOfSight(livingEntity)) && (--this.ticksUntilNextPathRecalculation <= 0)) {
             this.ticksUntilNextPathRecalculation = this.failedPathFindingPenalty + 4 + this.attacker.getRandom().nextInt(7);
             this.attacker.getNavigation().moveTo(livingEntity, this.speedTowardsTarget);
             if (this.attacker.getNavigation().getPath() != null) {
-                PathPoint finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
+                Node finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
                 if ((finalPathPoint != null) && (livingEntity.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)) {
                     this.failedPathFindingPenalty = 0;
                 } else {
@@ -146,10 +142,10 @@ public class AIAttackOnCollideExtended extends Goal {
                 this.attackTick = 20;
 
                 if (!this.attacker.getMainHandItem().isEmpty()) {
-                    this.attacker.swing(Hand.MAIN_HAND);
+                    this.attacker.swing(InteractionHand.MAIN_HAND);
                 }
 
-                if (this.attacker instanceof MonsterEntity) {
+                if (this.attacker instanceof Monster) {
                     this.attacker.doHurtTarget(livingEntity);
                 } else {
                     livingEntity.hurt(DamageSource.mobAttack(this.attacker), 3);

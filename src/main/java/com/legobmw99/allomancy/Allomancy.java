@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy;
 
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
+import com.legobmw99.allomancy.modules.combat.client.CombatClientSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
@@ -9,15 +10,15 @@ import com.legobmw99.allomancy.modules.powers.PowersSetup;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.util.AllomancyConfig;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -35,7 +36,7 @@ import org.apache.logging.log4j.Logger;
 public class Allomancy {
 
     public static final String MODID = "allomancy";
-    public static final ItemGroup allomancy_group = new ItemGroup(MODID) {
+    public static final CreativeModeTab allomancy_group = new CreativeModeTab(MODID) {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(CombatSetup.MISTCLOAK.get());
@@ -54,6 +55,8 @@ public class Allomancy {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancyConfig::onLoad);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancyConfig::onReload);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(PowersClientSetup::registerParticle);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(CombatClientSetup::registerEntityRenders);
+
         MinecraftForge.EVENT_BUS.addListener(Allomancy::registerCommands);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, OreGenerator::registerGeneration);
 
@@ -74,35 +77,27 @@ public class Allomancy {
         return new Item.Properties().tab(allomancy_group).stacksTo(64);
     }
 
-    public static Block.Properties createStandardBlockProperties() {
-        return Block.Properties.of(Material.STONE).strength(2.1F).harvestTool(ToolType.PICKAXE).harvestLevel(2).requiresCorrectToolForDrops();
-    }
-
     public static Item createStandardItem() {
         return new Item(createStandardItemProperties());
     }
 
-    public static Block createStandardBlock() {
-        return new Block(createStandardBlockProperties());
-    }
 
-    public static IFormattableTextComponent addColorToText(String translationKey, TextFormatting color) {
-        IFormattableTextComponent lore = new TranslationTextComponent(translationKey);
+    public static MutableComponent addColorToText(String translationKey, ChatFormatting color) {
+        MutableComponent lore = new TranslatableComponent(translationKey);
         return addColor(lore, color);
     }
 
-    public static IFormattableTextComponent addColorToText(String translationKey, TextFormatting color, Object... fmting) {
-        IFormattableTextComponent lore = new TranslationTextComponent(translationKey, fmting);
+    public static MutableComponent addColorToText(String translationKey, ChatFormatting color, Object... fmting) {
+        MutableComponent lore = new TranslatableComponent(translationKey, fmting);
         return addColor(lore, color);
     }
 
-    private static IFormattableTextComponent addColor(IFormattableTextComponent text, TextFormatting color) {
-        text.setStyle(text.getStyle().withColor(Color.fromLegacyFormat(color)));
+    private static MutableComponent addColor(MutableComponent text, ChatFormatting color) {
+        text.setStyle(text.getStyle().withColor(TextColor.fromLegacyFormat(color)));
         return text;
     }
 
     public static void clientInit(final FMLClientSetupEvent e) {
-        CombatSetup.clientInit(e);
         PowersSetup.clientInit(e);
     }
 
