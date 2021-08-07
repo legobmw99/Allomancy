@@ -59,7 +59,7 @@ public class CoinBagItem extends ShootableItem {
         }
 
 
-        if (player.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.STEEL)).isPresent()) {
+        if (!itemstack.isEmpty() && player.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.STEEL)).isPresent()) {
             if (!world.isClientSide) {
 
                 Ammo type = getAmmoFromItem(itemstack.getItem());
@@ -68,7 +68,6 @@ public class CoinBagItem extends ShootableItem {
                     dmg *= 2.0F;
                 }
                 ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, dmg);
-                //          formerly called .shoot()
                 nugget_projectile.shootFromRotation(player, player.xRot, player.yHeadRot, type.arg1, type.arg2, type.arg3);
                 world.addFreshEntity(nugget_projectile);
 
