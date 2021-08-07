@@ -28,6 +28,11 @@ public class Languages extends LanguageProvider {
         return in.substring(0, 1).toUpperCase(Locale.US) + in.substring(1);
     }
 
+    private static String getDisplayName(DyeColor color) {
+        String[] trans = color.getName().split("_");
+        return Arrays.stream(trans).map(Languages::toTitleCase).collect(Collectors.joining(" "));
+    }
+
     @Override
     protected void addTranslations() {
         add("itemGroup.allomancy", "Allomancy");
@@ -46,7 +51,7 @@ public class Languages extends LanguageProvider {
             add(raw, "Raw " + toTitleCase(metal));
 
         }
-        
+
         add(ExtrasSetup.IRON_BUTTON.get(), "Iron Button");
         add(ExtrasSetup.IRON_LEVER.get(), "Iron Lever");
         add("block.allomancy.iron_activation.lore", "This item seems too heavy to activate by ordinary means");
@@ -117,10 +122,5 @@ public class Languages extends LanguageProvider {
     @Override
     public String getName() {
         return "Allomancy Language";
-    }
-
-    private String getDisplayName(DyeColor color) {
-        String[] trans = color.getName().split("_");
-        return Arrays.stream(trans).map(Languages::toTitleCase).collect(Collectors.joining(" "));
     }
 }

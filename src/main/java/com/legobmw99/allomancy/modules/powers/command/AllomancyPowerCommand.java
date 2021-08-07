@@ -110,7 +110,7 @@ public class AllomancyPowerCommand {
             } else {
                 for (Metal mt : Metal.values()) {
                     if (data.hasPower(mt)) {
-                        if (powers.length() == 0) {
+                        if (powers.isEmpty()) {
                             powers.append(mt.getName());
                         } else {
                             powers.append(", ").append(mt.getName());
@@ -123,7 +123,7 @@ public class AllomancyPowerCommand {
     }
 
     private static void addPower(CommandContext<CommandSourceStack> ctx, ServerPlayer player) throws CommandSyntaxException {
-        handlePowerChange(ctx, player, IAllomancerData::setMistborn, data -> (mt -> !data.hasPower(mt)), mt -> (data -> data.addPower(mt)), ERROR_CANT_ADD::create,
+        handlePowerChange(ctx, player, IAllomancerData::setMistborn, data -> Predicate.not(data::hasPower), mt -> (data -> data.addPower(mt)), ERROR_CANT_ADD::create,
                           "commands.allomancy.addpower");
     }
 

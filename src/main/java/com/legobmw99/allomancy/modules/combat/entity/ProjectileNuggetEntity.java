@@ -42,9 +42,8 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
 
     public ProjectileNuggetEntity(LivingEntity livingEntityIn, Level worldIn, ItemStack itemIn, float damageIn) {
         super(CombatSetup.NUGGET_PROJECTILE.get(), livingEntityIn, worldIn);
-        if (livingEntityIn instanceof Player) {
-            Player ep = (Player) livingEntityIn;
-            if (ep.getAbilities().instabuild) {
+        if (livingEntityIn instanceof Player player) {
+            if (player.getAbilities().instabuild) {
                 this.dropItem = false;
             }
         }
@@ -61,9 +60,7 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
 
     public ProjectileNuggetEntity(Level world, Entity other) {
         this(CombatSetup.NUGGET_PROJECTILE.get(), world);
-        if (other instanceof ProjectileNuggetEntity) {
-            ProjectileNuggetEntity nugget = (ProjectileNuggetEntity) other;
-
+        if (other instanceof ProjectileNuggetEntity nugget) {
             this.entityData.set(ITEM, nugget.getItem().copy());
             this.damage = nugget.getDamage();
         }

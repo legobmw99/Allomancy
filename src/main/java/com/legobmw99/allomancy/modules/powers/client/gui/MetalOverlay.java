@@ -45,22 +45,22 @@ public class MetalOverlay {
 
         // Set the offsets of the overlay based on config
         switch (PowersConfig.overlay_position.get()) {
-            case TOP_RIGHT:
+            case TOP_RIGHT -> {
                 renderX = res.getGuiScaledWidth() - 145;
                 renderY = 10;
-                break;
-            case BOTTOM_RIGHT:
+            }
+            case BOTTOM_RIGHT -> {
                 renderX = res.getGuiScaledWidth() - 145;
                 renderY = res.getGuiScaledHeight() - 50;
-                break;
-            case BOTTOM_LEFT:
+            }
+            case BOTTOM_LEFT -> {
                 renderX = 5;
                 renderY = res.getGuiScaledHeight() - 50;
-                break;
-            default: // TOP_LEFT
+            }
+            default -> { // TOP_LEFT
                 renderX = 5;
                 renderY = 10;
-                break;
+            }
         }
 
         ForgeIngameGui gui = new ForgeIngameGui(mc);

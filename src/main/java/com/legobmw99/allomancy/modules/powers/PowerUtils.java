@@ -74,7 +74,7 @@ public class PowerUtils {
      * Block state wrapper on {@link PowerUtils#isBlockMetal}
      *
      * @param state BlockState to check
-     * @return whether or not the block state is metal
+     * @return whether the block state is metal
      */
     public static boolean isBlockStateMetal(BlockState state) {
         return isBlockMetal(state.getBlock());
@@ -84,7 +84,7 @@ public class PowerUtils {
      * Determines if a block is metal or not
      *
      * @param block to be checked
-     * @return Whether or not the block is metal
+     * @return Whether the block is metal
      */
     public static boolean isBlockMetal(Block block) {
         return isOnWhitelist(block.getRegistryName().toString());
@@ -94,7 +94,7 @@ public class PowerUtils {
      * Determines if an item is metal or not
      *
      * @param item to be checked
-     * @return Whether or not the item is metal
+     * @return Whether the item is metal
      */
     public static boolean isItemMetal(ItemStack item) {
         return isOnWhitelist(item.getItem().getRegistryName().toString());
@@ -108,20 +108,20 @@ public class PowerUtils {
      * Determines if an entity is metal or not
      *
      * @param entity to be checked
-     * @return Whether or not the entity is metallic
+     * @return Whether the entity is metallic
      */
     public static boolean isEntityMetal(Entity entity) {
         if (entity == null) {
             return false;
         }
-        if (entity instanceof ItemEntity) {
-            return isItemMetal(((ItemEntity) entity).getItem());
+        if (entity instanceof ItemEntity item) {
+            return isItemMetal(item.getItem());
         }
-        if (entity instanceof ItemFrame) {
-            return isItemMetal(((ItemFrame) entity).getItem());
+        if (entity instanceof ItemFrame itemFrame) {
+            return isItemMetal(itemFrame.getItem());
         }
-        if (entity instanceof FallingBlockEntity) {
-            return isBlockStateMetal(((FallingBlockEntity) entity).getBlockState());
+        if (entity instanceof FallingBlockEntity fbe) {
+            return isBlockStateMetal(fbe.getBlockState());
         }
         if (entity instanceof ProjectileNuggetEntity) {
             return true;
@@ -129,8 +129,7 @@ public class PowerUtils {
         if (entity instanceof AbstractMinecart) {
             return true;
         }
-        if (entity instanceof LivingEntity) {
-            LivingEntity ent = (LivingEntity) entity;
+        if (entity instanceof LivingEntity ent) {
             if (ent instanceof IronGolem) {
                 return true;
             }
@@ -258,20 +257,20 @@ public class PowerUtils {
 
                 target.setAggressive(true);
 
-                if (target instanceof Creeper) {
-                    target.goalSelector.addGoal(1, new SwellGoal((Creeper) target));
+                if (target instanceof Creeper creeper) {
+                    target.goalSelector.addGoal(1, new SwellGoal(creeper));
                 }
-                if (target instanceof Rabbit) {
-                    target.goalSelector.addGoal(1, new AIEvilAttack((Rabbit) target));
+                if (target instanceof Rabbit rabbit) {
+                    target.goalSelector.addGoal(1, new AIEvilAttack(rabbit));
                 }
-                if (target instanceof AbstractSkeleton) {
-                    target.goalSelector.addGoal(1, new RangedBowAttackGoal<>((AbstractSkeleton) target, 1.0D, 20, 15.0F));
+                if (target instanceof AbstractSkeleton skeleton) {
+                    target.goalSelector.addGoal(1, new RangedBowAttackGoal<>(skeleton, 1.0D, 20, 15.0F));
                 }
-                if (target instanceof Illusioner) {
-                    target.goalSelector.addGoal(1, new RangedBowAttackGoal<>((Illusioner) target, 0.5D, 20, 15.0F));
+                if (target instanceof Illusioner illusioner) {
+                    target.goalSelector.addGoal(1, new RangedBowAttackGoal<>(illusioner, 0.5D, 20, 15.0F));
                 }
-                if (target instanceof Pillager) {
-                    target.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>((Pillager) target, 1.0D, 8.0F));
+                if (target instanceof Pillager pillager) {
+                    target.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>(pillager, 1.0D, 8.0F));
                 }
             } else {
                 target.level.explode(target, target.position().x(), target.position().y(), target.position().z(), 1.2F, false, Explosion.BlockInteraction.BREAK);
@@ -301,26 +300,26 @@ public class PowerUtils {
                 //Add new goals
                 target.goalSelector.addGoal(7, new LookAtPlayerGoal(target, Player.class, 6.0F));
 
-                if (target instanceof TamableAnimal) {
+                if (target instanceof TamableAnimal animal) {
                     if (Math.random() < 0.3) {
-                        ((TamableAnimal) target).tame(allomancer);
+                        animal.tame(allomancer);
                     }
                 }
-                if (target instanceof AbstractHorse) {
+                if (target instanceof AbstractHorse horse) {
                     if (Math.random() < 0.3) {
-                        ((AbstractHorse) target).tameWithName(allomancer);
+                        horse.tameWithName(allomancer);
                     }
                 }
                 if (target instanceof Sheep) {
                     target.goalSelector.addGoal(1, new EatBlockGoal(target));
                 }
-                if (target instanceof Villager) {
-                    ((Villager) target).onReputationEventFrom(ReputationEventType.TRADE, allomancer);
+                if (target instanceof Villager villager) {
+                    villager.onReputationEventFrom(ReputationEventType.TRADE, allomancer);
                 }
                 if (target instanceof WanderingTrader) {
                     target.goalSelector.addGoal(1, new TradeWithPlayerGoal((AbstractVillager) target));
                 }
-            } else { // Completely remove all ai if enhanced
+            } else { // Completely remove all AI if enhanced
                 target.setNoAi(true);
             }
 

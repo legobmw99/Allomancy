@@ -25,12 +25,10 @@ public class KolossBladeItem extends SwordItem {
     @Override
     public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        if (entityIn != null && entityIn instanceof Player) {
-            Player player = (Player) entityIn;
-
+        if (entityIn instanceof Player player) {
             if (isSelected && (player.getOffhandItem() != stack)) {
                 if (!(player.hasEffect(MobEffects.DAMAGE_BOOST) && player.getEffect(MobEffects.DAMAGE_BOOST).getAmplifier() >= 2) &&
-                    !player.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.PEWTER)).isPresent()) {
+                    player.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.PEWTER)).isEmpty()) {
                     player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 10, 10, true, false));
                     player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10, 10, true, false));
                     player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 0, true, false));
@@ -41,7 +39,7 @@ public class KolossBladeItem extends SwordItem {
 
     @Override
     public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
-        return (attacker instanceof Player) && (attacker.getCapability(AllomancerCapability.PLAYER_CAP).filter(d -> d.isBurning(Metal.PEWTER)).isPresent());
+        return (attacker instanceof Player) && (attacker.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.PEWTER)).isPresent());
     }
 
     @Override

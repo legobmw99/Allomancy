@@ -18,8 +18,8 @@ public interface IAllomanticallyUsableBlock {
     /**
      * Called when the block is steelpushed or ironpulled
      *
-     * @param isPush whether or not the activation is Steel
-     * @return whether or not the block was activated
+     * @param isPush whether the activation is Steel
+     * @return whether the block was activated
      */
     boolean useAllomantically(BlockState state, Level world, BlockPos pos, Player playerIn, boolean isPush);
 }

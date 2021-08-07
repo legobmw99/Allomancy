@@ -27,7 +27,7 @@ public class LootTableInjector {
         }
         if (MaterialsConfig.generate_unbreakable_daggers.get() &&
             (name.equals("minecraft:chests/end_city_treasure") || name.equals("minecraft:chests/woodland_mansion") || name.equals("minecraft:chests/pillager_outpost"))) {
-            //Inject a unbreakable Obsidian Dagger loot table into the above vanilla tables
+            //Inject an unbreakable Obsidian Dagger loot table into the above vanilla tables
             Allomancy.LOGGER.info("Adding obsidian dagger to Loot Table: " + name);
             event
                     .getTable()

@@ -30,14 +30,14 @@ public class ExtrasSetup {
                                                                               () -> new BlockItem(IRON_LEVER.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
 
     public static final List<BannerPattern> PATTERNS = new ArrayList<>();
-    public static final List<RegistryObject<Item>> PATTERN_ITEMS = new ArrayList<>();
+    public static final List<RegistryObject<BannerPatternItem>> PATTERN_ITEMS = new ArrayList<>();
 
 
     static {
         for (Metal mt : Metal.values()) {
             String name = mt.getName();
-            BannerPattern pattern = BannerPattern.create("ALLOMANCY" + mt.name(), "allomancy_" + name, "allomancy_" + name, true);
-            RegistryObject<Item> pattern_item = ITEMS.register(name + "_pattern", () -> new BannerPatternItem(pattern, Allomancy.createStandardItemProperties().stacksTo(1)));
+            var pattern = BannerPattern.create("ALLOMANCY" + mt.name(), "allomancy_" + name, "allomancy_" + name, true);
+            var pattern_item = ITEMS.register(name + "_pattern", () -> new BannerPatternItem(pattern, Allomancy.createStandardItemProperties().stacksTo(1)));
             PATTERNS.add(pattern);
             PATTERN_ITEMS.add(pattern_item);
         }

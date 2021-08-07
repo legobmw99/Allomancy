@@ -29,21 +29,11 @@ public class CoinBagItem extends ProjectileWeaponItem {
     }
 
     private static Ammo getAmmoFromItem(Item itemIn) {
-        switch (itemIn.getRegistryName().getPath()) {
-            case "iron_nugget":
-            case "steel_nugget":
-            case "bronze_nugget":
-            case "copper_nugget":
-            case "nickel_nugget":
-                return Ammo.HEAVY;
-            case "bendalloy_nugget":
-            case "nicrosil_nugget":
-            case "electrum_nugget":
-            case "platinum_nugget":
-                return Ammo.MAGIC;
-            default:
-                return Ammo.LIGHT;
-        }
+        return switch (itemIn.getRegistryName().getPath()) {
+            case "iron_nugget", "steel_nugget", "bronze_nugget", "copper_nugget", "nickel_nugget" -> Ammo.HEAVY;
+            case "bendalloy_nugget", "nicrosil_nugget", "electrum_nugget", "platinum_nugget" -> Ammo.MAGIC;
+            default -> Ammo.LIGHT;
+        };
     }
 
     @Nonnull

@@ -20,7 +20,7 @@ public class UpdateBurnPacket {
      * Send request to the server to change the burning state of a metal
      *
      * @param mt    the metal
-     * @param value whether or not it is burning
+     * @param value whether it is burning
      */
     public UpdateBurnPacket(Metal mt, boolean value) {
         this.mt = mt;

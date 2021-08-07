@@ -39,7 +39,6 @@ import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class CommonEventHandler {
@@ -56,8 +55,7 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getPlayer().level.isClientSide) {
-            if (event.getPlayer() instanceof ServerPlayer) {
-                ServerPlayer player = (ServerPlayer) event.getPlayer();
+            if (event.getPlayer() instanceof ServerPlayer player) {
 
                 player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                     //Handle random misting case
@@ -126,8 +124,7 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void onStartTracking(final net.minecraftforge.event.entity.player.PlayerEvent.StartTracking event) {
         if (!event.getTarget().level.isClientSide) {
-            if (event.getTarget() instanceof ServerPlayer) {
-                ServerPlayer player = (ServerPlayer) event.getTarget();
+            if (event.getTarget() instanceof ServerPlayer player) {
                 Network.sync(player);
             }
         }
@@ -135,8 +132,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onSetSpawn(final PlayerSetSpawnEvent event) {
-        Player player = event.getPlayer();
-        if (player instanceof ServerPlayer) {
+        if (event.getPlayer() instanceof ServerPlayer player) {
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 data.setSpawnLoc(event.getNewSpawn(), event.getSpawnWorld());
                 Network.sync(data, player);
@@ -146,8 +142,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onLivingDeath(final LivingDeathEvent event) {
-        if (event.getEntityLiving() instanceof ServerPlayer) {
-            ServerPlayer player = (ServerPlayer) event.getEntityLiving();
+        if (event.getEntityLiving() instanceof ServerPlayer player) {
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 data.setDeathLoc(new BlockPos(player.position()), player.level.dimension());
                 Network.sync(data, player);
@@ -158,8 +153,7 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void onDamage(final LivingHurtEvent event) {
         // Increase outgoing damage for pewter burners
-        if (event.getSource().getEntity() instanceof ServerPlayer) {
-            ServerPlayer source = (ServerPlayer) event.getSource().getEntity();
+        if (event.getSource().getEntity() instanceof ServerPlayer source) {
             source.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
 
                 if (data.isBurning(Metal.PEWTER)) {
@@ -176,16 +170,16 @@ public class CommonEventHandler {
                 }
 
                 if (data.isBurning(Metal.CHROMIUM)) {
-                    if (event.getEntityLiving() instanceof Player) {
-                        PowerUtils.wipePlayer((Player) event.getEntityLiving());
+                    if (event.getEntityLiving() instanceof Player player) {
+                        PowerUtils.wipePlayer(player);
                     }
                 }
             });
         }
 
         // Reduce incoming damage for pewter burners
-        if (event.getEntityLiving() instanceof ServerPlayer) {
-            event.getEntityLiving().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
+        if (event.getEntityLiving() instanceof ServerPlayer player) {
+            player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 if (data.isBurning(Metal.PEWTER)) {
                     if (data.isEnhanced()) { // Duralumin invulnerability
                         Allomancy.LOGGER.debug("Canceling Damage");
@@ -197,7 +191,7 @@ public class CommonEventHandler {
                         event.setAmount(event.getAmount() - 2);
                         // Note that they took damage, will come in to play if they stop burning
                         data.setDamageStored(data.getDamageStored() + 1);
-                        Network.sync(data, (ServerPlayer) event.getEntityLiving());
+                        Network.sync(data, player);
                     }
                 }
             });
@@ -208,8 +202,8 @@ public class CommonEventHandler {
     public static void onWorldTick(final TickEvent.WorldTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
 
-            Level world = event.world;
-            List<? extends Player> list = world.players();
+            Level level = event.world;
+            var list = level.players();
             for (int enti = list.size() - 1; enti >= 0; enti--) {
                 Player curPlayer = list.get(enti);
                 curPlayer.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
@@ -235,8 +229,8 @@ public class CommonEventHandler {
 
                         // Run the necessary updates on the player's metals
                         // Ran AFTER duralumin and aluminum to make sure they function correctly
-                        if (curPlayer instanceof ServerPlayer) {
-                            data.tickBurning((ServerPlayer) curPlayer);
+                        if (curPlayer instanceof ServerPlayer player) {
+                            data.tickBurning(player);
                         }
 
 
@@ -244,11 +238,11 @@ public class CommonEventHandler {
                          * CHROMIUM (enhanced)                       *
                          *********************************************/
                         if (data.isEnhanced() && data.isBurning(Metal.CHROMIUM)) {
-                            if (event.world instanceof ServerLevel) {
+                            if (level instanceof ServerLevel) {
                                 int max = 20;
                                 BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
                                 BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
-                                event.world.getEntitiesOfClass(Player.class, new AABB(negative, positive)).forEach(otherPlayer -> {
+                                level.getEntitiesOfClass(Player.class, new AABB(negative, positive)).forEach(otherPlayer -> {
                                     otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(otherData -> otherData.drainMetals(Metal.values()));
                                 });
                             }
@@ -266,12 +260,11 @@ public class CommonEventHandler {
                                 spawnLoc = data.getSpawnLoc();
                             } else {
                                 spawnDim = Level.OVERWORLD; // no spawn --> use world spawn
-                                spawnLoc = new BlockPos(curPlayer.level.getLevelData().getXSpawn(), curPlayer.level.getLevelData().getYSpawn(),
-                                                        curPlayer.level.getLevelData().getZSpawn());
+                                spawnLoc = new BlockPos(level.getLevelData().getXSpawn(), level.getLevelData().getYSpawn(), level.getLevelData().getZSpawn());
 
                             }
 
-                            PowerUtils.teleport(curPlayer, event.world, spawnDim, spawnLoc);
+                            PowerUtils.teleport(curPlayer, level, spawnDim, spawnLoc);
                             if (data.isBurning(Metal.DURALUMIN)) {
                                 data.drainMetals(Metal.DURALUMIN);
                             }
@@ -281,7 +274,7 @@ public class CommonEventHandler {
                         } else if (data.isEnhanced() && data.isBurning(Metal.GOLD) && data.getAmount(Metal.GOLD) >= 9) { // These should be mutually exclusive
                             ResourceKey<Level> deathDim = data.getDeathDim();
                             if (deathDim != null) {
-                                PowerUtils.teleport(curPlayer, event.world, deathDim, data.getDeathLoc());
+                                PowerUtils.teleport(curPlayer, level, deathDim, data.getDeathLoc());
                                 if (data.isBurning(Metal.DURALUMIN)) {
                                     data.drainMetals(Metal.DURALUMIN);
                                 }
@@ -298,11 +291,11 @@ public class CommonEventHandler {
                             curPlayer.aiStep();
                             curPlayer.aiStep();
 
-                            if (event.world instanceof ServerLevel) {
+                            if (level instanceof ServerLevel serverLevel) {
                                 int max = data.isEnhanced() ? 10 : 5;
                                 BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
                                 BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
-                                event.world.getEntitiesOfClass(LivingEntity.class, new AABB(negative, positive)).forEach(entity -> {
+                                serverLevel.getEntitiesOfClass(LivingEntity.class, new AABB(negative, positive)).forEach(entity -> {
                                     entity.aiStep();
                                     entity.aiStep();
                                 });
@@ -310,10 +303,10 @@ public class CommonEventHandler {
                                     BlockState block = event.world.getBlockState(bp);
                                     BlockEntity te = event.world.getBlockEntity(bp);
                                     for (int i = 0; i < max * 4 / (te == null ? 10 : 1); i++) {
-                                        if (te instanceof TickingBlockEntity) {
-                                            ((TickingBlockEntity) te).tick();
+                                        if (te instanceof TickingBlockEntity tbe) {
+                                            tbe.tick();
                                         } else if (block.isRandomlyTicking()) {
-                                            block.randomTick((ServerLevel) event.world, bp, event.world.random);
+                                            block.randomTick(serverLevel, bp, serverLevel.random);
                                         }
                                     }
                                 });
@@ -324,7 +317,7 @@ public class CommonEventHandler {
                             BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
                             BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
                             int slowness_amplifier = data.isEnhanced() ? 255 : 2; // Duralumin freezes entities
-                            event.world.getEntitiesOfClass(LivingEntity.class, new AABB(negative, positive)).forEach(entity -> {
+                            level.getEntitiesOfClass(LivingEntity.class, new AABB(negative, positive)).forEach(entity -> {
                                 entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 10, 0, true, false));
                                 if (entity != curPlayer) {
                                     entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, slowness_amplifier, true, false));
@@ -341,7 +334,7 @@ public class CommonEventHandler {
                             curPlayer.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, Short.MAX_VALUE, 5, true, false));
                             if (data.isEnhanced()) { // Tin and Duralumin is too much to handle
                                 curPlayer.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 150, true, false));
-                                if (event.world.random.nextInt(50) == 0) {
+                                if (level.random.nextInt(50) == 0) {
                                     curPlayer.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0, true, false));
                                 }
                             } else { // Remove blindness from normal tin burners
@@ -363,7 +356,7 @@ public class CommonEventHandler {
                             curPlayer.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 10, 1, true, false));
 
                             if (data.getDamageStored() > 0) {
-                                if (event.world.random.nextInt(200) == 0) {
+                                if (level.random.nextInt(200) == 0) {
                                     data.setDamageStored(data.getDamageStored() - 1);
                                 }
                             }
@@ -383,10 +376,11 @@ public class CommonEventHandler {
                             curPlayer.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 50, true, false));
                         }
 
+                        // TODO this would be atium? need a packet and a renderer
                         if (false) { //todo
                             BlockPos negative = curPlayer.blockPosition().offset(-30, -30, -30);
                             BlockPos positive = curPlayer.blockPosition().offset(30, 30, 30);
-                            List<Mob> nearby_players = curPlayer.level.getEntitiesOfClass(Mob.class, new AABB(negative, positive), Objects::nonNull);
+                            var nearby_players = curPlayer.level.getEntitiesOfClass(Mob.class, new AABB(negative, positive), Objects::nonNull);
 
                             for (Mob mob : nearby_players) {
                                 Path path = mob.getNavigation().getPath();
@@ -394,8 +388,6 @@ public class CommonEventHandler {
                                     int count = path.getNodeCount();
                                     for (int i = 0; i < count; i++) {
                                         Node point = path.getNode(i);
-                                        System.out.println(point);
-                                        // TODO this would be atium? need a packet and a renderer
                                         event.world.addParticle(ParticleTypes.EXPLOSION, point.x + 0.5, point.y + 0.5, point.z + 0.5, 0, 0, 0);
                                     }
                                 }

@@ -36,20 +36,20 @@ public class MetalBlockBlob {
         return blob3;
     }
 
+    private static Vec3 getCenterOfBlock(BlockPos pos) {
+        try {
+            return Vec3.atLowerCornerOf(pos).add(level.getBlockState(pos).getShape(level, pos).bounds().getCenter());
+        } catch (UnsupportedOperationException e) {
+            return Vec3.atCenterOf(pos);
+        }
+    }
+
     public boolean isMatch(BlockPos pos) {
         return this.blocks.stream().anyMatch(bp -> Vec3.atCenterOf(bp).distanceTo(Vec3.atCenterOf(pos)) <= 1.5);
     }
 
     public int size() {
         return this.blocks.size();
-    }
-
-    private Vec3 getCenterOfBlock(BlockPos pos) {
-        try {
-            return Vec3.atLowerCornerOf(pos).add(level.getBlockState(pos).getShape(level, pos).bounds().getCenter());
-        } catch (UnsupportedOperationException e) {
-            return Vec3.atCenterOf(pos);
-        }
     }
 
     public boolean add(BlockPos pos) {

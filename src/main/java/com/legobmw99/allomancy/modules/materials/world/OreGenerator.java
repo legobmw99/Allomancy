@@ -88,7 +88,7 @@ public class OreGenerator {
          * @param vein_size       the vein size
          * @param ores_per_chunk  number of times it can generate per chunk
          * @param stone_ore_block the block to generate
-         * @param config_enabled  whether or not it is enabled in the configuration file
+         * @param config_enabled  whether it is enabled in the configuration file
          */
         protected OreData(ForgeConfigSpec.IntValue max_height,
                           ForgeConfigSpec.IntValue min_height,

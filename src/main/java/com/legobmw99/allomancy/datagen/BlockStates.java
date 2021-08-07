@@ -8,7 +8,6 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.OreBlock;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -98,37 +97,18 @@ public class BlockStates extends BlockStateProvider {
 
         BiConsumer<Direction, ModelBuilder<BlockModelBuilder>.ElementBuilder.FaceBuilder> base_generator = (dir, facebuilder) -> {
             switch (dir) {
-                case UP:
-                    facebuilder.uvs(5, 4, 11, 12).texture("#base").end();
-                    break;
-                case DOWN:
-                    facebuilder.uvs(5, 4, 11, 12).texture("#base").cullface(Direction.DOWN).end();
-                    break;
-                case NORTH:
-                case SOUTH:
-                    facebuilder.uvs(5, 0, 11, 3).texture("#base").end();
-                    break;
-                case WEST:
-                case EAST:
-                    facebuilder.uvs(4, 0, 12, 3).texture("#base").end();
-                    break;
+                case UP -> facebuilder.uvs(5, 4, 11, 12).texture("#base").end();
+                case DOWN -> facebuilder.uvs(5, 4, 11, 12).texture("#base").cullface(Direction.DOWN).end();
+                case NORTH, SOUTH -> facebuilder.uvs(5, 0, 11, 3).texture("#base").end();
+                case WEST, EAST -> facebuilder.uvs(4, 0, 12, 3).texture("#base").end();
             }
         };
 
         BiConsumer<Direction, ModelBuilder<BlockModelBuilder>.ElementBuilder.FaceBuilder> lever_generator = (dir, facebuilder) -> {
             switch (dir) {
-                case UP:
-                    facebuilder.uvs(7, 6, 9, 8).texture("#lever").end();
-                    break;
-                case NORTH:
-                case SOUTH:
-                case WEST:
-                case EAST:
-                    facebuilder.uvs(7, 6, 9, 16).texture("#lever").end();
-                    break;
-                case DOWN:
-                    facebuilder.end();
-                    break;
+                case UP -> facebuilder.uvs(7, 6, 9, 8).texture("#lever").end();
+                case NORTH, SOUTH, WEST, EAST -> facebuilder.uvs(7, 6, 9, 16).texture("#lever").end();
+                case DOWN -> facebuilder.end();
             }
         };
 

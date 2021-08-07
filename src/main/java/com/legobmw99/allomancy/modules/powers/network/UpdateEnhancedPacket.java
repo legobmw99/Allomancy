@@ -48,9 +48,7 @@ public class UpdateEnhancedPacket {
             } else {
                 Player player = (Player) Minecraft.getInstance().level.getEntity(this.entityID);
                 if (player != null) {
-                    player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-                        data.setEnhanced(this.enhance_time);
-                    });
+                    player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> data.setEnhanced(this.enhance_time));
                 }
             }
 

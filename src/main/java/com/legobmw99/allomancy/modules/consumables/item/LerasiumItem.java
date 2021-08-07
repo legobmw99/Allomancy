@@ -48,7 +48,7 @@ public class LerasiumItem extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity livingEntity) {
 
         livingEntity.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(IAllomancerData::setMistborn);
-        //Fancy shmancy effects
+        //Fancy-shmancy effects
         LightningBolt lightning = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
         lightning.setVisualOnly(true);
         lightning.moveTo(livingEntity.position().add(0, 3, 0));

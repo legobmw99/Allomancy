@@ -73,7 +73,7 @@ public class VialItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
-        InteractionResultHolder<ItemStack> res = playerIn.getCapability(AllomancerCapability.PLAYER_CAP).map(data -> {
+        return playerIn.getCapability(AllomancerCapability.PLAYER_CAP).map(data -> {
             //If all the ones being filled are full, don't allow
             int filling = 0, full = 0;
             if (itemStackIn.hasTag()) {
@@ -93,7 +93,6 @@ public class VialItem extends Item {
             }
             return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
         }).orElse(new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn));
-        return res;
     }
 
 

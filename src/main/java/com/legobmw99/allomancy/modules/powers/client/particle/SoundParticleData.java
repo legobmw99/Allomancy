@@ -11,7 +11,7 @@ import net.minecraft.sounds.SoundSource;
 public class SoundParticleData implements ParticleOptions {
 
 
-    public static final ParticleOptions.Deserializer<SoundParticleData> DESERIALIZER = new ParticleOptions.Deserializer<SoundParticleData>() {
+    public static final ParticleOptions.Deserializer<SoundParticleData> DESERIALIZER = new ParticleOptions.Deserializer<>() {
 
         @Override
         public SoundParticleData fromCommand(ParticleType<SoundParticleData> particleTypeIn, StringReader reader) {

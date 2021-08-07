@@ -7,10 +7,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.OreBlock;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fmllegacy.RegistryObject;
 
 public class ItemTags extends ItemTagsProvider {
 
@@ -46,13 +43,13 @@ public class ItemTags extends ItemTagsProvider {
         for (var rblock : MaterialsSetup.ORE_BLOCKS_ITEMS) {
             var block = rblock.get();
             String path = block.getRegistryName().getPath();
-            addForgeTag("ores/"+path, block);
+            addForgeTag("ores/" + path, block);
         }
 
         for (var rblock : MaterialsSetup.DEEPSLATE_ORE_BLOCKS_ITEMS) {
             var block = rblock.get();
             String path = block.getRegistryName().getPath();
-            addForgeTag("ores/"+path, block);
+            addForgeTag("ores/" + path, block);
         }
 
     }

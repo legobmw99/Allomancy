@@ -17,6 +17,7 @@ import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
 import com.legobmw99.allomancy.network.Network;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -42,10 +43,8 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ClientEventHandler {
 
@@ -74,7 +73,7 @@ public class ClientEventHandler {
                     // Handle our input-based powers
                     if (this.mc.options.keyAttack.isDown()) {
                         // Ray trace 20 blocks (or 40 if enhanced)
-                        HitResult trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
+                        var trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
                         // All iron pulling powers
                         if (data.isBurning(Metal.IRON)) {
                             if (trace != null) {
@@ -104,7 +103,7 @@ public class ClientEventHandler {
                     }
                     if (this.mc.options.keyUse.isDown()) {
                         // Ray trace 20 blocks (or 40 if enhanced)
-                        HitResult trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
+                        var trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
                         // All steel pushing powers
                         if (data.isBurning(Metal.STEEL)) {
 
@@ -159,23 +158,20 @@ public class ClientEventHandler {
                                     player.level.getEntitiesOfClass(Entity.class, new AABB(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
 
                             // Add metal blobs to metal list
-                            Stream<BlockPos> blocks = BlockPos.betweenClosedStream(negative, positive);
+                            var blocks = BlockPos.betweenClosedStream(negative, positive);
                             blocks.filter(bp -> PowerUtils.isBlockStateMetal(player.level.getBlockState(bp))).forEach(bp -> {
-                                Set<MetalBlockBlob> matches = this.metal_blobs.stream().filter(mbl -> mbl.isMatch(bp)).collect(Collectors.toSet());
+                                var matches = this.metal_blobs.stream().filter(mbl -> mbl.isMatch(bp)).collect(Collectors.toSet());
                                 switch (matches.size()) {
-                                    case 0: // new blob
-                                        this.metal_blobs.add(new MetalBlockBlob(bp));
-                                        break;
-                                    case 1: // add to existing blob
-                                        matches.stream().findAny().get().add(bp);
-                                        break;
-                                    default: // this block serves as a bridge between (possibly many) existing blobs
+                                    case 0 -> // new blob
+                                            this.metal_blobs.add(new MetalBlockBlob(bp));
+                                    case 1 -> // add to existing blob
+                                            matches.stream().findAny().get().add(bp);
+                                    default -> { // this block serves as a bridge between (possibly many) existing blobs
                                         this.metal_blobs.removeAll(matches);
                                         MetalBlockBlob mbb = matches.stream().reduce(null, MetalBlockBlob::merge);
                                         mbb.add(bp);
                                         this.metal_blobs.add(mbb);
-                                        break;
-
+                                    }
                                 }
 
                             });
@@ -187,7 +183,7 @@ public class ClientEventHandler {
                             // Add metal burners to a list
                             BlockPos negative = player.blockPosition().offset(-30, -30, -30);
                             BlockPos positive = player.blockPosition().offset(30, 30, 30);
-                            List<Player> nearby_players = player.level.getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
+                            var nearby_players = player.level.getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
 
 
                             for (Player otherPlayer : nearby_players) {
@@ -238,7 +234,7 @@ public class ClientEventHandler {
      */
     private void acceptInput() {
 
-        boolean extras = PowersClientSetup.enable_more_keybinds && Arrays.stream(PowersClientSetup.powers).anyMatch(k -> k.isDown());
+        boolean extras = PowersClientSetup.enable_more_keybinds && Arrays.stream(PowersClientSetup.powers).anyMatch(KeyMapping::isDown);
 
         if (PowersClientSetup.burn.isDown() || extras) {
             Player player = this.mc.player;
@@ -301,6 +297,7 @@ public class ClientEventHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
+
         Player player = this.mc.player;
         if (player == null || !player.isAlive() || this.mc.options.getCameraType().isMirrored()) {
             return;
@@ -324,19 +321,30 @@ public class ClientEventHandler {
             Vec3 view = this.mc.cameraEntity.getEyePosition(event.getPartialTicks());
             stack.translate(-view.x, -view.y, -view.z);
 
+            //            stack.mulPoseMatrix(stack.last().pose());
+            //            System.out.println(stack.last().);
             RenderSystem.applyModelViewMatrix();
 
-            double dist = 1;
-            double yaw = ((this.mc.player.getYRot() + 180) * Math.PI) / 180;
-            double pitch = ((this.mc.player.getXRot() + 90) * Math.PI) / 180;
-            // TODO broken
-            //            Vec3 playervec = view.add(Mth.sin((float) pitch) * Mth.cos((float) yaw) * dist, Mth.cos((float) pitch) * dist - 0.35,
-            //                                      Mth.sin((float) pitch) * Mth.sin((float) yaw) * dist);
-            Vec3 playervec = view.add(this.mc.gameRenderer.getMainCamera().getNearPlane().getBottomRight());
+            double rho = 1;
+            double theta = (this.mc.player.getViewYRot(event.getPartialTicks())) * Math.PI / 180;
+            double phi = (this.mc.player.getViewXRot(event.getPartialTicks()) + 90) * Math.PI / 180;
+            //            System.out.println(theta);
+
+            Vec3 playervec = view.add(rho * Math.sin((float) phi) * Math.cos((float) theta), rho * Math.cos((float) phi), rho * Math.sin((float) phi) * Math.sin((float) theta));
+
+            //            double yaw = ((this.mc.player.getYRot() + 180) * Math.PI) / 180;
+            //            double pitch = ((this.mc.player.getXRot() + 90) * Math.PI) / 180;
+            //            // TODO broken
+            //            //            Vec3 playervec = view.add(Mth.sin((float) pitch) * Mth.cos((float) yaw) * dist, Mth.cos((float) pitch) * dist - 0.35,
+            //            //                                      Mth.sin((float) pitch) * Mth.sin((float) yaw) * dist);
+            //            Vec3 playervec = view.add(this.mc.gameRenderer.getMainCamera().getNearPlane().getBottomRight());
             //            System.out.println();
             /*********************************************
              * IRON AND STEEL LINES                      *
              *********************************************/
+
+            ClientUtils.drawMetalLine(new Vec3(6, 4, 3), new Vec3(7, 6, 2), 1.5F, 0F, 0.6F, 1F);
+
             if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
                 for (Entity entity : this.metal_entities) {
                     ClientUtils.drawMetalLine(playervec, entity.position(), 1.5F, 0F, 0.6F, 1F);

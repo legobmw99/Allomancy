@@ -21,17 +21,14 @@ public class SoundParticle extends TextureSheetParticle {
         setLifetime(20);
 
         switch (typeIn) {
-            case HOSTILE: // red
-                setColor(1F, 0.15F, 0.15F);
-                break;
-            case PLAYERS: // yellow
-                setColor(1F, 1F, 0F);
-                break;
-            case NEUTRAL: // green
-                setColor(0F, 1F, 0F);
-                break;
-            default: // neutral/blue
-                setColor(0F, 0F, 1F);
+            case HOSTILE -> // red
+                    setColor(1F, 0.15F, 0.15F);
+            case PLAYERS -> // yellow
+                    setColor(1F, 1F, 0F);
+            case NEUTRAL -> // green
+                    setColor(0F, 1F, 0F);
+            default -> // neutral/blue
+                    setColor(0F, 0F, 1F);
         }
     }
 

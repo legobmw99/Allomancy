@@ -240,7 +240,7 @@ public class DefaultAllomancerData implements IAllomancerData {
     /**
      * Set the burn time of a specific metal
      *
-     * @param metal    the the metal to set
+     * @param metal    the metal to set
      * @param burnTime the burn time
      */
     protected void setBurnTime(Metal metal, int burnTime) {
@@ -285,19 +285,19 @@ public class DefaultAllomancerData implements IAllomancerData {
         allomancy_data.put("metal_burning", metal_burning);
 
         CompoundTag position = new CompoundTag();
-        BlockPos death_pos = this.getDeathLoc();
-        if (death_pos != null) {
+        BlockPos death_block = this.getDeathLoc();
+        if (death_block != null) {
             position.putString("death_dimension", this.getDeathDim().location().toString());
-            position.putInt("death_x", death_pos.getX());
-            position.putInt("death_y", death_pos.getY());
-            position.putInt("death_z", death_pos.getZ());
+            position.putInt("death_x", death_block.getX());
+            position.putInt("death_y", death_block.getY());
+            position.putInt("death_z", death_block.getZ());
         }
-        BlockPos spawn_pos = this.getSpawnLoc();
-        if (spawn_pos != null) {
+        BlockPos spawn_block = this.getSpawnLoc();
+        if (spawn_block != null) {
             position.putString("spawn_dimension", this.getSpawnDim().location().toString());
-            position.putInt("spawn_x", spawn_pos.getX());
-            position.putInt("spawn_y", spawn_pos.getY());
-            position.putInt("spawn_z", spawn_pos.getZ());
+            position.putInt("spawn_x", spawn_block.getX());
+            position.putInt("spawn_y", spawn_block.getY());
+            position.putInt("spawn_z", spawn_block.getZ());
         }
         allomancy_data.put("position", position);
 

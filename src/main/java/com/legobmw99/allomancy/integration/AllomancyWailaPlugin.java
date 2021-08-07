@@ -8,6 +8,6 @@ import net.minecraft.world.entity.player.Player;
 public class AllomancyWailaPlugin implements IWailaPlugin {
     @Override
     public void register(IRegistrar iRegistrar) {
-        iRegistrar.registerComponentProvider(AllomancyTooltip.INSTANCE, TooltipPosition.BODY, Player.class);
+        iRegistrar.addComponent(AllomancyTooltip.INSTANCE, TooltipPosition.BODY, Player.class);
     }
 }
