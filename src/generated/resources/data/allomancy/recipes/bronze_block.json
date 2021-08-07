@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "allomancy:bronze_ingot"
+    },
+    {
+      "item": "allomancy:bronze_ingot"
+    },
+    {
+      "item": "allomancy:bronze_ingot"
+    },
+    {
+      "item": "allomancy:bronze_ingot"
+    },
+    {
+      "item": "allomancy:bronze_ingot"
+    },
+    {
+      "item": "allomancy:bronze_ingot"
+    },
+    {
+      "item": "allomancy:bronze_ingot"
+    },
+    {
+      "item": "allomancy:bronze_ingot"
+    },
+    {
+      "item": "allomancy:bronze_ingot"
+    }
+  ],
+  "result": {
+    "item": "allomancy:bronze_block"
+  }
+}

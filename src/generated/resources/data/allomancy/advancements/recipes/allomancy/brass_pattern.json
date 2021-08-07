@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:brass_pattern"
+    ]
+  },
+  "criteria": {
+    "has_brass_flakes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:brass_flakes"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:brass_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_brass_flakes",
+      "has_the_recipe"
+    ]
+  ]
+}

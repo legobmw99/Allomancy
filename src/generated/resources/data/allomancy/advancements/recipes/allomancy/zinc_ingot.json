@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:zinc_ingot"
+    ]
+  },
+  "criteria": {
+    "has_raw_zinc": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:raw_zinc"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:zinc_ingot"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_raw_zinc",
+      "has_the_recipe"
+    ]
+  ]
+}

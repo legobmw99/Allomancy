@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "allomancy:nicrosil_ingot"
+    },
+    {
+      "item": "allomancy:nicrosil_ingot"
+    },
+    {
+      "item": "allomancy:nicrosil_ingot"
+    },
+    {
+      "item": "allomancy:nicrosil_ingot"
+    },
+    {
+      "item": "allomancy:nicrosil_ingot"
+    },
+    {
+      "item": "allomancy:nicrosil_ingot"
+    },
+    {
+      "item": "allomancy:nicrosil_ingot"
+    },
+    {
+      "item": "allomancy:nicrosil_ingot"
+    },
+    {
+      "item": "allomancy:nicrosil_ingot"
+    }
+  ],
+  "result": {
+    "item": "allomancy:nicrosil_block"
+  }
+}

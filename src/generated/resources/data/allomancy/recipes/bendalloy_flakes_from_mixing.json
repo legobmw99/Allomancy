@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "allomancy:cadmium_flakes"
+    },
+    {
+      "item": "allomancy:cadmium_flakes"
+    },
+    {
+      "item": "allomancy:lead_flakes"
+    }
+  ],
+  "result": {
+    "item": "allomancy:bendalloy_flakes",
+    "count": 3
+  }
+}

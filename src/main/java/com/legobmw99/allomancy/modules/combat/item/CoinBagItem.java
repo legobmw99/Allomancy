@@ -68,7 +68,6 @@ public class CoinBagItem extends ProjectileWeaponItem {
                     dmg *= 2.0F;
                 }
                 ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, dmg);
-                //          formerly called .shoot()
                 nugget_projectile.shootFromRotation(player, player.getXRot(), player.getYHeadRot(), type.arg1, type.arg2, type.arg3);
                 world.addFreshEntity(nugget_projectile);
 

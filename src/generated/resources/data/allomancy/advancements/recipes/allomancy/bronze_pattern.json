@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:bronze_pattern"
+    ]
+  },
+  "criteria": {
+    "has_bronze_flakes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:bronze_flakes"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:bronze_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_bronze_flakes",
+      "has_the_recipe"
+    ]
+  ]
+}

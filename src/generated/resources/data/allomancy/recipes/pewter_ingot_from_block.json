@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "allomancy:pewter_block"
+    }
+  ],
+  "result": {
+    "item": "allomancy:pewter_ingot",
+    "count": 9
+  }
+}

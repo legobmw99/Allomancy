@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:cadmium_pattern"
+    ]
+  },
+  "criteria": {
+    "has_cadmium_flakes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:cadmium_flakes"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:cadmium_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_cadmium_flakes",
+      "has_the_recipe"
+    ]
+  ]
+}

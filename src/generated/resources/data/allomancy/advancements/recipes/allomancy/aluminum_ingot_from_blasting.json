@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:aluminum_ingot_from_blasting"
+    ]
+  },
+  "criteria": {
+    "has_raw_aluminum": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:raw_aluminum"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:aluminum_ingot_from_blasting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_raw_aluminum",
+      "has_the_recipe"
+    ]
+  ]
+}

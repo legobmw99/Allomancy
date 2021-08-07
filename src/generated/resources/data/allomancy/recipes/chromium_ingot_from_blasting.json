@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "allomancy:raw_chromium"
+  },
+  "result": "allomancy:chromium_ingot",
+  "experience": 0.7,
+  "cookingtime": 100
+}

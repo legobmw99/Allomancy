@@ -1,0 +1,39 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "item": "allomancy:mistcloak",
+      "nbt": "{Damage:0}"
+    },
+    "title": {
+      "translate": "advancements.become_mistborn.title"
+    },
+    "description": {
+      "translate": "advancements.become_mistborn.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "rewards": {
+    "experience": 100
+  },
+  "criteria": {
+    "lerasium_nugget": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "allomancy:lerasium_nugget"
+          ]
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "lerasium_nugget"
+    ]
+  ]
+}

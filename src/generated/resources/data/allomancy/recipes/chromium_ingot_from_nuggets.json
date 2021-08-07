@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "allomancy:chromium_nugget"
+    },
+    {
+      "item": "allomancy:chromium_nugget"
+    },
+    {
+      "item": "allomancy:chromium_nugget"
+    },
+    {
+      "item": "allomancy:chromium_nugget"
+    },
+    {
+      "item": "allomancy:chromium_nugget"
+    },
+    {
+      "item": "allomancy:chromium_nugget"
+    },
+    {
+      "item": "allomancy:chromium_nugget"
+    },
+    {
+      "item": "allomancy:chromium_nugget"
+    },
+    {
+      "item": "allomancy:chromium_nugget"
+    }
+  ],
+  "result": {
+    "item": "allomancy:chromium_ingot"
+  }
+}

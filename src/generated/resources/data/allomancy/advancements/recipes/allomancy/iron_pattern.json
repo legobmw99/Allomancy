@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:iron_pattern"
+    ]
+  },
+  "criteria": {
+    "has_iron_flakes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:iron_flakes"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:iron_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_iron_flakes",
+      "has_the_recipe"
+    ]
+  ]
+}

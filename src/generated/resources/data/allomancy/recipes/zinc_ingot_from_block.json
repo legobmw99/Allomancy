@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "allomancy:zinc_block"
+    }
+  ],
+  "result": {
+    "item": "allomancy:zinc_ingot",
+    "count": 9
+  }
+}

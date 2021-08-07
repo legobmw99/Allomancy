@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "allomancy:cadmium_block"
+    }
+  ],
+  "result": {
+    "item": "allomancy:cadmium_ingot",
+    "count": 9
+  }
+}

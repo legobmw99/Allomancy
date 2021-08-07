@@ -59,7 +59,7 @@ public class MaterialsSetup {
             DEEPSLATE_ORE_BLOCKS.add(ds_ore_block);
             DEEPSLATE_ORE_BLOCKS_ITEMS.add(ITEMS.register("deepslate_" + ore + "_ore", () -> new BlockItem(ds_ore_block.get(), Allomancy.createStandardItemProperties())));
 
-            var raw_ore_block = BLOCKS.register("raw_" + ore + "block", MaterialsSetup::createStandardBlock);
+            var raw_ore_block = BLOCKS.register("raw_" + ore + "_block", MaterialsSetup::createStandardBlock);
             RAW_ORE_BLOCKS.add(raw_ore_block);
             RAW_ORE_BLOCKS_ITEMS.add(ITEMS.register("raw_" + ore + "_block", () -> new BlockItem(raw_ore_block.get(), Allomancy.createStandardItemProperties())));
 

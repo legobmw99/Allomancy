@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:aluminum_pattern"
+    ]
+  },
+  "criteria": {
+    "has_aluminum_flakes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:aluminum_flakes"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:aluminum_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_aluminum_flakes",
+      "has_the_recipe"
+    ]
+  ]
+}

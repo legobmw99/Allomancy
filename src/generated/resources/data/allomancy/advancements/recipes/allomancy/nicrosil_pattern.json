@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:nicrosil_pattern"
+    ]
+  },
+  "criteria": {
+    "has_nicrosil_flakes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:nicrosil_flakes"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:nicrosil_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_nicrosil_flakes",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " #g",
+    "l l",
+    " l "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:lead"
+    },
+    "l": {
+      "item": "minecraft:leather"
+    },
+    "g": {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "result": {
+    "item": "allomancy:coin_bag"
+  }
+}

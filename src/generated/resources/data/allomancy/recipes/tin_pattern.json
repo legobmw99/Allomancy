@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "allomancy:tin_flakes"
+    }
+  ],
+  "result": {
+    "item": "allomancy:tin_pattern"
+  }
+}

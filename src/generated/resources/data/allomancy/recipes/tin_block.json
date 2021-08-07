@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "allomancy:tin_ingot"
+    },
+    {
+      "item": "allomancy:tin_ingot"
+    },
+    {
+      "item": "allomancy:tin_ingot"
+    },
+    {
+      "item": "allomancy:tin_ingot"
+    },
+    {
+      "item": "allomancy:tin_ingot"
+    },
+    {
+      "item": "allomancy:tin_ingot"
+    },
+    {
+      "item": "allomancy:tin_ingot"
+    },
+    {
+      "item": "allomancy:tin_ingot"
+    },
+    {
+      "item": "allomancy:tin_ingot"
+    }
+  ],
+  "result": {
+    "item": "allomancy:tin_block"
+  }
+}

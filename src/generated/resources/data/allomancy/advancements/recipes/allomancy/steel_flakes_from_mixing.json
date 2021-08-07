@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:steel_flakes_from_mixing"
+    ]
+  },
+  "criteria": {
+    "has_allomantic_grinder": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:allomantic_grinder"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:steel_flakes_from_mixing"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_allomantic_grinder",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -29,7 +29,6 @@ import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -55,8 +54,12 @@ public class LootTables extends LootTableProvider {
             var ore = MaterialsSetup.ORE_BLOCKS.get(i).get();
             var ds = MaterialsSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
             var raw = MaterialsSetup.RAW_ORE_ITEMS.get(i).get();
+            var rawb = MaterialsSetup.RAW_ORE_BLOCKS.get(i).get();
+
             addSilkTouchBlock(ore.getRegistryName().getPath(), ore, raw, 1, 1);
             addSilkTouchBlock(ds.getRegistryName().getPath(), ds, raw, 1, 1);
+            addSimpleBlock(rawb.getRegistryName().getPath(), rawb);
+
         }
 
         addSimpleBlock("iron_button", ExtrasSetup.IRON_BUTTON.get());
@@ -74,12 +77,7 @@ public class LootTables extends LootTableProvider {
     // Useful boilerplate from McJtyLib
     protected void addSimpleBlock(String name, Block block) {
         Allomancy.LOGGER.debug("Creating Loot Table for block " + block.getRegistryName());
-        LootPool.Builder builder = LootPool
-                .lootPool()
-                .name(name)
-                .setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(block))
-                .when(ExplosionCondition.survivesExplosion());
+        LootPool.Builder builder = LootPool.lootPool().name(name).setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(block));
 
         this.lootTables.put(block, LootTable.lootTable().withPool(builder));
     }

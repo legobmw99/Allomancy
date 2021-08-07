@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:copper_pattern"
+    ]
+  },
+  "criteria": {
+    "has_copper_flakes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:copper_flakes"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:copper_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_copper_flakes",
+      "has_the_recipe"
+    ]
+  ]
+}

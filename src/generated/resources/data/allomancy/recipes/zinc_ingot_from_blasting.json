@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "allomancy:raw_zinc"
+  },
+  "result": "allomancy:zinc_ingot",
+  "experience": 0.6,
+  "cookingtime": 100
+}

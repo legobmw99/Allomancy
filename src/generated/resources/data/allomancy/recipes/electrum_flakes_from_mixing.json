@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "allomancy:gold_flakes"
+    },
+    {
+      "item": "allomancy:silver_flakes"
+    }
+  ],
+  "result": {
+    "item": "allomancy:electrum_flakes",
+    "count": 2
+  }
+}
