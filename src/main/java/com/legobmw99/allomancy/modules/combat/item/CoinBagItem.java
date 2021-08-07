@@ -59,7 +59,7 @@ public class CoinBagItem extends ProjectileWeaponItem {
         }
 
 
-        if (player.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.STEEL)).isPresent()) {
+        if (!itemstack.isEmpty() && player.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.STEEL)).isPresent()) {
             if (!world.isClientSide) {
 
                 Ammo type = getAmmoFromItem(itemstack.getItem());
