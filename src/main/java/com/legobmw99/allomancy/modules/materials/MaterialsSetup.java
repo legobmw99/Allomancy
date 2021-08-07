@@ -9,7 +9,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.OreBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.common.MinecraftForge;
@@ -50,22 +49,6 @@ public class MaterialsSetup {
     public static final int SILVER = METAL_ITEM_LEN++;
 
     static {
-        for (String ore : ORE_METALS) {
-            var ore_block = BLOCKS.register(ore + "_ore", MaterialsSetup::createStandardOre);
-            ORE_BLOCKS.add(ore_block);
-            ORE_BLOCKS_ITEMS.add(ITEMS.register(ore + "_ore", () -> new BlockItem(ore_block.get(), Allomancy.createStandardItemProperties())));
-
-            var ds_ore_block = BLOCKS.register("deepslate_" + ore + "_ore", MaterialsSetup::createDeepslateBlock);
-            DEEPSLATE_ORE_BLOCKS.add(ds_ore_block);
-            DEEPSLATE_ORE_BLOCKS_ITEMS.add(ITEMS.register("deepslate_" + ore + "_ore", () -> new BlockItem(ds_ore_block.get(), Allomancy.createStandardItemProperties())));
-
-            var raw_ore_block = BLOCKS.register("raw_" + ore + "_block", MaterialsSetup::createStandardBlock);
-            RAW_ORE_BLOCKS.add(raw_ore_block);
-            RAW_ORE_BLOCKS_ITEMS.add(ITEMS.register("raw_" + ore + "_block", () -> new BlockItem(raw_ore_block.get(), Allomancy.createStandardItemProperties())));
-
-            RAW_ORE_ITEMS.add(ITEMS.register("raw_" + ore, Allomancy::createStandardItem));
-        }
-
         for (Metal mt : Metal.values()) {
             String name = mt.getName();
             FLAKES.add(MaterialsSetup.ITEMS.register(name + "_flakes", Allomancy::createStandardItem));
@@ -94,6 +77,21 @@ public class MaterialsSetup {
         STORAGE_BLOCKS.add(BLOCKS.register("silver_block", MaterialsSetup::createStandardBlock));
         STORAGE_BLOCK_ITEMS.add(ITEMS.register("silver_block", () -> new BlockItem(STORAGE_BLOCKS.get(SILVER).get(), Allomancy.createStandardItemProperties())));
 
+        for (String ore : ORE_METALS) {
+            var ore_block = BLOCKS.register(ore + "_ore", MaterialsSetup::createStandardOre);
+            ORE_BLOCKS.add(ore_block);
+            ORE_BLOCKS_ITEMS.add(ITEMS.register(ore + "_ore", () -> new BlockItem(ore_block.get(), Allomancy.createStandardItemProperties())));
+
+            var ds_ore_block = BLOCKS.register("deepslate_" + ore + "_ore", MaterialsSetup::createDeepslateBlock);
+            DEEPSLATE_ORE_BLOCKS.add(ds_ore_block);
+            DEEPSLATE_ORE_BLOCKS_ITEMS.add(ITEMS.register("deepslate_" + ore + "_ore", () -> new BlockItem(ds_ore_block.get(), Allomancy.createStandardItemProperties())));
+
+            var raw_ore_block = BLOCKS.register("raw_" + ore + "_block", MaterialsSetup::createStandardBlock);
+            RAW_ORE_BLOCKS.add(raw_ore_block);
+            RAW_ORE_BLOCKS_ITEMS.add(ITEMS.register("raw_" + ore + "_block", () -> new BlockItem(raw_ore_block.get(), Allomancy.createStandardItemProperties())));
+
+            RAW_ORE_ITEMS.add(ITEMS.register("raw_" + ore, Allomancy::createStandardItem));
+        }
     }
 
 
