@@ -38,7 +38,7 @@ public class AllomancyPowerCommand {
     }
 
     private static Collection<ServerPlayer> target(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        return EntityArgument.getPlayers(ctx, "target");
+        return EntityArgument.getPlayers(ctx, "targets");
     }
 
 
