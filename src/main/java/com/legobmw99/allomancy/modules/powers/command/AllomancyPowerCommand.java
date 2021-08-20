@@ -1,9 +1,9 @@
 package com.legobmw99.allomancy.modules.powers.command;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.api.enums.Metal;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -38,7 +38,7 @@ public class AllomancyPowerCommand {
     }
 
     private static Collection<ServerPlayerEntity> target(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
-        return EntityArgument.getPlayers(ctx, "target");
+        return EntityArgument.getPlayers(ctx, "targets");
     }
 
 
