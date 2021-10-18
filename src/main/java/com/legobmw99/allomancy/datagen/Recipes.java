@@ -212,13 +212,13 @@ public class Recipes extends RecipeProvider {
                        repeatWith(ing("forge:ingots/tin"), 2, ing("forge:ingots/lead")));
 
         buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.BRASS.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.ZINC.getIndex()).get(), alloy_save("brass"),
-                       repeatWith(ing("forge:ingots/copper"), 3, ing("forge:ingots/zinc")));
+                       repeatWith(ing(Items.COPPER_INGOT), 3, ing("forge:ingots/zinc")));
 
         buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.BRONZE.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.TIN.getIndex()).get(), alloy_save("bronze"),
-                       repeatWith(ing("forge:ingots/copper"), 3, ing("forge:ingots/tin")));
+                       repeatWith(ing(Items.COPPER_INGOT), 3, ing("forge:ingots/tin")));
 
         buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.DURALUMIN.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(),
-                       alloy_save("duralumin"), repeatWith(ing("forge:ingots/aluminum"), 3, ing("forge:ingots/copper")));
+                       alloy_save("duralumin"), repeatWith(ing("forge:ingots/aluminum"), 3, ing(Items.COPPER_INGOT)));
 
         buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.ELECTRUM.getIndex()).get(), 2, MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get(), alloy_save("electrum"),
                        ing("forge:ingots/silver"), ing(Items.GOLD_INGOT));

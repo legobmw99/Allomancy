@@ -8,6 +8,7 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.materials.world.OreGenerator;
 import com.legobmw99.allomancy.modules.powers.PowersSetup;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import net.minecraft.ChatFormatting;
@@ -52,6 +53,7 @@ public class Allomancy {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancyConfig::onLoad);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancyConfig::onReload);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(PowersClientSetup::registerParticle);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancerCapability::registerCapability);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(CombatClientSetup::registerEntityRenders);
 
         MinecraftForge.EVENT_BUS.addListener(Allomancy::registerCommands);

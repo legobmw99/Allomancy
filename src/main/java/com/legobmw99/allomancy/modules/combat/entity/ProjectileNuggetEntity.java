@@ -89,7 +89,7 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
                 this.level.addFreshEntity(new ItemEntity(this.level, this.position().x(), this.position().y(), this.position().z(), ammo));
             }
 
-            this.remove(false);
+            this.kill();
         }
     }
 

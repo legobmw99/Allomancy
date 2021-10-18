@@ -26,7 +26,6 @@ public class PowersSetup {
     public static void init(final FMLCommonSetupEvent e) {
         //Register our ArgumentType so it can be sent over network
         ArgumentTypes.register("allomancy_power", AllomancyPowerType.class, new EmptyArgumentSerializer<>(() -> AllomancyPowerType.INSTANCE));
-        AllomancerCapability.register();
         MinecraftForge.EVENT_BUS.register(CommonEventHandler.class);
     }
 

@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -27,7 +26,7 @@ import java.util.List;
 public class IronLeverBlock extends LeverBlock implements IAllomanticallyUsableBlock {
 
     public IronLeverBlock() {
-        super(Block.Properties.of(Material.METAL).noCollission().strength(1.0F).harvestLevel(2).harvestTool(ToolType.PICKAXE));
+        super(Block.Properties.of(Material.METAL).noCollission().strength(1.0F));
     }
 
     @Override

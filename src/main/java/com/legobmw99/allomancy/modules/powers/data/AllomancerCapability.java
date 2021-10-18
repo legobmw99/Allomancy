@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
 public class AllomancerCapability {
 
@@ -14,8 +15,8 @@ public class AllomancerCapability {
 
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "allomancy_data");
 
-    public static void register() {
-        CapabilityManager.INSTANCE.register(IAllomancerData.class);
+    public static void registerCapability(final RegisterCapabilitiesEvent event) {
+        event.register(IAllomancerData.class);
     }
 
 }

@@ -33,6 +33,9 @@ public class BlockTags extends BlockTagsProvider {
                 var block = MaterialsSetup.STORAGE_BLOCKS.get(mt.getIndex()).get();
                 addForgeTag("storage_blocks/" + mt.getName(), block);
                 makePickaxeMineable(block);
+                if (mt != Metal.ALUMINUM){
+                    addTag("beacon_base_blocks", block);
+                }
             }
         }
 
@@ -40,7 +43,11 @@ public class BlockTags extends BlockTagsProvider {
         addForgeTag("storage_blocks/lead", lead);
         var silver = MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.SILVER).get();
         addForgeTag("storage_blocks/silver", silver);
+        addTag("beacon_base_blocks", silver);
+
         makePickaxeMineable(lead, silver);
+
+
 
     }
 

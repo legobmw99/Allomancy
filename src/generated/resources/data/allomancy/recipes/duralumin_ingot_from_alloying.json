@@ -11,7 +11,7 @@
       "tag": "forge:ingots/aluminum"
     },
     {
-      "tag": "forge:ingots/copper"
+      "item": "minecraft:copper_ingot"
     }
   ],
   "result": {

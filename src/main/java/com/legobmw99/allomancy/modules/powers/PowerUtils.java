@@ -274,7 +274,7 @@ public class PowerUtils {
                 }
             } else {
                 target.level.explode(target, target.position().x(), target.position().y(), target.position().z(), 1.2F, false, Explosion.BlockInteraction.BREAK);
-                target.remove(false);
+                target.kill();
             }
         } catch (Exception e) {
             Allomancy.LOGGER.error("Failed to riot entity " + target + "! Please report this error!", e);

@@ -39,6 +39,6 @@ public class AllomancerDataProvider implements ICapabilitySerializable<CompoundT
     }
 
     public void invalidate() {
-        this.dataOptional.invalidate();
+//        this.dataOptional.invalidate(); // TODO
     }
 }

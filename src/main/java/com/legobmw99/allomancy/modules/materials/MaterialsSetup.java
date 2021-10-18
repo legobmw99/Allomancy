@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fmllegacy.RegistryObject;
@@ -106,22 +105,15 @@ public class MaterialsSetup {
     }
 
     public static Block createStandardBlock() {
-        return new Block(Block.Properties.of(Material.STONE).strength(2.1F).harvestTool(ToolType.PICKAXE).harvestLevel(2).requiresCorrectToolForDrops());
+        return new Block(Block.Properties.of(Material.STONE).strength(2.1F).requiresCorrectToolForDrops());
     }
 
     public static OreBlock createStandardOre() {
-        return new OreBlock(Block.Properties.of(Material.STONE).harvestTool(ToolType.PICKAXE).harvestLevel(2).requiresCorrectToolForDrops().strength(3.0F, 3.0F));
+        return new OreBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F));
     }
 
     public static OreBlock createDeepslateBlock() {
-        return new OreBlock(Block.Properties
-                                    .of(Material.STONE)
-                                    .harvestTool(ToolType.PICKAXE)
-                                    .harvestLevel(2)
-                                    .requiresCorrectToolForDrops()
-                                    .color(MaterialColor.DEEPSLATE)
-                                    .strength(4.5F, 3.0F)
-                                    .sound(SoundType.DEEPSLATE));
+        return new OreBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().color(MaterialColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE));
     }
 }
 

@@ -81,10 +81,14 @@ public class CommonEventHandler {
     public static void onPlayerClone(final PlayerEvent.Clone event) {
         if (!event.getPlayer().level.isClientSide()) {
 
-            Player player = event.getPlayer();
-            player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
+            event.getOriginal().reviveCaps();
 
+            Player player = event.getPlayer();
+
+            player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
+                System.out.println("hi from dta");
                 event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(oldData -> {
+                    System.out.println("hi from old data");
                     data.setDeathLoc(oldData.getDeathLoc(), oldData.getDeathDim());
                     if (!oldData.isUninvested()) { // make sure the new player has the same power status
                         for (Metal mt : Metal.values()) {
@@ -101,7 +105,9 @@ public class CommonEventHandler {
                         }
                     }
                 });
+                event.getOriginal().invalidateCaps();
             });
+            event.getOriginal().invalidateCaps();
 
             Network.sync(player);
         }
