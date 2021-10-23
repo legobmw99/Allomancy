@@ -309,49 +309,40 @@ public class ClientEventHandler {
                 return;
             }
             RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
-            RenderSystem.depthMask(true);
+            RenderSystem.disableTexture();
+            RenderSystem.disableDepthTest();
+            RenderSystem.depthMask(false);
             RenderSystem.disableCull();
             RenderSystem.enableBlend();
+            RenderSystem.disablePolygonOffset();
             RenderSystem.defaultBlendFunc();
-            RenderSystem.disableTexture();
 
 
-            PoseStack stack = RenderSystem.getModelViewStack();
+            PoseStack stack = event.getMatrixStack();
             stack.pushPose();
             Vec3 view = this.mc.cameraEntity.getEyePosition(event.getPartialTicks());
             stack.translate(-view.x, -view.y, -view.z);
-
-            //            stack.mulPoseMatrix(stack.last().pose());
-            //            System.out.println(stack.last().);
             RenderSystem.applyModelViewMatrix();
 
             double rho = 1;
-            double theta = (this.mc.player.getViewYRot(event.getPartialTicks())) * Math.PI / 180;
-            double phi = (this.mc.player.getViewXRot(event.getPartialTicks()) + 90) * Math.PI / 180;
-            //            System.out.println(theta);
+            float theta = (float) ((this.mc.player.getViewYRot(event.getPartialTicks()) + 90) * Math.PI / 180);
+            float phi = Mth.clamp((float) ((this.mc.player.getViewXRot(event.getPartialTicks()) + 90) * Math.PI / 180), 0.0001F, 3.14F);
 
-            Vec3 playervec = view.add(rho * Math.sin((float) phi) * Math.cos((float) theta), rho * Math.cos((float) phi), rho * Math.sin((float) phi) * Math.sin((float) theta));
 
-            //            double yaw = ((this.mc.player.getYRot() + 180) * Math.PI) / 180;
-            //            double pitch = ((this.mc.player.getXRot() + 90) * Math.PI) / 180;
-            //            // TODO broken
-            //            //            Vec3 playervec = view.add(Mth.sin((float) pitch) * Mth.cos((float) yaw) * dist, Mth.cos((float) pitch) * dist - 0.35,
-            //            //                                      Mth.sin((float) pitch) * Mth.sin((float) yaw) * dist);
-            //            Vec3 playervec = view.add(this.mc.gameRenderer.getMainCamera().getNearPlane().getBottomRight());
-            //            System.out.println();
+            Vec3 playervec = view.add(rho * Mth.sin(phi) * Mth.cos(theta), rho * Mth.cos(phi) - 0.35F, rho * Mth.sin(phi) * Mth.sin(theta));
+
             /*********************************************
              * IRON AND STEEL LINES                      *
              *********************************************/
 
-            ClientUtils.drawMetalLine(new Vec3(6, 4, 3), new Vec3(7, 6, 2), 1.5F, 0F, 0.6F, 1F);
 
             if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
                 for (Entity entity : this.metal_entities) {
-                    ClientUtils.drawMetalLine(playervec, entity.position(), 1.5F, 0F, 0.6F, 1F);
+                    ClientUtils.drawMetalLine(stack, playervec, entity.position(), 1.5F, 0F, 0.6F, 1F);
                 }
 
                 for (MetalBlockBlob mb : this.metal_blobs) {
-                    ClientUtils.drawMetalLine(playervec, mb.getCenter(), Mth.clamp(0.3F + mb.size() * 0.4F, 0.5F, 7.5F), 0F, 0.6F, 1F);
+                    ClientUtils.drawMetalLine(stack, playervec, mb.getCenter(), Mth.clamp(0.3F + mb.size() * 0.4F, 0.5F, 7.5F), 0F, 0.6F, 1F);
                 }
             }
 
@@ -360,7 +351,7 @@ public class ClientEventHandler {
              *********************************************/
             if ((data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER)))) {
                 for (Player playerEntity : this.nearby_allomancers) {
-                    ClientUtils.drawMetalLine(playervec, playerEntity.position(), 5.0F, 0.7F, 0.15F, 0.15F);
+                    ClientUtils.drawMetalLine(stack, playervec, playerEntity.position(), 5.0F, 0.7F, 0.15F, 0.15F);
                 }
             }
 
@@ -369,26 +360,28 @@ public class ClientEventHandler {
              *********************************************/
             if (data.isBurning(Metal.GOLD)) {
                 ResourceKey<Level> deathDim = data.getDeathDim();
-                if (deathDim != null && player.level.dimension() == deathDim) { //world .getDim (look for return type matches)
-                    ClientUtils.drawMetalLine(playervec, Vec3.atCenterOf(data.getDeathLoc()), 3.0F, 0.9F, 0.85F, 0.0F);
+                if (deathDim != null && player.level.dimension() == deathDim) {
+                    ClientUtils.drawMetalLine(stack, playervec, Vec3.atCenterOf(data.getDeathLoc()), 3.0F, 0.9F, 0.85F, 0.0F);
                 }
             }
             if (data.isBurning(Metal.ELECTRUM)) {
                 ResourceKey<Level> spawnDim = data.getSpawnDim();
                 if (spawnDim == null && player.level.dimension() == Level.OVERWORLD) { // overworld, no spawn --> use world spawn
                     BlockPos spawnLoc = new BlockPos(player.level.getLevelData().getXSpawn(), player.level.getLevelData().getYSpawn(), player.level.getLevelData().getZSpawn());
-                    ClientUtils.drawMetalLine(playervec, Vec3.atCenterOf(spawnLoc), 3.0F, 0.7F, 0.8F, 0.2F);
+                    ClientUtils.drawMetalLine(stack, playervec, Vec3.atCenterOf(spawnLoc), 3.0F, 0.7F, 0.8F, 0.2F);
 
                 } else if (spawnDim != null && player.level.dimension() == spawnDim) {
-                    ClientUtils.drawMetalLine(playervec, Vec3.atCenterOf(data.getSpawnLoc()), 3.0F, 0.7F, 0.8F, 0.2F);
+                    ClientUtils.drawMetalLine(stack, playervec, Vec3.atCenterOf(data.getSpawnLoc()), 3.0F, 0.7F, 0.8F, 0.2F);
                 }
             }
 
             stack.popPose();
             RenderSystem.applyModelViewMatrix();
 
-            RenderSystem.depthMask(true);
             RenderSystem.disableBlend();
+            RenderSystem.enablePolygonOffset();
+            RenderSystem.enableDepthTest();
+            RenderSystem.depthMask(true);
             RenderSystem.enableCull();
             RenderSystem.enableTexture();
 

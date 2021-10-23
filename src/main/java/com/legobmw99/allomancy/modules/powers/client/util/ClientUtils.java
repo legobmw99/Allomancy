@@ -5,10 +5,8 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.network.UpdateBurnPacket;
 import com.legobmw99.allomancy.network.Network;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -80,17 +78,19 @@ public class ClientUtils {
      * @param dest
      * @param width  the width of the line
      */
-    public static void drawMetalLine(Vec3 player, Vec3 dest, float width, float r, float g, float b) {
-        RenderSystem.lineWidth(width);
+    public static void drawMetalLine(PoseStack stack, Vec3 player, Vec3 dest, float width, float r, float g, float b) {
 
+        //        RenderSystem.lineWidth(width);
         Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder buffer = tessellator.getBuilder();
+        BufferBuilder builder = tessellator.getBuilder();
 
-        buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-        buffer.vertex(player.x(), player.y(), player.z()).color(r, g, b, 0.5f).endVertex();
-        buffer.vertex(dest.x(), dest.y(), dest.z()).color(r, g, b, 0.5f).endVertex();
-        tessellator.end();
+        builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
+        Matrix4f matrix4f = stack.last().pose();
+        builder.vertex(matrix4f, (float) player.x, (float) player.y, (float) player.z).color(r, g, b, 0.6f).endVertex();
+        builder.vertex(matrix4f, (float) dest.x, (float) dest.y, (float) dest.z).color(r, g, b, 0.6f).endVertex();
         RenderSystem.lineWidth(width);
+
+        tessellator.end();
 
     }
 
