@@ -15,6 +15,7 @@ import net.minecraft.data.HashCache;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -25,8 +26,8 @@ public class Advancements extends AdvancementProvider {
 
     private final DataGenerator gen;
 
-    public Advancements(DataGenerator generatorIn) {
-        super(generatorIn);
+    public Advancements(DataGenerator generatorIn, ExistingFileHelper existingFileHelper) {
+        super(generatorIn, existingFileHelper);
         this.gen = generatorIn;
     }
 

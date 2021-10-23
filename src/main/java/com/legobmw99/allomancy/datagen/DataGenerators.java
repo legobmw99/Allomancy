@@ -18,7 +18,7 @@ public class DataGenerators {
             BlockTags blocktags = new BlockTags(generator, Allomancy.MODID, event.getExistingFileHelper());
             generator.addProvider(blocktags);
             generator.addProvider(new ItemTags(generator, blocktags, Allomancy.MODID, event.getExistingFileHelper()));
-            generator.addProvider(new Advancements(generator));
+            generator.addProvider(new Advancements(generator, event.getExistingFileHelper()));
         }
         if (event.includeClient()) {
             generator.addProvider(new Languages(generator, Allomancy.MODID, "en_us"));

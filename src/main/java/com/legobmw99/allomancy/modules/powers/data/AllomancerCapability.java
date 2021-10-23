@@ -4,14 +4,14 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
 public class AllomancerCapability {
 
-    @CapabilityInject(IAllomancerData.class)
-    public static final Capability<IAllomancerData> PLAYER_CAP = null;
+    public static final Capability<IAllomancerData> PLAYER_CAP = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
     public static final ResourceLocation IDENTIFIER = new ResourceLocation(Allomancy.MODID, "allomancy_data");
 

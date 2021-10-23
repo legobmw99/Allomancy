@@ -93,21 +93,21 @@ public class MetalSelectScreen extends Screen {
                     radius *= 1.025f;
                 }
 
-                int gs = 0x40;
+                int gs = 0x55;
                 if (seg % 2 == 0) {
                     gs += 0x19;
                 }
 
                 gs = (!data.hasPower(mt) || data.getAmount(mt) == 0) ? 0 : gs;
 
-                int r = data.isBurning(mt) ? 0xFF : gs;
+                int r = gs;
                 int g = gs;
                 int b = gs;
                 int a = 0x99;
 
 
                 if (seg == 0) {
-                    buf.vertex(x, y, 0).color(r, g, b, a).endVertex();
+                    buf.vertex(x, y, 0).color(0x19, 0x19, 0x19, 0x15).endVertex();
                 }
 
 

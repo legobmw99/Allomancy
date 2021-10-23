@@ -31,7 +31,7 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyUsableB
 
     @Override
     public boolean useAllomantically(BlockState state, Level world, BlockPos pos, Player playerIn, boolean isPush) {
-        state = state.cycle(POWERED); // formerly cycle
+        state = state.cycle(POWERED);
         if (world.isClientSide) {
             return true;
         }
