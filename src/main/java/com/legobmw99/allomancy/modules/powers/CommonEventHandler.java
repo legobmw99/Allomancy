@@ -9,7 +9,6 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerDataProvider;
 import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +17,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -27,8 +25,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.Node;
-import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -39,7 +35,6 @@ import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public class CommonEventHandler {
 
@@ -48,7 +43,6 @@ public class CommonEventHandler {
         if (event.getObject() instanceof Player) {
             AllomancerDataProvider provider = new AllomancerDataProvider();
             event.addCapability(AllomancerCapability.IDENTIFIER, provider);
-            event.addListener(provider::invalidate);
         }
     }
 
@@ -86,9 +80,7 @@ public class CommonEventHandler {
             Player player = event.getPlayer();
 
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-                System.out.println("hi from dta");
                 event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(oldData -> {
-                    System.out.println("hi from old data");
                     data.setDeathLoc(oldData.getDeathLoc(), oldData.getDeathDim());
                     if (!oldData.isUninvested()) { // make sure the new player has the same power status
                         for (Metal mt : Metal.values()) {
@@ -105,8 +97,8 @@ public class CommonEventHandler {
                         }
                     }
                 });
-                event.getOriginal().invalidateCaps();
             });
+            event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).invalidate();
             event.getOriginal().invalidateCaps();
 
             Network.sync(player);
@@ -383,22 +375,22 @@ public class CommonEventHandler {
                         }
 
                         // TODO this would be atium? need a packet and a renderer
-                        if (false) { //todo
-                            BlockPos negative = curPlayer.blockPosition().offset(-30, -30, -30);
-                            BlockPos positive = curPlayer.blockPosition().offset(30, 30, 30);
-                            var nearby_players = curPlayer.level.getEntitiesOfClass(Mob.class, new AABB(negative, positive), Objects::nonNull);
-
-                            for (Mob mob : nearby_players) {
-                                Path path = mob.getNavigation().getPath();
-                                if (path != null) {
-                                    int count = path.getNodeCount();
-                                    for (int i = 0; i < count; i++) {
-                                        Node point = path.getNode(i);
-                                        event.world.addParticle(ParticleTypes.EXPLOSION, point.x + 0.5, point.y + 0.5, point.z + 0.5, 0, 0, 0);
-                                    }
-                                }
-                            }
-                        }
+                        //                        if (false) {
+                        //                            BlockPos negative = curPlayer.blockPosition().offset(-30, -30, -30);
+                        //                            BlockPos positive = curPlayer.blockPosition().offset(30, 30, 30);
+                        //                            var nearby_players = curPlayer.level.getEntitiesOfClass(Mob.class, new AABB(negative, positive), Objects::nonNull);
+                        //
+                        //                            for (Mob mob : nearby_players) {
+                        //                                Path path = mob.getNavigation().getPath();
+                        //                                if (path != null) {
+                        //                                    int count = path.getNodeCount();
+                        //                                    for (int i = 0; i < count; i++) {
+                        //                                        Node point = path.getNode(i);
+                        //                                        event.world.addParticle(ParticleTypes.EXPLOSION, point.x + 0.5, point.y + 0.5, point.z + 0.5, 0, 0, 0);
+                        //                                    }
+                        //                                }
+                        //                            }
+                        //                        }
 
                     }
                 });
