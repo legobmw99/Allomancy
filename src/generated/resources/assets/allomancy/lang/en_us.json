@@ -1,6 +1,8 @@
 {
   "advancements.become_mistborn.desc": "You have a power most people envy...",
   "advancements.become_mistborn.title": "Become Mistborn!",
+  "advancements.local_metallurgist.desc": "Craft a grinder to begin mixing metals",
+  "advancements.local_metallurgist.title": "Local Metallurgist!",
   "block.allomancy.aluminum_block": "Aluminum Block",
   "block.allomancy.aluminum_ore": "Aluminum Ore",
   "block.allomancy.bendalloy_block": "Bendalloy Block",

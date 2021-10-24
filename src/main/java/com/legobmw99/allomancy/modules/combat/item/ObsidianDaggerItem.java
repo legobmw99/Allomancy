@@ -16,7 +16,7 @@ public class ObsidianDaggerItem extends SwordItem {
     private static final Tier tier = new Tier() {
         @Override
         public int getUses() {
-            return 3;
+            return 2;
         }
 
         @Override
@@ -58,7 +58,7 @@ public class ObsidianDaggerItem extends SwordItem {
     // Disable mending on daggers
     @Override
     public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        if (EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.MENDING)) {
+        if (EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.MENDING) || EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.UNBREAKING)) {
             return false;
         }
         return super.isBookEnchantable(stack, book);
@@ -66,7 +66,7 @@ public class ObsidianDaggerItem extends SwordItem {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        if (enchantment.equals(Enchantments.MENDING)) {
+        if (enchantment.equals(Enchantments.MENDING) || enchantment.equals(Enchantments.UNBREAKING)) {
             return false;
         }
         return super.canApplyAtEnchantingTable(stack, enchantment);

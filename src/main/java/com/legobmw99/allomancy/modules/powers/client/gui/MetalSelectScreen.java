@@ -105,11 +105,9 @@ public class MetalSelectScreen extends Screen {
                 int b = gs;
                 int a = 0x99;
 
-
                 if (seg == 0) {
                     buf.vertex(x, y, 0).color(0x19, 0x19, 0x19, 0x15).endVertex();
                 }
-
 
                 for (float v = 0; v < degPer + step / 2; v += step) {
                     float rad = v + seg * degPer;

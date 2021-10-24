@@ -45,7 +45,7 @@ public class MaterialsConfig {
     public static ForgeConfigSpec.IntValue zinc_min_y;
     public static ForgeConfigSpec.IntValue zinc_max_y;
 
-    public static void init(ForgeConfigSpec.Builder common_builder, ForgeConfigSpec.Builder client_builder) {
+    public static void init(ForgeConfigSpec.Builder common_builder) {
         common_builder.comment("Settings for the mod's added generation").push("world");
 
         common_builder.push("aluminum");

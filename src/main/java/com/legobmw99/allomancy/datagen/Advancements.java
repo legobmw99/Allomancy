@@ -9,6 +9,7 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.ConsumeItemTrigger;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -35,11 +36,20 @@ public class Advancements extends AdvancementProvider {
         Advancement.Builder
                 .advancement()
                 .parent(Advancement.Builder.advancement().build(new ResourceLocation("adventure/root"))) // hacky
+                .display(ConsumeSetup.ALLOMANTIC_GRINDER.get(), new TranslatableComponent("advancements.local_metallurgist.title"),
+                         new TranslatableComponent("advancements.local_metallurgist.desc"), null, FrameType.TASK, true, true, false)
+                .addCriterion("grinder", InventoryChangeTrigger.TriggerInstance.hasItems(ConsumeSetup.ALLOMANTIC_GRINDER.get()))
+                .save(consumer, "allomancy:main/metallurgist");
+
+        Advancement.Builder
+                .advancement()
+                .parent(Advancement.Builder.advancement().build(new ResourceLocation(Allomancy.MODID, "main/metallurgist"))) // hacky
                 .display(CombatSetup.MISTCLOAK.get(), new TranslatableComponent("advancements.become_mistborn.title"),
                          new TranslatableComponent("advancements.become_mistborn.desc"), null, FrameType.CHALLENGE, true, true, true)
                 .addCriterion("lerasium_nugget", ConsumeItemTrigger.TriggerInstance.usedItem(ConsumeSetup.LERASIUM_NUGGET.get()))
                 .rewards(AdvancementRewards.Builder.experience(100))
                 .save(consumer, "allomancy:main/become_mistborn");
+
 
     }
 

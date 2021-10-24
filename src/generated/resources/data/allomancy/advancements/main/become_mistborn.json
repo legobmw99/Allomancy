@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:adventure/root",
+  "parent": "allomancy:main/metallurgist",
   "display": {
     "icon": {
       "item": "allomancy:mistcloak",

@@ -97,6 +97,8 @@ public class Languages extends LanguageProvider {
 
         add(CombatSetup.NUGGET_PROJECTILE.get(), "Nugget Projectile");
 
+        add("advancements.local_metallurgist.title", "Local Metallurgist!");
+        add("advancements.local_metallurgist.desc", "Craft a grinder to begin mixing metals");
         add("advancements.become_mistborn.title", "Become Mistborn!");
         add("advancements.become_mistborn.desc", "You have a power most people envy...");
 
