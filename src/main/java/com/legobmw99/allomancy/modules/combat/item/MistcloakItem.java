@@ -3,13 +3,13 @@ package com.legobmw99.allomancy.modules.combat.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 
 import java.util.UUID;
 
@@ -19,7 +19,7 @@ public class MistcloakItem extends ArmorItem {
     private final Multimap<Attribute, AttributeModifier> attributes;
 
     public MistcloakItem() {
-        super(CombatSetup.WoolArmor, EquipmentSlotType.CHEST, new Item.Properties().tab(ItemGroup.TAB_COMBAT));
+        super(CombatSetup.WoolArmor, EquipmentSlot.CHEST, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT));
 
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         UUID uuid = ARMOR_MODIFIERS[this.slot.getIndex()];
@@ -30,7 +30,7 @@ public class MistcloakItem extends ArmorItem {
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
         return equipmentSlot == this.slot ? this.attributes : super.getDefaultAttributeModifiers(equipmentSlot);
 
     }

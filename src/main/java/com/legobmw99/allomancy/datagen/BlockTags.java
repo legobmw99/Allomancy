@@ -1,11 +1,11 @@
 package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.api.enums.Metal;
-import net.minecraft.block.Block;
-import net.minecraft.data.BlockTagsProvider;
+import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 
@@ -17,24 +17,36 @@ public class BlockTags extends BlockTagsProvider {
 
     @Override
     protected void addTags() {
-        addForgeTag("ores/aluminum", MaterialsSetup.ALUMINUM_ORE.get());
-        addForgeTag("ores/cadmium", MaterialsSetup.CADMIUM_ORE.get());
-        addForgeTag("ores/chromium", MaterialsSetup.CHROMIUM_ORE.get());
-        addForgeTag("ores/copper", MaterialsSetup.COPPER_ORE.get());
-        addForgeTag("ores/lead", MaterialsSetup.LEAD_ORE.get());
-        addForgeTag("ores/silver", MaterialsSetup.SILVER_ORE.get());
-        addForgeTag("ores/tin", MaterialsSetup.TIN_ORE.get());
-        addForgeTag("ores/zinc", MaterialsSetup.ZINC_ORE.get());
+
+        for (int i = 0; i < MaterialsSetup.ORE_METALS.length; i++) {
+            var block = MaterialsSetup.ORE_BLOCKS.get(i).get();
+            var ds = MaterialsSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
+            var raw = MaterialsSetup.RAW_ORE_BLOCKS.get(i).get();
+
+            String path = block.getRegistryName().getPath();
+            addForgeTag("ores/" + path, block, ds);
+            makePickaxeMineable(block, ds, raw);
+        }
 
         for (Metal mt : Metal.values()) {
             if (!mt.isVanilla()) {
-                addForgeTag("storage_blocks/" + mt.getName(), MaterialsSetup.STORAGE_BLOCKS.get(mt.getIndex()).get());
+                var block = MaterialsSetup.STORAGE_BLOCKS.get(mt.getIndex()).get();
+                addForgeTag("storage_blocks/" + mt.getName(), block);
+                makePickaxeMineable(block);
+                if (mt != Metal.ALUMINUM){
+                    addTag("beacon_base_blocks", block);
+                }
             }
         }
 
-        addForgeTag("storage_blocks/lead", MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.LEAD).get());
+        var lead = MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.LEAD).get();
+        addForgeTag("storage_blocks/lead", lead);
+        var silver = MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.SILVER).get();
+        addForgeTag("storage_blocks/silver", silver);
+        addTag("beacon_base_blocks", silver);
 
-        addForgeTag("storage_blocks/silver", MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.SILVER).get());
+        makePickaxeMineable(lead, silver);
+
 
 
     }
@@ -44,6 +56,16 @@ public class BlockTags extends BlockTagsProvider {
         tag(net.minecraft.tags.BlockTags.bind("forge:" + name)).replace(false).add(items);
     }
 
+    private void makePickaxeMineable(Block... items) {
+        addTag("mineable/pickaxe", items);
+        addTag("needs_stone_tool", items);
+
+    }
+
+    private void addTag(String name, Block... items) {
+        Allomancy.LOGGER.debug("Creating block tag for minecraft:" + name);
+        tag(net.minecraft.tags.BlockTags.bind("minecraft:" + name)).replace(false).add(items);
+    }
 
     @Override
     public String getName() {

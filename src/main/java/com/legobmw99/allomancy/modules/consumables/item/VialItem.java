@@ -1,24 +1,23 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
-import com.legobmw99.allomancy.api.enums.Metal;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -33,7 +32,7 @@ public class VialItem extends Item {
 
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity livingEntity) {
+    public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity livingEntity) {
 
         if (!stack.hasTag()) {
             return stack;
@@ -49,10 +48,10 @@ public class VialItem extends Item {
             }
         });
 
-        if (!((PlayerEntity) (livingEntity)).abilities.instabuild) {
+        if (!((Player) (livingEntity)).getAbilities().instabuild) {
             stack.shrink(1);
 
-            if (!((PlayerEntity) livingEntity).inventory.add(new ItemStack(ConsumeSetup.VIAL.get(), 1))) {
+            if (!((Player) livingEntity).getInventory().add(new ItemStack(ConsumeSetup.VIAL.get(), 1))) {
                 world.addFreshEntity(new ItemEntity(world, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), new ItemStack(ConsumeSetup.VIAL.get(), 1)));
             }
         }
@@ -66,15 +65,15 @@ public class VialItem extends Item {
     }
 
     @Override
-    public UseAction getUseAnimation(ItemStack stack) {
-        return UseAction.DRINK;
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.DRINK;
     }
 
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
-        ActionResult<ItemStack> res = playerIn.getCapability(AllomancerCapability.PLAYER_CAP).map(data -> {
+        return playerIn.getCapability(AllomancerCapability.PLAYER_CAP).map(data -> {
             //If all the ones being filled are full, don't allow
             int filling = 0, full = 0;
             if (itemStackIn.hasTag()) {
@@ -89,18 +88,17 @@ public class VialItem extends Item {
 
                 if (filling != full) {
                     playerIn.startUsingItem(hand);
-                    return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
+                    return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStackIn);
                 }
             }
-            return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
-        }).orElse(new ActionResult<>(ActionResultType.FAIL, itemStackIn));
-        return res;
+            return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
+        }).orElse(new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn));
     }
 
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (stack.hasTag()) {
             boolean full_display = Screen.hasShiftDown();
@@ -109,15 +107,15 @@ public class VialItem extends Item {
                 if (stack.getTag().getBoolean(mt.getName())) {
                     count++;
                     if (full_display) {
-                        IFormattableTextComponent metal = Allomancy.addColorToText("metals." + mt.getName(), TextFormatting.GRAY);
+                        MutableComponent metal = Allomancy.addColorToText("metals." + mt.getName(), ChatFormatting.GRAY);
                         tooltip.add(metal);
                     }
                 }
             }
             if (!full_display) {
-                IFormattableTextComponent lcount = Allomancy.addColorToText("item.allomancy.vial.lore_count", TextFormatting.GRAY, count);
+                MutableComponent lcount = Allomancy.addColorToText("item.allomancy.vial.lore_count", ChatFormatting.GRAY, count);
                 tooltip.add(lcount);
-                IFormattableTextComponent linst = Allomancy.addColorToText("item.allomancy.vial.lore_inst", TextFormatting.GRAY);
+                MutableComponent linst = Allomancy.addColorToText("item.allomancy.vial.lore_inst", ChatFormatting.GRAY);
                 tooltip.add(linst);
 
             }
@@ -131,12 +129,12 @@ public class VialItem extends Item {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (group == Allomancy.allomancy_group) {
             items.add(new ItemStack(this, 1));
 
             ItemStack resultItem = new ItemStack(ConsumeSetup.VIAL.get(), 1);
-            CompoundNBT nbt = new CompoundNBT();
+            CompoundTag nbt = new CompoundTag();
             for (Metal mt : Metal.values()) {
                 nbt.putBoolean(mt.getName(), true);
             }

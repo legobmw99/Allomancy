@@ -3,10 +3,10 @@ package com.legobmw99.allomancy.modules.powers.network;
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -27,19 +27,19 @@ public class ChangeEmotionPacket {
         this.make_aggressive = make_aggressive;
     }
 
-    public static ChangeEmotionPacket decode(PacketBuffer buf) {
+    public static ChangeEmotionPacket decode(FriendlyByteBuf buf) {
         return new ChangeEmotionPacket(buf.readInt(), buf.readBoolean());
     }
 
-    public void encode(PacketBuffer buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeInt(this.entityID);
         buf.writeBoolean(this.make_aggressive);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            PlayerEntity allomancer = ctx.get().getSender();
-            CreatureEntity target = (CreatureEntity) allomancer.level.getEntity(this.entityID);
+            Player allomancer = ctx.get().getSender();
+            PathfinderMob target = (PathfinderMob) allomancer.level.getEntity(this.entityID);
             if (target == null) {
                 return;
             }

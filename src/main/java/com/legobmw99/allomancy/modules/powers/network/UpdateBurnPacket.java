@@ -1,11 +1,11 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.api.enums.Metal;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.Arrays;
 import java.util.function.Supplier;
@@ -20,18 +20,18 @@ public class UpdateBurnPacket {
      * Send request to the server to change the burning state of a metal
      *
      * @param mt    the metal
-     * @param value whether or not it is burning
+     * @param value whether it is burning
      */
     public UpdateBurnPacket(Metal mt, boolean value) {
         this.mt = mt;
         this.value = value; // Convert bool to int
     }
 
-    public static UpdateBurnPacket decode(PacketBuffer buf) {
+    public static UpdateBurnPacket decode(FriendlyByteBuf buf) {
         return new UpdateBurnPacket(buf.readEnum(Metal.class), buf.readBoolean());
     }
 
-    public void encode(PacketBuffer buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeEnum(this.mt);
         buf.writeBoolean(this.value);
     }
@@ -39,7 +39,7 @@ public class UpdateBurnPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
 
-            ServerPlayerEntity player = ctx.get().getSender();
+            ServerPlayer player = ctx.get().getSender();
 
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 if (data.hasPower(this.mt) && data.getAmount(this.mt) > 0) {

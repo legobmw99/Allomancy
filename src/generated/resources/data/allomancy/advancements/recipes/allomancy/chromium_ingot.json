@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:chromium_ingot"
+    ]
+  },
+  "criteria": {
+    "has_raw_chromium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:raw_chromium"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:chromium_ingot"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_raw_chromium",
+      "has_the_recipe"
+    ]
+  ]
+}

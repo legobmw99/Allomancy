@@ -1,24 +1,24 @@
 package com.legobmw99.allomancy.modules.consumables.item.recipe;
 
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.api.enums.Metal;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.RegistryObject;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 
-public class VialItemRecipe extends SpecialRecipe {
+public class VialItemRecipe extends CustomRecipe {
     private static final Ingredient INGREDIENT_FLAKES = Ingredient.of(
             MaterialsSetup.FLAKES.subList(0, Metal.values().length).stream().map(RegistryObject::get).toArray(Item[]::new));
     private static final Ingredient INGREDIENT_VIAL = Ingredient.of(ConsumeSetup.VIAL.get());
@@ -31,7 +31,7 @@ public class VialItemRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         this.item_result = ItemStack.EMPTY;
 
         boolean[] metals = new boolean[Metal.values().length];
@@ -75,7 +75,7 @@ public class VialItemRecipe extends SpecialRecipe {
         }
         if (ingredients[0] && ingredients[1]) {
             this.item_result = new ItemStack(ConsumeSetup.VIAL.get(), 1);
-            CompoundNBT nbt = new CompoundNBT();
+            CompoundTag nbt = new CompoundTag();
             for (Metal mt : Metal.values()) {
                 nbt.putBoolean(mt.getName(), metals[mt.getIndex()]);
             }
@@ -89,7 +89,7 @@ public class VialItemRecipe extends SpecialRecipe {
 
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) { //getCraftingResult
+    public ItemStack assemble(CraftingContainer inv) { //getCraftingResult
         return this.item_result.copy();
     }
 
@@ -110,12 +110,12 @@ public class VialItemRecipe extends SpecialRecipe {
 
     @Nonnull
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ConsumeSetup.VIAL_RECIPE_SERIALIZER.get();
     }
 
 
-    public static class Serializer extends SpecialRecipeSerializer<VialItemRecipe> {
+    public static class Serializer extends SimpleRecipeSerializer<VialItemRecipe> {
 
         public Serializer() {
             super(VialItemRecipe::new);

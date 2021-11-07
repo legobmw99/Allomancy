@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
@@ -18,7 +18,7 @@ public class DataGenerators {
             BlockTags blocktags = new BlockTags(generator, Allomancy.MODID, event.getExistingFileHelper());
             generator.addProvider(blocktags);
             generator.addProvider(new ItemTags(generator, blocktags, Allomancy.MODID, event.getExistingFileHelper()));
-            generator.addProvider(new Advancements(generator));
+            generator.addProvider(new Advancements(generator, event.getExistingFileHelper()));
         }
         if (event.includeClient()) {
             generator.addProvider(new Languages(generator, Allomancy.MODID, "en_us"));

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:lead_ingot"
+    ]
+  },
+  "criteria": {
+    "has_raw_lead": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:raw_lead"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:lead_ingot"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_raw_lead",
+      "has_the_recipe"
+    ]
+  ]
+}

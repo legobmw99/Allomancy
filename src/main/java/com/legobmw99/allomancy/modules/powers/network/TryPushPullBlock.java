@@ -3,10 +3,10 @@ package com.legobmw99.allomancy.modules.powers.network;
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -26,25 +26,24 @@ public class TryPushPullBlock {
         this.direction = direction;
     }
 
-    public static TryPushPullBlock decode(PacketBuffer buf) {
+    public static TryPushPullBlock decode(FriendlyByteBuf buf) {
         return new TryPushPullBlock(buf.readBlockPos(), buf.readInt());
     }
 
-    public void encode(PacketBuffer buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeBlockPos(this.blockPos);
         buf.writeInt(this.direction);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerPlayerEntity player = ctx.get().getSender();
+            ServerPlayer player = ctx.get().getSender();
             BlockPos pos = this.blockPos;
             // Sanity check to make sure  the block is loaded in the server
             if (player.level.isLoaded(pos)) {
                 // activate blocks
-                if (player.level.getBlockState(pos).getBlock() instanceof IAllomanticallyUsableBlock) {
-                    ((IAllomanticallyUsableBlock) player.level.getBlockState(pos).getBlock()).useAllomantically(player.level.getBlockState(pos), player.level, pos, player,
-                                                                                                                this.direction > 0);
+                if (player.level.getBlockState(pos).getBlock() instanceof IAllomanticallyUsableBlock block) {
+                    block.useAllomantically(player.level.getBlockState(pos), player.level, pos, player, this.direction > 0);
                 } else if (PowerUtils.isBlockStateMetal(player.level.getBlockState(pos)) // Check whitelist on server
                            || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() // check coin bag
                                && (!player.getProjectile(player.getMainHandItem()).isEmpty()) && this.direction > 0)) {

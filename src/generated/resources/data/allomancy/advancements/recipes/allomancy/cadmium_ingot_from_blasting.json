@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "allomancy:cadmium_ingot_from_blasting"
+    ]
+  },
+  "criteria": {
+    "has_raw_cadmium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:raw_cadmium"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "allomancy:cadmium_ingot_from_blasting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_raw_cadmium",
+      "has_the_recipe"
+    ]
+  ]
+}

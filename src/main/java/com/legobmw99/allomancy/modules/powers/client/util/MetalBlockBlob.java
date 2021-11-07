@@ -1,18 +1,18 @@
 package com.legobmw99.allomancy.modules.powers.client.util;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class MetalBlockBlob {
 
-    private static final World level = Minecraft.getInstance().level;
+    private static final Level level = Minecraft.getInstance().level;
     private final Set<BlockPos> blocks = new HashSet<>();
-    private Vector3d center = null;
+    private Vec3 center = null;
 
     public MetalBlockBlob(BlockPos initial) {
         this.add(initial);
@@ -36,20 +36,20 @@ public class MetalBlockBlob {
         return blob3;
     }
 
+    private static Vec3 getCenterOfBlock(BlockPos pos) {
+        try {
+            return Vec3.atLowerCornerOf(pos).add(level.getBlockState(pos).getShape(level, pos).bounds().getCenter());
+        } catch (UnsupportedOperationException e) {
+            return Vec3.atCenterOf(pos);
+        }
+    }
+
     public boolean isMatch(BlockPos pos) {
-        return this.blocks.stream().anyMatch(bp -> Vector3d.atCenterOf(bp).distanceTo(Vector3d.atCenterOf(pos)) <= 1.5);
+        return this.blocks.stream().anyMatch(bp -> Vec3.atCenterOf(bp).distanceTo(Vec3.atCenterOf(pos)) <= 1.5);
     }
 
     public int size() {
         return this.blocks.size();
-    }
-
-    private Vector3d getCenterOfBlock(BlockPos pos) {
-        try {
-            return Vector3d.atLowerCornerOf(pos).add(level.getBlockState(pos).getBlockState().getShape(level, pos).bounds().getCenter());
-        } catch (UnsupportedOperationException e) {
-            return Vector3d.atCenterOf(pos);
-        }
     }
 
     public boolean add(BlockPos pos) {
@@ -73,7 +73,7 @@ public class MetalBlockBlob {
         return this.blocks.contains(pos);
     }
 
-    public Vector3d getCenter() {
+    public Vec3 getCenter() {
         return this.center;
     }
 

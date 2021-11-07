@@ -5,8 +5,8 @@ import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerCommand;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerType;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
-import net.minecraft.command.arguments.ArgumentSerializer;
-import net.minecraft.command.arguments.ArgumentTypes;
+import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -25,8 +25,7 @@ public class PowersSetup {
 
     public static void init(final FMLCommonSetupEvent e) {
         //Register our ArgumentType so it can be sent over network
-        ArgumentTypes.register("allomancy_power", AllomancyPowerType.class, new ArgumentSerializer<>(() -> AllomancyPowerType.INSTANCE));
-        AllomancerCapability.register();
+        ArgumentTypes.register("allomancy_power", AllomancyPowerType.class, new EmptyArgumentSerializer<>(() -> AllomancyPowerType.INSTANCE));
         MinecraftForge.EVENT_BUS.register(CommonEventHandler.class);
     }
 

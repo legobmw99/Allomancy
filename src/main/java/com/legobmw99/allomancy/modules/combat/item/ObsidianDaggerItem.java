@@ -1,22 +1,22 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.*;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class ObsidianDaggerItem extends SwordItem {
 
     private static final int ATTACK_DAMAGE = 12;
     private static final float ATTACK_SPEED = 9.2F;
 
-    private static final IItemTier tier = new IItemTier() {
+    private static final Tier tier = new Tier() {
         @Override
         public int getUses() {
-            return 3;
+            return 2;
         }
 
         @Override
@@ -46,7 +46,7 @@ public class ObsidianDaggerItem extends SwordItem {
     };
 
     public ObsidianDaggerItem() {
-        super(tier, ATTACK_DAMAGE, ATTACK_SPEED, new Item.Properties().tab(ItemGroup.TAB_COMBAT));
+        super(tier, ATTACK_DAMAGE, ATTACK_SPEED, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT));
     }
 
     // prevent dagger from mining
@@ -58,7 +58,7 @@ public class ObsidianDaggerItem extends SwordItem {
     // Disable mending on daggers
     @Override
     public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        if (EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.MENDING)) {
+        if (EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.MENDING) || EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.UNBREAKING)) {
             return false;
         }
         return super.isBookEnchantable(stack, book);
@@ -66,7 +66,7 @@ public class ObsidianDaggerItem extends SwordItem {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        if (enchantment.equals(Enchantments.MENDING)) {
+        if (enchantment.equals(Enchantments.MENDING) || enchantment.equals(Enchantments.UNBREAKING)) {
             return false;
         }
         return super.canApplyAtEnchantingTable(stack, enchantment);

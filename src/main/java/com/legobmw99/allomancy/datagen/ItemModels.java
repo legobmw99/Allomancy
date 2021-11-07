@@ -1,14 +1,14 @@
 package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.api.enums.Metal;
-import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -23,51 +23,56 @@ public class ItemModels extends ItemModelProvider {
         parentedBlock(ExtrasSetup.IRON_BUTTON.get(), "block/iron_button_inventory");
         itemGenerated(ExtrasSetup.IRON_LEVER_ITEM.get(), "block/iron_lever");
 
-        itemGenerated(CombatSetup.MISTCLOAK.get(), "item/mistcloak");
-        itemGenerated(CombatSetup.COIN_BAG.get(), "item/coin_bag");
-        itemHandheld(CombatSetup.OBSIDIAN_DAGGER.get(), "item/obsidian_dagger");
-        largeItemHandheld(CombatSetup.KOLOSS_BLADE.get(), "item/koloss_blade");
+        itemGenerated(CombatSetup.MISTCLOAK.get());
+        itemGenerated(CombatSetup.COIN_BAG.get());
+        itemHandheld(CombatSetup.OBSIDIAN_DAGGER.get());
+        largeItemHandheld(CombatSetup.KOLOSS_BLADE.get());
 
-        itemGenerated(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "item/allomantic_grinder");
-        itemGenerated(ConsumeSetup.LERASIUM_NUGGET.get(), "item/lerasium_nugget");
+        itemGenerated(ConsumeSetup.ALLOMANTIC_GRINDER.get());
+        itemGenerated(ConsumeSetup.LERASIUM_NUGGET.get());
 
-        parentedBlock(MaterialsSetup.ALUMINUM_ORE.get(), "block/aluminum_ore");
-        parentedBlock(MaterialsSetup.CADMIUM_ORE.get(), "block/cadmium_ore");
-        parentedBlock(MaterialsSetup.CHROMIUM_ORE.get(), "block/chromium_ore");
-        parentedBlock(MaterialsSetup.COPPER_ORE.get(), "block/copper_ore");
-        parentedBlock(MaterialsSetup.LEAD_ORE.get(), "block/lead_ore");
-        parentedBlock(MaterialsSetup.SILVER_ORE.get(), "block/silver_ore");
-        parentedBlock(MaterialsSetup.TIN_ORE.get(), "block/tin_ore");
-        parentedBlock(MaterialsSetup.ZINC_ORE.get(), "block/zinc_ore");
+        for (var rblock : MaterialsSetup.ORE_BLOCKS) {
+            parentedBlock(rblock.get());
+        }
+        for (var rblock : MaterialsSetup.DEEPSLATE_ORE_BLOCKS) {
+            parentedBlock(rblock.get());
+        }
+        for (var rblock : MaterialsSetup.RAW_ORE_BLOCKS) {
+            parentedBlock(rblock.get());
+        }
+
+        for (var ritem : MaterialsSetup.RAW_ORE_ITEMS) {
+            itemGenerated(ritem.get());
+        }
 
         for (int i = 0; i < MaterialsSetup.METAL_ITEM_LEN; i++) {
 
             Item flake = MaterialsSetup.FLAKES.get(i).get();
-            itemGenerated(flake, "item/" + flake.getRegistryName().getPath());
+            itemGenerated(flake);
 
             if (i <= Metal.BENDALLOY.getIndex()) {
                 Item pattern_item = ExtrasSetup.PATTERN_ITEMS.get(i).get();
-                itemGenerated(pattern_item, "item/" + pattern_item.getRegistryName().getPath());
+                itemGenerated(pattern_item);
 
-                if (Metal.getMetal(i).isVanilla()){
+                if (Metal.getMetal(i).isVanilla()) {
                     continue;
                 }
             }
 
 
             Item nugget = MaterialsSetup.NUGGETS.get(i).get();
-            itemGenerated(nugget, "item/" + nugget.getRegistryName().getPath());
+            itemGenerated(nugget);
 
             Item ingot = MaterialsSetup.INGOTS.get(i).get();
-            itemGenerated(ingot, "item/" + ingot.getRegistryName().getPath());
+            itemGenerated(ingot);
 
             Block block = MaterialsSetup.STORAGE_BLOCKS.get(i).get();
-            parentedBlock(block, "block/" + block.getRegistryName().getPath());
+            parentedBlock(block);
 
         }
 
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial (filled)");
-        ModelFile mf = getBuilder("vial_filled").parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc("item/full_vial"));
+        var mf = getBuilder("vial_filled").parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc("item/full_vial"));
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial");
         getBuilder("vial")
                 .parent(getExistingFile(mcLoc("item/generated")))
@@ -79,24 +84,32 @@ public class ItemModels extends ItemModelProvider {
 
     }
 
+    public void parentedBlock(Block block) {
+        parentedBlock(block, "block/" + block.getRegistryName().getPath());
+    }
+
     public void parentedBlock(Block block, String model) {
         Allomancy.LOGGER.debug("Creating Item Model for " + block.getRegistryName());
         getBuilder(block.getRegistryName().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc(model)));
     }
 
-    public void itemGenerated(Item item, String texture) {
-        Allomancy.LOGGER.debug("Creating Item Model for " + item.getRegistryName());
-        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc(texture));
+    public void itemGenerated(Item item) {
+        itemGenerated(item, "item/" + item.getRegistryName().getPath());
     }
 
-    public void itemHandheld(Item item, String texture) {
+    public void itemGenerated(Item item, String model) {
         Allomancy.LOGGER.debug("Creating Item Model for " + item.getRegistryName());
-        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(mcLoc("item/handheld"))).texture("layer0", modLoc(texture));
+        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc(model));
     }
 
-    public void largeItemHandheld(Item item, String texture) {
+    public void itemHandheld(Item item) {
+        Allomancy.LOGGER.debug("Creating Item Model for " + item.getRegistryName());
+        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(mcLoc("item/handheld"))).texture("layer0", modLoc("item/" + item.getRegistryName().getPath()));
+    }
+
+    public void largeItemHandheld(Item item) {
         Allomancy.LOGGER.debug("Creating Large Item Model for " + item.getRegistryName());
-        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(modLoc("item/handheld_large"))).texture("layer0", modLoc(texture));
+        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(modLoc("item/handheld_large"))).texture("layer0", modLoc("item/" + item.getRegistryName().getPath()));
     }
 
     @Override

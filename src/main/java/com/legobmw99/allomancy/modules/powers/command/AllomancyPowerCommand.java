@@ -10,11 +10,11 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.util.NonNullConsumer;
 
 import java.util.Arrays;
@@ -26,25 +26,25 @@ import java.util.function.Predicate;
 
 public class AllomancyPowerCommand {
 
-    private static final DynamicCommandExceptionType ERROR_CANT_ADD = new DynamicCommandExceptionType(s -> new TranslationTextComponent("commands.allomancy.err_add", s));
-    private static final DynamicCommandExceptionType ERROR_CANT_REMOVE = new DynamicCommandExceptionType(s -> new TranslationTextComponent("commands.allomancy.err_remove", s));
+    private static final DynamicCommandExceptionType ERROR_CANT_ADD = new DynamicCommandExceptionType(s -> new TranslatableComponent("commands.allomancy.err_add", s));
+    private static final DynamicCommandExceptionType ERROR_CANT_REMOVE = new DynamicCommandExceptionType(s -> new TranslatableComponent("commands.allomancy.err_remove", s));
 
-    private static Predicate<CommandSource> permissions(int level) {
+    private static Predicate<CommandSourceStack> permissions(int level) {
         return (player) -> player.hasPermission(level);
     }
 
-    private static Collection<ServerPlayerEntity> sender(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
+    private static Collection<ServerPlayer> sender(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         return Collections.singleton(ctx.getSource().getPlayerOrException());
     }
 
-    private static Collection<ServerPlayerEntity> target(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
+    private static Collection<ServerPlayer> target(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         return EntityArgument.getPlayers(ctx, "targets");
     }
 
 
-    public static void register(CommandDispatcher<CommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 
-        LiteralArgumentBuilder<CommandSource> root = Commands.literal("allomancy").requires(permissions(0));
+        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("allomancy").requires(permissions(0));
         root.then(Commands
                           .literal("get")
                           .requires(permissions(0))
@@ -72,7 +72,7 @@ public class AllomancyPowerCommand {
                                                       .executes(ctx -> handleMultiPlayer(ctx, target(ctx), AllomancyPowerCommand::removePower)))));
 
 
-        LiteralCommandNode<CommandSource> command = dispatcher.register(root);
+        LiteralCommandNode<CommandSourceStack> command = dispatcher.register(root);
 
         dispatcher.register(Commands.literal("ap").requires(permissions(0)).redirect(command));
     }
@@ -87,12 +87,12 @@ public class AllomancyPowerCommand {
      * @return The number of players successfully applied to
      * @throws CommandSyntaxException
      */
-    private static int handleMultiPlayer(CommandContext<CommandSource> ctx,
-                                         Collection<ServerPlayerEntity> players,
-                                         CheckedBiCon<CommandContext<CommandSource>, ServerPlayerEntity> toApply) throws CommandSyntaxException {
+    private static int handleMultiPlayer(CommandContext<CommandSourceStack> ctx,
+                                         Collection<ServerPlayer> players,
+                                         CheckedBiCon<CommandContext<CommandSourceStack>, ServerPlayer> toApply) throws CommandSyntaxException {
         int i = 0;
 
-        for (ServerPlayerEntity p : players) {
+        for (ServerPlayer p : players) {
             toApply.accept(ctx, p);
             i++;
         }
@@ -100,7 +100,7 @@ public class AllomancyPowerCommand {
         return i;
     }
 
-    private static void getPowers(CommandContext<CommandSource> ctx, ServerPlayerEntity player) {
+    private static void getPowers(CommandContext<CommandSourceStack> ctx, ServerPlayer player) {
         StringBuilder powers = new StringBuilder();
         player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
             if (data.isMistborn()) {
@@ -110,7 +110,7 @@ public class AllomancyPowerCommand {
             } else {
                 for (Metal mt : Metal.values()) {
                     if (data.hasPower(mt)) {
-                        if (powers.length() == 0) {
+                        if (powers.isEmpty()) {
                             powers.append(mt.getName());
                         } else {
                             powers.append(", ").append(mt.getName());
@@ -119,15 +119,15 @@ public class AllomancyPowerCommand {
                 }
             }
         });
-        ctx.getSource().sendSuccess(new TranslationTextComponent("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
+        ctx.getSource().sendSuccess(new TranslatableComponent("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
     }
 
-    private static void addPower(CommandContext<CommandSource> ctx, ServerPlayerEntity player) throws CommandSyntaxException {
-        handlePowerChange(ctx, player, IAllomancerData::setMistborn, data -> (mt -> !data.hasPower(mt)), mt -> (data -> data.addPower(mt)), ERROR_CANT_ADD::create,
+    private static void addPower(CommandContext<CommandSourceStack> ctx, ServerPlayer player) throws CommandSyntaxException {
+        handlePowerChange(ctx, player, IAllomancerData::setMistborn, data -> Predicate.not(data::hasPower), mt -> (data -> data.addPower(mt)), ERROR_CANT_ADD::create,
                           "commands.allomancy.addpower");
     }
 
-    private static void removePower(CommandContext<CommandSource> ctx, ServerPlayerEntity player) throws CommandSyntaxException {
+    private static void removePower(CommandContext<CommandSourceStack> ctx, ServerPlayer player) throws CommandSyntaxException {
         handlePowerChange(ctx, player, IAllomancerData::setUninvested, (data) -> data::hasPower, (mt) -> (data -> data.revokePower(mt)), ERROR_CANT_REMOVE::create,
                           "commands.allomancy.removepower");
     }
@@ -144,8 +144,8 @@ public class AllomancyPowerCommand {
      * @param success        String used when successful
      * @throws CommandSyntaxException
      */
-    private static void handlePowerChange(CommandContext<CommandSource> ctx,
-                                          ServerPlayerEntity player,
+    private static void handlePowerChange(CommandContext<CommandSourceStack> ctx,
+                                          ServerPlayer player,
                                           NonNullConsumer<IAllomancerData> all,
                                           Function<IAllomancerData, Predicate<Metal>> filterFunction,
                                           Function<Metal, NonNullConsumer<IAllomancerData>> single,
@@ -175,7 +175,7 @@ public class AllomancyPowerCommand {
         }
         Network.sync(player);
 
-        ctx.getSource().sendSuccess(new TranslationTextComponent(success, player.getDisplayName(), type), true);
+        ctx.getSource().sendSuccess(new TranslatableComponent(success, player.getDisplayName(), type), true);
 
     }
 

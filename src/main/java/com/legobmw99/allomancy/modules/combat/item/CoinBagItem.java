@@ -6,17 +6,17 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 
-public class CoinBagItem extends ShootableItem {
+public class CoinBagItem extends ProjectileWeaponItem {
 
 
     public static final Predicate<ItemStack> NUGGETS = (stack) -> {
@@ -29,21 +29,11 @@ public class CoinBagItem extends ShootableItem {
     }
 
     private static Ammo getAmmoFromItem(Item itemIn) {
-        switch (itemIn.getRegistryName().getPath()) {
-            case "iron_nugget":
-            case "steel_nugget":
-            case "bronze_nugget":
-            case "copper_nugget":
-            case "nickel_nugget":
-                return Ammo.HEAVY;
-            case "bendalloy_nugget":
-            case "nicrosil_nugget":
-            case "electrum_nugget":
-            case "platinum_nugget":
-                return Ammo.MAGIC;
-            default:
-                return Ammo.LIGHT;
-        }
+        return switch (itemIn.getRegistryName().getPath()) {
+            case "iron_nugget", "steel_nugget", "bronze_nugget", "copper_nugget", "nickel_nugget" -> Ammo.HEAVY;
+            case "bendalloy_nugget", "nicrosil_nugget", "electrum_nugget", "platinum_nugget" -> Ammo.MAGIC;
+            default -> Ammo.LIGHT;
+        };
     }
 
     @Nonnull
@@ -52,7 +42,7 @@ public class CoinBagItem extends ShootableItem {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getProjectile(player.getItemInHand(hand));
         if (itemstack.getItem() instanceof ArrowItem) { // the above get function has silly default behavior
             itemstack = new ItemStack(Items.GOLD_NUGGET, 1);
@@ -68,21 +58,21 @@ public class CoinBagItem extends ShootableItem {
                     dmg *= 2.0F;
                 }
                 ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, dmg);
-                nugget_projectile.shootFromRotation(player, player.xRot, player.yHeadRot, type.arg1, type.arg2, type.arg3);
+                nugget_projectile.shootFromRotation(player, player.getXRot(), player.getYHeadRot(), type.arg1, type.arg2, type.arg3);
                 world.addFreshEntity(nugget_projectile);
 
 
-                if (!player.abilities.instabuild) {
+                if (!player.getAbilities().instabuild) {
                     itemstack.shrink(1);
                 }
 
-                return new ActionResult<>(ActionResultType.SUCCESS, player.getItemInHand(hand));
+                return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
 
             }
 
 
         }
-        return new ActionResult<>(ActionResultType.FAIL, player.getItemInHand(hand));
+        return new InteractionResultHolder<>(InteractionResult.FAIL, player.getItemInHand(hand));
 
     }
 

@@ -4,11 +4,12 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.util.AllomancyConfig;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -27,15 +28,15 @@ public class PowersConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
     private static HashSet<String> defaultList;
 
-    public static void init(ForgeConfigSpec.Builder common_builder, ForgeConfigSpec.Builder client_builder) {
+    public static void init(ForgeConfigSpec.Builder server_builder, ForgeConfigSpec.Builder client_builder) {
 
-        common_builder.comment("Settings for the gameplay elements of the mod").push("gameplay");
-        random_mistings = common_builder.comment("Spawn players as a random Misting").define("random_mistings", true);
-        generate_whitelist = common_builder.comment("Regenerate the metal whitelist").define("regenerate_whitelist", true);
-        cfg_whitelist = common_builder
-                .comment("List of registry names of items and blocks that are counted as 'metal")
+        server_builder.comment("Settings for the gameplay elements of the mod").push("gameplay");
+        random_mistings = server_builder.comment("Spawn players as a random Misting").define("random_mistings", true);
+        generate_whitelist = server_builder.comment("Regenerate the metal whitelist").define("regenerate_whitelist", true);
+        cfg_whitelist = server_builder
+                .comment("List of registry names of items and blocks that are counted as 'metal'")
                 .defineList("whitelist", new ArrayList<>(), o -> o instanceof String);
-        common_builder.pop();
+        server_builder.pop();
 
         client_builder.push("graphics");
         max_metal_detection = client_builder.comment("Maximum iron/steelsight distance. Can have a HUGE impact on performance").defineInRange("max_metal_distance", 15, 3, 30);
@@ -51,9 +52,9 @@ public class PowersConfig {
 
     }
 
-    public static void refresh(final ModConfig.ModConfigEvent e) {
+    public static void refresh(final ModConfigEvent e) {
         ModConfig cfg = e.getConfig();
-        if (cfg.getSpec() == AllomancyConfig.COMMON_CONFIG) {
+        if (cfg.getSpec() == AllomancyConfig.SERVER_CONFIG) {
             refresh_whitelist();
         }
     }
@@ -63,9 +64,9 @@ public class PowersConfig {
         whitelist.addAll(cfg_whitelist.get());
     }
 
-    public static void load_whitelist(final ModConfig.Loading e) {
+    public static void load_whitelist(final ModConfigEvent.Loading e) {
         ModConfig cfg = e.getConfig();
-        if (cfg.getSpec() == AllomancyConfig.COMMON_CONFIG) {
+        if (cfg.getSpec() == AllomancyConfig.SERVER_CONFIG) {
             if (generate_whitelist.get()) {
                 ArrayList<String> list = new ArrayList<>(default_whitelist());
                 list.sort(String::compareTo);

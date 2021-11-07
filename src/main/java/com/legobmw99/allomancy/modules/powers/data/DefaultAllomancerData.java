@@ -1,14 +1,15 @@
 package com.legobmw99.allomancy.modules.powers.data;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
-import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.api.enums.Metal;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import com.legobmw99.allomancy.network.Network;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 
@@ -48,7 +49,7 @@ public class DefaultAllomancerData implements IAllomancerData {
     }
 
 
-    public void tickBurning(ServerPlayerEntity player) {
+    public void tickBurning(ServerPlayer player) {
         boolean sync = false;
         for (Metal metal : Metal.values()) {
             if (this.isBurning(metal)) {
@@ -176,7 +177,7 @@ public class DefaultAllomancerData implements IAllomancerData {
     }
 
 
-    public void setDeathLoc(BlockPos pos, RegistryKey<World> dim) {
+    public void setDeathLoc(BlockPos pos, ResourceKey<Level> dim) {
         if (dim != null) {
             setDeathLoc(pos, dim.location().toString());
         }
@@ -194,16 +195,16 @@ public class DefaultAllomancerData implements IAllomancerData {
     }
 
 
-    public RegistryKey<World> getDeathDim() {
+    public ResourceKey<Level> getDeathDim() {
         if (this.death_dimension == null) {
             return null;
         }
-        return RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(this.death_dimension));
+        return ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(this.death_dimension));
 
     }
 
 
-    public void setSpawnLoc(BlockPos pos, RegistryKey<World> dim) {
+    public void setSpawnLoc(BlockPos pos, ResourceKey<Level> dim) {
         setSpawnLoc(pos, dim.location().toString());
     }
 
@@ -219,11 +220,11 @@ public class DefaultAllomancerData implements IAllomancerData {
     }
 
 
-    public RegistryKey<World> getSpawnDim() {
+    public ResourceKey<Level> getSpawnDim() {
         if (this.spawn_dimension == null) {
             return null;
         }
-        return RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(this.spawn_dimension));
+        return ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(this.spawn_dimension));
     }
 
     /**
@@ -239,7 +240,7 @@ public class DefaultAllomancerData implements IAllomancerData {
     /**
      * Set the burn time of a specific metal
      *
-     * @param metal    the the metal to set
+     * @param metal    the metal to set
      * @param burnTime the burn time
      */
     protected void setBurnTime(Metal metal, int burnTime) {
@@ -260,4 +261,77 @@ public class DefaultAllomancerData implements IAllomancerData {
         this.enhanced_time = time;
     }
 
+    public CompoundTag save() {
+        CompoundTag allomancy_data = new CompoundTag();
+
+        CompoundTag abilities = new CompoundTag();
+        for (Metal mt : Metal.values()) {
+            abilities.putBoolean(mt.getName(), this.hasPower(mt));
+        }
+        allomancy_data.put("abilities", abilities);
+
+
+        CompoundTag metal_storage = new CompoundTag();
+        for (Metal mt : Metal.values()) {
+            metal_storage.putInt(mt.getName(), this.getAmount(mt));
+        }
+        allomancy_data.put("metal_storage", metal_storage);
+
+
+        CompoundTag metal_burning = new CompoundTag();
+        for (Metal mt : Metal.values()) {
+            metal_burning.putBoolean(mt.getName(), this.isBurning(mt));
+        }
+        allomancy_data.put("metal_burning", metal_burning);
+
+        CompoundTag position = new CompoundTag();
+        BlockPos death_block = this.getDeathLoc();
+        if (death_block != null) {
+            position.putString("death_dimension", this.getDeathDim().location().toString());
+            position.putInt("death_x", death_block.getX());
+            position.putInt("death_y", death_block.getY());
+            position.putInt("death_z", death_block.getZ());
+        }
+        BlockPos spawn_block = this.getSpawnLoc();
+        if (spawn_block != null) {
+            position.putString("spawn_dimension", this.getSpawnDim().location().toString());
+            position.putInt("spawn_x", spawn_block.getX());
+            position.putInt("spawn_y", spawn_block.getY());
+            position.putInt("spawn_z", spawn_block.getZ());
+        }
+        allomancy_data.put("position", position);
+
+        return allomancy_data;
+    }
+
+    public void load(CompoundTag allomancy_data) {
+        CompoundTag abilities = (CompoundTag) allomancy_data.get("abilities");
+        for (Metal mt : Metal.values()) {
+            if (abilities.getBoolean(mt.getName())) {
+                this.addPower(mt);
+            } else {
+                this.revokePower(mt);
+            }
+        }
+
+        CompoundTag metal_storage = (CompoundTag) allomancy_data.get("metal_storage");
+        for (Metal mt : Metal.values()) {
+            this.setAmount(mt, metal_storage.getInt(mt.getName()));
+        }
+
+        CompoundTag metal_burning = (CompoundTag) allomancy_data.get("metal_burning");
+        for (Metal mt : Metal.values()) {
+            this.setBurning(mt, metal_burning.getBoolean(mt.getName()));
+        }
+
+        CompoundTag position = (CompoundTag) allomancy_data.get("position");
+        if (position.contains("death_dimension")) {
+            this.setDeathLoc(new BlockPos(position.getInt("death_x"), position.getInt("death_y"), position.getInt("death_z")), position.getString("death_dimension"));
+        }
+        if (position.contains("spawn_dimension")) {
+            this.setSpawnLoc(new BlockPos(position.getInt("spawn_x"), position.getInt("spawn_y"), position.getInt("spawn_z")), position.getString("spawn_dimension"));
+        }
+
+    }
 }
+

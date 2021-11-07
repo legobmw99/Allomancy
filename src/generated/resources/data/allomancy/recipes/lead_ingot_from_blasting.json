@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "allomancy:raw_lead"
+  },
+  "result": "allomancy:lead_ingot",
+  "experience": 0.4,
+  "cookingtime": 100
+}

@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
@@ -14,20 +15,21 @@ import com.legobmw99.allomancy.modules.powers.network.TryPushPullBlock;
 import com.legobmw99.allomancy.modules.powers.network.TryPushPullEntity;
 import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
 import com.legobmw99.allomancy.network.Network;
-import com.legobmw99.allomancy.api.enums.Metal;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
@@ -38,11 +40,11 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ClientEventHandler {
 
@@ -51,7 +53,7 @@ public class ClientEventHandler {
 
     private final Set<Entity> metal_entities = new HashSet<>();
     private final Set<MetalBlockBlob> metal_blobs = new HashSet<>();
-    private final Set<PlayerEntity> nearby_allomancers = new HashSet<>();
+    private final Set<Player> nearby_allomancers = new HashSet<>();
 
     private int tickOffset = 0;
 
@@ -61,7 +63,7 @@ public class ClientEventHandler {
         // Run once per tick, only if in game, and only if there is a player
         if (event.phase == TickEvent.Phase.END && !this.mc.isPaused() && this.mc.player != null && this.mc.player.isAlive()) {
 
-            PlayerEntity player = this.mc.player;
+            Player player = this.mc.player;
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 if (!data.isUninvested()) {
                     // Duralumin makes you move much quicker and reach much further
@@ -71,16 +73,16 @@ public class ClientEventHandler {
                     // Handle our input-based powers
                     if (this.mc.options.keyAttack.isDown()) {
                         // Ray trace 20 blocks (or 40 if enhanced)
-                        RayTraceResult trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
+                        var trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
                         // All iron pulling powers
                         if (data.isBurning(Metal.IRON)) {
                             if (trace != null) {
-                                if (trace.getType() == RayTraceResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
-                                    Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getId(), PowerUtils.PULL * force_multiplier));
+                                if (trace.getType() == HitResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityHitResult) trace).getEntity())) {
+                                    Network.sendToServer(new TryPushPullEntity(((EntityHitResult) trace).getEntity().getId(), PowerUtils.PULL * force_multiplier));
                                 }
 
-                                if (trace.getType() == RayTraceResult.Type.BLOCK) {
-                                    BlockPos bp = ((BlockRayTraceResult) trace).getBlockPos();
+                                if (trace.getType() == HitResult.Type.BLOCK) {
+                                    BlockPos bp = ((BlockHitResult) trace).getBlockPos();
                                     if (PowerUtils.isBlockStateMetal(this.mc.level.getBlockState(bp)) ||
                                         (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
                                         Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PULL * force_multiplier));
@@ -91,9 +93,9 @@ public class ClientEventHandler {
                         // All zinc powers
                         if (data.isBurning(Metal.ZINC)) {
                             Entity entity;
-                            if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
-                                entity = ((EntityRayTraceResult) trace).getEntity();
-                                if (entity instanceof CreatureEntity) {
+                            if ((trace != null) && (trace.getType() == HitResult.Type.ENTITY)) {
+                                entity = ((EntityHitResult) trace).getEntity();
+                                if (entity instanceof PathfinderMob) {
                                     Network.sendToServer(new ChangeEmotionPacket(entity.getId(), true));
                                 }
                             }
@@ -101,17 +103,17 @@ public class ClientEventHandler {
                     }
                     if (this.mc.options.keyUse.isDown()) {
                         // Ray trace 20 blocks (or 40 if enhanced)
-                        RayTraceResult trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
+                        var trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
                         // All steel pushing powers
                         if (data.isBurning(Metal.STEEL)) {
 
                             if (trace != null) {
-                                if (trace.getType() == RayTraceResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityRayTraceResult) trace).getEntity())) {
-                                    Network.sendToServer(new TryPushPullEntity(((EntityRayTraceResult) trace).getEntity().getId(), PowerUtils.PUSH * force_multiplier));
+                                if (trace.getType() == HitResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityHitResult) trace).getEntity())) {
+                                    Network.sendToServer(new TryPushPullEntity(((EntityHitResult) trace).getEntity().getId(), PowerUtils.PUSH * force_multiplier));
                                 }
 
-                                if (trace.getType() == RayTraceResult.Type.BLOCK) {
-                                    BlockPos bp = ((BlockRayTraceResult) trace).getBlockPos();
+                                if (trace.getType() == HitResult.Type.BLOCK) {
+                                    BlockPos bp = ((BlockHitResult) trace).getBlockPos();
                                     if (PowerUtils.isBlockStateMetal(this.mc.level.getBlockState(bp)) ||
                                         (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
                                         Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PUSH * force_multiplier));
@@ -122,18 +124,18 @@ public class ClientEventHandler {
                         // All brass powers
                         if (data.isBurning(Metal.BRASS)) {
                             Entity entity;
-                            if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
-                                entity = ((EntityRayTraceResult) trace).getEntity();
-                                if (entity instanceof CreatureEntity) {
+                            if ((trace != null) && (trace.getType() == HitResult.Type.ENTITY)) {
+                                entity = ((EntityHitResult) trace).getEntity();
+                                if (entity instanceof PathfinderMob) {
                                     Network.sendToServer(new ChangeEmotionPacket(entity.getId(), false));
                                 }
                             }
                         }
 
                         if (data.isBurning(Metal.NICROSIL)) {
-                            if ((trace != null) && (trace.getType() == RayTraceResult.Type.ENTITY)) {
-                                Entity entity = ((EntityRayTraceResult) trace).getEntity();
-                                if (entity instanceof PlayerEntity) {
+                            if ((trace != null) && (trace.getType() == HitResult.Type.ENTITY)) {
+                                Entity entity = ((EntityHitResult) trace).getEntity();
+                                if (entity instanceof Player) {
                                     Network.sendToServer(new UpdateEnhancedPacket(true, entity.getId()));
                                 }
                             }
@@ -153,26 +155,23 @@ public class ClientEventHandler {
 
                             // Add metal entities to metal list
                             this.metal_entities.addAll(
-                                    player.level.getEntitiesOfClass(Entity.class, new AxisAlignedBB(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
+                                    player.level.getEntitiesOfClass(Entity.class, new AABB(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
 
                             // Add metal blobs to metal list
-                            Stream<BlockPos> blocks = BlockPos.betweenClosedStream(negative, positive);
+                            var blocks = BlockPos.betweenClosedStream(negative, positive);
                             blocks.filter(bp -> PowerUtils.isBlockStateMetal(player.level.getBlockState(bp))).forEach(bp -> {
-                                Set<MetalBlockBlob> matches = this.metal_blobs.stream().filter(mbl -> mbl.isMatch(bp)).collect(Collectors.toSet());
+                                var matches = this.metal_blobs.stream().filter(mbl -> mbl.isMatch(bp)).collect(Collectors.toSet());
                                 switch (matches.size()) {
-                                    case 0: // new blob
-                                        this.metal_blobs.add(new MetalBlockBlob(bp));
-                                        break;
-                                    case 1: // add to existing blob
-                                        matches.stream().findAny().get().add(bp);
-                                        break;
-                                    default: // this block serves as a bridge between (possibly many) existing blobs
+                                    case 0 -> // new blob
+                                            this.metal_blobs.add(new MetalBlockBlob(bp));
+                                    case 1 -> // add to existing blob
+                                            matches.stream().findAny().get().add(bp);
+                                    default -> { // this block serves as a bridge between (possibly many) existing blobs
                                         this.metal_blobs.removeAll(matches);
                                         MetalBlockBlob mbb = matches.stream().reduce(null, MetalBlockBlob::merge);
                                         mbb.add(bp);
                                         this.metal_blobs.add(mbb);
-                                        break;
-
+                                    }
                                 }
 
                             });
@@ -184,11 +183,10 @@ public class ClientEventHandler {
                             // Add metal burners to a list
                             BlockPos negative = player.blockPosition().offset(-30, -30, -30);
                             BlockPos positive = player.blockPosition().offset(30, 30, 30);
-                            List<PlayerEntity> nearby_players = player.level.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(negative, positive),
-                                                                                                entity -> entity != null && entity != player);
+                            var nearby_players = player.level.getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
 
 
-                            for (PlayerEntity otherPlayer : nearby_players) {
+                            for (Player otherPlayer : nearby_players) {
 
                                 boolean cont = otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).map(otherData -> {
                                     if (otherData.isBurning(Metal.COPPER) && (!data.isEnhanced() || otherData.isEnhanced())) {
@@ -236,10 +234,10 @@ public class ClientEventHandler {
      */
     private void acceptInput() {
 
-        boolean extras = PowersClientSetup.enable_more_keybinds && Arrays.stream(PowersClientSetup.powers).anyMatch(k -> k.isDown());
+        boolean extras = PowersClientSetup.enable_more_keybinds && Arrays.stream(PowersClientSetup.powers).anyMatch(KeyMapping::isDown);
 
         if (PowersClientSetup.burn.isDown() || extras) {
-            PlayerEntity player = this.mc.player;
+            Player player = this.mc.player;
             if (this.mc.screen == null) {
                 if (player == null || !this.mc.isWindowActive()) {
                     return;
@@ -283,7 +281,7 @@ public class ClientEventHandler {
         if (!PowersConfig.enable_overlay.get() && !(this.mc.screen instanceof MetalSelectScreen)) {
             return;
         }
-        if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
+        if (event.isCancelable() || event.getType() != ElementType.LAYER) {
             return;
         }
         if (!this.mc.isWindowActive() || !this.mc.player.isAlive()) {
@@ -299,7 +297,8 @@ public class ClientEventHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        PlayerEntity player = this.mc.player;
+
+        Player player = this.mc.player;
         if (player == null || !player.isAlive() || this.mc.options.getCameraType().isMirrored()) {
             return;
         }
@@ -309,40 +308,41 @@ public class ClientEventHandler {
             if (data.isUninvested()) {
                 return;
             }
-
-            MatrixStack stack = event.getMatrixStack();
-            stack.pushPose();
-            Vector3d view = this.mc.cameraEntity.getEyePosition(event.getPartialTicks());
-            stack.translate(-view.x, -view.y, -view.z);
-
-            // TODO investigate depreciation
-            RenderSystem.pushMatrix();
-            RenderSystem.multMatrix(stack.last().pose());
+            RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
             RenderSystem.disableTexture();
             RenderSystem.disableDepthTest();
             RenderSystem.depthMask(false);
-            RenderSystem.polygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            RenderSystem.disableCull();
             RenderSystem.enableBlend();
+            RenderSystem.disablePolygonOffset();
+            RenderSystem.defaultBlendFunc();
 
-            double dist = 1;
-            double yaw = ((this.mc.player.yRot + 90) * Math.PI) / 180;
-            double pitch = ((this.mc.player.xRot + 90) * Math.PI) / 180;
 
-            Vector3d playervec = view.add(MathHelper.sin((float) pitch) * MathHelper.cos((float) yaw) * dist, MathHelper.cos((float) pitch) * dist - 0.35,
-                                          MathHelper.sin((float) pitch) * MathHelper.sin((float) yaw) * dist);
+            PoseStack stack = event.getMatrixStack();
+            stack.pushPose();
+            Vec3 view = this.mc.cameraEntity.getEyePosition(event.getPartialTicks());
+            stack.translate(-view.x, -view.y, -view.z);
+            RenderSystem.applyModelViewMatrix();
+
+            double rho = 1;
+            float theta = (float) ((this.mc.player.getViewYRot(event.getPartialTicks()) + 90) * Math.PI / 180);
+            float phi = Mth.clamp((float) ((this.mc.player.getViewXRot(event.getPartialTicks()) + 90) * Math.PI / 180), 0.0001F, 3.14F);
+
+
+            Vec3 playervec = view.add(rho * Mth.sin(phi) * Mth.cos(theta), rho * Mth.cos(phi) - 0.35F, rho * Mth.sin(phi) * Mth.sin(theta));
 
             /*********************************************
              * IRON AND STEEL LINES                      *
              *********************************************/
-            if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
 
+
+            if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
                 for (Entity entity : this.metal_entities) {
-                    ClientUtils.drawMetalLine(playervec, entity.position(), 1.5F, 0F, 0.6F, 1F);
+                    ClientUtils.drawMetalLine(stack, playervec, entity.position(), 1.5F, 0F, 0.6F, 1F);
                 }
 
                 for (MetalBlockBlob mb : this.metal_blobs) {
-                    ClientUtils.drawMetalLine(playervec, mb.getCenter(), MathHelper.clamp(0.3F + mb.size() * 0.4F, 0.5F, 7.5F), 0F, 0.6F, 1F);
+                    ClientUtils.drawMetalLine(stack, playervec, mb.getCenter(), Mth.clamp(0.3F + mb.size() * 0.4F, 0.5F, 7.5F), 0F, 0.6F, 1F);
                 }
             }
 
@@ -350,8 +350,8 @@ public class ClientEventHandler {
              * BRONZE LINES                              *
              *********************************************/
             if ((data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER)))) {
-                for (PlayerEntity playerEntity : this.nearby_allomancers) {
-                    ClientUtils.drawMetalLine(playervec, playerEntity.position(), 5.0F, 0.7F, 0.15F, 0.15F);
+                for (Player playerEntity : this.nearby_allomancers) {
+                    ClientUtils.drawMetalLine(stack, playervec, playerEntity.position(), 5.0F, 0.7F, 0.15F, 0.15F);
                 }
             }
 
@@ -359,29 +359,32 @@ public class ClientEventHandler {
              * GOLD AND ELECTRUM LINES                   *
              *********************************************/
             if (data.isBurning(Metal.GOLD)) {
-                RegistryKey<World> deathDim = data.getDeathDim();
-                if (deathDim != null && player.level.dimension() == deathDim) { //world .getDim (look for return type matches)
-                    ClientUtils.drawMetalLine(playervec, Vector3d.atCenterOf(data.getDeathLoc()), 3.0F, 0.9F, 0.85F, 0.0F);
+                ResourceKey<Level> deathDim = data.getDeathDim();
+                if (deathDim != null && player.level.dimension() == deathDim) {
+                    ClientUtils.drawMetalLine(stack, playervec, Vec3.atCenterOf(data.getDeathLoc()), 3.0F, 0.9F, 0.85F, 0.0F);
                 }
             }
             if (data.isBurning(Metal.ELECTRUM)) {
-                RegistryKey<World> spawnDim = data.getSpawnDim();
-                if (spawnDim == null && player.level.dimension() == World.OVERWORLD) { // overworld, no spawn --> use world spawn
+                ResourceKey<Level> spawnDim = data.getSpawnDim();
+                if (spawnDim == null && player.level.dimension() == Level.OVERWORLD) { // overworld, no spawn --> use world spawn
                     BlockPos spawnLoc = new BlockPos(player.level.getLevelData().getXSpawn(), player.level.getLevelData().getYSpawn(), player.level.getLevelData().getZSpawn());
-                    ClientUtils.drawMetalLine(playervec, Vector3d.atCenterOf(spawnLoc), 3.0F, 0.7F, 0.8F, 0.2F);
+                    ClientUtils.drawMetalLine(stack, playervec, Vec3.atCenterOf(spawnLoc), 3.0F, 0.7F, 0.8F, 0.2F);
 
                 } else if (spawnDim != null && player.level.dimension() == spawnDim) {
-                    ClientUtils.drawMetalLine(playervec, Vector3d.atCenterOf(data.getSpawnLoc()), 3.0F, 0.7F, 0.8F, 0.2F);
+                    ClientUtils.drawMetalLine(stack, playervec, Vec3.atCenterOf(data.getSpawnLoc()), 3.0F, 0.7F, 0.8F, 0.2F);
                 }
             }
 
-            RenderSystem.polygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+            stack.popPose();
+            RenderSystem.applyModelViewMatrix();
+
             RenderSystem.disableBlend();
+            RenderSystem.enablePolygonOffset();
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);
+            RenderSystem.enableCull();
             RenderSystem.enableTexture();
-            RenderSystem.popMatrix();
-            stack.popPose();
+
         });
     }
 
@@ -389,8 +392,8 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onSound(PlaySoundEvent event) {
 
-        PlayerEntity player = this.mc.player;
-        ISound sound = event.getSound();
+        Player player = this.mc.player;
+        SoundInstance sound = event.getSound();
         if ((player == null) || (sound == null) || !player.isAlive()) {
             return;
         }
@@ -405,7 +408,7 @@ public class ClientEventHandler {
                 if (((magnitude) > 25) || ((magnitude) < 3)) {
                     return;
                 }
-                Vector3d vec = player.position();
+                Vec3 vec = player.position();
                 double posX = vec.x(), posY = vec.y(), posZ = vec.z();
                 // Spawn sound particles
                 String soundName = sound.getLocation().toString();

@@ -2,37 +2,36 @@ package com.legobmw99.allomancy.modules.extras.block;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
-import net.minecraft.block.AbstractButtonBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class IronButtonBlock extends AbstractButtonBlock implements IAllomanticallyUsableBlock {
+public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsableBlock {
 
     public IronButtonBlock() {
-        super(false, Block.Properties.of(Material.METAL).noCollission().strength(1.0F).harvestLevel(2).harvestTool(ToolType.PICKAXE));
+        super(false, Block.Properties.of(Material.METAL).noCollission().strength(1.0F));
     }
 
     @Override
-    public boolean useAllomantically(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean isPush) {
+    public boolean useAllomantically(BlockState state, Level world, BlockPos pos, Player player, boolean isPush) {
         if (state.getValue(POWERED) || world.isClientSide) {
             return true;
         } else if (isPush) {
@@ -47,8 +46,8 @@ public class IronButtonBlock extends AbstractButtonBlock implements IAllomantica
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        return ActionResultType.FAIL;
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+        return InteractionResult.FAIL;
     }
 
 
@@ -58,14 +57,14 @@ public class IronButtonBlock extends AbstractButtonBlock implements IAllomantica
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        IFormattableTextComponent lore = Allomancy.addColorToText("block.allomancy.iron_activation.lore", TextFormatting.GRAY);
+        MutableComponent lore = Allomancy.addColorToText("block.allomancy.iron_activation.lore", ChatFormatting.GRAY);
         tooltip.add(lore);
     }
 
 
-    private void updateNeighbors(BlockState state, World world, BlockPos pos) {
+    private void updateNeighbors(BlockState state, Level world, BlockPos pos) {
         world.updateNeighborsAt(pos, this);
         world.updateNeighborsAt(pos.relative(getConnectedDirection(state).getOpposite()), this);
     }

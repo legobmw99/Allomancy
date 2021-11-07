@@ -2,34 +2,34 @@ package com.legobmw99.allomancy.modules.powers.client.particle;
 
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.mojang.brigadier.StringReader;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.sounds.SoundSource;
 
-public class SoundParticleData implements IParticleData {
+public class SoundParticleData implements ParticleOptions {
 
 
-    public static final IParticleData.IDeserializer<SoundParticleData> DESERIALIZER = new IParticleData.IDeserializer<SoundParticleData>() {
+    public static final ParticleOptions.Deserializer<SoundParticleData> DESERIALIZER = new ParticleOptions.Deserializer<>() {
 
         @Override
         public SoundParticleData fromCommand(ParticleType<SoundParticleData> particleTypeIn, StringReader reader) {
-            return new SoundParticleData(SoundCategory.AMBIENT);
+            return new SoundParticleData(SoundSource.AMBIENT);
         }
 
         @Override
-        public SoundParticleData fromNetwork(ParticleType<SoundParticleData> particleTypeIn, PacketBuffer buffer) {
-            return new SoundParticleData(buffer.readEnum(SoundCategory.class));
+        public SoundParticleData fromNetwork(ParticleType<SoundParticleData> particleTypeIn, FriendlyByteBuf buffer) {
+            return new SoundParticleData(buffer.readEnum(SoundSource.class));
         }
     };
-    private final SoundCategory type;
+    private final SoundSource type;
 
-    public SoundParticleData(SoundCategory type) {
+    public SoundParticleData(SoundSource type) {
         this.type = type;
     }
 
-    protected SoundCategory getSoundType() {
+    protected SoundSource getSoundType() {
         return this.type;
     }
 
@@ -39,7 +39,7 @@ public class SoundParticleData implements IParticleData {
     }
 
     @Override
-    public void writeToNetwork(PacketBuffer buffer) {
+    public void writeToNetwork(FriendlyByteBuf buffer) {
         buffer.writeEnum(this.type);
     }
 
