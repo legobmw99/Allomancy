@@ -3,21 +3,22 @@ package com.legobmw99.allomancy.modules.materials.world;
 import com.google.common.collect.ImmutableList;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.features.OreFeatures;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.OreBlock;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.legobmw99.allomancy.modules.materials.MaterialsConfig.*;
 
@@ -41,12 +42,11 @@ public class OreGenerator {
     }
 
     public static void registerFeatures() {
-        var registry = BuiltinRegistries.CONFIGURED_FEATURE;
         for (OreData ore : ores) {
             ResourceLocation block = ore.stone_ore_block.getRegistryName();
-            Allomancy.LOGGER.info("Registering configured feature generation for block " + block.toString());
+            Allomancy.LOGGER.info("Registering feature generation for block " + block.toString());
             ore.feature = featureFromData(ore);
-            Registry.register(registry, block, ore.feature);
+            PlacementUtils.register(block.toString(), ore.feature);
         }
     }
 
@@ -59,16 +59,19 @@ public class OreGenerator {
         }
     }
 
-    private static ConfiguredFeature<?, ?> featureFromData(OreData ore) {
-        var targetList = ImmutableList.of(OreConfiguration.target(OreConfiguration.Predicates.STONE_ORE_REPLACEABLES, ore.stone_ore_block.defaultBlockState()),
-                                          OreConfiguration.target(OreConfiguration.Predicates.DEEPSLATE_ORE_REPLACEABLES, ore.deepslate_ore_block.defaultBlockState()));
-        return Feature.ORE
-                .configured(new OreConfiguration(targetList, ore.vein_size))
-                .rangeUniform(VerticalAnchor.absolute(ore.min_height), VerticalAnchor.absolute(ore.max_height))
-                .squared()
-                .count(ore.ores_per_chunk);
+    private static PlacedFeature featureFromData(OreData ore) {
+        var targetList = ImmutableList.of(OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, ore.stone_ore_block.defaultBlockState()),
+                                          OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, ore.deepslate_ore_block.defaultBlockState()));
+        return Feature.ORE.configured(new OreConfiguration(targetList, ore.vein_size)).placed(commonOrePlacement(ore.ores_per_chunk, ore.min_height, ore.max_height));
     }
 
+    private static List<PlacementModifier> orePlacement(PlacementModifier p_195347_, PlacementModifier p_195348_) {
+        return List.of(p_195347_, InSquarePlacement.spread(), p_195348_, BiomeFilter.biome());
+    }
+
+    private static List<PlacementModifier> commonOrePlacement(int count, int min, int max) {
+        return orePlacement(CountPlacement.of(count), HeightRangePlacement.triangle(VerticalAnchor.absolute(-16), VerticalAnchor.absolute(112)));
+    }
 
     private static class OreData {
         public final int max_height;
@@ -78,7 +81,7 @@ public class OreGenerator {
         public final Block stone_ore_block;
         public final Block deepslate_ore_block;
         public final boolean config_enabled;
-        public ConfiguredFeature<?, ?> feature = null;
+        public PlacedFeature feature = null;
 
         /**
          * Construct an OreData with the given parameters

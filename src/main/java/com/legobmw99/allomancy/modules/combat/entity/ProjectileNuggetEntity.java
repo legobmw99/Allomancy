@@ -22,7 +22,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class ProjectileNuggetEntity extends ThrowableItemProjectile implements ItemSupplier {

@@ -35,7 +35,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -296,7 +296,7 @@ public class ClientEventHandler {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void onRenderWorldLast(RenderWorldLastEvent event) {
+    public void onRenderWorldLast(RenderLevelLastEvent event) {
 
         Player player = this.mc.player;
         if (player == null || !player.isAlive() || this.mc.options.getCameraType().isMirrored()) {
@@ -318,15 +318,15 @@ public class ClientEventHandler {
             RenderSystem.defaultBlendFunc();
 
 
-            PoseStack stack = event.getMatrixStack();
+            PoseStack stack = event.getPoseStack();
             stack.pushPose();
-            Vec3 view = this.mc.cameraEntity.getEyePosition(event.getPartialTicks());
+            Vec3 view = this.mc.cameraEntity.getEyePosition(event.getPartialTick());
             stack.translate(-view.x, -view.y, -view.z);
             RenderSystem.applyModelViewMatrix();
 
             double rho = 1;
-            float theta = (float) ((this.mc.player.getViewYRot(event.getPartialTicks()) + 90) * Math.PI / 180);
-            float phi = Mth.clamp((float) ((this.mc.player.getViewXRot(event.getPartialTicks()) + 90) * Math.PI / 180), 0.0001F, 3.14F);
+            float theta = (float) ((this.mc.player.getViewYRot(event.getPartialTick()) + 90) * Math.PI / 180);
+            float phi = Mth.clamp((float) ((this.mc.player.getViewXRot(event.getPartialTick()) + 90) * Math.PI / 180), 0.0001F, 3.14F);
 
 
             Vec3 playervec = view.add(rho * Mth.sin(phi) * Mth.cos(theta), rho * Mth.cos(phi) - 0.35F, rho * Mth.sin(phi) * Mth.sin(theta));

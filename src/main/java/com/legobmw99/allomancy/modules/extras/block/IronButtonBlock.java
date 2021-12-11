@@ -31,14 +31,14 @@ public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsabl
     }
 
     @Override
-    public boolean useAllomantically(BlockState state, Level world, BlockPos pos, Player player, boolean isPush) {
-        if (state.getValue(POWERED) || world.isClientSide) {
+    public boolean useAllomantically(BlockState state, Level level, BlockPos pos, Player player, boolean isPush) {
+        if (state.getValue(POWERED) || level.isClientSide) {
             return true;
         } else if (isPush) {
-            world.setBlock(pos, state.setValue(POWERED, true), 3);
-            this.playSound(player, world, pos, true);
-            this.updateNeighbors(state, world, pos);
-            world.getBlockTicks().scheduleTick(pos, this, 20);
+            level.setBlock(pos, state.setValue(POWERED, true), 3);
+            this.playSound(player, level, pos, true);
+            this.updateNeighbors(state, level, pos);
+            level.scheduleTick(pos, this, 20);
             return true;
         } else {
             return false;

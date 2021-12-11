@@ -100,7 +100,7 @@ public class MetalSelectScreen extends Screen {
 
                 gs = (!data.hasPower(mt) || data.getAmount(mt) == 0) ? 0 : gs;
 
-                int r = gs;
+                int r = data.isBurning(mt) ? 0xFF : gs;
                 int g = gs;
                 int b = gs;
                 int a = 0x99;
