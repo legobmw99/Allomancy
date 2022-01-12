@@ -45,6 +45,21 @@ public class CommonEventHandler {
             event.addCapability(AllomancerCapability.IDENTIFIER, provider);
         }
     }
+    
+    public static int randomNumbGen(Player player) {
+
+        char m = player.getUUID().toString().charAt(0);
+
+        String e = Character.toString(m);
+
+        int i = HexToDecimal(e);
+        return i;
+    }
+
+    public static int HexToDecimal(String s){
+        int decimal=Integer.parseInt(s,16);
+        return decimal;
+    }
 
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
@@ -54,7 +69,12 @@ public class CommonEventHandler {
                 player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                     //Handle random misting case
                     if (PowersConfig.random_mistings.get() && data.isUninvested()) {
-                        byte randomMisting = (byte) (Math.random() * Metal.values().length);
+                        byte randomMisting;
+                        if (PowersConfig.respect_player_UUID.get()) {
+                            randomMisting = (byte) (randomNumbGen(player));
+                        } else {
+                            randomMisting = (byte) (Math.random() * Metal.values().length);
+                        }
                         data.addPower(Metal.getMetal(randomMisting));
                         ItemStack flakes = new ItemStack(MaterialsSetup.FLAKES.get(randomMisting).get());
                         // Give the player one flake of their metal
