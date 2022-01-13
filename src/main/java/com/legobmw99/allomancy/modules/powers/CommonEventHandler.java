@@ -46,21 +46,6 @@ public class CommonEventHandler {
         }
     }
     
-    public static int randomNumbGen(Player player) {
-
-        char m = player.getUUID().toString().charAt(0);
-
-        String e = Character.toString(m);
-
-        int i = HexToDecimal(e);
-        return i;
-    }
-
-    public static int HexToDecimal(String s){
-        int decimal=Integer.parseInt(s,16);
-        return decimal;
-    }
-
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getPlayer().level.isClientSide) {
@@ -71,7 +56,9 @@ public class CommonEventHandler {
                     if (PowersConfig.random_mistings.get() && data.isUninvested()) {
                         byte randomMisting;
                         if (PowersConfig.respect_player_UUID.get()) {
-                            randomMisting = (byte) (randomNumbGen(player));
+                            Character a = player.getUUID().toString().charAt(0);
+                            int dec=Integer.parseInt(a.toString(),16);
+                            randomMisting = (byte) (dec);
                         } else {
                             randomMisting = (byte) (Math.random() * Metal.values().length);
                         }
