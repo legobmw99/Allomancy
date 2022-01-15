@@ -43,6 +43,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,7 @@ public class ClientEventHandler {
     private final Set<Player> nearby_allomancers = new HashSet<>();
 
     private int tickOffset = 0;
+
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -158,24 +160,40 @@ public class ClientEventHandler {
                                     player.level.getEntitiesOfClass(Entity.class, new AABB(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
 
                             // Add metal blobs to metal list
-                            var blocks = BlockPos.betweenClosedStream(negative, positive);
-                            blocks.filter(bp -> PowerUtils.isBlockStateMetal(player.level.getBlockState(bp))).forEach(bp -> {
-                                var matches = this.metal_blobs.stream().filter(mbl -> mbl.isMatch(bp)).collect(Collectors.toSet());
-                                switch (matches.size()) {
-                                    case 0 -> // new blob
-                                            this.metal_blobs.add(new MetalBlockBlob(bp));
-                                    case 1 -> // add to existing blob
-                                            matches.stream().findAny().get().add(bp);
-                                    default -> { // this block serves as a bridge between (possibly many) existing blobs
-                                        this.metal_blobs.removeAll(matches);
-                                        MetalBlockBlob mbb = matches.stream().reduce(null, MetalBlockBlob::merge);
-                                        mbb.add(bp);
-                                        this.metal_blobs.add(mbb);
-                                    }
+
+                            var blocks = BlockPos
+                                    .betweenClosedStream(negative, positive)
+                                    .map(BlockPos::immutable)
+                                    .filter(bp -> PowerUtils.isBlockStateMetal(player.level.getBlockState(bp)))
+                                    .collect(Collectors.toSet());
+
+                            // a sort of BFS with a global seen list
+                            var seen = new HashSet<BlockPos>();
+                            blocks.forEach((starter) -> {
+                                if (seen.contains(starter)) {
+                                    return;
                                 }
 
-                            });
+                                seen.add(starter);
 
+                                var points = new LinkedList<BlockPos>();
+                                points.add(starter);
+
+                                var blob = new MetalBlockBlob(starter);
+
+                                while (!points.isEmpty()) {
+                                    var pos = points.poll();
+                                    for (var p1 : BlockPos.withinManhattan(pos, 1, 1, 1)) {
+                                        var p2 = p1.immutable();
+                                        if (!seen.contains(p2) && blocks.contains(p2)) {
+                                            points.add(p2);
+                                            seen.add(p2);
+                                            blob.add(p2);
+                                        }
+                                    }
+                                }
+                                this.metal_blobs.add(blob);
+                            });
                         }
                         // Populate our list of nearby allomancy users
                         this.nearby_allomancers.clear();
@@ -337,11 +355,11 @@ public class ClientEventHandler {
 
 
             if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
-                for (Entity entity : this.metal_entities) {
+                for (var entity : this.metal_entities) {
                     ClientUtils.drawMetalLine(stack, playervec, entity.position(), 1.5F, 0F, 0.6F, 1F);
                 }
 
-                for (MetalBlockBlob mb : this.metal_blobs) {
+                for (var mb : this.metal_blobs) {
                     ClientUtils.drawMetalLine(stack, playervec, mb.getCenter(), Mth.clamp(0.3F + mb.size() * 0.4F, 0.5F, 7.5F), 0F, 0.6F, 1F);
                 }
             }
