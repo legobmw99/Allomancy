@@ -10,4 +10,4 @@ This mod is currently updated for `Minecraft 1.18.1` and `Forge 39.0.0`
 Please verify and report any issues!
 
 *This mod was originally conceived by [ZenDarva](https://github.com/ZenDarva) and used some code from [Psi](https://github.com/Vazkii/Psi) as a template. Textures were redone
-by [SuPaChikEn](https://twitter.com/SuPaChIkEn1), with later assistance by V_4_Vicegod, Emsinatree, Khronos, and Halyo. All code is used under license or with permission.*
+by [SuPaChikEn](https://twitter.com/SuPaChIkEn1), with later assistance by Roseplate, Emsinatree, Khronos, and Halyo. All code is used under license or with permission.*
