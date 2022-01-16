@@ -29,12 +29,16 @@ public class PowersConfig {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
     private static HashSet<String> defaultList;
 
-    public static void init(ForgeConfigSpec.Builder server_builder, ForgeConfigSpec.Builder client_builder) {
+    public static void init(ForgeConfigSpec.Builder server_builder, ForgeConfigSpec.Builder common_builder, ForgeConfigSpec.Builder client_builder) {
+        common_builder.comment("Settings for the gameplay elements of the mod").push("gameplay");
+        random_mistings = common_builder.comment("Spawn players as a random Misting").define("random_mistings", true);
+        respect_player_UUID = common_builder
+                .comment("Decides whether your spawn metal is based off your UUID (this will cause it to be consistent across worlds)")
+                .define("respect_player_UUID", false);
+        common_builder.pop();
 
         server_builder.comment("Settings for the gameplay elements of the mod").push("gameplay");
-        random_mistings = server_builder.comment("Spawn players as a random Misting").define("random_mistings", true);
         generate_whitelist = server_builder.comment("Regenerate the metal whitelist").define("regenerate_whitelist", true);
-        respect_player_UUID = server_builder.comment("Decides whether your spawn metal is based off your UUID (this will cause it to be consistent across worlds)").define("respect_player_UUID", false);
         cfg_whitelist = server_builder
                 .comment("List of registry names of items and blocks that are counted as 'metal'")
                 .defineList("whitelist", new ArrayList<>(), o -> o instanceof String);

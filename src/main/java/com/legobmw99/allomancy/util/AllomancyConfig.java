@@ -21,7 +21,7 @@ public class AllomancyConfig {
         var SERVER_BUILDER = new ForgeConfigSpec.Builder();
 
         MaterialsConfig.init(COMMON_BUILDER);
-        PowersConfig.init(SERVER_BUILDER, CLIENT_BUILDER);
+        PowersConfig.init(SERVER_BUILDER, COMMON_BUILDER, CLIENT_BUILDER);
 
         COMMON_CONFIG = COMMON_BUILDER.build();
         CLIENT_CONFIG = CLIENT_BUILDER.build();
