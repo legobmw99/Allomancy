@@ -2,9 +2,9 @@ package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.modules.powers.client.ClientEventHandler;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
+import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerCommand;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerType;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,6 +17,7 @@ public class PowersSetup {
     public static void clientInit(final FMLClientSetupEvent e) {
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
         PowersClientSetup.initKeyBindings();
+        MetalOverlay.register();
     }
 
     public static void registerCommands(final RegisterCommandsEvent e) {

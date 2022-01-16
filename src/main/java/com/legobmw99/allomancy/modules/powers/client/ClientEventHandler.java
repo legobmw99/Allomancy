@@ -4,7 +4,6 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
-import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
 import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
@@ -19,7 +18,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
@@ -33,8 +31,6 @@ import net.minecraft.world.phys.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
@@ -152,15 +148,14 @@ public class ClientEventHandler {
                         this.metal_entities.clear();
                         if (data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL)) {
                             int max = PowersConfig.max_metal_detection.get();
-                            BlockPos negative = player.blockPosition().offset(-max, -max, -max);
-                            BlockPos positive = player.blockPosition().offset(max, max, max);
+                            var negative = player.blockPosition().offset(-max, -max, -max);
+                            var positive = player.blockPosition().offset(max, max, max);
 
                             // Add metal entities to metal list
                             this.metal_entities.addAll(
                                     player.level.getEntitiesOfClass(Entity.class, new AABB(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
 
                             // Add metal blobs to metal list
-
                             var blocks = BlockPos
                                     .betweenClosedStream(negative, positive)
                                     .map(BlockPos::immutable)
@@ -173,14 +168,11 @@ public class ClientEventHandler {
                                 if (seen.contains(starter)) {
                                     return;
                                 }
-
                                 seen.add(starter);
 
                                 var points = new LinkedList<BlockPos>();
                                 points.add(starter);
-
                                 var blob = new MetalBlockBlob(starter);
-
                                 while (!points.isEmpty()) {
                                     var pos = points.poll();
                                     for (var p1 : BlockPos.withinManhattan(pos, 1, 1, 1)) {
@@ -199,13 +191,11 @@ public class ClientEventHandler {
                         this.nearby_allomancers.clear();
                         if (data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER))) {
                             // Add metal burners to a list
-                            BlockPos negative = player.blockPosition().offset(-30, -30, -30);
-                            BlockPos positive = player.blockPosition().offset(30, 30, 30);
+                            var negative = player.blockPosition().offset(-30, -30, -30);
+                            var positive = player.blockPosition().offset(30, 30, 30);
                             var nearby_players = player.level.getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
 
-
                             for (Player otherPlayer : nearby_players) {
-
                                 boolean cont = otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).map(otherData -> {
                                     if (otherData.isBurning(Metal.COPPER) && (!data.isEnhanced() || otherData.isEnhanced())) {
                                         return false;
@@ -292,25 +282,6 @@ public class ClientEventHandler {
 
     }
 
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public void onRenderGameOverlay(RenderGameOverlayEvent event) {
-
-        if (!PowersConfig.enable_overlay.get() && !(this.mc.screen instanceof MetalSelectScreen)) {
-            return;
-        }
-        if (event.isCancelable() || event.getType() != ElementType.LAYER) {
-            return;
-        }
-        if (!this.mc.isWindowActive() || !this.mc.player.isAlive()) {
-            return;
-        }
-        if (this.mc.screen != null && !(this.mc.screen instanceof ChatScreen) && !(this.mc.screen instanceof MetalSelectScreen)) {
-            return;
-        }
-
-        MetalOverlay.drawMetalOverlay(event.getMatrixStack());
-    }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
