@@ -4,31 +4,38 @@ import java.util.Locale;
 
 public enum Metal {
     IRON(true),
-    STEEL,
+    STEEL(IRON),
     TIN,
-    PEWTER,
+    PEWTER(TIN),
     ZINC,
-    BRASS,
+    BRASS(ZINC),
     COPPER(true),
-    BRONZE,
+    BRONZE(COPPER),
     ALUMINUM,
-    DURALUMIN,
+    DURALUMIN(ALUMINUM),
     CHROMIUM,
-    NICROSIL,
+    NICROSIL(CHROMIUM),
     GOLD(true),
-    ELECTRUM,
+    ELECTRUM(GOLD),
     CADMIUM,
-    BENDALLOY;
+    BENDALLOY(CADMIUM);
 
 
     private final boolean vanilla;
+    private final Metal base;
 
     Metal() {
         this(false);
     }
 
+    Metal(Metal base) {
+        this.base = base;
+        this.vanilla = false;
+    }
+
     Metal(boolean isVanilla) {
         this.vanilla = isVanilla;
+        this.base = null;
     }
 
     public static Metal getMetal(int index) {
@@ -39,6 +46,8 @@ public enum Metal {
         }
         throw new IllegalArgumentException("Allomancy: Bad Metal Index");
     }
+
+    public boolean isAlloy() {return this.base != null;}
 
     public boolean isVanilla() {
         return this.vanilla;
