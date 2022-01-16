@@ -100,8 +100,10 @@ public class MaterialsSetup {
     }
 
     public static void init(final FMLCommonSetupEvent e) {
-        MinecraftForge.EVENT_BUS.register(LootTableInjector.class);
-        OreGenerator.registerFeatures();
+        e.enqueueWork(() -> {
+            MinecraftForge.EVENT_BUS.register(LootTableInjector.class);
+            OreGenerator.registerFeatures();
+        });
     }
 
     public static Block createStandardBlock() {
