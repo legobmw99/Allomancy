@@ -58,11 +58,9 @@ public class CommonEventHandler {
                 if (PowersConfig.random_mistings.get() && data.isUninvested()) {
                     byte randomMisting;
                     if (PowersConfig.respect_player_UUID.get()) {
-                        Character a = player.getUUID().toString().charAt(0);
-                        int dec = Integer.parseInt(a.toString(), 16);
-                        randomMisting = (byte) (dec);
+                        randomMisting = (byte) (Math.abs(player.getUUID().hashCode()) % 16);
                     } else {
-                        randomMisting = (byte) (Math.random() * Metal.values().length);
+                        randomMisting = (byte) (event.getPlayer().getRandom().nextInt(Metal.values().length));
                     }
                     data.addPower(Metal.getMetal(randomMisting));
                     ItemStack flakes = new ItemStack(MaterialsSetup.FLAKES.get(randomMisting).get());
