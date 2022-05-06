@@ -5,6 +5,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -53,7 +54,7 @@ public class BlockTags extends BlockTagsProvider {
 
     private void addForgeTag(String name, Block... items) {
         Allomancy.LOGGER.debug("Creating block tag for forge:" + name);
-        tag(net.minecraft.tags.BlockTags.bind("forge:" + name)).replace(false).add(items);
+        tag(net.minecraft.tags.BlockTags.create(new ResourceLocation("forge", name))).replace(false).add(items);
     }
 
     private void makePickaxeMineable(Block... items) {
@@ -64,7 +65,7 @@ public class BlockTags extends BlockTagsProvider {
 
     private void addTag(String name, Block... items) {
         Allomancy.LOGGER.debug("Creating block tag for minecraft:" + name);
-        tag(net.minecraft.tags.BlockTags.bind("minecraft:" + name)).replace(false).add(items);
+        tag(net.minecraft.tags.BlockTags.create(new ResourceLocation("minecraft", name))).replace(false).add(items);
     }
 
     @Override

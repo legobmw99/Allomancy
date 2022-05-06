@@ -4,10 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.materials.MaterialsConfig;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.core.Holder;
+import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -22,14 +22,13 @@ import java.util.List;
 
 public class OreGenerator {
 
-    private static final ArrayList<PlacedFeature> ores = new ArrayList<>();
+    private static final ArrayList<Holder<PlacedFeature>> ores = new ArrayList<>();
 
 
     public static void registerFeatures() {
         for (MaterialsConfig.OreConfig ore_config : MaterialsConfig.ores) {
             Allomancy.LOGGER.info("Registering feature generation for " + ore_config.name + " ore!");
             var feature = featureFromConfig(ore_config);
-            PlacementUtils.register(ore_config.name + "_ore_feature", feature);
             ores.add(feature);
         }
     }
@@ -47,15 +46,14 @@ public class OreGenerator {
         }
     }
 
-    private static PlacedFeature featureFromConfig(MaterialsConfig.OreConfig cfg) {
+
+    private static Holder<PlacedFeature> featureFromConfig(MaterialsConfig.OreConfig cfg) {
         var stone_ore = MaterialsSetup.ORE_BLOCKS.get(cfg.index).get();
         var deepslate_ore = MaterialsSetup.DEEPSLATE_ORE_BLOCKS.get(cfg.index).get();
         var targetList = ImmutableList.of(OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, stone_ore.defaultBlockState()),
                                           OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, deepslate_ore.defaultBlockState()));
-        return BuiltinRegistries
-                .register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(Allomancy.MODID, cfg.name + "_ore_feature"),
-                          Feature.ORE.configured(new OreConfiguration(targetList, cfg.vein_size.get())))
-                .placed(commonOrePlacement(cfg.per_chunk.get(), cfg.min_y.get(), cfg.max_y.get(), cfg.placement_type.get()));
+        var oreconfig = FeatureUtils.register(cfg.name + "_ore_feature", Feature.ORE, new OreConfiguration(targetList, cfg.vein_size.get()));
+        return PlacementUtils.register(cfg.name + "_ore_feature", oreconfig, commonOrePlacement(cfg.per_chunk.get(), cfg.min_y.get(), cfg.max_y.get(), cfg.placement_type.get()));
     }
 
     private static List<PlacementModifier> orePlacement(PlacementModifier p_195347_, PlacementModifier p_195348_) {

@@ -6,6 +6,7 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -58,7 +59,7 @@ public class ItemTags extends ItemTagsProvider {
         // see ForgeItemTagsProvider
         Allomancy.LOGGER.debug("Creating item tag for forge:" + name);
 
-        tag(net.minecraft.tags.ItemTags.bind("forge:" + name)).replace(false).add(items);
+        tag(net.minecraft.tags.ItemTags.create(new ResourceLocation("forge", name))).replace(false).add(items);
     }
 
 

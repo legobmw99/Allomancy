@@ -9,8 +9,9 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -86,10 +87,10 @@ public class Recipes extends RecipeProvider {
     }
 
     protected static Ingredient ing(String tag) {
-        return Ingredient.of(ItemTags.bind(tag));
+        return Ingredient.of(ItemTags.create(new ResourceLocation(tag)));
     }
 
-    protected static Ingredient ing(Tag.Named<Item> tag) {
+    protected static Ingredient ing(TagKey<Item> tag) {
         return Ingredient.of(tag);
     }
 
@@ -273,7 +274,7 @@ public class Recipes extends RecipeProvider {
         buildShaped(consumer, result, 1, criterion, lines);
     }
 
-    protected void add(char c, Tag.Named<Item> itemTag) {
+    protected void add(char c, TagKey<Item> itemTag) {
         this.defaultIngredients.put(c, Ingredient.of(itemTag));
     }
 
