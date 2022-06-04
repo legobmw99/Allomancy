@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "allomancy:raw_aluminum",
+    "allomancy:raw_cadmium",
+    "allomancy:raw_chromium",
+    "allomancy:raw_lead",
+    "allomancy:raw_silver",
+    "allomancy:raw_tin",
+    "allomancy:raw_zinc"
+  ]
+}

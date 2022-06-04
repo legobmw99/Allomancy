@@ -99,8 +99,8 @@ public class Languages extends LanguageProvider {
 
         add("advancements.local_metallurgist.title", "Local Metallurgist!");
         add("advancements.local_metallurgist.desc", "Craft a grinder to begin mixing metals");
-        add("advancements.dna_entangled.title", "Spirtual DNA Entanglement");
-        add("advancements.dna_entangled.desc", "Your DNA is too entangled with the spirtual realm to use Lerasium");
+        add("advancements.dna_entangled.title", "Spiritual DNA Entanglement");
+        add("advancements.dna_entangled.desc", "Your DNA is too entangled with the spiritual realm to use Lerasium");
         add("advancements.become_mistborn.title", "Become Mistborn!");
         add("advancements.become_mistborn.desc", "You have a power most people envy...");
 

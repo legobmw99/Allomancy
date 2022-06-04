@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "allomancy:steel_ingot",
+    "allomancy:tin_ingot",
+    "allomancy:pewter_ingot",
+    "allomancy:zinc_ingot",
+    "allomancy:brass_ingot",
+    "allomancy:bronze_ingot",
+    "allomancy:aluminum_ingot",
+    "allomancy:duralumin_ingot",
+    "allomancy:chromium_ingot",
+    "allomancy:nicrosil_ingot",
+    "allomancy:electrum_ingot",
+    "allomancy:cadmium_ingot",
+    "allomancy:bendalloy_ingot",
+    "allomancy:lead_ingot",
+    "allomancy:silver_ingot"
+  ]
+}

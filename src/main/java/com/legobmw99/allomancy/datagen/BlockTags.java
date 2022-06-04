@@ -24,20 +24,29 @@ public class BlockTags extends BlockTagsProvider {
             var ds = MaterialsSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
             var raw = MaterialsSetup.RAW_ORE_BLOCKS.get(i).get();
 
-            String path = block.getRegistryName().getPath();
-            addForgeTag("ores/" + path, block, ds);
+            addForgeTag("ores/" + MaterialsSetup.ORE_METALS[i], block, ds);
+            addForgeTag("ores", block, ds);
+            addForgeTag("ores_in_ground/stone", block);
+            addForgeTag("ores_in_ground/deepslate", ds);
+
+            addForgeTag("storage_blocks", raw);
+            addForgeTag("storage_blocks/raw_" + MaterialsSetup.ORE_METALS[i], raw);
+
             makePickaxeMineable(block, ds, raw);
         }
 
         for (Metal mt : Metal.values()) {
-            if (!mt.isVanilla()) {
-                var block = MaterialsSetup.STORAGE_BLOCKS.get(mt.getIndex()).get();
-                addForgeTag("storage_blocks/" + mt.getName(), block);
-                makePickaxeMineable(block);
-                if (mt != Metal.ALUMINUM){
-                    addTag("beacon_base_blocks", block);
-                }
+            if (mt.isVanilla()) {
+                continue;
             }
+            var block = MaterialsSetup.STORAGE_BLOCKS.get(mt.getIndex()).get();
+            addForgeTag("storage_blocks/" + mt.getName(), block);
+            addForgeTag("storage_blocks", block);
+            makePickaxeMineable(block);
+            if (mt != Metal.ALUMINUM) {
+                addTag("beacon_base_blocks", block);
+            }
+
         }
 
         var lead = MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.LEAD).get();
@@ -47,8 +56,7 @@ public class BlockTags extends BlockTagsProvider {
         addTag("beacon_base_blocks", silver);
 
         makePickaxeMineable(lead, silver);
-
-
+        addForgeTag("storage_blocks", lead, silver);
 
     }
 

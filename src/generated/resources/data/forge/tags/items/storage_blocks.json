@@ -1,0 +1,27 @@
+{
+  "replace": false,
+  "values": [
+    "allomancy:steel_block",
+    "allomancy:tin_block",
+    "allomancy:pewter_block",
+    "allomancy:zinc_block",
+    "allomancy:brass_block",
+    "allomancy:bronze_block",
+    "allomancy:aluminum_block",
+    "allomancy:duralumin_block",
+    "allomancy:chromium_block",
+    "allomancy:nicrosil_block",
+    "allomancy:electrum_block",
+    "allomancy:cadmium_block",
+    "allomancy:bendalloy_block",
+    "allomancy:lead_block",
+    "allomancy:silver_block",
+    "allomancy:raw_aluminum_block",
+    "allomancy:raw_cadmium_block",
+    "allomancy:raw_chromium_block",
+    "allomancy:raw_lead_block",
+    "allomancy:raw_silver_block",
+    "allomancy:raw_tin_block",
+    "allomancy:raw_zinc_block"
+  ]
+}

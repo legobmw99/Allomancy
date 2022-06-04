@@ -1,0 +1,28 @@
+{
+  "parent": "allomancy:main/metallurgist",
+  "display": {
+    "icon": {
+      "item": "allomancy:lerasium_nugget"
+    },
+    "title": {
+      "translate": "advancements.dna_entangled.title"
+    },
+    "description": {
+      "translate": "advancements.dna_entangled.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ]
+}

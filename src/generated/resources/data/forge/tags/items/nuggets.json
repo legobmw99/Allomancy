@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "allomancy:steel_nugget",
+    "allomancy:tin_nugget",
+    "allomancy:pewter_nugget",
+    "allomancy:zinc_nugget",
+    "allomancy:brass_nugget",
+    "allomancy:bronze_nugget",
+    "allomancy:aluminum_nugget",
+    "allomancy:duralumin_nugget",
+    "allomancy:chromium_nugget",
+    "allomancy:nicrosil_nugget",
+    "allomancy:electrum_nugget",
+    "allomancy:cadmium_nugget",
+    "allomancy:bendalloy_nugget",
+    "allomancy:lead_nugget",
+    "allomancy:silver_nugget"
+  ]
+}
