@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
+import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
@@ -69,7 +70,6 @@ public class ClientEventHandler {
                 return;
             }
             // Duralumin makes you move much quicker and reach much further
-            int force_multiplier = data.isEnhanced() ? 4 : 1;
             int dist_modifier = data.isEnhanced() ? 2 : 1;
 
             // Handle our input-based powers
@@ -77,63 +77,18 @@ public class ClientEventHandler {
                 // Ray trace 20 blocks (or 40 if enhanced)
                 var trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
                 // All iron pulling powers
-                if (data.isBurning(Metal.IRON)) {
-                    if (trace != null) {
-                        if (trace.getType() == HitResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityHitResult) trace).getEntity())) {
-                            Network.sendToServer(new TryPushPullEntity(((EntityHitResult) trace).getEntity().getId(), PowerUtils.PULL * force_multiplier));
-                        }
-
-                        if (trace.getType() == HitResult.Type.BLOCK) {
-                            BlockPos bp = ((BlockHitResult) trace).getBlockPos();
-                            if (PowerUtils.isBlockStateMetal(this.mc.level.getBlockState(bp)) ||
-                                (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
-                                Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PULL * force_multiplier));
-                            }
-                        }
-                    }
-                }
+                metalPushPull(player, data, trace, Metal.IRON, PowerUtils.PULL);
                 // All zinc powers
-                if (data.isBurning(Metal.ZINC)) {
-                    Entity entity;
-                    if ((trace != null) && (trace.getType() == HitResult.Type.ENTITY)) {
-                        entity = ((EntityHitResult) trace).getEntity();
-                        if (entity instanceof PathfinderMob) {
-                            Network.sendToServer(new ChangeEmotionPacket(entity.getId(), true));
-                        }
-                    }
-                }
+                emotionPushPull(data, trace, Metal.ZINC, true);
             }
 
             if (this.mc.options.keyUse.isDown()) {
                 // Ray trace 20 blocks (or 40 if enhanced)
                 var trace = ClientUtils.getMouseOverExtended(20F * dist_modifier);
                 // All steel pushing powers
-                if (data.isBurning(Metal.STEEL)) {
-
-                    if (trace != null) {
-                        if (trace.getType() == HitResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityHitResult) trace).getEntity())) {
-                            Network.sendToServer(new TryPushPullEntity(((EntityHitResult) trace).getEntity().getId(), PowerUtils.PUSH * force_multiplier));
-                        }
-
-                        if (trace.getType() == HitResult.Type.BLOCK) {
-                            BlockPos bp = ((BlockHitResult) trace).getBlockPos();
-                            if (PowerUtils.isBlockStateMetal(this.mc.level.getBlockState(bp)) ||
-                                (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
-                                Network.sendToServer(new TryPushPullBlock(bp, PowerUtils.PUSH * force_multiplier));
-                            }
-                        }
-                    }
-                }
+                metalPushPull(player, data, trace, Metal.STEEL, PowerUtils.PUSH);
                 // All brass powers
-                if (data.isBurning(Metal.BRASS)) {
-                    Entity entity;
-                    if ((trace != null) && (trace.getType() == HitResult.Type.ENTITY)) {
-                        entity = ((EntityHitResult) trace).getEntity();
-                        if (entity instanceof PathfinderMob) {
-                            Network.sendToServer(new ChangeEmotionPacket(entity.getId(), false));
-                        }
-                    }
-                }
+                emotionPushPull(data, trace, Metal.BRASS, false);
 
                 if (data.isBurning(Metal.NICROSIL)) {
                     if ((trace != null) && (trace.getType() == HitResult.Type.ENTITY)) {
@@ -147,80 +102,116 @@ public class ClientEventHandler {
 
             this.tickOffset = (this.tickOffset + 1) % 2;
             if (this.tickOffset == 0) {
-                // Populate the metal lists
-                this.metal_blobs.clear();
-                this.metal_entities.clear();
-                if (data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL)) {
-                    int max = PowersConfig.max_metal_detection.get();
-                    var negative = player.blockPosition().offset(-max, -max, -max);
-                    var positive = player.blockPosition().offset(max, max, max);
-
-                    // Add metal entities to metal list
-                    this.metal_entities.addAll(player.level.getEntitiesOfClass(Entity.class, new AABB(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
-
-                    // Add metal blobs to metal list
-                    var blocks = BlockPos
-                            .betweenClosedStream(negative, positive)
-                            .map(BlockPos::immutable)
-                            .filter(bp -> PowerUtils.isBlockStateMetal(player.level.getBlockState(bp)))
-                            .collect(Collectors.toSet());
-
-                    // a sort of BFS with a global seen list
-                    var seen = new HashSet<BlockPos>();
-                    blocks.forEach((starter) -> {
-                        if (seen.contains(starter)) {
-                            return;
-                        }
-                        seen.add(starter);
-
-                        var points = new LinkedList<BlockPos>();
-                        points.add(starter);
-                        var blob = new MetalBlockBlob(starter);
-                        while (!points.isEmpty()) {
-                            var pos = points.poll();
-                            for (var p1 : BlockPos.withinManhattan(pos, 1, 1, 1)) {
-                                var p2 = p1.immutable();
-                                if (!seen.contains(p2) && blocks.contains(p2)) {
-                                    points.add(p2);
-                                    seen.add(p2);
-                                    blob.add(p2);
-                                }
-                            }
-                        }
-                        this.metal_blobs.add(blob);
-                    });
-                }
-
-                // Populate our list of nearby allomancy users
-                this.nearby_allomancers.clear();
-                if (data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER))) {
-                    // Add metal burners to a list
-                    var negative = player.blockPosition().offset(-30, -30, -30);
-                    var positive = player.blockPosition().offset(30, 30, 30);
-                    var nearby_players = player.level.getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
-
-                    for (Player otherPlayer : nearby_players) {
-                        boolean cont = otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).map(otherData -> {
-                            if (otherData.isBurning(Metal.COPPER) && (!data.isEnhanced() || otherData.isEnhanced())) {
-                                return false;
-                            }
-                            for (Metal mt : Metal.values()) {
-                                if (otherData.isBurning(mt)) {
-                                    this.nearby_allomancers.add(otherPlayer);
-                                    break;
-                                }
-                            }
-                            return true;
-                        }).orElse(true);
-
-                        if (!cont) {
-                            break;
-                        }
-                    }
-                }
+                populateSensoryLists(player, data);
             }
         });
 
+    }
+
+    private void populateSensoryLists(Player player, IAllomancerData data) {
+        // Populate the metal lists
+        this.metal_blobs.clear();
+        this.metal_entities.clear();
+        if (data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL)) {
+            int max = PowersConfig.max_metal_detection.get();
+            var negative = player.blockPosition().offset(-max, -max, -max);
+            var positive = player.blockPosition().offset(max, max, max);
+
+            // Add metal entities to metal list
+            this.metal_entities.addAll(player.level.getEntitiesOfClass(Entity.class, new AABB(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
+
+            // Add metal blobs to metal list
+            var blocks = BlockPos
+                    .betweenClosedStream(negative, positive)
+                    .map(BlockPos::immutable)
+                    .filter(bp -> PowerUtils.isBlockStateMetal(player.level.getBlockState(bp)))
+                    .collect(Collectors.toSet());
+
+            // a sort of BFS with a global seen list
+            var seen = new HashSet<BlockPos>();
+            blocks.forEach((starter) -> {
+                if (seen.contains(starter)) {
+                    return;
+                }
+                seen.add(starter);
+
+                var points = new LinkedList<BlockPos>();
+                points.add(starter);
+                var blob = new MetalBlockBlob(starter);
+                while (!points.isEmpty()) {
+                    var pos = points.poll();
+                    for (var p1 : BlockPos.withinManhattan(pos, 1, 1, 1)) {
+                        var p2 = p1.immutable();
+                        if (!seen.contains(p2) && blocks.contains(p2)) {
+                            points.add(p2);
+                            seen.add(p2);
+                            blob.add(p2);
+                        }
+                    }
+                }
+                this.metal_blobs.add(blob);
+            });
+        }
+
+        // Populate our list of nearby allomancy users
+        this.nearby_allomancers.clear();
+        if (data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER))) {
+            // Add metal burners to a list
+            var negative = player.blockPosition().offset(-30, -30, -30);
+            var positive = player.blockPosition().offset(30, 30, 30);
+            var nearby_players = player.level.getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
+
+            for (Player otherPlayer : nearby_players) {
+                boolean cont = otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).map(otherData -> {
+                    if (otherData.isBurning(Metal.COPPER) && (!data.isEnhanced() || otherData.isEnhanced())) {
+                        return false;
+                    }
+                    for (Metal mt : Metal.values()) {
+                        if (otherData.isBurning(mt)) {
+                            this.nearby_allomancers.add(otherPlayer);
+                            break;
+                        }
+                    }
+                    return true;
+                }).orElse(true);
+
+                if (!cont) {
+                    break;
+                }
+            }
+        }
+    }
+
+    private void emotionPushPull(IAllomancerData data, HitResult trace, Metal metal, boolean make_aggressive) {
+        if (data.isBurning(metal)) {
+            Entity entity;
+            if ((trace != null) && (trace.getType() == HitResult.Type.ENTITY)) {
+                entity = ((EntityHitResult) trace).getEntity();
+                if (entity instanceof PathfinderMob) {
+                    Network.sendToServer(new ChangeEmotionPacket(entity.getId(), make_aggressive));
+                }
+            }
+        }
+    }
+
+    private void metalPushPull(Player player, IAllomancerData data, HitResult trace, Metal metal, byte direction) {
+        int force_multiplier = data.isEnhanced() ? 4 : 1;
+
+        if (data.isBurning(metal)) {
+            if (trace != null) {
+                if (trace.getType() == HitResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityHitResult) trace).getEntity())) {
+                    Network.sendToServer(new TryPushPullEntity(((EntityHitResult) trace).getEntity().getId(), direction * force_multiplier));
+                }
+
+                if (trace.getType() == HitResult.Type.BLOCK) {
+                    BlockPos bp = ((BlockHitResult) trace).getBlockPos();
+                    if (PowerUtils.isBlockStateMetal(this.mc.level.getBlockState(bp)) ||
+                        (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
+                        Network.sendToServer(new TryPushPullBlock(bp, direction * force_multiplier));
+                    }
+                }
+            }
+        }
     }
 
 
