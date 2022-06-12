@@ -55,7 +55,6 @@ public class ClientEventHandler {
 
     private int tickOffset = 0;
 
-
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onClientTick(final TickEvent.ClientTickEvent event) {
@@ -129,28 +128,7 @@ public class ClientEventHandler {
 
             // a sort of BFS with a global seen list
             var seen = new HashSet<BlockPos>();
-            blocks.forEach((starter) -> {
-                if (seen.contains(starter)) {
-                    return;
-                }
-                seen.add(starter);
-
-                var points = new LinkedList<BlockPos>();
-                points.add(starter);
-                var blob = new MetalBlockBlob(starter);
-                while (!points.isEmpty()) {
-                    var pos = points.poll();
-                    for (var p1 : BlockPos.withinManhattan(pos, 1, 1, 1)) {
-                        var p2 = p1.immutable();
-                        if (!seen.contains(p2) && blocks.contains(p2)) {
-                            points.add(p2);
-                            seen.add(p2);
-                            blob.add(p2);
-                        }
-                    }
-                }
-                this.metal_blobs.add(blob);
-            });
+            blocks.forEach((starter) -> searchNearbyMetalBlocks(blocks, seen, starter));
         }
 
         // Populate our list of nearby allomancy users
@@ -162,54 +140,77 @@ public class ClientEventHandler {
             var nearby_players = player.level.getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
 
             for (Player otherPlayer : nearby_players) {
-                boolean cont = otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).map(otherData -> {
-                    if (otherData.isBurning(Metal.COPPER) && (!data.isEnhanced() || otherData.isEnhanced())) {
-                        return false;
-                    }
-                    for (Metal mt : Metal.values()) {
-                        if (otherData.isBurning(mt)) {
-                            this.nearby_allomancers.add(otherPlayer);
-                            break;
-                        }
-                    }
-                    return true;
-                }).orElse(true);
-
+                boolean cont = otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).map(otherData -> checkSeeking(data, otherPlayer, otherData)).orElse(true);
                 if (!cont) {
+                    this.nearby_allomancers.clear();
                     break;
                 }
             }
         }
     }
 
-    private void emotionPushPull(IAllomancerData data, HitResult trace, Metal metal, boolean make_aggressive) {
-        if (data.isBurning(metal)) {
-            Entity entity;
-            if ((trace != null) && (trace.getType() == HitResult.Type.ENTITY)) {
-                entity = ((EntityHitResult) trace).getEntity();
-                if (entity instanceof PathfinderMob) {
-                    Network.sendToServer(new ChangeEmotionPacket(entity.getId(), make_aggressive));
+    private void searchNearbyMetalBlocks(Set<BlockPos> blocks, HashSet<BlockPos> seen, BlockPos starter) {
+        if (seen.contains(starter)) {
+            return;
+        }
+        seen.add(starter);
+
+        var points = new LinkedList<BlockPos>();
+        points.add(starter);
+        var blob = new MetalBlockBlob(starter);
+        while (!points.isEmpty()) {
+            var pos = points.poll();
+            for (var p1 : BlockPos.withinManhattan(pos, 1, 1, 1)) {
+                var p2 = p1.immutable();
+                if (!seen.contains(p2) && blocks.contains(p2)) {
+                    points.add(p2);
+                    seen.add(p2);
+                    blob.add(p2);
                 }
+            }
+        }
+        this.metal_blobs.add(blob);
+    }
+
+    private boolean checkSeeking(IAllomancerData data, Player otherPlayer, IAllomancerData otherData) {
+        if (otherData.isBurning(Metal.COPPER) && (!data.isEnhanced() || otherData.isEnhanced())) {
+            return false;
+        }
+        for (Metal mt : Metal.values()) {
+            if (otherData.isBurning(mt)) {
+                this.nearby_allomancers.add(otherPlayer);
+                break;
+            }
+        }
+        return true;
+    }
+
+    private void emotionPushPull(IAllomancerData data, HitResult trace, Metal metal, boolean make_aggressive) {
+        if (!data.isBurning(metal) || trace == null) {
+            return;
+        }
+
+        if (trace.getType() == HitResult.Type.ENTITY) {
+            Entity entity = ((EntityHitResult) trace).getEntity();
+            if (entity instanceof PathfinderMob) {
+                Network.sendToServer(new ChangeEmotionPacket(entity.getId(), make_aggressive));
             }
         }
     }
 
     private void metalPushPull(Player player, IAllomancerData data, HitResult trace, Metal metal, byte direction) {
+        if (!data.isBurning(metal) || trace == null) {
+            return;
+        }
+
         int force_multiplier = data.isEnhanced() ? 4 : 1;
 
-        if (data.isBurning(metal)) {
-            if (trace != null) {
-                if (trace.getType() == HitResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityHitResult) trace).getEntity())) {
-                    Network.sendToServer(new TryPushPullEntity(((EntityHitResult) trace).getEntity().getId(), direction * force_multiplier));
-                }
-
-                if (trace.getType() == HitResult.Type.BLOCK) {
-                    BlockPos bp = ((BlockHitResult) trace).getBlockPos();
-                    if (PowerUtils.isBlockStateMetal(this.mc.level.getBlockState(bp)) ||
-                        (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
-                        Network.sendToServer(new TryPushPullBlock(bp, direction * force_multiplier));
-                    }
-                }
+        if (trace.getType() == HitResult.Type.ENTITY && PowerUtils.isEntityMetal(((EntityHitResult) trace).getEntity())) {
+            Network.sendToServer(new TryPushPullEntity(((EntityHitResult) trace).getEntity().getId(), direction * force_multiplier));
+        } else if (trace.getType() == HitResult.Type.BLOCK) {
+            BlockPos bp = ((BlockHitResult) trace).getBlockPos();
+            if (PowerUtils.isBlockStateMetal(this.mc.level.getBlockState(bp)) || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
+                Network.sendToServer(new TryPushPullBlock(bp, direction * force_multiplier));
             }
         }
     }
@@ -291,28 +292,15 @@ public class ClientEventHandler {
             if (data.isUninvested()) {
                 return;
             }
-            RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
-            RenderSystem.disableTexture();
-            RenderSystem.disableDepthTest();
-            RenderSystem.depthMask(false);
-            RenderSystem.disableCull();
-            RenderSystem.enableBlend();
-            RenderSystem.disablePolygonOffset();
-            RenderSystem.defaultBlendFunc();
-
-
-            PoseStack stack = event.getPoseStack();
-            stack.pushPose();
-            Vec3 view = this.mc.cameraEntity.getEyePosition(event.getPartialTick());
-            stack.translate(-view.x, -view.y, -view.z);
-            RenderSystem.applyModelViewMatrix();
+            PoseStack stack = setupPoseStack(event);
 
             double rho = 1;
             float theta = (float) ((this.mc.player.getViewYRot(event.getPartialTick()) + 90) * Math.PI / 180);
             float phi = Mth.clamp((float) ((this.mc.player.getViewXRot(event.getPartialTick()) + 90) * Math.PI / 180), 0.0001F, 3.14F);
 
-
-            Vec3 playervec = view.add(rho * Mth.sin(phi) * Mth.cos(theta), rho * Mth.cos(phi) - 0.35F, rho * Mth.sin(phi) * Mth.sin(theta));
+            Vec3 playervec = this.mc.cameraEntity
+                    .getEyePosition(event.getPartialTick())
+                    .add(rho * Mth.sin(phi) * Mth.cos(theta), rho * Mth.cos(phi) - 0.35F, rho * Mth.sin(phi) * Mth.sin(theta));
 
             /*********************************************
              * IRON AND STEEL LINES                      *
@@ -358,17 +346,39 @@ public class ClientEventHandler {
                 }
             }
 
-            stack.popPose();
-            RenderSystem.applyModelViewMatrix();
-
-            RenderSystem.disableBlend();
-            RenderSystem.enablePolygonOffset();
-            RenderSystem.enableDepthTest();
-            RenderSystem.depthMask(true);
-            RenderSystem.enableCull();
-            RenderSystem.enableTexture();
+            teardownPoseStack(stack);
 
         });
+    }
+
+    private void teardownPoseStack(PoseStack stack) {
+        stack.popPose();
+        RenderSystem.applyModelViewMatrix();
+
+        RenderSystem.disableBlend();
+        RenderSystem.enablePolygonOffset();
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthMask(true);
+        RenderSystem.enableCull();
+        RenderSystem.enableTexture();
+    }
+
+    private PoseStack setupPoseStack(RenderLevelLastEvent event) {
+        RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
+        RenderSystem.disableTexture();
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
+        RenderSystem.disableCull();
+        RenderSystem.enableBlend();
+        RenderSystem.disablePolygonOffset();
+        RenderSystem.defaultBlendFunc();
+
+        PoseStack stack = event.getPoseStack();
+        stack.pushPose();
+        Vec3 view = this.mc.cameraEntity.getEyePosition(event.getPartialTick());
+        stack.translate(-view.x, -view.y, -view.z);
+        RenderSystem.applyModelViewMatrix();
+        return stack;
     }
 
     @OnlyIn(Dist.CLIENT)
