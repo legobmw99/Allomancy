@@ -70,6 +70,7 @@ public class Languages extends LanguageProvider {
 
         for (Metal mt : Metal.values()) {
             add("metals." + mt.getName(), getDisplayName(mt));
+            add("key.metals." + mt.getName(), "Toggle " + getDisplayName(mt));
 
             add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), getDisplayName(mt) + " Flakes");
             add(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), "Banner Pattern");

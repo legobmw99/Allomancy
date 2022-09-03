@@ -43,7 +43,7 @@ public class PowersClientSetup {
 
         powers = new KeyMapping[Metal.values().length];
         for (int i = 0; i < powers.length; i++) {
-            powers[i] = new KeyMapping("metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN, "key.categories.allomancy");
+            powers[i] = new KeyMapping("key.metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN, "key.categories.allomancy");
             evt.register(powers[i]);
         }
 

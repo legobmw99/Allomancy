@@ -17,7 +17,6 @@ import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
 import com.legobmw99.allomancy.network.Network;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -38,7 +37,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -215,7 +213,6 @@ public class ClientEventHandler {
         }
     }
 
-
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onKeyInput(final InputEvent.Key event) {
@@ -236,12 +233,6 @@ public class ClientEventHandler {
      * Handles either mouse or button presses for the mod's keybinds
      */
     private void acceptInput() {
-
-        boolean extras = Arrays.stream(PowersClientSetup.powers).anyMatch(KeyMapping::isDown);
-
-        if (!PowersClientSetup.burn.isDown() && !extras) {
-            return;
-        }
         if (this.mc.screen != null) {
             return;
         }
@@ -250,33 +241,33 @@ public class ClientEventHandler {
             return;
         }
 
-        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-            if (extras) { // try one of the extra keybinds
-                for (int i = 0; i < PowersClientSetup.powers.length; i++) {
-                    if (PowersClientSetup.powers[i].isDown()) {
-                        ClientUtils.toggleBurn(Metal.getMetal(i), data);
-                    }
-                }
+        if (PowersClientSetup.hud.isDown()) {
+            PowersConfig.enable_overlay.set(!PowersConfig.enable_overlay.get());
+            return;
+        }
 
-            } else { // normal key press
-                int num_powers = data.getPowerCount();
-                if (num_powers == 0) {
-                    return;
-                } else if (num_powers == 1) {
-                    ClientUtils.toggleBurn(data.getPowers()[0], data);
-                } else {
-                    this.mc.setScreen(new MetalSelectScreen());
+        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
+            for (int i = 0; i < PowersClientSetup.powers.length; i++) {
+                if (PowersClientSetup.powers[i].isDown()) {
+                    ClientUtils.toggleBurn(Metal.getMetal(i), data);
+                }
+            }
+            if (PowersClientSetup.burn.isDown()) {
+                switch (data.getPowerCount()) {
+                    case 0:
+                        break;
+                    case 1:
+                        ClientUtils.toggleBurn(data.getPowers()[0], data);
+                        break;
+                    default:
+                        this.mc.setScreen(new MetalSelectScreen());
+                        break;
                 }
             }
         });
 
 
-        if (PowersClientSetup.hud.isDown()) {
-            PowersConfig.enable_overlay.set(!PowersConfig.enable_overlay.get());
-        }
-
     }
-
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
