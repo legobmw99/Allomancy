@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
   "ingredient": {
     "item": "allomancy:raw_cadmium"
   },
-  "result": "allomancy:cadmium_ingot",
-  "experience": 0.7,
-  "cookingtime": 200
+  "result": "allomancy:cadmium_ingot"
 }

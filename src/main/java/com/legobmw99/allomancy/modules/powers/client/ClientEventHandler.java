@@ -32,7 +32,7 @@ import net.minecraft.world.phys.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -218,7 +218,7 @@ public class ClientEventHandler {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void onKeyInput(final InputEvent.KeyInputEvent event) {
+    public void onKeyInput(final InputEvent.Key event) {
         if (event.getAction() == GLFW.GLFW_PRESS) {
             acceptInput();
         }
@@ -226,7 +226,7 @@ public class ClientEventHandler {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void onMouseInput(final InputEvent.MouseInputEvent event) {
+    public void onMouseInput(final InputEvent.MouseButton event) {
         if (event.getAction() == GLFW.GLFW_PRESS) {
             acceptInput();
         }
@@ -237,7 +237,7 @@ public class ClientEventHandler {
      */
     private void acceptInput() {
 
-        boolean extras = PowersClientSetup.enable_more_keybinds && Arrays.stream(PowersClientSetup.powers).anyMatch(KeyMapping::isDown);
+        boolean extras = Arrays.stream(PowersClientSetup.powers).anyMatch(KeyMapping::isDown);
 
         if (!PowersClientSetup.burn.isDown() && !extras) {
             return;
@@ -280,7 +280,11 @@ public class ClientEventHandler {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void onRenderWorldLast(RenderLevelLastEvent event) {
+    public void onRenderLevelStage(final RenderLevelStageEvent event) {
+
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            return;
+        }
 
         Player player = this.mc.player;
         if (player == null || !player.isAlive() || this.mc.options.getCameraType().isMirrored()) {
@@ -351,7 +355,7 @@ public class ClientEventHandler {
         });
     }
 
-    private void teardownPoseStack(PoseStack stack) {
+    private static void teardownPoseStack(PoseStack stack) {
         stack.popPose();
         RenderSystem.applyModelViewMatrix();
 
@@ -363,7 +367,7 @@ public class ClientEventHandler {
         RenderSystem.enableTexture();
     }
 
-    private PoseStack setupPoseStack(RenderLevelLastEvent event) {
+    private PoseStack setupPoseStack(final RenderLevelStageEvent event) {
         RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
         RenderSystem.disableTexture();
         RenderSystem.disableDepthTest();

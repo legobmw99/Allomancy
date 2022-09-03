@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class CombatSetup {
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Allomancy.MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Allomancy.MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Allomancy.MODID);
     public static final RegistryObject<CoinBagItem> COIN_BAG = ITEMS.register("coin_bag", CoinBagItem::new);
     public static final RegistryObject<ObsidianDaggerItem> OBSIDIAN_DAGGER = ITEMS.register("obsidian_dagger", ObsidianDaggerItem::new);
@@ -69,7 +69,11 @@ public class CombatSetup {
 
     };
     public static final RegistryObject<MistcloakItem> MISTCLOAK = ITEMS.register("mistcloak", MistcloakItem::new);
-    public static final RegistryObject<EntityType<ProjectileNuggetEntity>> NUGGET_PROJECTILE = ENTITIES.register("nugget_projectile", () -> EntityType.Builder
+
+    public static void register() {
+        ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    }    public static final RegistryObject<EntityType<ProjectileNuggetEntity>> NUGGET_PROJECTILE = ENTITIES.register("nugget_projectile", () -> EntityType.Builder
             .<ProjectileNuggetEntity>of(ProjectileNuggetEntity::new, MobCategory.MISC)
             .setShouldReceiveVelocityUpdates(true)
             .setUpdateInterval(20)
@@ -77,10 +81,7 @@ public class CombatSetup {
             .sized(0.25F, 0.25F)
             .build("nugget_projectile"));
 
-    public static void register() {
-        ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-    }
+
 
 
 }

@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "CC",
-    "CC",
-    "sC"
-  ],
   "key": {
     "C": {
       "item": "minecraft:cobblestone"
@@ -13,6 +8,11 @@
       "item": "minecraft:stick"
     }
   },
+  "pattern": [
+    "CC",
+    "CC",
+    "sC"
+  ],
   "result": {
     "item": "allomancy:koloss_blade"
   }

@@ -17,6 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,11 +48,11 @@ public class Recipes extends RecipeProvider {
     }
 
     protected static void buildShapeless(Consumer<FinishedRecipe> consumer, ItemLike result, int count, Item criterion, String save, Ingredient... ingredients) {
-        Allomancy.LOGGER.debug("Creating Shapeless Recipe for " + result.asItem().getRegistryName() + " " + save);
+        Allomancy.LOGGER.debug("Creating Shapeless Recipe for " + ForgeRegistries.ITEMS.getKey(result.asItem()) + " " + save);
 
         ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(result, count);
 
-        builder.unlockedBy("has_" + criterion.getRegistryName().getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(criterion));
+        builder.unlockedBy("has_" + ForgeRegistries.ITEMS.getKey(criterion).getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(criterion));
 
         for (Ingredient ingredient : ingredients) {
             builder.requires(ingredient);
@@ -65,16 +66,16 @@ public class Recipes extends RecipeProvider {
     }
 
     protected static void buildSmeltingAndBlasting(Consumer<FinishedRecipe> consumer, ItemLike result, ItemLike ingredient, float xp) {
-        Allomancy.LOGGER.debug("Creating Smelting and Blasting Recipe for " + result.asItem().getRegistryName());
+        Allomancy.LOGGER.debug("Creating Smelting and Blasting Recipe for " + ForgeRegistries.ITEMS.getKey(result.asItem()));
 
         SimpleCookingRecipeBuilder smelt = SimpleCookingRecipeBuilder.smelting(ing(ingredient), result, xp, 200);
         SimpleCookingRecipeBuilder blast = SimpleCookingRecipeBuilder.blasting(ing(ingredient), result, xp, 100);
 
-        smelt.unlockedBy("has_" + ingredient.asItem().getRegistryName().getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
-        blast.unlockedBy("has_" + ingredient.asItem().getRegistryName().getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
+        smelt.unlockedBy("has_" + ForgeRegistries.ITEMS.getKey(ingredient.asItem()).getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
+        blast.unlockedBy("has_" + ForgeRegistries.ITEMS.getKey(ingredient.asItem()).getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
 
         smelt.save(consumer);
-        blast.save(consumer, result.asItem().getRegistryName() + "_from_blasting");
+        blast.save(consumer, ForgeRegistries.ITEMS.getKey(result.asItem()) + "_from_blasting");
 
     }
 
@@ -151,7 +152,7 @@ public class Recipes extends RecipeProvider {
 
             // Grinder recipes
             Item flake = MaterialsSetup.FLAKES.get(i).get();
-            String flakeType = flake.getRegistryName().getPath().substring(0, flake.getRegistryName().getPath().indexOf('_'));
+            String flakeType = ForgeRegistries.ITEMS.getKey(flake).getPath().substring(0, ForgeRegistries.ITEMS.getKey(flake).getPath().indexOf('_'));
             buildShapeless(consumer, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()), ing("forge:" + "ingots/" + flakeType));
 
             if (i < Metal.values().length && Metal.getMetal(i).isVanilla()) {
@@ -165,10 +166,10 @@ public class Recipes extends RecipeProvider {
 
             // building up
             buildShapeless(consumer, block, 1, ingot, repeat(ing(ingot), 9));
-            buildShapeless(consumer, ingot, 1, nugget, "allomancy:" + ingot.getRegistryName().getPath() + "_from_nuggets", repeat(ing(nugget), 9));
+            buildShapeless(consumer, ingot, 1, nugget, "allomancy:" + ForgeRegistries.ITEMS.getKey(ingot).getPath() + "_from_nuggets", repeat(ing(nugget), 9));
 
             // breaking down
-            buildShapeless(consumer, ingot, 9, block, "allomancy:" + ingot.getRegistryName().getPath() + "_from_block", ing(block));
+            buildShapeless(consumer, ingot, 9, block, "allomancy:" + ForgeRegistries.ITEMS.getKey(ingot).getPath() + "_from_block", ing(block));
             buildShapeless(consumer, nugget, 9, ingot, ing(ingot));
         }
 
@@ -249,11 +250,11 @@ public class Recipes extends RecipeProvider {
     }
 
     protected void buildShaped(Consumer<FinishedRecipe> consumer, ItemLike result, int count, Item criterion, String... lines) {
-        Allomancy.LOGGER.debug("Creating Shaped Recipe for " + result.asItem().getRegistryName());
+        Allomancy.LOGGER.debug("Creating Shaped Recipe for " + ForgeRegistries.ITEMS.getKey(result.asItem()));
 
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(result, count);
 
-        builder.unlockedBy("has_" + criterion.getRegistryName().getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(criterion));
+        builder.unlockedBy("has_" + ForgeRegistries.ITEMS.getKey(criterion).getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(criterion));
 
         Set<Character> characters = new HashSet<>();
         for (String line : lines) {

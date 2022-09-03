@@ -2,19 +2,15 @@ package com.legobmw99.allomancy.modules.powers.client;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticle;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
 import com.mojang.serialization.Codec;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -36,26 +32,21 @@ public class PowersClientSetup {
     @OnlyIn(Dist.CLIENT)
     public static KeyMapping burn;
 
-    public static boolean enable_more_keybinds;
-
     @OnlyIn(Dist.CLIENT)
     public static KeyMapping[] powers;
 
-    public static void initKeyBindings() {
+    public static void registerKeyBinding(final RegisterKeyMappingsEvent evt) {
         burn = new KeyMapping("key.burn", GLFW.GLFW_KEY_V, "key.categories.allomancy");
         hud = new KeyMapping("key.hud", GLFW.GLFW_KEY_UNKNOWN, "key.categories.allomancy");
-        ClientRegistry.registerKeyBinding(burn);
-        ClientRegistry.registerKeyBinding(hud);
+        evt.register(burn);
+        evt.register(hud);
 
-        enable_more_keybinds = PowersConfig.enable_more_keybinds.get();
-
-        if (enable_more_keybinds) {
-            powers = new KeyMapping[Metal.values().length];
-            for (int i = 0; i < powers.length; i++) {
-                powers[i] = new KeyMapping("metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN, "key.categories.allomancy");
-                ClientRegistry.registerKeyBinding(powers[i]);
-            }
+        powers = new KeyMapping[Metal.values().length];
+        for (int i = 0; i < powers.length; i++) {
+            powers[i] = new KeyMapping("metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN, "key.categories.allomancy");
+            evt.register(powers[i]);
         }
+
 
     }
 
@@ -63,10 +54,9 @@ public class PowersClientSetup {
         PARTICLES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void registerParticle(ParticleFactoryRegisterEvent event) {
+    public static void registerParticle(final RegisterParticleProvidersEvent event) {
         Allomancy.LOGGER.info("Allomancy: Registering custom particles");
-        Minecraft.getInstance().particleEngine.register(PowersClientSetup.SOUND_PARTICLE_TYPE.get(), SoundParticle.Factory::new);
+        event.register(PowersClientSetup.SOUND_PARTICLE_TYPE.get(), SoundParticle.Factory::new);
     }
 
 }

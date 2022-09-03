@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.BiConsumer;
@@ -25,26 +26,26 @@ public class BlockStates extends BlockStateProvider {
     protected void registerStatesAndModels() {
         for (var rblock : MaterialsSetup.ORE_BLOCKS) {
             Block block = rblock.get();
-            String path = block.getRegistryName().getPath();
+            String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
             singleTextureBlock(block, path, "block/" + path);
         }
 
         for (var rblock : MaterialsSetup.DEEPSLATE_ORE_BLOCKS) {
             Block block = rblock.get();
-            String path = block.getRegistryName().getPath();
+            String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
             singleTextureBlock(block, path, "block/" + path);
         }
 
         for (RegistryObject<Block> rblock : MaterialsSetup.RAW_ORE_BLOCKS) {
             Block block = rblock.get();
-            String path = block.getRegistryName().getPath();
+            String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
             singleTextureBlock(block, path, "block/" + path);
         }
 
         for (RegistryObject<Block> rblock : MaterialsSetup.STORAGE_BLOCKS) {
             if (rblock != null) {
                 Block block = rblock.get();
-                String path = block.getRegistryName().getPath();
+                String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
                 singleTextureBlock(block, path, "block/" + path);
             }
         }
@@ -56,7 +57,7 @@ public class BlockStates extends BlockStateProvider {
 
 
     private void singleTextureBlock(Block block, String model, String texture) {
-        Allomancy.LOGGER.debug("Creating Block Data for " + block.getRegistryName());
+        Allomancy.LOGGER.debug("Creating Block Data for " + ForgeRegistries.BLOCKS.getKey(block));
         simpleBlock(block);
     }
 

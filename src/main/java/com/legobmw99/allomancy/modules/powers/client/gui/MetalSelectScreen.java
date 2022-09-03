@@ -20,8 +20,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -43,7 +42,7 @@ public class MetalSelectScreen extends Screen {
     int slotSelected = -1;
 
     public MetalSelectScreen() {
-        super(new TextComponent("allomancy_gui"));
+        super(Component.translatable("allomancy_gui"));
         this.mc = Minecraft.getInstance();
     }
 
@@ -139,7 +138,7 @@ public class MetalSelectScreen extends Screen {
 
                 float xsp = xp - 4;
                 float ysp = yp;
-                String name = (mouseInSector ? ChatFormatting.UNDERLINE : ChatFormatting.RESET) + new TranslatableComponent(METAL_LOCAL[toMetalIndex(seg)]).getString();
+                String name = (mouseInSector ? ChatFormatting.UNDERLINE : ChatFormatting.RESET) + Component.translatable(METAL_LOCAL[toMetalIndex(seg)]).getString();
                 int textwidth = this.mc.font.width(name);
 
                 if (xsp < x) {

@@ -36,6 +36,7 @@ public class UpdateEnhancedPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
+        // TODO: check person doing this has the right powers to do so, need to encode target and source.
         ctx.get().enqueueWork(() -> {
             if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) { // Update player of own status
                 Player player = (Player) ctx.get().getSender().level.getEntity(this.entityID);

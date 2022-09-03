@@ -1,0 +1,27 @@
+{
+  "feature": "allomancy:tin_ore_feature",
+  "placement": [
+    {
+      "count": 15,
+      "type": "minecraft:count"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "height": {
+        "min_inclusive": {
+          "absolute": 30
+        },
+        "max_inclusive": {
+          "absolute": 112
+        },
+        "type": "minecraft:trapezoid"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -15,7 +15,7 @@
     }
   ],
   "result": {
-    "item": "allomancy:duralumin_ingot",
-    "count": 4
+    "count": 4,
+    "item": "allomancy:duralumin_ingot"
   }
 }

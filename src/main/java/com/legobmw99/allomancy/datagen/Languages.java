@@ -72,7 +72,6 @@ public class Languages extends LanguageProvider {
             add("metals." + mt.getName(), getDisplayName(mt));
 
             add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), getDisplayName(mt) + " Flakes");
-
             add(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), "Banner Pattern");
             add("item.allomancy." + mt.getName() + "_pattern.desc", getDisplayName(mt) + " Symbol");
 
@@ -117,9 +116,12 @@ public class Languages extends LanguageProvider {
 
         for (DyeColor color : DyeColor.values()) {
             for (Metal mt : Metal.values()) {
-                add("block.minecraft.banner.allomancy_" + mt.getName() + "." + color.getName(), getDisplayName(color) + " " + getDisplayName(mt) + " Symbol");
+                add("block.minecraft.banner.allomancy." + mt.getName() + "." + color.getName(), getDisplayName(color) + " " + getDisplayName(mt) + " Symbol");
             }
         }
+
+        add("config.jade.plugin_allomancy.waila_bronze", "Allomancy: Show burning metals when seeking");
+
 
     }
 

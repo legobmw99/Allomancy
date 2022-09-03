@@ -1,13 +1,14 @@
 package com.legobmw99.allomancy.integration;
 
-import mcp.mobius.waila.api.IRegistrar;
-import mcp.mobius.waila.api.IWailaPlugin;
-import mcp.mobius.waila.api.TooltipPosition;
 import net.minecraft.world.entity.player.Player;
+import snownee.jade.api.IWailaClientRegistration;
+import snownee.jade.api.IWailaPlugin;
+import snownee.jade.api.WailaPlugin;
 
+@WailaPlugin
 public class AllomancyWailaPlugin implements IWailaPlugin {
     @Override
-    public void register(IRegistrar iRegistrar) {
-        iRegistrar.addComponent(AllomancyTooltip.INSTANCE, TooltipPosition.BODY, Player.class);
+    public void registerClient(IWailaClientRegistration registration) {
+        registration.registerEntityComponent(AllomancyTooltip.INSTANCE, Player.class);
     }
 }

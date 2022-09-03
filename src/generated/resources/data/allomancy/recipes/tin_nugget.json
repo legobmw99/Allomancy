@@ -6,7 +6,7 @@
     }
   ],
   "result": {
-    "item": "allomancy:tin_nugget",
-    "count": 9
+    "count": 9,
+    "item": "allomancy:tin_nugget"
   }
 }

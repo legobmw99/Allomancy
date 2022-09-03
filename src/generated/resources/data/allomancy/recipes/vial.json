@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "S": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
   "pattern": [
     " S ",
     "G G",
     " G "
   ],
-  "key": {
-    "S": {
-      "tag": "minecraft:wooden_slabs"
-    },
-    "G": {
-      "item": "minecraft:glass"
-    }
-  },
   "result": {
-    "item": "allomancy:vial",
-    "count": 4
+    "count": 4,
+    "item": "allomancy:vial"
   }
 }
