@@ -33,7 +33,7 @@ minecraft {
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
     mappings channel: 'parchment', version: "${parchment_version}-${minecraft_version}"
-//    mappings channel: 'official', version: "${minecraft_version}"
+    //    mappings channel: 'official', version: "${minecraft_version}"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -49,6 +49,7 @@ minecraft {
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'allomancy'
 
             mods {
                 allomancy {
@@ -66,6 +67,8 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            property 'forge.enabledGameTestNamespaces', 'allomancy'
+
             mods {
                 allomancy {
                     source sourceSets.main
@@ -73,6 +76,25 @@ minecraft {
             }
         }
 
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+            property 'forge.enabledGameTestNamespaces', 'allomancy'
+
+            mods {
+                allomancy {
+                    source sourceSets.main
+                }
+            }
+        }
 
         data {
             workingDirectory project.file('run')
@@ -100,7 +122,10 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven {
-        url 'https://gitlab.com/api/v4/projects/25106863/packages/maven'
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
     }
 }
 
@@ -113,12 +138,11 @@ dependencies {
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
-    dependencies {
-        // compile against the API
-        compileOnly fg.deobf("mcp.mobius.waila:wthit-api:forge-4.8.0")
 
-        // run against the full jar
-        runtimeOnly fg.deobf("mcp.mobius.waila:wthit:forge-4.8.0")
+    dependencies {
+        // Visit https://www.curseforge.com/minecraft/mc-mods/jade/files/all
+        // to get the latest version's jade_id
+        implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
     }
     // Real examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
@@ -150,7 +174,22 @@ jar {
     }
 }
 
-task srcJar(type: Jar) {
-    from(sourceSets.main.java)
-    classifier = 'sources'
+
+jar.finalizedBy('reobfJar')
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+
+////////////////
+// IntelliJ Project Import
+// The Mixin annotation process does not have an obfuscation source when running through the IntelliJ compiler,
+// thus we have to prevent it from being activated as part of importing this Gradle project into IntelliJ.
+if (System.getProperty("idea.sync.active") == "true") {
+    afterEvaluate {
+        tasks.withType(JavaCompile).all {
+            it.options.annotationProcessorPath = files()
+        }
+    }
 }

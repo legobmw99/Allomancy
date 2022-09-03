@@ -2,15 +2,15 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "electrum_block",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "allomancy:electrum_block"
         }
-      ]
+      ],
+      "name": "electrum_block",
+      "rolls": 1.0
     }
   ]
 }

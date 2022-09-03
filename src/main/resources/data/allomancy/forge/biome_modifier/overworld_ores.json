@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features", 
+  "biomes": "#minecraft:is_overworld", 
+  "features": ["allomancy:aluminum_ore","allomancy:cadmium_ore","allomancy:chromium_ore","allomancy:lead_ore","allomancy:silver_ore","allomancy:tin_ore","allomancy:zinc_ore"] ,
+  "step": "underground_ores" 
+}

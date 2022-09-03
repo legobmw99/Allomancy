@@ -40,7 +40,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onAttachCapability(final AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
+        if (event.getObject() instanceof Player p) {
             AllomancerDataProvider provider = new AllomancerDataProvider();
             event.addCapability(AllomancerCapability.IDENTIFIER, provider);
         }
@@ -48,11 +48,10 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getPlayer().level.isClientSide()) {
+        if (event.getEntity().level.isClientSide()) {
             return;
         }
-
-        if (event.getPlayer() instanceof ServerPlayer player) {
+        if (event.getEntity() instanceof ServerPlayer player) {
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 //Handle random misting case
                 if (PowersConfig.random_mistings.get() && data.isUninvested()) {
@@ -60,7 +59,7 @@ public class CommonEventHandler {
                     if (PowersConfig.respect_player_UUID.get()) {
                         randomMisting = (byte) (Math.abs(player.getUUID().hashCode()) % 16);
                     } else {
-                        randomMisting = (byte) (event.getPlayer().getRandom().nextInt(Metal.values().length));
+                        randomMisting = (byte) (player.getRandom().nextInt(Metal.values().length));
                     }
                     data.addPower(Metal.getMetal(randomMisting));
                     ItemStack flakes = new ItemStack(MaterialsSetup.FLAKES.get(randomMisting).get());
@@ -73,19 +72,19 @@ public class CommonEventHandler {
             });
 
             //Sync cap to client
-            Network.sync(event.getPlayer());
+            Network.sync(player);
         }
 
     }
 
     @SubscribeEvent
     public static void onPlayerClone(final PlayerEvent.Clone event) {
-        if (event.getPlayer().level.isClientSide()) {
+        if (event.getEntity().level.isClientSide()) {
             return;
         }
 
         event.getOriginal().reviveCaps();
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
             event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(oldData -> {
                 data.setDeathLoc(oldData.getDeathLoc(), oldData.getDeathDim());
@@ -114,15 +113,15 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.getPlayer().getCommandSenderWorld().isClientSide()) {
-            Network.sync(event.getPlayer());
+        if (!event.getEntity().getCommandSenderWorld().isClientSide()) {
+            Network.sync(event.getEntity());
         }
     }
 
     @SubscribeEvent
     public static void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (!event.getPlayer().getCommandSenderWorld().isClientSide()) {
-            Network.sync(event.getPlayer());
+        if (!event.getEntity().getCommandSenderWorld().isClientSide()) {
+            Network.sync(event.getEntity());
         }
     }
 
@@ -135,9 +134,9 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onSetSpawn(final PlayerSetSpawnEvent event) {
-        if (event.getPlayer() instanceof ServerPlayer player) {
+        if (event.getEntity() instanceof ServerPlayer player) {
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-                data.setSpawnLoc(event.getNewSpawn(), event.getSpawnWorld());
+                data.setSpawnLoc(event.getNewSpawn(), event.getSpawnLevel());
                 Network.sync(data, player);
             });
         }
@@ -145,7 +144,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onLivingDeath(final LivingDeathEvent event) {
-        if (event.getEntityLiving() instanceof ServerPlayer player) {
+        if (event.getEntity() instanceof ServerPlayer player) {
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 data.setDeathLoc(new BlockPos(player.position()), player.level.dimension());
                 Network.sync(data, player);
@@ -173,7 +172,7 @@ public class CommonEventHandler {
                 }
 
                 if (data.isBurning(Metal.CHROMIUM)) {
-                    if (event.getEntityLiving() instanceof Player player) {
+                    if (event.getEntity() instanceof Player player) {
                         PowerUtils.wipePlayer(player);
                     }
                 }
@@ -181,7 +180,7 @@ public class CommonEventHandler {
         }
 
         // Reduce incoming damage for pewter burners
-        if (event.getEntityLiving() instanceof ServerPlayer player) {
+        if (event.getEntity() instanceof ServerPlayer player) {
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 if (data.isBurning(Metal.PEWTER)) {
                     if (data.isEnhanced()) { // Duralumin invulnerability
@@ -202,12 +201,12 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void onWorldTick(final TickEvent.WorldTickEvent event) {
+    public static void onWorldTick(final TickEvent.LevelTickEvent event) {
         if (event.phase != TickEvent.Phase.END) {
             return;
         }
 
-        Level level = event.world;
+        Level level = event.level;
         var list = level.players();
         for (int enti = list.size() - 1; enti >= 0; enti--) {
             Player curPlayer = list.get(enti);

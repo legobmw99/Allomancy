@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 0.4,
   "ingredient": {
     "item": "allomancy:raw_lead"
   },
-  "result": "allomancy:lead_ingot",
-  "experience": 0.4,
-  "cookingtime": 200
+  "result": "allomancy:lead_ingot"
 }

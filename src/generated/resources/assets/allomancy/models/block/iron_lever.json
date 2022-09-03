@@ -1,29 +1,20 @@
 {
   "ambientocclusion": false,
-  "textures": {
-    "particle": "minecraft:block/iron_block",
-    "base": "minecraft:block/iron_block",
-    "lever": "allomancy:block/iron_lever"
-  },
   "elements": [
     {
-      "from": [
-        5,
-        0,
-        4
-      ],
-      "to": [
-        11,
-        3,
-        12
-      ],
       "faces": {
         "down": {
-          "texture": "#base",
-          "cullface": "down"
-        },
-        "up": {
+          "cullface": "down",
           "texture": "#base"
+        },
+        "east": {
+          "texture": "#base",
+          "uv": [
+            4.0,
+            0.0,
+            12.0,
+            3.0
+          ]
         },
         "north": {
           "texture": "#base",
@@ -43,6 +34,9 @@
             3.0
           ]
         },
+        "up": {
+          "texture": "#base"
+        },
         "west": {
           "texture": "#base",
           "uv": [
@@ -51,41 +45,50 @@
             12.0,
             3.0
           ]
-        },
-        "east": {
-          "texture": "#base",
-          "uv": [
-            4.0,
-            0.0,
-            12.0,
-            3.0
-          ]
         }
-      }
-    },
-    {
+      },
       "from": [
-        7,
-        1,
-        7
+        5,
+        0,
+        4
       ],
       "to": [
-        9,
         11,
-        9
-      ],
-      "rotation": {
-        "origin": [
-          8,
-          1,
-          8
-        ],
-        "axis": "x",
-        "angle": -45.0
-      },
+        3,
+        12
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "minecraft:missingno"
+        },
+        "east": {
+          "texture": "#lever",
+          "uv": [
+            7.0,
+            6.0,
+            9.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#lever",
+          "uv": [
+            7.0,
+            6.0,
+            9.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#lever",
+          "uv": [
+            7.0,
+            6.0,
+            9.0,
+            16.0
+          ]
         },
         "up": {
           "texture": "#lever",
@@ -96,24 +99,6 @@
             8.0
           ]
         },
-        "north": {
-          "texture": "#lever",
-          "uv": [
-            7.0,
-            6.0,
-            9.0,
-            16.0
-          ]
-        },
-        "south": {
-          "texture": "#lever",
-          "uv": [
-            7.0,
-            6.0,
-            9.0,
-            16.0
-          ]
-        },
         "west": {
           "texture": "#lever",
           "uv": [
@@ -122,17 +107,32 @@
             9.0,
             16.0
           ]
-        },
-        "east": {
-          "texture": "#lever",
-          "uv": [
-            7.0,
-            6.0,
-            9.0,
-            16.0
-          ]
         }
-      }
+      },
+      "from": [
+        7,
+        1,
+        7
+      ],
+      "rotation": {
+        "angle": -45.0,
+        "axis": "x",
+        "origin": [
+          8,
+          1,
+          8
+        ]
+      },
+      "to": [
+        9,
+        11,
+        9
+      ]
     }
-  ]
+  ],
+  "textures": {
+    "base": "minecraft:block/iron_block",
+    "lever": "allomancy:block/iron_lever",
+    "particle": "minecraft:block/iron_block"
+  }
 }

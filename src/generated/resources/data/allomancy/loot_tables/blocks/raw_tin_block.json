@@ -2,15 +2,15 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "raw_tin_block",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "allomancy:raw_tin_block"
         }
-      ]
+      ],
+      "name": "raw_tin_block",
+      "rolls": 1.0
     }
   ]
 }

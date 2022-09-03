@@ -13,7 +13,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.util.NonNullConsumer;
 
@@ -26,8 +26,8 @@ import java.util.function.Predicate;
 
 public class AllomancyPowerCommand {
 
-    private static final DynamicCommandExceptionType ERROR_CANT_ADD = new DynamicCommandExceptionType(s -> new TranslatableComponent("commands.allomancy.err_add", s));
-    private static final DynamicCommandExceptionType ERROR_CANT_REMOVE = new DynamicCommandExceptionType(s -> new TranslatableComponent("commands.allomancy.err_remove", s));
+    private static final DynamicCommandExceptionType ERROR_CANT_ADD = new DynamicCommandExceptionType(s -> Component.translatable("commands.allomancy.err_add", s));
+    private static final DynamicCommandExceptionType ERROR_CANT_REMOVE = new DynamicCommandExceptionType(s -> Component.translatable("commands.allomancy.err_remove", s));
 
     private static Predicate<CommandSourceStack> permissions(int level) {
         return (player) -> player.hasPermission(level);
@@ -119,7 +119,7 @@ public class AllomancyPowerCommand {
                 }
             }
         });
-        ctx.getSource().sendSuccess(new TranslatableComponent("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
+        ctx.getSource().sendSuccess(Component.translatable("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
     }
 
     private static void addPower(CommandContext<CommandSourceStack> ctx, ServerPlayer player) throws CommandSyntaxException {
@@ -175,7 +175,7 @@ public class AllomancyPowerCommand {
         }
         Network.sync(player);
 
-        ctx.getSource().sendSuccess(new TranslatableComponent(success, player.getDisplayName(), type), true);
+        ctx.getSource().sendSuccess(Component.translatable(success, player.getDisplayName(), type), true);
 
     }
 

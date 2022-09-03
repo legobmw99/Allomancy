@@ -9,7 +9,7 @@
     }
   ],
   "result": {
-    "item": "allomancy:iron_flakes",
-    "count": 2
+    "count": 2,
+    "item": "allomancy:iron_flakes"
   }
 }

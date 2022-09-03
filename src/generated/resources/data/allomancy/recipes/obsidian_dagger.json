@@ -1,18 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "O": {
+      "tag": "forge:obsidian"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
   "pattern": [
     "  O",
     " O ",
     "s  "
   ],
-  "key": {
-    "s": {
-      "item": "minecraft:stick"
-    },
-    "O": {
-      "tag": "forge:obsidian"
-    }
-  },
   "result": {
     "item": "allomancy:obsidian_dagger"
   }

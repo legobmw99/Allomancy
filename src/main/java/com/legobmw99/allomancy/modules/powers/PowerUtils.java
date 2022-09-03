@@ -44,6 +44,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.ITeleporter;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -87,7 +88,7 @@ public class PowerUtils {
      * @return Whether the block is metal
      */
     public static boolean isBlockMetal(Block block) {
-        return isOnWhitelist(block.getRegistryName().toString());
+        return isOnWhitelist(ForgeRegistries.BLOCKS.getKey(block).toString());
     }
 
     /**
@@ -97,7 +98,7 @@ public class PowerUtils {
      * @return Whether the item is metal
      */
     public static boolean isItemMetal(ItemStack item) {
-        return isOnWhitelist(item.getItem().getRegistryName().toString());
+        return isOnWhitelist(ForgeRegistries.ITEMS.getKey(item.getItem()).toString());
     }
 
     private static boolean isOnWhitelist(String s) {

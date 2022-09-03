@@ -10,23 +10,9 @@ public class GrinderItem extends Item {
         super(Allomancy.createStandardItemProperties().setNoRepair().defaultDurability(256));
     }
 
-    @Override
-    public boolean hasCraftingRemainingItem() {
-        return true;
-    }
 
     @Override
-    public boolean hasContainerItem(ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public boolean isDamageable(ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getContainerItem(ItemStack itemStack) {
+    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
         ItemStack damaged = itemStack.copy();
         damaged.setDamageValue(damaged.getDamageValue() + 1);
         if (damaged.getDamageValue() >= damaged.getMaxDamage()) {
@@ -34,4 +20,17 @@ public class GrinderItem extends Item {
         }
         return damaged;
     }
+
+    @Override
+    public boolean hasCraftingRemainingItem() {
+        return true;
+    }
+
+
+    @Override
+    public boolean isDamageable(ItemStack stack) {
+        return true;
+    }
+
+
 }

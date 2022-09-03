@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
   "pattern": [
     "s",
     "I"
   ],
-  "key": {
-    "s": {
-      "item": "minecraft:stick"
-    },
-    "I": {
-      "tag": "forge:storage_blocks/iron"
-    }
-  },
   "result": {
     "item": "allomancy:iron_lever"
   }

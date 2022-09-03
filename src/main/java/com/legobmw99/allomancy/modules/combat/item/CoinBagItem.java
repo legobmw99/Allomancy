@@ -12,6 +12,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;
@@ -21,7 +22,7 @@ public class CoinBagItem extends ProjectileWeaponItem {
 
     public static final Predicate<ItemStack> NUGGETS = (stack) -> {
         Item item = stack.getItem();
-        return PowerUtils.doesResourceContainsMetal(item.getRegistryName()) && item.getRegistryName().getPath().contains("nugget");
+        return PowerUtils.doesResourceContainsMetal(ForgeRegistries.ITEMS.getKey(item)) && ForgeRegistries.ITEMS.getKey(item).getPath().contains("nugget");
     };
 
     public CoinBagItem() {
@@ -29,7 +30,7 @@ public class CoinBagItem extends ProjectileWeaponItem {
     }
 
     private static Ammo getAmmoFromItem(Item itemIn) {
-        return switch (itemIn.getRegistryName().getPath()) {
+        return switch (ForgeRegistries.ITEMS.getKey(itemIn).getPath()) {
             case "iron_nugget", "steel_nugget", "bronze_nugget", "copper_nugget", "nickel_nugget" -> Ammo.HEAVY;
             case "bendalloy_nugget", "nicrosil_nugget", "electrum_nugget", "platinum_nugget" -> Ammo.MAGIC;
             default -> Ammo.LIGHT;

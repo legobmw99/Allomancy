@@ -1,24 +1,7 @@
 {
   "parent": "minecraft:adventure/root",
-  "display": {
-    "icon": {
-      "item": "allomancy:allomantic_grinder",
-      "nbt": "{Damage:0}"
-    },
-    "title": {
-      "translate": "advancements.local_metallurgist.title"
-    },
-    "description": {
-      "translate": "advancements.local_metallurgist.desc"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
     "grinder": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -27,7 +10,24 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.local_metallurgist.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "allomancy:allomantic_grinder",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.local_metallurgist.title"
     }
   },
   "requirements": [

@@ -3,11 +3,10 @@ package com.legobmw99.allomancy.modules.materials;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
-import com.legobmw99.allomancy.modules.materials.world.OreGenerator;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
@@ -35,9 +34,9 @@ public class MaterialsSetup {
     public static final List<RegistryObject<Item>> STORAGE_BLOCK_ITEMS = new ArrayList<>();
 
 
-    public static final List<RegistryObject<OreBlock>> ORE_BLOCKS = new ArrayList<>();
+    public static final List<RegistryObject<DropExperienceBlock>> ORE_BLOCKS = new ArrayList<>();
     public static final List<RegistryObject<Item>> ORE_BLOCKS_ITEMS = new ArrayList<>();
-    public static final List<RegistryObject<OreBlock>> DEEPSLATE_ORE_BLOCKS = new ArrayList<>();
+    public static final List<RegistryObject<DropExperienceBlock>> DEEPSLATE_ORE_BLOCKS = new ArrayList<>();
     public static final List<RegistryObject<Item>> DEEPSLATE_ORE_BLOCKS_ITEMS = new ArrayList<>();
     public static final List<RegistryObject<Block>> RAW_ORE_BLOCKS = new ArrayList<>();
     public static final List<RegistryObject<Item>> RAW_ORE_BLOCKS_ITEMS = new ArrayList<>();
@@ -102,7 +101,6 @@ public class MaterialsSetup {
     public static void init(final FMLCommonSetupEvent e) {
         e.enqueueWork(() -> {
             MinecraftForge.EVENT_BUS.register(LootTableInjector.class);
-            OreGenerator.registerFeatures();
         });
     }
 
@@ -110,12 +108,13 @@ public class MaterialsSetup {
         return new Block(Block.Properties.of(Material.STONE).strength(2.1F).requiresCorrectToolForDrops());
     }
 
-    public static OreBlock createStandardOre() {
-        return new OreBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F));
+    public static DropExperienceBlock createStandardOre() {
+        return new DropExperienceBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F));
     }
 
-    public static OreBlock createDeepslateBlock() {
-        return new OreBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().color(MaterialColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE));
+    public static DropExperienceBlock createDeepslateBlock() {
+        return new DropExperienceBlock(
+                Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().color(MaterialColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE));
     }
 }
 

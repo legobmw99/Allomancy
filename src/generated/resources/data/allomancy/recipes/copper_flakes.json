@@ -9,7 +9,7 @@
     }
   ],
   "result": {
-    "item": "allomancy:copper_flakes",
-    "count": 2
+    "count": 2,
+    "item": "allomancy:copper_flakes"
   }
 }

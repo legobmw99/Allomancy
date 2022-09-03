@@ -10,9 +10,9 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -32,6 +32,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.io.IOException;
@@ -56,9 +57,9 @@ public class LootTables extends LootTableProvider {
             var raw = MaterialsSetup.RAW_ORE_ITEMS.get(i).get();
             var rawb = MaterialsSetup.RAW_ORE_BLOCKS.get(i).get();
 
-            addSilkTouchBlock(ore.getRegistryName().getPath(), ore, raw, 1, 1);
-            addSilkTouchBlock(ds.getRegistryName().getPath(), ds, raw, 1, 1);
-            addSimpleBlock(rawb.getRegistryName().getPath(), rawb);
+            addSilkTouchBlock(ForgeRegistries.BLOCKS.getKey(ore).getPath(), ore, raw, 1, 1);
+            addSilkTouchBlock(ForgeRegistries.BLOCKS.getKey(ds).getPath(), ds, raw, 1, 1);
+            addSimpleBlock(ForgeRegistries.BLOCKS.getKey(rawb).getPath(), rawb);
 
         }
 
@@ -68,7 +69,7 @@ public class LootTables extends LootTableProvider {
         for (RegistryObject<Block> rblock : MaterialsSetup.STORAGE_BLOCKS) {
             if (rblock != null) {
                 Block block = rblock.get();
-                addSimpleBlock(block.getRegistryName().getPath(), block);
+                addSimpleBlock(ForgeRegistries.BLOCKS.getKey(block).getPath(), block);
             }
         }
 
@@ -76,7 +77,7 @@ public class LootTables extends LootTableProvider {
 
     // Useful boilerplate from McJtyLib
     protected void addSimpleBlock(String name, Block block) {
-        Allomancy.LOGGER.debug("Creating Loot Table for block " + block.getRegistryName());
+        Allomancy.LOGGER.debug("Creating Loot Table for block " + ForgeRegistries.BLOCKS.getKey(block));
         LootPool.Builder builder = LootPool.lootPool().name(name).setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(block));
 
         this.lootTables.put(block, LootTable.lootTable().withPool(builder));
@@ -101,7 +102,7 @@ public class LootTables extends LootTableProvider {
     }
 
     @Override
-    public void run(HashCache cache) {
+    public void run(CachedOutput cache) {
         addBlockTables();
 
         Map<ResourceLocation, LootTable> tables;
@@ -135,12 +136,12 @@ public class LootTables extends LootTableProvider {
         writeTables(cache, tables);
     }
 
-    private void writeTables(HashCache cache, Map<ResourceLocation, LootTable> tables) {
+    private void writeTables(CachedOutput cache, Map<ResourceLocation, LootTable> tables) {
         Path outputFolder = this.gen.getOutputFolder();
         tables.forEach((key, lootTable) -> {
             Path path = outputFolder.resolve("data/" + key.getNamespace() + "/loot_tables/" + key.getPath() + ".json");
             try {
-                DataProvider.save(GSON, cache, net.minecraft.world.level.storage.loot.LootTables.serialize(lootTable), path);
+                DataProvider.saveStable(cache, net.minecraft.world.level.storage.loot.LootTables.serialize(lootTable), path);
             } catch (IOException e) {
                 Allomancy.LOGGER.error("Couldn't write loot table {}", path, e);
             }

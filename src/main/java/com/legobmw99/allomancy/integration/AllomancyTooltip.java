@@ -1,26 +1,28 @@
 package com.legobmw99.allomancy.integration;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
-import mcp.mobius.waila.api.IEntityAccessor;
-import mcp.mobius.waila.api.IEntityComponentProvider;
-import mcp.mobius.waila.api.IPluginConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import snownee.jade.api.EntityAccessor;
+import snownee.jade.api.IEntityComponentProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
 
-import java.util.List;
 
 public class AllomancyTooltip implements IEntityComponentProvider {
 
     static final AllomancyTooltip INSTANCE = new AllomancyTooltip();
 
-    private static TranslatableComponent translateMetal(Metal mt) {
-        return new TranslatableComponent("metals." + mt.getName().toLowerCase());
+    private static MutableComponent translateMetal(Metal mt) {
+        return Component.translatable("metals." + mt.getName().toLowerCase());
     }
 
+
     @Override
-    public void appendBody(List<Component> tooltip, IEntityAccessor accessor, IPluginConfig config) {
+    public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig iPluginConfig) {
         accessor.getPlayer().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(cap -> {
             if (cap.isBurning(Metal.BRONZE) && (cap.isEnhanced() || !cap.isBurning(Metal.COPPER))) {
                 accessor.getEntity().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(capOther -> {
@@ -45,5 +47,10 @@ public class AllomancyTooltip implements IEntityComponentProvider {
                 });
             }
         });
+    }
+
+    @Override
+    public ResourceLocation getUid() {
+        return new ResourceLocation(Allomancy.MODID, "waila_bronze");
     }
 }

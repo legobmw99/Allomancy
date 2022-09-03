@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "W W",
-    "WWW",
-    "WWW"
-  ],
   "key": {
     "W": {
       "item": "minecraft:gray_wool"
     }
   },
+  "pattern": [
+    "W W",
+    "WWW",
+    "WWW"
+  ],
   "result": {
     "item": "allomancy:mistcloak"
   }

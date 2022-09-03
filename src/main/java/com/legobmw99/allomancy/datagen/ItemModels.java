@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemModels extends ItemModelProvider {
     public ItemModels(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
@@ -49,10 +50,9 @@ public class ItemModels extends ItemModelProvider {
 
             Item flake = MaterialsSetup.FLAKES.get(i).get();
             itemGenerated(flake);
-
             if (i <= Metal.BENDALLOY.getIndex()) {
-                Item pattern_item = ExtrasSetup.PATTERN_ITEMS.get(i).get();
-                itemGenerated(pattern_item);
+                                Item pattern_item = ExtrasSetup.PATTERN_ITEMS.get(i).get();
+                                itemGenerated(pattern_item);
 
                 if (Metal.getMetal(i).isVanilla()) {
                     continue;
@@ -85,31 +85,35 @@ public class ItemModels extends ItemModelProvider {
     }
 
     public void parentedBlock(Block block) {
-        parentedBlock(block, "block/" + block.getRegistryName().getPath());
+        parentedBlock(block, "block/" + ForgeRegistries.BLOCKS.getKey(block).getPath());
     }
 
     public void parentedBlock(Block block, String model) {
-        Allomancy.LOGGER.debug("Creating Item Model for " + block.getRegistryName());
-        getBuilder(block.getRegistryName().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc(model)));
+        Allomancy.LOGGER.debug("Creating Item Model for " + ForgeRegistries.BLOCKS.getKey(block));
+        getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile(modLoc(model)));
     }
 
     public void itemGenerated(Item item) {
-        itemGenerated(item, "item/" + item.getRegistryName().getPath());
+        itemGenerated(item, "item/" + ForgeRegistries.ITEMS.getKey(item).getPath());
     }
 
     public void itemGenerated(Item item, String model) {
-        Allomancy.LOGGER.debug("Creating Item Model for " + item.getRegistryName());
-        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc(model));
+        Allomancy.LOGGER.debug("Creating Item Model for " + ForgeRegistries.ITEMS.getKey(item));
+        getBuilder(ForgeRegistries.ITEMS.getKey(item).getPath()).parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc(model));
     }
 
     public void itemHandheld(Item item) {
-        Allomancy.LOGGER.debug("Creating Item Model for " + item.getRegistryName());
-        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(mcLoc("item/handheld"))).texture("layer0", modLoc("item/" + item.getRegistryName().getPath()));
+        Allomancy.LOGGER.debug("Creating Item Model for " + ForgeRegistries.ITEMS.getKey(item));
+        getBuilder(ForgeRegistries.ITEMS.getKey(item).getPath())
+                .parent(getExistingFile(mcLoc("item/handheld")))
+                .texture("layer0", modLoc("item/" + ForgeRegistries.ITEMS.getKey(item).getPath()));
     }
 
     public void largeItemHandheld(Item item) {
-        Allomancy.LOGGER.debug("Creating Large Item Model for " + item.getRegistryName());
-        getBuilder(item.getRegistryName().getPath()).parent(getExistingFile(modLoc("item/handheld_large"))).texture("layer0", modLoc("item/" + item.getRegistryName().getPath()));
+        Allomancy.LOGGER.debug("Creating Large Item Model for " + ForgeRegistries.ITEMS.getKey(item));
+        getBuilder(ForgeRegistries.ITEMS.getKey(item).getPath())
+                .parent(getExistingFile(modLoc("item/handheld_large")))
+                .texture("layer0", modLoc("item/" + ForgeRegistries.ITEMS.getKey(item).getPath()));
     }
 
     @Override

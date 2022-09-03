@@ -2,15 +2,15 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "iron_lever",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "allomancy:iron_lever"
         }
-      ]
+      ],
+      "name": "iron_lever",
+      "rolls": 1.0
     }
   ]
 }

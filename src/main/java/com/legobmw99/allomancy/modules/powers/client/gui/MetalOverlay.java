@@ -10,13 +10,13 @@ import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.ForgeIngameGui;
-import net.minecraftforge.client.gui.IIngameOverlay;
-import net.minecraftforge.client.gui.OverlayRegistry;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 import java.awt.*;
 
-public class MetalOverlay implements IIngameOverlay {
+public class MetalOverlay implements IGuiOverlay {
 
     private static final Point[] Frames = new Point[4];
     private static final ResourceLocation meterLoc = new ResourceLocation("allomancy", "textures/gui/overlay/meter.png");
@@ -32,16 +32,16 @@ public class MetalOverlay implements IIngameOverlay {
 
     private MetalOverlay() {}
 
-    public static void register() {
-        OverlayRegistry.registerOverlayTop("Allomancy metal display", new MetalOverlay());
+    public static void registerGUI(final RegisterGuiOverlaysEvent evt) {
+        evt.registerAboveAll("metal_display", new MetalOverlay());
     }
 
-    private static void blit(PoseStack matrix, ForgeIngameGui gui, int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
-        ForgeIngameGui.blit(matrix, x, y, gui.getBlitOffset(), uOffset, vOffset, uWidth, vHeight, 128, 128);
+    private static void blit(PoseStack matrix, ForgeGui gui, int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
+        ForgeGui.blit(matrix, x, y, gui.getBlitOffset(), uOffset, vOffset, uWidth, vHeight, 128, 128);
     }
 
     @Override
-    public void render(ForgeIngameGui gui, PoseStack matrix, float partialTicks, int screenWidth, int screenHeight) {
+    public void render(ForgeGui gui, PoseStack matrix, float partialTicks, int screenWidth, int screenHeight) {
 
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;

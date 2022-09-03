@@ -5,22 +5,22 @@ import com.legobmw99.allomancy.modules.combat.client.CombatClientSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.modules.materials.world.OreGenerator;
 import com.legobmw99.allomancy.modules.powers.PowersSetup;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
+import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -46,16 +46,23 @@ public class Allomancy {
     public Allomancy() {
         instance = this;
         // Register our setup events on the necessary buses
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(Allomancy::init);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(Allomancy::clientInit);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancyConfig::onLoad);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancyConfig::onReload);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(PowersClientSetup::registerParticle);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(AllomancerCapability::registerCapability);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(CombatClientSetup::registerEntityRenders);
+        var modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modBus.addListener(Allomancy::init);
+        modBus.addListener(Allomancy::clientInit);
+        modBus.addListener(AllomancyConfig::onLoad);
+        modBus.addListener(AllomancyConfig::onReload);
+        modBus.addListener(AllomancerCapability::registerCapability);
+        modBus.addListener(CombatClientSetup::registerEntityRenders);
+        modBus.addListener(MetalOverlay::registerGUI);
 
-        MinecraftForge.EVENT_BUS.addListener(Allomancy::registerCommands);
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, OreGenerator::registerGeneration);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            modBus.addListener(PowersClientSetup::registerKeyBinding);
+            modBus.addListener(PowersClientSetup::registerParticle);
+        });
+
+
+        MinecraftForge.EVENT_BUS.addListener(PowersSetup::registerCommands);
+
 
         // Register all Registries
         PowersSetup.register();
@@ -78,12 +85,12 @@ public class Allomancy {
 
 
     public static MutableComponent addColorToText(String translationKey, ChatFormatting color) {
-        MutableComponent lore = new TranslatableComponent(translationKey);
+        MutableComponent lore = Component.translatable(translationKey);
         return addColor(lore, color);
     }
 
     public static MutableComponent addColorToText(String translationKey, ChatFormatting color, Object... fmting) {
-        MutableComponent lore = new TranslatableComponent(translationKey, fmting);
+        MutableComponent lore = Component.translatable(translationKey, fmting);
         return addColor(lore, color);
     }
 
@@ -94,10 +101,6 @@ public class Allomancy {
 
     public static void clientInit(final FMLClientSetupEvent e) {
         PowersSetup.clientInit(e);
-    }
-
-    public static void registerCommands(final RegisterCommandsEvent e) {
-        PowersSetup.registerCommands(e);
     }
 
     public static void init(final FMLCommonSetupEvent e) {

@@ -9,7 +9,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,11 +21,18 @@ public class AllomancyPowerType implements ArgumentType<String> {
 
     public static final AllomancyPowerType INSTANCE = new AllomancyPowerType();
     private static final Set<String> types = Arrays.stream(Metal.values()).map(Metal::getName).collect(Collectors.toSet());
-    private static final DynamicCommandExceptionType unknown_power = new DynamicCommandExceptionType(o -> new TranslatableComponent("commands.allomancy.unrecognized", o));
+    private static final DynamicCommandExceptionType unknown_power = new DynamicCommandExceptionType(o -> Component.translatable("commands.allomancy.unrecognized", o));
 
     static {
         types.add("all");
         types.add("random");
+    }
+
+    private AllomancyPowerType() {
+    }
+
+    public static AllomancyPowerType allomancyPowerType() {
+        return new AllomancyPowerType();
     }
 
     @Override
