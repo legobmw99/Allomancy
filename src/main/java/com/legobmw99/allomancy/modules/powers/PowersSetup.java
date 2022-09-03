@@ -3,7 +3,6 @@ package com.legobmw99.allomancy.modules.powers;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.client.ClientEventHandler;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
-import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerCommand;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerType;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
@@ -22,9 +21,11 @@ public class PowersSetup {
 
 
     private static final DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, Allomancy.MODID);
-    private static final RegistryObject<SingletonArgumentInfo<AllomancyPowerType>> CONTAINER_CLASS = COMMAND_ARGUMENT_TYPES.register(
-            "allomancy_power",
-            () -> ArgumentTypeInfos.registerByClass(AllomancyPowerType.class, SingletonArgumentInfo.contextFree(AllomancyPowerType::allomancyPowerType)));
+    private static final RegistryObject<SingletonArgumentInfo<AllomancyPowerType>> CONTAINER_CLASS = COMMAND_ARGUMENT_TYPES.register("allomancy_power",
+                                                                                                                                     () -> ArgumentTypeInfos.registerByClass(
+                                                                                                                                             AllomancyPowerType.class,
+                                                                                                                                             SingletonArgumentInfo.contextFree(
+                                                                                                                                                     AllomancyPowerType::allomancyPowerType)));
 
     public static void clientInit(final FMLClientSetupEvent e) {
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());

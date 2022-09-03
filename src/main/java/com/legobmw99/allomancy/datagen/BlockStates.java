@@ -26,26 +26,26 @@ public class BlockStates extends BlockStateProvider {
     protected void registerStatesAndModels() {
         for (var rblock : MaterialsSetup.ORE_BLOCKS) {
             Block block = rblock.get();
-            String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
+            String path = rblock.getId().getPath();
             singleTextureBlock(block, path, "block/" + path);
         }
 
         for (var rblock : MaterialsSetup.DEEPSLATE_ORE_BLOCKS) {
             Block block = rblock.get();
-            String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
+            String path = rblock.getId().getPath();
             singleTextureBlock(block, path, "block/" + path);
         }
 
         for (RegistryObject<Block> rblock : MaterialsSetup.RAW_ORE_BLOCKS) {
             Block block = rblock.get();
-            String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
+            String path = rblock.getId().getPath();
             singleTextureBlock(block, path, "block/" + path);
         }
 
         for (RegistryObject<Block> rblock : MaterialsSetup.STORAGE_BLOCKS) {
             if (rblock != null) {
                 Block block = rblock.get();
-                String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
+                String path = rblock.getId().getPath();
                 singleTextureBlock(block, path, "block/" + path);
             }
         }

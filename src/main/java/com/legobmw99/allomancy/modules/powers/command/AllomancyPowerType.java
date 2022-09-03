@@ -28,10 +28,10 @@ public class AllomancyPowerType implements ArgumentType<String> {
         types.add("random");
     }
 
-    private AllomancyPowerType (){
+    private AllomancyPowerType() {
     }
 
-    public static AllomancyPowerType allomancyPowerType(){
+    public static AllomancyPowerType allomancyPowerType() {
         return new AllomancyPowerType();
     }
 

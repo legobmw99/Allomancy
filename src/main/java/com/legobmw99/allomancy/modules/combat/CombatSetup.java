@@ -73,15 +73,13 @@ public class CombatSetup {
     public static void register() {
         ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-    }    public static final RegistryObject<EntityType<ProjectileNuggetEntity>> NUGGET_PROJECTILE = ENTITIES.register("nugget_projectile", () -> EntityType.Builder
+    }
+
+    public static final RegistryObject<EntityType<ProjectileNuggetEntity>> NUGGET_PROJECTILE = ENTITIES.register("nugget_projectile", () -> EntityType.Builder
             .<ProjectileNuggetEntity>of(ProjectileNuggetEntity::new, MobCategory.MISC)
             .setShouldReceiveVelocityUpdates(true)
             .setUpdateInterval(20)
             .setCustomClientFactory((spawnEntity, world) -> new ProjectileNuggetEntity(world, spawnEntity.getEntity()))
             .sized(0.25F, 0.25F)
             .build("nugget_projectile"));
-
-
-
-
 }
