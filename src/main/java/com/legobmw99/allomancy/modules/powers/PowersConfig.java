@@ -81,7 +81,6 @@ public class PowersConfig {
     private static Set<String> default_whitelist() {
         defaultList = new HashSet<>();
 
-        add(Items.CHAINMAIL_BOOTS);
         add(Items.BUCKET);
         add(Items.LAVA_BUCKET);
         add(Items.MILK_BUCKET);
@@ -90,16 +89,20 @@ public class PowersConfig {
         add(Items.SALMON_BUCKET);
         add(Items.TROPICAL_FISH_BUCKET);
         add(Items.WATER_BUCKET);
-        add(Items.CAULDRON);
+        add(Items.TADPOLE_BUCKET);
+        add(Items.AXOLOTL_BUCKET);
+        add(Items.POWDER_SNOW_BUCKET);
         add(Items.COMPASS);
+        add(Items.RECOVERY_COMPASS);
         add(Items.CHAINMAIL_HELMET);
+        add(Items.CHAINMAIL_CHESTPLATE);
         add(Items.CHAINMAIL_LEGGINGS);
+        add(Items.CHAINMAIL_BOOTS);
         add(Items.MINECART);
         add(Items.CHEST_MINECART);
         add(Items.HOPPER_MINECART);
         add(Items.FURNACE_MINECART);
         add(Items.TNT_MINECART);
-        add(Items.CHAINMAIL_CHESTPLATE);
         add(Items.CLOCK);
         add(Items.SHEARS);
         add(Items.SHIELD);
