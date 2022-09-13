@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
@@ -22,8 +23,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -300,26 +303,7 @@ public class CommonEventHandler {
                     curPlayer.aiStep();
                     curPlayer.aiStep();
 
-                    if (level instanceof ServerLevel serverLevel) {
-                        int max = data.isEnhanced() ? 10 : 5;
-                        BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
-                        BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
-                        serverLevel.getEntitiesOfClass(LivingEntity.class, new AABB(negative, positive)).forEach(entity -> {
-                            entity.aiStep();
-                            entity.aiStep();
-                        });
-                        BlockPos.betweenClosedStream(negative, positive).forEach(bp -> {
-                            BlockState block = level.getBlockState(bp);
-                            BlockEntity te = level.getBlockEntity(bp);
-                            for (int i = 0; i < max * 4 / (te == null ? 10 : 1); i++) {
-                                if (te instanceof TickingBlockEntity tbe) {
-                                    tbe.tick();
-                                } else if (block.isRandomlyTicking()) {
-                                    block.randomTick(serverLevel, bp, serverLevel.random);
-                                }
-                            }
-                        });
-                    }
+                    tickNearby(curPlayer, level, data);
                 }
                 if (data.isBurning(Metal.CADMIUM) && !data.isBurning(Metal.BENDALLOY)) {
                     int max = data.isEnhanced() ? 20 : 10;
@@ -403,6 +387,40 @@ public class CommonEventHandler {
 
             }
         });
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void tickNearby(Player curPlayer, Level level, IAllomancerData data) {
+        if (level instanceof ServerLevel serverLevel) {
+            int max = data.isEnhanced() ? 10 : 5;
+            BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
+            BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
+            serverLevel.getEntitiesOfClass(LivingEntity.class, new AABB(negative, positive)).forEach(entity -> {
+                entity.aiStep();
+                entity.aiStep();
+            });
+            BlockPos.betweenClosedStream(negative, positive).forEach(bp -> {
+                BlockState block = level.getBlockState(bp);
+                BlockEntity te = level.getBlockEntity(bp);
+                if (te == null) {
+                    if (block.isRandomlyTicking()) {
+                        for (int i = 0; i < max * 4 / 15; i++) {
+                            block.randomTick(serverLevel, bp, serverLevel.random);
+                        }
+                    }
+                } else {
+                    Block underlying_block = block.getBlock();
+                    if (underlying_block instanceof EntityBlock eb) {
+                        BlockEntityTicker ticker = eb.getTicker(level, block, te.getType());
+                        if (ticker != null) {
+                            for (int i = 0; i < max * 4 / 3; i++) {
+                                ticker.tick(level, bp, block, te);
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 }
 
