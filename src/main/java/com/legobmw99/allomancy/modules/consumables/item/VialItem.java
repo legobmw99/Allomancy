@@ -25,7 +25,7 @@ import java.util.List;
 public class VialItem extends Item {
 
     public VialItem() {
-        super(ItemDisplay.createStandardItemProperties().stacksTo(32));
+        super(new Item.Properties().stacksTo(32));
     }
 
 

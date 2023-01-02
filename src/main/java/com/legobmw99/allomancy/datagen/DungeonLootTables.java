@@ -22,7 +22,6 @@ public class DungeonLootTables implements LootTableSubProvider {
         // Lerasium Inject
         Allomancy.LOGGER.debug("Creating Loot Table for Lerasium inject");
         LootPool.Builder leras_builder = LootPool
-
                 .lootPool()
                 .name("main")
                 .setRolls(ConstantValue.exactly(1))

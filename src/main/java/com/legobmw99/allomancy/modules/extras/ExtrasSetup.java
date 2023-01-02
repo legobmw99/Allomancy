@@ -4,7 +4,6 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
-import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -47,12 +46,10 @@ public class ExtrasSetup {
             var pattern_key = TagKey.create(Registries.BANNER_PATTERN, new ResourceLocation(Allomancy.MODID, name));
             PATTERN_KEYS.add(pattern_key);
 
-            var pattern_item = ITEMS.register(name + "_pattern", () -> new BannerPatternItem(pattern_key, ItemDisplay.createStandardItemProperties().stacksTo(1)));
+            var pattern_item = ITEMS.register(name + "_pattern", () -> new BannerPatternItem(pattern_key, new Item.Properties().stacksTo(1)));
             PATTERN_ITEMS.add(pattern_item);
         }
     }
-
-    // TODO redstone tab
 
     public static void register() {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());

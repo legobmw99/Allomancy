@@ -76,4 +76,5 @@ public class Allomancy {
         e.enqueueWork(Network::registerPackets);
 
     }
+
 }
