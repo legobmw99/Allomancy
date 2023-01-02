@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.extras.block;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
+import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -56,7 +56,7 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyUsableB
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        Component lore = Allomancy.addColorToText("block.allomancy.iron_activation.lore", ChatFormatting.GRAY);
+        Component lore = ItemDisplay.addColorToText("block.allomancy.iron_activation.lore", ChatFormatting.GRAY);
         tooltip.add(lore);
     }
 

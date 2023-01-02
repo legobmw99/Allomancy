@@ -1,11 +1,12 @@
 package com.legobmw99.allomancy.datagen;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.common.data.LanguageProvider;
 
@@ -16,8 +17,8 @@ import java.util.stream.Collectors;
 public class Languages extends LanguageProvider {
 
 
-    public Languages(DataGenerator gen, String modid, String locale) {
-        super(gen, modid, locale);
+    public Languages(PackOutput gen) {
+        super(gen, Allomancy.MODID, "en_us");
     }
 
     private static String getDisplayName(Metal mt) {
@@ -35,7 +36,7 @@ public class Languages extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        add("itemGroup.allomancy", "Allomancy");
+        add("tabs.allomancy.main_tab", "Allomancy");
 
 
         for (int i = 0; i < MaterialsSetup.ORE_METALS.length; i++) {

@@ -406,7 +406,6 @@
   "item.allomancy.zinc_nugget": "Zinc Nugget",
   "item.allomancy.zinc_pattern": "Banner Pattern",
   "item.allomancy.zinc_pattern.desc": "Zinc Symbol",
-  "itemGroup.allomancy": "Allomancy",
   "key.burn": "Burn Metals",
   "key.categories.allomancy": "Allomancy",
   "key.hud": "Show HUD",
@@ -441,5 +440,6 @@
   "metals.pewter": "Pewter",
   "metals.steel": "Steel",
   "metals.tin": "Tin",
-  "metals.zinc": "Zinc"
+  "metals.zinc": "Zinc",
+  "tabs.allomancy.main_tab": "Allomancy"
 }

@@ -207,7 +207,7 @@ public class MetalSelectScreen extends Screen {
             Metal mt = Metal.getMetal(toMetalIndex(this.slotSelected));
             this.mc.player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
                 ClientUtils.toggleBurn(mt, data);
-                this.mc.player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.1F, 2.0F);
+                this.mc.player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.1F, 2.0F);
             });
         }
     }

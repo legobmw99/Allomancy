@@ -8,10 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CustomRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -26,8 +23,8 @@ public class VialItemRecipe extends CustomRecipe {
     private ItemStack item_result = ItemStack.EMPTY;
 
 
-    public VialItemRecipe(ResourceLocation idIn) {
-        super(idIn);
+    public VialItemRecipe(ResourceLocation idIn, CraftingBookCategory catIn) {
+        super(idIn, catIn);
     }
 
     @Override
@@ -115,7 +112,7 @@ public class VialItemRecipe extends CustomRecipe {
     }
 
 
-    public static class Serializer extends SimpleRecipeSerializer<VialItemRecipe> {
+    public static class Serializer extends SimpleCraftingRecipeSerializer<VialItemRecipe> {
 
         public Serializer() {
             super(VialItemRecipe::new);

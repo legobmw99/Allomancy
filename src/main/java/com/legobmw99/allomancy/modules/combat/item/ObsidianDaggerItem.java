@@ -1,6 +1,9 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -46,7 +49,7 @@ public class ObsidianDaggerItem extends SwordItem {
     };
 
     public ObsidianDaggerItem() {
-        super(tier, ATTACK_DAMAGE, ATTACK_SPEED, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT));
+        super(tier, ATTACK_DAMAGE, ATTACK_SPEED, new Item.Properties());
     }
 
     // prevent dagger from mining

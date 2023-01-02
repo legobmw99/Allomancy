@@ -6,7 +6,7 @@ import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.core.Direction;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraftforge.client.model.generators.*;
@@ -18,8 +18,8 @@ import java.util.function.BiConsumer;
 
 public class BlockStates extends BlockStateProvider {
 
-    public BlockStates(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
-        super(gen, modid, exFileHelper);
+    public BlockStates(PackOutput gen, ExistingFileHelper exFileHelper) {
+        super(gen, Allomancy.MODID, exFileHelper);
     }
 
     @Override

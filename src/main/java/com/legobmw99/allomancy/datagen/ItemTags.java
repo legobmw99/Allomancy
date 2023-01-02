@@ -3,31 +3,35 @@ package com.legobmw99.allomancy.datagen;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+
+import java.util.concurrent.CompletableFuture;
 
 public class ItemTags extends ItemTagsProvider {
 
 
-    public ItemTags(DataGenerator gen, BlockTagsProvider blockTagProvider, String modid, ExistingFileHelper exFileHelper) {
-        super(gen, blockTagProvider, modid, exFileHelper);
+    public ItemTags(PackOutput gen, CompletableFuture<HolderLookup.Provider> lookupProvider, BlockTagsProvider blockTagProvider, ExistingFileHelper exFileHelper) {
+        super(gen, lookupProvider, blockTagProvider, Allomancy.MODID, exFileHelper);
     }
 
     @Override
-    protected void addTags() {
+    protected void addTags(HolderLookup.Provider pProvider) {
 
         for (Metal mt : Metal.values()) {
             if (mt.isVanilla()) {
                 continue;
             }
 
-            var nugget = MaterialsSetup.NUGGETS.get(mt.getIndex()).get();
-            var ingot = MaterialsSetup.INGOTS.get(mt.getIndex()).get();
-            var block = MaterialsSetup.STORAGE_BLOCK_ITEMS.get(mt.getIndex()).get();
+            var nugget = MaterialsSetup.NUGGETS.get(mt.getIndex()).getKey();
+            var ingot = MaterialsSetup.INGOTS.get(mt.getIndex()).getKey();
+            var block = MaterialsSetup.STORAGE_BLOCK_ITEMS.get(mt.getIndex()).getKey();
 
             addForgeTag("nuggets", nugget);
             addForgeTag("nuggets/" + mt.getName(), nugget);
@@ -38,26 +42,26 @@ public class ItemTags extends ItemTagsProvider {
 
 
         }
-        addForgeTag("nuggets", MaterialsSetup.NUGGETS.get(MaterialsSetup.LEAD).get());
-        addForgeTag("nuggets/lead", MaterialsSetup.NUGGETS.get(MaterialsSetup.LEAD).get());
-        addForgeTag("ingots", MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).get());
-        addForgeTag("ingots/lead", MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).get());
-        addForgeTag("storage_blocks", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.LEAD).get());
-        addForgeTag("storage_blocks/lead", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.LEAD).get());
+        addForgeTag("nuggets", MaterialsSetup.NUGGETS.get(MaterialsSetup.LEAD).getKey());
+        addForgeTag("nuggets/lead", MaterialsSetup.NUGGETS.get(MaterialsSetup.LEAD).getKey());
+        addForgeTag("ingots", MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).getKey());
+        addForgeTag("ingots/lead", MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).getKey());
+        addForgeTag("storage_blocks", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.LEAD).getKey());
+        addForgeTag("storage_blocks/lead", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.LEAD).getKey());
 
-        addForgeTag("nuggets", MaterialsSetup.NUGGETS.get(MaterialsSetup.SILVER).get());
-        addForgeTag("nuggets/silver", MaterialsSetup.NUGGETS.get(MaterialsSetup.SILVER).get());
-        addForgeTag("ingots", MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get());
-        addForgeTag("ingots/silver", MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get());
-        addForgeTag("storage_blocks", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).get());
-        addForgeTag("storage_blocks/silver", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).get());
+        addForgeTag("nuggets", MaterialsSetup.NUGGETS.get(MaterialsSetup.SILVER).getKey());
+        addForgeTag("nuggets/silver", MaterialsSetup.NUGGETS.get(MaterialsSetup.SILVER).getKey());
+        addForgeTag("ingots", MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).getKey());
+        addForgeTag("ingots/silver", MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).getKey());
+        addForgeTag("storage_blocks", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).getKey());
+        addForgeTag("storage_blocks/silver", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).getKey());
 
 
         for (int i = 0; i < MaterialsSetup.ORE_METALS.length; i++) {
-            var ore = MaterialsSetup.ORE_BLOCKS_ITEMS.get(i).get();
-            var ds_ore = MaterialsSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).get();
-            var raw_block = MaterialsSetup.RAW_ORE_BLOCKS_ITEMS.get(i).get();
-            var raw = MaterialsSetup.RAW_ORE_ITEMS.get(i).get();
+            var ore = MaterialsSetup.ORE_BLOCKS_ITEMS.get(i).getKey();
+            var ds_ore = MaterialsSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).getKey();
+            var raw_block = MaterialsSetup.RAW_ORE_BLOCKS_ITEMS.get(i).getKey();
+            var raw = MaterialsSetup.RAW_ORE_ITEMS.get(i).getKey();
 
             addForgeTag("ores/" + MaterialsSetup.ORE_METALS[i], ore, ds_ore);
             addForgeTag("ores", ore, ds_ore);
@@ -71,7 +75,7 @@ public class ItemTags extends ItemTagsProvider {
 
     }
 
-    private void addForgeTag(String name, Item... items) {
+    private void addForgeTag(String name, ResourceKey<Item>... items) {
         // see ForgeItemTagsProvider
         Allomancy.LOGGER.debug("Creating item tag for forge:" + name);
 

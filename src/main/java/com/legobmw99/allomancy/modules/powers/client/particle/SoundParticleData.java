@@ -2,11 +2,11 @@ package com.legobmw99.allomancy.modules.powers.client.particle;
 
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.mojang.brigadier.StringReader;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundSource;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class SoundParticleData implements ParticleOptions {
 
@@ -45,6 +45,6 @@ public class SoundParticleData implements ParticleOptions {
 
     @Override
     public String writeToString() {
-        return Registry.PARTICLE_TYPE.getKey(this.getType()) + " " + this.type.toString();
+        return ForgeRegistries.PARTICLE_TYPES.getKey(this.getType()) + " " + this.type.toString();
     }
 }

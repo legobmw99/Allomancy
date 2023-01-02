@@ -8,7 +8,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 import java.util.UUID;
@@ -19,7 +18,7 @@ public class MistcloakItem extends ArmorItem {
     private final Multimap<Attribute, AttributeModifier> attributes;
 
     public MistcloakItem() {
-        super(CombatSetup.WoolArmor, EquipmentSlot.CHEST, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT));
+        super(CombatSetup.WoolArmor, EquipmentSlot.CHEST, new Item.Properties());
 
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         UUID uuid = ARMOR_MODIFIERS[this.slot.getIndex()];

@@ -6,7 +6,7 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -15,8 +15,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemModels extends ItemModelProvider {
-    public ItemModels(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
-        super(generator, modid, existingFileHelper);
+    public ItemModels(PackOutput generator, ExistingFileHelper existingFileHelper) {
+        super(generator, Allomancy.MODID, existingFileHelper);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class ItemModels extends ItemModelProvider {
             Item flake = MaterialsSetup.FLAKES.get(i).get();
             itemGenerated(flake);
             if (i <= Metal.BENDALLOY.getIndex()) {
-                                Item pattern_item = ExtrasSetup.PATTERN_ITEMS.get(i).get();
-                                itemGenerated(pattern_item);
+                Item pattern_item = ExtrasSetup.PATTERN_ITEMS.get(i).get();
+                itemGenerated(pattern_item);
 
                 if (Metal.getMetal(i).isVanilla()) {
                     continue;

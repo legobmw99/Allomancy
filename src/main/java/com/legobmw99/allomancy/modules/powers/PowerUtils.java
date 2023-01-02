@@ -274,7 +274,7 @@ public class PowerUtils {
                     target.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>(pillager, 1.0D, 8.0F));
                 }
             } else {
-                target.level.explode(target, target.position().x(), target.position().y(), target.position().z(), 1.2F, false, Explosion.BlockInteraction.BREAK);
+                target.level.explode(target, target.position().x(), target.position().y(), target.position().z(), 1.2F, false, Level.ExplosionInteraction.MOB);
                 target.kill();
             }
         } catch (Exception e) {

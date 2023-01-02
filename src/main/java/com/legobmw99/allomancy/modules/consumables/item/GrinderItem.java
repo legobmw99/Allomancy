@@ -1,13 +1,13 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
-import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class GrinderItem extends Item {
 
     public GrinderItem() {
-        super(Allomancy.createStandardItemProperties().setNoRepair().defaultDurability(256));
+        super(ItemDisplay.createStandardItemProperties().setNoRepair().defaultDurability(256));
     }
 
 

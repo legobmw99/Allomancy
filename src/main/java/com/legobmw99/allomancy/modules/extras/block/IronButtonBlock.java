@@ -1,12 +1,11 @@
 package com.legobmw99.allomancy.modules.extras.block;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
+import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -27,7 +26,7 @@ import java.util.List;
 public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsableBlock {
 
     public IronButtonBlock() {
-        super(false, Block.Properties.of(Material.METAL).noCollission().strength(1.0F));
+        super(Block.Properties.of(Material.METAL).noCollission().strength(1.0F), 35, false, SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF, SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON);
     }
 
     @Override
@@ -35,10 +34,7 @@ public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsabl
         if (state.getValue(POWERED) || level.isClientSide) {
             return true;
         } else if (isPush) {
-            level.setBlock(pos, state.setValue(POWERED, true), 3);
-            this.playSound(player, level, pos, true);
-            this.updateNeighbors(state, level, pos);
-            level.scheduleTick(pos, this, 20);
+            this.press(state, level, pos);
             return true;
         } else {
             return false;
@@ -52,20 +48,10 @@ public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsabl
 
 
     @Override
-    protected SoundEvent getSound(boolean on) {
-        return on ? SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON : SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF;
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        MutableComponent lore = Allomancy.addColorToText("block.allomancy.iron_activation.lore", ChatFormatting.GRAY);
+        MutableComponent lore = ItemDisplay.addColorToText("block.allomancy.iron_activation.lore", ChatFormatting.GRAY);
         tooltip.add(lore);
     }
 
-
-    private void updateNeighbors(BlockState state, Level world, BlockPos pos) {
-        world.updateNeighborsAt(pos, this);
-        world.updateNeighborsAt(pos.relative(getConnectedDirection(state).getOpposite()), this);
-    }
 }

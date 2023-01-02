@@ -70,6 +70,8 @@ public class CombatSetup {
     };
     public static final RegistryObject<MistcloakItem> MISTCLOAK = ITEMS.register("mistcloak", MistcloakItem::new);
 
+    // TODO combat tab
+
     public static void register() {
         ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());

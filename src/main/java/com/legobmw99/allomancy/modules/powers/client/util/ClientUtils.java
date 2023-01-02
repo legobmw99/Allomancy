@@ -6,7 +6,6 @@ import com.legobmw99.allomancy.modules.powers.network.UpdateBurnPacket;
 import com.legobmw99.allomancy.network.Network;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +18,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
 
@@ -113,9 +113,9 @@ public class ClientUtils {
         }
         // play a sound effect
         if (capability.isBurning(metal)) {
-            player.playSound(new SoundEvent(new ResourceLocation("item.flintandsteel.use")), 1, 5);
+            player.playSound(SoundEvent.createFixedRangeEvent(new ResourceLocation("item.flintandsteel.use"), 1f), 1, 5);
         } else {
-            player.playSound(new SoundEvent(new ResourceLocation("block.fire.extinguish")), 1, 4);
+            player.playSound(SoundEvent.createFixedRangeEvent(new ResourceLocation("block.fire.extinguish"), 1f), 1, 4);
         }
     }
 }

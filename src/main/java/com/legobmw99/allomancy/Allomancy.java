@@ -11,13 +11,7 @@ import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.util.AllomancyConfig;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
@@ -32,12 +26,6 @@ import org.apache.logging.log4j.Logger;
 public class Allomancy {
 
     public static final String MODID = "allomancy";
-    public static final CreativeModeTab allomancy_group = new CreativeModeTab(MODID) {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(CombatSetup.MISTCLOAK.get());
-        }
-    };
 
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -53,6 +41,9 @@ public class Allomancy {
         modBus.addListener(AllomancyConfig::onReload);
         modBus.addListener(AllomancerCapability::registerCapability);
         modBus.addListener(CombatClientSetup::registerEntityRenders);
+        modBus.addListener(ItemDisplay::registerCreativeTabs);
+        modBus.addListener(ItemDisplay::addTabContents);
+
         modBus.addListener(MetalOverlay::registerGUI);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
@@ -73,30 +64,6 @@ public class Allomancy {
 
         AllomancyConfig.register();
 
-    }
-
-    public static Item.Properties createStandardItemProperties() {
-        return new Item.Properties().tab(allomancy_group).stacksTo(64);
-    }
-
-    public static Item createStandardItem() {
-        return new Item(createStandardItemProperties());
-    }
-
-
-    public static MutableComponent addColorToText(String translationKey, ChatFormatting color) {
-        MutableComponent lore = Component.translatable(translationKey);
-        return addColor(lore, color);
-    }
-
-    public static MutableComponent addColorToText(String translationKey, ChatFormatting color, Object... fmting) {
-        MutableComponent lore = Component.translatable(translationKey, fmting);
-        return addColor(lore, color);
-    }
-
-    private static MutableComponent addColor(MutableComponent text, ChatFormatting color) {
-        text.setStyle(text.getStyle().withColor(TextColor.fromLegacyFormat(color)));
-        return text;
     }
 
     public static void clientInit(final FMLClientSetupEvent e) {

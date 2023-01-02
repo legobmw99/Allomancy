@@ -7,7 +7,7 @@ import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -29,8 +29,8 @@ public class Recipes extends RecipeProvider {
 
     private final Map<Character, Ingredient> defaultIngredients = new HashMap<>();
 
-    public Recipes(DataGenerator generatorIn) {
-        super(generatorIn);
+    public Recipes(PackOutput packOutput) {
+        super(packOutput);
         add('i', Tags.Items.INGOTS_IRON);
         add('g', Tags.Items.INGOTS_GOLD);
         add('s', Items.STICK);
@@ -43,14 +43,21 @@ public class Recipes extends RecipeProvider {
 
     }
 
-    protected static void buildShapeless(Consumer<FinishedRecipe> consumer, ItemLike result, int count, Item criterion, Ingredient... ingredients) {
-        buildShapeless(consumer, result, count, criterion, "", ingredients);
+
+    protected static void buildShapeless(Consumer<FinishedRecipe> consumer, RecipeCategory cat, ItemLike result, int count, Item criterion, Ingredient... ingredients) {
+        buildShapeless(consumer, cat, result, count, criterion, "", ingredients);
     }
 
-    protected static void buildShapeless(Consumer<FinishedRecipe> consumer, ItemLike result, int count, Item criterion, String save, Ingredient... ingredients) {
+    protected static void buildShapeless(Consumer<FinishedRecipe> consumer,
+                                         RecipeCategory cat,
+                                         ItemLike result,
+                                         int count,
+                                         Item criterion,
+                                         String save,
+                                         Ingredient... ingredients) {
         Allomancy.LOGGER.debug("Creating Shapeless Recipe for " + ForgeRegistries.ITEMS.getKey(result.asItem()) + " " + save);
 
-        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(result, count);
+        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(cat, result, count);
 
         builder.unlockedBy("has_" + ForgeRegistries.ITEMS.getKey(criterion).getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(criterion));
 
@@ -68,8 +75,8 @@ public class Recipes extends RecipeProvider {
     protected static void buildSmeltingAndBlasting(Consumer<FinishedRecipe> consumer, ItemLike result, ItemLike ingredient, float xp) {
         Allomancy.LOGGER.debug("Creating Smelting and Blasting Recipe for " + ForgeRegistries.ITEMS.getKey(result.asItem()));
 
-        SimpleCookingRecipeBuilder smelt = SimpleCookingRecipeBuilder.smelting(ing(ingredient), result, xp, 200);
-        SimpleCookingRecipeBuilder blast = SimpleCookingRecipeBuilder.blasting(ing(ingredient), result, xp, 100);
+        SimpleCookingRecipeBuilder smelt = SimpleCookingRecipeBuilder.smelting(ing(ingredient), RecipeCategory.MISC, result, xp, 200);
+        SimpleCookingRecipeBuilder blast = SimpleCookingRecipeBuilder.blasting(ing(ingredient), RecipeCategory.MISC, result, xp, 100);
 
         smelt.unlockedBy("has_" + ForgeRegistries.ITEMS.getKey(ingredient.asItem()).getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
         blast.unlockedBy("has_" + ForgeRegistries.ITEMS.getKey(ingredient.asItem()).getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
@@ -121,17 +128,17 @@ public class Recipes extends RecipeProvider {
         return out;
     }
 
-
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
+    protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
+
         // Basic Shaped Recipes
-        buildShaped(consumer, ExtrasSetup.IRON_LEVER.get(), Items.IRON_INGOT, "s", "I");
-        buildShaped(consumer, ExtrasSetup.IRON_BUTTON.get(), Items.IRON_INGOT, "i", "I");
-        buildShaped(consumer, ConsumeSetup.ALLOMANTIC_GRINDER.get(), Items.IRON_INGOT, "ggg", "iii", "ggg");
-        buildShaped(consumer, ConsumeSetup.VIAL.get(), 4, Items.GLASS, " S ", "G G", " G ");
-        buildShaped(consumer, CombatSetup.MISTCLOAK.get(), ConsumeSetup.VIAL.get(), "W W", "WWW", "WWW");
-        buildShaped(consumer, CombatSetup.OBSIDIAN_DAGGER.get(), CombatSetup.MISTCLOAK.get(), "  O", " O ", "s  ");
-        buildShaped(consumer, CombatSetup.KOLOSS_BLADE.get(), ConsumeSetup.LERASIUM_NUGGET.get(), "CC", "CC", "sC");
+        buildShaped(consumer, RecipeCategory.REDSTONE, ExtrasSetup.IRON_LEVER.get(), Items.IRON_INGOT, "s", "I");
+        buildShaped(consumer, RecipeCategory.REDSTONE, ExtrasSetup.IRON_BUTTON.get(), Items.IRON_INGOT, "i", "I");
+        buildShaped(consumer, RecipeCategory.FOOD, ConsumeSetup.ALLOMANTIC_GRINDER.get(), Items.IRON_INGOT, "ggg", "iii", "ggg");
+        buildShaped(consumer, RecipeCategory.FOOD, ConsumeSetup.VIAL.get(), 4, Items.GLASS, " S ", "G G", " G ");
+        buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.MISTCLOAK.get(), ConsumeSetup.VIAL.get(), "W W", "WWW", "WWW");
+        buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.OBSIDIAN_DAGGER.get(), CombatSetup.MISTCLOAK.get(), "  O", " O ", "s  ");
+        buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.KOLOSS_BLADE.get(), ConsumeSetup.LERASIUM_NUGGET.get(), "CC", "CC", "sC");
 
         // Ore Recipes
         // order must be the same as MaterialsSetup.ORE_METALS
@@ -145,7 +152,7 @@ public class Recipes extends RecipeProvider {
         }
 
 
-        buildShapeless(consumer, ConsumeSetup.LERASIUM_NUGGET.get(), 1, Items.NETHER_STAR, ing(Items.NETHER_STAR), ing(Tags.Items.STORAGE_BLOCKS_GOLD));
+        buildShapeless(consumer, RecipeCategory.MISC, ConsumeSetup.LERASIUM_NUGGET.get(), 1, Items.NETHER_STAR, ing(Items.NETHER_STAR), ing(Tags.Items.STORAGE_BLOCKS_GOLD));
 
         // Most metal based recipes
         for (int i = 0; i < MaterialsSetup.METAL_ITEM_LEN; i++) {
@@ -153,7 +160,8 @@ public class Recipes extends RecipeProvider {
             // Grinder recipes
             Item flake = MaterialsSetup.FLAKES.get(i).get();
             String flakeType = ForgeRegistries.ITEMS.getKey(flake).getPath().substring(0, ForgeRegistries.ITEMS.getKey(flake).getPath().indexOf('_'));
-            buildShapeless(consumer, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()), ing("forge:" + "ingots/" + flakeType));
+            buildShapeless(consumer, RecipeCategory.MISC, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()),
+                           ing("forge:" + "ingots/" + flakeType));
 
             if (i < Metal.values().length && Metal.getMetal(i).isVanilla()) {
                 continue;
@@ -165,76 +173,78 @@ public class Recipes extends RecipeProvider {
             Item nugget = MaterialsSetup.NUGGETS.get(i).get();
 
             // building up
-            buildShapeless(consumer, block, 1, ingot, repeat(ing(ingot), 9));
-            buildShapeless(consumer, ingot, 1, nugget, "allomancy:" + ForgeRegistries.ITEMS.getKey(ingot).getPath() + "_from_nuggets", repeat(ing(nugget), 9));
+            buildShapeless(consumer, RecipeCategory.BUILDING_BLOCKS, block, 1, ingot, repeat(ing(ingot), 9));
+            buildShapeless(consumer, RecipeCategory.MISC, ingot, 1, nugget, "allomancy:" + ForgeRegistries.ITEMS.getKey(ingot).getPath() + "_from_nuggets", repeat(ing(nugget), 9));
 
             // breaking down
-            buildShapeless(consumer, ingot, 9, block, "allomancy:" + ForgeRegistries.ITEMS.getKey(ingot).getPath() + "_from_block", ing(block));
-            buildShapeless(consumer, nugget, 9, ingot, ing(ingot));
+            buildShapeless(consumer, RecipeCategory.MISC, ingot, 9, block, "allomancy:" + ForgeRegistries.ITEMS.getKey(ingot).getPath() + "_from_block", ing(block));
+            buildShapeless(consumer, RecipeCategory.MISC, nugget, 9, ingot, ing(ingot));
         }
 
 
         // pattern recipes
         for (Metal mt : Metal.values()) {
-            buildShapeless(consumer, ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), 1, MaterialsSetup.FLAKES.get(mt.getIndex()).get(), ing(Items.PAPER),
+            buildShapeless(consumer, RecipeCategory.MISC, ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), 1, MaterialsSetup.FLAKES.get(mt.getIndex()).get(), ing(Items.PAPER),
                            ing(MaterialsSetup.FLAKES.get(mt.getIndex()).get()));
         }
 
         // Mixing/Alloying Recipes
         // GRINDER
-        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("steel"), ing(Items.COAL),
-                       ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("steel"),
+                       ing(Items.COAL), ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
 
-        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("pewter"),
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("pewter"),
                        repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get()), 2, ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get())));
 
-        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("brass"),
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("brass"),
                        repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.ZINC.getIndex()).get())));
 
-        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.BRONZE.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("bronze"),
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.FLAKES.get(Metal.BRONZE.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("bronze"),
                        repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.TIN.getIndex()).get())));
 
-        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.DURALUMIN.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("duralumin"),
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.FLAKES.get(Metal.DURALUMIN.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+                       mixing_save("duralumin"),
                        repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.COPPER.getIndex()).get())));
 
-        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.ELECTRUM.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("electrum"),
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.FLAKES.get(Metal.ELECTRUM.getIndex()).get(), 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("electrum"),
                        ing(MaterialsSetup.FLAKES.get(Metal.GOLD.getIndex()).get()), ing(MaterialsSetup.FLAKES.get(MaterialsSetup.SILVER).get()));
 
-        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.BENDALLOY.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("bendalloy"),
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.FLAKES.get(Metal.BENDALLOY.getIndex()).get(), 3, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+                       mixing_save("bendalloy"),
                        repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.CADMIUM.getIndex()).get()), 2, ing(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get())));
 
-        buildShapeless(consumer, MaterialsSetup.FLAKES.get(Metal.NICROSIL.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("nicrosil"),
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.FLAKES.get(Metal.NICROSIL.getIndex()).get(), 4, ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("nicrosil"),
                        repeatWith(ing(MaterialsSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), 3, ing(MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()).get())));
 
         // ALLOYS
-        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.STEEL.getIndex()).get(), 4, Items.COAL, alloy_save("steel"),
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.INGOTS.get(Metal.STEEL.getIndex()).get(), 4, Items.COAL, alloy_save("steel"),
                        repeatWith(ing(Items.IRON_INGOT), 3, ing(Items.COAL)));
 
-        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.PEWTER.getIndex()).get(), 3, MaterialsSetup.INGOTS.get(Metal.TIN.getIndex()).get(), alloy_save("pewter"),
-                       repeatWith(ing("forge:ingots/tin"), 2, ing("forge:ingots/lead")));
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.INGOTS.get(Metal.PEWTER.getIndex()).get(), 3, MaterialsSetup.INGOTS.get(Metal.TIN.getIndex()).get(),
+                       alloy_save("pewter"), repeatWith(ing("forge:ingots/tin"), 2, ing("forge:ingots/lead")));
 
-        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.BRASS.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.ZINC.getIndex()).get(), alloy_save("brass"),
-                       repeatWith(ing(Items.COPPER_INGOT), 3, ing("forge:ingots/zinc")));
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.INGOTS.get(Metal.BRASS.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.ZINC.getIndex()).get(),
+                       alloy_save("brass"), repeatWith(ing(Items.COPPER_INGOT), 3, ing("forge:ingots/zinc")));
 
-        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.BRONZE.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.TIN.getIndex()).get(), alloy_save("bronze"),
-                       repeatWith(ing(Items.COPPER_INGOT), 3, ing("forge:ingots/tin")));
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.INGOTS.get(Metal.BRONZE.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.TIN.getIndex()).get(),
+                       alloy_save("bronze"), repeatWith(ing(Items.COPPER_INGOT), 3, ing("forge:ingots/tin")));
 
-        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.DURALUMIN.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(),
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.INGOTS.get(Metal.DURALUMIN.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(),
                        alloy_save("duralumin"), repeatWith(ing("forge:ingots/aluminum"), 3, ing(Items.COPPER_INGOT)));
 
-        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.ELECTRUM.getIndex()).get(), 2, MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get(), alloy_save("electrum"),
-                       ing("forge:ingots/silver"), ing(Items.GOLD_INGOT));
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.INGOTS.get(Metal.ELECTRUM.getIndex()).get(), 2, MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get(),
+                       alloy_save("electrum"), ing("forge:ingots/silver"), ing(Items.GOLD_INGOT));
 
-        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.BENDALLOY.getIndex()).get(), 3, MaterialsSetup.INGOTS.get(Metal.CADMIUM.getIndex()).get(), alloy_save("bendalloy"),
-                       repeatWith(ing("forge:ingots/cadmium"), 2, ing("forge:ingots/lead")));
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.INGOTS.get(Metal.BENDALLOY.getIndex()).get(), 3, MaterialsSetup.INGOTS.get(Metal.CADMIUM.getIndex()).get(),
+                       alloy_save("bendalloy"), repeatWith(ing("forge:ingots/cadmium"), 2, ing("forge:ingots/lead")));
 
-        buildShapeless(consumer, MaterialsSetup.INGOTS.get(Metal.NICROSIL.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.CHROMIUM.getIndex()).get(), alloy_save("nicrosil"),
-                       repeatWith(ing("forge:ingots/chromium"), 3, ing(Items.IRON_INGOT)));
+        buildShapeless(consumer, RecipeCategory.MISC, MaterialsSetup.INGOTS.get(Metal.NICROSIL.getIndex()).get(), 4, MaterialsSetup.INGOTS.get(Metal.CHROMIUM.getIndex()).get(),
+                       alloy_save("nicrosil"), repeatWith(ing("forge:ingots/chromium"), 3, ing(Items.IRON_INGOT)));
 
 
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
         ShapedRecipeBuilder
-                .shaped(CombatSetup.COIN_BAG.get())
+                .shaped(RecipeCategory.COMBAT, CombatSetup.COIN_BAG.get())
                 .unlockedBy("has_gold_nugget", InventoryChangeTrigger.TriggerInstance.hasItems(CombatSetup.MISTCLOAK.get()))
                 .define('#', Items.LEAD)
                 .define('l', Items.LEATHER)
@@ -249,10 +259,10 @@ public class Recipes extends RecipeProvider {
 
     }
 
-    protected void buildShaped(Consumer<FinishedRecipe> consumer, ItemLike result, int count, Item criterion, String... lines) {
+    protected void buildShaped(Consumer<FinishedRecipe> consumer, RecipeCategory cat, ItemLike result, int count, Item criterion, String... lines) {
         Allomancy.LOGGER.debug("Creating Shaped Recipe for " + ForgeRegistries.ITEMS.getKey(result.asItem()));
 
-        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(result, count);
+        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(cat, result, count);
 
         builder.unlockedBy("has_" + ForgeRegistries.ITEMS.getKey(criterion).getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(criterion));
 
@@ -271,8 +281,8 @@ public class Recipes extends RecipeProvider {
         builder.save(consumer);
     }
 
-    protected void buildShaped(Consumer<FinishedRecipe> consumer, ItemLike result, Item criterion, String... lines) {
-        buildShaped(consumer, result, 1, criterion, lines);
+    protected void buildShaped(Consumer<FinishedRecipe> consumer, RecipeCategory cat, ItemLike result, Item criterion, String... lines) {
+        buildShaped(consumer, cat, result, 1, criterion, lines);
     }
 
     protected void add(char c, TagKey<Item> itemTag) {
@@ -287,8 +297,5 @@ public class Recipes extends RecipeProvider {
         this.defaultIngredients.put(c, ingredient);
     }
 
-    @Override
-    public String getName() {
-        return "Allomancy Recipes";
-    }
+
 }

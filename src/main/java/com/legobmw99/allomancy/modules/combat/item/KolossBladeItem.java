@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class KolossBladeItem extends SwordItem {
     public KolossBladeItem() {
-        super(Tiers.STONE, 9, -2.6F, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT));
+        super(Tiers.STONE, 9, -2.6F, new Item.Properties());
     }
 
     @Override
@@ -45,7 +45,7 @@ public class KolossBladeItem extends SwordItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        Component lore = Allomancy.addColorToText("item.allomancy.koloss_blade.lore", ChatFormatting.GRAY);
+        Component lore = ItemDisplay.addColorToText("item.allomancy.koloss_blade.lore", ChatFormatting.GRAY);
         tooltip.add(lore);
     }
 

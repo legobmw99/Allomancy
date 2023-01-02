@@ -5,6 +5,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -199,7 +200,7 @@ public class DefaultAllomancerData implements IAllomancerData {
         if (this.death_dimension == null) {
             return null;
         }
-        return ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(this.death_dimension));
+        return ResourceKey.create(Registries.DIMENSION, new ResourceLocation(this.death_dimension));
 
     }
 
@@ -224,7 +225,7 @@ public class DefaultAllomancerData implements IAllomancerData {
         if (this.spawn_dimension == null) {
             return null;
         }
-        return ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(this.spawn_dimension));
+        return ResourceKey.create(Registries.DIMENSION, new ResourceLocation(this.spawn_dimension));
     }
 
     /**

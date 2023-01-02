@@ -1,13 +1,11 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
@@ -27,7 +25,7 @@ import java.util.List;
 public class VialItem extends Item {
 
     public VialItem() {
-        super(Allomancy.createStandardItemProperties().stacksTo(32));
+        super(ItemDisplay.createStandardItemProperties().stacksTo(32));
     }
 
 
@@ -107,41 +105,24 @@ public class VialItem extends Item {
                 if (stack.getTag().getBoolean(mt.getName())) {
                     count++;
                     if (full_display) {
-                        MutableComponent metal = Allomancy.addColorToText("metals." + mt.getName(), ChatFormatting.GRAY);
+                        MutableComponent metal = ItemDisplay.addColorToText("metals." + mt.getName(), ChatFormatting.GRAY);
                         tooltip.add(metal);
                     }
                 }
             }
             if (!full_display) {
-                MutableComponent lcount = Allomancy.addColorToText("item.allomancy.vial.lore_count", ChatFormatting.GRAY, count);
+                MutableComponent lcount = ItemDisplay.addColorToText("item.allomancy.vial.lore_count", ChatFormatting.GRAY, count);
                 tooltip.add(lcount);
-                MutableComponent linst = Allomancy.addColorToText("item.allomancy.vial.lore_inst", ChatFormatting.GRAY);
+                MutableComponent linst = ItemDisplay.addColorToText("item.allomancy.vial.lore_inst", ChatFormatting.GRAY);
                 tooltip.add(linst);
 
             }
         }
     }
 
-
     @Override
     public Rarity getRarity(ItemStack stack) {
         return stack.hasTag() ? Rarity.UNCOMMON : Rarity.COMMON;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (group == Allomancy.allomancy_group) {
-            items.add(new ItemStack(this, 1));
-
-            ItemStack resultItem = new ItemStack(ConsumeSetup.VIAL.get(), 1);
-            CompoundTag nbt = new CompoundTag();
-            for (Metal mt : Metal.values()) {
-                nbt.putBoolean(mt.getName(), true);
-            }
-            nbt.putInt("CustomModelData", 1);
-            resultItem.setTag(nbt);
-            items.add(resultItem);
-        }
     }
 
 }

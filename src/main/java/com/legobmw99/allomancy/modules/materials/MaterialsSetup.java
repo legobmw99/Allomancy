@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.materials;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
+import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -34,9 +35,9 @@ public class MaterialsSetup {
     public static final List<RegistryObject<Item>> STORAGE_BLOCK_ITEMS = new ArrayList<>();
 
 
-    public static final List<RegistryObject<DropExperienceBlock>> ORE_BLOCKS = new ArrayList<>();
+    public static final List<RegistryObject<Block>> ORE_BLOCKS = new ArrayList<>();
     public static final List<RegistryObject<Item>> ORE_BLOCKS_ITEMS = new ArrayList<>();
-    public static final List<RegistryObject<DropExperienceBlock>> DEEPSLATE_ORE_BLOCKS = new ArrayList<>();
+    public static final List<RegistryObject<Block>> DEEPSLATE_ORE_BLOCKS = new ArrayList<>();
     public static final List<RegistryObject<Item>> DEEPSLATE_ORE_BLOCKS_ITEMS = new ArrayList<>();
     public static final List<RegistryObject<Block>> RAW_ORE_BLOCKS = new ArrayList<>();
     public static final List<RegistryObject<Item>> RAW_ORE_BLOCKS_ITEMS = new ArrayList<>();
@@ -49,7 +50,7 @@ public class MaterialsSetup {
     static {
         for (Metal mt : Metal.values()) {
             String name = mt.getName();
-            FLAKES.add(MaterialsSetup.ITEMS.register(name + "_flakes", Allomancy::createStandardItem));
+            FLAKES.add(MaterialsSetup.ITEMS.register(name + "_flakes", ItemDisplay::createStandardItem));
 
             if (mt.isVanilla()) {
                 NUGGETS.add(null);
@@ -57,38 +58,38 @@ public class MaterialsSetup {
                 STORAGE_BLOCKS.add(null);
                 STORAGE_BLOCK_ITEMS.add(null);
             } else {
-                NUGGETS.add(ITEMS.register(name + "_nugget", Allomancy::createStandardItem));
-                INGOTS.add(ITEMS.register(name + "_ingot", Allomancy::createStandardItem));
+                NUGGETS.add(ITEMS.register(name + "_nugget", ItemDisplay::createStandardItem));
+                INGOTS.add(ITEMS.register(name + "_ingot", ItemDisplay::createStandardItem));
                 STORAGE_BLOCKS.add(BLOCKS.register(name + "_block", MaterialsSetup::createStandardBlock));
-                STORAGE_BLOCK_ITEMS.add(ITEMS.register(name + "_block", () -> new BlockItem(STORAGE_BLOCKS.get(mt.getIndex()).get(), Allomancy.createStandardItemProperties())));
+                STORAGE_BLOCK_ITEMS.add(ITEMS.register(name + "_block", () -> new BlockItem(STORAGE_BLOCKS.get(mt.getIndex()).get(), ItemDisplay.createStandardItemProperties())));
             }
         }
-        FLAKES.add(MaterialsSetup.ITEMS.register("lead_flakes", Allomancy::createStandardItem));
-        NUGGETS.add(ITEMS.register("lead_nugget", Allomancy::createStandardItem));
-        INGOTS.add(ITEMS.register("lead_ingot", Allomancy::createStandardItem));
+        FLAKES.add(MaterialsSetup.ITEMS.register("lead_flakes", ItemDisplay::createStandardItem));
+        NUGGETS.add(ITEMS.register("lead_nugget", ItemDisplay::createStandardItem));
+        INGOTS.add(ITEMS.register("lead_ingot", ItemDisplay::createStandardItem));
         STORAGE_BLOCKS.add(BLOCKS.register("lead_block", MaterialsSetup::createStandardBlock));
-        STORAGE_BLOCK_ITEMS.add(ITEMS.register("lead_block", () -> new BlockItem(STORAGE_BLOCKS.get(LEAD).get(), Allomancy.createStandardItemProperties())));
+        STORAGE_BLOCK_ITEMS.add(ITEMS.register("lead_block", () -> new BlockItem(STORAGE_BLOCKS.get(LEAD).get(), ItemDisplay.createStandardItemProperties())));
 
-        FLAKES.add(MaterialsSetup.ITEMS.register("silver_flakes", Allomancy::createStandardItem));
-        NUGGETS.add(ITEMS.register("silver_nugget", Allomancy::createStandardItem));
-        INGOTS.add(ITEMS.register("silver_ingot", Allomancy::createStandardItem));
+        FLAKES.add(MaterialsSetup.ITEMS.register("silver_flakes", ItemDisplay::createStandardItem));
+        NUGGETS.add(ITEMS.register("silver_nugget", ItemDisplay::createStandardItem));
+        INGOTS.add(ITEMS.register("silver_ingot", ItemDisplay::createStandardItem));
         STORAGE_BLOCKS.add(BLOCKS.register("silver_block", MaterialsSetup::createStandardBlock));
-        STORAGE_BLOCK_ITEMS.add(ITEMS.register("silver_block", () -> new BlockItem(STORAGE_BLOCKS.get(SILVER).get(), Allomancy.createStandardItemProperties())));
+        STORAGE_BLOCK_ITEMS.add(ITEMS.register("silver_block", () -> new BlockItem(STORAGE_BLOCKS.get(SILVER).get(), ItemDisplay.createStandardItemProperties())));
 
         for (String ore : ORE_METALS) {
             var ore_block = BLOCKS.register(ore + "_ore", MaterialsSetup::createStandardOre);
             ORE_BLOCKS.add(ore_block);
-            ORE_BLOCKS_ITEMS.add(ITEMS.register(ore + "_ore", () -> new BlockItem(ore_block.get(), Allomancy.createStandardItemProperties())));
+            ORE_BLOCKS_ITEMS.add(ITEMS.register(ore + "_ore", () -> new BlockItem(ore_block.get(), ItemDisplay.createStandardItemProperties())));
 
             var ds_ore_block = BLOCKS.register("deepslate_" + ore + "_ore", MaterialsSetup::createDeepslateBlock);
             DEEPSLATE_ORE_BLOCKS.add(ds_ore_block);
-            DEEPSLATE_ORE_BLOCKS_ITEMS.add(ITEMS.register("deepslate_" + ore + "_ore", () -> new BlockItem(ds_ore_block.get(), Allomancy.createStandardItemProperties())));
+            DEEPSLATE_ORE_BLOCKS_ITEMS.add(ITEMS.register("deepslate_" + ore + "_ore", () -> new BlockItem(ds_ore_block.get(), ItemDisplay.createStandardItemProperties())));
 
             var raw_ore_block = BLOCKS.register("raw_" + ore + "_block", MaterialsSetup::createStandardBlock);
             RAW_ORE_BLOCKS.add(raw_ore_block);
-            RAW_ORE_BLOCKS_ITEMS.add(ITEMS.register("raw_" + ore + "_block", () -> new BlockItem(raw_ore_block.get(), Allomancy.createStandardItemProperties())));
+            RAW_ORE_BLOCKS_ITEMS.add(ITEMS.register("raw_" + ore + "_block", () -> new BlockItem(raw_ore_block.get(), ItemDisplay.createStandardItemProperties())));
 
-            RAW_ORE_ITEMS.add(ITEMS.register("raw_" + ore, Allomancy::createStandardItem));
+            RAW_ORE_ITEMS.add(ITEMS.register("raw_" + ore, ItemDisplay::createStandardItem));
         }
     }
 
@@ -108,11 +109,11 @@ public class MaterialsSetup {
         return new Block(Block.Properties.of(Material.STONE).strength(2.1F).requiresCorrectToolForDrops());
     }
 
-    public static DropExperienceBlock createStandardOre() {
+    public static Block createStandardOre() {
         return new DropExperienceBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F));
     }
 
-    public static DropExperienceBlock createDeepslateBlock() {
+    public static Block createDeepslateBlock() {
         return new DropExperienceBlock(
                 Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().color(MaterialColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE));
     }
