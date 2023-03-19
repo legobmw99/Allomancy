@@ -6,7 +6,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -81,7 +80,7 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
         }
 
         if (rayTraceResult.getType() == HitResult.Type.ENTITY) {
-            ((EntityHitResult) rayTraceResult).getEntity().hurt(DamageSource.thrown(this, this.getOwner()), this.damage);
+            ((EntityHitResult) rayTraceResult).getEntity().hurt(this.level.damageSources().thrown(this, this.getOwner()), this.damage);
         }
 
         if (!this.level.isClientSide) {

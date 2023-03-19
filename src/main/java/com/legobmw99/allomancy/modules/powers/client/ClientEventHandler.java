@@ -355,12 +355,11 @@ public class ClientEventHandler {
         RenderSystem.enableDepthTest();
         RenderSystem.depthMask(true);
         RenderSystem.enableCull();
-        RenderSystem.enableTexture();
+
     }
 
     private PoseStack setupPoseStack(final RenderLevelStageEvent event) {
         RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
-        RenderSystem.disableTexture();
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.disableCull();

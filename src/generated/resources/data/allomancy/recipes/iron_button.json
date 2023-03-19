@@ -15,5 +15,6 @@
   ],
   "result": {
     "item": "allomancy:iron_button"
-  }
+  },
+  "show_notification": true
 }

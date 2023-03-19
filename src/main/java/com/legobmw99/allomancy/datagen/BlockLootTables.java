@@ -30,14 +30,14 @@ public class BlockLootTables implements LootTableSubProvider {
 
 
     // Useful boilerplate from McJtyLib
-    protected void addSimpleBlock(BiConsumer<ResourceLocation, LootTable.Builder> writer, String name, Block block) {
+    protected static void addSimpleBlock(BiConsumer<ResourceLocation, LootTable.Builder> writer, String name, Block block) {
         Allomancy.LOGGER.debug("Creating Loot Table for block " + ForgeRegistries.BLOCKS.getKey(block));
         LootPool.Builder builder = LootPool.lootPool().name(name).setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(block));
 
         writer.accept(new ResourceLocation(Allomancy.MODID, "blocks/" + name), LootTable.lootTable().withPool(builder));
     }
 
-    protected void addSilkTouchBlock(BiConsumer<ResourceLocation, LootTable.Builder> writer, String name, Block block, Item lootItem, float min, float max) {
+    protected static void addSilkTouchBlock(BiConsumer<ResourceLocation, LootTable.Builder> writer, String name, Block block, Item lootItem, float min, float max) {
         LootPool.Builder builder = LootPool
                 .lootPool()
                 .name(name)

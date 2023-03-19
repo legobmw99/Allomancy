@@ -1,11 +1,11 @@
-Allomancy 4.6.2
+Allomancy 4.6.3
 ===============
 
 [![ CurseForge](http://cf.way2muchnoise.eu/256282.svg)](https://minecraft.curseforge.com/projects/allomancy) [![Modrinth Downloads](https://img.shields.io/modrinth/dt/allomancy?color=00AF5C&label=downloads&style=flat-square&logo=modrinth)](https://modrinth.com/mod/allomancy) [![Build status](https://github.com/legobmw99/Allomancy/actions/workflows/gradle.yml/badge.svg)](https://github.com/legobmw99/Allomancy/actions)
 
 This mod adds the basics of [Allomancy](http://coppermind.net/wiki/Allomancy) from Brandon Sanderson's book series *Mistborn*.
 
-This mod is currently updated for `Minecraft 1.19.3` and `Forge 44.0.48`
+This mod is currently updated for `Minecraft 1.19.4` and `Forge 45.0.9`
 
 Please verify and report any issues!
 

@@ -75,9 +75,7 @@ public class MetalSelectScreen extends Screen {
             Tesselator tess = Tesselator.getInstance();
             BufferBuilder buf = tess.getBuilder();
 
-
             RenderSystem.disableCull();
-            RenderSystem.disableTexture();
             RenderSystem.enableBlend();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
@@ -120,8 +118,6 @@ public class MetalSelectScreen extends Screen {
                 }
             }
             tess.end();
-
-            RenderSystem.enableTexture();
 
             for (int seg = 0; seg < segments; seg++) {
                 Metal mt = Metal.getMetal(toMetalIndex(seg));

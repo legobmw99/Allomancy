@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "allomancy:koloss_blade"
-  }
+  },
+  "show_notification": true
 }

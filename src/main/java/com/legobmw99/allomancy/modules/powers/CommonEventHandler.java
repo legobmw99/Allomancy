@@ -13,7 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -88,25 +87,23 @@ public class CommonEventHandler {
 
         event.getOriginal().reviveCaps();
         Player player = event.getEntity();
-        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-            event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(oldData -> {
-                data.setDeathLoc(oldData.getDeathLoc(), oldData.getDeathDim());
-                if (!oldData.isUninvested()) { // make sure the new player has the same power status
-                    for (Metal mt : Metal.values()) {
-                        if (oldData.hasPower(mt)) {
-                            data.addPower(mt);
-                        }
+        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(oldData -> {
+            data.setDeathLoc(oldData.getDeathLoc(), oldData.getDeathDim());
+            if (!oldData.isUninvested()) { // make sure the new player has the same power status
+                for (Metal mt : Metal.values()) {
+                    if (oldData.hasPower(mt)) {
+                        data.addPower(mt);
                     }
                 }
+            }
 
-                if (player.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) ||
-                    !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
-                    for (Metal mt : Metal.values()) {
-                        data.setAmount(mt, oldData.getAmount(mt));
-                    }
+            if (player.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) ||
+                !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
+                for (Metal mt : Metal.values()) {
+                    data.setAmount(mt, oldData.getAmount(mt));
                 }
-            });
-        });
+            }
+        }));
         event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).invalidate();
         event.getOriginal().invalidateCaps();
 
@@ -149,7 +146,7 @@ public class CommonEventHandler {
     public static void onLivingDeath(final LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-                data.setDeathLoc(new BlockPos(player.position()), player.level.dimension());
+                data.setDeathLoc(player.blockPosition(), player.level.dimension());
                 Network.sync(data, player);
             });
         }
@@ -252,11 +249,9 @@ public class CommonEventHandler {
                 if (data.isEnhanced() && data.isBurning(Metal.CHROMIUM)) {
                     if (level instanceof ServerLevel) {
                         int max = 20;
-                        BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
-                        BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
-                        level.getEntitiesOfClass(Player.class, new AABB(negative, positive)).forEach(otherPlayer -> {
-                            otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(otherData -> otherData.drainMetals(Metal.values()));
-                        });
+                        BlockPos negative = curPlayer.blockPosition().offset(-max, -max, -max);
+                        BlockPos positive = curPlayer.blockPosition().offset(max, max, max);
+                        level.getEntitiesOfClass(Player.class, new AABB(negative, positive)).forEach(otherPlayer -> otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(otherData -> otherData.drainMetals(Metal.values())));
                     }
                 }
 
@@ -307,8 +302,8 @@ public class CommonEventHandler {
                 }
                 if (data.isBurning(Metal.CADMIUM) && !data.isBurning(Metal.BENDALLOY)) {
                     int max = data.isEnhanced() ? 20 : 10;
-                    BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
-                    BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
+                    BlockPos negative = curPlayer.blockPosition().offset(-max, -max, -max);
+                    BlockPos positive = curPlayer.blockPosition().offset(max, max, max);
                     int slowness_amplifier = data.isEnhanced() ? 255 : 2; // Duralumin freezes entities
                     level.getEntitiesOfClass(LivingEntity.class, new AABB(negative, positive)).forEach(entity -> {
                         entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 10, 0, true, false));
@@ -356,7 +351,7 @@ public class CommonEventHandler {
                 // Damage the player if they have stored damage and pewter cuts out
                 if (!data.isBurning(Metal.PEWTER) && (data.getDamageStored() > 0)) {
                     data.setDamageStored(data.getDamageStored() - 1);
-                    curPlayer.hurt(DamageSource.MAGIC, 2);
+                    curPlayer.hurt(level.damageSources().magic(), 2);
                 }
 
 
@@ -366,25 +361,6 @@ public class CommonEventHandler {
                 if (data.isEnhanced() && data.isBurning(Metal.COPPER)) {
                     curPlayer.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 50, true, false));
                 }
-
-                // TODO this would be atium? need a packet and a renderer
-                //                        if (false) {
-                //                            BlockPos negative = curPlayer.blockPosition().offset(-30, -30, -30);
-                //                            BlockPos positive = curPlayer.blockPosition().offset(30, 30, 30);
-                //                            var nearby_players = curPlayer.level.getEntitiesOfClass(Mob.class, new AABB(negative, positive), Objects::nonNull);
-                //
-                //                            for (Mob mob : nearby_players) {
-                //                                Path path = mob.getNavigation().getPath();
-                //                                if (path != null) {
-                //                                    int count = path.getNodeCount();
-                //                                    for (int i = 0; i < count; i++) {
-                //                                        Node point = path.getNode(i);
-                //                                        event.world.addParticle(ParticleTypes.EXPLOSION, point.x + 0.5, point.y + 0.5, point.z + 0.5, 0, 0, 0);
-                //                                    }
-                //                                }
-                //                            }
-                //                        }
-
             }
         });
     }
@@ -393,8 +369,8 @@ public class CommonEventHandler {
     private static void tickNearby(Player curPlayer, Level level, IAllomancerData data) {
         if (level instanceof ServerLevel serverLevel) {
             int max = data.isEnhanced() ? 10 : 5;
-            BlockPos negative = new BlockPos(curPlayer.position()).offset(-max, -max, -max);
-            BlockPos positive = new BlockPos(curPlayer.position()).offset(max, max, max);
+            BlockPos negative = curPlayer.blockPosition().offset(-max, -max, -max);
+            BlockPos positive = curPlayer.blockPosition().offset(max, max, max);
             serverLevel.getEntitiesOfClass(LivingEntity.class, new AABB(negative, positive)).forEach(entity -> {
                 entity.aiStep();
                 entity.aiStep();

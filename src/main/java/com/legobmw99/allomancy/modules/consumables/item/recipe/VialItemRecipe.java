@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.consumables.item.recipe;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -84,9 +85,8 @@ public class VialItemRecipe extends CustomRecipe {
         }
     }
 
-
     @Override
-    public ItemStack assemble(CraftingContainer inv) { //getCraftingResult
+    public ItemStack assemble(CraftingContainer p_44001_, RegistryAccess p_267165_) {
         return this.item_result.copy();
     }
 
@@ -95,10 +95,6 @@ public class VialItemRecipe extends CustomRecipe {
         return true;
     }
 
-    @Override
-    public ItemStack getResultItem() {
-        return this.item_result;
-    }
 
     @Override
     public boolean canCraftInDimensions(int width, int height) {

@@ -6,10 +6,11 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.BlockTagsProvider;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
@@ -17,7 +18,10 @@ import java.util.concurrent.CompletableFuture;
 public class ItemTags extends ItemTagsProvider {
 
 
-    public ItemTags(PackOutput gen, CompletableFuture<HolderLookup.Provider> lookupProvider, BlockTagsProvider blockTagProvider, ExistingFileHelper exFileHelper) {
+    public ItemTags(PackOutput gen,
+                    CompletableFuture<HolderLookup.Provider> lookupProvider,
+                    CompletableFuture<TagsProvider.TagLookup<Block>> blockTagProvider,
+                    ExistingFileHelper exFileHelper) {
         super(gen, lookupProvider, blockTagProvider, Allomancy.MODID, exFileHelper);
     }
 

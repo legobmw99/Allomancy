@@ -25,7 +25,7 @@ public class DataGenerators {
                                                                                    new LootTableProvider.SubProviderEntry(DungeonLootTables::new, LootContextParamSets.EMPTY))));
         BlockTags blocktags = new BlockTags(packOutput, lookup, fileHelper);
         generator.addProvider(event.includeServer(), blocktags);
-        generator.addProvider(event.includeServer(), new ItemTags(packOutput, lookup, blocktags, fileHelper));
+        generator.addProvider(event.includeServer(), new ItemTags(packOutput, lookup, blocktags.contentsGetter(), fileHelper));
         generator.addProvider(event.includeServer(), new ForgeAdvancementProvider(packOutput, lookup, fileHelper, List.of(new Advancements())));
         generator.addProvider(event.includeServer(), new BannerTag(packOutput, lookup, fileHelper));
 

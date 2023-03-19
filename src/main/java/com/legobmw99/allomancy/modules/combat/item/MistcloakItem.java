@@ -18,10 +18,10 @@ public class MistcloakItem extends ArmorItem {
     private final Multimap<Attribute, AttributeModifier> attributes;
 
     public MistcloakItem() {
-        super(CombatSetup.WoolArmor, EquipmentSlot.CHEST, new Item.Properties());
+        super(CombatSetup.WoolArmor, Type.CHESTPLATE, new Item.Properties());
 
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        UUID uuid = ARMOR_MODIFIERS[this.slot.getIndex()];
+        UUID uuid = ARMOR_MODIFIERS[this.getEquipmentSlot().getIndex()];
         builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", this.getDefense(), AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", this.getToughness(), AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "Speed Modifier", .25, AttributeModifier.Operation.MULTIPLY_TOTAL));
@@ -30,7 +30,7 @@ public class MistcloakItem extends ArmorItem {
 
     @Override
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return equipmentSlot == this.slot ? this.attributes : super.getDefaultAttributeModifiers(equipmentSlot);
+        return equipmentSlot == this.getEquipmentSlot() ? this.attributes : super.getDefaultAttributeModifiers(equipmentSlot);
 
     }
 

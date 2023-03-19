@@ -9,8 +9,8 @@ import com.legobmw99.allomancy.modules.combat.item.ObsidianDaggerItem;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -28,13 +28,13 @@ public class CombatSetup {
     public static final RegistryObject<KolossBladeItem> KOLOSS_BLADE = ITEMS.register("koloss_blade", KolossBladeItem::new);
     public static final ArmorMaterial WoolArmor = new ArmorMaterial() {
         @Override
-        public int getDurabilityForSlot(EquipmentSlot slotIn) {
+        public int getDurabilityForType(ArmorItem.Type type) {
             return 50;
         }
 
         @Override
-        public int getDefenseForSlot(EquipmentSlot slotIn) {
-            return slotIn == EquipmentSlot.CHEST ? 4 : 0;
+        public int getDefenseForType(ArmorItem.Type type) {
+            return type == ArmorItem.Type.CHESTPLATE ? 4 : 0;
         }
 
         @Override

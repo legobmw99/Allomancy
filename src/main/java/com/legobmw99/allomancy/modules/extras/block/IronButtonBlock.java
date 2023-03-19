@@ -6,7 +6,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -17,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -26,7 +26,7 @@ import java.util.List;
 public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsableBlock {
 
     public IronButtonBlock() {
-        super(Block.Properties.of(Material.METAL).noCollission().strength(1.0F), 35, false, SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF, SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON);
+        super(Block.Properties.of(Material.METAL).noCollission().strength(1.0F), BlockSetType.IRON, 35, false);
     }
 
     @Override

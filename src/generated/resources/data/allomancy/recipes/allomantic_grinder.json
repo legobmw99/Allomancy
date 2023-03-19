@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "allomancy:allomantic_grinder"
-  }
+  },
+  "show_notification": true
 }

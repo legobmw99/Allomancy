@@ -24,7 +24,7 @@ public class ItemDisplay {
         allomancy_group = event.registerCreativeModeTab(new ResourceLocation(Allomancy.MODID, "main_tab"), builder -> builder
                 .icon(() -> new ItemStack(CombatSetup.MISTCLOAK.get()))
                 .title(Component.translatable("tabs.allomancy.main_tab"))
-                .displayItems((featureFlags, output, hasOp) -> {
+                .displayItems((featureFlags, output) -> {
                     output.accept(ConsumeSetup.LERASIUM_NUGGET.get());
                     output.accept(CombatSetup.MISTCLOAK.get());
                     output.accept(CombatSetup.COIN_BAG.get());

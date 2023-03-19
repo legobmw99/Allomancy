@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
-import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -19,6 +18,11 @@ public class GrinderItem extends Item {
             damaged.setCount(0);
         }
         return damaged;
+    }
+
+    @Override
+    public boolean hasCraftingRemainingItem(ItemStack stack) {
+        return stack.getDamageValue() < stack.getMaxDamage();
     }
 
     @Override

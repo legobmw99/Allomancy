@@ -37,7 +37,7 @@ public class MetalOverlay implements IGuiOverlay {
     }
 
     private static void blit(PoseStack matrix, ForgeGui gui, int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
-        ForgeGui.blit(matrix, x, y, gui.getBlitOffset(), uOffset, vOffset, uWidth, vHeight, 128, 128);
+        ForgeGui.blit(matrix, x, y, 0, uOffset, vOffset, uWidth, vHeight, 128, 128);
     }
 
     @Override

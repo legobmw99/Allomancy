@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "allomancy:coin_bag"
-  }
+  },
+  "show_notification": true
 }

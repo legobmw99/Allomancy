@@ -1,8 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.entity.ai;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -86,9 +84,8 @@ public class AIAttackOnCollideExtended extends Goal {
         if (livingEntity == null) {
             return false;
         }
-        BlockPos pos1 = new BlockPos(livingEntity.position());
 
-        return (livingEntity.isAlive() && (!this.longMemory ? !this.attacker.getNavigation().isDone() : this.attacker.isWithinRestriction(pos1)));
+        return (livingEntity.isAlive() && (!this.longMemory ? !this.attacker.getNavigation().isDone() : this.attacker.isWithinRestriction(livingEntity.blockPosition())));
     }
 
     /**
@@ -148,7 +145,7 @@ public class AIAttackOnCollideExtended extends Goal {
                 if (this.attacker instanceof Monster) {
                     this.attacker.doHurtTarget(livingEntity);
                 } else {
-                    livingEntity.hurt(DamageSource.mobAttack(this.attacker), 3);
+                    livingEntity.hurt(livingEntity.level.damageSources().mobAttack(this.attacker), 3);
                 }
             }
         }

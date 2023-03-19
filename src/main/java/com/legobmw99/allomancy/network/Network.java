@@ -41,7 +41,7 @@ public class Network {
 
     public static void sendTo(Object msg, ServerPlayer player) {
         if (!(player instanceof FakePlayer)) {
-            INSTANCE.sendTo(msg, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+            INSTANCE.sendTo(msg, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 
