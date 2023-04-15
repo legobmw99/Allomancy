@@ -1,4 +1,4 @@
-Allomancy 4.5.3
+Allomancy 4.5.4
 ===============
 
 [![ CurseForge](http://cf.way2muchnoise.eu/256282.svg)](https://minecraft.curseforge.com/projects/allomancy) [![Build status](https://github.com/legobmw99/Allomancy/actions/workflows/gradle.yml/badge.svg)](https://github.com/legobmw99/Allomancy/actions)
