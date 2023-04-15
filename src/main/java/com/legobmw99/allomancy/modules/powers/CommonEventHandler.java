@@ -81,47 +81,45 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onPlayerClone(final PlayerEvent.Clone event) {
-        if (event.getEntity().level.isClientSide()) {
-            return;
-        }
+        if (!event.getEntity().level.isClientSide() && event.getEntity() instanceof ServerPlayer player) {
 
-        event.getOriginal().reviveCaps();
-        Player player = event.getEntity();
-        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(oldData -> {
-            data.setDeathLoc(oldData.getDeathLoc(), oldData.getDeathDim());
-            if (!oldData.isUninvested()) { // make sure the new player has the same power status
-                for (Metal mt : Metal.values()) {
-                    if (oldData.hasPower(mt)) {
-                        data.addPower(mt);
+
+            event.getOriginal().reviveCaps();
+            player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(oldData -> {
+                data.setDeathLoc(oldData.getDeathLoc(), oldData.getDeathDim());
+                if (!oldData.isUninvested()) { // make sure the new player has the same power status
+                    for (Metal mt : Metal.values()) {
+                        if (oldData.hasPower(mt)) {
+                            data.addPower(mt);
+                        }
                     }
                 }
-            }
 
-            if (player.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) ||
-                !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
-                for (Metal mt : Metal.values()) {
-                    data.setAmount(mt, oldData.getAmount(mt));
+                if (player.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) ||
+                    !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
+                    for (Metal mt : Metal.values()) {
+                        data.setAmount(mt, oldData.getAmount(mt));
+                    }
                 }
-            }
-        }));
-        event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).invalidate();
-        event.getOriginal().invalidateCaps();
+            }));
+            event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).invalidate();
+            event.getOriginal().invalidateCaps();
 
-        Network.sync(player);
-
+            Network.sync(player);
+        }
     }
 
     @SubscribeEvent
     public static void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.getEntity().getCommandSenderWorld().isClientSide()) {
-            Network.sync(event.getEntity());
+        if (!event.getEntity().getCommandSenderWorld().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
+            Network.sync(player);
         }
     }
 
     @SubscribeEvent
     public static void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (!event.getEntity().getCommandSenderWorld().isClientSide()) {
-            Network.sync(event.getEntity());
+        if (!event.getEntity().getCommandSenderWorld().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
+            Network.sync(player);
         }
     }
 
@@ -226,11 +224,15 @@ public class CommonEventHandler {
                 }
                 if (data.isBurning(Metal.DURALUMIN) && !data.isEnhanced()) {
                     data.setEnhanced(2);
-                    Network.sync(new UpdateEnhancedPacket(2, curPlayer.getId()), curPlayer);
+                    if (curPlayer instanceof ServerPlayer sp) {
+                        Network.sync(new UpdateEnhancedPacket(2, sp.getId()), sp);
+                    }
                 } else if (!data.isBurning(Metal.DURALUMIN) && data.isEnhanced()) {
                     data.decEnhanced();
                     if (!data.isEnhanced()) { //Enhancement ran out this tick
-                        Network.sync(new UpdateEnhancedPacket(false, curPlayer.getId()), curPlayer);
+                        if (curPlayer instanceof ServerPlayer sp) {
+                            Network.sync(new UpdateEnhancedPacket(false, sp.getId()), sp);
+                        }
                         data.drainMetals(Arrays.stream(Metal.values()).filter(data::isBurning).toArray(Metal[]::new));
                     }
                 }
@@ -251,7 +253,9 @@ public class CommonEventHandler {
                         int max = 20;
                         BlockPos negative = curPlayer.blockPosition().offset(-max, -max, -max);
                         BlockPos positive = curPlayer.blockPosition().offset(max, max, max);
-                        level.getEntitiesOfClass(Player.class, new AABB(negative, positive)).forEach(otherPlayer -> otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(otherData -> otherData.drainMetals(Metal.values())));
+                        level
+                                .getEntitiesOfClass(Player.class, new AABB(negative, positive))
+                                .forEach(otherPlayer -> otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(otherData -> otherData.drainMetals(Metal.values())));
                     }
                 }
 
