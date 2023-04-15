@@ -156,8 +156,8 @@ public class PowerUtils {
             data.drainMetals(Metal.values());
             player.removeAllEffects();
 
-            if (player instanceof ServerPlayer) {
-                Network.sync(data, player);
+            if (player instanceof ServerPlayer sp) {
+                Network.sync(data, sp);
             }
         });
     }

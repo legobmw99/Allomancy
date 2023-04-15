@@ -120,15 +120,8 @@ public class ClientEventHandler {
             this.metal_entities.addAll(player.level.getEntitiesOfClass(Entity.class, new AABB(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
 
             // Add metal blobs to metal list
-            var blocks = BlockPos
-                    .betweenClosedStream(negative, positive)
-                    .map(BlockPos::immutable)
-                    .filter(bp -> PowerUtils.isBlockStateMetal(player.level.getBlockState(bp)))
-                    .collect(Collectors.toSet());
-
-            // a sort of BFS with a global seen list
             var seen = new HashSet<BlockPos>();
-            blocks.forEach((starter) -> searchNearbyMetalBlocks(blocks, seen, starter));
+            BlockPos.betweenClosed(negative, positive).forEach(starter -> searchNearbyMetalBlocks(seen, starter.immutable(), player.level));
         }
 
         // Populate our list of nearby allomancy users
@@ -149,23 +142,32 @@ public class ClientEventHandler {
         }
     }
 
-    private void searchNearbyMetalBlocks(Set<BlockPos> blocks, HashSet<BlockPos> seen, BlockPos starter) {
+    /**
+     * A sort of BFS with a global seen list
+     */
+    private void searchNearbyMetalBlocks(HashSet<BlockPos> seen, BlockPos starter, Level level) {
         if (seen.contains(starter)) {
             return;
         }
         seen.add(starter);
 
+        if (!PowerUtils.isBlockStateMetal(level.getBlockState(starter))) {
+            return;
+        }
+
         var points = new LinkedList<BlockPos>();
         points.add(starter);
         var blob = new MetalBlockBlob(starter);
         while (!points.isEmpty()) {
-            var pos = points.poll();
+            var pos = points.remove();
             for (var p1 : BlockPos.withinManhattan(pos, 1, 1, 1)) {
-                var p2 = p1.immutable();
-                if (!seen.contains(p2) && blocks.contains(p2)) {
-                    points.add(p2);
+                if (!seen.contains(p1)) {
+                    var p2 = p1.immutable();
                     seen.add(p2);
-                    blob.add(p2);
+                    if (PowerUtils.isBlockStateMetal(level.getBlockState(p2))) {
+                        points.add(p2);
+                        blob.add(p2);
+                    }
                 }
             }
         }

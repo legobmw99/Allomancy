@@ -49,15 +49,15 @@ public class Network {
         INSTANCE.send(target, msg);
     }
 
-    public static void sync(Player player) {
+    public static void sync(ServerPlayer player) {
         player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> sync(data, player));
     }
 
-    public static void sync(IAllomancerData cap, Player player) {
+    public static void sync(IAllomancerData cap, ServerPlayer player) {
         sync(new AllomancerDataPacket(cap, player), player);
     }
 
-    public static void sync(Object msg, Player player) {
+    public static void sync(Object msg, ServerPlayer player) {
         sendTo(msg, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
     }
 
