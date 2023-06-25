@@ -31,7 +31,7 @@ minecraft {
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
     mappings channel: mapping_channel, version: mapping_version
-    
+
     // When true, this property will have all Eclipse run configurations run the "prepareX" task for the given run configuration before launching the game.
     // In most cases, it is not necessary to enable.
     // enableEclipsePrepareRuns = true
@@ -197,11 +197,11 @@ dependencies {
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
 def replaceProperties = [
-        minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-        forge_version: forge_version, forge_version_range: forge_version_range,
+        minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
+        forge_version       : forge_version, forge_version_range: forge_version_range,
         loader_version_range: loader_version_range,
-        mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-        mod_authors: mod_authors, mod_description: mod_description
+        mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+        mod_authors         : mod_authors, mod_description: mod_description
 ]
 processResources {
     inputs.properties replaceProperties
@@ -251,23 +251,23 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 
-// task deobfJar(type: Jar) {
-//     from sourceSets.main.output
-//     classifier = 'deobf'
-// }
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    archiveClassifier = 'deobf'
+}
 
-// task apiJar(type: Jar) {
-//     classifier = 'api'
-//     include 'com/legobmw99/allomancy/api/**/*'
-//     from sourceSets.main.allSource
-//     from sourceSets.main.output
-// }
+task apiJar(type: Jar) {
+    archiveClassifier = 'api'
+    include 'com/legobmw99/allomancy/api/**/*'
+    from sourceSets.main.allSource
+    from sourceSets.main.output
+}
 
-// artifacts {
-//     archives jar
-//     archives apiJar
-//     archives deobfJar
-// }
+artifacts {
+    archives jar
+    archives apiJar
+    archives deobfJar
+}
 
 
 ////////////////
