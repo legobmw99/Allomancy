@@ -219,7 +219,7 @@ public class PowerUtils {
                     player.stopRiding();
                 }
 
-                if (player.level.dimension() != dimension) {
+                if (player.level().dimension() != dimension) {
                     //change dimension
                     player = (Player) player.changeDimension(world.getServer().getLevel(dimension), new ITeleporter() {
                         @Override
@@ -273,7 +273,7 @@ public class PowerUtils {
                     target.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>(pillager, 1.0D, 8.0F));
                 }
             } else {
-                target.level.explode(target, target.position().x(), target.position().y(), target.position().z(), 1.2F, false, Level.ExplosionInteraction.MOB);
+                target.level().explode(target, target.position().x(), target.position().y(), target.position().z(), 1.2F, false, Level.ExplosionInteraction.MOB);
                 target.kill();
             }
         } catch (Exception e) {

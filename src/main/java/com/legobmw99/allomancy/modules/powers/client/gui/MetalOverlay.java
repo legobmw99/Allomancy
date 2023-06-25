@@ -4,8 +4,8 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
@@ -36,13 +36,12 @@ public class MetalOverlay implements IGuiOverlay {
         evt.registerAboveAll("metal_display", new MetalOverlay());
     }
 
-    private static void blit(PoseStack matrix, ForgeGui gui, int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
-        ForgeGui.blit(matrix, x, y, 0, uOffset, vOffset, uWidth, vHeight, 128, 128);
+    private static void blit(GuiGraphics graphics, int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
+        graphics.blit(meterLoc, x, y, 0, uOffset, vOffset, uWidth, vHeight, 128, 128);
     }
 
     @Override
-    public void render(ForgeGui gui, PoseStack matrix, float partialTicks, int screenWidth, int screenHeight) {
-
+    public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
 
@@ -97,14 +96,14 @@ public class MetalOverlay implements IGuiOverlay {
                     int i = mt.getIndex();
                     int offset = (i / 2) * 4; // Adding a gap between pairs
                     // Draw the bars first
-                    blit(matrix, gui, renderX + 1 + (7 * i) + offset, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
+                    blit(guiGraphics, renderX + 1 + (7 * i) + offset, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
                     // Draw the gauges second, so that highlights and decorations show over the bar.
-                    blit(matrix, gui, renderX + (7 * i) + offset, renderY, 0, 0, 5, 20);
+                    blit(guiGraphics, renderX + (7 * i) + offset, renderY, 0, 0, 5, 20);
                     // Draw the fire if it is burning
                     if (data.isBurning(mt)) {
                         int frameCount = (currentFrame + i) % 4;
                         var frame = Frames[frameCount];
-                        blit(matrix, gui, renderX + (7 * i) + offset, renderY + 4 + metalY, frame.x, frame.y, 5, 3);
+                        blit(guiGraphics, renderX + (7 * i) + offset, renderY + 4 + metalY, frame.x, frame.y, 5, 3);
                     }
                 }
 

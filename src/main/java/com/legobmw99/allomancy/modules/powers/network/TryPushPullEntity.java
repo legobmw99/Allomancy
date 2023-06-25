@@ -44,7 +44,7 @@ public class TryPushPullEntity {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
-            Entity target = player.level.getEntity(this.entityIDOther);
+            Entity target = player.level().getEntity(this.entityIDOther);
             if (target != null) {
                 if (PowerUtils.isEntityMetal(target)) {
                     // The player moves

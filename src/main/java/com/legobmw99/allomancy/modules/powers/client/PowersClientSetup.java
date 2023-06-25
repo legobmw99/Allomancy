@@ -56,7 +56,7 @@ public class PowersClientSetup {
 
     public static void registerParticle(final RegisterParticleProvidersEvent event) {
         Allomancy.LOGGER.info("Allomancy: Registering custom particles");
-        event.register(PowersClientSetup.SOUND_PARTICLE_TYPE.get(), SoundParticle.Factory::new);
+        event.registerSprite(PowersClientSetup.SOUND_PARTICLE_TYPE.get(), new SoundParticle.Factory());
     }
 
 }

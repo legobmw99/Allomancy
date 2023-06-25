@@ -1,7 +1,9 @@
 package com.legobmw99.allomancy.modules.powers.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -54,17 +56,9 @@ public class SoundParticle extends TextureSheetParticle {
 
 
     @OnlyIn(Dist.CLIENT)
-    public static class Factory implements ParticleProvider<SoundParticleData> {
-        private final SpriteSet spriteSet;
-
-        public Factory(SpriteSet sprite) {
-            this.spriteSet = sprite;
-        }
-
-        public Particle createParticle(SoundParticleData data, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-            SoundParticle sp = new SoundParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, data.getSoundType());
-            sp.pickSprite(this.spriteSet);
-            return sp;
+    public static class Factory implements ParticleProvider.Sprite<SoundParticleData> {
+        public TextureSheetParticle createParticle(SoundParticleData data, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            return new SoundParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, data.getSoundType());
         }
     }
 

@@ -6,10 +6,9 @@ import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -105,16 +104,15 @@ public class MaterialsSetup {
     }
 
     public static Block createStandardBlock() {
-        return new Block(Block.Properties.of(Material.STONE).strength(2.1F).requiresCorrectToolForDrops());
+        return new Block(BlockBehaviour.Properties.copy(Blocks.STONE).strength(2.1F).requiresCorrectToolForDrops());
     }
 
     public static Block createStandardOre() {
-        return new DropExperienceBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F));
+        return new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.IRON_ORE));
     }
 
     public static Block createDeepslateBlock() {
-        return new DropExperienceBlock(
-                Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().color(MaterialColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE));
+        return new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_IRON_ORE).strength(4.5F, 3.0F));
     }
 
     public static Item createStandardItem() {

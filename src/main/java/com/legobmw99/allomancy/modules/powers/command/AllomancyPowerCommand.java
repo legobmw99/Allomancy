@@ -119,7 +119,7 @@ public class AllomancyPowerCommand {
                 }
             }
         });
-        ctx.getSource().sendSuccess(Component.translatable("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
+        ctx.getSource().sendSuccess(() -> Component.translatable("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
     }
 
     private static void addPower(CommandContext<CommandSourceStack> ctx, ServerPlayer player) throws CommandSyntaxException {
@@ -175,7 +175,7 @@ public class AllomancyPowerCommand {
         }
         Network.sync(player);
 
-        ctx.getSource().sendSuccess(Component.translatable(success, player.getDisplayName(), type), true);
+        ctx.getSource().sendSuccess(() -> Component.translatable(success, player.getDisplayName(), type), true);
 
     }
 

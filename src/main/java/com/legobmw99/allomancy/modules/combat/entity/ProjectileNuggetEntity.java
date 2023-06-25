@@ -80,13 +80,13 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
         }
 
         if (rayTraceResult.getType() == HitResult.Type.ENTITY) {
-            ((EntityHitResult) rayTraceResult).getEntity().hurt(this.level.damageSources().thrown(this, this.getOwner()), this.damage);
+            ((EntityHitResult) rayTraceResult).getEntity().hurt(this.level().damageSources().thrown(this, this.getOwner()), this.damage);
         }
 
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             ItemStack ammo = new ItemStack(this.entityData.get(ITEM).getItem(), 1);
-            if (this.level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && rayTraceResult.getType() != HitResult.Type.ENTITY && this.dropItem) {
-                this.level.addFreshEntity(new ItemEntity(this.level, this.position().x(), this.position().y(), this.position().z(), ammo));
+            if (this.level().getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && rayTraceResult.getType() != HitResult.Type.ENTITY && this.dropItem) {
+                this.level().addFreshEntity(new ItemEntity(this.level(), this.position().x(), this.position().y(), this.position().z(), ammo));
             }
 
             this.kill();

@@ -15,9 +15,13 @@ import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -55,8 +59,8 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mx, int my, float partialTicks) {
-        super.render(matrixStack, mx, my, partialTicks);
+    public void render(GuiGraphics guiGraphics, int mx, int my, float partialTicks) {
+        super.render(guiGraphics, mx, my, partialTicks);
 
         this.mc.player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
 
@@ -144,14 +148,13 @@ public class MetalSelectScreen extends Screen {
                     ysp -= 9;
                 }
 
-                this.mc.font.drawShadow(matrixStack, name, xsp, ysp, 0xFFFFFF);
 
                 double mod = 0.8;
                 int xdp = (int) ((xp - x) * mod + x);
                 int ydp = (int) ((yp - y) * mod + y);
                 RenderSystem.setShader(GameRenderer::getPositionTexShader);
                 RenderSystem.setShaderTexture(0, METAL_ICONS[toMetalIndex(seg)]);
-                blit(matrixStack, xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
+                guiGraphics.blit(METAL_ICONS[toMetalIndex(seg)], xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
             }
 

@@ -39,7 +39,7 @@ public class ChangeEmotionPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             Player allomancer = ctx.get().getSender();
-            PathfinderMob target = (PathfinderMob) allomancer.level.getEntity(this.entityID);
+            PathfinderMob target = (PathfinderMob) allomancer.level().getEntity(this.entityID);
             if (target == null) {
                 return;
             }

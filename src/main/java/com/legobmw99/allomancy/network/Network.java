@@ -6,7 +6,6 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.modules.powers.network.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;

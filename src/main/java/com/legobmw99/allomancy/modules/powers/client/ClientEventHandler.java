@@ -40,7 +40,6 @@ import org.lwjgl.glfw.GLFW;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ClientEventHandler {
 
@@ -115,11 +114,11 @@ public class ClientEventHandler {
             var positive = player.blockPosition().offset(max, max, max);
 
             // Add metal entities to metal list
-            this.metal_entities.addAll(player.level.getEntitiesOfClass(Entity.class, new AABB(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
+            this.metal_entities.addAll(player.level().getEntitiesOfClass(Entity.class, new AABB(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
 
             // Add metal blobs to metal list
             var seen = new HashSet<BlockPos>();
-            BlockPos.betweenClosed(negative, positive).forEach(starter -> searchNearbyMetalBlocks(seen, starter.immutable(), player.level));
+            BlockPos.betweenClosed(negative, positive).forEach(starter -> searchNearbyMetalBlocks(seen, starter.immutable(), player.level()));
         }
 
         // Populate our list of nearby allomancy users
@@ -128,7 +127,7 @@ public class ClientEventHandler {
             // Add metal burners to a list
             var negative = player.blockPosition().offset(-30, -30, -30);
             var positive = player.blockPosition().offset(30, 30, 30);
-            var nearby_players = player.level.getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
+            var nearby_players = player.level().getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
 
             for (Player otherPlayer : nearby_players) {
                 boolean cont = otherPlayer.getCapability(AllomancerCapability.PLAYER_CAP).map(otherData -> checkSeeking(data, otherPlayer, otherData)).orElse(true);
@@ -328,17 +327,17 @@ public class ClientEventHandler {
              *********************************************/
             if (data.isBurning(Metal.GOLD)) {
                 ResourceKey<Level> deathDim = data.getDeathDim();
-                if (deathDim != null && player.level.dimension() == deathDim) {
+                if (deathDim != null && player.level().dimension() == deathDim) {
                     ClientUtils.drawMetalLine(stack, playervec, Vec3.atCenterOf(data.getDeathLoc()), 3.0F, 0.9F, 0.85F, 0.0F);
                 }
             }
             if (data.isBurning(Metal.ELECTRUM)) {
                 ResourceKey<Level> spawnDim = data.getSpawnDim();
-                if (spawnDim == null && player.level.dimension() == Level.OVERWORLD) { // overworld, no spawn --> use world spawn
-                    BlockPos spawnLoc = new BlockPos(player.level.getLevelData().getXSpawn(), player.level.getLevelData().getYSpawn(), player.level.getLevelData().getZSpawn());
+                if (spawnDim == null && player.level().dimension() == Level.OVERWORLD) { // overworld, no spawn --> use world spawn
+                    var levelData = player.level().getLevelData();
+                    BlockPos spawnLoc = new BlockPos(levelData.getXSpawn(), levelData.getYSpawn(), levelData.getZSpawn());
                     ClientUtils.drawMetalLine(stack, playervec, Vec3.atCenterOf(spawnLoc), 3.0F, 0.7F, 0.8F, 0.2F);
-
-                } else if (spawnDim != null && player.level.dimension() == spawnDim) {
+                } else if (spawnDim != null && player.level().dimension() == spawnDim) {
                     ClientUtils.drawMetalLine(stack, playervec, Vec3.atCenterOf(data.getSpawnLoc()), 3.0F, 0.7F, 0.8F, 0.2F);
                 }
             }

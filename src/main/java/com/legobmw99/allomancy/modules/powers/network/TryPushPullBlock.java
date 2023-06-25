@@ -40,11 +40,11 @@ public class TryPushPullBlock {
             ServerPlayer player = ctx.get().getSender();
             BlockPos pos = this.blockPos;
             // Sanity check to make sure  the block is loaded in the server
-            if (player.level.isLoaded(pos)) {
+            if (player.level().isLoaded(pos)) {
                 // activate blocks
-                if (player.level.getBlockState(pos).getBlock() instanceof IAllomanticallyUsableBlock block) {
-                    block.useAllomantically(player.level.getBlockState(pos), player.level, pos, player, this.direction > 0);
-                } else if (PowerUtils.isBlockStateMetal(player.level.getBlockState(pos)) // Check whitelist on server
+                if (player.level().getBlockState(pos).getBlock() instanceof IAllomanticallyUsableBlock block) {
+                    block.useAllomantically(player.level().getBlockState(pos), player.level(), pos, player, this.direction > 0);
+                } else if (PowerUtils.isBlockStateMetal(player.level().getBlockState(pos)) // Check whitelist on server
                            || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() // check coin bag
                                && (!player.getProjectile(player.getMainHandItem()).isEmpty()) && this.direction > 0)) {
                     PowerUtils.move(this.direction, player, pos);

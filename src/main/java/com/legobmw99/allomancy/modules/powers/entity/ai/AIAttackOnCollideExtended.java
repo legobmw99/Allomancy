@@ -44,7 +44,7 @@ public class AIAttackOnCollideExtended extends Goal {
 
     public AIAttackOnCollideExtended(PathfinderMob par1EntityCreature, double par2, boolean par4) {
         this.attacker = par1EntityCreature;
-        this.worldObj = par1EntityCreature.level;
+        this.worldObj = par1EntityCreature.level();
         this.speedTowardsTarget = par2;
         this.longMemory = par4;
         this.setFlags(EnumSet.of(Flag.TARGET));
@@ -145,7 +145,7 @@ public class AIAttackOnCollideExtended extends Goal {
                 if (this.attacker instanceof Monster) {
                     this.attacker.doHurtTarget(livingEntity);
                 } else {
-                    livingEntity.hurt(livingEntity.level.damageSources().mobAttack(this.attacker), 3);
+                    livingEntity.hurt(livingEntity.level().damageSources().mobAttack(this.attacker), 3);
                 }
             }
         }

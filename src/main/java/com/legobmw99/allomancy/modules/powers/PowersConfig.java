@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -116,6 +117,7 @@ public class PowersConfig {
         add(Items.NETHERITE_SHOVEL);
         add(Items.NETHERITE_SWORD);
         add(Items.NETHERITE_AXE);
+        add(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE);
         add(Items.CROSSBOW);
 
         add(Blocks.ANVIL);
@@ -145,6 +147,14 @@ public class PowersConfig {
         add(Blocks.NETHERITE_BLOCK);
         add(Blocks.LODESTONE);
         add(Blocks.GILDED_BLACKSTONE);
+
+        add(Items.BRUSH);
+
+        WoodType.values().forEach(wt -> {
+            add("minecraft:" + wt.name() + "_hanging_sign");
+            add("minecraft:" + wt.name() + "_wall_hanging_sign");
+        });
+
 
         add(ConsumeSetup.VIAL.get());
         add(ConsumeSetup.LERASIUM_NUGGET.get());

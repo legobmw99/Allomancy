@@ -41,7 +41,6 @@ public class Allomancy {
         modBus.addListener(AllomancyConfig::onReload);
         modBus.addListener(AllomancerCapability::registerCapability);
         modBus.addListener(CombatClientSetup::registerEntityRenders);
-        modBus.addListener(ItemDisplay::registerCreativeTabs);
         modBus.addListener(ItemDisplay::addTabContents);
 
         modBus.addListener(MetalOverlay::registerGUI);
@@ -61,6 +60,7 @@ public class Allomancy {
         ConsumeSetup.register();
         MaterialsSetup.register();
         ExtrasSetup.register();
+        ItemDisplay.register();
 
         AllomancyConfig.register();
 

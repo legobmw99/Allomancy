@@ -50,7 +50,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity().level.isClientSide()) {
+        if (event.getEntity().level().isClientSide()) {
             return;
         }
         if (event.getEntity() instanceof ServerPlayer player) {
@@ -81,7 +81,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onPlayerClone(final PlayerEvent.Clone event) {
-        if (!event.getEntity().level.isClientSide() && event.getEntity() instanceof ServerPlayer player) {
+        if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
 
 
             event.getOriginal().reviveCaps();
@@ -95,7 +95,7 @@ public class CommonEventHandler {
                     }
                 }
 
-                if (player.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) ||
+                if (player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) ||
                     !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
                     for (Metal mt : Metal.values()) {
                         data.setAmount(mt, oldData.getAmount(mt));
@@ -125,7 +125,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onStartTracking(final net.minecraftforge.event.entity.player.PlayerEvent.StartTracking event) {
-        if (!event.getTarget().level.isClientSide && event.getTarget() instanceof ServerPlayer player) {
+        if (!event.getTarget().level().isClientSide && event.getTarget() instanceof ServerPlayer player) {
             Network.sync(player);
         }
     }
@@ -144,7 +144,7 @@ public class CommonEventHandler {
     public static void onLivingDeath(final LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-                data.setDeathLoc(player.blockPosition(), player.level.dimension());
+                data.setDeathLoc(player.blockPosition(), player.level().dimension());
                 Network.sync(data, player);
             });
         }
