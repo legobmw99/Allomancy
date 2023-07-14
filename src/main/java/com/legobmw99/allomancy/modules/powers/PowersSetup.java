@@ -2,7 +2,6 @@ package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.client.ClientEventHandler;
-import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerCommand;
 import com.legobmw99.allomancy.modules.powers.command.AllomancyPowerType;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
@@ -45,6 +44,5 @@ public class PowersSetup {
 
     public static void register() {
         COMMAND_ARGUMENT_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        PowersClientSetup.register();
     }
 }

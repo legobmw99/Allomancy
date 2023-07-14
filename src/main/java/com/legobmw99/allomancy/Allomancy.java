@@ -48,6 +48,7 @@ public class Allomancy {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             modBus.addListener(PowersClientSetup::registerKeyBinding);
             modBus.addListener(PowersClientSetup::registerParticle);
+            PowersClientSetup.register();
         });
 
 
