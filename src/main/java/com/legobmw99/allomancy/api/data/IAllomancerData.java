@@ -6,8 +6,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
-public interface IAllomancerData {
+public interface IAllomancerData extends INBTSerializable<CompoundTag> {
 
     /**
      * Called each worldTick, checking the burn times, abilities, and metal
@@ -184,9 +185,5 @@ public interface IAllomancerData {
     boolean isEnhanced();
 
     void setEnhanced(int time);
-
-    void load(CompoundTag nbt);
-
-    CompoundTag save();
 
 }

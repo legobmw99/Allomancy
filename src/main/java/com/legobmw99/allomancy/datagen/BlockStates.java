@@ -6,13 +6,12 @@ import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraftforge.client.model.generators.*;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.*;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.function.BiConsumer;
 
@@ -36,13 +35,13 @@ public class BlockStates extends BlockStateProvider {
             singleTextureBlock(block, path, "block/" + path);
         }
 
-        for (RegistryObject<Block> rblock : MaterialsSetup.RAW_ORE_BLOCKS) {
+        for (var rblock : MaterialsSetup.RAW_ORE_BLOCKS) {
             Block block = rblock.get();
             String path = rblock.getId().getPath();
             singleTextureBlock(block, path, "block/" + path);
         }
 
-        for (RegistryObject<Block> rblock : MaterialsSetup.STORAGE_BLOCKS) {
+        for (var rblock : MaterialsSetup.STORAGE_BLOCKS) {
             if (rblock != null) {
                 Block block = rblock.get();
                 String path = rblock.getId().getPath();
@@ -57,7 +56,7 @@ public class BlockStates extends BlockStateProvider {
 
 
     private void singleTextureBlock(Block block, String model, String texture) {
-        Allomancy.LOGGER.debug("Creating Block Data for " + ForgeRegistries.BLOCKS.getKey(block));
+        Allomancy.LOGGER.debug("Creating Block Data for " + BuiltInRegistries.BLOCK.getKey(block));
         simpleBlock(block);
     }
 

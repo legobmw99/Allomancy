@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class BannerTag extends TagsProvider<BannerPattern> {
 
-    public BannerTag(PackOutput pGenerator, CompletableFuture<HolderLookup.Provider> registries, net.minecraftforge.common.data.ExistingFileHelper existingFileHelper) {
+    public BannerTag(PackOutput pGenerator, CompletableFuture<HolderLookup.Provider> registries, net.neoforged.neoforge.common.data.ExistingFileHelper existingFileHelper) {
         super(pGenerator, Registries.BANNER_PATTERN, registries, Allomancy.MODID, existingFileHelper);
     }
 

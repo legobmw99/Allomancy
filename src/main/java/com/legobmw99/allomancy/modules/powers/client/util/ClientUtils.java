@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.powers.client.util;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.powers.network.UpdateBurnPacket;
+import com.legobmw99.allomancy.modules.powers.network.ToggleBurnPayload;
 import com.legobmw99.allomancy.network.Network;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -16,8 +16,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
@@ -98,21 +98,21 @@ public class ClientUtils {
     /**
      * Used to toggle a metal's burn state and play a sound effect
      *
-     * @param metal      the index of the metal to toggle
-     * @param capability the capability being handled
+     * @param metal the index of the metal to toggle
+     * @param data  the Allomancer data of the player
      */
-    public static void toggleBurn(Metal metal, IAllomancerData capability) {
-        if (!capability.hasPower(metal)) {
+    public static void toggleBurn(Metal metal, IAllomancerData data) {
+        if (!data.hasPower(metal)) {
             return;
         }
 
-        Network.sendToServer(new UpdateBurnPacket(metal, !capability.isBurning(metal)));
+        Network.sendToServer(new ToggleBurnPayload(metal, !data.isBurning(metal)));
 
-        if (capability.getAmount(metal) > 0) {
-            capability.setBurning(metal, !capability.isBurning(metal));
+        if (data.getAmount(metal) > 0) {
+            data.setBurning(metal, !data.isBurning(metal));
         }
         // play a sound effect
-        if (capability.isBurning(metal)) {
+        if (data.isBurning(metal)) {
             player.playSound(SoundEvent.createFixedRangeEvent(new ResourceLocation("item.flintandsteel.use"), 1f), 1, 5);
         } else {
             player.playSound(SoundEvent.createFixedRangeEvent(new ResourceLocation("block.fire.extinguish"), 1f), 1, 4);

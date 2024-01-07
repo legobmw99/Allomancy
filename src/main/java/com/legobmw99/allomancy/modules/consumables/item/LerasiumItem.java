@@ -1,7 +1,6 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
-import com.legobmw99.allomancy.api.data.IAllomancerData;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -35,7 +34,8 @@ public class LerasiumItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemStackIn = player.getItemInHand(hand);
-        if (player.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> !data.isMistborn()).isPresent()) {
+
+        if (!player.getData(AllomancerAttachment.ALLOMANCY_DATA.value()).isMistborn()) {
             player.startUsingItem(hand);
             return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStackIn);
         }
@@ -47,13 +47,15 @@ public class LerasiumItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity livingEntity) {
 
-        livingEntity.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(IAllomancerData::setMistborn);
-        //Fancy-shmancy effects
-        LightningBolt lightning = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
-        lightning.setVisualOnly(true);
-        lightning.moveTo(livingEntity.position().add(0, 3, 0));
-        world.addFreshEntity(lightning);
-        livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20, 0, true, false));
+        if (livingEntity instanceof Player) {
+            livingEntity.getData(AllomancerAttachment.ALLOMANCY_DATA).setMistborn();
+            //Fancy-shmancy effects
+            LightningBolt lightning = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
+            lightning.setVisualOnly(true);
+            lightning.moveTo(livingEntity.position().add(0, 3, 0));
+            world.addFreshEntity(lightning);
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20, 0, true, false));
+        }
 
         return super.finishUsingItem(stack, world, livingEntity);
     }

@@ -58,5 +58,6 @@
       "name": "aluminum_ore",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/aluminum_ore"
 }

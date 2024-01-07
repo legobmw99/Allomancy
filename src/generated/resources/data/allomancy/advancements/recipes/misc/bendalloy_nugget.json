@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_bendalloy_ingot",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_bendalloy_ingot"
     ]
   ],
   "rewards": {

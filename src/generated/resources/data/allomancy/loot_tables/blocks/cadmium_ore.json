@@ -58,5 +58,6 @@
       "name": "cadmium_ore",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/cadmium_ore"
 }

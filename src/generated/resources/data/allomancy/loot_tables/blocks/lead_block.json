@@ -12,5 +12,6 @@
       "name": "lead_block",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/lead_block"
 }

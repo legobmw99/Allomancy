@@ -8,7 +8,7 @@ import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.DyeColor;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -124,6 +124,8 @@ public class Languages extends LanguageProvider {
 
         add("config.jade.plugin_allomancy.waila_bronze", "Allomancy: Show burning metals when seeking");
 
+        add("allomancy.networking.failed", "Allomancy packet failed to play: %s");
+        add("allomancy.networking.kicked", "Requested illegal action: %s");
 
     }
 

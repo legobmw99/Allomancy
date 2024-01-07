@@ -22,5 +22,6 @@
       "name": "main",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:inject/obsidian_dagger"
 }

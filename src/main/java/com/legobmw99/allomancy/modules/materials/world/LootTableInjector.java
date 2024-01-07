@@ -5,12 +5,16 @@ import com.legobmw99.allomancy.modules.materials.MaterialsConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
-import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
 
 public class LootTableInjector {
     @SubscribeEvent
     public static void onLootTableLoad(final LootTableLoadEvent event) {
+        if (event.getName() == null) {
+            return;
+        }
+
         String name = event.getName().toString();
         if (MaterialsConfig.generate_lerasium.get() &&
             (name.equals("minecraft:chests/simple_dungeon") || name.equals("minecraft:chests/desert_pyramid") || name.equals("minecraft:chests/jungle_temple") ||

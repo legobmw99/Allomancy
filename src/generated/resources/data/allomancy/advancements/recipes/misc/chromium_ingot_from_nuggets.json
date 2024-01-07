@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_chromium_nugget",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_chromium_nugget"
     ]
   ],
   "rewards": {

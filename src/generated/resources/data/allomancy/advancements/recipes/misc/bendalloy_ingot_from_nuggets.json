@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_bendalloy_nugget",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_bendalloy_nugget"
     ]
   ],
   "rewards": {

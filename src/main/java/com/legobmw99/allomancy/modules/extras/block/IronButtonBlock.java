@@ -25,7 +25,7 @@ import java.util.List;
 public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsableBlock {
 
     public IronButtonBlock() {
-        super(Block.Properties.of().noCollission().strength(1.0F), BlockSetType.IRON, 35, false);
+        super(BlockSetType.IRON, 35, Block.Properties.of().noCollission().strength(1.0F));
     }
 
     @Override

@@ -1,63 +1,37 @@
 package com.legobmw99.allomancy.network;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.api.data.IAllomancerData;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.ServerPayloadHandler;
+import com.legobmw99.allomancy.modules.powers.client.ClientPayloadHandler;
 import com.legobmw99.allomancy.modules.powers.network.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 
 public class Network {
+    public static void registerPayloads(final RegisterPayloadHandlerEvent event) {
+        final IPayloadRegistrar registrar = event.registrar(Allomancy.MODID).versioned("2.0");
 
-    private static final String VERSION = "1.1";
-    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Allomancy.MODID, "networking"), () -> VERSION, VERSION::equals,
-                                                                                  VERSION::equals);
+        registrar.play(AllomancerDataPayload.ID, AllomancerDataPayload::new, handler -> handler.client(ClientPayloadHandler::handleAllomancyData));
+        registrar.play(EmotionPayload.ID, EmotionPayload::new, handler -> handler.server(ServerPayloadHandler::handleEmotionChange));
+        registrar.play(BlockPushPullPayload.ID, BlockPushPullPayload::new, handler -> handler.server(ServerPayloadHandler::tryPushPullBlock));
+        registrar.play(EntityPushPullPayload.ID, EntityPushPullPayload::new, handler -> handler.server(ServerPayloadHandler::tryPushPullEntity));
+        registrar.play(ToggleBurnPayload.ID, ToggleBurnPayload::new, handler -> handler.server(ServerPayloadHandler::toggleBurnRequest));
+        registrar.play(EnhanceTimePayload.ID, EnhanceTimePayload::new,
+                       handler -> handler.server(ServerPayloadHandler::updateEnhanced).client(ClientPayloadHandler::updateEnhanced));
 
-    private static int index = 0;
-
-    private static int nextIndex() {
-        return index++;
     }
 
-    public static void registerPackets() {
-        INSTANCE.registerMessage(nextIndex(), AllomancerDataPacket.class, AllomancerDataPacket::encode, AllomancerDataPacket::decode, AllomancerDataPacket::handle);
-        INSTANCE.registerMessage(nextIndex(), UpdateBurnPacket.class, UpdateBurnPacket::encode, UpdateBurnPacket::decode, UpdateBurnPacket::handle);
-        INSTANCE.registerMessage(nextIndex(), ChangeEmotionPacket.class, ChangeEmotionPacket::encode, ChangeEmotionPacket::decode, ChangeEmotionPacket::handle);
-        INSTANCE.registerMessage(nextIndex(), TryPushPullEntity.class, TryPushPullEntity::encode, TryPushPullEntity::decode, TryPushPullEntity::handle);
-        INSTANCE.registerMessage(nextIndex(), TryPushPullBlock.class, TryPushPullBlock::encode, TryPushPullBlock::decode, TryPushPullBlock::handle);
-        INSTANCE.registerMessage(nextIndex(), UpdateEnhancedPacket.class, UpdateEnhancedPacket::encode, UpdateEnhancedPacket::decode, UpdateEnhancedPacket::handle);
+    public static void sendToServer(CustomPacketPayload msg) {
+        PacketDistributor.SERVER.noArg().send(msg);
     }
-
-    public static void sendToServer(Object msg) {
-        INSTANCE.sendToServer(msg);
+    public static void syncAllomancerData(ServerPlayer player) {
+        sync(new AllomancerDataPayload(player), player);
     }
-
-    public static void sendTo(Object msg, ServerPlayer player) {
-        if (!(player instanceof FakePlayer)) {
-            INSTANCE.sendTo(msg, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
-        }
+    public static void sync(CustomPacketPayload msg, ServerPlayer player) {
+        PacketDistributor.TRACKING_ENTITY_AND_SELF.with(player).send(msg);
     }
-
-    public static void sendTo(Object msg, PacketDistributor.PacketTarget target) {
-        INSTANCE.send(target, msg);
-    }
-
-    public static void sync(ServerPlayer player) {
-        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> sync(data, player));
-    }
-
-    public static void sync(IAllomancerData cap, ServerPlayer player) {
-        sync(new AllomancerDataPacket(cap, player), player);
-    }
-
-    public static void sync(Object msg, ServerPlayer player) {
-        sendTo(msg, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
-    }
-
 }

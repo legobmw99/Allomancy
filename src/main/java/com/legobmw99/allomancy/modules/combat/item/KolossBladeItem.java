@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -28,7 +28,7 @@ public class KolossBladeItem extends SwordItem {
         if (entityIn instanceof Player player) {
             if (isSelected && (player.getOffhandItem() != stack)) {
                 if (!(player.hasEffect(MobEffects.DAMAGE_BOOST) && player.getEffect(MobEffects.DAMAGE_BOOST).getAmplifier() >= 2) &&
-                    player.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.PEWTER)).isEmpty()) {
+                    !player.getData(AllomancerAttachment.ALLOMANCY_DATA).isBurning(Metal.PEWTER)) {
                     player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 10, 10, true, false));
                     player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10, 10, true, false));
                     player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 0, true, false));
@@ -39,7 +39,7 @@ public class KolossBladeItem extends SwordItem {
 
     @Override
     public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
-        return (attacker instanceof Player) && (attacker.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.PEWTER)).isPresent());
+        return (attacker instanceof Player) && (attacker.getData(AllomancerAttachment.ALLOMANCY_DATA).isBurning(Metal.PEWTER));
     }
 
     @Override

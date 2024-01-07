@@ -1,12 +1,12 @@
 package com.legobmw99.allomancy.modules.materials;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class MaterialsConfig {
-    public static ForgeConfigSpec.BooleanValue generate_lerasium;
-    public static ForgeConfigSpec.BooleanValue generate_unbreakable_daggers;
+    public static ModConfigSpec.BooleanValue generate_lerasium;
+    public static ModConfigSpec.BooleanValue generate_unbreakable_daggers;
 
-    public static void init(ForgeConfigSpec.Builder common_builder) {
+    public static void init(ModConfigSpec.Builder common_builder) {
         common_builder.comment("Settings for the mod's added generation").push("world");
 
         common_builder.push("loot");

@@ -12,5 +12,6 @@
       "name": "brass_block",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/brass_block"
 }

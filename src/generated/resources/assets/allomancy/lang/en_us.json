@@ -5,6 +5,8 @@
   "advancements.dna_entangled.title": "Spiritual DNA Entanglement",
   "advancements.local_metallurgist.desc": "Craft a grinder to begin mixing metals",
   "advancements.local_metallurgist.title": "Local Metallurgist!",
+  "allomancy.networking.failed": "Allomancy packet failed to play: %s",
+  "allomancy.networking.kicked": "Requested illegal action: %s",
   "block.allomancy.aluminum_block": "Aluminum Block",
   "block.allomancy.aluminum_ore": "Aluminum Ore",
   "block.allomancy.bendalloy_block": "Bendalloy Block",

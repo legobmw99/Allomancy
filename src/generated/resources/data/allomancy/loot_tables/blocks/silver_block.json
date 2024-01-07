@@ -12,5 +12,6 @@
       "name": "silver_block",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/silver_block"
 }

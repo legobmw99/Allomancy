@@ -1,8 +1,9 @@
 package com.legobmw99.allomancy.modules.powers.client.gui;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -10,9 +11,9 @@ import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
+import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
 
 import java.awt.*;
 
@@ -33,7 +34,7 @@ public class MetalOverlay implements IGuiOverlay {
     private MetalOverlay() {}
 
     public static void registerGUI(final RegisterGuiOverlaysEvent evt) {
-        evt.registerAboveAll("metal_display", new MetalOverlay());
+        evt.registerAboveAll(new ResourceLocation(Allomancy.MODID, "metal_display"), new MetalOverlay());
     }
 
     private static void blit(GuiGraphics graphics, int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
@@ -41,7 +42,7 @@ public class MetalOverlay implements IGuiOverlay {
     }
 
     @Override
-    public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+    public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
 
@@ -81,34 +82,34 @@ public class MetalOverlay implements IGuiOverlay {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, meterLoc);
 
-        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
-            if (data.isUninvested()) {
-                return;
-            }
 
-            /*
-             * The rendering for the overlay
-             */
-            for (Metal mt : Metal.values()) {
-                if (data.hasPower(mt)) {
-                    int metalY = 9 - data.getAmount(mt);
-                    int i = mt.getIndex();
-                    int offset = (i / 2) * 4; // Adding a gap between pairs
-                    // Draw the bars first
-                    blit(guiGraphics, renderX + 1 + (7 * i) + offset, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
-                    // Draw the gauges second, so that highlights and decorations show over the bar.
-                    blit(guiGraphics, renderX + (7 * i) + offset, renderY, 0, 0, 5, 20);
-                    // Draw the fire if it is burning
-                    if (data.isBurning(mt)) {
-                        int frameCount = (currentFrame + i) % 4;
-                        var frame = Frames[frameCount];
-                        blit(guiGraphics, renderX + (7 * i) + offset, renderY + 4 + metalY, frame.x, frame.y, 5, 3);
-                    }
+        if (data.isUninvested()) {
+            return;
+        }
+
+        /*
+         * The rendering for the overlay
+         */
+        for (Metal mt : Metal.values()) {
+            if (data.hasPower(mt)) {
+                int metalY = 9 - data.getAmount(mt);
+                int i = mt.getIndex();
+                int offset = (i / 2) * 4; // Adding a gap between pairs
+                // Draw the bars first
+                blit(guiGraphics, renderX + 1 + (7 * i) + offset, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
+                // Draw the gauges second, so that highlights and decorations show over the bar.
+                blit(guiGraphics, renderX + (7 * i) + offset, renderY, 0, 0, 5, 20);
+                // Draw the fire if it is burning
+                if (data.isBurning(mt)) {
+                    int frameCount = (currentFrame + i) % 4;
+                    var frame = Frames[frameCount];
+                    blit(guiGraphics, renderX + (7 * i) + offset, renderY + 4 + metalY, frame.x, frame.y, 5, 3);
                 }
-
             }
-        });
+
+        }
 
         // Update the animation counters
 
