@@ -4,33 +4,33 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.util.AllomancyConfig;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.*;
 
 public class PowersConfig {
 
     public static final Set<String> whitelist = new HashSet<>();
-    public static ForgeConfigSpec.IntValue max_metal_detection;
-    public static ForgeConfigSpec.BooleanValue animate_selection;
-    public static ForgeConfigSpec.BooleanValue enable_overlay;
-    public static ForgeConfigSpec.EnumValue<SCREEN_LOC> overlay_position;
-    public static ForgeConfigSpec.BooleanValue random_mistings;
-    public static ForgeConfigSpec.BooleanValue generate_whitelist;
-    public static ForgeConfigSpec.BooleanValue respect_player_UUID;
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
+    public static ModConfigSpec.IntValue max_metal_detection;
+    public static ModConfigSpec.BooleanValue animate_selection;
+    public static ModConfigSpec.BooleanValue enable_overlay;
+    public static ModConfigSpec.EnumValue<SCREEN_LOC> overlay_position;
+    public static ModConfigSpec.BooleanValue random_mistings;
+    public static ModConfigSpec.BooleanValue generate_whitelist;
+    public static ModConfigSpec.BooleanValue respect_player_UUID;
+    public static ModConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
     private static HashSet<String> defaultList;
 
-    public static void init(ForgeConfigSpec.Builder server_builder, ForgeConfigSpec.Builder common_builder, ForgeConfigSpec.Builder client_builder) {
+    public static void init(ModConfigSpec.Builder server_builder, ModConfigSpec.Builder common_builder, ModConfigSpec.Builder client_builder) {
         common_builder.comment("Settings for the gameplay elements of the mod").push("gameplay");
         random_mistings = common_builder.comment("Spawn players as a random Misting").define("random_mistings", true);
         respect_player_UUID = common_builder
@@ -162,9 +162,9 @@ public class PowersConfig {
         add(CombatSetup.COIN_BAG.get());
 
 
-        ForgeRegistries.ITEMS.getKeys().stream().filter(Objects::nonNull).filter(PowerUtils::doesResourceContainsMetal).forEach(PowersConfig::add);
+        BuiltInRegistries.ITEM.keySet().stream().filter(Objects::nonNull).filter(PowerUtils::doesResourceContainsMetal).forEach(PowersConfig::add);
 
-        ForgeRegistries.BLOCKS.getKeys().stream().filter(Objects::nonNull).filter(PowerUtils::doesResourceContainsMetal).forEach(PowersConfig::add);
+        BuiltInRegistries.BLOCK.keySet().stream().filter(Objects::nonNull).filter(PowerUtils::doesResourceContainsMetal).forEach(PowersConfig::add);
 
         return defaultList;
 
@@ -181,11 +181,11 @@ public class PowersConfig {
     }
 
     private static void add(Block block) {
-        add(ForgeRegistries.BLOCKS.getKey(block));
+        add(BuiltInRegistries.BLOCK.getKey(block));
     }
 
     private static void add(Item item) {
-        add(ForgeRegistries.ITEMS.getKey(item));
+        add(BuiltInRegistries.ITEM.getKey(item));
     }
 
     public enum SCREEN_LOC {

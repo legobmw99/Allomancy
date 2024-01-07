@@ -8,19 +8,19 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.PowersSetup;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.ItemDisplay;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 
 @Mod(Allomancy.MODID)
 public class Allomancy {
@@ -29,39 +29,36 @@ public class Allomancy {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static Allomancy instance;
 
-    public Allomancy() {
-        instance = this;
+    public Allomancy(IEventBus bus) {
+
         // Register our setup events on the necessary buses
-        var modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modBus.addListener(Allomancy::init);
-        modBus.addListener(Allomancy::clientInit);
-        modBus.addListener(AllomancyConfig::onLoad);
-        modBus.addListener(AllomancyConfig::onReload);
-        modBus.addListener(AllomancerCapability::registerCapability);
-        modBus.addListener(CombatClientSetup::registerEntityRenders);
-        modBus.addListener(ItemDisplay::addTabContents);
+        bus.addListener(Allomancy::init);
+        bus.addListener(Allomancy::clientInit);
+        bus.addListener(AllomancyConfig::onLoad);
+        bus.addListener(AllomancyConfig::onReload);
+        bus.addListener(CombatClientSetup::registerEntityRenders);
+        bus.addListener(ItemDisplay::addTabContents);
+        bus.addListener(Network::registerPayloads);
 
-        modBus.addListener(MetalOverlay::registerGUI);
+        bus.addListener(MetalOverlay::registerGUI);
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            modBus.addListener(PowersClientSetup::registerKeyBinding);
-            modBus.addListener(PowersClientSetup::registerParticle);
-            PowersClientSetup.register();
-        });
+        if (FMLLoader.getDist().isClient()) {
+            bus.addListener(PowersClientSetup::registerKeyBinding);
+            bus.addListener(PowersClientSetup::registerParticle);
+            PowersClientSetup.register(bus);
+        }
 
-
-        MinecraftForge.EVENT_BUS.addListener(PowersSetup::registerCommands);
-
+        NeoForge.EVENT_BUS.addListener(PowersSetup::registerCommands);
 
         // Register all Registries
-        PowersSetup.register();
-        CombatSetup.register();
-        ConsumeSetup.register();
-        MaterialsSetup.register();
-        ExtrasSetup.register();
-        ItemDisplay.register();
+        AllomancerAttachment.register(bus);
+        PowersSetup.register(bus);
+        CombatSetup.register(bus);
+        ConsumeSetup.register(bus);
+        MaterialsSetup.register(bus);
+        ExtrasSetup.register(bus);
+        ItemDisplay.register(bus);
 
         AllomancyConfig.register();
 
@@ -74,8 +71,6 @@ public class Allomancy {
     public static void init(final FMLCommonSetupEvent e) {
         PowersSetup.init(e);
         MaterialsSetup.init(e);
-        e.enqueueWork(Network::registerPackets);
-
     }
 
 }

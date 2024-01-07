@@ -1,8 +1,6 @@
 package com.legobmw99.allomancy.modules.combat.entity;
 
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -20,9 +18,8 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class ProjectileNuggetEntity extends ThrowableItemProjectile implements ItemSupplier {
@@ -106,11 +103,5 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
     protected Item getDefaultItem() {
         return Items.GOLD_NUGGET;
     }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
-
 
 }

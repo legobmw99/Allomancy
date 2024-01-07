@@ -58,5 +58,6 @@
       "name": "zinc_ore",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/zinc_ore"
 }

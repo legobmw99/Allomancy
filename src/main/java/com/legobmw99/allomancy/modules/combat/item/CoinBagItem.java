@@ -1,17 +1,16 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
-import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;
@@ -21,7 +20,7 @@ public class CoinBagItem extends ProjectileWeaponItem {
 
     public static final Predicate<ItemStack> NUGGETS = (stack) -> {
         Item item = stack.getItem();
-        return PowerUtils.doesResourceContainsMetal(ForgeRegistries.ITEMS.getKey(item)) && ForgeRegistries.ITEMS.getKey(item).getPath().contains("nugget");
+        return PowerUtils.doesResourceContainsMetal(BuiltInRegistries.ITEM.getKey(item)) && BuiltInRegistries.ITEM.getKey(item).getPath().contains("nugget");
     };
 
     public CoinBagItem() {
@@ -29,7 +28,7 @@ public class CoinBagItem extends ProjectileWeaponItem {
     }
 
     private static Ammo getAmmoFromItem(Item itemIn) {
-        return switch (ForgeRegistries.ITEMS.getKey(itemIn).getPath()) {
+        return switch (BuiltInRegistries.ITEM.getKey(itemIn).getPath()) {
             case "iron_nugget", "steel_nugget", "bronze_nugget", "copper_nugget", "nickel_nugget" -> Ammo.HEAVY;
             case "bendalloy_nugget", "nicrosil_nugget", "electrum_nugget", "platinum_nugget" -> Ammo.MAGIC;
             default -> Ammo.LIGHT;
@@ -49,12 +48,12 @@ public class CoinBagItem extends ProjectileWeaponItem {
         }
 
 
-        if (!itemstack.isEmpty() && player.getCapability(AllomancerCapability.PLAYER_CAP).filter(data -> data.isBurning(Metal.STEEL)).isPresent()) {
+        if (!itemstack.isEmpty() && player.getData(AllomancerAttachment.ALLOMANCY_DATA.value()).isBurning(Metal.STEEL)) {
             if (!world.isClientSide) {
 
                 Ammo type = getAmmoFromItem(itemstack.getItem());
                 float dmg = type.damage;
-                if (player.getCapability(AllomancerCapability.PLAYER_CAP).filter(IAllomancerData::isEnhanced).isPresent()) {
+                if (player.getData(AllomancerAttachment.ALLOMANCY_DATA.value()).isEnhanced()) {
                     dmg *= 2.0F;
                 }
                 ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, dmg);

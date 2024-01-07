@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_cadmium_flakes",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_cadmium_flakes"
     ]
   ],
   "rewards": {

@@ -58,5 +58,6 @@
       "name": "chromium_ore",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/chromium_ore"
 }

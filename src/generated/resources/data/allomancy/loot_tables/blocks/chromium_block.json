@@ -12,5 +12,6 @@
       "name": "chromium_block",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/chromium_block"
 }

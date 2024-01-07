@@ -5,27 +5,25 @@ import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class VialItemRecipe extends CustomRecipe {
-    private static final Ingredient INGREDIENT_FLAKES = Ingredient.of(
-            MaterialsSetup.FLAKES.subList(0, Metal.values().length).stream().map(RegistryObject::get).toArray(Item[]::new));
+    private static final Ingredient INGREDIENT_FLAKES = Ingredient.of(MaterialsSetup.FLAKES.subList(0, Metal.values().length).stream().map(Supplier::get).toArray(Item[]::new));
     private static final Ingredient INGREDIENT_VIAL = Ingredient.of(ConsumeSetup.VIAL.get());
 
     private ItemStack item_result = ItemStack.EMPTY;
 
 
-    public VialItemRecipe(ResourceLocation idIn, CraftingBookCategory catIn) {
-        super(idIn, catIn);
+    public VialItemRecipe(CraftingBookCategory catIn) {
+        super(catIn);
     }
 
     @Override

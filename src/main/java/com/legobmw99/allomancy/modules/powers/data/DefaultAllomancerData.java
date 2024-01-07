@@ -72,7 +72,7 @@ public class DefaultAllomancerData implements IAllomancerData {
             }
         }
         if (sync) {
-            Network.sync(this, player);
+            Network.syncAllomancerData(player);
         }
 
     }
@@ -261,7 +261,9 @@ public class DefaultAllomancerData implements IAllomancerData {
         this.enhanced_time = time;
     }
 
-    public CompoundTag save() {
+
+    @Override
+    public CompoundTag serializeNBT() {
         CompoundTag allomancy_data = new CompoundTag();
 
         CompoundTag abilities = new CompoundTag();
@@ -301,10 +303,10 @@ public class DefaultAllomancerData implements IAllomancerData {
         }
         allomancy_data.put("position", position);
 
-        return allomancy_data;
-    }
+        return allomancy_data;    }
 
-    public void load(CompoundTag allomancy_data) {
+    @Override
+    public void deserializeNBT(CompoundTag allomancy_data) {
         CompoundTag abilities = (CompoundTag) allomancy_data.get("abilities");
         for (Metal mt : Metal.values()) {
             if (abilities.getBoolean(mt.getName())) {

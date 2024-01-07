@@ -12,5 +12,6 @@
       "name": "iron_button",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/iron_button"
 }

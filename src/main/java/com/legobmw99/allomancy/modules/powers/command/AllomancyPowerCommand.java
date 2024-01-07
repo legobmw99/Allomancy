@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.powers.command;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.network.Network;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -15,12 +15,13 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.common.util.NonNullConsumer;
+import net.neoforged.neoforge.common.util.NonNullConsumer;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -102,33 +103,33 @@ public class AllomancyPowerCommand {
 
     private static void getPowers(CommandContext<CommandSourceStack> ctx, ServerPlayer player) {
         StringBuilder powers = new StringBuilder();
-        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-            if (data.isMistborn()) {
-                powers.append("all");
-            } else if (data.isUninvested()) {
-                powers.append("none");
-            } else {
-                for (Metal mt : Metal.values()) {
-                    if (data.hasPower(mt)) {
-                        if (powers.isEmpty()) {
-                            powers.append(mt.getName());
-                        } else {
-                            powers.append(", ").append(mt.getName());
-                        }
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+        if (data.isMistborn()) {
+            powers.append("all");
+        } else if (data.isUninvested()) {
+            powers.append("none");
+        } else {
+            for (Metal mt : Metal.values()) {
+                if (data.hasPower(mt)) {
+                    if (powers.isEmpty()) {
+                        powers.append(mt.getName());
+                    } else {
+                        powers.append(", ").append(mt.getName());
                     }
                 }
             }
-        });
+        }
         ctx.getSource().sendSuccess(() -> Component.translatable("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
     }
 
     private static void addPower(CommandContext<CommandSourceStack> ctx, ServerPlayer player) throws CommandSyntaxException {
-        handlePowerChange(ctx, player, IAllomancerData::setMistborn, data -> Predicate.not(data::hasPower), mt -> (data -> data.addPower(mt)), ERROR_CANT_ADD::create,
+        handlePowerChange(ctx, player, IAllomancerData::setMistborn, data -> Predicate.not(data::hasPower), (mt, data) -> data.addPower(mt), ERROR_CANT_ADD::create,
                           "commands.allomancy.addpower");
     }
 
     private static void removePower(CommandContext<CommandSourceStack> ctx, ServerPlayer player) throws CommandSyntaxException {
-        handlePowerChange(ctx, player, IAllomancerData::setUninvested, (data) -> data::hasPower, (mt) -> (data -> data.revokePower(mt)), ERROR_CANT_REMOVE::create,
+        handlePowerChange(ctx, player, IAllomancerData::setUninvested, (data) -> data::hasPower, (mt, data) -> data.revokePower(mt), ERROR_CANT_REMOVE::create,
                           "commands.allomancy.removepower");
     }
 
@@ -148,32 +149,33 @@ public class AllomancyPowerCommand {
                                           ServerPlayer player,
                                           NonNullConsumer<IAllomancerData> all,
                                           Function<IAllomancerData, Predicate<Metal>> filterFunction,
-                                          Function<Metal, NonNullConsumer<IAllomancerData>> single,
+                                          BiConsumer<Metal, IAllomancerData> single,
                                           Function<String, CommandSyntaxException> exception,
                                           String success) throws CommandSyntaxException {
 
         String type = ctx.getArgument("type", String.class);
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
         if (type.equalsIgnoreCase("all")) {
-            player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(all);
+            all.accept(data);
         } else {
-            Predicate<Metal> filter = player.getCapability(AllomancerCapability.PLAYER_CAP).map(filterFunction::apply).orElse((m) -> false);
+            Predicate<Metal> filter = filterFunction.apply(data);
 
             if (type.equalsIgnoreCase("random")) {
                 List<Metal> metalList = Arrays.asList(Metal.values());
                 Collections.shuffle(metalList);
                 Metal mt = metalList.stream().filter(filter).findFirst().orElseThrow(() -> exception.apply(type));
-                player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(single.apply(mt));
+                single.accept(mt, data);
             } else {
                 Metal mt = Metal.valueOf(type.toUpperCase());
                 if (filter.test(mt)) {
-                    player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(single.apply(mt));
+                    single.accept(mt, data);
                 } else {
                     throw exception.apply(type);
                 }
             }
         }
-        Network.sync(player);
+        Network.syncAllomancerData(player);
 
         ctx.getSource().sendSuccess(() -> Component.translatable(success, player.getDisplayName(), type), true);
 

@@ -12,5 +12,6 @@
       "name": "zinc_block",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/zinc_block"
 }

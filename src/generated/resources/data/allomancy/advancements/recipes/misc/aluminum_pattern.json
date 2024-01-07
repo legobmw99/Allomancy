@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_aluminum_flakes",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_aluminum_flakes"
     ]
   ],
   "rewards": {

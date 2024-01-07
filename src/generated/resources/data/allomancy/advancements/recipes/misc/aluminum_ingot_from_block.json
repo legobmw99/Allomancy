@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_aluminum_block",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_aluminum_block"
     ]
   ],
   "rewards": {

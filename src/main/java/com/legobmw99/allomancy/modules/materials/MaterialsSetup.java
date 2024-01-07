@@ -3,18 +3,18 @@ package com.legobmw99.allomancy.modules.materials;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,23 +23,23 @@ public class MaterialsSetup {
 
     public static final String[] ORE_METALS = {"aluminum", "cadmium", "chromium", "lead", "silver", "tin", "zinc"};
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Allomancy.MODID);
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Allomancy.MODID);
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
 
-    public static final List<RegistryObject<Item>> FLAKES = new ArrayList<>();
-    public static final List<RegistryObject<Item>> NUGGETS = new ArrayList<>();
-    public static final List<RegistryObject<Item>> INGOTS = new ArrayList<>();
-    public static final List<RegistryObject<Block>> STORAGE_BLOCKS = new ArrayList<>();
-    public static final List<RegistryObject<Item>> STORAGE_BLOCK_ITEMS = new ArrayList<>();
+    public static final List<DeferredItem<Item>> FLAKES = new ArrayList<>();
+    public static final List<DeferredItem<Item>> NUGGETS = new ArrayList<>();
+    public static final List<DeferredItem<Item>> INGOTS = new ArrayList<>();
+    public static final List<DeferredBlock<Block>> STORAGE_BLOCKS = new ArrayList<>();
+    public static final List<DeferredItem<Item>> STORAGE_BLOCK_ITEMS = new ArrayList<>();
 
 
-    public static final List<RegistryObject<Block>> ORE_BLOCKS = new ArrayList<>();
-    public static final List<RegistryObject<Item>> ORE_BLOCKS_ITEMS = new ArrayList<>();
-    public static final List<RegistryObject<Block>> DEEPSLATE_ORE_BLOCKS = new ArrayList<>();
-    public static final List<RegistryObject<Item>> DEEPSLATE_ORE_BLOCKS_ITEMS = new ArrayList<>();
-    public static final List<RegistryObject<Block>> RAW_ORE_BLOCKS = new ArrayList<>();
-    public static final List<RegistryObject<Item>> RAW_ORE_BLOCKS_ITEMS = new ArrayList<>();
-    public static final List<RegistryObject<Item>> RAW_ORE_ITEMS = new ArrayList<>();
+    public static final List<DeferredBlock<Block>> ORE_BLOCKS = new ArrayList<>();
+    public static final List<DeferredItem<Item>> ORE_BLOCKS_ITEMS = new ArrayList<>();
+    public static final List<DeferredBlock<Block>> DEEPSLATE_ORE_BLOCKS = new ArrayList<>();
+    public static final List<DeferredItem<Item>> DEEPSLATE_ORE_BLOCKS_ITEMS = new ArrayList<>();
+    public static final List<DeferredBlock<Block>> RAW_ORE_BLOCKS = new ArrayList<>();
+    public static final List<DeferredItem<Item>> RAW_ORE_BLOCKS_ITEMS = new ArrayList<>();
+    public static final List<DeferredItem<Item>> RAW_ORE_ITEMS = new ArrayList<>();
 
     public static int METAL_ITEM_LEN = Metal.values().length;
     public static final int LEAD = METAL_ITEM_LEN++;
@@ -92,27 +92,27 @@ public class MaterialsSetup {
     }
 
 
-    public static void register() {
-        BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    public static void register(IEventBus bus) {
+        BLOCKS.register(bus);
+        ITEMS.register(bus);
     }
 
     public static void init(final FMLCommonSetupEvent e) {
         e.enqueueWork(() -> {
-            MinecraftForge.EVENT_BUS.register(LootTableInjector.class);
+            NeoForge.EVENT_BUS.register(LootTableInjector.class);
         });
     }
 
     public static Block createStandardBlock() {
-        return new Block(BlockBehaviour.Properties.copy(Blocks.STONE).strength(2.1F).requiresCorrectToolForDrops());
+        return new Block(Blocks.STONE.properties().strength(2.1F).requiresCorrectToolForDrops());
     }
 
     public static Block createStandardOre() {
-        return new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.IRON_ORE));
+        return new DropExperienceBlock(UniformInt.of(2, 5), Blocks.IRON_ORE.properties());
     }
 
     public static Block createDeepslateBlock() {
-        return new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_IRON_ORE).strength(4.5F, 3.0F));
+        return new DropExperienceBlock(UniformInt.of(2, 5), Blocks.DEEPSLATE_IRON_ORE.properties().strength(4.5F, 3.0F));
     }
 
     public static Item createStandardItem() {

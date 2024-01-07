@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_tin_flakes",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_tin_flakes"
     ]
   ],
   "rewards": {

@@ -6,13 +6,14 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
 
 public class ItemModels extends ItemModelProvider {
     public ItemModels(PackOutput generator, ExistingFileHelper existingFileHelper) {
@@ -85,35 +86,35 @@ public class ItemModels extends ItemModelProvider {
     }
 
     public void parentedBlock(Block block) {
-        parentedBlock(block, "block/" + ForgeRegistries.BLOCKS.getKey(block).getPath());
+        parentedBlock(block, "block/" + BuiltInRegistries.BLOCK.getKey(block).getPath());
     }
 
     public void parentedBlock(Block block, String model) {
-        Allomancy.LOGGER.debug("Creating Item Model for " + ForgeRegistries.BLOCKS.getKey(block));
-        getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile(modLoc(model)));
+        Allomancy.LOGGER.debug("Creating Item Model for " + BuiltInRegistries.BLOCK.getKey(block));
+        getBuilder(BuiltInRegistries.BLOCK.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile(modLoc(model)));
     }
 
     public void itemGenerated(Item item) {
-        itemGenerated(item, "item/" + ForgeRegistries.ITEMS.getKey(item).getPath());
+        itemGenerated(item, "item/" + BuiltInRegistries.ITEM.getKey(item).getPath());
     }
 
     public void itemGenerated(Item item, String model) {
-        Allomancy.LOGGER.debug("Creating Item Model for " + ForgeRegistries.ITEMS.getKey(item));
-        getBuilder(ForgeRegistries.ITEMS.getKey(item).getPath()).parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc(model));
+        Allomancy.LOGGER.debug("Creating Item Model for " + BuiltInRegistries.ITEM.getKey(item));
+        getBuilder(BuiltInRegistries.ITEM.getKey(item).getPath()).parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc(model));
     }
 
     public void itemHandheld(Item item) {
-        Allomancy.LOGGER.debug("Creating Item Model for " + ForgeRegistries.ITEMS.getKey(item));
-        getBuilder(ForgeRegistries.ITEMS.getKey(item).getPath())
+        Allomancy.LOGGER.debug("Creating Item Model for " + BuiltInRegistries.ITEM.getKey(item));
+        getBuilder(BuiltInRegistries.ITEM.getKey(item).getPath())
                 .parent(getExistingFile(mcLoc("item/handheld")))
-                .texture("layer0", modLoc("item/" + ForgeRegistries.ITEMS.getKey(item).getPath()));
+                .texture("layer0", modLoc("item/" + BuiltInRegistries.ITEM.getKey(item).getPath()));
     }
 
     public void largeItemHandheld(Item item) {
-        Allomancy.LOGGER.debug("Creating Large Item Model for " + ForgeRegistries.ITEMS.getKey(item));
-        getBuilder(ForgeRegistries.ITEMS.getKey(item).getPath())
+        Allomancy.LOGGER.debug("Creating Large Item Model for " + BuiltInRegistries.ITEM.getKey(item));
+        getBuilder(BuiltInRegistries.ITEM.getKey(item).getPath())
                 .parent(getExistingFile(modLoc("item/handheld_large")))
-                .texture("layer0", modLoc("item/" + ForgeRegistries.ITEMS.getKey(item).getPath()));
+                .texture("layer0", modLoc("item/" + BuiltInRegistries.ITEM.getKey(item).getPath()));
     }
 
     @Override

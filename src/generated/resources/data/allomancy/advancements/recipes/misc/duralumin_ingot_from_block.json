@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_duralumin_block",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_duralumin_block"
     ]
   ],
   "rewards": {

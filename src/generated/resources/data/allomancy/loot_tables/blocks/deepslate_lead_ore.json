@@ -58,5 +58,6 @@
       "name": "deepslate_lead_ore",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/deepslate_lead_ore"
 }

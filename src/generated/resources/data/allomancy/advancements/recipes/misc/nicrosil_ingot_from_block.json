@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_nicrosil_block",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_nicrosil_block"
     ]
   ],
   "rewards": {

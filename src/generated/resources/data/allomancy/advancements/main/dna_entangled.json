@@ -10,12 +10,10 @@
     "description": {
       "translate": "advancements.dna_entangled.desc"
     },
-    "frame": "task",
     "hidden": true,
     "icon": {
       "item": "allomancy:lerasium_nugget"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.dna_entangled.title"
     }
@@ -24,5 +22,6 @@
     [
       "impossible"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

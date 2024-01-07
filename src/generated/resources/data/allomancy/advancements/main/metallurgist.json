@@ -15,17 +15,13 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
     "description": {
       "translate": "advancements.local_metallurgist.desc"
     },
-    "frame": "task",
-    "hidden": false,
     "icon": {
       "item": "allomancy:allomantic_grinder",
       "nbt": "{Damage:0}"
     },
-    "show_toast": true,
     "title": {
       "translate": "advancements.local_metallurgist.title"
     }
@@ -34,5 +30,6 @@
     [
       "grinder"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

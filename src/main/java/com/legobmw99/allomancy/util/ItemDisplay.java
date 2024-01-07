@@ -15,16 +15,17 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 public class ItemDisplay {
 
     public static final DeferredRegister<CreativeModeTab> CREATIVETABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Allomancy.MODID);
 
-    public static RegistryObject<CreativeModeTab> allomancy_group = CREATIVETABS.register("main_tab", () -> CreativeModeTab
+    public static Supplier<CreativeModeTab> allomancy_group = CREATIVETABS.register("main_tab", () -> CreativeModeTab
             .builder()
             .icon(() -> new ItemStack(CombatSetup.MISTCLOAK.get()))
             .title(Component.translatable("tabs.allomancy.main_tab"))
@@ -107,8 +108,8 @@ public class ItemDisplay {
         }
     }
 
-    public static void register() {
-        CREATIVETABS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    public static void register(IEventBus bus) {
+        CREATIVETABS.register(bus);
     }
 
     public static MutableComponent addColorToText(String translationKey, ChatFormatting color) {

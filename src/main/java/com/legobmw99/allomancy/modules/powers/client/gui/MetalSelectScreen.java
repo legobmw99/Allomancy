@@ -13,7 +13,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -28,8 +28,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
@@ -62,106 +62,105 @@ public class MetalSelectScreen extends Screen {
     public void render(GuiGraphics guiGraphics, int mx, int my, float partialTicks) {
         super.render(guiGraphics, mx, my, partialTicks);
 
-        this.mc.player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
+        var data = this.mc.player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
-            int x = this.width / 2;
-            int y = this.height / 2;
-            int maxRadius = 80;
+        int x = this.width / 2;
+        int y = this.height / 2;
+        int maxRadius = 80;
 
-            double angle = mouseAngle(x, y, mx, my);
+        double angle = mouseAngle(x, y, mx, my);
 
-            int segments = METAL_NAMES.length;
-            float step = (float) Math.PI / 180;
-            float degPer = (float) Math.PI * 2 / segments;
+        int segments = METAL_NAMES.length;
+        float step = (float) Math.PI / 180;
+        float degPer = (float) Math.PI * 2 / segments;
 
-            this.slotSelected = -1;
+        this.slotSelected = -1;
 
-            Tesselator tess = Tesselator.getInstance();
-            BufferBuilder buf = tess.getBuilder();
+        Tesselator tess = Tesselator.getInstance();
+        BufferBuilder buf = tess.getBuilder();
 
-            RenderSystem.disableCull();
-            RenderSystem.enableBlend();
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.disableCull();
+        RenderSystem.enableBlend();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
-            buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
+        buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
 
-            for (int seg = 0; seg < segments; seg++) {
-                Metal mt = Metal.getMetal(toMetalIndex(seg));
-                boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
-                float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
-                if (mouseInSector) {
-                    this.slotSelected = seg;
-                    radius *= 1.025f;
-                }
-
-                int gs = 0x55;
-                if (seg % 2 == 0) {
-                    gs += 0x19;
-                }
-
-                gs = (!data.hasPower(mt) || data.getAmount(mt) == 0) ? 0 : gs;
-
-                int r = data.isBurning(mt) ? 0xFF : gs;
-                int g = gs;
-                int b = gs;
-                int a = 0x99;
-
-                if (seg == 0) {
-                    buf.vertex(x, y, 0).color(0x19, 0x19, 0x19, 0x15).endVertex();
-                }
-
-                for (float v = 0; v < degPer + step / 2; v += step) {
-                    float rad = v + seg * degPer;
-                    float xp = x + Mth.cos(rad) * radius;
-                    float yp = y + Mth.sin(rad) * radius;
-
-                    if (v == 0) {
-                        buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
-                    }
-                    buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
-                }
+        for (int seg = 0; seg < segments; seg++) {
+            Metal mt = Metal.getMetal(toMetalIndex(seg));
+            boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
+            float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+            if (mouseInSector) {
+                this.slotSelected = seg;
+                radius *= 1.025f;
             }
-            tess.end();
 
-            for (int seg = 0; seg < segments; seg++) {
-                Metal mt = Metal.getMetal(toMetalIndex(seg));
-                boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
-                float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
-                if (mouseInSector) {
-                    radius *= 1.025f;
-                }
+            int gs = 0x55;
+            if (seg % 2 == 0) {
+                gs += 0x19;
+            }
 
+            gs = (!data.hasPower(mt) || data.getAmount(mt) == 0) ? 0 : gs;
 
-                float rad = (seg + 0.5f) * degPer;
+            int r = data.isBurning(mt) ? 0xFF : gs;
+            int g = gs;
+            int b = gs;
+            int a = 0x99;
+
+            if (seg == 0) {
+                buf.vertex(x, y, 0).color(0x19, 0x19, 0x19, 0x15).endVertex();
+            }
+
+            for (float v = 0; v < degPer + step / 2; v += step) {
+                float rad = v + seg * degPer;
                 float xp = x + Mth.cos(rad) * radius;
                 float yp = y + Mth.sin(rad) * radius;
 
-                float xsp = xp - 4;
-                float ysp = yp;
-                String name = (mouseInSector ? ChatFormatting.UNDERLINE : ChatFormatting.RESET) + Component.translatable(METAL_LOCAL[toMetalIndex(seg)]).getString();
-                int textwidth = this.mc.font.width(name);
-
-                if (xsp < x) {
-                    xsp -= textwidth - 8;
+                if (v == 0) {
+                    buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
                 }
-                if (ysp < y) {
-                    ysp -= 9;
-                }
+                buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
+            }
+        }
+        tess.end();
 
-
-                double mod = 0.8;
-                int xdp = (int) ((xp - x) * mod + x);
-                int ydp = (int) ((yp - y) * mod + y);
-                RenderSystem.setShader(GameRenderer::getPositionTexShader);
-                RenderSystem.setShaderTexture(0, METAL_ICONS[toMetalIndex(seg)]);
-                guiGraphics.blit(METAL_ICONS[toMetalIndex(seg)], xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
-
+        for (int seg = 0; seg < segments; seg++) {
+            Metal mt = Metal.getMetal(toMetalIndex(seg));
+            boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
+            float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+            if (mouseInSector) {
+                radius *= 1.025f;
             }
 
-            RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-            RenderSystem.disableBlend();
-        });
+
+            float rad = (seg + 0.5f) * degPer;
+            float xp = x + Mth.cos(rad) * radius;
+            float yp = y + Mth.sin(rad) * radius;
+
+            float xsp = xp - 4;
+            float ysp = yp;
+            String name = (mouseInSector ? ChatFormatting.UNDERLINE : ChatFormatting.RESET) + Component.translatable(METAL_LOCAL[toMetalIndex(seg)]).getString();
+            int textwidth = this.font.width(name);
+
+            if (xsp < x) {
+                xsp -= textwidth - 8;
+            }
+            if (ysp < y) {
+                ysp -= 9;
+            }
+            guiGraphics.drawString(this.font, name, xsp, ysp, 0xFFFFFF, true);
+
+            double mod = 0.8;
+            int xdp = (int) ((xp - x) * mod + x);
+            int ydp = (int) ((yp - y) * mod + y);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, METAL_ICONS[toMetalIndex(seg)]);
+            guiGraphics.blit(METAL_ICONS[toMetalIndex(seg)], xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
+
+        }
+
+        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        RenderSystem.disableBlend();
 
     }
 
@@ -204,11 +203,14 @@ public class MetalSelectScreen extends Screen {
     private void toggleSelected() {
         if (this.slotSelected != -1) {
             Metal mt = Metal.getMetal(toMetalIndex(this.slotSelected));
-            this.mc.player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-                ClientUtils.toggleBurn(mt, data);
-                this.mc.player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.1F, 2.0F);
-            });
+            var data = this.mc.player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            ClientUtils.toggleBurn(mt, data);
+            this.mc.player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.1F, 2.0F);
         }
+    }
+
+    @Override
+    public void renderTransparentBackground(GuiGraphics unused) {
     }
 
     @Override

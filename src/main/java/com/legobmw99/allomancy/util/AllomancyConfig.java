@@ -2,23 +2,23 @@ package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.modules.materials.MaterialsConfig;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 
 public class AllomancyConfig {
 
-    public static final ForgeConfigSpec COMMON_CONFIG;
-    public static final ForgeConfigSpec CLIENT_CONFIG;
-    public static final ForgeConfigSpec SERVER_CONFIG;
+    public static final ModConfigSpec COMMON_CONFIG;
+    public static final ModConfigSpec CLIENT_CONFIG;
+    public static final ModConfigSpec SERVER_CONFIG;
 
 
     static {
-        var COMMON_BUILDER = new ForgeConfigSpec.Builder();
-        var CLIENT_BUILDER = new ForgeConfigSpec.Builder();
-        var SERVER_BUILDER = new ForgeConfigSpec.Builder();
+        var COMMON_BUILDER = new ModConfigSpec.Builder();
+        var CLIENT_BUILDER = new ModConfigSpec.Builder();
+        var SERVER_BUILDER = new ModConfigSpec.Builder();
 
         MaterialsConfig.init(COMMON_BUILDER);
         PowersConfig.init(SERVER_BUILDER, COMMON_BUILDER, CLIENT_BUILDER);

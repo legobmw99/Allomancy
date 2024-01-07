@@ -7,25 +7,26 @@ import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
 import com.mojang.serialization.Codec;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.core.registries.Registries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.function.Supplier;
+
 public class PowersClientSetup {
-    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Allomancy.MODID);
-    public static final RegistryObject<ParticleType<SoundParticleData>> SOUND_PARTICLE_TYPE = PARTICLES.register("sound_particle",
-                                                                                                                 () -> new ParticleType<>(true, SoundParticleData.DESERIALIZER) {
-                                                                                                                     @Override
-                                                                                                                     public Codec<SoundParticleData> codec() {
-                                                                                                                         return null;
-                                                                                                                     }
-                                                                                                                 });
+    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(Registries.PARTICLE_TYPE, Allomancy.MODID);
+    public static final Supplier<ParticleType<SoundParticleData>> SOUND_PARTICLE_TYPE = PARTICLES.register("sound_particle",
+                                                                                                           () -> new ParticleType<>(true, SoundParticleData.DESERIALIZER) {
+                                                                                                               @Override
+                                                                                                               public Codec<SoundParticleData> codec() {
+                                                                                                                   return null;
+                                                                                                               }
+                                                                                                           });
     @OnlyIn(Dist.CLIENT)
     public static KeyMapping hud;
 
@@ -50,8 +51,8 @@ public class PowersClientSetup {
 
     }
 
-    public static void register() {
-        PARTICLES.register(FMLJavaModLoadingContext.get().getModEventBus());
+    public static void register(IEventBus bus) {
+        PARTICLES.register(bus);
     }
 
     public static void registerParticle(final RegisterParticleProvidersEvent event) {

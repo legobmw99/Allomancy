@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.integration;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -23,30 +23,33 @@ public class AllomancyTooltip implements IEntityComponentProvider {
 
     @Override
     public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig iPluginConfig) {
-        accessor.getPlayer().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(cap -> {
-            if (cap.isBurning(Metal.BRONZE) && (cap.isEnhanced() || !cap.isBurning(Metal.COPPER))) {
-                accessor.getEntity().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(capOther -> {
-                    if (!capOther.isBurning(Metal.COPPER) || (cap.isEnhanced() && !capOther.isEnhanced())) {
+        var data = accessor.getPlayer().getData(AllomancerAttachment.ALLOMANCY_DATA);
 
-                        MutableComponent text = null;
+        if (data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER))) {
 
-                        for (Metal mt : Metal.values()) {
-                            if (capOther.isBurning(mt)) {
-                                if (text == null) {
-                                    text = translateMetal(mt);
-                                } else {
-                                    text = text.append(", ").append(translateMetal(mt));
-                                }
+            if (accessor.getEntity().hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
+                var dataOther = accessor.getEntity().getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+                if (!dataOther.isBurning(Metal.COPPER) || (data.isEnhanced() && !dataOther.isEnhanced())) {
+
+                    MutableComponent text = null;
+
+                    for (Metal mt : Metal.values()) {
+                        if (dataOther.isBurning(mt)) {
+                            if (text == null) {
+                                text = translateMetal(mt);
+                            } else {
+                                text = text.append(", ").append(translateMetal(mt));
                             }
                         }
-
-                        if (text != null) {
-                            tooltip.add(text);
-                        }
                     }
-                });
+
+                    if (text != null) {
+                        tooltip.add(text);
+                    }
+                }
             }
-        });
+        }
     }
 
     @Override

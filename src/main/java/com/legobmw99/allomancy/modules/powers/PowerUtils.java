@@ -3,11 +3,12 @@ package com.legobmw99.allomancy.modules.powers;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIAttackOnCollideExtended;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIEvilAttack;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -42,8 +43,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.ITeleporter;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.util.ITeleporter;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -87,7 +87,7 @@ public class PowerUtils {
      * @return Whether the block is metal
      */
     public static boolean isBlockMetal(Block block) {
-        return isOnWhitelist(ForgeRegistries.BLOCKS.getKey(block).toString());
+        return isOnWhitelist(BuiltInRegistries.BLOCK.getKey(block).toString());
     }
 
     /**
@@ -97,7 +97,7 @@ public class PowerUtils {
      * @return Whether the item is metal
      */
     public static boolean isItemMetal(ItemStack item) {
-        return isOnWhitelist(ForgeRegistries.ITEMS.getKey(item.getItem()).toString());
+        return isOnWhitelist(BuiltInRegistries.ITEM.getKey(item.getItem()).toString());
     }
 
     private static boolean isOnWhitelist(String s) {
@@ -152,14 +152,13 @@ public class PowerUtils {
      * @param player The player to wipe
      */
     public static void wipePlayer(Player player) {
-        player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-            data.drainMetals(Metal.values());
-            player.removeAllEffects();
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        data.drainMetals(Metal.values());
+        player.removeAllEffects();
 
-            if (player instanceof ServerPlayer sp) {
-                Network.sync(data, sp);
-            }
-        });
+        if (player instanceof ServerPlayer sp) {
+            Network.syncAllomancerData(sp);
+        }
     }
 
     /**

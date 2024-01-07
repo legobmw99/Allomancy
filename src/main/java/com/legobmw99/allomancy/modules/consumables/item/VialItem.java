@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -16,8 +16,8 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -32,19 +32,19 @@ public class VialItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity livingEntity) {
 
-        if (!stack.hasTag()) {
+        if (!stack.hasTag() || !livingEntity.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
             return stack;
         }
 
-        livingEntity.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-            for (Metal mt : Metal.values()) {
-                if (stack.getTag().contains(mt.getName()) && stack.getTag().getBoolean(mt.getName())) {
-                    if (data.getAmount(mt) < 10) {
-                        data.setAmount(mt, data.getAmount(mt) + 1);
-                    }
+
+        var data = livingEntity.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        for (Metal mt : Metal.values()) {
+            if (stack.getTag().contains(mt.getName()) && stack.getTag().getBoolean(mt.getName())) {
+                if (data.getAmount(mt) < 10) {
+                    data.setAmount(mt, data.getAmount(mt) + 1);
                 }
             }
-        });
+        }
 
         if (!((Player) (livingEntity)).getAbilities().instabuild) {
             stack.shrink(1);
@@ -71,7 +71,9 @@ public class VialItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
-        return playerIn.getCapability(AllomancerCapability.PLAYER_CAP).map(data -> {
+
+        if (playerIn.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
+            var data = playerIn.getData(AllomancerAttachment.ALLOMANCY_DATA);
             //If all the ones being filled are full, don't allow
             int filling = 0, full = 0;
             if (itemStackIn.hasTag()) {
@@ -90,7 +92,11 @@ public class VialItem extends Item {
                 }
             }
             return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
-        }).orElse(new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn));
+        } else {
+            return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
+        }
+
+
     }
 
 
