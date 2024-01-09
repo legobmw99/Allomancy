@@ -5,7 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
-public record EmotionPayload (int entityID, boolean makeAggressive) implements CustomPacketPayload {
+public record EmotionPayload(int entityID, boolean makeAggressive) implements CustomPacketPayload {
 
     public static final ResourceLocation ID = new ResourceLocation(Allomancy.MODID, "change_emotion");
 

@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_raw_zinc": {
+    "has_aluminum_ore": {
       "conditions": {
         "items": [
           {
             "items": [
-              "allomancy:raw_zinc"
+              "allomancy:aluminum_ore"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:zinc_ingot"
+        "recipe": "allomancy:aluminum_ingot_from_aluminum_ore_from_blasting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +23,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_raw_zinc"
+      "has_aluminum_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "allomancy:zinc_ingot"
+      "allomancy:aluminum_ingot_from_aluminum_ore_from_blasting"
     ]
   }
 }

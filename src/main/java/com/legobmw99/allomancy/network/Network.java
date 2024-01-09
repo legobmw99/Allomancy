@@ -28,9 +28,11 @@ public class Network {
     public static void sendToServer(CustomPacketPayload msg) {
         PacketDistributor.SERVER.noArg().send(msg);
     }
+
     public static void syncAllomancerData(ServerPlayer player) {
         sync(new AllomancerDataPayload(player), player);
     }
+
     public static void sync(CustomPacketPayload msg, ServerPlayer player) {
         PacketDistributor.TRACKING_ENTITY_AND_SELF.with(player).send(msg);
     }

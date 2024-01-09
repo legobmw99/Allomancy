@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "allomancy:zinc_ingot_from_zinc_ore_from_blasting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_zinc_ore": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:zinc_ore"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_zinc_ore"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "allomancy:zinc_ingot_from_zinc_ore_from_blasting"
+    ]
+  }
+}

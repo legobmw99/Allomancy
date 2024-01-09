@@ -12,6 +12,7 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.ItemDisplay;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -30,7 +31,7 @@ public class Allomancy {
     public static final Logger LOGGER = LogManager.getLogger();
 
 
-    public Allomancy(IEventBus bus) {
+    public Allomancy(IEventBus bus, Dist dist) {
 
         // Register our setup events on the necessary buses
         bus.addListener(Allomancy::init);
@@ -43,7 +44,7 @@ public class Allomancy {
 
         bus.addListener(MetalOverlay::registerGUI);
 
-        if (FMLLoader.getDist().isClient()) {
+        if (dist.isClient()) {
             bus.addListener(PowersClientSetup::registerKeyBinding);
             bus.addListener(PowersClientSetup::registerParticle);
             PowersClientSetup.register(bus);

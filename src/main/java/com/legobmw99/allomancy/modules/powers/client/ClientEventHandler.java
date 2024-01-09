@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.ArrayListDeque;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -37,20 +38,16 @@ import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
 import net.neoforged.neoforge.event.TickEvent;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 public class ClientEventHandler {
-
-
     private final Minecraft mc = Minecraft.getInstance();
-
-    private final Set<Entity> metal_entities = new HashSet<>();
-    private final Set<MetalBlockBlob> metal_blobs = new HashSet<>();
-    private final Set<Player> nearby_allomancers = new HashSet<>();
+    private final List<Entity> metal_entities = new ArrayList<>();
+    private final List<MetalBlockBlob> metal_blobs = new ArrayList<>();
+    private final List<Player> nearby_allomancers = new ArrayList<>();
 
     private int tickOffset = 0;
+    private final Deque<BlockPos> to_consider = new ArrayListDeque<>();
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -117,8 +114,8 @@ public class ClientEventHandler {
                     player.level().getEntitiesOfClass(Entity.class, AABB.encapsulatingFullBlocks(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
 
             // Add metal blobs to metal list
-            var seen = new HashSet<BlockPos>();
-            BlockPos.betweenClosed(negative, positive).forEach(starter -> searchNearbyMetalBlocks(seen, starter.immutable(), player.level()));
+            Set<BlockPos> seen = new HashSet<>();
+            BlockPos.betweenClosed(negative, positive).forEach(starter -> searchNearbyMetalBlocks(player.blockPosition(), max, seen, starter.immutable(), player.level()));
         }
 
         // Populate our list of nearby allomancy users
@@ -132,7 +129,7 @@ public class ClientEventHandler {
             var nearby_players = player.level().getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
 
             for (Player otherPlayer : nearby_players) {
-                if (checkSeeking(data, otherPlayer)) {
+                if (!addSeeked(data, otherPlayer)) {
                     this.nearby_allomancers.clear();
                     break;
                 }
@@ -143,7 +140,7 @@ public class ClientEventHandler {
     /**
      * A sort of BFS with a global seen list
      */
-    private void searchNearbyMetalBlocks(HashSet<BlockPos> seen, BlockPos starter, Level level) {
+    private void searchNearbyMetalBlocks(BlockPos origin, int range, Set<BlockPos> seen, BlockPos starter, Level level) {
         if (seen.contains(starter)) {
             return;
         }
@@ -153,17 +150,20 @@ public class ClientEventHandler {
             return;
         }
 
-        var points = new LinkedList<BlockPos>();
-        points.add(starter);
+        int range_sqr = 4 * range * range;
+
+        this.to_consider.clear();
+        this.to_consider.addFirst(starter);
+
         var blob = new MetalBlockBlob(starter);
-        while (!points.isEmpty()) {
-            var pos = points.remove();
+        while (!this.to_consider.isEmpty()) {
+            var pos = this.to_consider.removeLast();
             for (var p1 : BlockPos.withinManhattan(pos, 1, 1, 1)) {
                 if (!seen.contains(p1)) {
                     var p2 = p1.immutable();
                     seen.add(p2);
-                    if (PowerUtils.isBlockStateMetal(level.getBlockState(p2))) {
-                        points.add(p2);
+                    if (origin.distSqr(p2) < range_sqr && PowerUtils.isBlockStateMetal(level.getBlockState(p2))) {
+                        this.to_consider.add(p2);
                         blob.add(p2);
                     }
                 }
@@ -172,17 +172,16 @@ public class ClientEventHandler {
         this.metal_blobs.add(blob);
     }
 
-    private boolean checkSeeking(IAllomancerData data, Player otherPlayer) {
+    private boolean addSeeked(IAllomancerData data, Player otherPlayer) {
         var otherData = otherPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA);
         if (otherData.isBurning(Metal.COPPER) && (!data.isEnhanced() || otherData.isEnhanced())) {
             return false;
         }
-        for (Metal mt : Metal.values()) {
-            if (otherData.isBurning(mt)) {
-                this.nearby_allomancers.add(otherPlayer);
-                break;
-            }
+
+        if (Arrays.stream(Metal.values()).anyMatch(otherData::isBurning)) {
+            this.nearby_allomancers.add(otherPlayer);
         }
+
         return true;
     }
 

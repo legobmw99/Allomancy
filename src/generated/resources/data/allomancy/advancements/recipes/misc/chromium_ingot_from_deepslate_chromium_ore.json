@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_raw_aluminum": {
+    "has_deepslate_chromium_ore": {
       "conditions": {
         "items": [
           {
             "items": [
-              "allomancy:raw_aluminum"
+              "allomancy:deepslate_chromium_ore"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:aluminum_ingot"
+        "recipe": "allomancy:chromium_ingot_from_deepslate_chromium_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +23,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_raw_aluminum"
+      "has_deepslate_chromium_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "allomancy:aluminum_ingot"
+      "allomancy:chromium_ingot_from_deepslate_chromium_ore"
     ]
   }
 }

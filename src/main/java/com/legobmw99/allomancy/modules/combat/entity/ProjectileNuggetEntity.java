@@ -98,7 +98,6 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
         return this.damage;
     }
 
-
     @Override
     protected Item getDefaultItem() {
         return Items.GOLD_NUGGET;

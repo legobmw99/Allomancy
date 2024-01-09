@@ -303,7 +303,8 @@ public class DefaultAllomancerData implements IAllomancerData {
         }
         allomancy_data.put("position", position);
 
-        return allomancy_data;    }
+        return allomancy_data;
+    }
 
     @Override
     public void deserializeNBT(CompoundTag allomancy_data) {

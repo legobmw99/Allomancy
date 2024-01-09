@@ -6,9 +6,13 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.legobmw99.allomancy.modules.powers.data.DefaultAllomancerData;
 import com.legobmw99.allomancy.modules.powers.network.EnhanceTimePayload;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtAccounter;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,10 +38,48 @@ import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerSetSpawnEvent;
 
+import java.io.File;
 import java.util.Arrays;
 
 public class CommonEventHandler {
 
+
+    /**
+     * TEMPORARY: Used to port Forge worlds to Neoforged.
+     * Loads the player's data file and sees if they have an old forge Capability stored.
+     */
+    @SubscribeEvent
+    public static void onPlayerLoad(final PlayerEvent.LoadFromFile event) {
+        Player player = event.getEntity();
+
+        if (!player.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
+            CompoundTag compoundtag = null;
+            try {
+                File file1 = new File(event.getPlayerDirectory(), event.getPlayerUUID() + ".dat");
+                if (file1.exists() && file1.isFile()) {
+                    compoundtag = NbtIo.readCompressed(file1.toPath(), NbtAccounter.unlimitedHeap());
+                }
+            } catch (Exception exception) {
+                Allomancy.LOGGER.warn("Failed to load old player data for {}", player.getName().getString());
+            }
+
+            if (compoundtag != null && compoundtag.contains("ForgeCaps")) {
+                CompoundTag caps = compoundtag.getCompound("ForgeCaps");
+                if (caps.contains("allomancy:allomancy_data")) {
+                    Allomancy.LOGGER.info("Found old forge data for player {}, trying to load!", player.getName().getString());
+                    var data = new DefaultAllomancerData();
+                    try {
+                        data.deserializeNBT(caps.getCompound("allomancy:allomancy_data"));
+                        player.setData(AllomancerAttachment.ALLOMANCY_DATA, data);
+                        Allomancy.LOGGER.info("Loaded old forge data for player {}!", player.getName().getString());
+
+                    } catch (Exception exception) {
+                        Allomancy.LOGGER.error("Failed to deserialize old data!", exception);
+                    }
+                }
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
@@ -45,21 +87,23 @@ public class CommonEventHandler {
             return;
         }
         if (event.getEntity() instanceof ServerPlayer player) {
-            var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-            //Handle random misting case
-            if (PowersConfig.random_mistings.get() && data.isUninvested()) {
-                byte randomMisting;
-                if (PowersConfig.respect_player_UUID.get()) {
-                    randomMisting = (byte) (Math.abs(player.getUUID().hashCode()) % 16);
-                } else {
-                    randomMisting = (byte) (player.getRandom().nextInt(Metal.values().length));
-                }
-                data.addPower(Metal.getMetal(randomMisting));
-                ItemStack flakes = new ItemStack(MaterialsSetup.FLAKES.get(randomMisting).get());
-                // Give the player one flake of their metal
-                if (!player.getInventory().add(flakes)) {
-                    ItemEntity entity = new ItemEntity(player.getCommandSenderWorld(), player.position().x(), player.position().y(), player.position().z(), flakes);
-                    player.getCommandSenderWorld().addFreshEntity(entity);
+            if (!player.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
+                var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+                //Handle random misting case
+                if (PowersConfig.random_mistings.get() && data.isUninvested()) {
+                    byte randomMisting;
+                    if (PowersConfig.respect_player_UUID.get()) {
+                        randomMisting = (byte) (Math.abs(player.getUUID().hashCode()) % 16);
+                    } else {
+                        randomMisting = (byte) (player.getRandom().nextInt(Metal.values().length));
+                    }
+                    data.addPower(Metal.getMetal(randomMisting));
+                    ItemStack flakes = new ItemStack(MaterialsSetup.FLAKES.get(randomMisting).get());
+                    // Give the player one flake of their metal
+                    if (!player.getInventory().add(flakes)) {
+                        ItemEntity entity = new ItemEntity(player.getCommandSenderWorld(), player.position().x(), player.position().y(), player.position().z(), flakes);
+                        player.getCommandSenderWorld().addFreshEntity(entity);
+                    }
                 }
             }
 
@@ -294,7 +338,7 @@ public class CommonEventHandler {
              *********************************************/
             if (data.isBurning(Metal.TIN)) {
                 // Add night vision to tin-burners
-                curPlayer.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, Short.MAX_VALUE, 5, true, false));
+                curPlayer.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 5, true, false));
                 if (data.isEnhanced()) { // Tin and Duralumin is too much to handle
                     curPlayer.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 150, true, false));
                     if (level.random.nextInt(50) == 0) {
