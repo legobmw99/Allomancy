@@ -72,33 +72,26 @@ public class VialItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
 
-        if (playerIn.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
-            var data = playerIn.getData(AllomancerAttachment.ALLOMANCY_DATA);
-            //If all the ones being filled are full, don't allow
-            int filling = 0, full = 0;
-            if (itemStackIn.hasTag()) {
-                for (Metal mt : Metal.values()) {
-                    if (itemStackIn.getTag().contains(mt.getName()) && itemStackIn.getTag().getBoolean(mt.getName())) {
-                        filling++;
-                        if (data.getAmount(mt) >= 10) {
-                            full++;
-                        }
+        var data = playerIn.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        //If all the ones being filled are full, don't allow
+        int filling = 0, full = 0;
+        if (itemStackIn.hasTag()) {
+            for (Metal mt : Metal.values()) {
+                if (itemStackIn.getTag().contains(mt.getName()) && itemStackIn.getTag().getBoolean(mt.getName())) {
+                    filling++;
+                    if (data.getAmount(mt) >= 10) {
+                        full++;
                     }
                 }
-
-                if (filling != full) {
-                    playerIn.startUsingItem(hand);
-                    return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStackIn);
-                }
             }
-            return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
-        } else {
-            return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
+
+            if (filling != full) {
+                playerIn.startUsingItem(hand);
+                return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStackIn);
+            }
         }
-
-
+        return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
     }
-
 
     @OnlyIn(Dist.CLIENT)
     @Override

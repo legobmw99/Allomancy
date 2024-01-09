@@ -1,11 +1,11 @@
-package com.legobmw99.allomancy.modules.powers;
+package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
+import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.modules.powers.network.*;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

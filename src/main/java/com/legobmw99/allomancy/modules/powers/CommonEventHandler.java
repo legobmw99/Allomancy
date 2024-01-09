@@ -6,7 +6,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.modules.powers.data.DefaultAllomancerData;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import com.legobmw99.allomancy.modules.powers.network.EnhanceTimePayload;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.core.BlockPos;
@@ -67,7 +67,7 @@ public class CommonEventHandler {
                 CompoundTag caps = compoundtag.getCompound("ForgeCaps");
                 if (caps.contains("allomancy:allomancy_data")) {
                     Allomancy.LOGGER.info("Found old forge data for player {}, trying to load!", player.getName().getString());
-                    var data = new DefaultAllomancerData();
+                    var data = new AllomancerData();
                     try {
                         data.deserializeNBT(caps.getCompound("allomancy:allomancy_data"));
                         player.setData(AllomancerAttachment.ALLOMANCY_DATA, data);

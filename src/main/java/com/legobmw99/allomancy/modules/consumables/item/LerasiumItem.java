@@ -35,7 +35,7 @@ public class LerasiumItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemStackIn = player.getItemInHand(hand);
 
-        if (!player.getData(AllomancerAttachment.ALLOMANCY_DATA.value()).isMistborn()) {
+        if (!player.getData(AllomancerAttachment.ALLOMANCY_DATA).isMistborn()) {
             player.startUsingItem(hand);
             return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStackIn);
         }

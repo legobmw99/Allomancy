@@ -1,7 +1,6 @@
 package com.legobmw99.allomancy.network;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.powers.ServerPayloadHandler;
 import com.legobmw99.allomancy.modules.powers.client.ClientPayloadHandler;
 import com.legobmw99.allomancy.modules.powers.network.*;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -15,7 +14,7 @@ public class Network {
     public static void registerPayloads(final RegisterPayloadHandlerEvent event) {
         final IPayloadRegistrar registrar = event.registrar(Allomancy.MODID).versioned("2.0");
 
-        registrar.play(AllomancerDataPayload.ID, AllomancerDataPayload::new, handler -> handler.client(ClientPayloadHandler::handleAllomancyData));
+        registrar.play(AllomancerDataPayload.ID, AllomancerDataPayload::new, handler -> handler.client(ClientPayloadHandler::handleAllomancerData));
         registrar.play(EmotionPayload.ID, EmotionPayload::new, handler -> handler.server(ServerPayloadHandler::handleEmotionChange));
         registrar.play(BlockPushPullPayload.ID, BlockPushPullPayload::new, handler -> handler.server(ServerPayloadHandler::tryPushPullBlock));
         registrar.play(EntityPushPullPayload.ID, EntityPushPullPayload::new, handler -> handler.server(ServerPayloadHandler::tryPushPullEntity));

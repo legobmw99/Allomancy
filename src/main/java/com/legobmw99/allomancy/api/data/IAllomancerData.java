@@ -2,13 +2,11 @@ package com.legobmw99.allomancy.api.data;
 
 import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 
-public interface IAllomancerData extends INBTSerializable<CompoundTag> {
+public interface IAllomancerData {
 
     /**
      * Called each worldTick, checking the burn times, abilities, and metal

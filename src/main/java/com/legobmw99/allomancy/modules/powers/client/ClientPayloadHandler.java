@@ -12,10 +12,13 @@ import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 public class ClientPayloadHandler {
 
-    public static void handleAllomancyData(final AllomancerDataPayload data, final PlayPayloadContext ctx) {
-        // TODO async?
-        ctx.workHandler().execute(() -> {
+    public static void handleAllomancerData(final AllomancerDataPayload data, final PlayPayloadContext ctx) {
+        ctx.workHandler().submitAsync(() -> {
             Minecraft.getInstance().level.getPlayerByUUID(data.player()).getData(AllomancerAttachment.ALLOMANCY_DATA).deserializeNBT(data.nbt());
+        }).exceptionally(e -> {
+            Allomancy.LOGGER.error("Failed to handle allomancerData update", e);
+            ctx.packetHandler().disconnect(Component.translatable("allomancy.networking.failed", e.getMessage()));
+            return null;
         });
     }
 
