@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_raw_lead": {
+    "has_raw_chromium": {
       "conditions": {
         "items": [
           {
             "items": [
-              "allomancy:raw_lead"
+              "allomancy:raw_chromium"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:lead_ingot"
+        "recipe": "allomancy:chromium_ingot_from_raw_chromium_from_blasting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +23,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_raw_lead"
+      "has_raw_chromium"
     ]
   ],
   "rewards": {
     "recipes": [
-      "allomancy:lead_ingot"
+      "allomancy:chromium_ingot_from_raw_chromium_from_blasting"
     ]
   }
 }

@@ -63,6 +63,9 @@ public class ServerPayloadHandler {
                                && (!player.getProjectile(player.getMainHandItem()).isEmpty()) && data.isPush())) {
                     PowerUtils.move(data.direction(), player, pos);
                 }
+            } else {
+                Allomancy.LOGGER.warn("Illegal use of iron/steel by player: {}!", player);
+                ctx.packetHandler().disconnect(Component.translatable("allomancy.networking.kicked", "Tried to push or pull against an unloaded block!"));
             }
         });
     }
@@ -127,7 +130,7 @@ public class ServerPayloadHandler {
         ctx.workHandler().submitAsync(() -> {
             Player source = ctx.player().get();
 
-            if (source.getData(AllomancerAttachment.ALLOMANCY_DATA).isBurning(Metal.NICROSIL)) {
+            if (!source.getData(AllomancerAttachment.ALLOMANCY_DATA).isBurning(Metal.NICROSIL)) {
                 Allomancy.LOGGER.warn("Illegal use of Nicrosil by player: {}!", source);
                 ctx.packetHandler().disconnect(Component.translatable("allomancy.networking.kicked", "Tried to mark other player as enhanced while not burning Nicrosil!"));
                 return;

@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_raw_chromium": {
+    "has_deepslate_cadmium_ore": {
       "conditions": {
         "items": [
           {
             "items": [
-              "allomancy:raw_chromium"
+              "allomancy:deepslate_cadmium_ore"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:chromium_ingot"
+        "recipe": "allomancy:cadmium_ingot_from_deepslate_cadmium_ore_from_blasting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +23,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_raw_chromium"
+      "has_deepslate_cadmium_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "allomancy:chromium_ingot"
+      "allomancy:cadmium_ingot_from_deepslate_cadmium_ore_from_blasting"
     ]
   }
 }

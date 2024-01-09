@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_raw_silver": {
+    "has_deepslate_aluminum_ore": {
       "conditions": {
         "items": [
           {
             "items": [
-              "allomancy:raw_silver"
+              "allomancy:deepslate_aluminum_ore"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:silver_ingot_from_blasting"
+        "recipe": "allomancy:aluminum_ingot_from_deepslate_aluminum_ore_from_blasting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +23,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_raw_silver"
+      "has_deepslate_aluminum_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "allomancy:silver_ingot_from_blasting"
+      "allomancy:aluminum_ingot_from_deepslate_aluminum_ore_from_blasting"
     ]
   }
 }

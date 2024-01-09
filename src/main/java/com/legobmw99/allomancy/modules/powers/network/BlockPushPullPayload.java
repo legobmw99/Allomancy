@@ -9,16 +9,17 @@ import net.minecraft.resources.ResourceLocation;
 public record BlockPushPullPayload(BlockPos block, int direction) implements CustomPacketPayload {
     public static final ResourceLocation ID = new ResourceLocation(Allomancy.MODID, "block_push_pull");
 
-    public BlockPushPullPayload(FriendlyByteBuf buf){
+    public BlockPushPullPayload(FriendlyByteBuf buf) {
         this(buf.readBlockPos(), buf.readInt());
     }
+
     @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeBlockPos(this.block);
         buf.writeInt(this.direction);
     }
 
-    public boolean isPush(){
+    public boolean isPush() {
         return this.direction > 0;
     }
 

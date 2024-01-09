@@ -77,8 +77,10 @@ public class Recipes extends RecipeProvider {
         smelt.unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(ingredient.asItem()).getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
         blast.unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(ingredient.asItem()).getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
 
-        smelt.save(consumer);
-        blast.save(consumer, BuiltInRegistries.ITEM.getKey(result.asItem()) + "_from_blasting");
+        var name = BuiltInRegistries.ITEM.getKey(result.asItem()) + "_from_" + BuiltInRegistries.ITEM.getKey(ingredient.asItem()).getPath();
+
+        smelt.save(consumer, name);
+        blast.save(consumer, name + "_from_blasting");
 
     }
 
@@ -143,8 +145,12 @@ public class Recipes extends RecipeProvider {
         float[] ore_metal_xp = {0.6F, 0.7F, 0.7F, 0.4F, 1.0F, 0.6F, 0.6F};
         for (int i = 0; i < MaterialsSetup.ORE_METALS.length; i++) {
             var raw = MaterialsSetup.RAW_ORE_ITEMS.get(i).get();
+            var ore = MaterialsSetup.ORE_BLOCKS_ITEMS.get(i).get();
+            var deep_ore = MaterialsSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).get();
             var ingot = MaterialsSetup.INGOTS.get(ore_metal_indexes[i]).get();
             buildSmeltingAndBlasting(consumer, ingot, raw, ore_metal_xp[i]);
+            buildSmeltingAndBlasting(consumer, ingot, ore, ore_metal_xp[i]);
+            buildSmeltingAndBlasting(consumer, ingot, deep_ore, ore_metal_xp[i]);
         }
 
 
@@ -243,6 +249,7 @@ public class Recipes extends RecipeProvider {
         ShapedRecipeBuilder
                 .shaped(RecipeCategory.COMBAT, CombatSetup.COIN_BAG.get())
                 .unlockedBy("has_gold_nugget", InventoryChangeTrigger.TriggerInstance.hasItems(CombatSetup.MISTCLOAK.get()))
+                .showNotification(true)
                 .define('#', Items.LEAD)
                 .define('l', Items.LEATHER)
                 .define('g', Items.GOLD_NUGGET)
@@ -262,6 +269,7 @@ public class Recipes extends RecipeProvider {
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(cat, result, count);
 
         builder.unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(criterion).getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(criterion));
+        builder.showNotification(true);
 
         Set<Character> characters = new HashSet<>();
         for (String line : lines) {

@@ -1,34 +1,34 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_raw_silver": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "allomancy:tin_ingot_from_tin_ore_from_blasting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tin_ore": {
       "conditions": {
         "items": [
           {
             "items": [
-              "allomancy:raw_silver"
+              "allomancy:tin_ore"
             ]
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
-    },
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "allomancy:silver_ingot"
-      },
-      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_raw_silver"
+      "has_tin_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "allomancy:silver_ingot"
+      "allomancy:tin_ingot_from_tin_ore_from_blasting"
     ]
   }
 }

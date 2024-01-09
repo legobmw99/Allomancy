@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_raw_aluminum": {
+    "has_raw_cadmium": {
       "conditions": {
         "items": [
           {
             "items": [
-              "allomancy:raw_aluminum"
+              "allomancy:raw_cadmium"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:aluminum_ingot_from_blasting"
+        "recipe": "allomancy:cadmium_ingot_from_raw_cadmium_from_blasting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +23,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_raw_aluminum"
+      "has_raw_cadmium"
     ]
   ],
   "rewards": {
     "recipes": [
-      "allomancy:aluminum_ingot_from_blasting"
+      "allomancy:cadmium_ingot_from_raw_cadmium_from_blasting"
     ]
   }
 }

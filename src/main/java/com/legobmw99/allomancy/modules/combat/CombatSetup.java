@@ -80,7 +80,6 @@ public class CombatSetup {
             .<ProjectileNuggetEntity>of(ProjectileNuggetEntity::new, MobCategory.MISC)
             .setShouldReceiveVelocityUpdates(true)
             .setUpdateInterval(20)
-//            .setCustomClientFactory((spawnEntity, world) -> new ProjectileNuggetEntity(world, spawnEntity.getEntity()))
             .sized(0.25F, 0.25F)
             .build("nugget_projectile"));
 }

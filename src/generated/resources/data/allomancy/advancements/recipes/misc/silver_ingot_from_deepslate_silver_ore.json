@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_raw_tin": {
+    "has_deepslate_silver_ore": {
       "conditions": {
         "items": [
           {
             "items": [
-              "allomancy:raw_tin"
+              "allomancy:deepslate_silver_ore"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:tin_ingot_from_blasting"
+        "recipe": "allomancy:silver_ingot_from_deepslate_silver_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +23,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_raw_tin"
+      "has_deepslate_silver_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "allomancy:tin_ingot_from_blasting"
+      "allomancy:silver_ingot_from_deepslate_silver_ore"
     ]
   }
 }

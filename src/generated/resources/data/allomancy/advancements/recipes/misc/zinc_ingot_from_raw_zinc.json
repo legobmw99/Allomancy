@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:zinc_ingot_from_blasting"
+        "recipe": "allomancy:zinc_ingot_from_raw_zinc"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "allomancy:zinc_ingot_from_blasting"
+      "allomancy:zinc_ingot_from_raw_zinc"
     ]
   }
 }

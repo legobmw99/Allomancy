@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_raw_lead": {
+    "has_deepslate_chromium_ore": {
       "conditions": {
         "items": [
           {
             "items": [
-              "allomancy:raw_lead"
+              "allomancy:deepslate_chromium_ore"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:lead_ingot_from_blasting"
+        "recipe": "allomancy:chromium_ingot_from_deepslate_chromium_ore_from_blasting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +23,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_raw_lead"
+      "has_deepslate_chromium_ore"
     ]
   ],
   "rewards": {
     "recipes": [
-      "allomancy:lead_ingot_from_blasting"
+      "allomancy:chromium_ingot_from_deepslate_chromium_ore_from_blasting"
     ]
   }
 }
