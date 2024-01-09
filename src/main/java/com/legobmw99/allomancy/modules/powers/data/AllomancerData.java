@@ -10,10 +10,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import java.util.Arrays;
 
-public class DefaultAllomancerData implements IAllomancerData {
+public class AllomancerData implements IAllomancerData, INBTSerializable<CompoundTag> {
 
     private static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
 
@@ -28,7 +29,7 @@ public class DefaultAllomancerData implements IAllomancerData {
     private BlockPos spawn_pos;
     private int enhanced_time;
 
-    public DefaultAllomancerData() {
+    public AllomancerData() {
 
         int powers = Metal.values().length;
         this.allomantic_powers = new boolean[powers];

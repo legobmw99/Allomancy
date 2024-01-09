@@ -47,13 +47,12 @@ public class CoinBagItem extends ProjectileWeaponItem {
             itemstack = new ItemStack(Items.GOLD_NUGGET, 1);
         }
 
-
-        if (!itemstack.isEmpty() && player.getData(AllomancerAttachment.ALLOMANCY_DATA.value()).isBurning(Metal.STEEL)) {
+        if (!itemstack.isEmpty() && player.getData(AllomancerAttachment.ALLOMANCY_DATA).isBurning(Metal.STEEL)) {
             if (!world.isClientSide) {
 
                 Ammo type = getAmmoFromItem(itemstack.getItem());
                 float dmg = type.damage;
-                if (player.getData(AllomancerAttachment.ALLOMANCY_DATA.value()).isEnhanced()) {
+                if (player.getData(AllomancerAttachment.ALLOMANCY_DATA).isEnhanced()) {
                     dmg *= 2.0F;
                 }
                 ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, dmg);
