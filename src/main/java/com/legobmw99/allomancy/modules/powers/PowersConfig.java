@@ -147,6 +147,7 @@ public class PowersConfig {
         add(Blocks.NETHERITE_BLOCK);
         add(Blocks.LODESTONE);
         add(Blocks.GILDED_BLACKSTONE);
+        add(Blocks.LIGHTNING_ROD);
 
         add(Items.BRUSH);
 
