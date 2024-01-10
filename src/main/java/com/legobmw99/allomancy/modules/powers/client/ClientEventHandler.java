@@ -8,46 +8,48 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
 import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
-import com.legobmw99.allomancy.modules.powers.client.util.MetalBlockBlob;
+import com.legobmw99.allomancy.modules.powers.client.util.SensoryTracking;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.network.BlockPushPullPayload;
 import com.legobmw99.allomancy.modules.powers.network.EmotionPayload;
 import com.legobmw99.allomancy.modules.powers.network.EnhanceTimePayload;
 import com.legobmw99.allomancy.modules.powers.network.EntityPushPullPayload;
 import com.legobmw99.allomancy.network.Network;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
+import net.minecraft.client.player.Input;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.ArrayListDeque;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
 import net.neoforged.neoforge.event.TickEvent;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.*;
-
 public class ClientEventHandler {
     private final Minecraft mc = Minecraft.getInstance();
-    private final List<Entity> metal_entities = new ArrayList<>();
-    private final List<MetalBlockBlob> metal_blobs = new ArrayList<>();
-    private final List<Player> nearby_allomancers = new ArrayList<>();
+    private final SensoryTracking tracking = new SensoryTracking();
 
-    private int tickOffset = 0;
-    private final Deque<BlockPos> to_consider = new ArrayListDeque<>();
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -93,97 +95,9 @@ public class ClientEventHandler {
             }
         }
 
-        this.tickOffset = (this.tickOffset + 1) % 2;
-        if (this.tickOffset == 0) {
-            populateSensoryLists(player, data);
-        }
-
+        this.tracking.tick();
     }
 
-    private void populateSensoryLists(Player player, IAllomancerData data) {
-        // Populate the metal lists
-        this.metal_blobs.clear();
-        this.metal_entities.clear();
-        if (data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL)) {
-            int max = PowersConfig.max_metal_detection.get();
-            var negative = player.blockPosition().offset(-max, -max, -max);
-            var positive = player.blockPosition().offset(max, max, max);
-
-            // Add metal entities to metal list
-            this.metal_entities.addAll(
-                    player.level().getEntitiesOfClass(Entity.class, AABB.encapsulatingFullBlocks(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
-
-            // Add metal blobs to metal list
-            Set<BlockPos> seen = new HashSet<>();
-            BlockPos.betweenClosed(negative, positive).forEach(starter -> searchNearbyMetalBlocks(player.blockPosition(), max, seen, starter.immutable(), player.level()));
-        }
-
-        // Populate our list of nearby allomancy users
-        this.nearby_allomancers.clear();
-        if (data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER))) {
-            // Add metal burners to a list
-            var negative = player.position().add(-30, -30, -30);
-            var positive = player.position().add(30, 30, 30);
-
-
-            var nearby_players = player.level().getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
-
-            for (Player otherPlayer : nearby_players) {
-                if (!addSeeked(data, otherPlayer)) {
-                    this.nearby_allomancers.clear();
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
-     * A sort of BFS with a global seen list
-     */
-    private void searchNearbyMetalBlocks(BlockPos origin, int range, Set<BlockPos> seen, BlockPos starter, Level level) {
-        if (seen.contains(starter)) {
-            return;
-        }
-        seen.add(starter);
-
-        if (!PowerUtils.isBlockStateMetal(level.getBlockState(starter))) {
-            return;
-        }
-
-        int range_sqr = 4 * range * range;
-
-        this.to_consider.clear();
-        this.to_consider.addFirst(starter);
-
-        var blob = new MetalBlockBlob(starter);
-        while (!this.to_consider.isEmpty()) {
-            var pos = this.to_consider.removeLast();
-            for (var p1 : BlockPos.withinManhattan(pos, 1, 1, 1)) {
-                if (!seen.contains(p1)) {
-                    var p2 = p1.immutable();
-                    seen.add(p2);
-                    if (origin.distSqr(p2) < range_sqr && PowerUtils.isBlockStateMetal(level.getBlockState(p2))) {
-                        this.to_consider.add(p2);
-                        blob.add(p2);
-                    }
-                }
-            }
-        }
-        this.metal_blobs.add(blob);
-    }
-
-    private boolean addSeeked(IAllomancerData data, Player otherPlayer) {
-        var otherData = otherPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA);
-        if (otherData.isBurning(Metal.COPPER) && (!data.isEnhanced() || otherData.isEnhanced())) {
-            return false;
-        }
-
-        if (Arrays.stream(Metal.values()).anyMatch(otherData::isBurning)) {
-            this.nearby_allomancers.add(otherPlayer);
-        }
-
-        return true;
-    }
 
     private static void emotionPushPull(IAllomancerData data, HitResult trace, Metal metal, boolean make_aggressive) {
         if (!data.isBurning(metal) || trace == null) {
@@ -268,6 +182,7 @@ public class ClientEventHandler {
         }
     }
 
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderLevelStage(final RenderLevelStageEvent event) {
@@ -302,22 +217,16 @@ public class ClientEventHandler {
 
 
         if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
-            for (var entity : this.metal_entities) {
-                ClientUtils.drawMetalLine(stack, playervec, entity.position(), 1.5F, 0F, 0.6F, 1F);
-            }
+            this.tracking.forEachMetalicEntity(entity -> ClientUtils.drawMetalLine(stack, playervec, entity.position(), 1.5F, 0F, 0.6F, 1F));
 
-            for (var mb : this.metal_blobs) {
-                ClientUtils.drawMetalLine(stack, playervec, mb.getCenter(), Mth.clamp(0.3F + mb.size() * 0.4F, 0.5F, 7.5F), 0F, 0.6F, 1F);
-            }
+            this.tracking.forEachMetalBlob(blob -> ClientUtils.drawMetalLine(stack, playervec, blob.getCenter(), Mth.clamp(0.3F + blob.size() * 0.4F, 0.5F, 7.5F), 0F, 0.6F, 1F));
         }
 
         /*********************************************
          * BRONZE LINES                              *
          *********************************************/
         if ((data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER)))) {
-            for (Player playerEntity : this.nearby_allomancers) {
-                ClientUtils.drawMetalLine(stack, playervec, playerEntity.position(), 5.0F, 0.7F, 0.15F, 0.15F);
-            }
+            this.tracking.forEachSeeked(playerEntity -> ClientUtils.drawMetalLine(stack, playervec, playerEntity.position(), 5.0F, 0.7F, 0.15F, 0.15F));
         }
 
         /*********************************************
@@ -406,4 +315,39 @@ public class ClientEventHandler {
             }
         }
     }
+
+    /**
+     * Used to enable movement while the MetalSelectScreen is open
+     */
+    @SubscribeEvent
+    public void updateInputEvent(MovementInputUpdateEvent event) {
+        if (this.mc.screen instanceof MetalSelectScreen) {
+            Options options = this.mc.options;
+            Input eInput = event.getInput();
+            float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.mc.player), 0.0F, 1.0F);
+            // from KeyboardInput#tick
+            eInput.up = InputConstants.isKeyDown(this.mc.getWindow().getWindow(), options.keyUp.getKey().getValue());
+            eInput.down = InputConstants.isKeyDown(this.mc.getWindow().getWindow(), options.keyDown.getKey().getValue());
+            eInput.left = InputConstants.isKeyDown(this.mc.getWindow().getWindow(), options.keyLeft.getKey().getValue());
+            eInput.right = InputConstants.isKeyDown(this.mc.getWindow().getWindow(), options.keyRight.getKey().getValue());
+            eInput.forwardImpulse = eInput.up == eInput.down ? 0.0f : (eInput.up ? 1.0f : -1.0f);
+            eInput.leftImpulse = eInput.left == eInput.right ? 0.0f : (eInput.left ? 1.0f : -1.0f);
+            eInput.jumping = InputConstants.isKeyDown(this.mc.getWindow().getWindow(), options.keyJump.getKey().getValue());
+            eInput.shiftKeyDown = InputConstants.isKeyDown(this.mc.getWindow().getWindow(), options.keyShift.getKey().getValue());
+            if (this.mc.player.isMovingSlowly()) {
+                eInput.leftImpulse *= f;
+                eInput.forwardImpulse *= f;
+            }
+
+            // from LocalPlayer#aiStep
+            if (!this.mc.player.isSprinting() &&
+                (!(this.mc.player.isInWater() || this.mc.player.isInFluidType((fluidType, height) -> this.mc.player.canSwimInFluidType(fluidType))) ||
+                 (this.mc.player.isUnderWater() || this.mc.player.canStartSwimming())) && eInput.forwardImpulse >= 0.8 && !this.mc.player.isUsingItem() &&
+                (this.mc.player.getFoodData().getFoodLevel() > 6.0F || this.mc.player.getAbilities().mayfly) && !this.mc.player.hasEffect(MobEffects.BLINDNESS) &&
+                InputConstants.isKeyDown(this.mc.getWindow().getWindow(), options.keySprint.getKey().getValue())) {
+                this.mc.player.setSprinting(true);
+            }
+        }
+    }
+
 }
