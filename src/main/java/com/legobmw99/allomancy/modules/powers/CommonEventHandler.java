@@ -116,9 +116,9 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void onPlayerClone(final PlayerEvent.Clone event) {
         if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
-            var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
             if (event.isWasDeath() && !player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
                 // if they died and keepInventory isn't set, they shouldn't keep their metals.
+                var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
                 for (Metal mt : Metal.values()) {
                     data.setAmount(mt, 0);
                     data.setBurning(mt, false);
