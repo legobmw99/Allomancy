@@ -24,7 +24,7 @@ public class PowersClientSetup {
                                                                                                            () -> new ParticleType<>(true, SoundParticleData.DESERIALIZER) {
                                                                                                                @Override
                                                                                                                public Codec<SoundParticleData> codec() {
-                                                                                                                   return null;
+                                                                                                                   return SoundParticleData.CODEC;
                                                                                                                }
                                                                                                            });
     @OnlyIn(Dist.CLIENT)

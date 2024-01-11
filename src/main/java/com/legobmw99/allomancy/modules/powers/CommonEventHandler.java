@@ -117,14 +117,13 @@ public class CommonEventHandler {
     public static void onPlayerClone(final PlayerEvent.Clone event) {
         if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
             var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-            var oldData = event.getOriginal().getData(AllomancerAttachment.ALLOMANCY_DATA);
-            if (player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) ||
-                !event.isWasDeath()) { // if keepInventory is true, or they didn't die, allow them to keep their metals, too
+            if (event.isWasDeath() && !player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+                // if they died and keepInventory isn't set, they shouldn't keep their metals.
                 for (Metal mt : Metal.values()) {
-                    data.setAmount(mt, oldData.getAmount(mt));
+                    data.setAmount(mt, 0);
+                    data.setBurning(mt, false);
                 }
             }
-
             Network.syncAllomancerData(player);
         }
     }
@@ -144,7 +143,7 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void onStartTracking(final net.neoforged.neoforge.event.entity.player.PlayerEvent.StartTracking event) {
+    public static void onStartTracking(final PlayerEvent.StartTracking event) {
         if (!event.getTarget().level().isClientSide && event.getTarget() instanceof ServerPlayer player) {
             Network.syncAllomancerData(player);
         }

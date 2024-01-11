@@ -187,7 +187,7 @@ public class PowerUtils {
 
 
     /*
-     * Three helper functions for working with Vector3ds
+     * Three helper functions for working with Vec3s
      */
     private static Vec3 clamp(Vec3 value, Vec3 min, Vec3 max) {
         return new Vec3(Mth.clamp(value.x, min.x, max.x), Mth.clamp(value.y, min.y, max.y), Mth.clamp(value.z, min.z, max.z));
