@@ -71,6 +71,7 @@ public class Allomancy {
     public static void init(final FMLCommonSetupEvent e) {
         PowersSetup.init(e);
         MaterialsSetup.init(e);
+        ExtrasSetup.init(e);
     }
 
 }

@@ -2,8 +2,10 @@ package com.legobmw99.allomancy.modules.extras;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnEntityTrigger;
 import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -12,6 +14,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -55,5 +58,14 @@ public class ExtrasSetup {
         BLOCKS.register(bus);
         ITEMS.register(bus);
         BP.register(bus);
+    }
+
+
+    public static final MetalUsedOnEntityTrigger METAL_USED_ON_ENTITY_TRIGGER = new MetalUsedOnEntityTrigger();
+
+    public static void init(final FMLCommonSetupEvent e) {
+        e.enqueueWork(() -> {
+            CriteriaTriggers.register("allomancy:metal_used", METAL_USED_ON_ENTITY_TRIGGER);
+        });
     }
 }
