@@ -1,9 +1,11 @@
 package com.legobmw99.allomancy.modules.combat.entity;
 
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -71,13 +73,12 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
 
     @Override
     protected void onHit(HitResult rayTraceResult) {
-        // I think this is .getThrower() or equiv
         if (rayTraceResult.getType() == HitResult.Type.ENTITY && ((EntityHitResult) rayTraceResult).getEntity() == this.getOwner()) {
             return;
         }
 
         if (rayTraceResult.getType() == HitResult.Type.ENTITY) {
-            ((EntityHitResult) rayTraceResult).getEntity().hurt(this.level().damageSources().thrown(this, this.getOwner()), this.damage);
+            ((EntityHitResult) rayTraceResult).getEntity().hurt(this.makeDamage(), this.damage);
         }
 
         if (!this.level().isClientSide) {
@@ -88,6 +89,10 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
 
             this.kill();
         }
+    }
+
+    private DamageSource makeDamage() {
+        return new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(CombatSetup.COIN_DAMAGE), this, this.getOwner());
     }
 
     public ItemStack getItem() {

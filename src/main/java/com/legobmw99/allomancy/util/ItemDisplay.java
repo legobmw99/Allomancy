@@ -51,27 +51,33 @@ public class ItemDisplay {
                 output.accept(ExtrasSetup.IRON_LEVER.get());
                 output.accept(ExtrasSetup.IRON_BUTTON.get());
 
-                for (Metal mt : Metal.values()) {
-                    if (mt.isVanilla()) {
+
+                for (var block : MaterialsSetup.STORAGE_BLOCKS) {
+                    if (block == null) {
                         continue;
                     }
-                    output.accept(MaterialsSetup.STORAGE_BLOCKS.get(mt.getIndex()).get());
+                    output.accept(block.get());
                 }
 
-                for (Metal mt : Metal.values()) {
-                    if (mt.isVanilla()) {
+                for (var ingot : MaterialsSetup.INGOTS) {
+                    if (ingot == null) {
                         continue;
                     }
-                    output.accept(MaterialsSetup.INGOTS.get(mt.getIndex()).get());
+                    output.accept(ingot.get());
                 }
-                for (Metal mt : Metal.values()) {
-                    if (mt.isVanilla()) {
+
+                for (var nug : MaterialsSetup.NUGGETS) {
+                    if (nug == null) {
                         continue;
                     }
-                    output.accept(MaterialsSetup.NUGGETS.get(mt.getIndex()).get());
+                    output.accept(nug.get());
                 }
-                for (Metal mt : Metal.values()) {
-                    output.accept(MaterialsSetup.FLAKES.get(mt.getIndex()).get());
+
+                for (var flake : MaterialsSetup.FLAKES) {
+                    if (flake == null) {
+                        continue;
+                    }
+                    output.accept(flake.get());
                 }
 
                 for (Metal mt : Metal.values()) {

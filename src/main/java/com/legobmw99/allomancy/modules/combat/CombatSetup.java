@@ -7,8 +7,12 @@ import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.combat.item.MistcloakItem;
 import com.legobmw99.allomancy.modules.combat.item.ObsidianDaggerItem;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.ArmorItem;
@@ -22,8 +26,11 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 public class CombatSetup {
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, Allomancy.MODID);
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
+    private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, Allomancy.MODID);
+    private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
+
+    public static final TagKey<DamageType> IS_COIN_HIT = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Allomancy.MODID, "is_coin_hit"));
+    public static final ResourceKey<DamageType> COIN_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Allomancy.MODID, "coin"));
     public static final DeferredItem<CoinBagItem> COIN_BAG = ITEMS.register("coin_bag", CoinBagItem::new);
     public static final DeferredItem<ObsidianDaggerItem> OBSIDIAN_DAGGER = ITEMS.register("obsidian_dagger", ObsidianDaggerItem::new);
     public static final DeferredItem<KolossBladeItem> KOLOSS_BLADE = ITEMS.register("koloss_blade", KolossBladeItem::new);

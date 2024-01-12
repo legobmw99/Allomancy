@@ -3,20 +3,19 @@ package com.legobmw99.allomancy.datagen;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
+import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.critereon.ConsumeItemTrigger;
-import net.minecraft.advancements.critereon.ImpossibleTrigger;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class Advancements implements AdvancementProvider.AdvancementGenerator {
-
 
     @Override
     public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
@@ -45,6 +44,26 @@ public class Advancements implements AdvancementProvider.AdvancementGenerator {
                 .rewards(AdvancementRewards.Builder.experience(100))
                 .save(saver, "allomancy:main/become_mistborn");
 
-    }
+        var allMetals = Advancement.Builder
+                .advancement()
+                .parent(Advancement.Builder.advancement().build(new ResourceLocation(Allomancy.MODID, "main/metallurgist")))
+                .display(ConsumeSetup.VIAL.get(), Component.translatable("advancements.metallic_collector.title"), Component.translatable("advancements.metallic_collector.desc"),
+                         null, AdvancementType.CHALLENGE, true, true, false);
+        for (var flake : MaterialsSetup.FLAKES) {
+            allMetals.addCriterion("has_" + flake.getId().getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(flake.get()));
+        }
 
+        allMetals.save(saver, "allomancy:main/metallic_collector");
+
+
+        Advancement.Builder
+                .advancement()
+                .parent(Advancement.Builder.advancement().build(new ResourceLocation(Allomancy.MODID, "main/metallurgist")))
+                .display(CombatSetup.COIN_BAG.get(), Component.translatable("advancements.coinshot.title"), Component.translatable("advancements.coinshot.desc"), null,
+                         AdvancementType.TASK, true, true, false)
+                .addCriterion("nugget_kill", KilledTrigger.TriggerInstance.playerKilledEntity(Optional.empty(), DamageSourcePredicate.Builder
+                        .damageType()
+                        .tag(TagPredicate.is(CombatSetup.IS_COIN_HIT))))
+                .save(saver, "allomancy:main/coinshot");
+    }
 }

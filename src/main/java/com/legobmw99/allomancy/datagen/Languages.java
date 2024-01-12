@@ -68,6 +68,7 @@ public class Languages extends LanguageProvider {
         add(ConsumeSetup.VIAL.get(), "Allomantic Vial");
         add("item.allomancy.vial.lore_count", "Contains %d metals");
         add("item.allomancy.vial.lore_inst", "Hold SHIFT to view");
+        add("death.attack.allomancy.coin", "%1$s was perforated by coins from %2$s");
 
         for (Metal mt : Metal.values()) {
             add("metals." + mt.getName(), getDisplayName(mt));
@@ -104,6 +105,10 @@ public class Languages extends LanguageProvider {
         add("advancements.dna_entangled.desc", "Your DNA is too entangled with the spiritual realm to use Lerasium");
         add("advancements.become_mistborn.title", "Become Mistborn!");
         add("advancements.become_mistborn.desc", "You have a power most people envy...");
+        add("advancements.metallic_collector.title", "Metallic Collector");
+        add("advancements.metallic_collector.desc", "Collect every single metallic flake, even the useless ones");
+        add("advancements.coinshot.title", "Coinshot");
+        add("advancements.coinshot.desc", "Kill a mob with the bag of coins.");
 
         add("key.categories.allomancy", "Allomancy");
         add("key.burn", "Burn Metals");
