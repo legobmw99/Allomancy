@@ -3,12 +3,15 @@ package com.legobmw99.allomancy.modules.materials;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
@@ -16,6 +19,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -26,14 +30,18 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MaterialsSetup {
+
 
     public record OreConfig(String name, int size, int placementCount, int minHeight, int maxHeight) {
 
@@ -50,6 +58,9 @@ public class MaterialsSetup {
     public static final OreConfig[] ORE_METALS = {new OreConfig("aluminum", 9, 14, 40, 120), new OreConfig("cadmium", 7, 5, -60, 0), new OreConfig("chromium", 6, 8, -30, 30),
                                                   new OreConfig("lead", 9, 15, -40, 30), new OreConfig("silver", 7, 11, -40, 30), new OreConfig("tin", 11, 15, 30, 112),
                                                   new OreConfig("zinc", 8, 12, 40, 80)};
+
+    private static final ResourceKey<BiomeModifier> ADD_ALLOMANCY_ORES = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+                                                                                            new ResourceLocation(Allomancy.MODID, "overworld_ores"));
 
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
@@ -178,6 +189,17 @@ public class MaterialsSetup {
                                                          HeightRangePlacement.triangle(VerticalAnchor.absolute(ore.minHeight), VerticalAnchor.absolute(ore.maxHeight)),
                                                          BiomeFilter.biome())));
         }
+    }
+
+    public static void bootstrapBiomeModifier(BootstapContext<BiomeModifier> bootstrap) {
+        var overworldTag = bootstrap.lookup(Registries.BIOME).getOrThrow(BiomeTags.IS_OVERWORLD);
+        HolderGetter<PlacedFeature> placed = bootstrap.lookup(Registries.PLACED_FEATURE);
+
+        List<Holder<PlacedFeature>> ores = new ArrayList<>();
+        for (OreConfig ore : ORE_METALS) {
+            ores.add(placed.getOrThrow(ore.getRegistryKey(Registries.PLACED_FEATURE, "_ore")));
+        }
+        bootstrap.register(ADD_ALLOMANCY_ORES, new BiomeModifiers.AddFeaturesBiomeModifier(overworldTag, HolderSet.direct(ores), GenerationStep.Decoration.UNDERGROUND_ORES));
     }
 }
 
