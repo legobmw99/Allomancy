@@ -40,7 +40,7 @@ public class Languages extends LanguageProvider {
 
 
         for (int i = 0; i < MaterialsSetup.ORE_METALS.length; i++) {
-            String metal = MaterialsSetup.ORE_METALS[i];
+            String metal = MaterialsSetup.ORE_METALS[i].name();
             var ore = MaterialsSetup.ORE_BLOCKS.get(i).get();
             var ds = MaterialsSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
             var rawb = MaterialsSetup.RAW_ORE_BLOCKS.get(i).get();

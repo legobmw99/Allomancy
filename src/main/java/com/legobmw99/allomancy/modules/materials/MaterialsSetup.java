@@ -3,12 +3,26 @@ package com.legobmw99.allomancy.modules.materials;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -21,7 +35,21 @@ import java.util.List;
 
 public class MaterialsSetup {
 
-    public static final String[] ORE_METALS = {"aluminum", "cadmium", "chromium", "lead", "silver", "tin", "zinc"};
+    public record OreConfig(String name, int size, int placementCount, int minHeight, int maxHeight) {
+
+        <T> ResourceKey<T> getRegistryKey(ResourceKey<Registry<T>> registry, String suffix) {
+            return ResourceKey.create(registry, new ResourceLocation(Allomancy.MODID, this.name + suffix));
+        }
+
+        @Override
+        public String toString() {
+            return this.name;
+        }
+    }
+
+    public static final OreConfig[] ORE_METALS = {new OreConfig("aluminum", 9, 14, 40, 120), new OreConfig("cadmium", 7, 5, -60, 0), new OreConfig("chromium", 6, 8, -30, 30),
+                                                  new OreConfig("lead", 9, 15, -40, 30), new OreConfig("silver", 7, 11, -40, 30), new OreConfig("tin", 11, 15, 30, 112),
+                                                  new OreConfig("zinc", 8, 12, 40, 80)};
 
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
@@ -74,7 +102,8 @@ public class MaterialsSetup {
         STORAGE_BLOCKS.add(BLOCKS.register("silver_block", MaterialsSetup::createStandardBlock));
         STORAGE_BLOCK_ITEMS.add(ITEMS.register("silver_block", () -> new BlockItem(STORAGE_BLOCKS.get(SILVER).get(), new Item.Properties())));
 
-        for (String ore : ORE_METALS) {
+        for (var ore_config : ORE_METALS) {
+            String ore = ore_config.name();
             var ore_block = BLOCKS.register(ore + "_ore", MaterialsSetup::createStandardOre);
             ORE_BLOCKS.add(ore_block);
             ORE_BLOCKS_ITEMS.add(ITEMS.register(ore + "_ore", () -> new BlockItem(ore_block.get(), new Item.Properties())));
@@ -117,6 +146,38 @@ public class MaterialsSetup {
 
     public static Item createStandardItem() {
         return new Item(new Item.Properties());
+    }
+
+    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> bootstrap) {
+        RuleTest stone = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
+        RuleTest deepslate = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
+        for (int i = 0; i < ORE_METALS.length; i++) {
+            OreConfig ore = ORE_METALS[i];
+            var ore_block = ORE_BLOCKS.get(i);
+            var deepslate_ore_block = DEEPSLATE_ORE_BLOCKS.get(i);
+
+            bootstrap.register(ore.getRegistryKey(Registries.CONFIGURED_FEATURE, "_ore_feature"), new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(
+                    List.of(OreConfiguration.target(stone, ore_block.get().defaultBlockState()), OreConfiguration.target(deepslate, deepslate_ore_block.get().defaultBlockState())),
+                    ore.size(), 0.0f)));
+        }
+    }
+
+    public static void bootstrapPlaced(BootstapContext<PlacedFeature> bootstrap) {
+
+        for (int i = 0; i < ORE_METALS.length; i++) {
+            OreConfig ore = ORE_METALS[i];
+            var ore_block = ORE_BLOCKS.get(i);
+            var deepslate_ore_block = DEEPSLATE_ORE_BLOCKS.get(i);
+
+            // Get configured feature registry
+            HolderGetter<ConfiguredFeature<?, ?>> configured = bootstrap.lookup(Registries.CONFIGURED_FEATURE);
+
+            bootstrap.register(ore.getRegistryKey(Registries.PLACED_FEATURE, "_ore"),
+                               new PlacedFeature(configured.getOrThrow(ore.getRegistryKey(Registries.CONFIGURED_FEATURE, "_ore_feature")),
+                                                 List.of(CountPlacement.of(ore.placementCount), InSquarePlacement.spread(),
+                                                         HeightRangePlacement.triangle(VerticalAnchor.absolute(ore.minHeight), VerticalAnchor.absolute(ore.maxHeight)),
+                                                         BiomeFilter.biome())));
+        }
     }
 }
 

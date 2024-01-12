@@ -32,7 +32,7 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), new AdvancementProvider(packOutput, lookup, fileHelper, List.of(new Advancements())));
         generator.addProvider(event.includeServer(), new BannerTag(packOutput, lookup, fileHelper));
 
-        DatapackBuiltinEntriesProvider datapackProvider = new Registries(packOutput, lookup);
+        DatapackBuiltinEntriesProvider datapackProvider = new BuiltinRegistryEntries(packOutput, lookup);
         CompletableFuture<HolderLookup.Provider> lookupProvider = datapackProvider.getRegistryProvider();
         generator.addProvider(event.includeServer(), datapackProvider);
         generator.addProvider(event.includeServer(), new DamageTags(packOutput, lookupProvider, fileHelper));
