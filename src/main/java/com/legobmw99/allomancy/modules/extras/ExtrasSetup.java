@@ -2,8 +2,11 @@ package com.legobmw99.allomancy.modules.extras;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnEntityTrigger;
+import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnPlayerTrigger;
 import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
+import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -19,6 +22,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ExtrasSetup {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
@@ -51,9 +55,15 @@ public class ExtrasSetup {
         }
     }
 
+    private static final DeferredRegister<CriterionTrigger<?>> CT = DeferredRegister.create(Registries.TRIGGER_TYPE, Allomancy.MODID);
+    public static final Supplier<MetalUsedOnEntityTrigger> METAL_USED_ON_ENTITY_TRIGGER = CT.register("metal_used_on_entity", MetalUsedOnEntityTrigger::new);
+    public static final Supplier<MetalUsedOnPlayerTrigger> METAL_USED_ON_PLAYER_TRIGGER = CT.register("metal_used_on_player", MetalUsedOnPlayerTrigger::new);
+
     public static void register(IEventBus bus) {
         BLOCKS.register(bus);
         ITEMS.register(bus);
         BP.register(bus);
+        CT.register(bus);
     }
+
 }

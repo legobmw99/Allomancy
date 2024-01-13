@@ -2,8 +2,10 @@ package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
+import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
+import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.network.Network;
@@ -29,12 +31,13 @@ public class ServerPayloadHandler {
 
     public static void handleEmotionChange(final EmotionPayload data, final PlayPayloadContext ctx) {
         ctx.workHandler().submitAsync(() -> {
-            Player allomancer = ctx.player().get();
+            ServerPlayer allomancer = (ServerPlayer) ctx.player().get();
             PathfinderMob target = (PathfinderMob) ctx.level().get().getEntity(data.entityID());
             if (target == null) {
                 return;
             }
             boolean enhanced = allomancer.getData(AllomancerAttachment.ALLOMANCY_DATA).isEnhanced();
+            ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(allomancer, target, data.makeAggressive() ? Metal.ZINC : Metal.BRASS, enhanced);
             if (data.makeAggressive()) {
                 PowerUtils.riotEntity(target, allomancer, enhanced);
             } else {
@@ -70,25 +73,32 @@ public class ServerPayloadHandler {
         });
     }
 
-    public static void tryPushPullEntity(final EntityPushPullPayload data, final PlayPayloadContext ctx) {
+    public static void tryPushPullEntity(final EntityPushPullPayload payload, final PlayPayloadContext ctx) {
         ctx.workHandler().execute(() -> {
-            Player player = ctx.player().get();
+            ServerPlayer player = (ServerPlayer) ctx.player().get();
             Level level = ctx.level().get();
-            Entity target = level.getEntity(data.entityID());
+            Entity target = level.getEntity(payload.entityID());
+            IAllomancerData data = player.getData(AllomancerAttachment.ALLOMANCY_DATA.get());
+            Metal which = payload.isPush() ? Metal.STEEL : Metal.IRON;
 
             if (target != null) {
                 if (PowerUtils.isEntityMetal(target)) {
+                    ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(player, target, which, data.isEnhanced());
+
                     // The player moves
                     if (target instanceof IronGolem || target instanceof ItemFrame) {
-                        PowerUtils.move(data.direction(), player, target.blockPosition());
+                        PowerUtils.move(payload.direction(), player, target.blockPosition());
                     } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity || target instanceof ArmorStand ||
                                (target instanceof AbstractMinecart && !target.isVehicle())) {
-                        PowerUtils.move(data.direction() / 2.0, target, player.blockPosition());
+                        PowerUtils.move(payload.direction() / 2.0, target, player.blockPosition());
 
                         // Split the difference
                     } else if (!(target instanceof ThrowableItemProjectile)) {
-                        PowerUtils.move(data.direction() / 2.0, target, player.blockPosition());
-                        PowerUtils.move(data.direction() / 2.0, player, target.blockPosition());
+                        if (target instanceof ServerPlayer targetPlayer) {
+                            ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(targetPlayer, which, data.isEnhanced());
+                        }
+                        PowerUtils.move(payload.direction() / 2.0, target, player.blockPosition());
+                        PowerUtils.move(payload.direction() / 2.0, player, target.blockPosition());
                     }
                 }
             }
@@ -101,7 +111,7 @@ public class ServerPayloadHandler {
         ctx.workHandler().submitAsync(() -> {
             ServerPlayer player = (ServerPlayer) ctx.player().get();
             Metal mt = payload.metal();
-            var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            IAllomancerData data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
             boolean value = payload.on();
 
@@ -128,21 +138,25 @@ public class ServerPayloadHandler {
 
     public static void updateEnhanced(final EnhanceTimePayload payload, final PlayPayloadContext ctx) {
         ctx.workHandler().submitAsync(() -> {
-            Player source = ctx.player().get();
-
-            if (!source.getData(AllomancerAttachment.ALLOMANCY_DATA).isBurning(Metal.NICROSIL)) {
+            ServerPlayer source = (ServerPlayer) ctx.player().get();
+            var data = source.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            if (!data.isBurning(Metal.NICROSIL)) {
                 Allomancy.LOGGER.warn("Illegal use of Nicrosil by player: {}!", source);
                 ctx.packetHandler().disconnect(Component.translatable("allomancy.networking.kicked", "Tried to mark other player as enhanced while not burning Nicrosil!"));
                 return;
             }
 
             Entity e = ctx.level().get().getEntity(payload.entityID());
-            if (e instanceof ServerPlayer player && !PowerUtils.hasTinFoilHat(player)) {
-                var target_data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-                target_data.setEnhanced(payload.enhanceTime());
-                // broadcast back to player and tracking
-                Network.sync(payload, player);
+            ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(source, e, Metal.NICROSIL, data.isEnhanced());
+            if (e instanceof ServerPlayer player) {
+                ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(player, Metal.NICROSIL, data.isEnhanced());
+                if (!PowerUtils.hasTinFoilHat(player)) {
+                    var target_data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+                    target_data.setEnhanced(payload.enhanceTime());
+                    // broadcast back to player and tracking
+                    Network.sync(payload, player);
 
+                }
             }
         }).exceptionally(e -> {
             Allomancy.LOGGER.error("Failed to handle sever updateEnhanced", e);
