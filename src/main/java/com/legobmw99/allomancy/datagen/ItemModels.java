@@ -26,6 +26,7 @@ public class ItemModels extends ItemModelProvider {
         itemGenerated(ExtrasSetup.IRON_LEVER_ITEM.get(), "block/iron_lever");
 
         itemGenerated(CombatSetup.MISTCLOAK.get());
+        itemGenerated(CombatSetup.ALUMINUM_HELMET.get());
         itemGenerated(CombatSetup.COIN_BAG.get());
         itemHandheld(CombatSetup.OBSIDIAN_DAGGER.get());
         largeItemHandheld(CombatSetup.KOLOSS_BLADE.get());

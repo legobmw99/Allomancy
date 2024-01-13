@@ -13,18 +13,17 @@ import net.minecraft.world.item.Item;
 import java.util.UUID;
 
 public class MistcloakItem extends ArmorItem {
-    private static final UUID[] ARMOR_MODIFIERS = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"),
-                                                             UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
+    private static final UUID MODIFIER = UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E");
+
     private final Multimap<Attribute, AttributeModifier> attributes;
 
     public MistcloakItem() {
         super(CombatSetup.WoolArmor, Type.CHESTPLATE, new Item.Properties());
 
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        UUID uuid = ARMOR_MODIFIERS[this.getEquipmentSlot().getIndex()];
-        builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", this.getDefense(), AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", this.getToughness(), AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "Speed Modifier", .25, AttributeModifier.Operation.MULTIPLY_TOTAL));
+        builder.put(Attributes.ARMOR, new AttributeModifier(MODIFIER, "Armor modifier", this.getDefense(), AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(MODIFIER, "Armor toughness", this.getToughness(), AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(MODIFIER, "Speed Modifier", .25, AttributeModifier.Operation.MULTIPLY_TOTAL));
         this.attributes = builder.build();
     }
 

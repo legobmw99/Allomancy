@@ -7,8 +7,10 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -44,11 +46,16 @@ public class Advancements implements AdvancementProvider.AdvancementGenerator {
                 .rewards(AdvancementRewards.Builder.experience(100))
                 .save(saver, "allomancy:main/become_mistborn");
 
+        ItemStack vial = new ItemStack(ConsumeSetup.VIAL.get());
+        CompoundTag nbt = new CompoundTag();
+        nbt.putInt("CustomModelData", 1);
+        vial.setTag(nbt);
+
         var allMetals = Advancement.Builder
                 .advancement()
                 .parent(Advancement.Builder.advancement().build(new ResourceLocation(Allomancy.MODID, "main/metallurgist")))
-                .display(ConsumeSetup.VIAL.get(), Component.translatable("advancements.metallic_collector.title"), Component.translatable("advancements.metallic_collector.desc"),
-                         null, AdvancementType.CHALLENGE, true, true, false);
+                .display(vial, Component.translatable("advancements.metallic_collector.title"), Component.translatable("advancements.metallic_collector.desc"), null,
+                         AdvancementType.CHALLENGE, true, true, false);
         for (var flake : MaterialsSetup.FLAKES) {
             allMetals.addCriterion("has_" + flake.getId().getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(flake.get()));
         }
@@ -65,5 +72,15 @@ public class Advancements implements AdvancementProvider.AdvancementGenerator {
                         .damageType()
                         .tag(TagPredicate.is(CombatSetup.IS_COIN_HIT))))
                 .save(saver, "allomancy:main/coinshot");
+
+
+        Advancement.Builder
+                .advancement()
+                .parent(Advancement.Builder.advancement().build(new ResourceLocation(Allomancy.MODID, "main/metallurgist")))
+                .display(CombatSetup.ALUMINUM_HELMET.get(), Component.translatable("advancements.tin_foil_hat.title"), Component.translatable("advancements.tin_foil_hat.desc"),
+                         null, AdvancementType.TASK, true, false, true)
+                .addCriterion("tin_foil_hat", InventoryChangeTrigger.TriggerInstance.hasItems(CombatSetup.ALUMINUM_HELMET.get()))
+                // TODO require that someone actually use allomancy on you
+                .save(saver, "allomancy:main/tin_foil_hat");
     }
 }

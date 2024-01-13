@@ -224,7 +224,8 @@
     },
     "frame": "challenge",
     "icon": {
-      "item": "allomancy:vial"
+      "item": "allomancy:vial",
+      "nbt": "{CustomModelData:1}"
     },
     "title": {
       "translate": "advancements.metallic_collector.title"

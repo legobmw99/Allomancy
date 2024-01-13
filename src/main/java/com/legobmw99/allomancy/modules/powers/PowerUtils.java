@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIAttackOnCollideExtended;
@@ -15,10 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -239,6 +237,9 @@ public class PowerUtils {
     public static void riotEntity(PathfinderMob target, Player allomancer, boolean enhanced) {
         try {
             if (!enhanced) {
+                if (hasTinFoilHat(target)) {
+                    return;
+                }
                 //Enable Targeting goals
                 target.targetSelector.enableControlFlag(Goal.Flag.TARGET);
                 //Add new goals
@@ -283,6 +284,10 @@ public class PowerUtils {
     public static void sootheEntity(PathfinderMob target, Player allomancer, boolean enhanced) {
         try {
             if (!enhanced) {
+                if (hasTinFoilHat(target)) {
+                    return;
+                }
+
                 if (target.isNoAi()) {
                     target.setNoAi(false);
                 }
@@ -326,5 +331,9 @@ public class PowerUtils {
             Allomancy.LOGGER.error("Failed to soothe entity " + target + "! Please report this error!", e);
         }
 
+    }
+
+    public static boolean hasTinFoilHat(LivingEntity entity) {
+        return entity.getItemBySlot(EquipmentSlot.HEAD).getItem() == CombatSetup.ALUMINUM_HELMET.get();
     }
 }

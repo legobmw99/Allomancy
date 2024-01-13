@@ -61,6 +61,7 @@ public class Languages extends LanguageProvider {
         add(ConsumeSetup.LERASIUM_NUGGET.get(), "Lerasium Nugget");
         add("item.allomancy.lerasium_nugget.lore", "This item is endowed with strange powers, perhaps you should ingest it?");
         add(CombatSetup.MISTCLOAK.get(), "Mistcloak");
+        add(CombatSetup.ALUMINUM_HELMET.get(), "Aluminum Helmet");
         add(CombatSetup.COIN_BAG.get(), "Coin Bag");
         add(CombatSetup.OBSIDIAN_DAGGER.get(), "Obsidian Dagger");
         add(CombatSetup.KOLOSS_BLADE.get(), "Koloss Blade");
@@ -109,6 +110,8 @@ public class Languages extends LanguageProvider {
         add("advancements.metallic_collector.desc", "Collect every single metallic flake, even the useless ones");
         add("advancements.coinshot.title", "Coinshot");
         add("advancements.coinshot.desc", "Kill a mob with the bag of coins.");
+        add("advancements.tin_foil_hat.title", "Tin foil hat");
+        add("advancements.tin_foil_hat.desc", "Protect yourself, and be a bit paranoid too");
 
         add("key.categories.allomancy", "Allomancy");
         add("key.burn", "Burn Metals");

@@ -9,6 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.LootTableLoadEvent;
 
 public class LootTableInjector {
+    // TODO replace https://docs.neoforged.net/docs/resources/server/glm/
     @SubscribeEvent
     public static void onLootTableLoad(final LootTableLoadEvent event) {
         if (event.getName() == null) {

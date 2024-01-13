@@ -31,6 +31,7 @@ public class ItemDisplay {
             .title(Component.translatable("tabs.allomancy.main_tab"))
             .displayItems((featureFlags, output) -> {
                 output.accept(ConsumeSetup.LERASIUM_NUGGET.get());
+                output.accept(CombatSetup.ALUMINUM_HELMET.get());
                 output.accept(CombatSetup.MISTCLOAK.get());
                 output.accept(CombatSetup.COIN_BAG.get());
                 output.accept(ConsumeSetup.ALLOMANTIC_GRINDER.get());
@@ -105,6 +106,7 @@ public class ItemDisplay {
 
     public static void addTabContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
+            event.accept(CombatSetup.ALUMINUM_HELMET);
             event.accept(CombatSetup.MISTCLOAK);
             event.accept(CombatSetup.OBSIDIAN_DAGGER);
             event.accept(CombatSetup.KOLOSS_BLADE);

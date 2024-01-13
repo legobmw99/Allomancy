@@ -137,11 +137,12 @@ public class ServerPayloadHandler {
             }
 
             Entity e = ctx.level().get().getEntity(payload.entityID());
-            if (e instanceof ServerPlayer player) {
+            if (e instanceof ServerPlayer player && !PowerUtils.hasTinFoilHat(player)) {
                 var target_data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
                 target_data.setEnhanced(payload.enhanceTime());
                 // broadcast back to player and tracking
                 Network.sync(payload, player);
+
             }
         }).exceptionally(e -> {
             Allomancy.LOGGER.error("Failed to handle sever updateEnhanced", e);

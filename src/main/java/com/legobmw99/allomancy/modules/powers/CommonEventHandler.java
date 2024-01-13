@@ -187,7 +187,7 @@ public class CommonEventHandler {
             }
 
             if (data.isBurning(Metal.CHROMIUM)) {
-                if (event.getEntity() instanceof Player player) {
+                if (event.getEntity() instanceof Player player && !PowerUtils.hasTinFoilHat(player)) {
                     PowerUtils.wipePlayer(player);
                 }
             }

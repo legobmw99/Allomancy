@@ -42,6 +42,7 @@ public class Recipes extends RecipeProvider {
         add('W', Items.GRAY_WOOL);
         add('O', Tags.Items.OBSIDIAN);
         add('C', Items.COBBLESTONE);
+        add('A', ing("forge:ingots/aluminum"));
 
     }
 
@@ -135,6 +136,8 @@ public class Recipes extends RecipeProvider {
         buildShaped(consumer, RecipeCategory.FOOD, ConsumeSetup.ALLOMANTIC_GRINDER.get(), Items.IRON_INGOT, "ggg", "iii", "ggg");
         buildShaped(consumer, RecipeCategory.FOOD, ConsumeSetup.VIAL.get(), 4, Items.GLASS, " S ", "G G", " G ");
         buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.MISTCLOAK.get(), ConsumeSetup.VIAL.get(), "W W", "WWW", "WWW");
+        buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.ALUMINUM_HELMET.get(), MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(), "AAA", "A A");
+
         buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.OBSIDIAN_DAGGER.get(), CombatSetup.MISTCLOAK.get(), "  O", " O ", "s  ");
         buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.KOLOSS_BLADE.get(), ConsumeSetup.LERASIUM_NUGGET.get(), "CC", "CC", "sC");
 
@@ -248,7 +251,7 @@ public class Recipes extends RecipeProvider {
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
         ShapedRecipeBuilder
                 .shaped(RecipeCategory.COMBAT, CombatSetup.COIN_BAG.get())
-                .unlockedBy("has_gold_nugget", InventoryChangeTrigger.TriggerInstance.hasItems(CombatSetup.MISTCLOAK.get()))
+                .unlockedBy("has_gold_nugget", InventoryChangeTrigger.TriggerInstance.hasItems(Items.GOLD_NUGGET))
                 .showNotification(true)
                 .define('#', Items.LEAD)
                 .define('l', Items.LEATHER)

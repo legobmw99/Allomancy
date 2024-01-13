@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_gold_nugget": {
+    "has_aluminum_ingot": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:gold_nugget"
+              "allomancy:aluminum_ingot"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:coin_bag"
+        "recipe": "allomancy:aluminum_helmet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +23,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_gold_nugget"
+      "has_aluminum_ingot"
     ]
   ],
   "rewards": {
     "recipes": [
-      "allomancy:coin_bag"
+      "allomancy:aluminum_helmet"
     ]
   }
 }
