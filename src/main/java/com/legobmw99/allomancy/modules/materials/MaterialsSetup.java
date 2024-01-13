@@ -2,7 +2,9 @@ package com.legobmw99.allomancy.modules.materials;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.materials.world.LootTableInjector;
+import com.legobmw99.allomancy.modules.materials.world.DaggerLootModifier;
+import com.legobmw99.allomancy.modules.materials.world.LerasiumLootModifier;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -28,8 +30,7 @@ import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -39,6 +40,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class MaterialsSetup {
 
@@ -62,8 +64,8 @@ public class MaterialsSetup {
     private static final ResourceKey<BiomeModifier> ADD_ALLOMANCY_ORES = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
                                                                                             new ResourceLocation(Allomancy.MODID, "overworld_ores"));
 
-    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
+    private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
+    private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
 
     public static final List<DeferredItem<Item>> FLAKES = new ArrayList<>();
     public static final List<DeferredItem<Item>> NUGGETS = new ArrayList<>();
@@ -131,16 +133,15 @@ public class MaterialsSetup {
         }
     }
 
+    private static final DeferredRegister<Codec<? extends IGlobalLootModifier>> GLM = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS,
+                                                                                                              Allomancy.MODID);
+    public static final Supplier<Codec<LerasiumLootModifier>> LERASIUM_LOOT = GLM.register("lerasium_loot", LerasiumLootModifier.CODEC);
+    public static final Supplier<Codec<DaggerLootModifier>> DAGGER_LOOT = GLM.register("unbreakable_dagger_loot", DaggerLootModifier.CODEC);
 
     public static void register(IEventBus bus) {
         BLOCKS.register(bus);
         ITEMS.register(bus);
-    }
-
-    public static void init(final FMLCommonSetupEvent e) {
-        e.enqueueWork(() -> {
-            NeoForge.EVENT_BUS.register(LootTableInjector.class);
-        });
+        GLM.register(bus);
     }
 
     public static Block createStandardBlock() {
