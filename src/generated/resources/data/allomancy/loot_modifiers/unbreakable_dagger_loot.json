@@ -1,0 +1,23 @@
+{
+  "type": "allomancy:unbreakable_dagger_loot",
+  "chance_one_in": 20,
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:chests/woodland_mansion"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:chests/end_city_treasure"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:chests/pillager_outpost"
+        }
+      ]
+    }
+  ]
+}

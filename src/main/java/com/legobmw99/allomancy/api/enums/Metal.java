@@ -1,11 +1,10 @@
 package com.legobmw99.allomancy.api.enums;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
+import net.minecraft.util.StringRepresentable;
 
 import java.util.Locale;
 
-public enum Metal {
+public enum Metal implements StringRepresentable {
     IRON(true),
     STEEL(IRON),
     TIN,
@@ -64,13 +63,11 @@ public enum Metal {
         return ordinal();
     }
 
-    public static final Codec<Metal> CODEC = Codec.STRING.comapFlatMap(s -> {
-        for (Metal mt : Metal.values()) {
-            if (mt.getName().equals(s)) {
-                return DataResult.success(mt);
-            }
-        }
-        return DataResult.error(() -> s + " is not a valid Metal");
-    }, Metal::getName);
 
+    public static final StringRepresentable.EnumCodec<Metal> CODEC = StringRepresentable.fromEnum(Metal::values);
+
+    @Override
+    public String getSerializedName() {
+        return getName();
+    }
 }

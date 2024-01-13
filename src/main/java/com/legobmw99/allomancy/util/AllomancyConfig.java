@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.util;
 
-import com.legobmw99.allomancy.modules.materials.MaterialsConfig;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.config.ModConfig;
@@ -20,7 +19,6 @@ public class AllomancyConfig {
         var CLIENT_BUILDER = new ModConfigSpec.Builder();
         var SERVER_BUILDER = new ModConfigSpec.Builder();
 
-        MaterialsConfig.init(COMMON_BUILDER);
         PowersConfig.init(SERVER_BUILDER, COMMON_BUILDER, CLIENT_BUILDER);
 
         COMMON_CONFIG = COMMON_BUILDER.build();

@@ -24,8 +24,9 @@ public class DataGenerators {
         var fileHelper = event.getExistingFileHelper();
         generator.addProvider(event.includeServer(), new Recipes(packOutput, lookup));
         generator.addProvider(event.includeServer(), new LootTableProvider(packOutput, Collections.emptySet(),
-                                                                           List.of(new LootTableProvider.SubProviderEntry(BlockLootTables::new, LootContextParamSets.BLOCK),
-                                                                                   new LootTableProvider.SubProviderEntry(DungeonLootTables::new, LootContextParamSets.EMPTY))));
+                                                                           List.of(new LootTableProvider.SubProviderEntry(BlockLootTables::new, LootContextParamSets.BLOCK))));
+        generator.addProvider(event.includeServer(), new LootModifiers(packOutput));
+
         BlockTags blocktags = new BlockTags(packOutput, lookup, fileHelper);
         generator.addProvider(event.includeServer(), blocktags);
         generator.addProvider(event.includeServer(), new ItemTags(packOutput, lookup, blocktags.contentsGetter(), fileHelper));
