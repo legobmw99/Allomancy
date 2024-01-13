@@ -1,11 +1,13 @@
 package com.legobmw99.allomancy.modules.extras.block;
 
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
+import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -30,6 +32,10 @@ public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsabl
 
     @Override
     public boolean useAllomantically(BlockState state, Level level, BlockPos pos, Player player, boolean isPush) {
+        if (player instanceof ServerPlayer sp) {
+            ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
+        }
+
         if (state.getValue(POWERED) || level.isClientSide) {
             return true;
         } else if (isPush) {

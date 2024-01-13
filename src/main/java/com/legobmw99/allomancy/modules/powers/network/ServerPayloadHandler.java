@@ -19,10 +19,10 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 import java.util.Arrays;
@@ -53,18 +53,22 @@ public class ServerPayloadHandler {
 
     public static void tryPushPullBlock(final BlockPushPullPayload data, final PlayPayloadContext ctx) {
         ctx.workHandler().execute(() -> {
-            Player player = ctx.player().get();
+            ServerPlayer player = (ServerPlayer) ctx.player().get();
             Level level = ctx.level().get();
             BlockPos pos = data.block();
             // Sanity check to make sure  the block is loaded in the server
             if (level.isLoaded(pos)) {
                 // activate blocks
-                if (level.getBlockState(pos).getBlock() instanceof IAllomanticallyUsableBlock block) {
-                    block.useAllomantically(level.getBlockState(pos), level, pos, player, data.isPush());
-                } else if (PowerUtils.isBlockStateMetal(player.level().getBlockState(pos)) // Check whitelist on server
+                BlockState blockState = level.getBlockState(pos);
+                if (blockState.getBlock() instanceof IAllomanticallyUsableBlock block) {
+                    block.useAllomantically(blockState, level, pos, player, data.isPush());
+                } else if (PowerUtils.isBlockStateMetal(blockState) // Check whitelist on server
                            || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() // check coin bag
                                && (!player.getProjectile(player.getMainHandItem()).isEmpty()) && data.isPush())) {
                     PowerUtils.move(data.direction(), player, pos);
+                } else {
+                    Allomancy.LOGGER.warn("Illegal use of iron/steel by player: {}!", player);
+                    ctx.packetHandler().disconnect(Component.translatable("allomancy.networking.kicked", "Tried to push or pull against an non-metallic block!"));
                 }
             } else {
                 Allomancy.LOGGER.warn("Illegal use of iron/steel by player: {}!", player);
@@ -139,7 +143,7 @@ public class ServerPayloadHandler {
     public static void updateEnhanced(final EnhanceTimePayload payload, final PlayPayloadContext ctx) {
         ctx.workHandler().submitAsync(() -> {
             ServerPlayer source = (ServerPlayer) ctx.player().get();
-            var data = source.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            IAllomancerData data = source.getData(AllomancerAttachment.ALLOMANCY_DATA);
             if (!data.isBurning(Metal.NICROSIL)) {
                 Allomancy.LOGGER.warn("Illegal use of Nicrosil by player: {}!", source);
                 ctx.packetHandler().disconnect(Component.translatable("allomancy.networking.kicked", "Tried to mark other player as enhanced while not burning Nicrosil!"));
@@ -148,13 +152,12 @@ public class ServerPayloadHandler {
 
             Entity e = ctx.level().get().getEntity(payload.entityID());
             ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(source, e, Metal.NICROSIL, data.isEnhanced());
-            if (e instanceof ServerPlayer player) {
-                ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(player, Metal.NICROSIL, data.isEnhanced());
-                if (!PowerUtils.hasTinFoilHat(player)) {
-                    var target_data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-                    target_data.setEnhanced(payload.enhanceTime());
+            if (e instanceof ServerPlayer target) {
+                ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(target, Metal.NICROSIL, data.isEnhanced());
+                if (!PowerUtils.hasTinFoilHat(target)) {
+                    target.getData(AllomancerAttachment.ALLOMANCY_DATA).setEnhanced(payload.enhanceTime());
                     // broadcast back to player and tracking
-                    Network.sync(payload, player);
+                    Network.sync(payload, target);
 
                 }
             }

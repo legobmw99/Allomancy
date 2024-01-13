@@ -1,10 +1,12 @@
 package com.legobmw99.allomancy.modules.extras.block;
 
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
+import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -29,7 +31,11 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyUsableB
     }
 
     @Override
-    public boolean useAllomantically(BlockState state, Level world, BlockPos pos, Player playerIn, boolean isPush) {
+    public boolean useAllomantically(BlockState state, Level world, BlockPos pos, Player player, boolean isPush) {
+        if (player instanceof ServerPlayer sp) {
+            ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
+        }
+
         state = state.cycle(POWERED);
         if (world.isClientSide) {
             return true;

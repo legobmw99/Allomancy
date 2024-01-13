@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.modules.extras;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.extras.advancement.AllomanticallyActivatedBlockTrigger;
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnEntityTrigger;
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnPlayerTrigger;
 import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
@@ -58,6 +59,8 @@ public class ExtrasSetup {
     private static final DeferredRegister<CriterionTrigger<?>> CT = DeferredRegister.create(Registries.TRIGGER_TYPE, Allomancy.MODID);
     public static final Supplier<MetalUsedOnEntityTrigger> METAL_USED_ON_ENTITY_TRIGGER = CT.register("metal_used_on_entity", MetalUsedOnEntityTrigger::new);
     public static final Supplier<MetalUsedOnPlayerTrigger> METAL_USED_ON_PLAYER_TRIGGER = CT.register("metal_used_on_player", MetalUsedOnPlayerTrigger::new);
+    public static final Supplier<AllomanticallyActivatedBlockTrigger> ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER = CT.register("activated_allomancy_block",
+                                                                                                                           AllomanticallyActivatedBlockTrigger::new);
 
     public static void register(IEventBus bus) {
         BLOCKS.register(bus);
