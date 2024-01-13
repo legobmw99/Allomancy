@@ -19,6 +19,10 @@ public record EntityPushPullPayload(int entityID, int direction) implements Cust
         buf.writeInt(this.direction);
     }
 
+    public boolean isPush() {
+        return this.direction > 0;
+    }
+
     @Override
     public ResourceLocation id() {
         return ID;

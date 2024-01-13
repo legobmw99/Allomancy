@@ -89,8 +89,6 @@ public class CoinBagItem extends ProjectileWeaponItem {
         MAGIC(5.5F, 2.0F, 4.0F, 1.0F),
         LIGHT(4.0F, 2.0F, 4.0F, 1.0F);
 
-        // TODO consider if should be more granular
-
         final float damage;
         final float arg1;
         final float arg2;

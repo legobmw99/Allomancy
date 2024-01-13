@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
+import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
@@ -187,8 +188,12 @@ public class CommonEventHandler {
             }
 
             if (data.isBurning(Metal.CHROMIUM)) {
-                if (event.getEntity() instanceof Player player && !PowerUtils.hasTinFoilHat(player)) {
-                    PowerUtils.wipePlayer(player);
+                ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(source, event.getEntity(), Metal.CHROMIUM, data.isEnhanced());
+                if (event.getEntity() instanceof ServerPlayer player) {
+                    ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(player, Metal.CHROMIUM, data.isEnhanced());
+                    if (!PowerUtils.hasTinFoilHat(player)) {
+                        PowerUtils.wipePlayer(player);
+                    }
                 }
             }
         }
@@ -260,7 +265,6 @@ public class CommonEventHandler {
                 data.tickBurning(player);
             }
 
-
             /*********************************************
              * CHROMIUM (enhanced)                       *
              *********************************************/
@@ -274,7 +278,6 @@ public class CommonEventHandler {
                             .forEach(otherPlayer -> otherPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA).drainMetals(Metal.values()));
                 }
             }
-
 
             /*********************************************
              * GOLD AND ELECTRUM (enhanced)              *

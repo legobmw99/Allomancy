@@ -1,8 +1,11 @@
 package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
+import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnEntityTrigger;
+import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnPlayerTrigger;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
@@ -10,7 +13,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -74,13 +79,29 @@ public class Advancements implements AdvancementProvider.AdvancementGenerator {
                 .save(saver, "allomancy:main/coinshot");
 
 
+        var tinFoilPredicate = EntityPredicate.wrap(
+                EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().head(ItemPredicate.Builder.item().of(CombatSetup.ALUMINUM_HELMET))));
+
         Advancement.Builder
                 .advancement()
                 .parent(Advancement.Builder.advancement().build(new ResourceLocation(Allomancy.MODID, "main/metallurgist")))
                 .display(CombatSetup.ALUMINUM_HELMET.get(), Component.translatable("advancements.tin_foil_hat.title"), Component.translatable("advancements.tin_foil_hat.desc"),
                          null, AdvancementType.TASK, true, false, true)
-                .addCriterion("tin_foil_hat", InventoryChangeTrigger.TriggerInstance.hasItems(CombatSetup.ALUMINUM_HELMET.get()))
-                // TODO require that someone actually use allomancy on you
+                .addCriterion("attempted_nicrosil_manipulation", MetalUsedOnPlayerTrigger.TriggerInstance.instance(Optional.of(tinFoilPredicate), Metal.NICROSIL, false))
+                .addCriterion("attempted_chromium_manipulation", MetalUsedOnPlayerTrigger.TriggerInstance.instance(Optional.of(tinFoilPredicate), Metal.CHROMIUM, false))
+                .requirements(AdvancementRequirements.Strategy.OR)
                 .save(saver, "allomancy:main/tin_foil_hat");
+
+        var ironGolemPredicate = EntityPredicate.wrap(EntityPredicate.Builder.entity().of(EntityType.IRON_GOLEM));
+
+        Advancement.Builder
+                .advancement()
+                .parent(Advancement.Builder.advancement().build(new ResourceLocation(Allomancy.MODID, "main/metallurgist")))
+                .display(Blocks.IRON_BLOCK, Component.translatable("advancements.consequences.title"), Component.translatable("advancements.consequences.desc"), null,
+                         AdvancementType.TASK, true, false, true)
+                .addCriterion("pushed_iron_golem", MetalUsedOnEntityTrigger.TriggerInstance.instance(Optional.empty(), Optional.of(ironGolemPredicate), Metal.STEEL))
+                .addCriterion("pulled_iron_golem", MetalUsedOnEntityTrigger.TriggerInstance.instance(Optional.empty(), Optional.of(ironGolemPredicate), Metal.IRON))
+                .requirements(AdvancementRequirements.Strategy.OR)
+                .save(saver, "allomancy:main/consequences");
     }
 }
