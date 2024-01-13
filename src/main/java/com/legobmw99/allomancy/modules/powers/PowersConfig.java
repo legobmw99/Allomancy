@@ -79,6 +79,7 @@ public class PowersConfig {
         }
     }
 
+    // this could be a Tag one day
     private static Set<String> default_whitelist() {
         defaultList = new HashSet<>();
 
@@ -124,6 +125,9 @@ public class PowersConfig {
         add(Blocks.CHIPPED_ANVIL);
         add(Blocks.DAMAGED_ANVIL);
         add(Blocks.CAULDRON);
+        add(Blocks.POWDER_SNOW_CAULDRON);
+        add(Blocks.LAVA_CAULDRON);
+        add(Blocks.WATER_CAULDRON);
         add(Blocks.SMITHING_TABLE);
         add(Blocks.STONECUTTER);
         add(Blocks.CHAIN);
