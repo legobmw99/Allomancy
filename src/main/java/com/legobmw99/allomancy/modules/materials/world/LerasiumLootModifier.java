@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 public class LerasiumLootModifier extends LootModifier {
 
-    public int chance_one_in;
+    public final int chance_one_in;
     public static final Supplier<Codec<LerasiumLootModifier>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create(
             inst -> codecStart(inst).and(Codec.INT.fieldOf("chance_one_in").forGetter(t -> t.chance_one_in)).apply(inst, LerasiumLootModifier::new)));
 

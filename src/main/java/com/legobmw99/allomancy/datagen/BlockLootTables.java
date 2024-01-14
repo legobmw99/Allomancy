@@ -28,7 +28,6 @@ import java.util.function.Supplier;
 
 public class BlockLootTables implements LootTableSubProvider {
 
-
     // Useful boilerplate from McJtyLib
     protected static void addSimpleBlock(BiConsumer<ResourceLocation, LootTable.Builder> writer, String name, Block block) {
         Allomancy.LOGGER.debug("Creating Loot Table for block " + BuiltInRegistries.BLOCK.getKey(block));

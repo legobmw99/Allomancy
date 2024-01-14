@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 public class MetalUsedOnEntityTrigger extends SimpleCriterionTrigger<MetalUsedOnEntityTrigger.TriggerInstance> {
     @Override
-    public Codec codec() {
+    public Codec<TriggerInstance> codec() {
         return TriggerInstance.CODEC;
     }
 

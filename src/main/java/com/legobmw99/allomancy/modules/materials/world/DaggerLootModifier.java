@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 public class DaggerLootModifier extends LootModifier {
 
-    public int chance_one_in;
+    public final int chance_one_in;
     public static final Supplier<Codec<DaggerLootModifier>> CODEC = Suppliers.memoize(
             () -> RecordCodecBuilder.create(inst -> codecStart(inst).and(Codec.INT.fieldOf("chance_one_in").forGetter(t -> t.chance_one_in)).apply(inst, DaggerLootModifier::new)));
 

@@ -17,12 +17,6 @@ public class BannerTag extends TagsProvider<BannerPattern> {
         super(pGenerator, Registries.BANNER_PATTERN, registries, Allomancy.MODID, existingFileHelper);
     }
 
-
-    @Override
-    public String getName() {
-        return "Allomancy Banner Tags";
-    }
-
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
         for (Metal mt : Metal.values()) {

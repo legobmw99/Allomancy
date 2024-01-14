@@ -118,9 +118,4 @@ public class ItemModels extends ItemModelProvider {
                 .parent(getExistingFile(modLoc("item/handheld_large")))
                 .texture("layer0", modLoc("item/" + BuiltInRegistries.ITEM.getKey(item).getPath()));
     }
-
-    @Override
-    public String getName() {
-        return "Allomancy Item Models";
-    }
 }

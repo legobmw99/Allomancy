@@ -181,9 +181,4 @@ public class BlockStates extends BlockStateProvider {
             }
         }
     }
-
-    @Override
-    public String getName() {
-        return "Allomancy Blockstates";
-    }
 }

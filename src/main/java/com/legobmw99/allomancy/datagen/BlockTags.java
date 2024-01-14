@@ -78,10 +78,4 @@ public class BlockTags extends BlockTagsProvider {
     private void addBeacon(ResourceKey<Block>... items) {
         this.tag(net.minecraft.tags.BlockTags.BEACON_BASE_BLOCKS).replace(false).add(items);
     }
-
-    @Override
-    public String getName() {
-        return "Allomancy Block Tags";
-    }
-
 }

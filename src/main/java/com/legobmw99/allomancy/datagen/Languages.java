@@ -139,9 +139,4 @@ public class Languages extends LanguageProvider {
         add("allomancy.networking.kicked", "Requested illegal action: %s");
 
     }
-
-    @Override
-    public String getName() {
-        return "Allomancy Language";
-    }
 }

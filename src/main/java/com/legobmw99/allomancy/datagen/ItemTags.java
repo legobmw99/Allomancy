@@ -79,6 +79,7 @@ public class ItemTags extends ItemTagsProvider {
 
     }
 
+    @SafeVarargs
     private void addForgeTag(String name, ResourceKey<Item>... items) {
         // see ForgeItemTagsProvider
         Allomancy.LOGGER.debug("Creating item tag for forge:" + name);

@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 public class MetalUsedOnPlayerTrigger extends SimpleCriterionTrigger<MetalUsedOnPlayerTrigger.TriggerInstance> {
     @Override
-    public Codec codec() {
+    public Codec<TriggerInstance> codec() {
         return TriggerInstance.CODEC;
     }
 
