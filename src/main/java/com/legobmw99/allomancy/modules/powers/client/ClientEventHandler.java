@@ -39,6 +39,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
@@ -284,7 +285,17 @@ public class ClientEventHandler {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void onSound(PlaySoundEvent event) {
+    public void onFovCompute(final ComputeFovModifierEvent event) {
+        var data = event.getPlayer().getData(AllomancerAttachment.ALLOMANCY_DATA);
+        // tin and duralumin give a zoom effect
+        if (data.isBurning(Metal.TIN) && data.isEnhanced()) {
+            event.setNewFovModifier(0.2F);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public void onSound(final PlaySoundEvent event) {
 
         Player player = this.mc.player;
         SoundInstance sound = event.getSound();
@@ -320,7 +331,7 @@ public class ClientEventHandler {
      * Used to enable movement while the MetalSelectScreen is open
      */
     @SubscribeEvent
-    public void updateInputEvent(MovementInputUpdateEvent event) {
+    public void updateInputEvent(final MovementInputUpdateEvent event) {
         if (this.mc.screen instanceof MetalSelectScreen) {
             Options options = this.mc.options;
             Input eInput = event.getInput();

@@ -342,7 +342,6 @@ public class CommonEventHandler {
                 // Add night vision to tin-burners
                 curPlayer.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 5, true, false));
                 if (data.isEnhanced()) { // Tin and Duralumin is too much to handle
-                    curPlayer.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 150, true, false));
                     if (level.random.nextInt(50) == 0) {
                         curPlayer.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0, true, false));
                     }
