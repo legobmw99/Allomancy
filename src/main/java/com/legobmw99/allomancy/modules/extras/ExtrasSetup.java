@@ -31,8 +31,13 @@ public class ExtrasSetup {
     public static final DeferredRegister<BannerPattern> BP = DeferredRegister.create(Registries.BANNER_PATTERN, Allomancy.MODID);
 
 
-    public static final DeferredBlock<IronButtonBlock> IRON_BUTTON = BLOCKS.register("iron_button", IronButtonBlock::new);
+    public static final DeferredBlock<IronButtonBlock> IRON_BUTTON = BLOCKS.register("iron_button", () -> new IronButtonBlock(true));
+
     public static final DeferredItem<Item> IRON_BUTTON_ITEM = ITEMS.register("iron_button", () -> new BlockItem(IRON_BUTTON.get(), new Item.Properties()));
+    public static final DeferredBlock<IronButtonBlock> INVERTED_IRON_BUTTON = BLOCKS.register("inverted_iron_button", () -> new IronButtonBlock(false));
+
+    public static final DeferredItem<Item> INVERTED_IRON_BUTTON_ITEM = ITEMS.register("inverted_iron_button",
+                                                                                      () -> new BlockItem(INVERTED_IRON_BUTTON.get(), new Item.Properties()));
     public static final DeferredBlock<IronLeverBlock> IRON_LEVER = BLOCKS.register("iron_lever", IronLeverBlock::new);
     public static final DeferredItem<Item> IRON_LEVER_ITEM = ITEMS.register("iron_lever", () -> new BlockItem(IRON_LEVER.get(), new Item.Properties()));
 

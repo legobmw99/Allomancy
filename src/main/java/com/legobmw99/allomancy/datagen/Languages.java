@@ -54,6 +54,7 @@ public class Languages extends LanguageProvider {
         }
 
         add(ExtrasSetup.IRON_BUTTON.get(), "Iron Button");
+        add(ExtrasSetup.INVERTED_IRON_BUTTON.get(), "Inverted Iron Button");
         add(ExtrasSetup.IRON_LEVER.get(), "Iron Lever");
         add("block.allomancy.iron_activation.lore", "This item seems too heavy to activate by ordinary means");
 

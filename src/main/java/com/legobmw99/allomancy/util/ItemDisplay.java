@@ -51,6 +51,7 @@ public class ItemDisplay {
 
                 output.accept(ExtrasSetup.IRON_LEVER.get());
                 output.accept(ExtrasSetup.IRON_BUTTON.get());
+                output.accept(ExtrasSetup.INVERTED_IRON_BUTTON.get());
 
 
                 for (var block : MaterialsSetup.STORAGE_BLOCKS) {
@@ -113,6 +114,7 @@ public class ItemDisplay {
         } else if (event.getTabKey() == CreativeModeTabs.REDSTONE_BLOCKS) {
             event.accept(ExtrasSetup.IRON_LEVER);
             event.accept(ExtrasSetup.IRON_BUTTON);
+            event.accept(ExtrasSetup.INVERTED_IRON_BUTTON);
         }
     }
 

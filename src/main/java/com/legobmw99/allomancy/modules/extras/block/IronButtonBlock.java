@@ -26,8 +26,12 @@ import java.util.List;
 
 public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsableBlock {
 
-    public IronButtonBlock() {
+
+    private final boolean activatedOnPush;
+
+    public IronButtonBlock(boolean activatedOnPush) {
         super(BlockSetType.IRON, 35, Block.Properties.of().noCollission().strength(1.0F));
+        this.activatedOnPush = activatedOnPush;
     }
 
     @Override
@@ -38,12 +42,16 @@ public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsabl
 
         if (state.getValue(POWERED) || level.isClientSide) {
             return true;
-        } else if (isPush) {
+        } else if (isPush == this.activatedOnPush) {
             this.press(state, level, pos);
             return true;
         } else {
             return false;
         }
+    }
+
+    public boolean activatedOnPush() {
+        return this.activatedOnPush;
     }
 
     @Override

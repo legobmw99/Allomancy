@@ -71,6 +71,7 @@ public class BlockLootTables implements LootTableSubProvider {
         }
 
         addSimpleBlock(writer, "iron_button", ExtrasSetup.IRON_BUTTON.get());
+        addSimpleBlock(writer, "inverted_iron_button", ExtrasSetup.INVERTED_IRON_BUTTON.get());
         addSimpleBlock(writer, "iron_lever", ExtrasSetup.IRON_LEVER.get());
 
         for (Supplier<Block> rblock : MaterialsSetup.STORAGE_BLOCKS) {

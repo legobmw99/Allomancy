@@ -50,7 +50,8 @@ public class BlockStates extends BlockStateProvider {
         }
 
         createIronLeverBlock();
-        createIronButtonBlock();
+        createIronButtonBlock(ExtrasSetup.IRON_BUTTON.get());
+        createIronButtonBlock(ExtrasSetup.INVERTED_IRON_BUTTON.get());
 
     }
 
@@ -61,23 +62,23 @@ public class BlockStates extends BlockStateProvider {
     }
 
 
-    private void createIronButtonBlock() {
+    private void createIronButtonBlock(IronButtonBlock block) {
         Allomancy.LOGGER.debug("Creating Block Data for allomancy:iron_button");
         ModelFile inventory = models().withExistingParent("allomancy:iron_button_inventory", mcLoc("block/button_inventory")).texture("texture", mcLoc("block/iron_block"));
         ModelFile button = models().withExistingParent("allomancy:iron_button", mcLoc("block/button")).texture("texture", mcLoc("block/iron_block"));
         ModelFile pressed = models().withExistingParent("allomancy:iron_button_pressed", mcLoc("block/button_pressed")).texture("texture", mcLoc("block/iron_block"));
 
-        VariantBlockStateBuilder builder = getVariantBuilder(ExtrasSetup.IRON_BUTTON.get());
+
+        VariantBlockStateBuilder builder = getVariantBuilder(block);
         for (Boolean powered : IronButtonBlock.POWERED.getPossibleValues()) {
-            ModelFile model = powered ? pressed : button;
+            ModelFile model = powered == block.activatedOnPush() ? pressed : button;
             for (AttachFace face : IronButtonBlock.FACE.getPossibleValues()) {
                 int xangle = (face == AttachFace.CEILING) ? 180 : (face == AttachFace.WALL) ? 90 : 0;
                 boolean uvlock = face == AttachFace.WALL;
                 for (Direction dir : IronButtonBlock.FACING.getPossibleValues()) {
                     int yangle = (int) dir.toYRot();
                     yangle = face != AttachFace.CEILING ? (yangle + 180) % 360 : yangle;
-                    builder
-                            .partialState()
+                    builder.partialState()
                             .with(IronButtonBlock.POWERED, powered)
                             .with(IronButtonBlock.FACE, face)
                             .with(IronButtonBlock.FACING, dir)

@@ -23,6 +23,7 @@ public class ItemModels extends ItemModelProvider {
     @Override
     protected void registerModels() {
         parentedBlock(ExtrasSetup.IRON_BUTTON.get(), "block/iron_button_inventory");
+        parentedBlock(ExtrasSetup.INVERTED_IRON_BUTTON.get(), "block/iron_button_inventory");
         itemGenerated(ExtrasSetup.IRON_LEVER_ITEM.get(), "block/iron_lever");
 
         itemGenerated(CombatSetup.MISTCLOAK.get());
