@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.consumables.item;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -40,8 +41,8 @@ public class VialItem extends Item {
         var data = livingEntity.getData(AllomancerAttachment.ALLOMANCY_DATA);
         for (Metal mt : Metal.values()) {
             if (stack.getTag().contains(mt.getName()) && stack.getTag().getBoolean(mt.getName())) {
-                if (data.getAmount(mt) < 10) {
-                    data.setAmount(mt, data.getAmount(mt) + 1);
+                if (data.getStored(mt) < AllomancerData.MAX_STORAGE) {
+                    data.incrementStored(mt);
                 }
             }
         }
@@ -79,7 +80,7 @@ public class VialItem extends Item {
             for (Metal mt : Metal.values()) {
                 if (itemStackIn.getTag().contains(mt.getName()) && itemStackIn.getTag().getBoolean(mt.getName())) {
                     filling++;
-                    if (data.getAmount(mt) >= 10) {
+                    if (data.getStored(mt) >= AllomancerData.MAX_STORAGE) {
                         full++;
                     }
                 }

@@ -124,7 +124,7 @@ public class CommonEventHandler {
                 // if they died and keepInventory isn't set, they shouldn't keep their metals.
                 var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
                 for (Metal mt : Metal.values()) {
-                    data.setAmount(mt, 0);
+                    data.drainMetals(mt);
                     data.setBurning(mt, false);
                 }
             }
@@ -253,32 +253,33 @@ public class CommonEventHandler {
     private static void playerPowerTick(Player curPlayer, Level level) {
         var data = curPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA);
         if (!data.isUninvested()) {
-            /*********************************************
-             * ALUMINUM AND DURALUMIN                    *
-             *********************************************/
-            if (data.isBurning(Metal.ALUMINUM)) {
-                PowerUtils.wipePlayer(curPlayer);
-            }
-            if (data.isBurning(Metal.DURALUMIN) && !data.isEnhanced()) {
-                data.setEnhanced(2);
-                if (curPlayer instanceof ServerPlayer sp) {
-                    Network.sync(new EnhanceTimePayload(2, sp.getId()), sp);
-                }
-            } else if (!data.isBurning(Metal.DURALUMIN) && data.isEnhanced()) {
-                data.decEnhanced();
-                if (!data.isEnhanced()) { //Enhancement ran out this tick
-                    if (curPlayer instanceof ServerPlayer sp) {
-                        Network.sync(new EnhanceTimePayload(false, sp.getId()), sp);
-                    }
-                    data.drainMetals(Arrays.stream(Metal.values()).filter(data::isBurning).toArray(Metal[]::new));
-                }
-            }
 
-
-            // Run the necessary updates on the player's metals
-            // Ran AFTER duralumin and aluminum to make sure they function correctly
             if (curPlayer instanceof ServerPlayer player) {
-                data.tickBurning(player);
+                // Run the necessary updates on the player's metals
+                boolean syncRequired = data.tickBurning();
+
+                /*********************************************
+                 * ALUMINUM AND DURALUMIN                    *
+                 *********************************************/
+                if (data.isBurning(Metal.ALUMINUM)) {
+                    PowerUtils.wipePlayer(curPlayer);
+                    syncRequired = true;
+                }
+                if (data.isBurning(Metal.DURALUMIN) && !data.isEnhanced()) {
+                    data.setEnhanced(2);
+                    Network.sync(new EnhanceTimePayload(2, player.getId()), player);
+                } else if (!data.isBurning(Metal.DURALUMIN) && data.isEnhanced()) {
+                    data.decrementEnhanced();
+                    if (!data.isEnhanced()) { //Enhancement ran out this tick
+                        Network.sync(new EnhanceTimePayload(false, player.getId()), player);
+                        data.drainMetals(Arrays.stream(Metal.values()).filter(data::isBurning).toArray(Metal[]::new));
+                        syncRequired = true;
+                    }
+                }
+
+                if (syncRequired) {
+                    Network.syncAllomancerData(player);
+                }
             }
 
             /*********************************************
@@ -298,7 +299,7 @@ public class CommonEventHandler {
             /*********************************************
              * GOLD AND ELECTRUM (enhanced)              *
              *********************************************/
-            if (data.isEnhanced() && data.isBurning(Metal.ELECTRUM) && data.getAmount(Metal.ELECTRUM) >= 9) {
+            if (data.isEnhanced() && data.isBurning(Metal.ELECTRUM) && data.getStored(Metal.ELECTRUM) >= 9) {
                 ResourceKey<Level> spawnDim = data.getSpawnDim();
                 BlockPos spawnLoc;
 
@@ -317,7 +318,7 @@ public class CommonEventHandler {
                 data.drainMetals(Metal.ELECTRUM);
 
 
-            } else if (data.isEnhanced() && data.isBurning(Metal.GOLD) && data.getAmount(Metal.GOLD) >= 9) { // These should be mutually exclusive
+            } else if (data.isEnhanced() && data.isBurning(Metal.GOLD) && data.getStored(Metal.GOLD) >= 9) { // These should be mutually exclusive
                 ResourceKey<Level> deathDim = data.getDeathDim();
                 if (deathDim != null) {
                     PowerUtils.teleport(curPlayer, level, deathDim, data.getDeathLoc());

@@ -2,22 +2,19 @@ package com.legobmw99.allomancy.modules.powers.data;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.network.Network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import java.util.Arrays;
 
 public class AllomancerData implements IAllomancerData, INBTSerializable<CompoundTag> {
-
+    public static final int MAX_STORAGE = 10;
     private static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
-
     private final boolean[] allomantic_powers;
     private final int[] burn_time;
     private final int[] metal_amounts;
@@ -50,7 +47,7 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
     }
 
 
-    public void tickBurning(ServerPlayer player) {
+    public boolean tickBurning() {
         boolean sync = false;
         for (Metal metal : Metal.values()) {
             if (this.isBurning(metal)) {
@@ -59,23 +56,21 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
                     this.setBurning(metal, false);
                     sync = true;
                 } else {
-                    this.setBurnTime(metal, this.getBurnTime(metal) - 1);
-                    if (this.getBurnTime(metal) <= 0) {
-                        if (this.getAmount(metal) <= 0) {
+                    this.burn_time[metal.getIndex()]--;
+
+                    if (this.burn_time[metal.getIndex()] <= 0) {
+                        if (this.getStored(metal) <= 0) {
                             this.setBurning(metal, false);
                         } else {
-                            this.setAmount(metal, this.getAmount(metal) - 1);
+                            this.decrementStored(metal);
                         }
                         sync = true;
-                        this.setBurnTime(metal, MAX_BURN_TIME[metal.getIndex()]);
+                        this.burn_time[metal.getIndex()] = MAX_BURN_TIME[metal.getIndex()];
                     }
                 }
             }
         }
-        if (sync) {
-            Network.syncAllomancerData(player);
-        }
-
+        return sync;
     }
 
 
@@ -149,24 +144,27 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
     }
 
 
-    public int getAmount(Metal metal) {
+    public int getStored(Metal metal) {
         return this.metal_amounts[metal.getIndex()];
     }
 
-
-    public void setAmount(Metal metal, int amt) {
-        this.metal_amounts[metal.getIndex()] = amt;
+    public void incrementStored(Metal metal) {
+        this.metal_amounts[metal.getIndex()]++;
     }
 
+    public void decrementStored(Metal metal) {
+        if (this.metal_amounts[metal.getIndex()] > 0) {
+            this.metal_amounts[metal.getIndex()]--;
+        }
+    }
 
     public void drainMetals(Metal... metals) {
         for (Metal mt : metals) {
             this.metal_amounts[mt.getIndex()] = 0;
-            // So that they burn out next tick
-            this.burn_time[mt.getIndex()] = 1;
+            this.burn_time[mt.getIndex()] = MAX_BURN_TIME[mt.getIndex()];
+            this.setBurning(mt, false);
         }
     }
-
 
     public int getDamageStored() {
         return this.damage_stored;
@@ -228,27 +226,7 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         return ResourceKey.create(Registries.DIMENSION, new ResourceLocation(this.spawn_dimension));
     }
 
-    /**
-     * Get the burn time of a specific metal
-     *
-     * @param metal the metal to retrieve
-     * @return the burn time
-     */
-    protected int getBurnTime(Metal metal) {
-        return this.burn_time[metal.getIndex()];
-    }
-
-    /**
-     * Set the burn time of a specific metal
-     *
-     * @param metal    the metal to set
-     * @param burnTime the burn time
-     */
-    protected void setBurnTime(Metal metal, int burnTime) {
-        this.burn_time[metal.getIndex()] = burnTime;
-    }
-
-    public void decEnhanced() {
+    public void decrementEnhanced() {
         if (isEnhanced()) {
             this.enhanced_time--;
         }
@@ -276,7 +254,7 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
 
         CompoundTag metal_storage = new CompoundTag();
         for (Metal mt : Metal.values()) {
-            metal_storage.putInt(mt.getName(), this.getAmount(mt));
+            metal_storage.putInt(mt.getName(), this.getStored(mt));
         }
         allomancy_data.put("metal_storage", metal_storage);
 
@@ -320,7 +298,7 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
 
         CompoundTag metal_storage = (CompoundTag) allomancy_data.get("metal_storage");
         for (Metal mt : Metal.values()) {
-            this.setAmount(mt, metal_storage.getInt(mt.getName()));
+            this.metal_amounts[mt.getIndex()] = metal_storage.getInt(mt.getName());
         }
 
         CompoundTag metal_burning = (CompoundTag) allomancy_data.get("metal_burning");

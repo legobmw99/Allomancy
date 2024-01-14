@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class ExtrasSetup {
-    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
-    public static final DeferredRegister<BannerPattern> BP = DeferredRegister.create(Registries.BANNER_PATTERN, Allomancy.MODID);
+    private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
+    private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
+    private static final DeferredRegister<BannerPattern> BP = DeferredRegister.create(Registries.BANNER_PATTERN, Allomancy.MODID);
 
 
     public static final DeferredBlock<IronButtonBlock> IRON_BUTTON = BLOCKS.register("iron_button", () -> new IronButtonBlock(true));

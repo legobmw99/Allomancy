@@ -119,7 +119,7 @@ public class ServerPayloadHandler {
 
             boolean value = payload.on();
 
-            if (!data.hasPower(mt) || data.getAmount(mt) <= 0) {
+            if (!data.hasPower(mt) || data.getStored(mt) <= 0) {
                 value = false;
             }
 

@@ -14,12 +14,12 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 public class ConsumeSetup {
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
+    private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
     public static final DeferredItem<GrinderItem> ALLOMANTIC_GRINDER = ITEMS.register("allomantic_grinder", GrinderItem::new);
     public static final DeferredItem<LerasiumItem> LERASIUM_NUGGET = ITEMS.register("lerasium_nugget", LerasiumItem::new);
     public static final DeferredItem<VialItem> VIAL = ITEMS.register("vial", VialItem::new);
 
-    public static final DeferredRegister<RecipeSerializer<?>> RECIPES = DeferredRegister.create(Registries.RECIPE_SERIALIZER, Allomancy.MODID);
+    private static final DeferredRegister<RecipeSerializer<?>> RECIPES = DeferredRegister.create(Registries.RECIPE_SERIALIZER, Allomancy.MODID);
     public static final Supplier<VialItemRecipe.Serializer> VIAL_RECIPE_SERIALIZER = RECIPES.register("vial_filling", VialItemRecipe.Serializer::new);
 
     public static void register(IEventBus bus) {

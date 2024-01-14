@@ -9,8 +9,8 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class AllomancyConfig {
 
-    public static final ModConfigSpec COMMON_CONFIG;
-    public static final ModConfigSpec CLIENT_CONFIG;
+    private static final ModConfigSpec COMMON_CONFIG;
+    private static final ModConfigSpec CLIENT_CONFIG;
     public static final ModConfigSpec SERVER_CONFIG;
 
 

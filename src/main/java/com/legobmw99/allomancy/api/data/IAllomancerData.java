@@ -3,7 +3,6 @@ package com.legobmw99.allomancy.api.data;
 import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 
 public interface IAllomancerData {
@@ -13,9 +12,9 @@ public interface IAllomancerData {
      * amounts. Then syncs to the client to make sure everyone is on the same
      * page
      *
-     * @param player the player being checked
+     * @return whether an observable change was made
      */
-    void tickBurning(ServerPlayer player);
+    boolean tickBurning();
 
     /**
      * Get if the player has the supplied power
@@ -94,12 +93,18 @@ public interface IAllomancerData {
     void setBurning(Metal metal, boolean metalBurning);
 
     /**
-     * Sets the players amount of Metal to the given value
+     * Increase the amount of this metal being stored
      *
-     * @param metal the Metal to set
-     * @param amt   the amount stored
+     * @param metal
      */
-    void setAmount(Metal metal, int amt);
+    void incrementStored(Metal metal);
+
+    /**
+     * Decrease the amount of this metal being stored
+     *
+     * @param metal
+     */
+    void decrementStored(Metal metal);
 
     /**
      * Gets the players stored amount of the given metal
@@ -107,7 +112,7 @@ public interface IAllomancerData {
      * @param metal the Metal to check
      * @return the amount stored
      */
-    int getAmount(Metal metal);
+    int getStored(Metal metal);
 
     /**
      * Drain all specified metals
@@ -178,7 +183,7 @@ public interface IAllomancerData {
      */
     ResourceKey<Level> getSpawnDim();
 
-    void decEnhanced();
+    void decrementEnhanced();
 
     boolean isEnhanced();
 

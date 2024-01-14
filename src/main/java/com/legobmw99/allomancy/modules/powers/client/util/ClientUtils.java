@@ -106,7 +106,7 @@ public class ClientUtils {
             return;
         }
 
-        if (data.getAmount(metal) > 0) {
+        if (data.getStored(metal) > 0) {
             data.setBurning(metal, !data.isBurning(metal));
         }
 

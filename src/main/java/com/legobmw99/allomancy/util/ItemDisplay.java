@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 
 public class ItemDisplay {
 
-    public static final DeferredRegister<CreativeModeTab> CREATIVETABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Allomancy.MODID);
+    private static final DeferredRegister<CreativeModeTab> CREATIVETABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Allomancy.MODID);
 
     public static Supplier<CreativeModeTab> allomancy_group = CREATIVETABS.register("main_tab", () -> CreativeModeTab
             .builder()

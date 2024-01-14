@@ -75,7 +75,7 @@ public class MetalOverlay implements IGuiOverlay {
          */
         for (Metal mt : Metal.values()) {
             if (data.hasPower(mt)) {
-                int metalY = 9 - data.getAmount(mt);
+                int metalY = 9 - data.getStored(mt);
                 int i = mt.getIndex();
                 int offset = (i / 2) * 4; // Adding a gap between pairs
                 // Draw the bars first
