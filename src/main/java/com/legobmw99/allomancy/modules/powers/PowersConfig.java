@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.powers;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
+import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +24,7 @@ public class PowersConfig {
     public static ModConfigSpec.IntValue max_metal_detection;
     public static ModConfigSpec.BooleanValue animate_selection;
     public static ModConfigSpec.BooleanValue enable_overlay;
-    public static ModConfigSpec.EnumValue<SCREEN_LOC> overlay_position;
+    public static ModConfigSpec.EnumValue<MetalOverlay.SCREEN_LOC> overlay_position;
     public static ModConfigSpec.BooleanValue random_mistings;
     public static ModConfigSpec.BooleanValue generate_whitelist;
     public static ModConfigSpec.BooleanValue respect_player_UUID;
@@ -49,7 +50,7 @@ public class PowersConfig {
         max_metal_detection = client_builder.comment("Maximum iron/steelsight distance. Can have a HUGE impact on performance").defineInRange("max_metal_distance", 15, 3, 30);
         animate_selection = client_builder.comment("Animate the selection wheel").define("animate_selection", true);
         enable_overlay = client_builder.comment("Enable the screen overlay").define("overlay_enabled", true);
-        overlay_position = client_builder.comment("Screen Overlay Position").defineEnum("overlay_position", SCREEN_LOC.TOP_LEFT);
+        overlay_position = client_builder.comment("Screen Overlay Position").defineEnum("overlay_position", MetalOverlay.SCREEN_LOC.TOP_LEFT);
         client_builder.pop();
 
     }
@@ -192,12 +193,4 @@ public class PowersConfig {
     private static void add(Item item) {
         add(BuiltInRegistries.ITEM.getKey(item));
     }
-
-    public enum SCREEN_LOC {
-        TOP_RIGHT,
-        BOTTOM_RIGHT,
-        TOP_LEFT,
-        BOTTOM_LEFT
-    }
-
 }

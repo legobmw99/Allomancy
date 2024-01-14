@@ -56,38 +56,19 @@ public class MetalOverlay implements IGuiOverlay {
             return;
         }
 
-
-        int renderX, renderY;
-
-        // Set the offsets of the overlay based on config
-        switch (PowersConfig.overlay_position.get()) {
-            case TOP_RIGHT -> {
-                renderX = screenWidth - 145;
-                renderY = 10;
-            }
-            case BOTTOM_RIGHT -> {
-                renderX = screenWidth - 145;
-                renderY = screenHeight - 50;
-            }
-            case BOTTOM_LEFT -> {
-                renderX = 5;
-                renderY = screenHeight - 50;
-            }
-            default -> { // TOP_LEFT
-                renderX = 5;
-                renderY = 10;
-            }
-        }
-
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, meterLoc);
-
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-
 
         if (data.isUninvested()) {
             return;
         }
+
+
+        int renderX = PowersConfig.overlay_position.get().getX(screenWidth);
+        int renderY = PowersConfig.overlay_position.get().getY(screenHeight);
+
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, meterLoc);
+
 
         /*
          * The rendering for the overlay
@@ -121,4 +102,24 @@ public class MetalOverlay implements IGuiOverlay {
         }
     }
 
+    public enum SCREEN_LOC {
+        TOP_RIGHT,
+        BOTTOM_RIGHT,
+        TOP_LEFT,
+        BOTTOM_LEFT;
+
+        public int getX(int screenWidth) {
+            return switch (this) {
+                case TOP_RIGHT, BOTTOM_RIGHT -> screenWidth - 145;
+                default -> 5;
+            };
+        }
+
+        public int getY(int screenHeight) {
+            return switch (this) {
+                case BOTTOM_RIGHT, BOTTOM_LEFT -> screenHeight - 50;
+                default -> 10;
+            };
+        }
+    }
 }

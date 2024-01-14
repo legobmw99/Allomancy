@@ -11,12 +11,14 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import com.legobmw99.allomancy.modules.powers.network.EnhanceTimePayload;
 import com.legobmw99.allomancy.network.Network;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -34,6 +36,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -169,7 +172,7 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void onDamage(final LivingHurtEvent event) {
+    public static void onEntityHurt(final LivingHurtEvent event) {
         // Increase outgoing damage for pewter burners
         if (event.getSource().getEntity() instanceof ServerPlayer source) {
             var data = source.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -201,19 +204,32 @@ public class CommonEventHandler {
         // Reduce incoming damage for pewter burners
         if (event.getEntity() instanceof ServerPlayer player) {
             var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-
             if (data.isBurning(Metal.PEWTER)) {
-                if (data.isEnhanced()) { // Duralumin invulnerability
-                    Allomancy.LOGGER.debug("Canceling Damage");
-                    event.setAmount(0);
-                    event.setCanceled(true);
-                } else {
-                    Allomancy.LOGGER.debug("Reducing Damage");
+                Allomancy.LOGGER.debug("Reducing Damage");
+                event.setAmount(event.getAmount() - 2);
+                // Note that they took damage, will come in to play if they stop burning
+                data.setDamageStored(data.getDamageStored() + 2);
+                Network.syncAllomancerData(player);
+            }
+        }
+    }
 
-                    event.setAmount(event.getAmount() - 2);
-                    // Note that they took damage, will come in to play if they stop burning
-                    data.setDamageStored(data.getDamageStored() + 1);
-                    Network.syncAllomancerData(player);
+    @SubscribeEvent
+    public static void onPlayerAttacked(final LivingAttackEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+            if (data.isBurning(Metal.PEWTER) && data.isEnhanced()) { // Duralumin invulnerability
+                Allomancy.LOGGER.debug("Canceling Damage");
+                event.setCanceled(true);
+            }
+
+            if (data.isBurning(Metal.STEEL)) {
+                if (event.getSource().type().equals(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FALL).value())) {
+                    BlockPos on = player.getOnPos();
+                    if (PowerUtils.isBlockStateMetal(player.level().getBlockState(on)) || PowerUtils.isBlockStateMetal(player.level().getBlockState(on.above()))) {
+                        event.setCanceled(true);
+                    }
                 }
             }
         }
