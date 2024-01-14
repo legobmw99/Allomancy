@@ -106,11 +106,12 @@ public class ClientUtils {
             return;
         }
 
-        Network.sendToServer(new ToggleBurnPayload(metal, !data.isBurning(metal)));
-
         if (data.getAmount(metal) > 0) {
             data.setBurning(metal, !data.isBurning(metal));
         }
+
+        Network.sendToServer(new ToggleBurnPayload(metal, data.isBurning(metal)));
+
         // play a sound effect
         if (data.isBurning(metal)) {
             player.playSound(SoundEvent.createFixedRangeEvent(new ResourceLocation("item.flintandsteel.use"), 1f), 1, 5);
