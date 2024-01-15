@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
@@ -31,21 +32,18 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyUsableB
     }
 
     @Override
-    public boolean useAllomantically(BlockState state, Level world, BlockPos pos, Player player, boolean isPush) {
+    public boolean useAllomantically(BlockState state, Level level, BlockPos pos, Player player, boolean isPush) {
         if (player instanceof ServerPlayer sp) {
             ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
         }
-
-        state = state.cycle(POWERED);
-        if (world.isClientSide) {
+        if (level.isClientSide()) {
             return true;
         }
-        if ((!isPush && state.getValue(POWERED)) || (isPush && !state.getValue(POWERED))) {
-
-            world.setBlock(pos, state, 3);
-            float f = state.getValue(POWERED) ? 0.6F : 0.5F;
-            world.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, f);
-            this.updateNeighbors(state, world, pos);
+        if (isPush == state.getValue(POWERED)) {
+            BlockState blockstate = this.pull(state, level, pos);
+            float f = blockstate.getValue(POWERED) ? 0.6F : 0.5F;
+            level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, f);
+            level.gameEvent(player, blockstate.getValue(POWERED) ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE, pos);
             return true;
 
         }

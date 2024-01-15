@@ -19,7 +19,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -40,10 +43,12 @@ public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsabl
             ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
         }
 
-        if (state.getValue(POWERED) || level.isClientSide) {
+        if (state.getValue(POWERED) || level.isClientSide()) {
             return true;
         } else if (isPush == this.activatedOnPush) {
             this.press(state, level, pos);
+            this.playSound(null, level, pos, true);
+            level.gameEvent(player, GameEvent.BLOCK_ACTIVATE, pos);
             return true;
         } else {
             return false;
@@ -59,6 +64,14 @@ public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsabl
         return InteractionResult.FAIL;
     }
 
+
+    @Override
+    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+        if (!this.activatedOnPush) {
+            return super.getShape(pState.cycle(POWERED), pLevel, pPos, pContext);
+        }
+        return super.getShape(pState, pLevel, pPos, pContext);
+    }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
