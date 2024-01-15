@@ -30,7 +30,7 @@ public class MetalUsedOnPlayerTrigger extends SimpleCriterionTrigger<MetalUsedOn
     public record TriggerInstance(Optional<ContextAwarePredicate> player, Metal mt, Optional<Boolean> enhanced) implements SimpleInstance {
         public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(builder -> builder
                 .group(ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(TriggerInstance::player),
-                       Metal.CODEC.fieldOf("metal").forGetter(TriggerInstance::mt), Codec.BOOL.optionalFieldOf("enhanced").forGetter(TriggerInstance::enhanced))
+                       Metal.CODEC.fieldOf("metal").forGetter(TriggerInstance::mt), ExtraCodecs.strictOptionalField(Codec.BOOL, "enhanced").forGetter(TriggerInstance::enhanced))
                 .apply(builder, TriggerInstance::new));
 
 

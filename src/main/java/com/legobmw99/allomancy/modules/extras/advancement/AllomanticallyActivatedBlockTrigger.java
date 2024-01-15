@@ -48,7 +48,7 @@ public class AllomanticallyActivatedBlockTrigger extends SimpleCriterionTrigger<
         public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(builder -> builder
                 .group(ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(TriggerInstance::player),
                        ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "entity").forGetter(TriggerInstance::location),
-                       Codec.BOOL.optionalFieldOf("is_push").forGetter(TriggerInstance::isPush))
+                       ExtraCodecs.strictOptionalField(Codec.BOOL, "is_push").forGetter(TriggerInstance::isPush))
                 .apply(builder, TriggerInstance::new));
 
         public static Criterion<TriggerInstance> activatedBlock(Block block) {
