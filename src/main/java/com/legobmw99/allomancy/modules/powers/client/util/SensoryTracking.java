@@ -5,12 +5,13 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.ArrayListDeque;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -24,8 +25,9 @@ public class SensoryTracking {
     private final List<Player> nearby_allomancers = new ArrayList<>();
 
     private int tickOffset = 0;
-    private final Deque<BlockPos> to_consider = new ArrayListDeque<>();
-    private final Set<BlockPos> seen = new HashSet<>();
+    private final Deque<BlockPos> to_consider = new ArrayDeque<>(20 * 20);
+    // trick taken from BlockPos#breadthFirstTraversal used in SpongeBlock
+    private final Set<Long> seen = new LongOpenHashSet(20 * 20);
 
     public void tick() {
         this.tickOffset = (this.tickOffset + 1) % 2;
@@ -63,7 +65,9 @@ public class SensoryTracking {
 
             // Add metal blobs to metal list
             this.seen.clear();
-            BlockPos.betweenClosed(negative, positive).forEach(starter -> searchNearbyMetalBlocks(player.blockPosition(), max, starter.immutable(), player.level()));
+            BlockPos
+                    .betweenClosed(negative.getX(), negative.getY(), negative.getZ(), positive.getX(), positive.getY(), positive.getZ())
+                    .forEach(starter -> searchNearbyMetalBlocks(player.blockPosition(), max, starter, player.level()));
         }
 
         // Populate our list of nearby allomancy users
@@ -89,30 +93,27 @@ public class SensoryTracking {
      * A sort of BFS with a global seen list
      */
     private void searchNearbyMetalBlocks(BlockPos origin, int range, BlockPos starter, Level level) {
-        if (this.seen.contains(starter)) {
+        var starterState = level.getBlockState(starter);
+        if (!this.seen.add(starter.asLong()) || !PowerUtils.isBlockStateMetal(starterState)) {
             return;
         }
-        this.seen.add(starter);
+        var blob = new MetalBlockBlob(starter, starterState);
 
-        if (!PowerUtils.isBlockStateMetal(level.getBlockState(starter))) {
-            return;
-        }
 
         int range_sqr = 4 * range * range;
 
         this.to_consider.clear();
         this.to_consider.addFirst(starter);
 
-        var blob = new MetalBlockBlob(starter);
+
         while (!this.to_consider.isEmpty()) {
             var pos = this.to_consider.removeLast();
-            for (var p1 : BlockPos.withinManhattan(pos, 1, 1, 1)) {
-                if (!this.seen.contains(p1)) {
-                    var p2 = p1.immutable();
-                    this.seen.add(p2);
-                    if (origin.distSqr(p2) < range_sqr && PowerUtils.isBlockStateMetal(level.getBlockState(p2))) {
-                        this.to_consider.add(p2);
-                        blob.add(p2);
+            for (var next : BlockPos.withinManhattan(pos, 1, 1, 1)) {
+                if (this.seen.add(next.asLong()) && origin.distToCenterSqr(next.getCenter()) < range_sqr) {
+                    var nextState = level.getBlockState(next);
+                    if (PowerUtils.isBlockStateMetal(nextState)) {
+                        blob.add(next, nextState);
+                        this.to_consider.add(next.immutable());
                     }
                 }
             }
@@ -137,39 +138,29 @@ public class SensoryTracking {
     public static class MetalBlockBlob {
 
         private static final Level level = Minecraft.getInstance().level;
-        private int blocks = 0;
-        private Vec3 center = null;
+        private int blocks;
+        private Vec3 center;
 
-        public MetalBlockBlob(BlockPos initial) {
-            this.add(initial);
+        public MetalBlockBlob(BlockPos initial, BlockState initialState) {
+            this.blocks = 1;
+            this.center = getCenterOfBlock(initial, initialState);
         }
 
-        public MetalBlockBlob() {
-        }
-
-        private static Vec3 getCenterOfBlock(BlockPos pos) {
-            try {
-                return Vec3.atLowerCornerOf(pos).add(level.getBlockState(pos).getShape(level, pos).bounds().getCenter());
-            } catch (UnsupportedOperationException e) {
+        private static Vec3 getCenterOfBlock(BlockPos pos, BlockState state) {
+            var shape = state.getShape(level, pos);
+            if (shape.isEmpty()) {
                 return Vec3.atCenterOf(pos);
             }
+            return Vec3.atLowerCornerOf(pos).add(shape.bounds().getCenter());
         }
 
         public int size() {
             return this.blocks;
         }
 
-        public void add(BlockPos pos) {
-            pos = pos.immutable();
-
+        public void add(BlockPos pos, BlockState state) {
             this.blocks += 1;
-
-            if (this.center == null) {
-                this.center = getCenterOfBlock(pos);
-            } else {
-                this.center = this.center.scale(this.blocks - 1).add(getCenterOfBlock(pos)).scale(1.0D / this.blocks);
-            }
-
+            this.center = this.center.scale(this.blocks - 1).add(getCenterOfBlock(pos, state)).scale(1.0D / this.blocks);
         }
 
         public Vec3 getCenter() {
