@@ -218,7 +218,7 @@ public class ClientEventHandler {
 
 
         if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
-            this.tracking.forEachMetalicEntity(entity -> ClientUtils.drawMetalLine(stack, playervec, entity.position(), 1.5F, 0F, 0.6F, 1F));
+            this.tracking.forEachMetallicEntity(entity -> ClientUtils.drawMetalLine(stack, playervec, entity.position(), 1.5F, 0F, 0.6F, 1F));
 
             this.tracking.forEachMetalBlob(blob -> ClientUtils.drawMetalLine(stack, playervec, blob.getCenter(), Mth.clamp(0.3F + blob.size() * 0.4F, 0.5F, 7.5F), 0F, 0.6F, 1F));
         }

@@ -6,6 +6,7 @@ import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -16,31 +17,30 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 public class SensoryTracking {
 
-    private final List<Entity> metal_entities = new ArrayList<>();
-    private final List<MetalBlockBlob> metal_blobs = new ArrayList<>();
-    private final List<Player> nearby_allomancers = new ArrayList<>();
 
-    private int tickOffset = 0;
+    private final List<Entity> metal_entities = new ArrayList<>();
+    private final SyncList<MetalBlockBlob> metal_blobs = new SyncList<>();
+    private final List<Player> nearby_allomancers = new ArrayList<>();
     private final Deque<BlockPos> to_consider = new ArrayDeque<>(20 * 20);
     // trick taken from BlockPos#breadthFirstTraversal used in SpongeBlock
     private final Set<Long> seen = new LongOpenHashSet(20 * 20);
 
-    public void tick() {
-        this.tickOffset = (this.tickOffset + 1) % 2;
-        if (this.tickOffset == 0) {
-            populateSensoryLists();
-        }
-    }
+    private Future<?> blobFuture = null;
 
     public void forEachSeeked(Consumer<Player> f) {
         this.nearby_allomancers.forEach(f);
     }
 
-    public void forEachMetalicEntity(Consumer<Entity> f) {
+    public void forEachMetallicEntity(Consumer<Entity> f) {
         this.metal_entities.forEach(f);
     }
 
@@ -48,26 +48,35 @@ public class SensoryTracking {
         this.metal_blobs.forEach(f);
     }
 
-    private void populateSensoryLists() {
+    public void tick() {
         Player player = Minecraft.getInstance().player;
         IAllomancerData data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
-        this.metal_blobs.clear();
-        this.metal_entities.clear();
         if (data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL)) {
             int max = PowersConfig.max_metal_detection.get();
             var negative = player.blockPosition().offset(-max, -max, -max);
             var positive = player.blockPosition().offset(max, max, max);
 
             // Add metal entities to metal list
+            this.metal_entities.clear();
             this.metal_entities.addAll(
                     player.level().getEntitiesOfClass(Entity.class, AABB.encapsulatingFullBlocks(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
 
             // Add metal blobs to metal list
-            this.seen.clear();
-            BlockPos
-                    .betweenClosed(negative.getX(), negative.getY(), negative.getZ(), positive.getX(), positive.getY(), positive.getZ())
-                    .forEach(starter -> searchNearbyMetalBlocks(player.blockPosition(), max, starter, player.level()));
+            if (this.blobFuture == null || this.blobFuture.isDone()) {
+                this.blobFuture = Util.backgroundExecutor().submit(() -> {
+                    this.seen.clear();
+                    BlockPos
+                            .betweenClosed(negative.getX(), negative.getY(), negative.getZ(), positive.getX(), positive.getY(), positive.getZ())
+                            .forEach(starter -> searchNearbyMetalBlocks(player.blockPosition(), max, starter, player.level()));
+                    this.metal_blobs.swapAndClearOld();
+                });
+            }
+
+        } else if (this.blobFuture != null) { // previously we were burning
+            this.blobFuture = null;
+            this.metal_blobs.clearBothAsync(Util.backgroundExecutor());
+            this.metal_entities.clear();
         }
 
         // Populate our list of nearby allomancy users
@@ -132,6 +141,71 @@ public class SensoryTracking {
         }
 
         return true;
+    }
+
+
+    private static class SyncList<T> {
+        private final List<T> list_a = new ArrayList<>();
+        private final List<T> list_b = new ArrayList<>();
+
+        private final Lock swapLock = new ReentrantLock();
+
+        /**
+         * When this is even, we are reading A and writing B
+         */
+        private final AtomicInteger AorB = new AtomicInteger(0);
+
+
+        /**
+         * Intended to be invoked from the main thread
+         */
+        public void forEach(Consumer<T> f) {
+            this.swapLock.lock();
+            try {
+                if (this.AorB.get() % 2 == 0) {
+                    this.list_a.forEach(f);
+                } else {
+                    this.list_b.forEach(f);
+                }
+            } finally {
+                this.swapLock.unlock();
+            }
+        }
+
+        public void add(T t) {
+            if (this.AorB.get() % 2 == 1) {
+                this.list_a.add(t);
+            } else {
+                this.list_b.add(t);
+            }
+        }
+
+
+        /**
+         * Intended to be invoked from a thread other than main
+         */
+        public void swapAndClearOld() {
+            this.swapLock.lock();
+            int newAB = this.AorB.incrementAndGet();
+            this.swapLock.unlock();
+            if (newAB % 2 == 1) {
+                this.list_a.clear();
+            } else {
+                this.list_b.clear();
+            }
+        }
+
+        public void clearBothAsync(ExecutorService ex) {
+            ex.submit(() -> {
+                this.swapLock.lock();
+                try {
+                    this.list_a.clear();
+                    this.list_b.clear();
+                } finally {
+                    this.swapLock.unlock();
+                }
+            });
+        }
     }
 
 
