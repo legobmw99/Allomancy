@@ -5,6 +5,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.legobmw99.allomancy.util.SyncList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -17,15 +18,10 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 public class SensoryTracking {
-
 
     private final List<Entity> metal_entities = new ArrayList<>();
     private final SyncList<MetalBlockBlob> metal_blobs = new SyncList<>();
@@ -143,79 +139,13 @@ public class SensoryTracking {
         return true;
     }
 
-
-    private static class SyncList<T> {
-        private final List<T> list_a = new ArrayList<>();
-        private final List<T> list_b = new ArrayList<>();
-
-        private final Lock swapLock = new ReentrantLock();
-
-        /**
-         * When this is even, we are reading A and writing B
-         */
-        private final AtomicInteger AorB = new AtomicInteger(0);
-
-
-        /**
-         * Intended to be invoked from the main thread
-         */
-        public void forEach(Consumer<T> f) {
-            this.swapLock.lock();
-            try {
-                if (this.AorB.get() % 2 == 0) {
-                    this.list_a.forEach(f);
-                } else {
-                    this.list_b.forEach(f);
-                }
-            } finally {
-                this.swapLock.unlock();
-            }
-        }
-
-        public void add(T t) {
-            if (this.AorB.get() % 2 == 1) {
-                this.list_a.add(t);
-            } else {
-                this.list_b.add(t);
-            }
-        }
-
-
-        /**
-         * Intended to be invoked from a thread other than main
-         */
-        public void swapAndClearOld() {
-            this.swapLock.lock();
-            int newAB = this.AorB.incrementAndGet();
-            this.swapLock.unlock();
-            if (newAB % 2 == 1) {
-                this.list_a.clear();
-            } else {
-                this.list_b.clear();
-            }
-        }
-
-        public void clearBothAsync(ExecutorService ex) {
-            ex.submit(() -> {
-                this.swapLock.lock();
-                try {
-                    this.list_a.clear();
-                    this.list_b.clear();
-                } finally {
-                    this.swapLock.unlock();
-                }
-            });
-        }
-    }
-
-
     public static class MetalBlockBlob {
 
         private static final Level level = Minecraft.getInstance().level;
         private int blocks;
         private Vec3 center;
 
-        public MetalBlockBlob(BlockPos initial, BlockState initialState) {
+        private MetalBlockBlob(BlockPos initial, BlockState initialState) {
             this.blocks = 1;
             this.center = getCenterOfBlock(initial, initialState);
         }
@@ -232,7 +162,7 @@ public class SensoryTracking {
             return this.blocks;
         }
 
-        public void add(BlockPos pos, BlockState state) {
+        private void add(BlockPos pos, BlockState state) {
             this.blocks += 1;
             this.center = this.center.scale(this.blocks - 1).add(getCenterOfBlock(pos, state)).scale(1.0D / this.blocks);
         }
