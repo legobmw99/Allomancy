@@ -1,14 +1,13 @@
-package com.legobmw99.allomancy.modules.powers.client;
+package com.legobmw99.allomancy.modules.powers.client.network;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.powers.client.util.Sounds;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.network.AllomancerDataPayload;
 import com.legobmw99.allomancy.modules.powers.network.EnhanceTimePayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
@@ -17,7 +16,7 @@ import java.util.Arrays;
 
 public class ClientPayloadHandler {
 
-    public static void handleAllomancerData(final AllomancerDataPayload payload, final PlayPayloadContext ctx) {
+    public static void updateAllomancer(final AllomancerDataPayload payload, final PlayPayloadContext ctx) {
         ctx.workHandler().submitAsync(() -> {
             Player player = Minecraft.getInstance().level.getPlayerByUUID(payload.player());
             if (player == Minecraft.getInstance().player) {
@@ -26,7 +25,7 @@ public class ClientPayloadHandler {
                 data.deserializeNBT(payload.nbt());
                 long burningAfter = Arrays.stream(Metal.values()).filter(data::isBurning).count();
                 if (burningAfter < burningBefore) {
-                    player.playSound(SoundEvent.createFixedRangeEvent(new ResourceLocation("block.fire.extinguish"), 1f), 1, 4);
+                    Sounds.soundForBurnChange(false);
                 }
             } else {
                 player.getData(AllomancerAttachment.ALLOMANCY_DATA).deserializeNBT(payload.nbt());

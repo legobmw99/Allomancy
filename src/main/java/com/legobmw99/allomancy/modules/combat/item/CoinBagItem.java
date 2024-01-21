@@ -2,8 +2,8 @@ package com.legobmw99.allomancy.modules.combat.item;
 
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
-import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.legobmw99.allomancy.modules.powers.util.Physical;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -20,7 +20,7 @@ public class CoinBagItem extends ProjectileWeaponItem {
 
     public static final Predicate<ItemStack> NUGGETS = (stack) -> {
         Item item = stack.getItem();
-        return PowerUtils.doesResourceContainsMetal(BuiltInRegistries.ITEM.getKey(item)) && BuiltInRegistries.ITEM.getKey(item).getPath().contains("nugget");
+        return Physical.doesResourceContainMetal(BuiltInRegistries.ITEM.getKey(item)) && BuiltInRegistries.ITEM.getKey(item).getPath().contains("nugget");
     };
 
     public CoinBagItem() {

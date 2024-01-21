@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.modules.powers.command;
+package com.legobmw99.allomancy.modules.extras.command;
 
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.mojang.brigadier.StringReader;

@@ -1,7 +1,6 @@
 package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
@@ -9,31 +8,25 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import com.legobmw99.allomancy.modules.powers.network.EnhanceTimePayload;
-import com.legobmw99.allomancy.network.Network;
+import com.legobmw99.allomancy.modules.powers.network.Network;
+import com.legobmw99.allomancy.modules.powers.util.Emotional;
+import com.legobmw99.allomancy.modules.powers.util.Enhancement;
+import com.legobmw99.allomancy.modules.powers.util.Physical;
+import com.legobmw99.allomancy.modules.powers.util.Temporal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
@@ -181,7 +174,7 @@ public class CommonEventHandler {
                 if (data.isEnhanced()) {
                     if (source.getMainHandItem().getItem() instanceof KolossBladeItem) {
                         event.setAmount(550); // Duralumin OHK with Koloss blade
-                        PowerUtils.wipePlayer(source);
+                        Enhancement.wipePlayer(source);
                     } else {
                         event.setAmount(event.getAmount() * 3);
                     }
@@ -194,8 +187,8 @@ public class CommonEventHandler {
                 ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(source, event.getEntity(), Metal.CHROMIUM, data.isEnhanced());
                 if (event.getEntity() instanceof ServerPlayer player) {
                     ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(player, Metal.CHROMIUM, data.isEnhanced());
-                    if (!PowerUtils.hasTinFoilHat(player)) {
-                        PowerUtils.wipePlayer(player);
+                    if (!Emotional.hasTinFoilHat(player)) {
+                        Enhancement.wipePlayer(player);
                     }
                 }
             }
@@ -227,7 +220,7 @@ public class CommonEventHandler {
             if (data.isBurning(Metal.STEEL)) {
                 if (event.getSource().type().equals(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FALL).value())) {
                     BlockPos on = player.getOnPos();
-                    if (PowerUtils.isBlockStateMetal(player.level().getBlockState(on)) || PowerUtils.isBlockStateMetal(player.level().getBlockState(on.above()))) {
+                    if (Physical.isBlockStateMetallic(player.level().getBlockState(on)) || Physical.isBlockStateMetallic(player.level().getBlockState(on.above()))) {
                         event.setCanceled(true);
                     }
                 }
@@ -262,7 +255,7 @@ public class CommonEventHandler {
                  * ALUMINUM AND DURALUMIN                    *
                  *********************************************/
                 if (data.isBurning(Metal.ALUMINUM)) {
-                    PowerUtils.wipePlayer(curPlayer);
+                    Enhancement.wipePlayer(curPlayer);
                     syncRequired = true;
                 }
                 if (data.isBurning(Metal.DURALUMIN) && !data.isEnhanced()) {
@@ -286,69 +279,26 @@ public class CommonEventHandler {
              * CHROMIUM (enhanced)                       *
              *********************************************/
             if (data.isEnhanced() && data.isBurning(Metal.CHROMIUM)) {
-                if (level instanceof ServerLevel) {
-                    int max = 20;
-                    Vec3 negative = curPlayer.position().add(-max, -max, -max);
-                    Vec3 positive = curPlayer.position().add(max, max, max);
-                    level
-                            .getEntitiesOfClass(Player.class, new AABB(negative, positive))
-                            .forEach(otherPlayer -> otherPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA).drainMetals(Metal.values()));
-                }
+                Enhancement.wipeNearby(curPlayer, level);
             }
 
             /*********************************************
              * GOLD AND ELECTRUM (enhanced)              *
              *********************************************/
             if (data.isEnhanced() && data.isBurning(Metal.ELECTRUM) && data.getStored(Metal.ELECTRUM) >= 9) {
-                ResourceKey<Level> spawnDim = data.getSpawnDim();
-                BlockPos spawnLoc;
-
-                if (spawnDim != null) {
-                    spawnLoc = data.getSpawnLoc();
-                } else {
-                    spawnDim = Level.OVERWORLD; // no spawn --> use world spawn
-                    spawnLoc = new BlockPos(level.getLevelData().getXSpawn(), level.getLevelData().getYSpawn(), level.getLevelData().getZSpawn());
-
-                }
-
-                PowerUtils.teleport(curPlayer, level, spawnDim, spawnLoc);
-                if (data.isBurning(Metal.DURALUMIN)) {
-                    data.drainMetals(Metal.DURALUMIN);
-                }
-                data.drainMetals(Metal.ELECTRUM);
-
-
+                Enhancement.teleportToSpawn(curPlayer, level, data);
             } else if (data.isEnhanced() && data.isBurning(Metal.GOLD) && data.getStored(Metal.GOLD) >= 9) { // These should be mutually exclusive
-                ResourceKey<Level> deathDim = data.getDeathDim();
-                if (deathDim != null) {
-                    PowerUtils.teleport(curPlayer, level, deathDim, data.getDeathLoc());
-                    if (data.isBurning(Metal.DURALUMIN)) {
-                        data.drainMetals(Metal.DURALUMIN);
-                    }
-                    data.drainMetals(Metal.GOLD);
-                }
+                Enhancement.teleportToLastDeath(curPlayer, level, data);
             }
-
 
             /*********************************************
              * BENDALLOY AND CADMIUM                     *
              *********************************************/
             if (data.isBurning(Metal.BENDALLOY) && !data.isBurning(Metal.CADMIUM)) {
-                curPlayer.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 10, 3, true, false));
-
-                tickNearby(curPlayer, level, data);
+                Temporal.speedUpNearby(curPlayer, level, data);
             }
             if (data.isBurning(Metal.CADMIUM) && !data.isBurning(Metal.BENDALLOY)) {
-                int max = data.isEnhanced() ? 20 : 10;
-                Vec3 negative = curPlayer.position().add(-max, -max, -max);
-                Vec3 positive = curPlayer.position().add(max, max, max);
-                int slowness_amplifier = data.isEnhanced() ? 255 : 2; // Duralumin freezes entities
-                level.getEntitiesOfClass(LivingEntity.class, new AABB(negative, positive)).forEach(entity -> {
-                    entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 10, 0, true, false));
-                    if (entity != curPlayer) {
-                        entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, slowness_amplifier, true, false));
-                    }
-                });
+                Temporal.slowDownNearby(curPlayer, level, data);
             }
 
 
@@ -362,10 +312,10 @@ public class CommonEventHandler {
                     if (level.random.nextInt(50) == 0) {
                         curPlayer.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0, true, false));
                     }
-                } else { // Remove blindness from normal tin burners
-                    if (curPlayer.hasEffect(MobEffects.BLINDNESS)) {
-                        curPlayer.removeEffect(MobEffects.BLINDNESS);
-                    }
+                }
+                // Remove blindness from normal tin burners
+                if (curPlayer.hasEffect(MobEffects.BLINDNESS)) {
+                    curPlayer.removeEffect(MobEffects.BLINDNESS);
                 }
             }
             // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing, only if the amplifier is 5
@@ -398,40 +348,6 @@ public class CommonEventHandler {
             if (data.isEnhanced() && data.isBurning(Metal.COPPER)) {
                 curPlayer.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 50, true, false));
             }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void tickNearby(Player curPlayer, Level level, IAllomancerData data) {
-        if (level instanceof ServerLevel serverLevel) {
-            int max = data.isEnhanced() ? 10 : 5;
-            BlockPos negative = curPlayer.blockPosition().offset(-max, -max, -max);
-            BlockPos positive = curPlayer.blockPosition().offset(max, max, max);
-            serverLevel.getEntitiesOfClass(LivingEntity.class, AABB.encapsulatingFullBlocks(negative, positive)).forEach(entity -> {
-                entity.aiStep();
-                entity.aiStep();
-            });
-            BlockPos.betweenClosedStream(negative, positive).forEach(bp -> {
-                BlockState block = level.getBlockState(bp);
-                BlockEntity te = level.getBlockEntity(bp);
-                if (te == null) {
-                    if (block.isRandomlyTicking()) {
-                        for (int i = 0; i < max * 4 / 15; i++) {
-                            block.randomTick(serverLevel, bp, serverLevel.random);
-                        }
-                    }
-                } else {
-                    Block underlying_block = block.getBlock();
-                    if (underlying_block instanceof EntityBlock eb) {
-                        BlockEntityTicker ticker = eb.getTicker(level, block, te.getType());
-                        if (ticker != null) {
-                            for (int i = 0; i < max * 4 / 3; i++) {
-                                ticker.tick(level, bp, block, te);
-                            }
-                        }
-                    }
-                }
-            });
         }
     }
 }

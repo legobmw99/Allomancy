@@ -6,9 +6,9 @@ import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.network.Network;
+import com.legobmw99.allomancy.modules.powers.util.Emotional;
+import com.legobmw99.allomancy.modules.powers.util.Physical;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,7 +29,7 @@ import java.util.Arrays;
 
 public class ServerPayloadHandler {
 
-    public static void handleEmotionChange(final EmotionPayload data, final PlayPayloadContext ctx) {
+    public static void changeEmotion(final EmotionPayload data, final PlayPayloadContext ctx) {
         ctx.workHandler().submitAsync(() -> {
             ServerPlayer allomancer = (ServerPlayer) ctx.player().get();
             PathfinderMob target = (PathfinderMob) ctx.level().get().getEntity(data.entityID());
@@ -39,9 +39,9 @@ public class ServerPayloadHandler {
             boolean enhanced = allomancer.getData(AllomancerAttachment.ALLOMANCY_DATA).isEnhanced();
             ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(allomancer, target, data.makeAggressive() ? Metal.ZINC : Metal.BRASS, enhanced);
             if (data.makeAggressive()) {
-                PowerUtils.riotEntity(target, allomancer, enhanced);
+                Emotional.riot(target, allomancer, enhanced);
             } else {
-                PowerUtils.sootheEntity(target, allomancer, enhanced);
+                Emotional.soothe(target, allomancer, enhanced);
             }
         }).exceptionally(e -> {
             Allomancy.LOGGER.error("Failed to handle changeEmotions", e);
@@ -62,10 +62,10 @@ public class ServerPayloadHandler {
                 BlockState blockState = level.getBlockState(pos);
                 if (blockState.getBlock() instanceof IAllomanticallyUsableBlock block) {
                     block.useAllomantically(blockState, level, pos, player, data.isPush());
-                } else if (PowerUtils.isBlockStateMetal(blockState) // Check whitelist on server
+                } else if (Physical.isBlockStateMetallic(blockState) // Check whitelist on server
                            || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() // check coin bag
                                && (!player.getProjectile(player.getMainHandItem()).isEmpty()) && data.isPush())) {
-                    PowerUtils.move(data.direction(), player, pos);
+                    Physical.lurch(data.direction(), player, pos);
                 } else {
                     Allomancy.LOGGER.warn("Illegal use of iron/steel by player: {}!", player);
                     ctx.packetHandler().disconnect(Component.translatable("allomancy.networking.kicked", "Tried to push or pull against an non-metallic block!"));
@@ -86,23 +86,23 @@ public class ServerPayloadHandler {
             Metal which = payload.isPush() ? Metal.STEEL : Metal.IRON;
 
             if (target != null) {
-                if (PowerUtils.isEntityMetal(target)) {
+                if (Physical.isEntityMetallic(target)) {
                     ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(player, target, which, data.isEnhanced());
 
                     // The player moves
                     if (target instanceof IronGolem || target instanceof ItemFrame) {
-                        PowerUtils.move(payload.direction(), player, target.blockPosition());
+                        Physical.lurch(payload.force(), player, target.blockPosition());
                     } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity || target instanceof ArmorStand ||
                                (target instanceof AbstractMinecart && !target.isVehicle())) {
-                        PowerUtils.move(payload.direction() / 2.0, target, player.blockPosition());
+                        Physical.lurch(payload.force() / 2.0, target, player.blockPosition());
 
                         // Split the difference
                     } else if (!(target instanceof ThrowableItemProjectile)) {
                         if (target instanceof ServerPlayer targetPlayer) {
                             ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(targetPlayer, which, data.isEnhanced());
                         }
-                        PowerUtils.move(payload.direction() / 2.0, target, player.blockPosition());
-                        PowerUtils.move(payload.direction() / 2.0, player, target.blockPosition());
+                        Physical.lurch(payload.force() / 2.0, target, player.blockPosition());
+                        Physical.lurch(payload.force() / 2.0, player, target.blockPosition());
                     }
                 }
             }
@@ -154,7 +154,7 @@ public class ServerPayloadHandler {
             ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(source, e, Metal.NICROSIL, data.isEnhanced());
             if (e instanceof ServerPlayer target) {
                 ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(target, Metal.NICROSIL, data.isEnhanced());
-                if (!PowerUtils.hasTinFoilHat(target)) {
+                if (!Emotional.hasTinFoilHat(target)) {
                     target.getData(AllomancerAttachment.ALLOMANCY_DATA).setEnhanced(payload.enhanceTime());
                     // broadcast back to player and tracking
                     Network.sync(payload, target);

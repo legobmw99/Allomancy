@@ -7,7 +7,12 @@ import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnEntityTrigg
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnPlayerTrigger;
 import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
+import com.legobmw99.allomancy.modules.extras.command.AllomancyPowerCommand;
+import com.legobmw99.allomancy.modules.extras.command.AllomancyPowerType;
 import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -16,6 +21,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -45,6 +51,12 @@ public class ExtrasSetup {
     public static final List<TagKey<BannerPattern>> PATTERN_KEYS = new ArrayList<>();
 
     public static final List<DeferredItem<BannerPatternItem>> PATTERN_ITEMS = new ArrayList<>();
+    private static final DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, Allomancy.MODID);
+    private static final Supplier<SingletonArgumentInfo<AllomancyPowerType>> CONTAINER_CLASS = COMMAND_ARGUMENT_TYPES.register("allomancy_power",
+                                                                                                                               () -> ArgumentTypeInfos.registerByClass(
+                                                                                                                                       AllomancyPowerType.class,
+                                                                                                                                       SingletonArgumentInfo.contextFree(
+                                                                                                                                               AllomancyPowerType::allomancyPowerType)));
 
 
     static {
@@ -72,6 +84,11 @@ public class ExtrasSetup {
         ITEMS.register(bus);
         BP.register(bus);
         CT.register(bus);
+        COMMAND_ARGUMENT_TYPES.register(bus);
+    }
+
+    public static void registerCommands(final RegisterCommandsEvent e) {
+        AllomancyPowerCommand.register(e.getDispatcher());
     }
 
 }

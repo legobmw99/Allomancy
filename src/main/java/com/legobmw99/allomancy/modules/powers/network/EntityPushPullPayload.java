@@ -5,7 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
-public record EntityPushPullPayload(int entityID, int direction) implements CustomPacketPayload {
+public record EntityPushPullPayload(int entityID, int force) implements CustomPacketPayload {
 
     public static final ResourceLocation ID = new ResourceLocation(Allomancy.MODID, "entity_push_pull");
 
@@ -16,11 +16,11 @@ public record EntityPushPullPayload(int entityID, int direction) implements Cust
     @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.entityID);
-        buf.writeInt(this.direction);
+        buf.writeInt(this.force);
     }
 
     public boolean isPush() {
-        return this.direction > 0;
+        return this.force > 0;
     }
 
     @Override

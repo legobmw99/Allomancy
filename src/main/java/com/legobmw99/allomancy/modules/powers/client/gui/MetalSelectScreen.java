@@ -11,8 +11,8 @@ package com.legobmw99.allomancy.modules.powers.client.gui;
 
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
-import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
-import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
+import com.legobmw99.allomancy.modules.powers.client.network.PowerRequests;
+import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -177,7 +177,7 @@ public class MetalSelectScreen extends Screen {
 
     @Override
     public boolean keyReleased(int keysym, int scancode, int modifiers) {
-        if (PowersClientSetup.burn.matches(keysym, scancode)) {
+        if (Inputs.burn.matches(keysym, scancode)) {
             this.mc.setScreen(null);
             this.mc.mouseHandler.grabMouse();
             return true;
@@ -188,7 +188,7 @@ public class MetalSelectScreen extends Screen {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (PowersClientSetup.burn.matchesMouse(button)) {
+        if (Inputs.burn.matchesMouse(button)) {
             this.mc.setScreen(null);
             this.mc.mouseHandler.grabMouse();
             return true;
@@ -204,7 +204,7 @@ public class MetalSelectScreen extends Screen {
         if (this.slotSelected != -1) {
             Metal mt = Metal.getMetal(toMetalIndex(this.slotSelected));
             var data = this.mc.player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-            ClientUtils.toggleBurn(mt, data);
+            PowerRequests.toggleBurn(mt, data);
             this.mc.player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.1F, 2.0F);
         }
     }

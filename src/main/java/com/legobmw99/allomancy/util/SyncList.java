@@ -14,6 +14,8 @@ import java.util.function.Consumer;
  * Writes are issued to a list which is not currently a candidate for iteration,
  * and on demand this list is swapped in. The lock required to swap is only held
  * for the length of one atomic integer increment.
+ * This is a simplified version of the ideas in something like https://github.com/jonhoo/left-right/,
+ * but we assume a single reader that works relatively quickly, so we block do to our atomic swap
  */
 public class SyncList<T> {
     private final List<T> list_a = new ArrayList<>();

@@ -2,9 +2,9 @@ package com.legobmw99.allomancy.modules.powers.client.util;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.legobmw99.allomancy.modules.powers.util.Physical;
 import com.legobmw99.allomancy.util.SyncList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.Util;
@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
-public class SensoryTracking {
+public class Tracking {
 
     private final List<Entity> metal_entities = new ArrayList<>();
     private final SyncList<MetalBlockBlob> metal_blobs = new SyncList<>();
@@ -56,7 +56,7 @@ public class SensoryTracking {
             // Add metal entities to metal list
             this.metal_entities.clear();
             this.metal_entities.addAll(
-                    player.level().getEntitiesOfClass(Entity.class, AABB.encapsulatingFullBlocks(negative, positive), e -> PowerUtils.isEntityMetal(e) && !e.equals(player)));
+                    player.level().getEntitiesOfClass(Entity.class, AABB.encapsulatingFullBlocks(negative, positive), e -> Physical.isEntityMetallic(e) && !e.equals(player)));
 
             // Add metal blobs to metal list
             if (this.blobFuture == null || this.blobFuture.isDone()) {
@@ -86,7 +86,7 @@ public class SensoryTracking {
             var nearby_players = player.level().getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
 
             for (Player otherPlayer : nearby_players) {
-                if (!addSeeked(data, otherPlayer)) {
+                if (!seek(data, otherPlayer)) {
                     this.nearby_allomancers.clear();
                     break;
                 }
@@ -99,7 +99,7 @@ public class SensoryTracking {
      */
     private void searchNearbyMetalBlocks(BlockPos origin, int range, BlockPos starter, Level level) {
         var starterState = level.getBlockState(starter);
-        if (!this.seen.add(starter.asLong()) || !PowerUtils.isBlockStateMetal(starterState)) {
+        if (!this.seen.add(starter.asLong()) || !Physical.isBlockStateMetallic(starterState)) {
             return;
         }
         var blob = new MetalBlockBlob(starter, starterState);
@@ -116,7 +116,7 @@ public class SensoryTracking {
             for (var next : BlockPos.withinManhattan(pos, 1, 1, 1)) {
                 if (this.seen.add(next.asLong()) && origin.distToCenterSqr(next.getCenter()) < range_sqr) {
                     var nextState = level.getBlockState(next);
-                    if (PowerUtils.isBlockStateMetal(nextState)) {
+                    if (Physical.isBlockStateMetallic(nextState)) {
                         blob.add(next, nextState);
                         this.to_consider.add(next.immutable());
                     }
@@ -126,7 +126,7 @@ public class SensoryTracking {
         this.metal_blobs.add(blob);
     }
 
-    private boolean addSeeked(IAllomancerData data, Player otherPlayer) {
+    private boolean seek(IAllomancerData data, Player otherPlayer) {
         var otherData = otherPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA);
         if (otherData.isBurning(Metal.COPPER) && (!data.isEnhanced() || otherData.isEnhanced())) {
             return false;

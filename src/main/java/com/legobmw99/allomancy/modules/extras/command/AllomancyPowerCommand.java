@@ -1,9 +1,9 @@
-package com.legobmw99.allomancy.modules.powers.command;
+package com.legobmw99.allomancy.modules.extras.command;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.network.Network;
+import com.legobmw99.allomancy.modules.powers.network.Network;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
