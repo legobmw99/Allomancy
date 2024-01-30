@@ -55,6 +55,7 @@ public class Rendering {
 
         start.pushPose();
         Vec3 view = Minecraft.getInstance().cameraEntity.getEyePosition(partialTicks);
+        // TODO figure out if I can cancel effect of view bobbing
         start.translate(-view.x, -view.y, -view.z);
         RenderSystem.applyModelViewMatrix();
         return start;

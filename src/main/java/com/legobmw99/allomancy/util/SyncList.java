@@ -52,7 +52,7 @@ public class SyncList<T> {
      * a swapAndClearOld is completed.
      */
     public void add(T t) {
-        if (this.AorB.get() % 2 == 1) {
+        if (this.AorB.get() % 2 != 0) {
             this.list_a.add(t);
         } else {
             this.list_b.add(t);
@@ -68,7 +68,7 @@ public class SyncList<T> {
         this.swapLock.lock();
         int newAB = this.AorB.incrementAndGet();
         this.swapLock.unlock();
-        if (newAB % 2 == 1) {
+        if (newAB % 2 != 0) {
             this.list_a.clear();
         } else {
             this.list_b.clear();

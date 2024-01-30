@@ -34,8 +34,6 @@ public class PowersClientSetup {
     }
 
     public static void clientInit(final FMLClientSetupEvent e) {
-        e.enqueueWork(() -> {
-            NeoForge.EVENT_BUS.register(ClientEventHandler.class);
-        });
+        e.enqueueWork(() -> NeoForge.EVENT_BUS.register(ClientEventHandler.class));
     }
 }
