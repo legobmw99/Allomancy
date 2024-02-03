@@ -12,16 +12,17 @@ import java.util.function.Consumer;
  * A wrapper around 2 array lists that allows "concurrent" modification
  * while maintaining very fast reads at the cost of slower/buffered writes.
  * Writes are issued to a list which is not currently a candidate for iteration,
- * and on demand this list is swapped in. The lock required to swap is only held
- * for the length of one atomic integer increment.
+ * and on demand this list is swapped in. Reads should never contend for a lock.
  * This is a simplified version of the ideas in something like https://github.com/jonhoo/left-right/,
- * but we assume a single reader that works relatively quickly, so we block do to our atomic swap
+ * or double buffered rendering, but we want to clear our list after it is swapped out and
+ * assume a single reader that works relatively quickly, so we block to clear
  */
-public class SyncList<T> {
+public class DoubleBufferedList<T> {
     private final List<T> list_a = new ArrayList<>();
     private final List<T> list_b = new ArrayList<>();
 
-    private final Lock swapLock = new ReentrantLock();
+    private final Lock lock_a = new ReentrantLock();
+    private final Lock lock_b = new ReentrantLock();
 
     /**
      * When this is even, we are reading A and writing B
@@ -34,22 +35,28 @@ public class SyncList<T> {
      * Writes will still proceed to the unobserved list.
      */
     public void forEach(Consumer<T> f) {
-        this.swapLock.lock();
-        try {
-            if (this.AorB.get() % 2 == 0) {
+        if (this.AorB.get() % 2 == 0) {
+            this.lock_a.lock();
+            try {
                 this.list_a.forEach(f);
-            } else {
-                this.list_b.forEach(f);
+            } finally {
+                this.lock_a.unlock();
             }
-        } finally {
-            this.swapLock.unlock();
+        } else {
+            this.lock_b.lock();
+            try {
+                this.list_b.forEach(f);
+            } finally {
+                this.lock_b.unlock();
+            }
         }
     }
+
 
     /**
      * Write to the unobserved list.
      * Nothing added here wil be visible until
-     * a swapAndClearOld is completed.
+     * a commitAndClear is completed.
      */
     public void add(T t) {
         if (this.AorB.get() % 2 != 0) {
@@ -64,25 +71,32 @@ public class SyncList<T> {
      * and clear the now-unobserved list.
      * Intended to be invoked from a thread other than main
      */
-    public void swapAndClearOld() {
-        this.swapLock.lock();
+    public void commitAndClear() {
         int newAB = this.AorB.incrementAndGet();
-        this.swapLock.unlock();
         if (newAB % 2 != 0) {
+            this.lock_a.lock();
             this.list_a.clear();
+            this.lock_a.unlock();
         } else {
+            this.lock_b.lock();
             this.list_b.clear();
+            this.lock_b.unlock();
         }
     }
 
     public void clearBothAsync(ExecutorService ex) {
         ex.submit(() -> {
-            this.swapLock.lock();
+            this.lock_a.lock();
             try {
                 this.list_a.clear();
+            } finally {
+                this.lock_a.unlock();
+            }
+            this.lock_b.lock();
+            try {
                 this.list_b.clear();
             } finally {
-                this.swapLock.unlock();
+                this.lock_b.unlock();
             }
         });
     }
