@@ -5,7 +5,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.util.Physical;
-import com.legobmw99.allomancy.util.DoubleBufferedList;
+import com.legobmw99.allomancy.util.DoubleBufferList;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public class Tracking {
 
     private final List<Entity> metal_entities = new ArrayList<>();
-    private final DoubleBufferedList<MetalBlockBlob> metal_blobs = new DoubleBufferedList<>();
+    private final DoubleBufferList<MetalBlockBlob> metal_blobs = new DoubleBufferList<>();
     private final List<Player> nearby_allomancers = new ArrayList<>();
     private final Deque<BlockPos> to_consider = new ArrayDeque<>(20 * 20);
     // trick taken from BlockPos#breadthFirstTraversal used in SpongeBlock

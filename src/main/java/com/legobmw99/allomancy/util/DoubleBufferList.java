@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  * or double buffered rendering, but we want to clear our list after it is swapped out and
  * assume a single reader that works relatively quickly, so we block to clear
  */
-public class DoubleBufferedList<T> {
+public class DoubleBufferList<T> {
     private final List<T> list_a = new ArrayList<>();
     private final List<T> list_b = new ArrayList<>();
 
