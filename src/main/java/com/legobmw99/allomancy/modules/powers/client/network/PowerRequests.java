@@ -66,7 +66,9 @@ public class PowerRequests {
         } else if (trace.getType() == HitResult.Type.BLOCK) {
             BlockPos bp = ((BlockHitResult) trace).getBlockPos();
             Player player = Minecraft.getInstance().player;
-            if (Physical.isBlockStateMetallic(player.level().getBlockState(bp)) || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() && player.isCrouching())) {
+            if (Physical.isBlockStateMetallic(player.level().getBlockState(bp)) ||
+                (player.isCrouching() && metal == Metal.STEEL && player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() &&
+                 (!player.getProjectile(player.getMainHandItem()).isEmpty()))) {
                 sendToServer(new BlockPushPullPayload(bp, force));
             }
         }

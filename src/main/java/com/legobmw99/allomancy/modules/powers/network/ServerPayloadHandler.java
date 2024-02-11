@@ -63,8 +63,9 @@ public class ServerPayloadHandler {
                 if (blockState.getBlock() instanceof IAllomanticallyUsableBlock block) {
                     block.useAllomantically(blockState, level, pos, player, data.isPush());
                 } else if (Physical.isBlockStateMetallic(blockState) // Check whitelist on server
-                           || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() // check coin bag
-                               && (!player.getProjectile(player.getMainHandItem()).isEmpty()) && data.isPush())) {
+                           || (player.isCrouching() && data.isPush() && player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() // check coin bag
+                                   /* causes problems if there is exactly 1 nugget, which just got fired!
+                                    && (!player.getProjectile(player.getMainHandItem()).isEmpty())*/)) {
                     Physical.lurch(data.direction(), player, pos);
                 } else {
                     Allomancy.LOGGER.warn("Illegal use of iron/steel by player: {}!", player);
