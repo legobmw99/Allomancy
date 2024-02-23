@@ -103,10 +103,8 @@ dependencies {
     // runtimeOnly "mezz.jei:jei-${mc_version}-forge:${jei_version}"
 
      dependencies {
-         // Visit https://www.curseforge.com/minecraft/mc-mods/jade/files/all
-         // to get the latest version's jade_id
-//         implementation "curse.maven:jade-324717:${jade_id}"
-         api "curse.maven:jade-324717:${jade_api}"
+         implementation "curse.maven:jade-324717:${jade_id}"
+//         api "curse.maven:jade-324717:${jade_api}"
      }
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
