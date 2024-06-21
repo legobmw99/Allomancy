@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:ingots/cadmium"
+    },
+    {
+      "tag": "c:ingots/cadmium"
+    },
+    {
+      "tag": "c:ingots/lead"
+    }
+  ],
+  "result": {
+    "count": 3,
+    "id": "allomancy:bendalloy_ingot"
+  }
+}

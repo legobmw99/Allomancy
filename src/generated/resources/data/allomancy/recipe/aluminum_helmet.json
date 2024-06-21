@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "tag": "c:ingots/aluminum"
+    }
+  },
+  "pattern": [
+    "AAA",
+    "A A"
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:aluminum_helmet"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "allomancy:cadmium_ingot"
+    },
+    {
+      "item": "allomancy:cadmium_ingot"
+    },
+    {
+      "item": "allomancy:cadmium_ingot"
+    },
+    {
+      "item": "allomancy:cadmium_ingot"
+    },
+    {
+      "item": "allomancy:cadmium_ingot"
+    },
+    {
+      "item": "allomancy:cadmium_ingot"
+    },
+    {
+      "item": "allomancy:cadmium_ingot"
+    },
+    {
+      "item": "allomancy:cadmium_ingot"
+    },
+    {
+      "item": "allomancy:cadmium_ingot"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:cadmium_block"
+  }
+}

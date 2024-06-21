@@ -1,30 +1,28 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.Allomancy;
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
 public record EntityPushPullPayload(int entityID, int force) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(Allomancy.MODID, "entity_push_pull");
+    public static final Type<EntityPushPullPayload> TYPE =
+            new Type<>(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "entity_push_pull"));
 
-    public EntityPushPullPayload(FriendlyByteBuf buf) {
-        this(buf.readInt(), buf.readInt());
-    }
+    public static final StreamCodec<ByteBuf, EntityPushPullPayload> STREAM_CODEC =
+            StreamCodec.composite(ByteBufCodecs.INT, EntityPushPullPayload::entityID, ByteBufCodecs.INT,
+                                  EntityPushPullPayload::force, EntityPushPullPayload::new);
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.entityID);
-        buf.writeInt(this.force);
-    }
 
     public boolean isPush() {
         return this.force > 0;
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<EntityPushPullPayload> type() {
+        return TYPE;
     }
 }

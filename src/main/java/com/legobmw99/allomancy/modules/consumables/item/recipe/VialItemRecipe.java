@@ -2,90 +2,102 @@ package com.legobmw99.allomancy.modules.consumables.item.recipe;
 
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
+import com.legobmw99.allomancy.modules.consumables.item.VialItem;
+import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.item.Item;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
-import java.util.function.Supplier;
+
+import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STORAGE;
 
 public class VialItemRecipe extends CustomRecipe {
-    private static final Ingredient INGREDIENT_FLAKES = Ingredient.of(MaterialsSetup.FLAKES.subList(0, Metal.values().length).stream().map(Supplier::get).toArray(Item[]::new));
+
+
     private static final Ingredient INGREDIENT_VIAL = Ingredient.of(ConsumeSetup.VIAL.get());
-
-    private ItemStack item_result = ItemStack.EMPTY;
-
 
     public VialItemRecipe(CraftingBookCategory catIn) {
         super(catIn);
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
-        this.item_result = ItemStack.EMPTY;
+    public boolean matches(CraftingInput input, Level worldIn) {
 
         boolean[] metals = new boolean[Metal.values().length];
         Arrays.fill(metals, false);
-        boolean[] ingredients = {false, false};
 
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
-            ItemStack itemstack = inv.getItem(i);
-            if (!itemstack.isEmpty()) {
-                if (INGREDIENT_FLAKES.test(itemstack)) {
+        boolean hasVial = false;
+        boolean hasFlake = false;
+
+        for (ItemStack stack : input.items()) {
+            if (stack.isEmpty()) {
+                continue;
+            }
+            if (INGREDIENT_VIAL.test(stack) && !hasVial) {
+                FlakeStorage storage = stack.get(FLAKE_STORAGE);
+                if (storage != null) {
                     for (Metal mt : Metal.values()) {
-                        if (itemstack.getItem() == MaterialsSetup.FLAKES.get(mt.getIndex()).get()) {
-                            if (metals[mt.getIndex()]) {
-                                return false;
-                            }
-
-                            metals[mt.getIndex()] = true;
-                            ingredients[1] = true;
+                        boolean hasMetalAlready = storage.contains(mt);
+                        if (metals[mt.getIndex()] && hasMetalAlready) {
+                            return false;
+                        } else {
+                            metals[mt.getIndex()] |= hasMetalAlready;
                         }
                     }
-                } else if (INGREDIENT_VIAL.test(itemstack)) {
-                    if (itemstack.getTag() != null) {
-                        for (Metal mt : Metal.values()) {
-                            if (itemstack.getTag().contains(mt.getName())) {
-                                boolean hasMetalAlready = itemstack.getTag().getBoolean(mt.getName());
-                                if (metals[mt.getIndex()] && hasMetalAlready) {
-                                    return false;
-                                } else {
-                                    metals[mt.getIndex()] = metals[mt.getIndex()] || hasMetalAlready;
-                                }
-                            }
-                        }
-                    }
-
-                    ingredients[0] = true;
-                } else {
-                    return false;
                 }
-
+                hasVial = true;
+                continue;
             }
-        }
-        if (ingredients[0] && ingredients[1]) {
-            this.item_result = new ItemStack(ConsumeSetup.VIAL.get(), 1);
-            CompoundTag nbt = new CompoundTag();
+            boolean any = false;
             for (Metal mt : Metal.values()) {
-                nbt.putBoolean(mt.getName(), metals[mt.getIndex()]);
+                if (stack.getItem() == MaterialsSetup.FLAKES.get(mt.getIndex()).get()) {
+                    if (metals[mt.getIndex()]) {
+                        return false;
+                    }
+
+                    metals[mt.getIndex()] = true;
+                    hasFlake = true;
+                    any = true;
+                    break;
+                }
             }
-            nbt.putInt("CustomModelData", 1);
-            this.item_result.setTag(nbt);
-            return true;
-        } else {
-            return false;
+            if (!any) {
+                return false;
+            }
         }
+        return hasVial && hasFlake;
+
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer p_44001_, RegistryAccess p_267165_) {
-        return this.item_result.copy();
+    public ItemStack assemble(CraftingInput input, HolderLookup.Provider provider) {
+
+        FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
+
+        for (var stack : input.items()) {
+            if (stack.isEmpty()) {
+                continue;
+            }
+            if (INGREDIENT_VIAL.test(stack)) {
+                storage.addAll(stack.get(FLAKE_STORAGE));
+                continue;
+            }
+            for (Metal mt : Metal.values()) {
+                if (stack.getItem() == MaterialsSetup.FLAKES.get(mt.getIndex()).get()) {
+                    storage.add(mt);
+                    break;
+                }
+            }
+        }
+
+        var item_result = new ItemStack(ConsumeSetup.VIAL.get(), 1);
+        VialItem.fillVial(item_result, storage.toImmutable());
+        return item_result;
+
     }
 
     @Override

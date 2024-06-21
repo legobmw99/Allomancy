@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_brass_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:brass_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "allomancy:brass_nugget"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_brass_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "allomancy:brass_nugget"
+    ]
+  }
+}

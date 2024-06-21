@@ -1,0 +1,36 @@
+{
+  "parent": "allomancy:main/metallurgist",
+  "criteria": {
+    "lerasium_nugget": {
+      "conditions": {
+        "item": {
+          "items": "allomancy:lerasium_nugget"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.become_mistborn.desc"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "allomancy:mistcloak"
+    },
+    "title": {
+      "translate": "advancements.become_mistborn.title"
+    }
+  },
+  "requirements": [
+    [
+      "lerasium_nugget"
+    ]
+  ],
+  "rewards": {
+    "experience": 100
+  },
+  "sends_telemetry_event": true
+}

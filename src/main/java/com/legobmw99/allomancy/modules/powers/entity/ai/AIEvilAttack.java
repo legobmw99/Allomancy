@@ -11,7 +11,8 @@ public class AIEvilAttack extends MeleeAttackGoal {
 
     @Override
     protected boolean canPerformAttack(LivingEntity attackTarget) {
-        return this.isTimeToAttack() && this.mob.distanceToSqr(attackTarget) <= (4.0F + attackTarget.getBbWidth()) && this.mob.getSensing().hasLineOfSight(attackTarget);
+        return this.isTimeToAttack() && this.mob.distanceToSqr(attackTarget) <= (4.0F + attackTarget.getBbWidth()) &&
+               this.mob.getSensing().hasLineOfSight(attackTarget);
     }
 
 }

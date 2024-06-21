@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "allomancy:bendalloy_nugget"
+    },
+    {
+      "item": "allomancy:bendalloy_nugget"
+    },
+    {
+      "item": "allomancy:bendalloy_nugget"
+    },
+    {
+      "item": "allomancy:bendalloy_nugget"
+    },
+    {
+      "item": "allomancy:bendalloy_nugget"
+    },
+    {
+      "item": "allomancy:bendalloy_nugget"
+    },
+    {
+      "item": "allomancy:bendalloy_nugget"
+    },
+    {
+      "item": "allomancy:bendalloy_nugget"
+    },
+    {
+      "item": "allomancy:bendalloy_nugget"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:bendalloy_ingot"
+  }
+}

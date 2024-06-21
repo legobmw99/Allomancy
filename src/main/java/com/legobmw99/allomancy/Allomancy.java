@@ -15,6 +15,7 @@ import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +30,7 @@ public class Allomancy {
     public static final Logger LOGGER = LogManager.getLogger();
 
 
-    public Allomancy(IEventBus bus, Dist dist) {
+    public Allomancy(IEventBus bus, ModContainer container, Dist dist) {
 
         if (dist.isClient()) {
             PowersClientSetup.register(bus);
@@ -56,7 +57,7 @@ public class Allomancy {
         ItemDisplay.register(bus);
         bus.addListener(ItemDisplay::addTabContents);
 
-        AllomancyConfig.register();
+        AllomancyConfig.register(container);
         bus.addListener(AllomancyConfig::onLoad);
         bus.addListener(AllomancyConfig::onReload);
 

@@ -75,7 +75,9 @@ public class ItemModels extends ItemModelProvider {
         }
 
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial (filled)");
-        var mf = getBuilder("vial_filled").parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc("item/full_vial"));
+        var mf = getBuilder("vial_filled")
+                .parent(getExistingFile(mcLoc("item/generated")))
+                .texture("layer0", modLoc("item/full_vial"));
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial");
         getBuilder("vial")
                 .parent(getExistingFile(mcLoc("item/generated")))
@@ -93,7 +95,8 @@ public class ItemModels extends ItemModelProvider {
 
     public void parentedBlock(Block block, String model) {
         Allomancy.LOGGER.debug("Creating Item Model for " + BuiltInRegistries.BLOCK.getKey(block));
-        getBuilder(BuiltInRegistries.BLOCK.getKey(block).getPath()).parent(new ModelFile.UncheckedModelFile(modLoc(model)));
+        getBuilder(BuiltInRegistries.BLOCK.getKey(block).getPath()).parent(
+                new ModelFile.UncheckedModelFile(modLoc(model)));
     }
 
     public void itemGenerated(Item item) {
@@ -102,7 +105,9 @@ public class ItemModels extends ItemModelProvider {
 
     public void itemGenerated(Item item, String model) {
         Allomancy.LOGGER.debug("Creating Item Model for " + BuiltInRegistries.ITEM.getKey(item));
-        getBuilder(BuiltInRegistries.ITEM.getKey(item).getPath()).parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc(model));
+        getBuilder(BuiltInRegistries.ITEM.getKey(item).getPath())
+                .parent(getExistingFile(mcLoc("item/generated")))
+                .texture("layer0", modLoc(model));
     }
 
     public void itemHandheld(Item item) {

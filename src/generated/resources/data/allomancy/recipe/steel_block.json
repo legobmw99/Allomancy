@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "allomancy:steel_ingot"
+    },
+    {
+      "item": "allomancy:steel_ingot"
+    },
+    {
+      "item": "allomancy:steel_ingot"
+    },
+    {
+      "item": "allomancy:steel_ingot"
+    },
+    {
+      "item": "allomancy:steel_ingot"
+    },
+    {
+      "item": "allomancy:steel_ingot"
+    },
+    {
+      "item": "allomancy:steel_ingot"
+    },
+    {
+      "item": "allomancy:steel_ingot"
+    },
+    {
+      "item": "allomancy:steel_ingot"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:steel_block"
+  }
+}

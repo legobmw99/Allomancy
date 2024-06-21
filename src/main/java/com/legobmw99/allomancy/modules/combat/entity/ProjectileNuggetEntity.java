@@ -25,7 +25,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class ProjectileNuggetEntity extends ThrowableItemProjectile implements ItemSupplier {
-    private static final EntityDataAccessor<ItemStack> ITEM = SynchedEntityData.defineId(ProjectileNuggetEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<ItemStack> ITEM =
+            SynchedEntityData.defineId(ProjectileNuggetEntity.class, EntityDataSerializers.ITEM_STACK);
 
     private float damage;
     private boolean dropItem = true;
@@ -65,15 +66,17 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
         }
     }
 
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ITEM, ItemStack.EMPTY);
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ITEM, ItemStack.EMPTY);
     }
 
 
     @Override
     protected void onHit(HitResult rayTraceResult) {
-        if (rayTraceResult.getType() == HitResult.Type.ENTITY && ((EntityHitResult) rayTraceResult).getEntity() == this.getOwner()) {
+        if (rayTraceResult.getType() == HitResult.Type.ENTITY &&
+            ((EntityHitResult) rayTraceResult).getEntity() == this.getOwner()) {
             return;
         }
 
@@ -83,8 +86,12 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
 
         if (!this.level().isClientSide) {
             ItemStack ammo = new ItemStack(this.entityData.get(ITEM).getItem(), 1);
-            if (this.level().getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && rayTraceResult.getType() != HitResult.Type.ENTITY && this.dropItem) {
-                this.level().addFreshEntity(new ItemEntity(this.level(), this.position().x(), this.position().y(), this.position().z(), ammo));
+            if (this.level().getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) &&
+                rayTraceResult.getType() != HitResult.Type.ENTITY && this.dropItem) {
+                this
+                        .level()
+                        .addFreshEntity(new ItemEntity(this.level(), this.position().x(), this.position().y(),
+                                                       this.position().z(), ammo));
             }
 
             this.kill();
@@ -92,7 +99,11 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
     }
 
     private DamageSource makeDamage() {
-        return new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(CombatSetup.COIN_DAMAGE), this, this.getOwner());
+        return new DamageSource(this
+                                        .level()
+                                        .registryAccess()
+                                        .registryOrThrow(Registries.DAMAGE_TYPE)
+                                        .getHolderOrThrow(CombatSetup.COIN_DAMAGE), this, this.getOwner());
     }
 
     public ItemStack getItem() {

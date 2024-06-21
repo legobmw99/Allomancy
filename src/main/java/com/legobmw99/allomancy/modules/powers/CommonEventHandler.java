@@ -28,12 +28,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerSetSpawnEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 import java.io.File;
 import java.util.Arrays;
@@ -63,10 +63,11 @@ public class CommonEventHandler {
             if (compoundtag != null && compoundtag.contains("ForgeCaps")) {
                 CompoundTag caps = compoundtag.getCompound("ForgeCaps");
                 if (caps.contains("allomancy:allomancy_data")) {
-                    Allomancy.LOGGER.info("Found old forge data for player {}, trying to load!", player.getName().getString());
+                    Allomancy.LOGGER.info("Found old forge data for player {}, trying to load!",
+                                          player.getName().getString());
                     var data = new AllomancerData();
                     try {
-                        data.deserializeNBT(caps.getCompound("allomancy:allomancy_data"));
+                        data.deserializeNBT(player.registryAccess(), caps.getCompound("allomancy:allomancy_data"));
                         player.setData(AllomancerAttachment.ALLOMANCY_DATA, data);
                         Allomancy.LOGGER.info("Loaded old forge data for player {}!", player.getName().getString());
 
@@ -98,7 +99,8 @@ public class CommonEventHandler {
                     ItemStack flakes = new ItemStack(MaterialsSetup.FLAKES.get(randomMisting).get());
                     // Give the player one flake of their metal
                     if (!player.getInventory().add(flakes)) {
-                        ItemEntity entity = new ItemEntity(player.getCommandSenderWorld(), player.position().x(), player.position().y(), player.position().z(), flakes);
+                        ItemEntity entity = new ItemEntity(player.getCommandSenderWorld(), player.position().x(),
+                                                           player.position().y(), player.position().z(), flakes);
                         player.getCommandSenderWorld().addFreshEntity(entity);
                     }
                 }
@@ -127,14 +129,16 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.getEntity().getCommandSenderWorld().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
+        if (!event.getEntity().getCommandSenderWorld().isClientSide() &&
+            event.getEntity() instanceof ServerPlayer player) {
             Network.syncAllomancerData(player);
         }
     }
 
     @SubscribeEvent
     public static void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (!event.getEntity().getCommandSenderWorld().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
+        if (!event.getEntity().getCommandSenderWorld().isClientSide() &&
+            event.getEntity() instanceof ServerPlayer player) {
             Network.syncAllomancerData(player);
         }
     }
@@ -184,7 +188,9 @@ public class CommonEventHandler {
             }
 
             if (data.isBurning(Metal.CHROMIUM)) {
-                ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(source, event.getEntity(), Metal.CHROMIUM, data.isEnhanced());
+                ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER
+                        .get()
+                        .trigger(source, event.getEntity(), Metal.CHROMIUM, data.isEnhanced());
                 if (event.getEntity() instanceof ServerPlayer player) {
                     ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(player, Metal.CHROMIUM, data.isEnhanced());
                     if (!Emotional.hasTinFoilHat(player)) {
@@ -218,9 +224,18 @@ public class CommonEventHandler {
             }
 
             if (data.isBurning(Metal.STEEL)) {
-                if (event.getSource().type().equals(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FALL).value())) {
+                if (event
+                        .getSource()
+                        .type()
+                        .equals(player
+                                        .level()
+                                        .registryAccess()
+                                        .registryOrThrow(Registries.DAMAGE_TYPE)
+                                        .getHolderOrThrow(DamageTypes.FALL)
+                                        .value())) {
                     BlockPos on = player.getOnPos();
-                    if (Physical.isBlockStateMetallic(player.level().getBlockState(on)) || Physical.isBlockStateMetallic(player.level().getBlockState(on.above()))) {
+                    if (Physical.isBlockStateMetallic(player.level().getBlockState(on)) ||
+                        Physical.isBlockStateMetallic(player.level().getBlockState(on.above()))) {
                         event.setCanceled(true);
                     }
                 }
@@ -229,12 +244,8 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void onWorldTick(final TickEvent.LevelTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
-
-        Level level = event.level;
+    public static void onWorldTick(final LevelTickEvent.Post event) {
+        Level level = event.getLevel();
         var list = level.players();
         for (int enti = list.size() - 1; enti >= 0; enti--) {
             Player curPlayer = list.get(enti);
@@ -287,7 +298,8 @@ public class CommonEventHandler {
              *********************************************/
             if (data.isEnhanced() && data.isBurning(Metal.ELECTRUM) && data.getStored(Metal.ELECTRUM) >= 9) {
                 Enhancement.teleportToSpawn(curPlayer, level, data);
-            } else if (data.isEnhanced() && data.isBurning(Metal.GOLD) && data.getStored(Metal.GOLD) >= 9) { // These should be mutually exclusive
+            } else if (data.isEnhanced() && data.isBurning(Metal.GOLD) &&
+                       data.getStored(Metal.GOLD) >= 9) { // These should be mutually exclusive
                 Enhancement.teleportToLastDeath(curPlayer, level, data);
             }
 
@@ -318,8 +330,10 @@ public class CommonEventHandler {
                     curPlayer.removeEffect(MobEffects.BLINDNESS);
                 }
             }
-            // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with flashing, only if the amplifier is 5
-            if (!data.isBurning(Metal.TIN) && curPlayer.getEffect(MobEffects.NIGHT_VISION) != null && curPlayer.getEffect(MobEffects.NIGHT_VISION).getAmplifier() == 5) {
+            // Remove night vision from non-tin burners if duration < 10 seconds. Related to the above issue with
+            // flashing, only if the amplifier is 5
+            if (!data.isBurning(Metal.TIN) && curPlayer.getEffect(MobEffects.NIGHT_VISION) != null &&
+                curPlayer.getEffect(MobEffects.NIGHT_VISION).getAmplifier() == 5) {
                 curPlayer.removeEffect(MobEffects.NIGHT_VISION);
             }
             if (data.isBurning(Metal.PEWTER)) {

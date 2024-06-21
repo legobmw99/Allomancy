@@ -4,11 +4,12 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
+import com.legobmw99.allomancy.modules.consumables.item.VialItem;
+import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
@@ -21,9 +22,11 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
+
 public class ItemDisplay {
 
-    private static final DeferredRegister<CreativeModeTab> CREATIVETABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Allomancy.MODID);
+    private static final DeferredRegister<CreativeModeTab> CREATIVETABS =
+            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Allomancy.MODID);
 
     public static Supplier<CreativeModeTab> allomancy_group = CREATIVETABS.register("main_tab", () -> CreativeModeTab
             .builder()
@@ -38,12 +41,12 @@ public class ItemDisplay {
                 output.accept(ConsumeSetup.VIAL.get());
 
                 ItemStack fullVial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
-                CompoundTag nbt = new CompoundTag();
+                FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
                 for (Metal mt : Metal.values()) {
-                    nbt.putBoolean(mt.getName(), true);
+                    storage.add(mt);
                 }
-                nbt.putInt("CustomModelData", 1);
-                fullVial.setTag(nbt);
+                VialItem.fillVial(fullVial, storage.toImmutable());
+
                 output.accept(fullVial);
 
                 output.accept(CombatSetup.KOLOSS_BLADE.get());

@@ -9,16 +9,14 @@
  */
 package com.legobmw99.allomancy.modules.powers.client.gui;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.network.PowerRequests;
 import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -37,12 +35,18 @@ import java.util.Arrays;
 @OnlyIn(Dist.CLIENT)
 public class MetalSelectScreen extends Screen {
 
-    private static final String[] METAL_NAMES = Arrays.stream(Metal.values()).map(Metal::getName).toArray(String[]::new);
-    private static final String GUI_METAL = "allomancy:textures/gui/metals/%s_symbol.png";
-    private static final String[] METAL_LOCAL = Arrays.stream(METAL_NAMES).map(s -> "metals." + s).toArray(String[]::new);
-    private static final ResourceLocation[] METAL_ICONS = Arrays.stream(METAL_NAMES).map(s -> new ResourceLocation(String.format(GUI_METAL, s))).toArray(ResourceLocation[]::new);
+    private static final String[] METAL_NAMES =
+            Arrays.stream(Metal.values()).map(Metal::getName).toArray(String[]::new);
+    private static final String GUI_METAL = "textures/gui/metals/%s_symbol.png";
+    private static final String[] METAL_LOCAL =
+            Arrays.stream(METAL_NAMES).map(s -> "metals." + s).toArray(String[]::new);
+    private static final ResourceLocation[] METAL_ICONS = Arrays
+            .stream(METAL_NAMES)
+            .map(s -> ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, String.format(GUI_METAL, s)))
+            .toArray(ResourceLocation[]::new);
     final Minecraft mc;
-    int timeIn = PowersConfig.animate_selection.get() ? 0 : 16; // Config setting for whether the wheel animates open or instantly appears
+    int timeIn = PowersConfig.animate_selection.get() ? 0 : 16;
+    // Config setting for whether the wheel animates open or instantly appears
     int slotSelected = -1;
 
     public MetalSelectScreen() {
@@ -77,18 +81,19 @@ public class MetalSelectScreen extends Screen {
         this.slotSelected = -1;
 
         Tesselator tess = Tesselator.getInstance();
-        BufferBuilder buf = tess.getBuilder();
+
+        BufferBuilder buf = tess.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
 
         RenderSystem.disableCull();
         RenderSystem.enableBlend();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
-        buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
 
         for (int seg = 0; seg < segments; seg++) {
             Metal mt = Metal.getMetal(toMetalIndex(seg));
             boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
-            float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+            float radius =
+                    Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
             if (mouseInSector) {
                 this.slotSelected = seg;
                 radius *= 1.025f;
@@ -107,7 +112,7 @@ public class MetalSelectScreen extends Screen {
             int a = 0x99;
 
             if (seg == 0) {
-                buf.vertex(x, y, 0).color(0x19, 0x19, 0x19, 0x15).endVertex();
+                buf.addVertex(x, y, 0).setColor(0x19, 0x19, 0x19, 0x15);
             }
 
             for (float v = 0; v < degPer + step / 2; v += step) {
@@ -116,17 +121,18 @@ public class MetalSelectScreen extends Screen {
                 float yp = y + Mth.sin(rad) * radius;
 
                 if (v == 0) {
-                    buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
+                    buf.addVertex(xp, yp, 0).setColor(r, g, b, a);
                 }
-                buf.vertex(xp, yp, 0).color(r, g, b, a).endVertex();
+                buf.addVertex(xp, yp, 0).setColor(r, g, b, a);
             }
         }
-        tess.end();
+        BufferUploader.drawWithShader(buf.buildOrThrow());
 
         for (int seg = 0; seg < segments; seg++) {
             Metal mt = Metal.getMetal(toMetalIndex(seg));
             boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
-            float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+            float radius =
+                    Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
             if (mouseInSector) {
                 radius *= 1.025f;
             }
@@ -138,7 +144,8 @@ public class MetalSelectScreen extends Screen {
 
             float xsp = xp - 4;
             float ysp = yp;
-            String name = (mouseInSector ? ChatFormatting.UNDERLINE : ChatFormatting.RESET) + Component.translatable(METAL_LOCAL[toMetalIndex(seg)]).getString();
+            String name = (mouseInSector ? ChatFormatting.UNDERLINE : ChatFormatting.RESET) +
+                          Component.translatable(METAL_LOCAL[toMetalIndex(seg)]).getString();
             int textwidth = this.font.width(name);
 
             if (xsp < x) {

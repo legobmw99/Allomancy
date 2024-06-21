@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_deepslate_cadmium_ore": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:deepslate_cadmium_ore"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "allomancy:cadmium_ingot_from_deepslate_cadmium_ore_from_blasting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_deepslate_cadmium_ore"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "allomancy:cadmium_ingot_from_deepslate_cadmium_ore_from_blasting"
+    ]
+  }
+}

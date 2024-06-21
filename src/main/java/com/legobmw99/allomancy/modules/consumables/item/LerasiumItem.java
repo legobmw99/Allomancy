@@ -20,11 +20,11 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class LerasiumItem extends Item {
-    private static final FoodProperties lerasium = new FoodProperties.Builder().fast().alwaysEat().saturationMod(0).nutrition(0).build();
+    private static final FoodProperties lerasium =
+            new FoodProperties.Builder().fast().alwaysEdible().saturationModifier(0).nutrition(0).build();
 
     public LerasiumItem() {
         super(new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).food(lerasium));
@@ -62,20 +62,24 @@ public class LerasiumItem extends Item {
 
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        Component lore = ItemDisplay.addColorToText("item.allomancy.lerasium_nugget.lore", ChatFormatting.LIGHT_PURPLE);
+    public void appendHoverText(ItemStack stack,
+                                Item.TooltipContext ctx,
+                                List<Component> tooltip,
+                                TooltipFlag flagIn) {
+        super.appendHoverText(stack, ctx, tooltip, flagIn);
+        Component lore =
+                ItemDisplay.addColorToText("item.allomancy.lerasium_nugget.lore", ChatFormatting.LIGHT_PURPLE);
         tooltip.add(lore);
 
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity livingEntity) {
         return 4;
     }
 
     @Override
-    public boolean isFoil(ItemStack par1ItemStack) {
+    public boolean isFoil(ItemStack stack) {
         //Add enchantment glint
         return true;
     }

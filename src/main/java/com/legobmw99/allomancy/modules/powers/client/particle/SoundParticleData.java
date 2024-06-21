@@ -1,31 +1,27 @@
 package com.legobmw99.allomancy.modules.powers.client.particle;
 
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
-import com.mojang.brigadier.StringReader;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.sounds.SoundSource;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 
 public class SoundParticleData implements ParticleOptions {
 
-    public static final Codec<SoundParticleData> CODEC = RecordCodecBuilder.create(
-            instance -> instance.group(Codec.INT.fieldOf("type").forGetter(d -> d.getSoundType().ordinal())).apply(instance, s -> new SoundParticleData(SoundSource.values()[s])));
-    public static final ParticleOptions.Deserializer<SoundParticleData> DESERIALIZER = new ParticleOptions.Deserializer<>() {
+    public static final MapCodec<SoundParticleData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+            .group(Codec.INT.fieldOf("type").forGetter(d -> d.getSoundType().ordinal()))
+            .apply(instance, s -> new SoundParticleData(SoundSource.values()[s])));
 
-        @Override
-        public SoundParticleData fromCommand(ParticleType<SoundParticleData> particleTypeIn, StringReader reader) {
-            return new SoundParticleData(SoundSource.AMBIENT);
-        }
+    public static final StreamCodec<FriendlyByteBuf, SoundParticleData> STREAM_CODEC =
+            StreamCodec.composite(NeoForgeStreamCodecs.enumCodec(SoundSource.class), SoundParticleData::getSoundType,
+                                  SoundParticleData::new);
 
-        @Override
-        public SoundParticleData fromNetwork(ParticleType<SoundParticleData> particleTypeIn, FriendlyByteBuf buffer) {
-            return new SoundParticleData(buffer.readEnum(SoundSource.class));
-        }
-    };
+
     private final SoundSource type;
 
     public SoundParticleData(SoundSource type) {
@@ -41,13 +37,4 @@ public class SoundParticleData implements ParticleOptions {
         return PowersClientSetup.SOUND_PARTICLE_TYPE.get();
     }
 
-    @Override
-    public void writeToNetwork(FriendlyByteBuf buffer) {
-        buffer.writeEnum(this.type);
-    }
-
-    @Override
-    public String writeToString() {
-        return BuiltInRegistries.PARTICLE_TYPE.getKey(this.getType()) + " " + this.type.toString();
-    }
 }

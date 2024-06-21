@@ -99,7 +99,8 @@ public class Physical {
             if (ent instanceof IronGolem) {
                 return true;
             }
-            if (isItemMetallic(ent.getItemInHand(InteractionHand.MAIN_HAND)) || isItemMetallic(ent.getItemInHand(InteractionHand.OFF_HAND))) {
+            if (isItemMetallic(ent.getItemInHand(InteractionHand.MAIN_HAND)) ||
+                isItemMetallic(ent.getItemInHand(InteractionHand.OFF_HAND))) {
                 return true;
             }
             for (ItemStack itemStack : ent.getArmorSlots()) {
@@ -113,7 +114,8 @@ public class Physical {
     }
 
     private static final Pattern ACTIVE_METAL_REGEX = Pattern.compile(
-            ".*(iron|steel|tin_|pewter|zinc|brass|copper|bronze|duralumin|chromium|nicrosil|gold|electrum|cadmium|bendalloy|lead_|silver|platinum|nickle).*");
+            ".*(iron|steel|tin_|pewter|zinc|brass|copper|bronze|duralumin|chromium|nicrosil|gold|electrum|cadmium" +
+            "|bendalloy|lead_|silver|platinum|nickle).*");
 
     public static boolean doesResourceContainMetal(ResourceLocation input) {
         return ACTIVE_METAL_REGEX.matcher(input.getPath()).matches();
@@ -148,7 +150,8 @@ public class Physical {
      * Three helper functions for working with Vec3s
      */
     private static Vec3 clamp(Vec3 value, Vec3 min, Vec3 max) {
-        return new Vec3(Mth.clamp(value.x, min.x, max.x), Mth.clamp(value.y, min.y, max.y), Mth.clamp(value.z, min.z, max.z));
+        return new Vec3(Mth.clamp(value.x, min.x, max.x), Mth.clamp(value.y, min.y, max.y),
+                        Mth.clamp(value.z, min.z, max.z));
     }
 
     private static Vec3 abs(Vec3 vec) {
@@ -204,6 +207,11 @@ public class Physical {
         add(Items.NETHERITE_AXE);
         add(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE);
         add(Items.CROSSBOW);
+        add(Items.BRUSH);
+        add(Items.MUSIC_DISC_CREATOR);
+        add(Items.MUSIC_DISC_CREATOR_MUSIC_BOX);
+        add(Items.TRIAL_KEY);
+        add(Items.OMINOUS_TRIAL_KEY);
 
         add(Blocks.ANVIL);
         add(Blocks.CHIPPED_ANVIL);
@@ -236,8 +244,9 @@ public class Physical {
         add(Blocks.LODESTONE);
         add(Blocks.GILDED_BLACKSTONE);
         add(Blocks.LIGHTNING_ROD);
+        add(Blocks.CRAFTER);
+        add(Blocks.HEAVY_CORE);
 
-        add(Items.BRUSH);
 
         WoodType.values().forEach(wt -> {
             add("minecraft:" + wt.name() + "_hanging_sign");
@@ -251,9 +260,19 @@ public class Physical {
         add(CombatSetup.COIN_BAG.get());
 
 
-        BuiltInRegistries.ITEM.keySet().stream().filter(Objects::nonNull).filter(Physical::doesResourceContainMetal).forEach(Physical::add);
+        BuiltInRegistries.ITEM
+                .keySet()
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(Physical::doesResourceContainMetal)
+                .forEach(Physical::add);
 
-        BuiltInRegistries.BLOCK.keySet().stream().filter(Objects::nonNull).filter(Physical::doesResourceContainMetal).forEach(Physical::add);
+        BuiltInRegistries.BLOCK
+                .keySet()
+                .stream()
+                .filter(Objects::nonNull)
+                .filter(Physical::doesResourceContainMetal)
+                .forEach(Physical::add);
 
 
         ArrayList<String> list = new ArrayList<>(defaultList);

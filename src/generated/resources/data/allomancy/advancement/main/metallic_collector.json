@@ -1,0 +1,258 @@
+{
+  "parent": "allomancy:main/metallurgist",
+  "criteria": {
+    "has_aluminum_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:aluminum_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_bendalloy_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:bendalloy_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_brass_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:brass_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_bronze_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:bronze_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_cadmium_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:cadmium_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_chromium_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:chromium_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_copper_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:copper_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_duralumin_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:duralumin_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_electrum_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:electrum_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_gold_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:gold_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_iron_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:iron_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_lead_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:lead_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_nicrosil_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:nicrosil_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_pewter_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:pewter_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_silver_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:silver_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_steel_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:steel_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_tin_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:tin_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_zinc_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:zinc_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.metallic_collector.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "components": {
+        "minecraft:custom_model_data": 1
+      },
+      "count": 1,
+      "id": "allomancy:vial"
+    },
+    "title": {
+      "translate": "advancements.metallic_collector.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_iron_flakes"
+    ],
+    [
+      "has_steel_flakes"
+    ],
+    [
+      "has_tin_flakes"
+    ],
+    [
+      "has_pewter_flakes"
+    ],
+    [
+      "has_zinc_flakes"
+    ],
+    [
+      "has_brass_flakes"
+    ],
+    [
+      "has_copper_flakes"
+    ],
+    [
+      "has_bronze_flakes"
+    ],
+    [
+      "has_aluminum_flakes"
+    ],
+    [
+      "has_duralumin_flakes"
+    ],
+    [
+      "has_chromium_flakes"
+    ],
+    [
+      "has_nicrosil_flakes"
+    ],
+    [
+      "has_gold_flakes"
+    ],
+    [
+      "has_electrum_flakes"
+    ],
+    [
+      "has_cadmium_flakes"
+    ],
+    [
+      "has_bendalloy_flakes"
+    ],
+    [
+      "has_lead_flakes"
+    ],
+    [
+      "has_silver_flakes"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -37,28 +38,28 @@ public class ItemTags extends ItemTagsProvider {
             var ingot = MaterialsSetup.INGOTS.get(mt.getIndex()).getKey();
             var block = MaterialsSetup.STORAGE_BLOCK_ITEMS.get(mt.getIndex()).getKey();
 
-            addForgeTag("nuggets", nugget);
-            addForgeTag("nuggets/" + mt.getName(), nugget);
-            addForgeTag("ingots", ingot);
-            addForgeTag("ingots/" + mt.getName(), ingot);
-            addForgeTag("storage_blocks", block);
-            addForgeTag("storage_blocks/" + mt.getName(), block);
+            addCommonTag("nuggets", nugget);
+            addCommonTag("nuggets/" + mt.getName(), nugget);
+            addCommonTag("ingots", ingot);
+            addCommonTag("ingots/" + mt.getName(), ingot);
+            addCommonTag("storage_blocks", block);
+            addCommonTag("storage_blocks/" + mt.getName(), block);
 
 
         }
-        addForgeTag("nuggets", MaterialsSetup.NUGGETS.get(MaterialsSetup.LEAD).getKey());
-        addForgeTag("nuggets/lead", MaterialsSetup.NUGGETS.get(MaterialsSetup.LEAD).getKey());
-        addForgeTag("ingots", MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).getKey());
-        addForgeTag("ingots/lead", MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).getKey());
-        addForgeTag("storage_blocks", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.LEAD).getKey());
-        addForgeTag("storage_blocks/lead", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.LEAD).getKey());
+        addCommonTag("nuggets", MaterialsSetup.NUGGETS.get(MaterialsSetup.LEAD).getKey());
+        addCommonTag("nuggets/lead", MaterialsSetup.NUGGETS.get(MaterialsSetup.LEAD).getKey());
+        addCommonTag("ingots", MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).getKey());
+        addCommonTag("ingots/lead", MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).getKey());
+        addCommonTag("storage_blocks", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.LEAD).getKey());
+        addCommonTag("storage_blocks/lead", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.LEAD).getKey());
 
-        addForgeTag("nuggets", MaterialsSetup.NUGGETS.get(MaterialsSetup.SILVER).getKey());
-        addForgeTag("nuggets/silver", MaterialsSetup.NUGGETS.get(MaterialsSetup.SILVER).getKey());
-        addForgeTag("ingots", MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).getKey());
-        addForgeTag("ingots/silver", MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).getKey());
-        addForgeTag("storage_blocks", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).getKey());
-        addForgeTag("storage_blocks/silver", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).getKey());
+        addCommonTag("nuggets", MaterialsSetup.NUGGETS.get(MaterialsSetup.SILVER).getKey());
+        addCommonTag("nuggets/silver", MaterialsSetup.NUGGETS.get(MaterialsSetup.SILVER).getKey());
+        addCommonTag("ingots", MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).getKey());
+        addCommonTag("ingots/silver", MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).getKey());
+        addCommonTag("storage_blocks", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).getKey());
+        addCommonTag("storage_blocks/silver", MaterialsSetup.STORAGE_BLOCK_ITEMS.get(MaterialsSetup.SILVER).getKey());
 
 
         for (int i = 0; i < MaterialsSetup.ORE_METALS.length; i++) {
@@ -67,24 +68,28 @@ public class ItemTags extends ItemTagsProvider {
             var raw_block = MaterialsSetup.RAW_ORE_BLOCKS_ITEMS.get(i).getKey();
             var raw = MaterialsSetup.RAW_ORE_ITEMS.get(i).getKey();
 
-            addForgeTag("ores/" + MaterialsSetup.ORE_METALS[i], ore, ds_ore);
-            addForgeTag("ores", ore, ds_ore);
-            addForgeTag("ores_in_ground/stone", ore);
-            addForgeTag("ores_in_ground/deepslate", ds_ore);
-            addForgeTag("storage_blocks", raw_block);
-            addForgeTag("storage_blocks/raw_" + MaterialsSetup.ORE_METALS[i], raw_block);
-            addForgeTag("raw_materials", raw);
-            addForgeTag("raw_materials/" + MaterialsSetup.ORE_METALS[i], raw);
+            addCommonTag("ores/" + MaterialsSetup.ORE_METALS[i], ore, ds_ore);
+            addCommonTag("ores", ore, ds_ore);
+            addCommonTag("ores_in_ground/stone", ore);
+            addCommonTag("ores_in_ground/deepslate", ds_ore);
+            addCommonTag("storage_blocks", raw_block);
+            addCommonTag("storage_blocks/raw_" + MaterialsSetup.ORE_METALS[i], raw_block);
+            addCommonTag("raw_materials", raw);
+            addCommonTag("raw_materials/" + MaterialsSetup.ORE_METALS[i], raw);
         }
 
+        tag(net.minecraft.tags.ItemTags.SWORDS)
+                .replace(false)
+                .add(CombatSetup.OBSIDIAN_DAGGER.get())
+                .add(CombatSetup.KOLOSS_BLADE.get());
     }
 
     @SafeVarargs
-    private void addForgeTag(String name, ResourceKey<Item>... items) {
-        // see ForgeItemTagsProvider
-        Allomancy.LOGGER.debug("Creating item tag for forge:" + name);
-
-        tag(net.minecraft.tags.ItemTags.create(new ResourceLocation("forge", name))).replace(false).add(items);
+    private void addCommonTag(String name, ResourceKey<Item>... items) {
+        Allomancy.LOGGER.debug("Creating item tag for c:" + name);
+        tag(net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name)))
+                .replace(false)
+                .add(items);
     }
 
 

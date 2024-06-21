@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "allomancy:steel_nugget"
+    },
+    {
+      "item": "allomancy:steel_nugget"
+    },
+    {
+      "item": "allomancy:steel_nugget"
+    },
+    {
+      "item": "allomancy:steel_nugget"
+    },
+    {
+      "item": "allomancy:steel_nugget"
+    },
+    {
+      "item": "allomancy:steel_nugget"
+    },
+    {
+      "item": "allomancy:steel_nugget"
+    },
+    {
+      "item": "allomancy:steel_nugget"
+    },
+    {
+      "item": "allomancy:steel_nugget"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:steel_ingot"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:adventure/root",
+  "criteria": {
+    "grinder": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:allomantic_grinder"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.local_metallurgist.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "allomancy:allomantic_grinder"
+    },
+    "title": {
+      "translate": "advancements.local_metallurgist.title"
+    }
+  },
+  "requirements": [
+    [
+      "grinder"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

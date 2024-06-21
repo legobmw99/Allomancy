@@ -10,12 +10,12 @@ import java.util.function.Supplier;
 
 public class AllomancerAttachment {
 
-    private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Allomancy.MODID);
+    private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
+            DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Allomancy.MODID);
 
-    public static final Supplier<AttachmentType<AllomancerData>> ALLOMANCY_DATA = ATTACHMENT_TYPES.register("allomancy_data", () -> AttachmentType
-            .serializable(AllomancerData::new)
-            .copyOnDeath()
-            .build());
+    public static final Supplier<AttachmentType<AllomancerData>> ALLOMANCY_DATA =
+            ATTACHMENT_TYPES.register("allomancy_data",
+                                      () -> AttachmentType.serializable(AllomancerData::new).copyOnDeath().build());
 
     public static void register(IEventBus bus) {
         ATTACHMENT_TYPES.register(bus);

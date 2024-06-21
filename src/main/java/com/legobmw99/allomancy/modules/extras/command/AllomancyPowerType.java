@@ -20,8 +20,10 @@ import java.util.stream.Collectors;
 public class AllomancyPowerType implements ArgumentType<String> {
 
     public static final AllomancyPowerType INSTANCE = new AllomancyPowerType();
-    private static final Set<String> types = Arrays.stream(Metal.values()).map(Metal::getName).collect(Collectors.toSet());
-    private static final DynamicCommandExceptionType unknown_power = new DynamicCommandExceptionType(o -> Component.translatable("commands.allomancy.unrecognized", o));
+    private static final Set<String> types =
+            Arrays.stream(Metal.values()).map(Metal::getName).collect(Collectors.toSet());
+    private static final DynamicCommandExceptionType unknown_power =
+            new DynamicCommandExceptionType(o -> Component.translatable("commands.allomancy.unrecognized", o));
 
     static {
         types.add("all");

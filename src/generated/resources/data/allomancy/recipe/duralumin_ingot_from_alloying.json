@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:ingots/aluminum"
+    },
+    {
+      "tag": "c:ingots/aluminum"
+    },
+    {
+      "tag": "c:ingots/aluminum"
+    },
+    {
+      "item": "minecraft:copper_ingot"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "allomancy:duralumin_ingot"
+  }
+}

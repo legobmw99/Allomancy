@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.4,
+  "ingredient": {
+    "item": "allomancy:deepslate_lead_ore"
+  },
+  "result": {
+    "count": 1,
+    "id": "allomancy:lead_ingot"
+  }
+}

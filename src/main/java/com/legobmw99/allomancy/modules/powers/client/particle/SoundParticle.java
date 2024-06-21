@@ -11,7 +11,14 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SoundParticle extends TextureSheetParticle {
-    public SoundParticle(Level world, double x, double y, double z, double motionX, double motionY, double motionZ, SoundSource typeIn) {
+    public SoundParticle(Level world,
+                         double x,
+                         double y,
+                         double z,
+                         double motionX,
+                         double motionY,
+                         double motionZ,
+                         SoundSource typeIn) {
         super((ClientLevel) world, x, y, z, motionX, motionY, motionZ);
 
         this.xd = motionX;
@@ -57,7 +64,14 @@ public class SoundParticle extends TextureSheetParticle {
 
     @OnlyIn(Dist.CLIENT)
     public static class Factory implements ParticleProvider.Sprite<SoundParticleData> {
-        public TextureSheetParticle createParticle(SoundParticleData data, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        public TextureSheetParticle createParticle(SoundParticleData data,
+                                                   ClientLevel worldIn,
+                                                   double x,
+                                                   double y,
+                                                   double z,
+                                                   double xSpeed,
+                                                   double ySpeed,
+                                                   double zSpeed) {
             return new SoundParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, data.getSoundType());
         }
     }

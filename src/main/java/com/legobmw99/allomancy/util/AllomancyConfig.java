@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -36,9 +36,9 @@ public class AllomancyConfig {
         PowersConfig.load_whitelist(e);
     }
 
-    public static void register() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_CONFIG);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AllomancyConfig.CLIENT_CONFIG);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, AllomancyConfig.SERVER_CONFIG);
+    public static void register(ModContainer container) {
+        container.registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_CONFIG);
+        container.registerConfig(ModConfig.Type.CLIENT, AllomancyConfig.CLIENT_CONFIG);
+        container.registerConfig(ModConfig.Type.SERVER, AllomancyConfig.SERVER_CONFIG);
     }
 }

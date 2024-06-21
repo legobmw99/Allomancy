@@ -27,9 +27,11 @@ import net.minecraft.world.level.Level;
 import java.util.function.Predicate;
 
 public class Emotional {
-    private static final Predicate<Goal> isAggroGoal = (goal) -> goal instanceof SwellGoal || goal instanceof AIAttackOnCollideExtended || goal instanceof MeleeAttackGoal ||
-                                                                 goal instanceof TargetGoal || goal instanceof PanicGoal || goal.getClass().getName().contains("Fireball") ||
-                                                                 goal.getClass().getName().contains("Attack") || goal.getClass().getName().contains("Anger");
+    private static final Predicate<Goal> isAggroGoal =
+            (goal) -> goal instanceof SwellGoal || goal instanceof AIAttackOnCollideExtended ||
+                      goal instanceof MeleeAttackGoal || goal instanceof TargetGoal || goal instanceof PanicGoal ||
+                      goal.getClass().getName().contains("Fireball") ||
+                      goal.getClass().getName().contains("Attack") || goal.getClass().getName().contains("Anger");
 
     public static void riot(PathfinderMob target, Player allomancer, boolean enhanced) {
         try {
@@ -70,7 +72,10 @@ public class Emotional {
                     target.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>(pillager, 1.0D, 8.0F));
                 }
             } else {
-                target.level().explode(target, target.position().x(), target.position().y(), target.position().z(), 1.2F, false, Level.ExplosionInteraction.MOB);
+                target
+                        .level()
+                        .explode(target, target.position().x(), target.position().y(), target.position().z(), 1.2F,
+                                 false, Level.ExplosionInteraction.MOB);
                 target.kill();
             }
         } catch (Exception e) {
@@ -89,8 +94,18 @@ public class Emotional {
                     target.setNoAi(false);
                 }
                 // Reset all current aggro goals
-                target.goalSelector.getRunningGoals().filter(isAggroGoal).forEach(WrappedGoal::stop);
-                target.targetSelector.getRunningGoals().filter(isAggroGoal).forEach(WrappedGoal::stop);
+                target.goalSelector
+                        .getAvailableGoals()
+                        .stream()
+                        .filter(WrappedGoal::isRunning)
+                        .filter(isAggroGoal)
+                        .forEach(WrappedGoal::stop);
+                target.targetSelector
+                        .getAvailableGoals()
+                        .stream()
+                        .filter(WrappedGoal::isRunning)
+                        .filter(isAggroGoal)
+                        .forEach(WrappedGoal::stop);
                 target.goalSelector.tick();
                 target.targetSelector.tick();
                 target.setTarget(null);

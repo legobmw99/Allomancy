@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "allomancy:cadmium_flakes"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:cadmium_pattern"
+  }
+}

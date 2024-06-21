@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
+      "tag": "c:storage_blocks/gold"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:lerasium_nugget"
+  }
+}

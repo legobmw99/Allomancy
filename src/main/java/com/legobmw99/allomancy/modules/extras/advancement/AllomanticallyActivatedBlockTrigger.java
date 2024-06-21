@@ -10,7 +10,6 @@ import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,18 +43,23 @@ public class AllomanticallyActivatedBlockTrigger extends SimpleCriterionTrigger<
         return TriggerInstance.CODEC;
     }
 
-    public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<ContextAwarePredicate> location, Optional<Boolean> isPush) implements SimpleInstance {
+    public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<ContextAwarePredicate> location,
+                                  Optional<Boolean> isPush) implements SimpleInstance {
         public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(builder -> builder
-                .group(ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(TriggerInstance::player),
-                       ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "entity").forGetter(TriggerInstance::location),
-                       ExtraCodecs.strictOptionalField(Codec.BOOL, "is_push").forGetter(TriggerInstance::isPush))
+                .group(EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
+                       EntityPredicate.ADVANCEMENT_CODEC
+                               .optionalFieldOf("entity")
+                               .forGetter(TriggerInstance::location),
+                       Codec.BOOL.optionalFieldOf("is_push").forGetter(TriggerInstance::isPush))
                 .apply(builder, TriggerInstance::new));
 
         public static Criterion<TriggerInstance> activatedBlock(Block block) {
-            ContextAwarePredicate contextawarepredicate = ContextAwarePredicate.create(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).build());
+            ContextAwarePredicate contextawarepredicate = ContextAwarePredicate.create(
+                    LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).build());
             return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
                     .get()
-                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate), Optional.empty()));
+                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate),
+                                                         Optional.empty()));
         }
 
         public static Criterion<TriggerInstance> activatedBlock(LootItemCondition.Builder... p_301013_) {
@@ -63,14 +67,17 @@ public class AllomanticallyActivatedBlockTrigger extends SimpleCriterionTrigger<
                     Arrays.stream(p_301013_).map(LootItemCondition.Builder::build).toArray(LootItemCondition[]::new));
             return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
                     .get()
-                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate), Optional.empty()));
+                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate),
+                                                         Optional.empty()));
         }
 
         public static Criterion<TriggerInstance> pushBlock(Block block) {
-            ContextAwarePredicate contextawarepredicate = ContextAwarePredicate.create(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).build());
+            ContextAwarePredicate contextawarepredicate = ContextAwarePredicate.create(
+                    LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).build());
             return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
                     .get()
-                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate), Optional.of(true)));
+                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate),
+                                                         Optional.of(true)));
         }
 
         public static Criterion<TriggerInstance> pushBlock(LootItemCondition.Builder... p_301013_) {
@@ -78,14 +85,17 @@ public class AllomanticallyActivatedBlockTrigger extends SimpleCriterionTrigger<
                     Arrays.stream(p_301013_).map(LootItemCondition.Builder::build).toArray(LootItemCondition[]::new));
             return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
                     .get()
-                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate), Optional.of(true)));
+                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate),
+                                                         Optional.of(true)));
         }
 
         public static Criterion<TriggerInstance> pullBlock(Block block) {
-            ContextAwarePredicate contextawarepredicate = ContextAwarePredicate.create(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).build());
+            ContextAwarePredicate contextawarepredicate = ContextAwarePredicate.create(
+                    LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).build());
             return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
                     .get()
-                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate), Optional.of(false)));
+                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate),
+                                                         Optional.of(false)));
         }
 
         public static Criterion<TriggerInstance> pullBlock(LootItemCondition.Builder... p_301013_) {
@@ -93,11 +103,13 @@ public class AllomanticallyActivatedBlockTrigger extends SimpleCriterionTrigger<
                     Arrays.stream(p_301013_).map(LootItemCondition.Builder::build).toArray(LootItemCondition[]::new));
             return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
                     .get()
-                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate), Optional.of(false)));
+                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(contextawarepredicate),
+                                                         Optional.of(false)));
         }
 
         public boolean matches(LootContext ctx, boolean is_push) {
-            return (this.isPush.isEmpty() || this.isPush.get() == is_push) && (this.location.isEmpty() || this.location.get().matches(ctx));
+            return (this.isPush.isEmpty() || this.isPush.get() == is_push) &&
+                   (this.location.isEmpty() || this.location.get().matches(ctx));
         }
 
     }
