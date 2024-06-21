@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.powers.data;
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -14,7 +15,8 @@ import java.util.Arrays;
 
 public class AllomancerData implements IAllomancerData, INBTSerializable<CompoundTag> {
     public static final int MAX_STORAGE = 10;
-    private static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
+    private static final int[] MAX_BURN_TIME =
+            {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
     private final boolean[] allomantic_powers;
     private final int[] burn_time;
     private final int[] metal_amounts;
@@ -198,7 +200,8 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         if (this.death_dimension == null) {
             return null;
         }
-        return ResourceKey.create(Registries.DIMENSION, new ResourceLocation(this.death_dimension));
+        // TODO figure out if this is what the holder is for
+        return ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(this.death_dimension));
 
     }
 
@@ -223,7 +226,7 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         if (this.spawn_dimension == null) {
             return null;
         }
-        return ResourceKey.create(Registries.DIMENSION, new ResourceLocation(this.spawn_dimension));
+        return ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(this.spawn_dimension));
     }
 
     public void decrementEnhanced() {
@@ -242,7 +245,7 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
 
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag allomancy_data = new CompoundTag();
 
         CompoundTag abilities = new CompoundTag();
@@ -286,8 +289,8 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
     }
 
     @Override
-    public void deserializeNBT(CompoundTag allomancy_data) {
-        CompoundTag abilities = (CompoundTag) allomancy_data.get("abilities");
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag allomancy_data) {
+        CompoundTag abilities = allomancy_data.getCompound("abilities");
         for (Metal mt : Metal.values()) {
             if (abilities.getBoolean(mt.getName())) {
                 this.addPower(mt);
@@ -296,22 +299,26 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
             }
         }
 
-        CompoundTag metal_storage = (CompoundTag) allomancy_data.get("metal_storage");
+        CompoundTag metal_storage = allomancy_data.getCompound("metal_storage");
         for (Metal mt : Metal.values()) {
             this.metal_amounts[mt.getIndex()] = metal_storage.getInt(mt.getName());
         }
 
-        CompoundTag metal_burning = (CompoundTag) allomancy_data.get("metal_burning");
+        CompoundTag metal_burning = allomancy_data.getCompound("metal_burning");
         for (Metal mt : Metal.values()) {
             this.setBurning(mt, metal_burning.getBoolean(mt.getName()));
         }
 
-        CompoundTag position = (CompoundTag) allomancy_data.get("position");
+        CompoundTag position = allomancy_data.getCompound("position");
         if (position.contains("death_dimension")) {
-            this.setDeathLoc(new BlockPos(position.getInt("death_x"), position.getInt("death_y"), position.getInt("death_z")), position.getString("death_dimension"));
+            this.setDeathLoc(
+                    new BlockPos(position.getInt("death_x"), position.getInt("death_y"), position.getInt("death_z")),
+                    position.getString("death_dimension"));
         }
         if (position.contains("spawn_dimension")) {
-            this.setSpawnLoc(new BlockPos(position.getInt("spawn_x"), position.getInt("spawn_y"), position.getInt("spawn_z")), position.getString("spawn_dimension"));
+            this.setSpawnLoc(
+                    new BlockPos(position.getInt("spawn_x"), position.getInt("spawn_y"), position.getInt("spawn_z")),
+                    position.getString("spawn_dimension"));
         }
 
     }

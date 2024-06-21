@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "allomancy:zinc_ingot"
+    },
+    {
+      "item": "allomancy:zinc_ingot"
+    },
+    {
+      "item": "allomancy:zinc_ingot"
+    },
+    {
+      "item": "allomancy:zinc_ingot"
+    },
+    {
+      "item": "allomancy:zinc_ingot"
+    },
+    {
+      "item": "allomancy:zinc_ingot"
+    },
+    {
+      "item": "allomancy:zinc_ingot"
+    },
+    {
+      "item": "allomancy:zinc_ingot"
+    },
+    {
+      "item": "allomancy:zinc_ingot"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:zinc_block"
+  }
+}

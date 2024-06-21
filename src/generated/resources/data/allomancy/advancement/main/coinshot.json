@@ -1,0 +1,36 @@
+{
+  "parent": "allomancy:main/metallurgist",
+  "criteria": {
+    "nugget_kill": {
+      "conditions": {
+        "killing_blow": {
+          "tags": [
+            {
+              "expected": true,
+              "id": "allomancy:is_coin_hit"
+            }
+          ]
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.coinshot.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "allomancy:coin_bag"
+    },
+    "title": {
+      "translate": "advancements.coinshot.title"
+    }
+  },
+  "requirements": [
+    [
+      "nugget_kill"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

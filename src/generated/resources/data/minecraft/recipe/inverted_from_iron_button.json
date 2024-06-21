@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "allomancy:iron_button"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:inverted_iron_button"
+  }
+}

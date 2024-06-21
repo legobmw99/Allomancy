@@ -64,9 +64,15 @@ public class BlockStates extends BlockStateProvider {
 
     private void createIronButtonBlock(IronButtonBlock block) {
         Allomancy.LOGGER.debug("Creating Block Data for allomancy:iron_button");
-        ModelFile inventory = models().withExistingParent("allomancy:iron_button_inventory", mcLoc("block/button_inventory")).texture("texture", mcLoc("block/iron_block"));
-        ModelFile button = models().withExistingParent("allomancy:iron_button", mcLoc("block/button")).texture("texture", mcLoc("block/iron_block"));
-        ModelFile pressed = models().withExistingParent("allomancy:iron_button_pressed", mcLoc("block/button_pressed")).texture("texture", mcLoc("block/iron_block"));
+        ModelFile inventory = models()
+                .withExistingParent("allomancy:iron_button_inventory", mcLoc("block/button_inventory"))
+                .texture("texture", mcLoc("block/iron_block"));
+        ModelFile button = models()
+                .withExistingParent("allomancy:iron_button", mcLoc("block/button"))
+                .texture("texture", mcLoc("block/iron_block"));
+        ModelFile pressed = models()
+                .withExistingParent("allomancy:iron_button_pressed", mcLoc("block/button_pressed"))
+                .texture("texture", mcLoc("block/iron_block"));
 
 
         VariantBlockStateBuilder builder = getVariantBuilder(block);
@@ -78,7 +84,8 @@ public class BlockStates extends BlockStateProvider {
                 for (Direction dir : IronButtonBlock.FACING.getPossibleValues()) {
                     int yangle = (int) dir.toYRot();
                     yangle = face != AttachFace.CEILING ? (yangle + 180) % 360 : yangle;
-                    builder.partialState()
+                    builder
+                            .partialState()
                             .with(IronButtonBlock.POWERED, powered)
                             .with(IronButtonBlock.FACE, face)
                             .with(IronButtonBlock.FACING, dir)
@@ -96,22 +103,24 @@ public class BlockStates extends BlockStateProvider {
     private void createIronLeverBlock() {
         Allomancy.LOGGER.debug("Creating Block Data for allomancy:iron_lever");
 
-        BiConsumer<Direction, ModelBuilder<BlockModelBuilder>.ElementBuilder.FaceBuilder> base_generator = (dir, facebuilder) -> {
-            switch (dir) {
-                case UP -> facebuilder.uvs(5, 4, 11, 12).texture("#base").end();
-                case DOWN -> facebuilder.uvs(5, 4, 11, 12).texture("#base").cullface(Direction.DOWN).end();
-                case NORTH, SOUTH -> facebuilder.uvs(5, 0, 11, 3).texture("#base").end();
-                case WEST, EAST -> facebuilder.uvs(4, 0, 12, 3).texture("#base").end();
-            }
-        };
+        BiConsumer<Direction, ModelBuilder<BlockModelBuilder>.ElementBuilder.FaceBuilder> base_generator =
+                (dir, facebuilder) -> {
+                    switch (dir) {
+                        case UP -> facebuilder.uvs(5, 4, 11, 12).texture("#base").end();
+                        case DOWN -> facebuilder.uvs(5, 4, 11, 12).texture("#base").cullface(Direction.DOWN).end();
+                        case NORTH, SOUTH -> facebuilder.uvs(5, 0, 11, 3).texture("#base").end();
+                        case WEST, EAST -> facebuilder.uvs(4, 0, 12, 3).texture("#base").end();
+                    }
+                };
 
-        BiConsumer<Direction, ModelBuilder<BlockModelBuilder>.ElementBuilder.FaceBuilder> lever_generator = (dir, facebuilder) -> {
-            switch (dir) {
-                case UP -> facebuilder.uvs(7, 6, 9, 8).texture("#lever").end();
-                case NORTH, SOUTH, WEST, EAST -> facebuilder.uvs(7, 6, 9, 16).texture("#lever").end();
-                case DOWN -> facebuilder.end();
-            }
-        };
+        BiConsumer<Direction, ModelBuilder<BlockModelBuilder>.ElementBuilder.FaceBuilder> lever_generator =
+                (dir, facebuilder) -> {
+                    switch (dir) {
+                        case UP -> facebuilder.uvs(7, 6, 9, 8).texture("#lever").end();
+                        case NORTH, SOUTH, WEST, EAST -> facebuilder.uvs(7, 6, 9, 16).texture("#lever").end();
+                        case DOWN -> facebuilder.end();
+                    }
+                };
 
         ModelFile lever_on = models()
                 .getBuilder("allomancy:iron_lever")

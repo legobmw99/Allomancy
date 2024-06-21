@@ -61,13 +61,15 @@ public class PowerRequests {
 
         int force = (data.isEnhanced() ? 4 : 1) * (metal == Metal.STEEL ? 1 : -1);
 
-        if (trace.getType() == HitResult.Type.ENTITY && Physical.isEntityMetallic(((EntityHitResult) trace).getEntity())) {
+        if (trace.getType() == HitResult.Type.ENTITY &&
+            Physical.isEntityMetallic(((EntityHitResult) trace).getEntity())) {
             sendToServer(new EntityPushPullPayload(((EntityHitResult) trace).getEntity().getId(), force));
         } else if (trace.getType() == HitResult.Type.BLOCK) {
             BlockPos bp = ((BlockHitResult) trace).getBlockPos();
             Player player = Minecraft.getInstance().player;
             if (Physical.isBlockStateMetallic(player.level().getBlockState(bp)) ||
-                (player.isCrouching() && metal == Metal.STEEL && player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() &&
+                (player.isCrouching() && metal == Metal.STEEL &&
+                 player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() &&
                  (!player.getProjectile(player.getMainHandItem()).isEmpty()))) {
                 sendToServer(new BlockPushPullPayload(bp, force));
             }
@@ -86,6 +88,6 @@ public class PowerRequests {
     }
 
     private static void sendToServer(CustomPacketPayload msg) {
-        PacketDistributor.SERVER.noArg().send(msg);
+        PacketDistributor.sendToServer(msg);
     }
 }

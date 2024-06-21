@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "allomancy:copper_flakes"
+    },
+    {
+      "item": "allomancy:copper_flakes"
+    },
+    {
+      "item": "allomancy:copper_flakes"
+    },
+    {
+      "item": "allomancy:tin_flakes"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "allomancy:bronze_flakes"
+  }
+}

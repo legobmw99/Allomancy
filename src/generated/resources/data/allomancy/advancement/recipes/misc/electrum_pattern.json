@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_electrum_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:electrum_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "allomancy:electrum_pattern"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_electrum_flakes"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "allomancy:electrum_pattern"
+    ]
+  }
+}

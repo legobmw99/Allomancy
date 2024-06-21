@@ -55,8 +55,12 @@ public class Tracking {
 
             // Add metal entities to metal list
             this.metal_entities.clear();
-            this.metal_entities.addAll(
-                    player.level().getEntitiesOfClass(Entity.class, AABB.encapsulatingFullBlocks(negative, positive), e -> Physical.isEntityMetallic(e) && !e.equals(player)));
+            this.metal_entities.addAll(player
+                                               .level()
+                                               .getEntitiesOfClass(Entity.class,
+                                                                   AABB.encapsulatingFullBlocks(negative, positive),
+                                                                   e -> Physical.isEntityMetallic(e) &&
+                                                                        !e.equals(player)));
 
             // Add metal blobs to metal list
             if (this.blobFuture == null || this.blobFuture.isDone()) {
@@ -64,8 +68,10 @@ public class Tracking {
                 this.blobFuture = Util.backgroundExecutor().submit(() -> {
                     this.seen.clear();
                     BlockPos
-                            .betweenClosed(negative.getX(), negative.getY(), negative.getZ(), positive.getX(), positive.getY(), positive.getZ())
-                            .forEach(starter -> searchNearbyMetalBlocks(player.blockPosition(), max, starter, player.level()));
+                            .betweenClosed(negative.getX(), negative.getY(), negative.getZ(), positive.getX(),
+                                           positive.getY(), positive.getZ())
+                            .forEach(starter -> searchNearbyMetalBlocks(player.blockPosition(), max, starter,
+                                                                        player.level()));
                     this.metal_blobs.commitAndClear();
                 });
             }
@@ -84,7 +90,10 @@ public class Tracking {
             var positive = player.position().add(30, 30, 30);
 
 
-            var nearby_players = player.level().getEntitiesOfClass(Player.class, new AABB(negative, positive), entity -> entity != null && entity != player);
+            var nearby_players = player
+                    .level()
+                    .getEntitiesOfClass(Player.class, new AABB(negative, positive),
+                                        entity -> entity != null && entity != player);
 
             for (Player otherPlayer : nearby_players) {
                 if (!seek(data, otherPlayer)) {
@@ -165,7 +174,8 @@ public class Tracking {
 
         private void add(BlockPos pos, BlockState state) {
             this.blocks += 1;
-            this.center = this.center.scale(this.blocks - 1).add(getCenterOfBlock(pos, state)).scale(1.0D / this.blocks);
+            this.center =
+                    this.center.scale(this.blocks - 1).add(getCenterOfBlock(pos, state)).scale(1.0D / this.blocks);
         }
 
         public Vec3 getCenter() {

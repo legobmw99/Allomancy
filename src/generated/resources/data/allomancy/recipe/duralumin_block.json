@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "allomancy:duralumin_ingot"
+    },
+    {
+      "item": "allomancy:duralumin_ingot"
+    },
+    {
+      "item": "allomancy:duralumin_ingot"
+    },
+    {
+      "item": "allomancy:duralumin_ingot"
+    },
+    {
+      "item": "allomancy:duralumin_ingot"
+    },
+    {
+      "item": "allomancy:duralumin_ingot"
+    },
+    {
+      "item": "allomancy:duralumin_ingot"
+    },
+    {
+      "item": "allomancy:duralumin_ingot"
+    },
+    {
+      "item": "allomancy:duralumin_ingot"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:duralumin_block"
+  }
+}

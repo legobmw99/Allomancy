@@ -1,0 +1,56 @@
+{
+  "parent": "allomancy:main/metallurgist",
+  "criteria": {
+    "pulled_iron_golem": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minecraft:iron_golem"
+            }
+          }
+        ],
+        "metal": "iron"
+      },
+      "trigger": "allomancy:metal_used_on_entity"
+    },
+    "pushed_iron_golem": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minecraft:iron_golem"
+            }
+          }
+        ],
+        "metal": "steel"
+      },
+      "trigger": "allomancy:metal_used_on_entity"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.consequences.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:iron_block"
+    },
+    "title": {
+      "translate": "advancements.consequences.title"
+    }
+  },
+  "requirements": [
+    [
+      "pushed_iron_golem",
+      "pulled_iron_golem"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

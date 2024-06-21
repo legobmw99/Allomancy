@@ -24,26 +24,35 @@ public class PowersConfig {
     public static ModConfigSpec.BooleanValue respect_player_UUID;
     public static ModConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
 
-    public static void init(ModConfigSpec.Builder server_builder, ModConfigSpec.Builder common_builder, ModConfigSpec.Builder client_builder) {
+    public static void init(ModConfigSpec.Builder server_builder,
+                            ModConfigSpec.Builder common_builder,
+                            ModConfigSpec.Builder client_builder) {
         common_builder.comment("Settings for the gameplay elements of the mod").push("gameplay");
         random_mistings = common_builder.comment("Spawn players as a random Misting").define("random_mistings", true);
         respect_player_UUID = common_builder
-                .comment("Decides whether your spawn metal is based off your UUID (this will cause it to be consistent across worlds)")
+                .comment(
+                        "Decides whether your spawn metal is based off your UUID (this will cause it to be " +
+                        "consistent across worlds)")
                 .define("respect_player_UUID", false);
         common_builder.pop();
 
         server_builder.comment("Settings for the gameplay elements of the mod").push("gameplay");
-        generate_whitelist = server_builder.comment("Regenerate the metal whitelist").define("regenerate_whitelist", true);
+        generate_whitelist =
+                server_builder.comment("Regenerate the metal whitelist").define("regenerate_whitelist", true);
         cfg_whitelist = server_builder
                 .comment("List of registry names of items and blocks that are counted as 'metal'")
                 .defineList("whitelist", new ArrayList<>(), o -> o instanceof String);
         server_builder.pop();
 
         client_builder.push("graphics");
-        max_metal_detection = client_builder.comment("Maximum iron/steelsight distance. Can have a HUGE impact on performance").defineInRange("max_metal_distance", 15, 3, 30);
+        max_metal_detection = client_builder
+                .comment("Maximum iron/steelsight distance. Can have a HUGE impact on performance")
+                .defineInRange("max_metal_distance", 15, 3, 30);
         animate_selection = client_builder.comment("Animate the selection wheel").define("animate_selection", true);
         enable_overlay = client_builder.comment("Enable the screen overlay").define("overlay_enabled", true);
-        overlay_position = client_builder.comment("Screen Overlay Position").defineEnum("overlay_position", MetalOverlay.SCREEN_LOC.TOP_LEFT);
+        overlay_position = client_builder
+                .comment("Screen Overlay Position")
+                .defineEnum("overlay_position", MetalOverlay.SCREEN_LOC.TOP_LEFT);
         client_builder.pop();
 
     }

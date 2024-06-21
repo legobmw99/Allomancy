@@ -16,19 +16,22 @@ public class Rendering {
      * @param dest
      * @param width  the width of the line
      */
-    public static void drawMetalLine(PoseStack stack, Vec3 player, Vec3 dest, float width, float r, float g, float b) {
-
-        //        RenderSystem.lineWidth(width);
+    public static void drawMetalLine(PoseStack stack,
+                                     Vec3 player,
+                                     Vec3 dest,
+                                     float width,
+                                     float r,
+                                     float g,
+                                     float b) {
         Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder builder = tessellator.getBuilder();
+        BufferBuilder builder = tessellator.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
 
-        builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
         Matrix4f matrix4f = stack.last().pose();
-        builder.vertex(matrix4f, (float) player.x, (float) player.y, (float) player.z).color(r, g, b, 0.6f).endVertex();
-        builder.vertex(matrix4f, (float) dest.x, (float) dest.y, (float) dest.z).color(r, g, b, 0.6f).endVertex();
+        builder.addVertex(matrix4f, (float) player.x, (float) player.y, (float) player.z).setColor(r, g, b, 0.6f);
+        builder.addVertex(matrix4f, (float) dest.x, (float) dest.y, (float) dest.z).setColor(r, g, b, 0.6f);
         RenderSystem.lineWidth(width);
 
-        tessellator.end();
+        BufferUploader.drawWithShader(builder.buildOrThrow());
 
     }
 

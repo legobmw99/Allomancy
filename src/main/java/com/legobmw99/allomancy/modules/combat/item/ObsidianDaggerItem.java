@@ -1,13 +1,15 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tier;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -24,7 +26,7 @@ public class ObsidianDaggerItem extends SwordItem {
 
         @Override
         public float getSpeed() {
-            return 0;
+            return ATTACK_SPEED;
         }
 
         @Override
@@ -33,8 +35,8 @@ public class ObsidianDaggerItem extends SwordItem {
         }
 
         @Override
-        public int getLevel() {
-            return 0;
+        public TagKey<Block> getIncorrectBlocksForDrops() {
+            return BlockTags.INCORRECT_FOR_WOODEN_TOOL;
         }
 
         @Override
@@ -46,33 +48,41 @@ public class ObsidianDaggerItem extends SwordItem {
         public Ingredient getRepairIngredient() {
             return Ingredient.of(Blocks.OBSIDIAN);
         }
+
     };
 
     public ObsidianDaggerItem() {
-        super(tier, ATTACK_DAMAGE, ATTACK_SPEED, new Item.Properties());
+        super(tier, new Item.Properties()
+                .attributes(SwordItem.createAttributes(tier, ATTACK_DAMAGE, ATTACK_SPEED))
+                .rarity(Rarity.UNCOMMON));
     }
 
     // prevent dagger from mining
     @Override
-    public boolean isCorrectToolForDrops(BlockState blockIn) {
+    public boolean isCorrectToolForDrops(ItemStack pStack, BlockState pState) {
         return false;
     }
 
     // Disable mending on daggers
     @Override
     public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        if (EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.MENDING) || EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.UNBREAKING)) {
+        if (EnchantmentHelper
+                .getEnchantmentsForCrafting(book)
+                .keySet()
+                .stream()
+                .anyMatch(holder -> holder.value().effects().has(EnchantmentEffectComponents.REPAIR_WITH_XP) ||
+                                    holder.value().effects().has(EnchantmentEffectComponents.ITEM_DAMAGE))) {
             return false;
         }
         return super.isBookEnchantable(stack, book);
     }
 
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        if (enchantment.equals(Enchantments.MENDING) || enchantment.equals(Enchantments.UNBREAKING)) {
+    public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
+        if (enchantment.is(Enchantments.MENDING) || enchantment.is(Enchantments.UNBREAKING)) {
             return false;
         }
-        return super.canApplyAtEnchantingTable(stack, enchantment);
+        return super.isPrimaryItemFor(stack, enchantment);
     }
 
     @Override

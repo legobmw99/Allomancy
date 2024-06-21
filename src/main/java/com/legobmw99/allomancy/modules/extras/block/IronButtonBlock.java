@@ -8,12 +8,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
@@ -24,8 +25,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsableBlock {
 
@@ -46,7 +47,7 @@ public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsabl
         if (state.getValue(POWERED) || level.isClientSide()) {
             return true;
         } else if (isPush == this.activatedOnPush) {
-            this.press(state, level, pos);
+            this.press(state, level, pos, player);
             this.playSound(null, level, pos, true);
             level.gameEvent(player, GameEvent.BLOCK_ACTIVATE, pos);
             return true;
@@ -60,10 +61,22 @@ public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsabl
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState pState,
+                                               Level pLevel,
+                                               BlockPos pPos,
+                                               Player pPlayer,
+                                               BlockHitResult pHitResult) {
         return InteractionResult.FAIL;
     }
 
+    @Override
+    protected void onExplosionHit(BlockState pState,
+                                  Level pLevel,
+                                  BlockPos pPos,
+                                  Explosion pExplosion,
+                                  BiConsumer<ItemStack, BlockPos> pDropConsumer) {
+        super.onExplosionHit(pState, pLevel, pPos, pExplosion, pDropConsumer);
+    }
 
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
@@ -74,10 +87,13 @@ public class IronButtonBlock extends ButtonBlock implements IAllomanticallyUsabl
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        MutableComponent lore = ItemDisplay.addColorToText("block.allomancy.iron_activation.lore", ChatFormatting.GRAY);
+    public void appendHoverText(ItemStack stack,
+                                Item.TooltipContext ctx,
+                                List<Component> tooltip,
+                                TooltipFlag flagIn) {
+        super.appendHoverText(stack, ctx, tooltip, flagIn);
+        MutableComponent lore =
+                ItemDisplay.addColorToText("block.allomancy.iron_activation.lore", ChatFormatting.GRAY);
         tooltip.add(lore);
     }
-
 }

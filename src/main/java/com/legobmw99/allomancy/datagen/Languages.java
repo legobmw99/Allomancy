@@ -60,7 +60,8 @@ public class Languages extends LanguageProvider {
 
         add(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "Hand Grinder");
         add(ConsumeSetup.LERASIUM_NUGGET.get(), "Lerasium Nugget");
-        add("item.allomancy.lerasium_nugget.lore", "This item is endowed with strange powers, perhaps you should ingest it?");
+        add("item.allomancy.lerasium_nugget.lore",
+            "This item is endowed with strange powers, perhaps you should ingest it?");
         add(CombatSetup.MISTCLOAK.get(), "Mistcloak");
         add(CombatSetup.ALUMINUM_HELMET.get(), "Aluminum Helmet");
         add(CombatSetup.COIN_BAG.get(), "Coin Bag");
@@ -129,7 +130,8 @@ public class Languages extends LanguageProvider {
 
         for (DyeColor color : DyeColor.values()) {
             for (Metal mt : Metal.values()) {
-                add("block.minecraft.banner.allomancy." + mt.getName() + "." + color.getName(), getDisplayName(color) + " " + getDisplayName(mt) + " Symbol");
+                add("allomancy." + mt.getName() + "." + color.getName(),
+                    getDisplayName(color) + " " + getDisplayName(mt) + " Symbol");
             }
         }
 

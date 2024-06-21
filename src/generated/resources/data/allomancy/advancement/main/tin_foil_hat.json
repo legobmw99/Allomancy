@@ -1,0 +1,66 @@
+{
+  "parent": "allomancy:main/metallurgist",
+  "criteria": {
+    "attempted_chromium_manipulation": {
+      "conditions": {
+        "enhanced": false,
+        "metal": "chromium",
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "equipment": {
+                "head": {
+                  "items": "allomancy:aluminum_helmet"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "allomancy:metal_used_on_player"
+    },
+    "attempted_nicrosil_manipulation": {
+      "conditions": {
+        "enhanced": false,
+        "metal": "nicrosil",
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "equipment": {
+                "head": {
+                  "items": "allomancy:aluminum_helmet"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "allomancy:metal_used_on_player"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.tin_foil_hat.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "allomancy:aluminum_helmet"
+    },
+    "title": {
+      "translate": "advancements.tin_foil_hat.title"
+    }
+  },
+  "requirements": [
+    [
+      "attempted_nicrosil_manipulation",
+      "attempted_chromium_manipulation"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

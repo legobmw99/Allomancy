@@ -9,7 +9,6 @@ import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 
 import java.util.Optional;
 
@@ -27,19 +26,27 @@ public class MetalUsedOnPlayerTrigger extends SimpleCriterionTrigger<MetalUsedOn
         this.trigger(player, p_48112_ -> p_48112_.matches(mt, enhanced));
     }
 
-    public record TriggerInstance(Optional<ContextAwarePredicate> player, Metal mt, Optional<Boolean> enhanced) implements SimpleInstance {
+    public record TriggerInstance(Optional<ContextAwarePredicate> player, Metal mt,
+                                  Optional<Boolean> enhanced) implements SimpleInstance {
         public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(builder -> builder
-                .group(ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(TriggerInstance::player),
-                       Metal.CODEC.fieldOf("metal").forGetter(TriggerInstance::mt), ExtraCodecs.strictOptionalField(Codec.BOOL, "enhanced").forGetter(TriggerInstance::enhanced))
+                .group(EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
+                       Metal.CODEC.fieldOf("metal").forGetter(TriggerInstance::mt),
+                       Codec.BOOL.optionalFieldOf("enhanced").forGetter(TriggerInstance::enhanced))
                 .apply(builder, TriggerInstance::new));
 
 
         public static Criterion<TriggerInstance> instance(Optional<ContextAwarePredicate> player, Metal mt) {
-            return ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().createCriterion(new TriggerInstance(player, mt, Optional.empty()));
+            return ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER
+                    .get()
+                    .createCriterion(new TriggerInstance(player, mt, Optional.empty()));
         }
 
-        public static Criterion<TriggerInstance> instance(Optional<ContextAwarePredicate> player, Metal mt, boolean enhanced) {
-            return ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().createCriterion(new TriggerInstance(player, mt, Optional.of(enhanced)));
+        public static Criterion<TriggerInstance> instance(Optional<ContextAwarePredicate> player,
+                                                          Metal mt,
+                                                          boolean enhanced) {
+            return ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER
+                    .get()
+                    .createCriterion(new TriggerInstance(player, mt, Optional.of(enhanced)));
         }
 
 

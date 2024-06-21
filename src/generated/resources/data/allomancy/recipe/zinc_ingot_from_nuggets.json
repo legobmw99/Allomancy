@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "allomancy:zinc_nugget"
+    },
+    {
+      "item": "allomancy:zinc_nugget"
+    },
+    {
+      "item": "allomancy:zinc_nugget"
+    },
+    {
+      "item": "allomancy:zinc_nugget"
+    },
+    {
+      "item": "allomancy:zinc_nugget"
+    },
+    {
+      "item": "allomancy:zinc_nugget"
+    },
+    {
+      "item": "allomancy:zinc_nugget"
+    },
+    {
+      "item": "allomancy:zinc_nugget"
+    },
+    {
+      "item": "allomancy:zinc_nugget"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:zinc_ingot"
+  }
+}

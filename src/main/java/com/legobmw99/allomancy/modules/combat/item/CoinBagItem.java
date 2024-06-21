@@ -5,14 +5,19 @@ import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.util.Physical;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class CoinBagItem extends ProjectileWeaponItem {
@@ -20,7 +25,8 @@ public class CoinBagItem extends ProjectileWeaponItem {
 
     public static final Predicate<ItemStack> NUGGETS = (stack) -> {
         Item item = stack.getItem();
-        return Physical.doesResourceContainMetal(BuiltInRegistries.ITEM.getKey(item)) && BuiltInRegistries.ITEM.getKey(item).getPath().contains("nugget");
+        return Physical.doesResourceContainMetal(BuiltInRegistries.ITEM.getKey(item)) &&
+               BuiltInRegistries.ITEM.getKey(item).getPath().contains("nugget");
     };
 
     public CoinBagItem() {
@@ -42,26 +48,21 @@ public class CoinBagItem extends ProjectileWeaponItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getProjectile(player.getItemInHand(hand));
-        if (itemstack.getItem() instanceof ArrowItem) { // the above get function has silly default behavior
-            itemstack = new ItemStack(Items.GOLD_NUGGET, 1);
+        ItemStack weapon = player.getItemInHand(hand);
+        ItemStack ammo = player.getProjectile(weapon);
+        if (ammo.getItem() instanceof ArrowItem) { // the above get function has silly default behavior
+            ammo = new ItemStack(Items.GOLD_NUGGET, 1);
         }
 
-        if (!itemstack.isEmpty() && player.getData(AllomancerAttachment.ALLOMANCY_DATA).isBurning(Metal.STEEL)) {
-            if (!world.isClientSide) {
+        if (!ammo.isEmpty() && player.getData(AllomancerAttachment.ALLOMANCY_DATA).isBurning(Metal.STEEL)) {
+            if (world instanceof ServerLevel level) {
+                Ammo type = getAmmoFromItem(ammo.getItem());
 
-                Ammo type = getAmmoFromItem(itemstack.getItem());
-                float dmg = type.damage;
-                if (player.getData(AllomancerAttachment.ALLOMANCY_DATA).isEnhanced()) {
-                    dmg *= 2.0F;
-                }
-                ProjectileNuggetEntity nugget_projectile = new ProjectileNuggetEntity(player, world, itemstack, dmg);
-                nugget_projectile.shootFromRotation(player, player.getXRot(), player.getYHeadRot(), type.arg1, type.arg2, type.arg3);
-                world.addFreshEntity(nugget_projectile);
-
+                this.shoot(level, player, hand, weapon, List.of(ammo), type.velocity, type.inaccuracy,
+                           player.getData(AllomancerAttachment.ALLOMANCY_DATA).isEnhanced(), null);
 
                 if (!player.getAbilities().instabuild) {
-                    itemstack.shrink(1);
+                    ammo.shrink(1);
                 }
 
                 return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
@@ -75,6 +76,20 @@ public class CoinBagItem extends ProjectileWeaponItem {
     }
 
     @Override
+    protected Projectile createProjectile(Level pLevel,
+                                          LivingEntity pShooter,
+                                          ItemStack pWeapon,
+                                          ItemStack pAmmo,
+                                          boolean pIsCrit) {
+
+        float dmg = getAmmoFromItem(pAmmo.getItem()).damage;
+        if (pIsCrit) {
+            dmg *= 2.0F;
+        }
+        return new ProjectileNuggetEntity(pShooter, pLevel, pAmmo, dmg);
+    }
+
+    @Override
     public int getEnchantmentValue() {
         return 0;
     }
@@ -84,22 +99,32 @@ public class CoinBagItem extends ProjectileWeaponItem {
         return 20;
     }
 
+    @Override
+    protected void shootProjectile(LivingEntity pShooter,
+                                   Projectile pProjectile,
+                                   int pIndex,
+                                   float pVelocity,
+                                   float pInaccuracy,
+                                   float pAngle,
+                                   @Nullable LivingEntity pTarget) {
+        pProjectile.shootFromRotation(pShooter, pShooter.getXRot(), pShooter.getYHeadRot(), 2.0F, pVelocity,
+                                      pInaccuracy);
+    }
+
     private enum Ammo {
-        HEAVY(5.0F, 2.0F, 2.25F, 2.5F),
-        MAGIC(5.5F, 2.0F, 4.0F, 1.0F),
-        LIGHT(4.0F, 2.0F, 4.0F, 1.0F);
+        HEAVY(5.0F, 2.25F, 2.5F),
+        MAGIC(5.5F, 4.0F, 1.0F),
+        LIGHT(4.0F, 4.0F, 1.0F);
 
         final float damage;
-        final float arg1;
-        final float arg2;
-        final float arg3;
+        final float velocity;
+        final float inaccuracy;
 
         @SuppressWarnings("SameParameterValue")
-        Ammo(float damage, float v1, float v2, float v3) {
+        Ammo(float damage, float velocity, float inaccuracy) {
             this.damage = damage;
-            this.arg1 = v1;
-            this.arg2 = v2;
-            this.arg3 = v3;
+            this.velocity = velocity;
+            this.inaccuracy = inaccuracy;
         }
     }
 }

@@ -4,13 +4,13 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.materials.world.DaggerLootModifier;
 import com.legobmw99.allomancy.modules.materials.world.LerasiumLootModifier;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
@@ -48,7 +48,8 @@ public class MaterialsSetup {
     public record OreConfig(String name, int size, int placementCount, int minHeight, int maxHeight) {
 
         <T> ResourceKey<T> getRegistryKey(ResourceKey<Registry<T>> registry, String suffix) {
-            return ResourceKey.create(registry, new ResourceLocation(Allomancy.MODID, this.name + suffix));
+            return ResourceKey.create(registry,
+                                      ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, this.name + suffix));
         }
 
         @Override
@@ -57,14 +58,17 @@ public class MaterialsSetup {
         }
     }
 
-    public static final OreConfig[] ORE_METALS = {new OreConfig("aluminum", 9, 14, 40, 120), new OreConfig("cadmium", 7, 5, -60, 0), new OreConfig("chromium", 6, 8, -30, 30),
-                                                  new OreConfig("lead", 9, 15, -40, 30), new OreConfig("silver", 7, 11, -40, 30), new OreConfig("tin", 11, 15, 30, 112),
-                                                  new OreConfig("zinc", 8, 12, 40, 80)};
+    public static final OreConfig[] ORE_METALS =
+            {new OreConfig("aluminum", 9, 14, 40, 120), new OreConfig("cadmium", 7, 5, -60, 0),
+             new OreConfig("chromium", 6, 8, -30, 30), new OreConfig("lead", 9, 15, -40, 30),
+             new OreConfig("silver", 7, 11, -40, 30), new OreConfig("tin", 11, 15, 30, 112),
+             new OreConfig("zinc", 8, 12, 40, 80)};
 
-    private static final ResourceKey<BiomeModifier> ADD_ALLOMANCY_ORES = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-                                                                                            new ResourceLocation(Allomancy.MODID, "overworld_ores"));
+    private static final ResourceKey<BiomeModifier> ADD_ALLOMANCY_ORES =
+            ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+                               ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "overworld_ores"));
 
-    private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
 
     public static final List<DeferredItem<Item>> FLAKES = new ArrayList<>();
@@ -100,43 +104,53 @@ public class MaterialsSetup {
                 NUGGETS.add(ITEMS.register(name + "_nugget", MaterialsSetup::createStandardItem));
                 INGOTS.add(ITEMS.register(name + "_ingot", MaterialsSetup::createStandardItem));
                 STORAGE_BLOCKS.add(BLOCKS.register(name + "_block", MaterialsSetup::createStandardBlock));
-                STORAGE_BLOCK_ITEMS.add(ITEMS.register(name + "_block", () -> new BlockItem(STORAGE_BLOCKS.get(mt.getIndex()).get(), new Item.Properties())));
+                STORAGE_BLOCK_ITEMS.add(ITEMS.register(name + "_block",
+                                                       () -> new BlockItem(STORAGE_BLOCKS.get(mt.getIndex()).get(),
+                                                                           new Item.Properties())));
             }
         }
         FLAKES.add(MaterialsSetup.ITEMS.register("lead_flakes", MaterialsSetup::createStandardItem));
         NUGGETS.add(ITEMS.register("lead_nugget", MaterialsSetup::createStandardItem));
         INGOTS.add(ITEMS.register("lead_ingot", MaterialsSetup::createStandardItem));
         STORAGE_BLOCKS.add(BLOCKS.register("lead_block", MaterialsSetup::createStandardBlock));
-        STORAGE_BLOCK_ITEMS.add(ITEMS.register("lead_block", () -> new BlockItem(STORAGE_BLOCKS.get(LEAD).get(), new Item.Properties())));
+        STORAGE_BLOCK_ITEMS.add(ITEMS.register("lead_block", () -> new BlockItem(STORAGE_BLOCKS.get(LEAD).get(),
+                                                                                 new Item.Properties())));
 
         FLAKES.add(MaterialsSetup.ITEMS.register("silver_flakes", MaterialsSetup::createStandardItem));
         NUGGETS.add(ITEMS.register("silver_nugget", MaterialsSetup::createStandardItem));
         INGOTS.add(ITEMS.register("silver_ingot", MaterialsSetup::createStandardItem));
         STORAGE_BLOCKS.add(BLOCKS.register("silver_block", MaterialsSetup::createStandardBlock));
-        STORAGE_BLOCK_ITEMS.add(ITEMS.register("silver_block", () -> new BlockItem(STORAGE_BLOCKS.get(SILVER).get(), new Item.Properties())));
+        STORAGE_BLOCK_ITEMS.add(ITEMS.register("silver_block", () -> new BlockItem(STORAGE_BLOCKS.get(SILVER).get(),
+                                                                                   new Item.Properties())));
 
         for (var ore_config : ORE_METALS) {
             String ore = ore_config.name();
             var ore_block = BLOCKS.register(ore + "_ore", MaterialsSetup::createStandardOre);
             ORE_BLOCKS.add(ore_block);
-            ORE_BLOCKS_ITEMS.add(ITEMS.register(ore + "_ore", () -> new BlockItem(ore_block.get(), new Item.Properties())));
+            ORE_BLOCKS_ITEMS.add(
+                    ITEMS.register(ore + "_ore", () -> new BlockItem(ore_block.get(), new Item.Properties())));
 
             var ds_ore_block = BLOCKS.register("deepslate_" + ore + "_ore", MaterialsSetup::createDeepslateBlock);
             DEEPSLATE_ORE_BLOCKS.add(ds_ore_block);
-            DEEPSLATE_ORE_BLOCKS_ITEMS.add(ITEMS.register("deepslate_" + ore + "_ore", () -> new BlockItem(ds_ore_block.get(), new Item.Properties())));
+            DEEPSLATE_ORE_BLOCKS_ITEMS.add(ITEMS.register("deepslate_" + ore + "_ore",
+                                                          () -> new BlockItem(ds_ore_block.get(),
+                                                                              new Item.Properties())));
 
             var raw_ore_block = BLOCKS.register("raw_" + ore + "_block", MaterialsSetup::createStandardBlock);
             RAW_ORE_BLOCKS.add(raw_ore_block);
-            RAW_ORE_BLOCKS_ITEMS.add(ITEMS.register("raw_" + ore + "_block", () -> new BlockItem(raw_ore_block.get(), new Item.Properties())));
+            RAW_ORE_BLOCKS_ITEMS.add(ITEMS.register("raw_" + ore + "_block",
+                                                    () -> new BlockItem(raw_ore_block.get(), new Item.Properties())));
 
             RAW_ORE_ITEMS.add(ITEMS.register("raw_" + ore, MaterialsSetup::createStandardItem));
         }
     }
 
-    private static final DeferredRegister<Codec<? extends IGlobalLootModifier>> GLM = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS,
-                                                                                                              Allomancy.MODID);
-    public static final Supplier<Codec<LerasiumLootModifier>> LERASIUM_LOOT = GLM.register("lerasium_loot", LerasiumLootModifier.CODEC);
-    public static final Supplier<Codec<DaggerLootModifier>> DAGGER_LOOT = GLM.register("unbreakable_dagger_loot", DaggerLootModifier.CODEC);
+    private static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> GLM =
+            DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Allomancy.MODID);
+    public static final Supplier<MapCodec<LerasiumLootModifier>> LERASIUM_LOOT =
+            GLM.register("lerasium_loot", LerasiumLootModifier.CODEC);
+    public static final Supplier<MapCodec<DaggerLootModifier>> DAGGER_LOOT =
+            GLM.register("unbreakable_dagger_loot", DaggerLootModifier.CODEC);
 
     public static void register(IEventBus bus) {
         BLOCKS.register(bus);
@@ -153,14 +167,15 @@ public class MaterialsSetup {
     }
 
     public static Block createDeepslateBlock() {
-        return new DropExperienceBlock(UniformInt.of(2, 5), Blocks.DEEPSLATE_IRON_ORE.properties().strength(4.5F, 3.0F));
+        return new DropExperienceBlock(UniformInt.of(2, 5),
+                                       Blocks.DEEPSLATE_IRON_ORE.properties().strength(4.5F, 3.0F));
     }
 
     public static Item createStandardItem() {
         return new Item(new Item.Properties());
     }
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> bootstrap) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> bootstrap) {
         RuleTest stone = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
         RuleTest deepslate = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
         for (int i = 0; i < ORE_METALS.length; i++) {
@@ -168,13 +183,16 @@ public class MaterialsSetup {
             var ore_block = ORE_BLOCKS.get(i);
             var deepslate_ore_block = DEEPSLATE_ORE_BLOCKS.get(i);
 
-            bootstrap.register(ore.getRegistryKey(Registries.CONFIGURED_FEATURE, "_ore_feature"), new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(
-                    List.of(OreConfiguration.target(stone, ore_block.get().defaultBlockState()), OreConfiguration.target(deepslate, deepslate_ore_block.get().defaultBlockState())),
-                    ore.size(), 0.0f)));
+            bootstrap.register(ore.getRegistryKey(Registries.CONFIGURED_FEATURE, "_ore_feature"),
+                               new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(
+                                       List.of(OreConfiguration.target(stone, ore_block.get().defaultBlockState()),
+                                               OreConfiguration.target(deepslate, deepslate_ore_block
+                                                       .get()
+                                                       .defaultBlockState())), ore.size(), 0.0f)));
         }
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> bootstrap) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> bootstrap) {
 
         for (int i = 0; i < ORE_METALS.length; i++) {
             OreConfig ore = ORE_METALS[i];
@@ -184,15 +202,16 @@ public class MaterialsSetup {
             // Get configured feature registry
             HolderGetter<ConfiguredFeature<?, ?>> configured = bootstrap.lookup(Registries.CONFIGURED_FEATURE);
 
-            bootstrap.register(ore.getRegistryKey(Registries.PLACED_FEATURE, "_ore"),
-                               new PlacedFeature(configured.getOrThrow(ore.getRegistryKey(Registries.CONFIGURED_FEATURE, "_ore_feature")),
-                                                 List.of(CountPlacement.of(ore.placementCount), InSquarePlacement.spread(),
-                                                         HeightRangePlacement.triangle(VerticalAnchor.absolute(ore.minHeight), VerticalAnchor.absolute(ore.maxHeight)),
-                                                         BiomeFilter.biome())));
+            bootstrap.register(ore.getRegistryKey(Registries.PLACED_FEATURE, "_ore"), new PlacedFeature(
+                    configured.getOrThrow(ore.getRegistryKey(Registries.CONFIGURED_FEATURE, "_ore_feature")),
+                    List.of(CountPlacement.of(ore.placementCount), InSquarePlacement.spread(),
+                            HeightRangePlacement.triangle(VerticalAnchor.absolute(ore.minHeight),
+                                                          VerticalAnchor.absolute(ore.maxHeight)),
+                            BiomeFilter.biome())));
         }
     }
 
-    public static void bootstrapBiomeModifier(BootstapContext<BiomeModifier> bootstrap) {
+    public static void bootstrapBiomeModifier(BootstrapContext<BiomeModifier> bootstrap) {
         var overworldTag = bootstrap.lookup(Registries.BIOME).getOrThrow(BiomeTags.IS_OVERWORLD);
         HolderGetter<PlacedFeature> placed = bootstrap.lookup(Registries.PLACED_FEATURE);
 
@@ -200,7 +219,9 @@ public class MaterialsSetup {
         for (OreConfig ore : ORE_METALS) {
             ores.add(placed.getOrThrow(ore.getRegistryKey(Registries.PLACED_FEATURE, "_ore")));
         }
-        bootstrap.register(ADD_ALLOMANCY_ORES, new BiomeModifiers.AddFeaturesBiomeModifier(overworldTag, HolderSet.direct(ores), GenerationStep.Decoration.UNDERGROUND_ORES));
+        bootstrap.register(ADD_ALLOMANCY_ORES,
+                           new BiomeModifiers.AddFeaturesBiomeModifier(overworldTag, HolderSet.direct(ores),
+                                                                       GenerationStep.Decoration.UNDERGROUND_ORES));
     }
 }
 

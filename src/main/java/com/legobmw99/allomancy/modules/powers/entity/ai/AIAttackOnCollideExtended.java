@@ -85,7 +85,8 @@ public class AIAttackOnCollideExtended extends Goal {
             return false;
         }
 
-        return (livingEntity.isAlive() && (!this.longMemory ? !this.attacker.getNavigation().isDone() : this.attacker.isWithinRestriction(livingEntity.blockPosition())));
+        return (livingEntity.isAlive() && (!this.longMemory ? !this.attacker.getNavigation().isDone() :
+                                           this.attacker.isWithinRestriction(livingEntity.blockPosition())));
     }
 
     /**
@@ -116,12 +117,15 @@ public class AIAttackOnCollideExtended extends Goal {
         }
         this.attacker.getLookControl().setLookAt(livingEntity, 30.0F, 30.0F);
 
-        if ((this.longMemory || this.attacker.getSensing().hasLineOfSight(livingEntity)) && (--this.ticksUntilNextPathRecalculation <= 0)) {
-            this.ticksUntilNextPathRecalculation = this.failedPathFindingPenalty + 4 + this.attacker.getRandom().nextInt(7);
+        if ((this.longMemory || this.attacker.getSensing().hasLineOfSight(livingEntity)) &&
+            (--this.ticksUntilNextPathRecalculation <= 0)) {
+            this.ticksUntilNextPathRecalculation =
+                    this.failedPathFindingPenalty + 4 + this.attacker.getRandom().nextInt(7);
             this.attacker.getNavigation().moveTo(livingEntity, this.speedTowardsTarget);
             if (this.attacker.getNavigation().getPath() != null) {
                 Node finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
-                if ((finalPathPoint != null) && (livingEntity.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)) {
+                if ((finalPathPoint != null) &&
+                    (livingEntity.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)) {
                     this.failedPathFindingPenalty = 0;
                 } else {
                     this.failedPathFindingPenalty += 10;
@@ -132,7 +136,8 @@ public class AIAttackOnCollideExtended extends Goal {
         }
 
         this.attackTick = Math.max(this.attackTick - 1, 0);
-        double d0 = (this.attacker.getBbWidth() * 2.0F * this.attacker.getBbWidth() * 2.0F) + livingEntity.getBbWidth();
+        double d0 =
+                (this.attacker.getBbWidth() * 2.0F * this.attacker.getBbWidth() * 2.0F) + livingEntity.getBbWidth();
 
         if (this.attacker.distanceToSqr(livingEntity) <= d0) {
             if (this.attackTick <= 0) {

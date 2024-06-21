@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "O": {
+      "tag": "c:obsidians"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "  O",
+    " O ",
+    "s  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:obsidian_dagger"
+  }
+}

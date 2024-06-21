@@ -26,10 +26,12 @@ public class Temporal {
             int max = data.isEnhanced() ? 10 : 5;
             BlockPos negative = curPlayer.blockPosition().offset(-max, -max, -max);
             BlockPos positive = curPlayer.blockPosition().offset(max, max, max);
-            serverLevel.getEntitiesOfClass(LivingEntity.class, AABB.encapsulatingFullBlocks(negative, positive)).forEach(entity -> {
-                entity.aiStep();
-                entity.aiStep();
-            });
+            serverLevel
+                    .getEntitiesOfClass(LivingEntity.class, AABB.encapsulatingFullBlocks(negative, positive))
+                    .forEach(entity -> {
+                        entity.aiStep();
+                        entity.aiStep();
+                    });
             BlockPos.betweenClosedStream(negative, positive).forEach(bp -> {
                 BlockState block = level.getBlockState(bp);
                 BlockEntity te = level.getBlockEntity(bp);
@@ -62,7 +64,8 @@ public class Temporal {
         level.getEntitiesOfClass(LivingEntity.class, new AABB(negative, positive)).forEach(entity -> {
             entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 10, 0, true, false));
             if (entity != curPlayer) {
-                entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, slowness_amplifier, true, false));
+                entity.addEffect(
+                        new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, slowness_amplifier, true, false));
             }
         });
     }

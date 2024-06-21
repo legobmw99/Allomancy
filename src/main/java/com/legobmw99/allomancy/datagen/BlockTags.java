@@ -16,7 +16,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class BlockTags extends BlockTagsProvider {
 
-    public BlockTags(PackOutput gen, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper exFileHelper) {
+    public BlockTags(PackOutput gen,
+                     CompletableFuture<HolderLookup.Provider> lookupProvider,
+                     ExistingFileHelper exFileHelper) {
         super(gen, lookupProvider, Allomancy.MODID, exFileHelper);
     }
 
@@ -28,13 +30,13 @@ public class BlockTags extends BlockTagsProvider {
             var ds = MaterialsSetup.DEEPSLATE_ORE_BLOCKS.get(i).getKey();
             var raw = MaterialsSetup.RAW_ORE_BLOCKS.get(i).getKey();
 
-            addForgeTag("ores/" + MaterialsSetup.ORE_METALS[i], block, ds);
-            addForgeTag("ores", block, ds);
-            addForgeTag("ores_in_ground/stone", block);
-            addForgeTag("ores_in_ground/deepslate", ds);
+            addCommonTag("ores/" + MaterialsSetup.ORE_METALS[i], block, ds);
+            addCommonTag("ores", block, ds);
+            addCommonTag("ores_in_ground/stone", block);
+            addCommonTag("ores_in_ground/deepslate", ds);
 
-            addForgeTag("storage_blocks", raw);
-            addForgeTag("storage_blocks/raw_" + MaterialsSetup.ORE_METALS[i], raw);
+            addCommonTag("storage_blocks", raw);
+            addCommonTag("storage_blocks/raw_" + MaterialsSetup.ORE_METALS[i], raw);
 
             makePickaxeMineable(block, ds, raw);
         }
@@ -44,8 +46,8 @@ public class BlockTags extends BlockTagsProvider {
                 continue;
             }
             var block = MaterialsSetup.STORAGE_BLOCKS.get(mt.getIndex()).getKey();
-            addForgeTag("storage_blocks/" + mt.getName(), block);
-            addForgeTag("storage_blocks", block);
+            addCommonTag("storage_blocks/" + mt.getName(), block);
+            addCommonTag("storage_blocks", block);
             makePickaxeMineable(block);
             if (mt != Metal.ALUMINUM) {
                 addBeacon(block);
@@ -54,27 +56,33 @@ public class BlockTags extends BlockTagsProvider {
         }
 
         var lead = MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.LEAD).getKey();
-        addForgeTag("storage_blocks/lead", lead);
+        addCommonTag("storage_blocks/lead", lead);
         var silver = MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.SILVER).getKey();
-        addForgeTag("storage_blocks/silver", silver);
+        addCommonTag("storage_blocks/silver", silver);
         addBeacon(silver);
 
         makePickaxeMineable(lead, silver);
-        addForgeTag("storage_blocks", lead, silver);
+        addCommonTag("storage_blocks", lead, silver);
 
     }
 
-    private void addForgeTag(String name, ResourceKey<Block>... items) {
-        Allomancy.LOGGER.debug("Creating block tag for forge:" + name);
-        tag(net.minecraft.tags.BlockTags.create(new ResourceLocation("forge", name))).replace(false).add(items);
+    @SafeVarargs
+    private void addCommonTag(String name, ResourceKey<Block>... items) {
+        Allomancy.LOGGER.debug("Creating block tag for c:" + name);
+        tag(net.minecraft.tags.BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", name)))
+                .replace(false)
+                .add(items);
     }
 
+
+    @SafeVarargs
     private void makePickaxeMineable(ResourceKey<Block>... items) {
         this.tag(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE).replace(false).add(items);
         this.tag(net.minecraft.tags.BlockTags.NEEDS_STONE_TOOL).replace(false).add(items);
 
     }
 
+    @SafeVarargs
     private void addBeacon(ResourceKey<Block>... items) {
         this.tag(net.minecraft.tags.BlockTags.BEACON_BASE_BLOCKS).replace(false).add(items);
     }

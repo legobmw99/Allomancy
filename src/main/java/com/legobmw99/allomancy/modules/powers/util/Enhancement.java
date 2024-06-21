@@ -11,11 +11,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.util.ITeleporter;
 
-import java.util.function.Function;
+import static net.minecraft.world.level.portal.DimensionTransition.DO_NOTHING;
 
 public class Enhancement {
     /**
@@ -39,7 +39,7 @@ public class Enhancement {
      * @param player    The player to move
      * @param world     The server world. Fails if clientside
      * @param dimension Dimension to call {@link Entity#changeDimension} on
-     * @param pos       BlockPos to move the player to using {@link Entity#teleportToWithTicket}
+     * @param pos       BlockPos to move the player to using {@link Entity#teleportTo(double, double, double)}
      */
     private static void teleport(Player player, Level world, ResourceKey<Level> dimension, BlockPos pos) {
         if (!world.isClientSide) {
@@ -50,17 +50,12 @@ public class Enhancement {
 
                 if (player.level().dimension() != dimension) {
                     //change dimension
-                    player = (Player) player.changeDimension(world.getServer().getLevel(dimension), new ITeleporter() {
-                        @Override
-                        public Entity placeEntity(Entity entity, ServerLevel currentWorld, ServerLevel destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-                            Entity repositionedEntity = repositionEntity.apply(false);
-                            repositionedEntity.teleportTo(pos.getX(), pos.getY(), pos.getZ());
-                            return repositionedEntity;
-                        }
-                    });
+                    player = (Player) player.changeDimension(
+                            new DimensionTransition(world.getServer().getLevel(dimension), Vec3.atBottomCenterOf(pos),
+                                                    Vec3.ZERO, player.getXRot(), player.getYRot(), DO_NOTHING));
                 }
 
-                player.teleportToWithTicket(pos.getX(), pos.getY() + 1.5, pos.getZ());
+                player.teleportTo(pos.getX(), pos.getY() + 1.5, pos.getZ());
                 player.fallDistance = 0.0F;
             }
         }
@@ -85,7 +80,7 @@ public class Enhancement {
             spawnLoc = data.getSpawnLoc();
         } else {
             spawnDim = Level.OVERWORLD; // no spawn --> use world spawn
-            spawnLoc = new BlockPos(level.getLevelData().getXSpawn(), level.getLevelData().getYSpawn(), level.getLevelData().getZSpawn());
+            spawnLoc = level.getLevelData().getSpawnPos();
 
         }
 
@@ -103,7 +98,9 @@ public class Enhancement {
             Vec3 positive = curPlayer.position().add(max, max, max);
             level
                     .getEntitiesOfClass(Player.class, new AABB(negative, positive))
-                    .forEach(otherPlayer -> otherPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA).drainMetals(Metal.values()));
+                    .forEach(otherPlayer -> otherPlayer
+                            .getData(AllomancerAttachment.ALLOMANCY_DATA)
+                            .drainMetals(Metal.values()));
         }
     }
 }

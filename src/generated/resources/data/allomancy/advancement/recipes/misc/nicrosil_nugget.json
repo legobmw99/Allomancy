@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_nicrosil_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:nicrosil_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "allomancy:nicrosil_nugget"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_nicrosil_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "allomancy:nicrosil_nugget"
+    ]
+  }
+}

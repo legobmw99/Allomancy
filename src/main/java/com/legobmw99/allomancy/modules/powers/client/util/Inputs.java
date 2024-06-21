@@ -11,12 +11,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -47,7 +46,7 @@ public class Inputs {
     @Nullable
     public static HitResult getMouseOverExtended(float dist) {
         var mc = Minecraft.getInstance();
-        float partialTicks = mc.getFrameTime();
+        float partialTicks = mc.getTimer().getGameTimeDeltaPartialTick(false);
         HitResult objectMouseOver = null;
         Entity entity = mc.getCameraEntity();
         if (entity != null) {
@@ -63,8 +62,10 @@ public class Inputs {
                 Vec3 vec3d1 = entity.getViewVector(1.0F);
                 Vec3 vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
                 float f = 1.0F;
-                AABB axisalignedbb = entity.getBoundingBox().expandTowards(vec3d1.scale(dist)).inflate(1.0D, 1.0D, 1.0D);
-                EntityHitResult entityraytraceresult = ProjectileUtil.getEntityHitResult(entity, vec3d, vec3d2, axisalignedbb, (e) -> true, d1);
+                AABB axisalignedbb =
+                        entity.getBoundingBox().expandTowards(vec3d1.scale(dist)).inflate(1.0D, 1.0D, 1.0D);
+                EntityHitResult entityraytraceresult =
+                        ProjectileUtil.getEntityHitResult(entity, vec3d, vec3d2, axisalignedbb, (e) -> true, d1);
                 if (entityraytraceresult != null) {
                     Entity entity1 = entityraytraceresult.getEntity();
                     Vec3 vec3d3 = entityraytraceresult.getLocation();
@@ -83,7 +84,7 @@ public class Inputs {
     public static void fakeMovement(Input input) {
         Options options = Minecraft.getInstance().options;
         LocalPlayer player = Minecraft.getInstance().player;
-        float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(player), 0.0F, 1.0F);
+        float f = (float) player.getAttributeValue(Attributes.SNEAKING_SPEED);
         var window = Minecraft.getInstance().getWindow().getWindow();
         // from KeyboardInput#tick
         input.up = InputConstants.isKeyDown(window, options.keyUp.getKey().getValue());
@@ -100,10 +101,13 @@ public class Inputs {
         }
 
         // from LocalPlayer#aiStep
-        if (!player.isSprinting() &&
-            (!(player.isInWater() || player.isInFluidType((fluidType, height) -> player.canSwimInFluidType(fluidType))) || (player.isUnderWater() || player.canStartSwimming())) &&
-            input.forwardImpulse >= 0.8 && !player.isUsingItem() && (player.getFoodData().getFoodLevel() > 6.0F || player.getAbilities().mayfly) &&
-            !player.hasEffect(MobEffects.BLINDNESS) && InputConstants.isKeyDown(window, options.keySprint.getKey().getValue())) {
+        if (!player.isSprinting() && (!(player.isInWater() || player.isInFluidType(
+                (fluidType, height) -> player.canSwimInFluidType(fluidType))) ||
+                                      (player.isUnderWater() || player.canStartSwimming())) &&
+            input.forwardImpulse >= 0.8 && !player.isUsingItem() &&
+            (player.getFoodData().getFoodLevel() > 6.0F || player.mayFly()) &&
+            !player.hasEffect(MobEffects.BLINDNESS) &&
+            InputConstants.isKeyDown(window, options.keySprint.getKey().getValue())) {
             player.setSprinting(true);
         }
     }
@@ -116,7 +120,8 @@ public class Inputs {
 
         powers = new KeyMapping[Metal.values().length];
         for (int i = 0; i < powers.length; i++) {
-            powers[i] = new KeyMapping("key.metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN, "key.categories.allomancy");
+            powers[i] = new KeyMapping("key.metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN,
+                                       "key.categories.allomancy");
             evt.register(powers[i]);
         }
 

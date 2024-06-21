@@ -3,24 +3,22 @@ package com.legobmw99.allomancy.modules.powers.network;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 
 public record ToggleBurnPayload(Metal metal, boolean on) implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(Allomancy.MODID, "toggle_burn");
+    public static final Type<ToggleBurnPayload> TYPE =
+            new Type<>(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "toggle_burn"));
 
-    public ToggleBurnPayload(FriendlyByteBuf buf) {
-        this(buf.readEnum(Metal.class), buf.readBoolean());
-    }
-
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeEnum(this.metal);
-        buf.writeBoolean(this.on);
-    }
+    public static final StreamCodec<FriendlyByteBuf, ToggleBurnPayload> STREAM_CODEC =
+            StreamCodec.composite(NeoForgeStreamCodecs.enumCodec(Metal.class), ToggleBurnPayload::metal,
+                                  ByteBufCodecs.BOOL, ToggleBurnPayload::on, ToggleBurnPayload::new);
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<ToggleBurnPayload> type() {
+        return TYPE;
     }
 }

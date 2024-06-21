@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "allomancy:chromium_flakes"
+    },
+    {
+      "item": "allomancy:chromium_flakes"
+    },
+    {
+      "item": "allomancy:chromium_flakes"
+    },
+    {
+      "item": "allomancy:iron_flakes"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "allomancy:nicrosil_flakes"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "allomancy:bendalloy_ingot"
+    },
+    {
+      "item": "allomancy:bendalloy_ingot"
+    },
+    {
+      "item": "allomancy:bendalloy_ingot"
+    },
+    {
+      "item": "allomancy:bendalloy_ingot"
+    },
+    {
+      "item": "allomancy:bendalloy_ingot"
+    },
+    {
+      "item": "allomancy:bendalloy_ingot"
+    },
+    {
+      "item": "allomancy:bendalloy_ingot"
+    },
+    {
+      "item": "allomancy:bendalloy_ingot"
+    },
+    {
+      "item": "allomancy:bendalloy_ingot"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:bendalloy_block"
+  }
+}

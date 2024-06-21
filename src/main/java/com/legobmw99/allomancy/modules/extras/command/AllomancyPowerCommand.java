@@ -15,20 +15,22 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.neoforge.common.util.NonNullConsumer;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class AllomancyPowerCommand {
 
-    private static final DynamicCommandExceptionType ERROR_CANT_ADD = new DynamicCommandExceptionType(s -> Component.translatable("commands.allomancy.err_add", s));
-    private static final DynamicCommandExceptionType ERROR_CANT_REMOVE = new DynamicCommandExceptionType(s -> Component.translatable("commands.allomancy.err_remove", s));
+    private static final DynamicCommandExceptionType ERROR_CANT_ADD =
+            new DynamicCommandExceptionType(s -> Component.translatable("commands.allomancy.err_add", s));
+    private static final DynamicCommandExceptionType ERROR_CANT_REMOVE =
+            new DynamicCommandExceptionType(s -> Component.translatable("commands.allomancy.err_remove", s));
 
     private static Predicate<CommandSourceStack> permissions(int level) {
         return (player) -> player.hasPermission(level);
@@ -50,27 +52,34 @@ public class AllomancyPowerCommand {
                           .literal("get")
                           .requires(permissions(0))
                           .executes(ctx -> handleMultiPlayer(ctx, sender(ctx), AllomancyPowerCommand::getPowers))
-                          .then(Commands.argument("targets", EntityArgument.players()).executes(ctx -> handleMultiPlayer(ctx, target(ctx), AllomancyPowerCommand::getPowers))));
+                          .then(Commands
+                                        .argument("targets", EntityArgument.players())
+                                        .executes(ctx -> handleMultiPlayer(ctx, target(ctx),
+                                                                           AllomancyPowerCommand::getPowers))));
 
         root.then(Commands
                           .literal("add")
                           .requires(permissions(2))
                           .then(Commands
                                         .argument("type", AllomancyPowerType.INSTANCE)
-                                        .executes(ctx -> handleMultiPlayer(ctx, sender(ctx), AllomancyPowerCommand::addPower))
+                                        .executes(ctx -> handleMultiPlayer(ctx, sender(ctx),
+                                                                           AllomancyPowerCommand::addPower))
                                         .then(Commands
                                                       .argument("targets", EntityArgument.players())
-                                                      .executes(ctx -> handleMultiPlayer(ctx, target(ctx), AllomancyPowerCommand::addPower)))));
+                                                      .executes(ctx -> handleMultiPlayer(ctx, target(ctx),
+                                                                                         AllomancyPowerCommand::addPower)))));
 
         root.then(Commands
                           .literal("remove")
                           .requires(permissions(2))
                           .then(Commands
                                         .argument("type", AllomancyPowerType.INSTANCE)
-                                        .executes(ctx -> handleMultiPlayer(ctx, sender(ctx), AllomancyPowerCommand::removePower))
+                                        .executes(ctx -> handleMultiPlayer(ctx, sender(ctx),
+                                                                           AllomancyPowerCommand::removePower))
                                         .then(Commands
                                                       .argument("targets", EntityArgument.players())
-                                                      .executes(ctx -> handleMultiPlayer(ctx, target(ctx), AllomancyPowerCommand::removePower)))));
+                                                      .executes(ctx -> handleMultiPlayer(ctx, target(ctx),
+                                                                                         AllomancyPowerCommand::removePower)))));
 
 
         LiteralCommandNode<CommandSourceStack> command = dispatcher.register(root);
@@ -120,16 +129,22 @@ public class AllomancyPowerCommand {
                 }
             }
         }
-        ctx.getSource().sendSuccess(() -> Component.translatable("commands.allomancy.getpowers", player.getDisplayName(), powers.toString()), true);
+        ctx
+                .getSource()
+                .sendSuccess(() -> Component.translatable("commands.allomancy.getpowers", player.getDisplayName(),
+                                                          powers.toString()), true);
     }
 
-    private static void addPower(CommandContext<CommandSourceStack> ctx, ServerPlayer player) throws CommandSyntaxException {
-        handlePowerChange(ctx, player, IAllomancerData::setMistborn, data -> Predicate.not(data::hasPower), (mt, data) -> data.addPower(mt), ERROR_CANT_ADD::create,
-                          "commands.allomancy.addpower");
+    private static void addPower(CommandContext<CommandSourceStack> ctx,
+                                 ServerPlayer player) throws CommandSyntaxException {
+        handlePowerChange(ctx, player, IAllomancerData::setMistborn, data -> Predicate.not(data::hasPower),
+                          (mt, data) -> data.addPower(mt), ERROR_CANT_ADD::create, "commands.allomancy.addpower");
     }
 
-    private static void removePower(CommandContext<CommandSourceStack> ctx, ServerPlayer player) throws CommandSyntaxException {
-        handlePowerChange(ctx, player, IAllomancerData::setUninvested, (data) -> data::hasPower, (mt, data) -> data.revokePower(mt), ERROR_CANT_REMOVE::create,
+    private static void removePower(CommandContext<CommandSourceStack> ctx,
+                                    ServerPlayer player) throws CommandSyntaxException {
+        handlePowerChange(ctx, player, IAllomancerData::setUninvested, (data) -> data::hasPower,
+                          (mt, data) -> data.revokePower(mt), ERROR_CANT_REMOVE::create,
                           "commands.allomancy.removepower");
     }
 
@@ -147,7 +162,7 @@ public class AllomancyPowerCommand {
      */
     private static void handlePowerChange(CommandContext<CommandSourceStack> ctx,
                                           ServerPlayer player,
-                                          NonNullConsumer<IAllomancerData> all,
+                                          Consumer<IAllomancerData> all,
                                           Function<IAllomancerData, Predicate<Metal>> filterFunction,
                                           BiConsumer<Metal, IAllomancerData> single,
                                           Function<String, CommandSyntaxException> exception,

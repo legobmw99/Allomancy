@@ -14,9 +14,13 @@ import net.neoforged.api.distmarker.OnlyIn;
 public class Sounds {
     public static void soundForBurnChange(boolean burning) {
         if (burning) {
-            Minecraft.getInstance().player.playSound(SoundEvent.createFixedRangeEvent(new ResourceLocation("item.flintandsteel.use"), 1f), 1, 5);
+            Minecraft.getInstance().player.playSound(
+                    SoundEvent.createFixedRangeEvent(ResourceLocation.withDefaultNamespace("item.flintandsteel.use"),
+                                                     1f), 1, 5);
         } else {
-            Minecraft.getInstance().player.playSound(SoundEvent.createFixedRangeEvent(new ResourceLocation("block.fire.extinguish"), 1f), 1, 4);
+            Minecraft.getInstance().player.playSound(
+                    SoundEvent.createFixedRangeEvent(ResourceLocation.withDefaultNamespace("block.fire.extinguish"),
+                                                     1f), 1, 4);
         }
     }
 
@@ -34,8 +38,13 @@ public class Sounds {
             double motionX = ((posX - (sound.getX() + .5)) * -0.7) / magnitude;
             double motionY = ((posY - (sound.getY() + .2)) * -0.7) / magnitude;
             double motionZ = ((posZ - (sound.getZ() + .5)) * -0.7) / magnitude;
-            Minecraft.getInstance().particleEngine.createParticle(new SoundParticleData(sound.getSource()), posX + (Math.sin(Math.toRadians(player.getYHeadRot())) * -.7d),
-                                                                  posY + .2, posZ + (Math.cos(Math.toRadians(player.getYHeadRot())) * .7d), motionX, motionY, motionZ);
+            Minecraft.getInstance()
+
+                    .particleEngine.createParticle(new SoundParticleData(sound.getSource()),
+                                                   posX + (Math.sin(Math.toRadians(player.getYHeadRot())) * -.7d),
+                                                   posY + .2,
+                                                   posZ + (Math.cos(Math.toRadians(player.getYHeadRot())) * .7d),
+                                                   motionX, motionY, motionZ);
         }
     }
 }

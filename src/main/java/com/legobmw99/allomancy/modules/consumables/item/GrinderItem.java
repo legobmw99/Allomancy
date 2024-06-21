@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 public class GrinderItem extends Item {
 
     public GrinderItem() {
-        super(new Item.Properties().setNoRepair().defaultDurability(256));
+        super(new Item.Properties().setNoRepair().durability(256));
     }
 
 

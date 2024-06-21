@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "allomancy:aluminum_flakes"
+    },
+    {
+      "item": "allomancy:aluminum_flakes"
+    },
+    {
+      "item": "allomancy:aluminum_flakes"
+    },
+    {
+      "item": "allomancy:copper_flakes"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "allomancy:duralumin_flakes"
+  }
+}
