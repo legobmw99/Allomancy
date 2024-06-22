@@ -1,7 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
@@ -61,8 +60,11 @@ public class ServerPayloadHandler {
         if (level.isLoaded(pos)) {
             // activate blocks
             BlockState blockState = level.getBlockState(pos);
-            if (blockState.getBlock() instanceof IAllomanticallyUsableBlock block) {
-                block.useAllomantically(blockState, level, pos, player, data.isPush());
+            var allomanticUseCap =
+                    level.getCapability(ExtrasSetup.ALLOMANTICALLY_USABLE_BLOCK, pos, blockState, null, null);
+
+            if (allomanticUseCap != null) {
+                allomanticUseCap.useAllomantically(player, data.isPush());
             } else if (Physical.isBlockStateMetallic(blockState) // Check whitelist on server
                        || (player.isCrouching() && data.isPush() &&
                            player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() // check coin bag

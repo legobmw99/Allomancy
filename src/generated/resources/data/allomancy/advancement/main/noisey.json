@@ -1,0 +1,36 @@
+{
+  "parent": "allomancy:main/coinshot",
+  "criteria": {
+    "allomantically_activate_bell": {
+      "conditions": {
+        "entity": [
+          {
+            "block": "minecraft:bell",
+            "condition": "minecraft:block_state_property"
+          }
+        ]
+      },
+      "trigger": "allomancy:activated_allomancy_block"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.noisey.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:bell"
+    },
+    "title": {
+      "translate": "advancements.noisey.title"
+    }
+  },
+  "requirements": [
+    [
+      "allomantically_activate_bell"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

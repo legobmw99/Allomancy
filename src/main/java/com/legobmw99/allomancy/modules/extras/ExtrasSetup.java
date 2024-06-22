@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.modules.extras;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.block.IAllomanticallyUsable;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.extras.advancement.AllomanticallyActivatedBlockTrigger;
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnEntityTrigger;
@@ -17,12 +18,19 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.BellBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -36,6 +44,12 @@ public class ExtrasSetup {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
 
+    public static final BlockCapability<IAllomanticallyUsable, Void> ALLOMANTICALLY_USABLE_BLOCK =
+            BlockCapability.createVoid(
+                    // Provide a name to uniquely identify the capability.
+                    ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "allomantically_usable_block"),
+                    // Provide the queried type. Here, we want to look up `IItemHandler` instances.
+                    IAllomanticallyUsable.class);
 
     public static final DeferredBlock<IronButtonBlock> IRON_BUTTON =
             BLOCKS.register("iron_button", () -> new IronButtonBlock(true));
@@ -108,6 +122,32 @@ public class ExtrasSetup {
         }
     }
 
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlock(ALLOMANTICALLY_USABLE_BLOCK, new IronLeverBlock.AllomanticUseCapabilityProvider(),
+                            IRON_LEVER.get());
+        event.registerBlock(ALLOMANTICALLY_USABLE_BLOCK, new IronButtonBlock.AllomanticUseCapabilityProvider(),
+                            IRON_BUTTON.get(), INVERTED_IRON_BUTTON.get());
+
+        event.registerBlock(ALLOMANTICALLY_USABLE_BLOCK,
+                            ((level, pos, state, blockEntity, context) -> ((player, isPush) -> {
+                                if (player instanceof ServerPlayer sp) {
+                                    ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
+                                }
+                                if (level.isClientSide()) {
+                                    return true;
+                                }
+                                var direction = player.getNearestViewDirection();
+                                if (isPush) {
+                                    direction = direction.getOpposite();
+                                }
+                                return ((BellBlock) state.getBlock()).onHit(level, state,
+                                                                            new BlockHitResult(Vec3.atCenterOf(pos),
+                                                                                               direction, pos, false),
+                                                                            player, true);
+
+                            })), Blocks.BELL);
+
+    }
 
     public static void registerCommands(final RegisterCommandsEvent e) {
         AllomancyPowerCommand.register(e.getDispatcher());

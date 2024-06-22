@@ -116,6 +116,8 @@ public class Languages extends LanguageProvider {
         add("advancements.tin_foil_hat.desc", "Protect yourself, and be a bit paranoid too");
         add("advancements.consequences.title", "Consequences, Vin");
         add("advancements.consequences.desc", "Learn what happens when you push on a much heavier target.");
+        add("advancements.noisey.title", "Going Loud");
+        add("advancements.noisey.desc", "Allomancy can grant great stealth, unless you do that!");
 
         add("key.categories.allomancy", "Allomancy");
         add("key.burn", "Burn Metals");

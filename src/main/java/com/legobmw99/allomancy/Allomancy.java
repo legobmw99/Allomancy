@@ -46,6 +46,7 @@ public class Allomancy {
         bus.addListener(Network::registerPayloads);
 
         ExtrasSetup.register(bus);
+        bus.addListener(ExtrasSetup::registerCapabilities);
         NeoForge.EVENT_BUS.addListener(ExtrasSetup::registerCommands);
 
         CombatSetup.register(bus);

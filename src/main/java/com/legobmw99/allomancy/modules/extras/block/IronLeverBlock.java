@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.modules.extras.block;
 
-import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
+import com.legobmw99.allomancy.api.block.IAllomanticallyUsable;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
@@ -18,37 +18,19 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeverBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.capabilities.IBlockCapabilityProvider;
 
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class IronLeverBlock extends LeverBlock implements IAllomanticallyUsableBlock {
+public class IronLeverBlock extends LeverBlock {
 
     public IronLeverBlock() {
         super(Block.Properties.of().noCollission().strength(1.0F));
-    }
-
-    @Override
-    public boolean useAllomantically(BlockState state, Level level, BlockPos pos, Player player, boolean isPush) {
-        if (player instanceof ServerPlayer sp) {
-            ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
-        }
-        if (level.isClientSide()) {
-            return true;
-        }
-        if (isPush == state.getValue(POWERED)) {
-            this.pull(state, level, pos, player);
-            float f = state.getValue(POWERED) ? 0.6F : 0.5F;
-            level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, f);
-            level.gameEvent(player, state.getValue(POWERED) ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE,
-                            pos);
-            return true;
-
-        }
-        return false;
     }
 
     @Override
@@ -82,6 +64,37 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyUsableB
     private void updateNeighbors(BlockState state, Level world, BlockPos pos) {
         world.updateNeighborsAt(pos, this);
         world.updateNeighborsAt(pos.relative(getConnectedDirection(state).getOpposite()), this);
+    }
+
+    public static class AllomanticUseCapabilityProvider implements IBlockCapabilityProvider<IAllomanticallyUsable,
+            Void> {
+
+        @Override
+        public IAllomanticallyUsable getCapability(Level level,
+                                                   BlockPos pos,
+                                                   BlockState state,
+                                                   BlockEntity blockEntity,
+                                                   Void context) {
+            return ((player, isPush) -> {
+                if (player instanceof ServerPlayer sp) {
+                    ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
+                }
+                if (level.isClientSide()) {
+                    return true;
+                }
+                if (isPush == state.getValue(POWERED)) {
+                    ((LeverBlock) state.getBlock()).pull(state, level, pos, player);
+                    float f = state.getValue(POWERED) ? 0.6F : 0.5F;
+                    level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, f);
+                    level.gameEvent(player,
+                                    state.getValue(POWERED) ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE,
+                                    pos);
+                    return true;
+
+                }
+                return false;
+            });
+        }
     }
 
 }

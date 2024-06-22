@@ -33,7 +33,7 @@ public class AllomancyConfig {
 
 
     public static void onLoad(final ModConfigEvent.Loading e) {
-        PowersConfig.load_whitelist(e);
+        PowersConfig.refresh(e);
     }
 
     public static void register(ModContainer container) {

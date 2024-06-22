@@ -217,7 +217,8 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public void renderTransparentBackground(GuiGraphics unused) {
+    public void renderBackground(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        // unused
     }
 
     @Override

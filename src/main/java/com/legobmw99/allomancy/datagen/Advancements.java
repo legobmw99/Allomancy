@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
+import com.legobmw99.allomancy.modules.extras.advancement.AllomanticallyActivatedBlockTrigger;
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnEntityTrigger;
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnPlayerTrigger;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
@@ -148,5 +149,18 @@ public class Advancements implements AdvancementProvider.AdvancementGenerator {
                                                                                                      Metal.IRON))
                 .requirements(AdvancementRequirements.Strategy.OR)
                 .save(saver, "allomancy:main/consequences");
+
+
+        Advancement.Builder
+                .advancement()
+                .parent(Advancement.Builder
+                                .advancement()
+                                .build(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "main/coinshot")))
+                .display(Blocks.BELL, Component.translatable("advancements.noisey.title"),
+                         Component.translatable("advancements.noisey.desc"), null, AdvancementType.TASK, true, true,
+                         true)
+                .addCriterion("allomantically_activate_bell",
+                              AllomanticallyActivatedBlockTrigger.TriggerInstance.activatedBlock(Blocks.BELL))
+                .save(saver, "allomancy:main/noisey");
     }
 }

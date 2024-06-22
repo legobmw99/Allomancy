@@ -1,19 +1,15 @@
 package com.legobmw99.allomancy.api.block;
 
-import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * This interface can be used to signify if a block should react to being pushed
  * or pulled, rather than moving the pusher
  *
  * @author legobmw99
- * @see IronLeverBlock
+ * @see com.legobmw99.allomancy.modules.extras.ExtrasSetup#ALLOMANTICALLY_USABLE_BLOCK
  */
-public interface IAllomanticallyUsableBlock {
+public interface IAllomanticallyUsable {
 
     /**
      * Called when the block is steelpushed or ironpulled
@@ -21,5 +17,5 @@ public interface IAllomanticallyUsableBlock {
      * @param isPush whether the activation is Steel
      * @return whether the block was activated
      */
-    boolean useAllomantically(BlockState state, Level world, BlockPos pos, Player playerIn, boolean isPush);
+    boolean useAllomantically(Player player, boolean isPush);
 }

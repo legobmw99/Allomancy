@@ -35,7 +35,7 @@ public class MetalOverlay implements LayeredDraw.Layer {
     private MetalOverlay() {}
 
     public static void registerGUI(final RegisterGuiLayersEvent evt) {
-        evt.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "metal_display"),
+        evt.registerBelowAll(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "metal_display"),
                              new MetalOverlay());
     }
 
@@ -54,12 +54,10 @@ public class MetalOverlay implements LayeredDraw.Layer {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
 
-        if (mc.options.hideGui || !mc.isWindowActive() || !player.isAlive()) {
+        if (mc.options.hideGui || !player.isAlive()) {
             return;
         }
-        if (mc.screen != null && !(mc.screen instanceof ChatScreen) && !(mc.screen instanceof MetalSelectScreen)) {
-            return;
-        }
+
         if (!PowersConfig.enable_overlay.get() && !(mc.screen instanceof MetalSelectScreen)) {
             return;
         }
