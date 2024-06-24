@@ -98,11 +98,7 @@ public final class Enhancement {
             int max = 20;
             Vec3 negative = curPlayer.position().add(-max, -max, -max);
             Vec3 positive = curPlayer.position().add(max, max, max);
-            level
-                    .getEntitiesOfClass(Player.class, new AABB(negative, positive))
-                    .forEach(otherPlayer -> otherPlayer
-                            .getData(AllomancerAttachment.ALLOMANCY_DATA)
-                            .drainMetals(Metal.values()));
+            level.getEntitiesOfClass(Player.class, new AABB(negative, positive)).forEach(Enhancement::wipePlayer);
         }
     }
 }

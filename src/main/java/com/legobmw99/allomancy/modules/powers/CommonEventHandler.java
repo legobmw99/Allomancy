@@ -28,9 +28,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerSetSpawnEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
@@ -171,7 +171,7 @@ public final class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void onEntityHurt(final LivingHurtEvent event) {
+    public static void onEntityHurt(final LivingIncomingDamageEvent event) {
         // Increase outgoing damage for pewter burners
         if (event.getSource().getEntity() instanceof ServerPlayer source) {
             var data = source.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -216,16 +216,16 @@ public final class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerAttacked(final LivingAttackEvent event) {
+    public static void onInvulnerabilityCheck(final EntityInvulnerabilityCheckEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
             if (data.isBurning(Metal.PEWTER) && data.isEnhanced()) { // Duralumin invulnerability
                 Allomancy.LOGGER.debug("Canceling Damage");
-                event.setCanceled(true);
+                event.setInvulnerable(true);
             }
 
-            if (data.isBurning(Metal.STEEL)) {
+            if (data.isBurning(Metal.STEEL)) { // Prevent fall damage on metal blocks when steelpushing
                 if (event
                         .getSource()
                         .type()
@@ -238,7 +238,7 @@ public final class CommonEventHandler {
                     BlockPos on = player.getOnPos();
                     if (Physical.isBlockStateMetallic(player.level().getBlockState(on)) ||
                         Physical.isBlockStateMetallic(player.level().getBlockState(on.above()))) {
-                        event.setCanceled(true);
+                        event.setInvulnerable(true);
                     }
                 }
             }
@@ -249,8 +249,8 @@ public final class CommonEventHandler {
     public static void onWorldTick(final LevelTickEvent.Post event) {
         Level level = event.getLevel();
         var list = level.players();
-        for (int enti = list.size() - 1; enti >= 0; enti--) {
-            Player curPlayer = list.get(enti);
+        for (int i = list.size() - 1; i >= 0; i--) {
+            Player curPlayer = list.get(i);
             playerPowerTick(curPlayer, level);
         }
 
