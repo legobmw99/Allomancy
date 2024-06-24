@@ -58,20 +58,17 @@ public final class Emotional {
 
                 target.setAggressive(true);
 
-                if (target instanceof Creeper creeper) {
-                    target.goalSelector.addGoal(1, new SwellGoal(creeper));
-                }
-                if (target instanceof Rabbit rabbit) {
-                    target.goalSelector.addGoal(1, new AIEvilAttack(rabbit));
-                }
-                if (target instanceof AbstractSkeleton skeleton) {
-                    target.goalSelector.addGoal(1, new RangedBowAttackGoal<>(skeleton, 1.0D, 20, 15.0F));
-                }
-                if (target instanceof Illusioner illusioner) {
-                    target.goalSelector.addGoal(1, new RangedBowAttackGoal<>(illusioner, 0.5D, 20, 15.0F));
-                }
-                if (target instanceof Pillager pillager) {
-                    target.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>(pillager, 1.0D, 8.0F));
+                switch (target) {
+                    case Creeper creeper -> target.goalSelector.addGoal(1, new SwellGoal(creeper));
+                    case Rabbit rabbit -> target.goalSelector.addGoal(1, new AIEvilAttack(rabbit));
+                    case AbstractSkeleton skeleton ->
+                            target.goalSelector.addGoal(1, new RangedBowAttackGoal<>(skeleton, 1.0D, 20, 15.0F));
+                    case Illusioner illusioner ->
+                            target.goalSelector.addGoal(1, new RangedBowAttackGoal<>(illusioner, 0.5D, 20, 15.0F));
+                    case Pillager pillager ->
+                            target.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>(pillager, 1.0D, 8.0F));
+                    default -> {
+                    }
                 }
             } else {
                 target
@@ -118,24 +115,23 @@ public final class Emotional {
                 //Add new goals
                 target.goalSelector.addGoal(7, new LookAtPlayerGoal(target, Player.class, 6.0F));
 
-                if (target instanceof TamableAnimal animal) {
-                    if (Math.random() < 0.3) {
-                        animal.tame(allomancer);
+                switch (target) {
+                    case AbstractHorse horse -> {
+                        if (Math.random() < 0.3) {
+                            horse.tameWithName(allomancer);
+                        }
                     }
-                }
-                if (target instanceof AbstractHorse horse) {
-                    if (Math.random() < 0.3) {
-                        horse.tameWithName(allomancer);
+                    case TamableAnimal animal -> {
+                        if (Math.random() < 0.3) {
+                            animal.tame(allomancer);
+                        }
                     }
-                }
-                if (target instanceof Sheep) {
-                    target.goalSelector.addGoal(1, new EatBlockGoal(target));
-                }
-                if (target instanceof Villager villager) {
-                    villager.onReputationEventFrom(ReputationEventType.TRADE, allomancer);
-                }
-                if (target instanceof WanderingTrader) {
-                    target.goalSelector.addGoal(1, new TradeWithPlayerGoal((AbstractVillager) target));
+                    case Sheep unused -> target.goalSelector.addGoal(1, new EatBlockGoal(target));
+                    case Villager villager -> villager.onReputationEventFrom(ReputationEventType.TRADE, allomancer);
+                    case WanderingTrader unused ->
+                            target.goalSelector.addGoal(1, new TradeWithPlayerGoal((AbstractVillager) target));
+                    default -> {
+                    }
                 }
             } else { // Completely remove all AI if enhanced
                 target.setNoAi(true);
