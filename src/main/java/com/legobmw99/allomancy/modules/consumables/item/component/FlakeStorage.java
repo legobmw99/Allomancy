@@ -7,16 +7,12 @@ import net.minecraft.network.codec.StreamCodec;
 
 import java.util.EnumSet;
 
-public class FlakeStorage {
+public final class FlakeStorage {
 
     private final EnumSet<Metal> flakes;
 
-    FlakeStorage(EnumSet<Metal> flakes) {
+    private FlakeStorage(EnumSet<Metal> flakes) {
         this.flakes = flakes;
-    }
-
-    public FlakeStorage() {
-        this(EnumSet.noneOf(Metal.class));
     }
 
     public boolean contains(Metal mt) {

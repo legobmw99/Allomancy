@@ -25,12 +25,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class AllomancyPowerCommand {
+public final class AllomancyPowerCommand {
 
     private static final DynamicCommandExceptionType ERROR_CANT_ADD =
             new DynamicCommandExceptionType(s -> Component.translatable("commands.allomancy.err_add", s));
     private static final DynamicCommandExceptionType ERROR_CANT_REMOVE =
             new DynamicCommandExceptionType(s -> Component.translatable("commands.allomancy.err_remove", s));
+
+
+    private AllomancyPowerCommand() {}
 
     private static Predicate<CommandSourceStack> permissions(int level) {
         return (player) -> player.hasPermission(level);
@@ -95,10 +98,10 @@ public class AllomancyPowerCommand {
      * @param players Collection of players
      * @param toApply Function to apply to all players or sender
      * @return The number of players successfully applied to
-     * @throws CommandSyntaxException
+     * @throws CommandSyntaxException if invalid
      */
     private static int handleMultiPlayer(CommandContext<CommandSourceStack> ctx,
-                                         Collection<ServerPlayer> players,
+                                         Iterable<ServerPlayer> players,
                                          CheckedBiCon<CommandContext<CommandSourceStack>, ServerPlayer> toApply) throws CommandSyntaxException {
         int i = 0;
 
@@ -158,7 +161,7 @@ public class AllomancyPowerCommand {
      * @param single         Either metal -> data.addPower or its inverse
      * @param exception      Function to create an exception
      * @param success        String used when successful
-     * @throws CommandSyntaxException
+     * @throws CommandSyntaxException if invalid
      */
     private static void handlePowerChange(CommandContext<CommandSourceStack> ctx,
                                           ServerPlayer player,
@@ -171,12 +174,12 @@ public class AllomancyPowerCommand {
         String type = ctx.getArgument("type", String.class);
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
-        if (type.equalsIgnoreCase("all")) {
+        if ("all".equalsIgnoreCase(type)) {
             all.accept(data);
         } else {
             Predicate<Metal> filter = filterFunction.apply(data);
 
-            if (type.equalsIgnoreCase("random")) {
+            if ("random".equalsIgnoreCase(type)) {
                 List<Metal> metalList = Arrays.asList(Metal.values());
                 Collections.shuffle(metalList);
                 Metal mt = metalList.stream().filter(filter).findFirst().orElseThrow(() -> exception.apply(type));

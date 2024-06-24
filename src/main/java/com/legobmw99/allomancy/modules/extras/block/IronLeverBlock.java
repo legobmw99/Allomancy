@@ -61,11 +61,6 @@ public class IronLeverBlock extends LeverBlock {
         tooltip.add(lore);
     }
 
-    private void updateNeighbors(BlockState state, Level world, BlockPos pos) {
-        world.updateNeighborsAt(pos, this);
-        world.updateNeighborsAt(pos.relative(getConnectedDirection(state).getOpposite()), this);
-    }
-
     public static class AllomanticUseCapabilityProvider implements IBlockCapabilityProvider<IAllomanticallyUsable,
             Void> {
 

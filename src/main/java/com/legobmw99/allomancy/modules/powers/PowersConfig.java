@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PowersConfig {
+public final class PowersConfig {
 
     public static final Set<String> whitelist = new HashSet<>();
     public static ModConfigSpec.IntValue max_metal_detection;
@@ -20,7 +20,9 @@ public class PowersConfig {
     public static ModConfigSpec.EnumValue<MetalOverlay.SCREEN_LOC> overlay_position;
     public static ModConfigSpec.BooleanValue random_mistings;
     public static ModConfigSpec.BooleanValue respect_player_UUID;
-    public static ModConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
+    private static ModConfigSpec.ConfigValue<List<? extends String>> cfg_whitelist;
+
+    private PowersConfig() {}
 
     public static void init(ModConfigSpec.Builder server_builder,
                             ModConfigSpec.Builder common_builder,
@@ -41,7 +43,7 @@ public class PowersConfig {
 
         client_builder.push("graphics");
         max_metal_detection = client_builder
-                .comment("Maximum iron/steelsight distance. Can have a HUGE impact on performance")
+                .comment("Maximum iron/steel sight distance. Can have an impact on performance")
                 .defineInRange("max_metal_distance", 15, 3, 30);
         animate_selection = client_builder.comment("Animate the selection wheel").define("animate_selection", true);
         enable_overlay = client_builder.comment("Enable the screen overlay").define("overlay_enabled", true);
@@ -52,7 +54,7 @@ public class PowersConfig {
 
     }
 
-    public static void refresh(final ModConfigEvent e) {
+    public static void refresh(ModConfigEvent e) {
         ModConfig cfg = e.getConfig();
         if (cfg.getSpec() == AllomancyConfig.SERVER_CONFIG) {
             whitelist.clear();

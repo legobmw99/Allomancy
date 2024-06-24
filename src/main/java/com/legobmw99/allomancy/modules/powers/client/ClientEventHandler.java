@@ -16,17 +16,16 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
 import org.lwjgl.glfw.GLFW;
 
-public class ClientEventHandler {
+public final class ClientEventHandler {
     private static final Tracking tracking = new Tracking();
 
-    @OnlyIn(Dist.CLIENT)
+    private ClientEventHandler() {}
+
     @SubscribeEvent
     public static void onClientTick(final ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
@@ -46,14 +45,14 @@ public class ClientEventHandler {
         // Handle our input-based powers
         if (mc.options.keyAttack.isDown()) {
             // Ray trace 20 blocks (or 40 if enhanced)
-            var trace = Inputs.getMouseOverExtended(20F * dist_modifier);
+            var trace = Inputs.getMouseOverExtended(20.0F * dist_modifier);
             PowerRequests.metallicPushPull(data, trace, Metal.IRON);
             PowerRequests.emotionPushPull(data, trace, Metal.ZINC);
         }
 
         if (mc.options.keyUse.isDown()) {
             // Ray trace 20 blocks (or 40 if enhanced)
-            var trace = Inputs.getMouseOverExtended(20F * dist_modifier);
+            var trace = Inputs.getMouseOverExtended(20.0F * dist_modifier);
             PowerRequests.metallicPushPull(data, trace, Metal.STEEL);
             PowerRequests.emotionPushPull(data, trace, Metal.BRASS);
             PowerRequests.nicrosilEnhance(data, trace);
@@ -63,7 +62,6 @@ public class ClientEventHandler {
     }
 
 
-    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onKeyInput(final InputEvent.Key event) {
         if (event.getAction() == GLFW.GLFW_PRESS) {
@@ -71,7 +69,6 @@ public class ClientEventHandler {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onMouseInput(final InputEvent.MouseButton.Pre event) {
         if (event.getAction() == GLFW.GLFW_PRESS) {
@@ -80,7 +77,6 @@ public class ClientEventHandler {
     }
 
 
-    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onRenderLevelStage(final RenderLevelStageEvent event) {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
@@ -118,11 +114,11 @@ public class ClientEventHandler {
 
         if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
             tracking.forEachMetallicEntity(
-                    entity -> Rendering.drawMetalLine(stack, playervec, entity.position(), 1.5F, 0F, 0.6F, 1F));
+                    entity -> Rendering.drawMetalLine(stack, playervec, entity.position(), 1.5F, 0.0F, 0.6F, 1.0F));
 
             tracking.forEachMetalBlob(blob -> Rendering.drawMetalLine(stack, playervec, blob.getCenter(),
                                                                       Mth.clamp(0.3F + blob.size() * 0.4F, 0.5F,
-                                                                                7.5F), 0F, 0.6F, 1F));
+                                                                                7.5F), 0.0F, 0.6F, 1.0F));
         }
 
         /*********************************************
@@ -161,7 +157,6 @@ public class ClientEventHandler {
 
     }
 
-    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onFovCompute(final ComputeFovModifierEvent event) {
         var data = event.getPlayer().getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -171,7 +166,6 @@ public class ClientEventHandler {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onSound(final PlaySoundEvent event) {
 
@@ -190,7 +184,6 @@ public class ClientEventHandler {
     /**
      * Used to enable movement while the MetalSelectScreen is open
      */
-    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void updateInputEvent(final MovementInputUpdateEvent event) {
         if (Minecraft.getInstance().screen instanceof MetalSelectScreen) {

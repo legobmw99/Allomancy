@@ -4,7 +4,6 @@ import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.client.util.Sounds;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import com.legobmw99.allomancy.modules.powers.network.*;
 import com.legobmw99.allomancy.modules.powers.util.Physical;
 import net.minecraft.client.Minecraft;
@@ -18,7 +17,9 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-public class PowerRequests {
+public final class PowerRequests {
+    private PowerRequests() {}
+
     /**
      * Used to toggle a metal's burn state and play a sound effect
      *
@@ -61,22 +62,30 @@ public class PowerRequests {
 
         int force = (data.isEnhanced() ? 4 : 1) * (metal == Metal.STEEL ? 1 : -1);
 
-        if (trace.getType() == HitResult.Type.ENTITY &&
-            Physical.isEntityMetallic(((EntityHitResult) trace).getEntity())) {
-            sendToServer(new EntityPushPullPayload(((EntityHitResult) trace).getEntity().getId(), force));
-        } else if (trace.getType() == HitResult.Type.BLOCK) {
-            BlockPos bp = ((BlockHitResult) trace).getBlockPos();
-            Player player = Minecraft.getInstance().player;
-            if (Physical.isBlockStateMetallic(player.level().getBlockState(bp)) ||
-                (player.isCrouching() && metal == Metal.STEEL &&
-                 player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() &&
-                 (!player.getProjectile(player.getMainHandItem()).isEmpty()))) {
-                sendToServer(new BlockPushPullPayload(bp, force));
+        switch (trace) {
+            case EntityHitResult e: {
+                if (Physical.isEntityMetallic((e).getEntity())) {
+                    sendToServer(new EntityPushPullPayload((e).getEntity().getId(), force));
+
+                }
+                break;
             }
+            case BlockHitResult b: {
+                BlockPos bp = b.getBlockPos();
+                Player player = Minecraft.getInstance().player;
+                if (Physical.isBlockStateMetallic(player.level().getBlockState(bp)) ||
+                    (player.isCrouching() && metal == Metal.STEEL &&
+                     player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() &&
+                     (!player.getProjectile(player.getMainHandItem()).isEmpty()))) {
+                    sendToServer(new BlockPushPullPayload(bp, force));
+                }
+            }
+            break;
+            default:
         }
     }
 
-    public static void nicrosilEnhance(AllomancerData data, HitResult trace) {
+    public static void nicrosilEnhance(IAllomancerData data, HitResult trace) {
         if (data.isBurning(Metal.NICROSIL)) {
             if ((trace != null) && (trace.getType() == HitResult.Type.ENTITY)) {
                 Entity entity = ((EntityHitResult) trace).getEntity();

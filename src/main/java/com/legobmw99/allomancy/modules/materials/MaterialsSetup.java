@@ -42,8 +42,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class MaterialsSetup {
+public final class MaterialsSetup {
 
+    private MaterialsSetup() {}
 
     public record OreConfig(String name, int size, int placementCount, int minHeight, int maxHeight) {
 
@@ -93,7 +94,7 @@ public class MaterialsSetup {
     static {
         for (Metal mt : Metal.values()) {
             String name = mt.getName();
-            FLAKES.add(MaterialsSetup.ITEMS.register(name + "_flakes", MaterialsSetup::createStandardItem));
+            FLAKES.add(ITEMS.register(name + "_flakes", MaterialsSetup::createStandardItem));
 
             if (mt.isVanilla()) {
                 NUGGETS.add(null);
@@ -109,14 +110,14 @@ public class MaterialsSetup {
                                                                            new Item.Properties())));
             }
         }
-        FLAKES.add(MaterialsSetup.ITEMS.register("lead_flakes", MaterialsSetup::createStandardItem));
+        FLAKES.add(ITEMS.register("lead_flakes", MaterialsSetup::createStandardItem));
         NUGGETS.add(ITEMS.register("lead_nugget", MaterialsSetup::createStandardItem));
         INGOTS.add(ITEMS.register("lead_ingot", MaterialsSetup::createStandardItem));
         STORAGE_BLOCKS.add(BLOCKS.register("lead_block", MaterialsSetup::createStandardBlock));
         STORAGE_BLOCK_ITEMS.add(ITEMS.register("lead_block", () -> new BlockItem(STORAGE_BLOCKS.get(LEAD).get(),
                                                                                  new Item.Properties())));
 
-        FLAKES.add(MaterialsSetup.ITEMS.register("silver_flakes", MaterialsSetup::createStandardItem));
+        FLAKES.add(ITEMS.register("silver_flakes", MaterialsSetup::createStandardItem));
         NUGGETS.add(ITEMS.register("silver_nugget", MaterialsSetup::createStandardItem));
         INGOTS.add(ITEMS.register("silver_ingot", MaterialsSetup::createStandardItem));
         STORAGE_BLOCKS.add(BLOCKS.register("silver_block", MaterialsSetup::createStandardBlock));
@@ -158,20 +159,20 @@ public class MaterialsSetup {
         GLM.register(bus);
     }
 
-    public static Block createStandardBlock() {
+    private static Block createStandardBlock() {
         return new Block(Blocks.STONE.properties().strength(2.1F).requiresCorrectToolForDrops());
     }
 
-    public static Block createStandardOre() {
+    private static Block createStandardOre() {
         return new DropExperienceBlock(UniformInt.of(2, 5), Blocks.IRON_ORE.properties());
     }
 
-    public static Block createDeepslateBlock() {
+    private static Block createDeepslateBlock() {
         return new DropExperienceBlock(UniformInt.of(2, 5),
                                        Blocks.DEEPSLATE_IRON_ORE.properties().strength(4.5F, 3.0F));
     }
 
-    public static Item createStandardItem() {
+    private static Item createStandardItem() {
         return new Item(new Item.Properties());
     }
 
@@ -194,11 +195,7 @@ public class MaterialsSetup {
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> bootstrap) {
 
-        for (int i = 0; i < ORE_METALS.length; i++) {
-            OreConfig ore = ORE_METALS[i];
-            var ore_block = ORE_BLOCKS.get(i);
-            var deepslate_ore_block = DEEPSLATE_ORE_BLOCKS.get(i);
-
+        for (OreConfig ore : ORE_METALS) {
             // Get configured feature registry
             HolderGetter<ConfiguredFeature<?, ?>> configured = bootstrap.lookup(Registries.CONFIGURED_FEATURE);
 

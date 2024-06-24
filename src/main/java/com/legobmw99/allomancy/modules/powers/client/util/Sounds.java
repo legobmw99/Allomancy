@@ -7,20 +7,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
-public class Sounds {
+public final class Sounds {
+    private Sounds() {}
+
     public static void soundForBurnChange(boolean burning) {
         if (burning) {
             Minecraft.getInstance().player.playSound(
                     SoundEvent.createFixedRangeEvent(ResourceLocation.withDefaultNamespace("item.flintandsteel.use"),
-                                                     1f), 1, 5);
+                                                     1.0f), 1, 5);
         } else {
             Minecraft.getInstance().player.playSound(
                     SoundEvent.createFixedRangeEvent(ResourceLocation.withDefaultNamespace("block.fire.extinguish"),
-                                                     1f), 1, 4);
+                                                     1.0f), 1, 4);
         }
     }
 
@@ -35,15 +34,15 @@ public class Sounds {
         // Spawn sound particles
         String soundName = sound.getLocation().toString();
         if (soundName.contains("entity") || soundName.contains("step")) {
-            double motionX = ((posX - (sound.getX() + .5)) * -0.7) / magnitude;
-            double motionY = ((posY - (sound.getY() + .2)) * -0.7) / magnitude;
-            double motionZ = ((posZ - (sound.getZ() + .5)) * -0.7) / magnitude;
+            double motionX = ((posX - (sound.getX() + 0.5)) * -0.7) / magnitude;
+            double motionY = ((posY - (sound.getY() + 0.2)) * -0.7) / magnitude;
+            double motionZ = ((posZ - (sound.getZ() + 0.5)) * -0.7) / magnitude;
             Minecraft.getInstance()
 
                     .particleEngine.createParticle(new SoundParticleData(sound.getSource()),
-                                                   posX + (Math.sin(Math.toRadians(player.getYHeadRot())) * -.7d),
-                                                   posY + .2,
-                                                   posZ + (Math.cos(Math.toRadians(player.getYHeadRot())) * .7d),
+                                                   posX + (Math.sin(Math.toRadians(player.getYHeadRot())) * -0.7d),
+                                                   posY + 0.2,
+                                                   posZ + (Math.cos(Math.toRadians(player.getYHeadRot())) * 0.7d),
                                                    motionX, motionY, motionZ);
         }
     }

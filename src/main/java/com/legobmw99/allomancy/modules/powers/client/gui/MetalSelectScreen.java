@@ -26,13 +26,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
 
-@OnlyIn(Dist.CLIENT)
 public class MetalSelectScreen extends Screen {
 
     private static final String[] METAL_NAMES =
@@ -44,13 +41,13 @@ public class MetalSelectScreen extends Screen {
             .stream(METAL_NAMES)
             .map(s -> ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, String.format(GUI_METAL, s)))
             .toArray(ResourceLocation[]::new);
-    final Minecraft mc;
-    int timeIn = PowersConfig.animate_selection.get() ? 0 : 16;
+    private final Minecraft mc;
+    private int timeIn = PowersConfig.animate_selection.get() ? 0 : 16;
     // Config setting for whether the wheel animates open or instantly appears
-    int slotSelected = -1;
+    private int slotSelected = -1;
 
     public MetalSelectScreen() {
-        super(Component.translatable("allomancy_gui"));
+        super(Component.translatable("allomancy.gui"));
         this.mc = Minecraft.getInstance();
     }
 
@@ -93,7 +90,7 @@ public class MetalSelectScreen extends Screen {
             Metal mt = Metal.getMetal(toMetalIndex(seg));
             boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
             float radius =
-                    Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+                    Math.max(0.0F, Math.min((this.timeIn + partialTicks - seg * 6.0F / segments) * 40.0F, maxRadius));
             if (mouseInSector) {
                 this.slotSelected = seg;
                 radius *= 1.025f;
@@ -132,7 +129,7 @@ public class MetalSelectScreen extends Screen {
             Metal mt = Metal.getMetal(toMetalIndex(seg));
             boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
             float radius =
-                    Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+                    Math.max(0.0F, Math.min((this.timeIn + partialTicks - seg * 6.0F / segments) * 40.0F, maxRadius));
             if (mouseInSector) {
                 radius *= 1.025f;
             }

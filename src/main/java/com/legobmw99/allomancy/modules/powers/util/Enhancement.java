@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.powers.util;
 
+import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import com.legobmw99.allomancy.modules.powers.network.Network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -17,7 +17,9 @@ import net.minecraft.world.phys.Vec3;
 
 import static net.minecraft.world.level.portal.DimensionTransition.DO_NOTHING;
 
-public class Enhancement {
+public final class Enhancement {
+    private Enhancement() {}
+
     /**
      * Wipe all metals from the player and sync to tracking entities. Used by Aluminum and Nicrosil
      *
@@ -61,7 +63,7 @@ public class Enhancement {
         }
     }
 
-    public static void teleportToLastDeath(Player curPlayer, Level level, AllomancerData data) {
+    public static void teleportToLastDeath(Player curPlayer, Level level, IAllomancerData data) {
         ResourceKey<Level> deathDim = data.getDeathDim();
         if (deathDim != null) {
             teleport(curPlayer, level, deathDim, data.getDeathLoc());
@@ -72,7 +74,7 @@ public class Enhancement {
         }
     }
 
-    public static void teleportToSpawn(Player curPlayer, Level level, AllomancerData data) {
+    public static void teleportToSpawn(Player curPlayer, Level level, IAllomancerData data) {
         ResourceKey<Level> spawnDim = data.getSpawnDim();
         BlockPos spawnLoc;
 

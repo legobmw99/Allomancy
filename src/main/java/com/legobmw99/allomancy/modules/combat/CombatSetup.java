@@ -34,7 +34,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class CombatSetup {
+public final class CombatSetup {
     private static final DeferredRegister<EntityType<?>> ENTITIES =
             DeferredRegister.create(Registries.ENTITY_TYPE, Allomancy.MODID);
 
@@ -51,10 +51,10 @@ public class CombatSetup {
             ITEMS.register("obsidian_dagger", ObsidianDaggerItem::new);
     public static final DeferredItem<KolossBladeItem> KOLOSS_BLADE =
             ITEMS.register("koloss_blade", KolossBladeItem::new);
-    public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS =
+    private static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS =
             DeferredRegister.create(Registries.ARMOR_MATERIAL, Allomancy.MODID);
 
-    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> WOOL_ARMOR =
+    private static final DeferredHolder<ArmorMaterial, ArmorMaterial> WOOL_ARMOR =
 
             ARMOR_MATERIALS.register("wool",
                                      () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
@@ -68,7 +68,7 @@ public class CombatSetup {
                                                                      ResourceLocation.fromNamespaceAndPath(
                                                                              Allomancy.MODID, "wool"))), 0, 0));
 
-    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ALUMINUM_ARMOR =
+    private static final DeferredHolder<ArmorMaterial, ArmorMaterial> ALUMINUM_ARMOR =
             ARMOR_MATERIALS.register("aluminum",
                                      () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                                          map.put(ArmorItem.Type.BOOTS, 0);
@@ -90,7 +90,7 @@ public class CombatSetup {
                                                      .add(Attributes.MOVEMENT_SPEED, new AttributeModifier(
                                                                   ResourceLocation.fromNamespaceAndPath(Allomancy.MODID,
                                                                                                         "mistcloak_speed"),
-                                                                  .25,
+                                                                  0.25,
                                                                   AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
                                                           EquipmentSlotGroup.CHEST)
                                                      .build());
@@ -111,6 +111,8 @@ public class CombatSetup {
                     .setUpdateInterval(20)
                     .sized(0.25F, 0.25F)
                     .build("nugget_projectile"));
+
+    private CombatSetup() {}
 
     public static void register(IEventBus bus) {
         ARMOR_MATERIALS.register(bus);

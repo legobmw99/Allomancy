@@ -27,11 +27,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-public class Recipes extends RecipeProvider {
+class Recipes extends RecipeProvider {
 
     private final Map<Character, Ingredient> defaultIngredients = new HashMap<>();
 
-    public Recipes(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    Recipes(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(packOutput, lookupProvider);
         add('i', Tags.Items.INGOTS_IRON);
         add('g', Tags.Items.INGOTS_GOLD);
@@ -47,24 +47,24 @@ public class Recipes extends RecipeProvider {
     }
 
 
-    protected static void buildShapeless(RecipeOutput consumer,
-                                         RecipeCategory cat,
-                                         ItemLike result,
-                                         int count,
-                                         Item criterion,
-                                         Ingredient... ingredients) {
+    private static void buildShapeless(RecipeOutput consumer,
+                                       RecipeCategory cat,
+                                       ItemLike result,
+                                       int count,
+                                       Item criterion,
+                                       Ingredient... ingredients) {
         buildShapeless(consumer, cat, result, count, criterion, "", ingredients);
     }
 
-    protected static void buildShapeless(RecipeOutput consumer,
-                                         RecipeCategory cat,
-                                         ItemLike result,
-                                         int count,
-                                         Item criterion,
-                                         String save,
-                                         Ingredient... ingredients) {
-        Allomancy.LOGGER.debug(
-                "Creating Shapeless Recipe for " + BuiltInRegistries.ITEM.getKey(result.asItem()) + " " + save);
+    private static void buildShapeless(RecipeOutput consumer,
+                                       RecipeCategory cat,
+                                       ItemLike result,
+                                       int count,
+                                       Item criterion,
+                                       String save,
+                                       Ingredient... ingredients) {
+        Allomancy.LOGGER.debug("Creating Shapeless Recipe for {}",
+                               BuiltInRegistries.ITEM.getKey(result.asItem()) + " " + save);
 
         ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(cat, result, count);
 
@@ -78,16 +78,16 @@ public class Recipes extends RecipeProvider {
         if (save.isEmpty()) {
             builder.save(consumer);
         } else {
-            builder.save(consumer, save);
+            builder.save(consumer, Allomancy.MODID + ":" + save);
         }
     }
 
-    protected static void buildSmeltingAndBlasting(RecipeOutput consumer,
-                                                   ItemLike result,
-                                                   ItemLike ingredient,
-                                                   float xp) {
-        Allomancy.LOGGER.debug(
-                "Creating Smelting and Blasting Recipe for " + BuiltInRegistries.ITEM.getKey(result.asItem()));
+    private static void buildSmeltingAndBlasting(RecipeOutput consumer,
+                                                 ItemLike result,
+                                                 ItemLike ingredient,
+                                                 float xp) {
+        Allomancy.LOGGER.debug("Creating Smelting and Blasting Recipe for {}",
+                               BuiltInRegistries.ITEM.getKey(result.asItem()));
 
         SimpleCookingRecipeBuilder smelt =
                 SimpleCookingRecipeBuilder.smelting(ing(ingredient), RecipeCategory.MISC, result, xp, 200);
@@ -108,34 +108,30 @@ public class Recipes extends RecipeProvider {
     }
 
     private static String mixing_save(String metal) {
-        return "allomancy:" + metal + "_flakes_from_mixing";
+        return metal + "_flakes_from_mixing";
     }
 
     private static String alloy_save(String metal) {
-        return "allomancy:" + metal + "_ingot_from_alloying";
+        return metal + "_ingot_from_alloying";
     }
 
-    protected static Ingredient ing(String tag) {
+    private static Ingredient ing(String tag) {
         return Ingredient.of(ItemTags.create(ResourceLocation.parse(tag)));
     }
 
-    protected static Ingredient ing(TagKey<Item> tag) {
+    private static Ingredient ing(TagKey<Item> tag) {
         return Ingredient.of(tag);
     }
 
-    protected static Ingredient ing(ItemLike itemProvider) {
+    private static Ingredient ing(ItemLike itemProvider) {
         return Ingredient.of(itemProvider);
     }
 
-    protected static Ingredient ing(Ingredient ingredient) {
-        return ingredient;
-    }
-
-    protected static Ingredient[] repeat(Ingredient ing, int n) {
+    private static Ingredient[] repeat(Ingredient ing, int n) {
         return repeatWith(ing, n);
     }
 
-    protected static Ingredient[] repeatWith(Ingredient ing, int n, Ingredient... extras) {
+    private static Ingredient[] repeatWith(Ingredient ing, int n, Ingredient... extras) {
         int size = n + extras.length;
         Ingredient[] out = new Ingredient[size];
         for (int i = 0; i < n; i++) {
@@ -220,12 +216,11 @@ public class Recipes extends RecipeProvider {
             // building up
             buildShapeless(consumer, RecipeCategory.BUILDING_BLOCKS, block, 1, ingot, repeat(ing(ingot), 9));
             buildShapeless(consumer, RecipeCategory.MISC, ingot, 1, nugget,
-                           "allomancy:" + BuiltInRegistries.ITEM.getKey(ingot).getPath() + "_from_nuggets",
-                           repeat(ing(nugget), 9));
+                           BuiltInRegistries.ITEM.getKey(ingot).getPath() + "_from_nuggets", repeat(ing(nugget), 9));
 
             // breaking down
             buildShapeless(consumer, RecipeCategory.MISC, ingot, 9, block,
-                           "allomancy:" + BuiltInRegistries.ITEM.getKey(ingot).getPath() + "_from_block", ing(block));
+                           BuiltInRegistries.ITEM.getKey(ingot).getPath() + "_from_block", ing(block));
             buildShapeless(consumer, RecipeCategory.MISC, nugget, 9, ingot, ing(ingot));
         }
 
@@ -329,13 +324,13 @@ public class Recipes extends RecipeProvider {
 
     }
 
-    protected void buildShaped(RecipeOutput consumer,
-                               RecipeCategory cat,
-                               ItemLike result,
-                               int count,
-                               Item criterion,
-                               String... lines) {
-        Allomancy.LOGGER.debug("Creating Shaped Recipe for " + BuiltInRegistries.ITEM.getKey(result.asItem()));
+    private void buildShaped(RecipeOutput consumer,
+                             RecipeCategory cat,
+                             ItemLike result,
+                             int count,
+                             Item criterion,
+                             String... lines) {
+        Allomancy.LOGGER.debug("Creating Shaped Recipe for {}", BuiltInRegistries.ITEM.getKey(result.asItem()));
 
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(cat, result, count);
 
@@ -358,23 +353,23 @@ public class Recipes extends RecipeProvider {
         builder.save(consumer);
     }
 
-    protected void buildShaped(RecipeOutput consumer,
-                               RecipeCategory cat,
-                               ItemLike result,
-                               Item criterion,
-                               String... lines) {
+    private void buildShaped(RecipeOutput consumer,
+                             RecipeCategory cat,
+                             ItemLike result,
+                             Item criterion,
+                             String... lines) {
         buildShaped(consumer, cat, result, 1, criterion, lines);
     }
 
-    protected void add(char c, TagKey<Item> itemTag) {
+    private void add(char c, TagKey<Item> itemTag) {
         this.defaultIngredients.put(c, Ingredient.of(itemTag));
     }
 
-    protected void add(char c, ItemLike itemProvider) {
+    private void add(char c, ItemLike itemProvider) {
         this.defaultIngredients.put(c, Ingredient.of(itemProvider));
     }
 
-    protected void add(char c, Ingredient ingredient) {
+    private void add(char c, Ingredient ingredient) {
         this.defaultIngredients.put(c, ingredient);
     }
 

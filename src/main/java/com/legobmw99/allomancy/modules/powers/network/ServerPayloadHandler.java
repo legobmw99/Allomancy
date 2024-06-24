@@ -26,9 +26,11 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Arrays;
 
-public class ServerPayloadHandler {
+public final class ServerPayloadHandler {
 
-    public static void changeEmotion(final EmotionPayload data, final IPayloadContext ctx) {
+    private ServerPayloadHandler() {}
+
+    public static void changeEmotion(EmotionPayload data, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             ServerPlayer allomancer = (ServerPlayer) ctx.player();
             PathfinderMob target = (PathfinderMob) allomancer.level().getEntity(data.entityID());
@@ -52,7 +54,7 @@ public class ServerPayloadHandler {
 
     }
 
-    public static void tryPushPullBlock(final BlockPushPullPayload data, final IPayloadContext ctx) {
+    public static void tryPushPullBlock(BlockPushPullPayload data, IPayloadContext ctx) {
         ServerPlayer player = (ServerPlayer) ctx.player();
         Level level = player.level();
         BlockPos pos = data.block();
@@ -77,13 +79,13 @@ public class ServerPayloadHandler {
                                                       "Tried to push or pull against an non-metallic block!"));
             }
         } else {
-            Allomancy.LOGGER.warn("Illegal use of iron/steel by player: {}!", player);
+            Allomancy.LOGGER.warn("Illegal use of iron/steel by player: {}! Block not loaded at {}", player, pos);
             ctx.disconnect(Component.translatable("allomancy.networking.kicked",
                                                   "Tried to push or pull against an unloaded block!"));
         }
     }
 
-    public static void tryPushPullEntity(final EntityPushPullPayload payload, final IPayloadContext ctx) {
+    public static void tryPushPullEntity(EntityPushPullPayload payload, IPayloadContext ctx) {
         ServerPlayer player = (ServerPlayer) ctx.player();
         Level level = player.level();
         Entity target = level.getEntity(payload.entityID());
@@ -116,7 +118,7 @@ public class ServerPayloadHandler {
         }
     }
 
-    public static void toggleBurnRequest(final ToggleBurnPayload payload, final IPayloadContext ctx) {
+    public static void toggleBurnRequest(ToggleBurnPayload payload, IPayloadContext ctx) {
         assert ctx.flow().isServerbound();
 
         ctx.enqueueWork(() -> {
@@ -147,7 +149,7 @@ public class ServerPayloadHandler {
         });
     }
 
-    public static void updateEnhanced(final EnhanceTimePayload payload, final IPayloadContext ctx) {
+    public static void updateEnhanced(EnhanceTimePayload payload, IPayloadContext ctx) {
         assert ctx.flow().isServerbound();
 
         ctx.enqueueWork(() -> {

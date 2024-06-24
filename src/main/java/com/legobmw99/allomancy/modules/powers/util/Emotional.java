@@ -26,12 +26,14 @@ import net.minecraft.world.level.Level;
 
 import java.util.function.Predicate;
 
-public class Emotional {
+public final class Emotional {
     private static final Predicate<Goal> isAggroGoal =
             (goal) -> goal instanceof SwellGoal || goal instanceof AIAttackOnCollideExtended ||
                       goal instanceof MeleeAttackGoal || goal instanceof TargetGoal || goal instanceof PanicGoal ||
                       goal.getClass().getName().contains("Fireball") ||
                       goal.getClass().getName().contains("Attack") || goal.getClass().getName().contains("Anger");
+
+    private Emotional() {}
 
     public static void riot(PathfinderMob target, Player allomancer, boolean enhanced) {
         try {
@@ -45,7 +47,7 @@ public class Emotional {
                 target.setTarget(allomancer);
                 target.setLastHurtByMob(allomancer);
                 // TODO: try to use PrioritizedGoal::startExecuting for already hostiles
-                target.targetSelector.addGoal(1, new AIAttackOnCollideExtended(target, 1d, false));
+                target.targetSelector.addGoal(1, new AIAttackOnCollideExtended(target, 1.0d, false));
                 target.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(target, Player.class, false));
                 target.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(target, target.getClass(), false));
                 target.goalSelector.addGoal(4, new RandomLookAroundGoal(target));
@@ -79,7 +81,7 @@ public class Emotional {
                 target.kill();
             }
         } catch (Exception e) {
-            Allomancy.LOGGER.error("Failed to riot entity " + target + "! Please report this error!", e);
+            Allomancy.LOGGER.error("Failed to riot entity {}! Please report this error!", target, e);
         }
     }
 
@@ -140,7 +142,7 @@ public class Emotional {
             }
 
         } catch (Exception e) {
-            Allomancy.LOGGER.error("Failed to soothe entity " + target + "! Please report this error!", e);
+            Allomancy.LOGGER.error("Failed to soothe entity {}! Please report this error!", target, e);
         }
 
     }

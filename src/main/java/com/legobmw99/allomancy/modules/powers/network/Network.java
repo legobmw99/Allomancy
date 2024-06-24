@@ -10,9 +10,11 @@ import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 
-public class Network {
+public final class Network {
+    private Network() {}
+
     public static void registerPayloads(final RegisterPayloadHandlersEvent event) {
-        final PayloadRegistrar registrar = event.registrar(Allomancy.MODID).versioned("3.0");
+        PayloadRegistrar registrar = event.registrar(Allomancy.MODID).versioned("3.0");
 
         registrar.playToClient(AllomancerDataPayload.TYPE, AllomancerDataPayload.STREAM_CODEC,
                                ClientPayloadHandler::updateAllomancer);

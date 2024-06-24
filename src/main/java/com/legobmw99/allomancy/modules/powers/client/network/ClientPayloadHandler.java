@@ -14,9 +14,11 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Arrays;
 
-public class ClientPayloadHandler {
+public final class ClientPayloadHandler {
 
-    public static void updateAllomancer(final AllomancerDataPayload payload, final IPayloadContext ctx) {
+    private ClientPayloadHandler() {}
+
+    public static void updateAllomancer(AllomancerDataPayload payload, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             Player player = Minecraft.getInstance().level.getPlayerByUUID(payload.player());
             if (player == Minecraft.getInstance().player) {
@@ -39,7 +41,7 @@ public class ClientPayloadHandler {
         });
     }
 
-    public static void updateEnhanced(final EnhanceTimePayload payload, final IPayloadContext ctx) {
+    public static void updateEnhanced(EnhanceTimePayload payload, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             Entity e = Minecraft.getInstance().level.getEntity(payload.entityID());
             if (e instanceof Player player) {

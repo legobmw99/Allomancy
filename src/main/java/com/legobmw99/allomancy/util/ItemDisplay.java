@@ -23,92 +23,96 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 
-public class ItemDisplay {
+public final class ItemDisplay {
 
     private static final DeferredRegister<CreativeModeTab> CREATIVETABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Allomancy.MODID);
 
-    public static Supplier<CreativeModeTab> allomancy_group = CREATIVETABS.register("main_tab", () -> CreativeModeTab
-            .builder()
-            .icon(() -> new ItemStack(CombatSetup.MISTCLOAK.get()))
-            .title(Component.translatable("tabs.allomancy.main_tab"))
-            .displayItems((featureFlags, output) -> {
-                output.accept(ConsumeSetup.LERASIUM_NUGGET.get());
-                output.accept(CombatSetup.ALUMINUM_HELMET.get());
-                output.accept(CombatSetup.MISTCLOAK.get());
-                output.accept(CombatSetup.COIN_BAG.get());
-                output.accept(ConsumeSetup.ALLOMANTIC_GRINDER.get());
-                output.accept(ConsumeSetup.VIAL.get());
+    private static final Supplier<CreativeModeTab> ALLOMANCY_CREATIVE_TAB =
 
-                ItemStack fullVial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
-                FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
-                for (Metal mt : Metal.values()) {
-                    storage.add(mt);
-                }
-                VialItem.fillVial(fullVial, storage.toImmutable());
+            CREATIVETABS.register("main_tab", () -> CreativeModeTab
+                    .builder()
+                    .icon(() -> new ItemStack(CombatSetup.MISTCLOAK.get()))
+                    .title(Component.translatable("tabs" + ".allomancy.main_tab"))
+                    .displayItems((featureFlags, output) -> {
+                        output.accept(ConsumeSetup.LERASIUM_NUGGET.get());
+                        output.accept(CombatSetup.ALUMINUM_HELMET.get());
+                        output.accept(CombatSetup.MISTCLOAK.get());
+                        output.accept(CombatSetup.COIN_BAG.get());
+                        output.accept(ConsumeSetup.ALLOMANTIC_GRINDER.get());
+                        output.accept(ConsumeSetup.VIAL.get());
 
-                output.accept(fullVial);
+                        ItemStack fullVial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
+                        FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
+                        for (Metal mt : Metal.values()) {
+                            storage.add(mt);
+                        }
+                        VialItem.fillVial(fullVial, storage.toImmutable());
 
-                output.accept(CombatSetup.KOLOSS_BLADE.get());
-                output.accept(CombatSetup.OBSIDIAN_DAGGER.get());
+                        output.accept(fullVial);
 
-                output.accept(ExtrasSetup.IRON_LEVER.get());
-                output.accept(ExtrasSetup.IRON_BUTTON.get());
-                output.accept(ExtrasSetup.INVERTED_IRON_BUTTON.get());
+                        output.accept(CombatSetup.KOLOSS_BLADE.get());
+                        output.accept(CombatSetup.OBSIDIAN_DAGGER.get());
+
+                        output.accept(ExtrasSetup.IRON_LEVER.get());
+                        output.accept(ExtrasSetup.IRON_BUTTON.get());
+                        output.accept(ExtrasSetup.INVERTED_IRON_BUTTON.get());
 
 
-                for (var block : MaterialsSetup.STORAGE_BLOCKS) {
-                    if (block == null) {
-                        continue;
-                    }
-                    output.accept(block.get());
-                }
+                        for (var block : MaterialsSetup.STORAGE_BLOCKS) {
+                            if (block == null) {
+                                continue;
+                            }
+                            output.accept(block.get());
+                        }
 
-                for (var ingot : MaterialsSetup.INGOTS) {
-                    if (ingot == null) {
-                        continue;
-                    }
-                    output.accept(ingot.get());
-                }
+                        for (var ingot : MaterialsSetup.INGOTS) {
+                            if (ingot == null) {
+                                continue;
+                            }
+                            output.accept(ingot.get());
+                        }
 
-                for (var nug : MaterialsSetup.NUGGETS) {
-                    if (nug == null) {
-                        continue;
-                    }
-                    output.accept(nug.get());
-                }
+                        for (var nug : MaterialsSetup.NUGGETS) {
+                            if (nug == null) {
+                                continue;
+                            }
+                            output.accept(nug.get());
+                        }
 
-                for (var flake : MaterialsSetup.FLAKES) {
-                    if (flake == null) {
-                        continue;
-                    }
-                    output.accept(flake.get());
-                }
+                        for (var flake : MaterialsSetup.FLAKES) {
+                            if (flake == null) {
+                                continue;
+                            }
+                            output.accept(flake.get());
+                        }
 
-                for (Metal mt : Metal.values()) {
-                    output.accept(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get());
-                }
+                        for (Metal mt : Metal.values()) {
+                            output.accept(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get());
+                        }
 
-                for (var ore : MaterialsSetup.ORE_BLOCKS) {
-                    output.accept(ore.get());
-                }
+                        for (var ore : MaterialsSetup.ORE_BLOCKS) {
+                            output.accept(ore.get());
+                        }
 
-                for (var ore : MaterialsSetup.DEEPSLATE_ORE_BLOCKS) {
-                    output.accept(ore.get());
-                }
+                        for (var ore : MaterialsSetup.DEEPSLATE_ORE_BLOCKS) {
+                            output.accept(ore.get());
+                        }
 
-                for (var ore : MaterialsSetup.RAW_ORE_BLOCKS) {
-                    output.accept(ore.get());
-                }
+                        for (var ore : MaterialsSetup.RAW_ORE_BLOCKS) {
+                            output.accept(ore.get());
+                        }
 
-                for (var ore : MaterialsSetup.RAW_ORE_ITEMS) {
-                    output.accept(ore.get());
-                }
+                        for (var ore : MaterialsSetup.RAW_ORE_ITEMS) {
+                            output.accept(ore.get());
+                        }
 
-            })
-            .build());
+                    })
+                    .build());
 
-    public static void addTabContents(BuildCreativeModeTabContentsEvent event) {
+    private ItemDisplay() {}
+
+    public static void addTabContents(final BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
             event.accept(CombatSetup.ALUMINUM_HELMET);
             event.accept(CombatSetup.MISTCLOAK);

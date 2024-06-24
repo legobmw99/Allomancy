@@ -95,14 +95,14 @@ public interface IAllomancerData {
     /**
      * Increase the amount of this metal being stored
      *
-     * @param metal
+     * @param metal the Metal to store more off
      */
     void incrementStored(Metal metal);
 
     /**
      * Decrease the amount of this metal being stored
      *
-     * @param metal
+     * @param metal the Metal to store less of
      */
     void decrementStored(Metal metal);
 

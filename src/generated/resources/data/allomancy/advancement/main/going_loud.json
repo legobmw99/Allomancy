@@ -14,9 +14,8 @@
     }
   },
   "display": {
-    "announce_to_chat": false,
     "description": {
-      "translate": "advancements.noisey.desc"
+      "translate": "advancements.going_loud.desc"
     },
     "hidden": true,
     "icon": {
@@ -24,7 +23,7 @@
       "id": "minecraft:bell"
     },
     "title": {
-      "translate": "advancements.noisey.title"
+      "translate": "advancements.going_loud.title"
     }
   },
   "requirements": [

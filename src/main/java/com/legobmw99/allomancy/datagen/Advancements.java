@@ -24,7 +24,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class Advancements implements AdvancementProvider.AdvancementGenerator {
+class Advancements implements AdvancementProvider.AdvancementGenerator {
 
     @Override
     public void generate(HolderLookup.Provider registries,
@@ -121,11 +121,11 @@ public class Advancements implements AdvancementProvider.AdvancementGenerator {
                          Component.translatable("advancements.tin_foil_hat.desc"), null, AdvancementType.TASK, true,
                          false, true)
                 .addCriterion("attempted_nicrosil_manipulation",
-                              MetalUsedOnPlayerTrigger.TriggerInstance.instance(Optional.of(tinFoilPredicate),
-                                                                                Metal.NICROSIL, false))
+                              MetalUsedOnPlayerTrigger.TriggerInstance.instance(tinFoilPredicate, Metal.NICROSIL,
+                                                                                false))
                 .addCriterion("attempted_chromium_manipulation",
-                              MetalUsedOnPlayerTrigger.TriggerInstance.instance(Optional.of(tinFoilPredicate),
-                                                                                Metal.CHROMIUM, false))
+                              MetalUsedOnPlayerTrigger.TriggerInstance.instance(tinFoilPredicate, Metal.CHROMIUM,
+                                                                                false))
                 .requirements(AdvancementRequirements.Strategy.OR)
                 .save(saver, "allomancy:main/tin_foil_hat");
 
@@ -139,14 +139,11 @@ public class Advancements implements AdvancementProvider.AdvancementGenerator {
                 .display(Blocks.IRON_BLOCK, Component.translatable("advancements.consequences.title"),
                          Component.translatable("advancements.consequences.desc"), null, AdvancementType.TASK, true,
                          false, true)
-                .addCriterion("pushed_iron_golem", MetalUsedOnEntityTrigger.TriggerInstance.instance(Optional.empty(),
-                                                                                                     Optional.of(
-                                                                                                             ironGolemPredicate),
-                                                                                                     Metal.STEEL))
-                .addCriterion("pulled_iron_golem", MetalUsedOnEntityTrigger.TriggerInstance.instance(Optional.empty(),
-                                                                                                     Optional.of(
-                                                                                                             ironGolemPredicate),
-                                                                                                     Metal.IRON))
+                .addCriterion("pushed_iron_golem",
+                              MetalUsedOnEntityTrigger.TriggerInstance.instance(null, ironGolemPredicate,
+                                                                                Metal.STEEL))
+                .addCriterion("pulled_iron_golem",
+                              MetalUsedOnEntityTrigger.TriggerInstance.instance(null, ironGolemPredicate, Metal.IRON))
                 .requirements(AdvancementRequirements.Strategy.OR)
                 .save(saver, "allomancy:main/consequences");
 
@@ -156,11 +153,11 @@ public class Advancements implements AdvancementProvider.AdvancementGenerator {
                 .parent(Advancement.Builder
                                 .advancement()
                                 .build(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "main/coinshot")))
-                .display(Blocks.BELL, Component.translatable("advancements.noisey.title"),
-                         Component.translatable("advancements.noisey.desc"), null, AdvancementType.TASK, true, true,
-                         true)
+                .display(Blocks.BELL, Component.translatable("advancements.going_loud.title"),
+                         Component.translatable("advancements.going_loud.desc"), null, AdvancementType.TASK, true,
+                         true, true)
                 .addCriterion("allomantically_activate_bell",
                               AllomanticallyActivatedBlockTrigger.TriggerInstance.activatedBlock(Blocks.BELL))
-                .save(saver, "allomancy:main/noisey");
+                .save(saver, "allomancy:main/going_loud");
     }
 }

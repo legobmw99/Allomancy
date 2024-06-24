@@ -1,6 +1,8 @@
 package com.legobmw99.allomancy.api.enums;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -64,10 +66,10 @@ public enum Metal implements StringRepresentable {
     }
 
 
-    public static final StringRepresentable.EnumCodec<Metal> CODEC = StringRepresentable.fromEnum(Metal::values);
+    public static final Codec<Metal> CODEC = StringRepresentable.fromEnum(Metal::values);
 
     @Override
-    public String getSerializedName() {
+    public @NotNull String getSerializedName() {
         return getName();
     }
 }

@@ -14,10 +14,10 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class Languages extends LanguageProvider {
+class Languages extends LanguageProvider {
 
 
-    public Languages(PackOutput gen) {
+    Languages(PackOutput gen) {
         super(gen, Allomancy.MODID, "en_us");
     }
 
@@ -116,12 +116,13 @@ public class Languages extends LanguageProvider {
         add("advancements.tin_foil_hat.desc", "Protect yourself, and be a bit paranoid too");
         add("advancements.consequences.title", "Consequences, Vin");
         add("advancements.consequences.desc", "Learn what happens when you push on a much heavier target.");
-        add("advancements.noisey.title", "Going Loud");
-        add("advancements.noisey.desc", "Allomancy can grant great stealth, unless you do that!");
+        add("advancements.going_loud.title", "Going Loud");
+        add("advancements.going_loud.desc", "Allomancy can grant great stealth, unless you do that!");
 
         add("key.categories.allomancy", "Allomancy");
         add("key.burn", "Burn Metals");
         add("key.hud", "Show HUD");
+        add("allomancy.gui", "Select Metal");
 
         add("commands.allomancy.getpowers", "%s currently has Allomantic powers: %s");
         add("commands.allomancy.addpower", "%s added Allomantic power %s");

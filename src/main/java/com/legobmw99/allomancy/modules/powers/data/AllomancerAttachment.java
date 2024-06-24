@@ -8,7 +8,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.function.Supplier;
 
-public class AllomancerAttachment {
+public final class AllomancerAttachment {
 
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Allomancy.MODID);
@@ -16,6 +16,8 @@ public class AllomancerAttachment {
     public static final Supplier<AttachmentType<AllomancerData>> ALLOMANCY_DATA =
             ATTACHMENT_TYPES.register("allomancy_data",
                                       () -> AttachmentType.serializable(AllomancerData::new).copyOnDeath().build());
+
+    private AllomancerAttachment() {}
 
     public static void register(IEventBus bus) {
         ATTACHMENT_TYPES.register(bus);

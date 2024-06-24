@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 
 public class DaggerLootModifier extends LootModifier {
 
-    public final int chance_one_in;
+    private final int chance_one_in;
     public static final Supplier<MapCodec<DaggerLootModifier>> CODEC = Suppliers.memoize(
             () -> RecordCodecBuilder.mapCodec(inst -> codecStart(inst)
                     .and(Codec.INT.fieldOf("chance_one_in").forGetter(t -> t.chance_one_in))

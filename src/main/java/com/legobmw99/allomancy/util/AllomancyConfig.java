@@ -7,7 +7,7 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 
-public class AllomancyConfig {
+public final class AllomancyConfig {
 
     private static final ModConfigSpec COMMON_CONFIG;
     private static final ModConfigSpec CLIENT_CONFIG;
@@ -27,6 +27,8 @@ public class AllomancyConfig {
 
     }
 
+    private AllomancyConfig() {}
+
     public static void onReload(final ModConfigEvent.Reloading e) {
         PowersConfig.refresh(e);
     }
@@ -37,8 +39,8 @@ public class AllomancyConfig {
     }
 
     public static void register(ModContainer container) {
-        container.registerConfig(ModConfig.Type.COMMON, AllomancyConfig.COMMON_CONFIG);
-        container.registerConfig(ModConfig.Type.CLIENT, AllomancyConfig.CLIENT_CONFIG);
-        container.registerConfig(ModConfig.Type.SERVER, AllomancyConfig.SERVER_CONFIG);
+        container.registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG);
+        container.registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG);
+        container.registerConfig(ModConfig.Type.SERVER, SERVER_CONFIG);
     }
 }

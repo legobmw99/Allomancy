@@ -7,13 +7,15 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
-public class Rendering {
+public final class Rendering {
+    private Rendering() {}
+
     /**
      * Draws a line from the player (denoted pX,Y,Z) to the given set of
      * coordinates (oX,Y,Z) in a certain color (r,g,b)
      *
-     * @param player
-     * @param dest
+     * @param player location of the player
+     * @param dest   location to draw toward
      * @param width  the width of the line
      */
     public static void drawMetalLine(PoseStack stack,

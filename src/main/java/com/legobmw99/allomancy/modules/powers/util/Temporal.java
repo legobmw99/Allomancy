@@ -1,7 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.util;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -17,7 +16,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public class Temporal {
+public final class Temporal {
+    private Temporal() {}
+
     @SuppressWarnings("unchecked")
     public static void speedUpNearby(Player curPlayer, Level level, IAllomancerData data) {
         curPlayer.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 10, 3, true, false));
@@ -56,7 +57,7 @@ public class Temporal {
         }
     }
 
-    public static void slowDownNearby(Player curPlayer, Level level, AllomancerData data) {
+    public static void slowDownNearby(Player curPlayer, Level level, IAllomancerData data) {
         int max = data.isEnhanced() ? 20 : 10;
         Vec3 negative = curPlayer.position().add(-max, -max, -max);
         Vec3 positive = curPlayer.position().add(max, max, max);

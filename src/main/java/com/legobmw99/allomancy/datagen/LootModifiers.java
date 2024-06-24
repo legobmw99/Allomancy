@@ -13,9 +13,9 @@ import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 
 import java.util.concurrent.CompletableFuture;
 
-public class LootModifiers extends GlobalLootModifierProvider {
+class LootModifiers extends GlobalLootModifierProvider {
 
-    public LootModifiers(PackOutput output, CompletableFuture<HolderLookup.Provider> regisrties) {
+    LootModifiers(PackOutput output, CompletableFuture<HolderLookup.Provider> regisrties) {
         super(output, regisrties, Allomancy.MODID);
     }
 

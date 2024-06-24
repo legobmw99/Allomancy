@@ -15,9 +15,9 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.function.BiConsumer;
 
-public class BlockStates extends BlockStateProvider {
+class BlockStates extends BlockStateProvider {
 
-    public BlockStates(PackOutput gen, ExistingFileHelper exFileHelper) {
+    BlockStates(PackOutput gen, ExistingFileHelper exFileHelper) {
         super(gen, Allomancy.MODID, exFileHelper);
     }
 
@@ -26,26 +26,26 @@ public class BlockStates extends BlockStateProvider {
         for (var rblock : MaterialsSetup.ORE_BLOCKS) {
             Block block = rblock.get();
             String path = rblock.getId().getPath();
-            singleTextureBlock(block, path, "block/" + path);
+            singleTextureBlock(block);
         }
 
         for (var rblock : MaterialsSetup.DEEPSLATE_ORE_BLOCKS) {
             Block block = rblock.get();
             String path = rblock.getId().getPath();
-            singleTextureBlock(block, path, "block/" + path);
+            singleTextureBlock(block);
         }
 
         for (var rblock : MaterialsSetup.RAW_ORE_BLOCKS) {
             Block block = rblock.get();
             String path = rblock.getId().getPath();
-            singleTextureBlock(block, path, "block/" + path);
+            singleTextureBlock(block);
         }
 
         for (var rblock : MaterialsSetup.STORAGE_BLOCKS) {
             if (rblock != null) {
                 Block block = rblock.get();
                 String path = rblock.getId().getPath();
-                singleTextureBlock(block, path, "block/" + path);
+                singleTextureBlock(block);
             }
         }
 
@@ -56,15 +56,15 @@ public class BlockStates extends BlockStateProvider {
     }
 
 
-    private void singleTextureBlock(Block block, String model, String texture) {
-        Allomancy.LOGGER.debug("Creating Block Data for " + BuiltInRegistries.BLOCK.getKey(block));
+    private void singleTextureBlock(Block block) {
+        Allomancy.LOGGER.debug("Creating Block Data for {}", BuiltInRegistries.BLOCK.getKey(block));
         simpleBlock(block);
     }
 
 
     private void createIronButtonBlock(IronButtonBlock block) {
         Allomancy.LOGGER.debug("Creating Block Data for allomancy:iron_button");
-        ModelFile inventory = models()
+        models()
                 .withExistingParent("allomancy:iron_button_inventory", mcLoc("block/button_inventory"))
                 .texture("texture", mcLoc("block/iron_block"));
         ModelFile button = models()
@@ -139,7 +139,7 @@ public class BlockStates extends BlockStateProvider {
                 .rotation()
                 .origin(8, 1, 8)
                 .axis(Direction.Axis.X)
-                .angle(-45F)
+                .angle(-45.0F)
                 .end()
                 .allFaces(lever_generator)
                 .end();

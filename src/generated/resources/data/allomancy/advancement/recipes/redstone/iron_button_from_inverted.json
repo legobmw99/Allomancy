@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_iron_button": {
+    "has_inverted_iron_button": {
       "conditions": {
         "items": [
           {
-            "items": "allomancy:iron_button"
+            "items": "allomancy:inverted_iron_button"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:inverted_from_iron_button"
+        "recipe": "allomancy:iron_button_from_inverted"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_iron_button"
+      "has_inverted_iron_button"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:inverted_from_iron_button"
+      "allomancy:iron_button_from_inverted"
     ]
   }
 }

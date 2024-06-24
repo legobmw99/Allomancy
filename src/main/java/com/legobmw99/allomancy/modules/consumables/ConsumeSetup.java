@@ -15,7 +15,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-public class ConsumeSetup {
+public final class ConsumeSetup {
 
     private static final DeferredRegister.DataComponents DATA_COMPONENTS =
             DeferredRegister.createDataComponents(Allomancy.MODID);
@@ -36,6 +36,8 @@ public class ConsumeSetup {
             DeferredRegister.create(Registries.RECIPE_SERIALIZER, Allomancy.MODID);
     public static final Supplier<VialItemRecipe.Serializer> VIAL_RECIPE_SERIALIZER =
             RECIPES.register("vial_filling", VialItemRecipe.Serializer::new);
+
+    private ConsumeSetup() {}
 
     public static void register(IEventBus bus) {
         DATA_COMPONENTS.register(bus);

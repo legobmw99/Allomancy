@@ -9,7 +9,6 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
-import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -17,12 +16,12 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 
 import java.awt.*;
 
-public class MetalOverlay implements LayeredDraw.Layer {
+public final class MetalOverlay implements LayeredDraw.Layer {
 
     private static final Point[] Frames = new Point[4];
     private static final ResourceLocation meterLoc =
             ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "textures/gui/overlay/meter.png");
-    private static int currentFrame = 0;
+    private int currentFrame = 0;
 
     static {
         int x = 0;
@@ -115,14 +114,14 @@ public class MetalOverlay implements LayeredDraw.Layer {
         TOP_LEFT,
         BOTTOM_LEFT;
 
-        public int getX(int screenWidth) {
+        private int getX(int screenWidth) {
             return switch (this) {
                 case TOP_RIGHT, BOTTOM_RIGHT -> screenWidth - 145;
                 default -> 5;
             };
         }
 
-        public int getY(int screenHeight) {
+        private int getY(int screenHeight) {
             return switch (this) {
                 case BOTTOM_RIGHT, BOTTOM_LEFT -> screenHeight - 50;
                 default -> 10;

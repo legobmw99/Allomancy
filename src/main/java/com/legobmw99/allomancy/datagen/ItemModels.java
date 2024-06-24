@@ -15,8 +15,8 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 
-public class ItemModels extends ItemModelProvider {
-    public ItemModels(PackOutput generator, ExistingFileHelper existingFileHelper) {
+class ItemModels extends ItemModelProvider {
+    ItemModels(PackOutput generator, ExistingFileHelper existingFileHelper) {
         super(generator, Allomancy.MODID, existingFileHelper);
     }
 
@@ -89,36 +89,36 @@ public class ItemModels extends ItemModelProvider {
 
     }
 
-    public void parentedBlock(Block block) {
+    private void parentedBlock(Block block) {
         parentedBlock(block, "block/" + BuiltInRegistries.BLOCK.getKey(block).getPath());
     }
 
-    public void parentedBlock(Block block, String model) {
-        Allomancy.LOGGER.debug("Creating Item Model for " + BuiltInRegistries.BLOCK.getKey(block));
+    private void parentedBlock(Block block, String model) {
+        Allomancy.LOGGER.debug("Creating block Item Model for {}", BuiltInRegistries.BLOCK.getKey(block));
         getBuilder(BuiltInRegistries.BLOCK.getKey(block).getPath()).parent(
                 new ModelFile.UncheckedModelFile(modLoc(model)));
     }
 
-    public void itemGenerated(Item item) {
+    private void itemGenerated(Item item) {
         itemGenerated(item, "item/" + BuiltInRegistries.ITEM.getKey(item).getPath());
     }
 
-    public void itemGenerated(Item item, String model) {
-        Allomancy.LOGGER.debug("Creating Item Model for " + BuiltInRegistries.ITEM.getKey(item));
+    private void itemGenerated(Item item, String model) {
+        Allomancy.LOGGER.debug("Creating Item Model for {}", BuiltInRegistries.ITEM.getKey(item));
         getBuilder(BuiltInRegistries.ITEM.getKey(item).getPath())
                 .parent(getExistingFile(mcLoc("item/generated")))
                 .texture("layer0", modLoc(model));
     }
 
-    public void itemHandheld(Item item) {
-        Allomancy.LOGGER.debug("Creating Item Model for " + BuiltInRegistries.ITEM.getKey(item));
+    private void itemHandheld(Item item) {
+        Allomancy.LOGGER.debug("Creating handheld Item Model for {}", BuiltInRegistries.ITEM.getKey(item));
         getBuilder(BuiltInRegistries.ITEM.getKey(item).getPath())
                 .parent(getExistingFile(mcLoc("item/handheld")))
                 .texture("layer0", modLoc("item/" + BuiltInRegistries.ITEM.getKey(item).getPath()));
     }
 
-    public void largeItemHandheld(Item item) {
-        Allomancy.LOGGER.debug("Creating Large Item Model for " + BuiltInRegistries.ITEM.getKey(item));
+    private void largeItemHandheld(Item item) {
+        Allomancy.LOGGER.debug("Creating Large Item Model for {}", BuiltInRegistries.ITEM.getKey(item));
         getBuilder(BuiltInRegistries.ITEM.getKey(item).getPath())
                 .parent(getExistingFile(modLoc("item/handheld_large")))
                 .texture("layer0", modLoc("item/" + BuiltInRegistries.ITEM.getKey(item).getPath()));

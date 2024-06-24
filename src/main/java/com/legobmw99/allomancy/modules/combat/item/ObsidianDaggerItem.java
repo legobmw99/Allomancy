@@ -18,42 +18,11 @@ public class ObsidianDaggerItem extends SwordItem {
     private static final int ATTACK_DAMAGE = 12;
     private static final float ATTACK_SPEED = 9.2F;
 
-    private static final Tier tier = new Tier() {
-        @Override
-        public int getUses() {
-            return 2;
-        }
-
-        @Override
-        public float getSpeed() {
-            return ATTACK_SPEED;
-        }
-
-        @Override
-        public float getAttackDamageBonus() {
-            return ATTACK_DAMAGE;
-        }
-
-        @Override
-        public TagKey<Block> getIncorrectBlocksForDrops() {
-            return BlockTags.INCORRECT_FOR_WOODEN_TOOL;
-        }
-
-        @Override
-        public int getEnchantmentValue() {
-            return 1;
-        }
-
-        @Override
-        public Ingredient getRepairIngredient() {
-            return Ingredient.of(Blocks.OBSIDIAN);
-        }
-
-    };
+    private static final Tier tier = new ObsidianTier();
 
     public ObsidianDaggerItem() {
         super(tier, new Item.Properties()
-                .attributes(SwordItem.createAttributes(tier, ATTACK_DAMAGE, ATTACK_SPEED))
+                .attributes(createAttributes(tier, ATTACK_DAMAGE, ATTACK_SPEED))
                 .rarity(Rarity.UNCOMMON));
     }
 
@@ -90,4 +59,36 @@ public class ObsidianDaggerItem extends SwordItem {
         return 0;
     }
 
+    private static class ObsidianTier implements Tier {
+        @Override
+        public int getUses() {
+            return 2;
+        }
+
+        @Override
+        public float getSpeed() {
+            return ATTACK_SPEED;
+        }
+
+        @Override
+        public float getAttackDamageBonus() {
+            return ATTACK_DAMAGE;
+        }
+
+        @Override
+        public TagKey<Block> getIncorrectBlocksForDrops() {
+            return BlockTags.INCORRECT_FOR_WOODEN_TOOL;
+        }
+
+        @Override
+        public int getEnchantmentValue() {
+            return 1;
+        }
+
+        @Override
+        public Ingredient getRepairIngredient() {
+            return Ingredient.of(Blocks.OBSIDIAN);
+        }
+
+    }
 }

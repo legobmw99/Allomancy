@@ -269,14 +269,14 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         allomancy_data.put("metal_burning", metal_burning);
 
         CompoundTag position = new CompoundTag();
-        BlockPos death_block = this.getDeathLoc();
+        BlockPos death_block = this.death_pos;
         if (death_block != null) {
             position.putString("death_dimension", this.getDeathDim().location().toString());
             position.putInt("death_x", death_block.getX());
             position.putInt("death_y", death_block.getY());
             position.putInt("death_z", death_block.getZ());
         }
-        BlockPos spawn_block = this.getSpawnLoc();
+        BlockPos spawn_block = this.spawn_pos;
         if (spawn_block != null) {
             position.putString("spawn_dimension", this.getSpawnDim().location().toString());
             position.putInt("spawn_x", spawn_block.getX());

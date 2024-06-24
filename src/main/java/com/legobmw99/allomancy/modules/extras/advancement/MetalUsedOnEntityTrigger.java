@@ -11,6 +11,7 @@ import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -32,7 +33,7 @@ public class MetalUsedOnEntityTrigger extends SimpleCriterionTrigger<MetalUsedOn
     public record TriggerInstance(Optional<ContextAwarePredicate> player,
                                   Optional<ContextAwarePredicate> entityPredicate, Metal mt,
                                   Optional<Boolean> enhanced) implements SimpleCriterionTrigger.SimpleInstance {
-        public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(builder -> builder
+        private static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(builder -> builder
                 .group(EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
                        EntityPredicate.ADVANCEMENT_CODEC
                                .optionalFieldOf("entity")
@@ -41,21 +42,26 @@ public class MetalUsedOnEntityTrigger extends SimpleCriterionTrigger<MetalUsedOn
                        Codec.BOOL.optionalFieldOf("enhanced").forGetter(TriggerInstance::enhanced))
                 .apply(builder, TriggerInstance::new));
 
-        public static Criterion<TriggerInstance> instance(Optional<ContextAwarePredicate> player,
-                                                          Optional<ContextAwarePredicate> entityPredicate,
+        public static Criterion<TriggerInstance> instance(@Nullable ContextAwarePredicate player,
+                                                          @Nullable ContextAwarePredicate entityPredicate,
                                                           Metal mt) {
+
             return ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER
                     .get()
-                    .createCriterion(new TriggerInstance(player, entityPredicate, mt, Optional.empty()));
+                    .createCriterion(
+                            new TriggerInstance(Optional.ofNullable(player), Optional.ofNullable(entityPredicate), mt,
+                                                Optional.empty()));
         }
 
-        public static Criterion<TriggerInstance> instance(Optional<ContextAwarePredicate> player,
-                                                          Optional<ContextAwarePredicate> entityPredicate,
+        public static Criterion<TriggerInstance> instance(@Nullable ContextAwarePredicate player,
+                                                          @Nullable ContextAwarePredicate entityPredicate,
                                                           Metal mt,
                                                           boolean enhanced) {
             return ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER
                     .get()
-                    .createCriterion(new TriggerInstance(player, entityPredicate, mt, Optional.of(enhanced)));
+                    .createCriterion(
+                            new TriggerInstance(Optional.ofNullable(player), Optional.ofNullable(entityPredicate), mt,
+                                                Optional.of(enhanced)));
         }
 
         boolean matches(LootContext entity, Metal mt, boolean enhanced) {

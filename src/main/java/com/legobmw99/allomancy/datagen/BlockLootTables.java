@@ -13,8 +13,8 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class BlockLootTables extends BlockLootSubProvider {
-    public BlockLootTables(HolderLookup.Provider provider) {
+class BlockLootTables extends BlockLootSubProvider {
+    BlockLootTables(HolderLookup.Provider provider) {
         super(Set.of(), FeatureFlags.REGISTRY.allFlags(), provider);
     }
 

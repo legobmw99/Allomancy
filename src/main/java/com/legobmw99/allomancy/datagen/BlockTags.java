@@ -14,11 +14,11 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import java.util.concurrent.CompletableFuture;
 
 
-public class BlockTags extends BlockTagsProvider {
+class BlockTags extends BlockTagsProvider {
 
-    public BlockTags(PackOutput gen,
-                     CompletableFuture<HolderLookup.Provider> lookupProvider,
-                     ExistingFileHelper exFileHelper) {
+    BlockTags(PackOutput gen,
+              CompletableFuture<HolderLookup.Provider> lookupProvider,
+              ExistingFileHelper exFileHelper) {
         super(gen, lookupProvider, Allomancy.MODID, exFileHelper);
     }
 
@@ -68,7 +68,7 @@ public class BlockTags extends BlockTagsProvider {
 
     @SafeVarargs
     private void addCommonTag(String name, ResourceKey<Block>... items) {
-        Allomancy.LOGGER.debug("Creating block tag for c:" + name);
+        Allomancy.LOGGER.debug("Creating block tag for c:{}", name);
         tag(net.minecraft.tags.BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", name)))
                 .replace(false)
                 .add(items);

@@ -23,8 +23,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
 
@@ -32,7 +30,7 @@ import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STO
 
 public class VialItem extends Item {
 
-    public static final CustomModelData FILLED_MODEL_DATA = new CustomModelData(1);
+    private static final CustomModelData FILLED_MODEL_DATA = new CustomModelData(1);
 
     public VialItem() {
         super(new Item.Properties().stacksTo(32).rarity(Rarity.COMMON));
@@ -107,7 +105,6 @@ public class VialItem extends Item {
         return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack,
                                 Item.TooltipContext ctx,

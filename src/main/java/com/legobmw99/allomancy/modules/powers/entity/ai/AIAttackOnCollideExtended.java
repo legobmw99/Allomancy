@@ -5,46 +5,37 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
 
 public class AIAttackOnCollideExtended extends Goal {
-    final Level worldObj;
-    final PathfinderMob attacker;
+    private final PathfinderMob attacker;
     /**
      * The speed with which the mob will approach the target
      */
-    final double speedTowardsTarget;
+    private final double speedTowardsTarget;
     /**
      * When true, the mob will continue chasing its target, even if it can't
      * find a path to them right now.
      */
-    final boolean longMemory;
+    private final boolean longMemory;
     /**
      * An amount of decrementing ticks that allows the entity to attack once the
      * tick reaches 0.
      */
-    int attackTick;
+    private int attackTick;
     /**
      * The PathEntity of our entity.
      */
-    Path entityPathEntity;
-    Class<?> classTarget;
+    private Path entityPathEntity;
     private int ticksUntilNextPathRecalculation;
 
     private int failedPathFindingPenalty;
 
-    public AIAttackOnCollideExtended(PathfinderMob par1EntityCreature, Class par2Class, double par3, boolean par5) {
-        this(par1EntityCreature, par3, par5);
-        this.classTarget = par2Class;
-    }
-
     public AIAttackOnCollideExtended(PathfinderMob par1EntityCreature, double par2, boolean par4) {
         this.attacker = par1EntityCreature;
-        this.worldObj = par1EntityCreature.level();
         this.speedTowardsTarget = par2;
         this.longMemory = par4;
         this.setFlags(EnumSet.of(Flag.TARGET));
@@ -61,10 +52,9 @@ public class AIAttackOnCollideExtended extends Goal {
             return false;
         } else if (!livingEntity.isAlive()) {
             return false;
-        } else if ((this.classTarget != null) && !this.classTarget.isAssignableFrom(livingEntity.getClass())) {
-            return false;
         } else {
-            if (--this.ticksUntilNextPathRecalculation <= 0) {
+            --this.ticksUntilNextPathRecalculation;
+            if (this.ticksUntilNextPathRecalculation <= 0) {
                 this.entityPathEntity = this.attacker.getNavigation().createPath(livingEntity, 0);
                 this.ticksUntilNextPathRecalculation = 4 + this.attacker.getRandom().nextInt(7);
                 return this.entityPathEntity != null;
@@ -117,21 +107,23 @@ public class AIAttackOnCollideExtended extends Goal {
         }
         this.attacker.getLookControl().setLookAt(livingEntity, 30.0F, 30.0F);
 
-        if ((this.longMemory || this.attacker.getSensing().hasLineOfSight(livingEntity)) &&
-            (--this.ticksUntilNextPathRecalculation <= 0)) {
-            this.ticksUntilNextPathRecalculation =
-                    this.failedPathFindingPenalty + 4 + this.attacker.getRandom().nextInt(7);
-            this.attacker.getNavigation().moveTo(livingEntity, this.speedTowardsTarget);
-            if (this.attacker.getNavigation().getPath() != null) {
-                Node finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
-                if ((finalPathPoint != null) &&
-                    (livingEntity.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)) {
-                    this.failedPathFindingPenalty = 0;
+        if ((this.longMemory || this.attacker.getSensing().hasLineOfSight(livingEntity))) {
+            --this.ticksUntilNextPathRecalculation;
+            if (this.ticksUntilNextPathRecalculation <= 0) {
+                this.ticksUntilNextPathRecalculation =
+                        this.failedPathFindingPenalty + 4 + this.attacker.getRandom().nextInt(7);
+                this.attacker.getNavigation().moveTo(livingEntity, this.speedTowardsTarget);
+                if (this.attacker.getNavigation().getPath() != null) {
+                    Node finalPathPoint = this.attacker.getNavigation().getPath().getEndNode();
+                    if ((finalPathPoint != null) &&
+                        (livingEntity.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1)) {
+                        this.failedPathFindingPenalty = 0;
+                    } else {
+                        this.failedPathFindingPenalty += 10;
+                    }
                 } else {
                     this.failedPathFindingPenalty += 10;
                 }
-            } else {
-                this.failedPathFindingPenalty += 10;
             }
         }
 

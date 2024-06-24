@@ -45,7 +45,7 @@ public class AllomanticallyActivatedBlockTrigger extends SimpleCriterionTrigger<
 
     public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<ContextAwarePredicate> location,
                                   Optional<Boolean> isPush) implements SimpleInstance {
-        public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(builder -> builder
+        static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(builder -> builder
                 .group(EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
                        EntityPredicate.ADVANCEMENT_CODEC
                                .optionalFieldOf("entity")
@@ -107,7 +107,7 @@ public class AllomanticallyActivatedBlockTrigger extends SimpleCriterionTrigger<
                                                          Optional.of(false)));
         }
 
-        public boolean matches(LootContext ctx, boolean is_push) {
+        boolean matches(LootContext ctx, boolean is_push) {
             return (this.isPush.isEmpty() || this.isPush.get() == is_push) &&
                    (this.location.isEmpty() || this.location.get().matches(ctx));
         }

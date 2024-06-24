@@ -21,9 +21,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class CoinBagItem extends ProjectileWeaponItem {
-
-
-    public static final Predicate<ItemStack> NUGGETS = (stack) -> {
+    private static final Predicate<ItemStack> NUGGETS = (stack) -> {
         Item item = stack.getItem();
         return Physical.doesResourceContainMetal(BuiltInRegistries.ITEM.getKey(item)) &&
                BuiltInRegistries.ITEM.getKey(item).getPath().contains("nugget");

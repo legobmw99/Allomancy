@@ -6,19 +6,16 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
-public class SoundParticle extends TextureSheetParticle {
-    public SoundParticle(Level world,
-                         double x,
-                         double y,
-                         double z,
-                         double motionX,
-                         double motionY,
-                         double motionZ,
-                         SoundSource typeIn) {
+public final class SoundParticle extends TextureSheetParticle {
+    private SoundParticle(Level world,
+                          double x,
+                          double y,
+                          double z,
+                          double motionX,
+                          double motionY,
+                          double motionZ,
+                          SoundSource typeIn) {
         super((ClientLevel) world, x, y, z, motionX, motionY, motionZ);
 
         this.xd = motionX;
@@ -31,13 +28,13 @@ public class SoundParticle extends TextureSheetParticle {
 
         switch (typeIn) {
             case HOSTILE -> // red
-                    setColor(1F, 0.15F, 0.15F);
+                    setColor(1.0F, 0.15F, 0.15F);
             case PLAYERS -> // yellow
-                    setColor(1F, 1F, 0F);
+                    setColor(1.0F, 1.0F, 0.0F);
             case NEUTRAL -> // green
-                    setColor(0F, 1F, 0F);
+                    setColor(0.0F, 1.0F, 0.0F);
             default -> // neutral/blue
-                    setColor(0F, 0F, 1F);
+                    setColor(0.0F, 0.0F, 1.0F);
         }
     }
 
@@ -48,11 +45,12 @@ public class SoundParticle extends TextureSheetParticle {
         this.xo = this.x;
         this.yo = this.y;
         this.zo = this.z;
-        if (this.age++ >= this.lifetime) {
+        if (this.age >= this.lifetime) {
             this.remove();
         } else {
             this.move(this.xd, this.yd, this.zd);
         }
+        this.age++;
 
     }
 
@@ -62,7 +60,6 @@ public class SoundParticle extends TextureSheetParticle {
     }
 
 
-    @OnlyIn(Dist.CLIENT)
     public static class Factory implements ParticleProvider.Sprite<SoundParticleData> {
         public TextureSheetParticle createParticle(SoundParticleData data,
                                                    ClientLevel worldIn,

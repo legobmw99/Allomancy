@@ -17,9 +17,9 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public class AllomancyPowerType implements ArgumentType<String> {
+public final class AllomancyPowerType implements ArgumentType<String> {
 
-    public static final AllomancyPowerType INSTANCE = new AllomancyPowerType();
+    static final AllomancyPowerType INSTANCE = new AllomancyPowerType();
     private static final Set<String> types =
             Arrays.stream(Metal.values()).map(Metal::getName).collect(Collectors.toSet());
     private static final DynamicCommandExceptionType unknown_power =

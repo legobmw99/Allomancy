@@ -24,42 +24,11 @@ public class KolossBladeItem extends SwordItem {
     private static final int ATTACK_DAMAGE = 9;
     private static final float ATTACK_SPEED = -2.6F;
 
-    private static final Tier SLOW_STONE = new Tier() {
-        @Override
-        public int getUses() {
-            return Tiers.STONE.getUses();
-        }
-
-        @Override
-        public float getSpeed() {
-            return ATTACK_SPEED;
-        }
-
-        @Override
-        public float getAttackDamageBonus() {
-            return ATTACK_DAMAGE;
-        }
-
-        @Override
-        public TagKey<Block> getIncorrectBlocksForDrops() {
-            return Tiers.STONE.getIncorrectBlocksForDrops();
-        }
-
-        @Override
-        public int getEnchantmentValue() {
-            return Tiers.STONE.getEnchantmentValue();
-        }
-
-        @Override
-        public Ingredient getRepairIngredient() {
-            return Tiers.STONE.getRepairIngredient();
-        }
-
-    };
+    private static final Tier SLOW_STONE = new SlowStoneTier();
 
     public KolossBladeItem() {
         super(SLOW_STONE,
-              new Item.Properties().attributes(SwordItem.createAttributes(SLOW_STONE, ATTACK_DAMAGE, ATTACK_SPEED)));
+              new Item.Properties().attributes(createAttributes(SLOW_STONE, ATTACK_DAMAGE, ATTACK_SPEED)));
     }
 
     @Override
@@ -97,5 +66,38 @@ public class KolossBladeItem extends SwordItem {
     @Override
     public boolean isCorrectToolForDrops(ItemStack pStack, BlockState pState) {
         return false;
+    }
+
+    private static class SlowStoneTier implements Tier {
+        @Override
+        public int getUses() {
+            return Tiers.STONE.getUses();
+        }
+
+        @Override
+        public float getSpeed() {
+            return ATTACK_SPEED;
+        }
+
+        @Override
+        public float getAttackDamageBonus() {
+            return ATTACK_DAMAGE;
+        }
+
+        @Override
+        public TagKey<Block> getIncorrectBlocksForDrops() {
+            return Tiers.STONE.getIncorrectBlocksForDrops();
+        }
+
+        @Override
+        public int getEnchantmentValue() {
+            return Tiers.STONE.getEnchantmentValue();
+        }
+
+        @Override
+        public Ingredient getRepairIngredient() {
+            return Tiers.STONE.getRepairIngredient();
+        }
+
     }
 }

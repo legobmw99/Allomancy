@@ -16,8 +16,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-public class PowersClientSetup {
-    public static final DeferredRegister<ParticleType<?>> PARTICLES =
+public final class PowersClientSetup {
+    private static final DeferredRegister<ParticleType<?>> PARTICLES =
             DeferredRegister.create(Registries.PARTICLE_TYPE, Allomancy.MODID);
     public static final Supplier<ParticleType<SoundParticleData>> SOUND_PARTICLE_TYPE =
             PARTICLES.register("sound_particle", () -> new ParticleType<>(true) {
@@ -34,13 +34,15 @@ public class PowersClientSetup {
                 }
             });
 
+    private PowersClientSetup() {}
+
     public static void register(IEventBus bus) {
         PARTICLES.register(bus);
     }
 
     public static void registerParticle(final RegisterParticleProvidersEvent event) {
         Allomancy.LOGGER.info("Allomancy: Registering custom particles");
-        event.registerSprite(PowersClientSetup.SOUND_PARTICLE_TYPE.get(), new SoundParticle.Factory());
+        event.registerSprite(SOUND_PARTICLE_TYPE.get(), new SoundParticle.Factory());
     }
 
     public static void clientInit(final FMLClientSetupEvent e) {

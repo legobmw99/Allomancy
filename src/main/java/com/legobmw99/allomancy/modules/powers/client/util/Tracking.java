@@ -149,7 +149,7 @@ public class Tracking {
         return true;
     }
 
-    public static class MetalBlockBlob {
+    public static final class MetalBlockBlob {
 
         private static final Level level = Minecraft.getInstance().level;
         private int blocks;

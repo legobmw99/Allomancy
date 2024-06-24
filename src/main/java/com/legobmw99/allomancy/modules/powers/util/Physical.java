@@ -10,7 +10,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
@@ -33,8 +32,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class Physical {
+public final class Physical {
 
+
+    private Physical() {}
 
     /**
      * Block state wrapper on {@link Physical#isBlockMetallic}
@@ -77,40 +78,29 @@ public class Physical {
      * @return Whether the entity is metallic
      */
     public static boolean isEntityMetallic(Entity entity) {
-        if (entity == null) {
-            return false;
-        }
-        if (entity instanceof ItemEntity item) {
-            return isItemMetallic(item.getItem());
-        }
-        if (entity instanceof ItemFrame itemFrame) {
-            return isItemMetallic(itemFrame.getItem());
-        }
-        if (entity instanceof FallingBlockEntity fbe) {
-            return isBlockStateMetallic(fbe.getBlockState());
-        }
-        if (entity instanceof ProjectileNuggetEntity) {
-            return true;
-        }
-        if (entity instanceof AbstractMinecart) {
-            return true;
-        }
-        if (entity instanceof LivingEntity ent) {
-            if (ent instanceof IronGolem) {
-                return true;
-            }
-            if (isItemMetallic(ent.getItemInHand(InteractionHand.MAIN_HAND)) ||
-                isItemMetallic(ent.getItemInHand(InteractionHand.OFF_HAND))) {
-                return true;
-            }
-            for (ItemStack itemStack : ent.getArmorSlots()) {
-                if (isItemMetallic(itemStack)) {
-                    return true;
+        return switch (entity) {
+            case ItemEntity item -> isItemMetallic(item.getItem());
+            case ItemFrame itemFrame -> isItemMetallic(itemFrame.getItem());
+            case FallingBlockEntity fbe -> isBlockStateMetallic(fbe.getBlockState());
+            case ProjectileNuggetEntity ignored -> true;
+            case AbstractMinecart ignored -> true;
+            case IronGolem ignored -> true;
+            case LivingEntity ent -> {
+                for (ItemStack itemStack : ent.getHandSlots()) {
+                    if (isItemMetallic(itemStack)) {
+                        yield true;
+                    }
                 }
+                for (ItemStack itemStack : ent.getArmorAndBodyArmorSlots()) {
+                    if (isItemMetallic(itemStack)) {
+                        yield true;
+                    }
+                }
+                yield false;
             }
-        }
+            default -> false;
+        };
 
-        return false;
     }
 
     private static final Pattern ACTIVE_METAL_REGEX = Pattern.compile(
@@ -275,14 +265,14 @@ public class Physical {
                 .forEach(Physical::add);
 
 
-        ArrayList<String> list = new ArrayList<>(defaultList);
+        List<String> list = new ArrayList<>(defaultList);
         list.sort(String::compareTo);
         return list;
 
     }
 
     private static void add(String s) {
-        Allomancy.LOGGER.info("Adding " + s + " to the default whitelist!");
+        Allomancy.LOGGER.info("Adding {} to the default whitelist!", s);
         defaultList.add(s);
     }
 

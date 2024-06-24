@@ -38,8 +38,10 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import java.io.File;
 import java.util.Arrays;
 
-public class CommonEventHandler {
+public final class CommonEventHandler {
 
+
+    private CommonEventHandler() {}
 
     /**
      * TEMPORARY: Used to port Forge worlds to Neoforged.

@@ -9,18 +9,18 @@ import net.minecraft.data.tags.BannerPatternTagsProvider;
 
 import java.util.concurrent.CompletableFuture;
 
-public class BannerTags extends BannerPatternTagsProvider {
+class BannerTags extends BannerPatternTagsProvider {
 
-    public BannerTags(PackOutput pGenerator,
-                      CompletableFuture<HolderLookup.Provider> registries,
-                      net.neoforged.neoforge.common.data.ExistingFileHelper existingFileHelper) {
+    BannerTags(PackOutput pGenerator,
+               CompletableFuture<HolderLookup.Provider> registries,
+               net.neoforged.neoforge.common.data.ExistingFileHelper existingFileHelper) {
         super(pGenerator, registries, Allomancy.MODID, existingFileHelper);
     }
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
         for (Metal mt : Metal.values()) {
-            Allomancy.LOGGER.debug("Creating banner tag for " + mt.getName());
+            Allomancy.LOGGER.debug("Creating banner tag for {}", mt.getName());
             this.tag(ExtrasSetup.PATTERN_KEYS.get(mt.getIndex())).add(ExtrasSetup.PATTERNS.get(mt.getIndex()));
         }
     }

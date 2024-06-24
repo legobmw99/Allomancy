@@ -20,22 +20,18 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 
-@OnlyIn(Dist.CLIENT)
-public class Inputs {
+public final class Inputs {
 
-    @OnlyIn(Dist.CLIENT)
-    public static KeyMapping hud;
-    @OnlyIn(Dist.CLIENT)
+    private static KeyMapping hud;
     public static KeyMapping burn;
-    @OnlyIn(Dist.CLIENT)
-    public static KeyMapping[] powers;
+    private static KeyMapping[] powers;
+
+    private Inputs() {}
 
     /**
      * Adapted from vanilla, allows getting mouseover at given distances
@@ -53,21 +49,17 @@ public class Inputs {
             if (mc.level != null) {
                 objectMouseOver = entity.pick(dist, partialTicks, false);
                 Vec3 vec3d = entity.getEyePosition(partialTicks);
-                boolean flag = false;
-                int i = 3;
                 double d1;
 
                 d1 = objectMouseOver.getLocation().distanceToSqr(vec3d);
 
                 Vec3 vec3d1 = entity.getViewVector(1.0F);
                 Vec3 vec3d2 = vec3d.add(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist);
-                float f = 1.0F;
                 AABB axisalignedbb =
                         entity.getBoundingBox().expandTowards(vec3d1.scale(dist)).inflate(1.0D, 1.0D, 1.0D);
                 EntityHitResult entityraytraceresult =
                         ProjectileUtil.getEntityHitResult(entity, vec3d, vec3d2, axisalignedbb, (e) -> true, d1);
                 if (entityraytraceresult != null) {
-                    Entity entity1 = entityraytraceresult.getEntity();
                     Vec3 vec3d3 = entityraytraceresult.getLocation();
                     double d2 = vec3d.distanceToSqr(vec3d3);
                     if (d2 < d1) {

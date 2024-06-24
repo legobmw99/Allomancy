@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 public class DataGenerators {
 
     @SubscribeEvent
-    public static void gatherData(GatherDataEvent event) {
+    public static void gatherData(final GatherDataEvent event) {
         var generator = event.getGenerator();
         var packOutput = generator.getPackOutput();
         var lookup = event.getLookupProvider();

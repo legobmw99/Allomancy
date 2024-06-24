@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ExtrasSetup {
+public final class ExtrasSetup {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
 
@@ -108,6 +108,8 @@ public class ExtrasSetup {
     public static final Supplier<AllomanticallyActivatedBlockTrigger> ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER =
             CT.register("activated_allomancy_block", AllomanticallyActivatedBlockTrigger::new);
 
+    private ExtrasSetup() {}
+
     public static void register(IEventBus bus) {
         BLOCKS.register(bus);
         ITEMS.register(bus);
@@ -122,7 +124,7 @@ public class ExtrasSetup {
         }
     }
 
-    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+    public static void registerCapabilities(final RegisterCapabilitiesEvent event) {
         event.registerBlock(ALLOMANTICALLY_USABLE_BLOCK, new IronLeverBlock.AllomanticUseCapabilityProvider(),
                             IRON_LEVER.get());
         event.registerBlock(ALLOMANTICALLY_USABLE_BLOCK, new IronButtonBlock.AllomanticUseCapabilityProvider(),
@@ -131,7 +133,7 @@ public class ExtrasSetup {
         event.registerBlock(ALLOMANTICALLY_USABLE_BLOCK,
                             ((level, pos, state, blockEntity, context) -> ((player, isPush) -> {
                                 if (player instanceof ServerPlayer sp) {
-                                    ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
+                                    ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
                                 }
                                 if (level.isClientSide()) {
                                     return true;
