@@ -223,22 +223,16 @@ public final class CommonEventHandler {
 
     @SubscribeEvent
     public static void onPlayerFinishUsingItem(final LivingEntityUseItemEvent.Finish event) {
-        if (!event.getEntity().hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
+        FlakeStorage storage = event.getItem().get(FLAKE_STORAGE);
+
+        if (storage == null || !event.getEntity().hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
             return;
         }
         var data = event.getEntity().getData(AllomancerAttachment.ALLOMANCY_DATA);
-
-        if (event.getItem().getItem() == Items.GOLDEN_APPLE || event.getItem().getItem() == Items.GOLDEN_CARROT) {
-            data.incrementStored(Metal.GOLD);
-        } else if (event.getItem().getItem() == Items.ENCHANTED_GOLDEN_APPLE) {
-            for (int i = 0; i < 10; i++) {
+        if (event.getItem().getItem() == Items.ENCHANTED_GOLDEN_APPLE && storage.contains(Metal.GOLD)) {
+            for (int i = 0; i < AllomancerData.MAX_STORAGE; i++) {
                 data.incrementStored(Metal.GOLD);
             }
-        }
-
-        FlakeStorage storage = event.getItem().get(FLAKE_STORAGE);
-        if (storage == null) {
-            return;
         }
         for (Metal mt : Metal.values()) {
             if (storage.contains(mt)) {

@@ -53,6 +53,8 @@ public class Allomancy {
         bus.addListener(CombatClientSetup::registerEntityRenders);
 
         ConsumeSetup.register(bus);
+        bus.addListener(ConsumeSetup::onModifyComponents);
+
         MaterialsSetup.register(bus);
 
         ItemDisplay.register(bus);

@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.modules.consumables;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.item.GrinderItem;
 import com.legobmw99.allomancy.modules.consumables.item.LerasiumItem;
 import com.legobmw99.allomancy.modules.consumables.item.VialItem;
@@ -8,8 +9,10 @@ import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.consumables.item.recipe.VialItemRecipe;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -45,4 +48,15 @@ public final class ConsumeSetup {
         RECIPES.register(bus);
     }
 
+
+    public static void onModifyComponents(final ModifyDefaultComponentsEvent event) {
+        FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
+        storage.add(Metal.GOLD);
+        FlakeStorage gold = storage.toImmutable();
+
+        // TODO hide tooltip on these?
+        event.modify(Items.GOLDEN_APPLE, builder -> builder.set(FLAKE_STORAGE.get(), gold));
+        event.modify(Items.GOLDEN_CARROT, builder -> builder.set(FLAKE_STORAGE.get(), gold));
+        event.modify(Items.ENCHANTED_GOLDEN_APPLE, builder -> builder.set(FLAKE_STORAGE.get(), gold));
+    }
 }
