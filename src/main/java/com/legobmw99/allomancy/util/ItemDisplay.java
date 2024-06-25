@@ -12,7 +12,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
@@ -140,7 +139,7 @@ public final class ItemDisplay {
     }
 
     private static MutableComponent addColor(MutableComponent text, ChatFormatting color) {
-        text.setStyle(text.getStyle().withColor(TextColor.fromLegacyFormat(color)));
+        text.setStyle(text.getStyle().withColor(color));
         return text;
     }
 

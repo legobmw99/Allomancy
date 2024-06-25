@@ -1,13 +1,22 @@
 package com.legobmw99.allomancy.modules.consumables.item.component;
 
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.util.ItemDisplay;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipProvider;
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.function.Consumer;
 
-public final class FlakeStorage {
+public final class FlakeStorage implements TooltipProvider {
 
     private final EnumSet<Metal> flakes;
 
@@ -60,6 +69,24 @@ public final class FlakeStorage {
         } else {
             return other instanceof FlakeStorage flakeStorage && this.flakes.equals(flakeStorage.flakes);
         }
+    }
+
+    @Override
+    public void addToTooltip(Item.TooltipContext ctx, Consumer<Component> pTooltipAdder, TooltipFlag pTooltipFlag) {
+
+        if (Screen.hasShiftDown()) {
+            for (Metal mt : Metal.values()) {
+                if (this.contains(mt)) {
+                    pTooltipAdder.accept(ItemDisplay.addColorToText("metals." + mt.getName(), ChatFormatting.GRAY));
+                }
+            }
+        } else {
+            int count = (int) Arrays.stream(Metal.values()).filter(this::contains).count();
+            pTooltipAdder.accept(
+                    ItemDisplay.addColorToText("item.allomancy.vial.lore_count", ChatFormatting.GRAY, count));
+            pTooltipAdder.accept(ItemDisplay.addColorToText("item.allomancy.vial.lore_inst", ChatFormatting.GRAY));
+        }
+
     }
 
     public static class Mutable {

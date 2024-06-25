@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.modules.powers.client.network.PowerRequests;
 import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
@@ -11,6 +12,7 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +21,13 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STORAGE;
 
 public final class ClientEventHandler {
     private static final Tracking tracking = new Tracking();
@@ -190,4 +198,17 @@ public final class ClientEventHandler {
             Inputs.fakeMovement(event.getInput());
         }
     }
+
+    @SubscribeEvent
+    public static void onTooltip(final ItemTooltipEvent event) {
+        FlakeStorage storage = event.getItemStack().get(FLAKE_STORAGE);
+        if (storage != null) {
+            List<Component> components = new ArrayList<>(16);
+            storage.addToTooltip(event.getContext(), components::add, event.getFlags());
+            int len = event.getToolTip().size();
+            int insertLoc = event.getFlags().isAdvanced() ? len - 2 : len;
+            event.getToolTip().addAll(insertLoc, components);
+        }
+    }
 }
+

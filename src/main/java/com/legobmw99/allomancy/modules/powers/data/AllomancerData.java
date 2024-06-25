@@ -151,7 +151,9 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
     }
 
     public void incrementStored(Metal metal) {
-        this.metal_amounts[metal.getIndex()]++;
+        if (this.metal_amounts[metal.getIndex()] <= MAX_STORAGE) {
+            this.metal_amounts[metal.getIndex()]++;
+        }
     }
 
     public void decrementStored(Metal metal) {

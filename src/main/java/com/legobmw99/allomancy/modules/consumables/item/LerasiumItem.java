@@ -3,7 +3,10 @@ package com.legobmw99.allomancy.modules.consumables.item;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -46,7 +49,10 @@ public class LerasiumItem extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity livingEntity) {
-
+        if (livingEntity instanceof ServerPlayer serverplayer) {
+            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, stack);
+            serverplayer.awardStat(Stats.ITEM_USED.get(this));
+        }
         if (livingEntity instanceof Player) {
             livingEntity.getData(AllomancerAttachment.ALLOMANCY_DATA).setMistborn();
             //Fancy-shmancy effects
