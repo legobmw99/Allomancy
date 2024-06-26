@@ -49,7 +49,7 @@ public final class Rendering {
 
     }
 
-    public static PoseStack prepareToDrawLines(PoseStack start, float partialTicks) {
+    public static PoseStack prepareToDrawLines(PoseStack start) {
         RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
@@ -59,8 +59,7 @@ public final class Rendering {
         RenderSystem.defaultBlendFunc();
 
         start.pushPose();
-        Vec3 view = Minecraft.getInstance().cameraEntity.getEyePosition(partialTicks);
-        // TODO figure out if I can cancel effect of view bobbing
+        Vec3 view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         start.translate(-view.x, -view.y, -view.z);
         RenderSystem.applyModelViewMatrix();
         return start;

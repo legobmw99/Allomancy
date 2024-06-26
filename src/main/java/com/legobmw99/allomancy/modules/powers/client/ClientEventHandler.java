@@ -93,7 +93,7 @@ public final class ClientEventHandler {
 
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
-        if (player == null || !player.isAlive() || mc.options.getCameraType().isMirrored()) {
+        if (player == null || !player.isAlive()) {
             return;
         }
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -104,14 +104,14 @@ public final class ClientEventHandler {
         }
         float partialTick = event.getPartialTick().getGameTimeDeltaPartialTick(false);
 
-        PoseStack stack = Rendering.prepareToDrawLines(event.getPoseStack(), partialTick);
+        PoseStack stack = Rendering.prepareToDrawLines(event.getPoseStack());
 
         double rho = 1;
         float theta = (float) ((player.getViewYRot(partialTick) + 90) * Math.PI / 180);
         float phi = Mth.clamp((float) ((player.getViewXRot(partialTick) + 90) * Math.PI / 180), 0.0001F, 3.14F);
 
-        Vec3 playervec = mc.cameraEntity
-                .getEyePosition(partialTick)
+        Vec3 playervec = mc.player
+                .getPosition(partialTick)
                 .add(rho * Mth.sin(phi) * Mth.cos(theta), rho * Mth.cos(phi) - 0.35F,
                      rho * Mth.sin(phi) * Mth.sin(theta));
 
