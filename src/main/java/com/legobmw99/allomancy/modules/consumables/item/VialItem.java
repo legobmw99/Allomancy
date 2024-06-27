@@ -99,6 +99,7 @@ public class VialItem extends Item {
     /**
      * TEMPORARY: Used to port pre-1.20.5 worlds to post.
      * Loads custom NBT data and convets it to the data component.
+     * TODO: Remove in future version once worlds have updated
      */
     @Override
     public void verifyComponentsAfterLoad(ItemStack pStack) {

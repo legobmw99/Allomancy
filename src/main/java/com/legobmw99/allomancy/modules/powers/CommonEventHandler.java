@@ -51,6 +51,7 @@ public final class CommonEventHandler {
     /**
      * TEMPORARY: Used to port Forge worlds to Neoforged.
      * Loads the player's data file and sees if they have an old forge Capability stored.
+     * TODO: Remove in future version once worlds have updated
      */
     @SubscribeEvent
     public static void onPlayerLoad(final PlayerEvent.LoadFromFile event) {

@@ -4,6 +4,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.neoforged.gradle.userdev' version '7.0.151'
+    id 'net.neoforged.gradle.mixin' version '7.0.151'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -103,6 +104,14 @@ repositories {
     }
 }
 
+mixin {
+    // add sourceSets.main, "${mod_id}.refmap.json"
+    // Sets up the mixin config; this gets added to run configurations and the manifest in the final jar
+    config "${mod_id}.mixins.json"
+
+    // Enables exporting mixin-changed classes to .mixin.out in the run folder
+    // debug.export = true
+}
 
 dependencies {
     // Specify the version of Minecraft to use.
