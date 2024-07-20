@@ -153,12 +153,16 @@ public final class Physical {
         return new Vec3(mag.x < e ? 0 : value.x, mag.y < e ? 0 : value.y, mag.z < e ? 0 : value.z);
     }
 
-    private static HashSet<String> defaultList;
-
+    private static HashSet<String> defaultSet;
+    private static List<String> defaultList = null;
 
     // TODO? this could be a Tag one day
     public static List<String> default_whitelist() {
-        defaultList = new HashSet<>();
+        if (defaultList != null) {
+            return defaultList;
+        }
+
+        defaultSet = new HashSet<>();
 
         add(Items.BUCKET);
         add(Items.LAVA_BUCKET);
@@ -265,15 +269,15 @@ public final class Physical {
                 .forEach(Physical::add);
 
 
-        List<String> list = new ArrayList<>(defaultList);
-        list.sort(String::compareTo);
-        return list;
+        defaultList = new ArrayList<>(defaultSet);
+        defaultList.sort(String::compareTo);
+        return defaultList;
 
     }
 
     private static void add(String s) {
         Allomancy.LOGGER.info("Adding {} to the default whitelist!", s);
-        defaultList.add(s);
+        defaultSet.add(s);
     }
 
     private static void add(ResourceLocation r) {

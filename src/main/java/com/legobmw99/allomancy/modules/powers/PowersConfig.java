@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.powers;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.modules.powers.util.Physical;
 import com.legobmw99.allomancy.util.AllomancyConfig;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -38,7 +39,12 @@ public final class PowersConfig {
         server_builder.comment("Settings for the gameplay elements of the mod").push("gameplay");
         cfg_whitelist = server_builder
                 .comment("List of registry names of items and blocks that are counted as 'metal'")
-                .defineListAllowEmpty("whitelist", Physical::default_whitelist, o -> o instanceof String);
+                .defineListAllowEmpty("whitelist", Physical::default_whitelist, String::new, o -> {
+                    if (o instanceof String s) {
+                        return ResourceLocation.tryParse(s) != null;
+                    }
+                    return false;
+                });
         server_builder.pop();
 
         client_builder.push("graphics");
@@ -46,9 +52,9 @@ public final class PowersConfig {
                 .comment("Maximum iron/steel sight distance. Can have an impact on performance")
                 .defineInRange("max_metal_distance", 15, 3, 30);
         animate_selection = client_builder.comment("Animate the selection wheel").define("animate_selection", true);
-        enable_overlay = client_builder.comment("Enable the screen overlay").define("overlay_enabled", true);
+        enable_overlay = client_builder.comment("Enable the metal vial HUD").define("overlay_enabled", true);
         overlay_position = client_builder
-                .comment("Screen Overlay Position")
+                .comment("Metal vial HUD position")
                 .defineEnum("overlay_position", MetalOverlay.SCREEN_LOC.TOP_LEFT);
         client_builder.pop();
 

@@ -122,7 +122,7 @@ class Languages extends LanguageProvider {
 
         add("key.categories.allomancy", "Allomancy");
         add("key.burn", "Burn Metals");
-        add("key.hud", "Show HUD");
+        add("key.hud", "Show Vial HUD");
         add("allomancy.gui", "Select Metal");
 
         add("commands.allomancy.getpowers", "%s currently has Allomantic powers: %s");
@@ -143,6 +143,17 @@ class Languages extends LanguageProvider {
 
         add("allomancy.networking.failed", "Allomancy packet failed to play: %s");
         add("allomancy.networking.kicked", "Requested illegal action: %s");
+
+        add("allomancy.configuration.gameplay", "Allomancy Gameplay Settings");
+        add("allomancy.configuration.whitelist", "Metal Whitelist");
+        add("allomancy.configuration.random_mistings", "Randomly Assign Mistings");
+        add("allomancy.configuration.respect_player_UUID", "Misting from UUID");
+
+        add("allomancy.configuration.graphics", "Allomancy Graphics Settings");
+        add("allomancy.configuration.overlay_enabled", "Vial HUD Enabled");
+        add("allomancy.configuration.overlay_position", "Vial HUD Position");
+        add("allomancy.configuration.animate_selection", "Animate Metal Selection Wheel");
+        add("allomancy.configuration.max_metal_distance", "Maximum Steelsight Distance");
 
     }
 }

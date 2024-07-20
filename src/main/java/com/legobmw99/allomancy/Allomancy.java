@@ -17,6 +17,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,6 +65,8 @@ public class Allomancy {
         AllomancyConfig.register(container);
         bus.addListener(AllomancyConfig::onLoad);
         bus.addListener(AllomancyConfig::onReload);
+
+        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
 
     }
 }
