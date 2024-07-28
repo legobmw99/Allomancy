@@ -41,6 +41,7 @@ public class Allomancy {
 
             bus.addListener(MetalOverlay::registerGUI);
             bus.addListener(Inputs::registerKeyBinding);
+            container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         }
 
         AllomancerAttachment.register(bus);
@@ -66,7 +67,6 @@ public class Allomancy {
         bus.addListener(AllomancyConfig::onLoad);
         bus.addListener(AllomancyConfig::onReload);
 
-        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
 
     }
 }
