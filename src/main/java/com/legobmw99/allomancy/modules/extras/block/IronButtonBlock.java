@@ -7,6 +7,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +17,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,8 +35,8 @@ public class IronButtonBlock extends ButtonBlock {
 
     private final boolean activatedOnPush;
 
-    public IronButtonBlock(boolean activatedOnPush) {
-        super(BlockSetType.IRON, 35, Block.Properties.of().noCollission().strength(1.0F));
+    public IronButtonBlock(boolean activatedOnPush, Properties props) {
+        super(BlockSetType.IRON, 35, props);
         this.activatedOnPush = activatedOnPush;
     }
 
@@ -55,7 +55,7 @@ public class IronButtonBlock extends ButtonBlock {
 
     @Override
     protected void onExplosionHit(BlockState pState,
-                                  Level pLevel,
+                                  ServerLevel pLevel,
                                   BlockPos pPos,
                                   Explosion pExplosion,
                                   BiConsumer<ItemStack, BlockPos> pDropConsumer) {

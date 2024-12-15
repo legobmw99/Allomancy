@@ -13,7 +13,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -21,14 +20,17 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
+
 import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STORAGE;
 
 public class VialItem extends Item {
 
-    private static final CustomModelData FILLED_MODEL_DATA = new CustomModelData(1);
+    private static final CustomModelData FILLED_MODEL_DATA =
+            new CustomModelData(List.of(), List.of(true), List.of(), List.of());
 
-    public VialItem() {
-        super(new Item.Properties().stacksTo(32).rarity(Rarity.COMMON));
+    public VialItem(Item.Properties props) {
+        super(props.stacksTo(32).rarity(Rarity.COMMON));
     }
 
 
@@ -53,13 +55,13 @@ public class VialItem extends Item {
 
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.DRINK;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.DRINK;
     }
 
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
+    public InteractionResult use(Level worldIn, Player playerIn, InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
 
         var data = playerIn.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -78,10 +80,10 @@ public class VialItem extends Item {
 
             if (filling != full) {
                 playerIn.startUsingItem(hand);
-                return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStackIn);
+                return InteractionResult.SUCCESS;
             }
         }
-        return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
+        return InteractionResult.FAIL;
     }
 
     public static void fillVial(ItemStack stack, FlakeStorage storage) {

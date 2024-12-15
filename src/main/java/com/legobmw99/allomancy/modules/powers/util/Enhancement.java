@@ -11,11 +11,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import static net.minecraft.world.level.portal.DimensionTransition.DO_NOTHING;
+import static net.minecraft.world.level.portal.TeleportTransition.DO_NOTHING;
+
 
 public final class Enhancement {
     private Enhancement() {}
@@ -52,9 +53,9 @@ public final class Enhancement {
 
                 if (player.level().dimension() != dimension) {
                     //change dimension
-                    player = (Player) player.changeDimension(
-                            new DimensionTransition(world.getServer().getLevel(dimension), Vec3.atBottomCenterOf(pos),
-                                                    Vec3.ZERO, player.getXRot(), player.getYRot(), DO_NOTHING));
+                    player = (Player) player.teleport(
+                            new TeleportTransition(world.getServer().getLevel(dimension), Vec3.atBottomCenterOf(pos),
+                                                   Vec3.ZERO, player.getXRot(), player.getYRot(), DO_NOTHING));
                 }
 
                 player.teleportTo(pos.getX(), pos.getY() + 1.5, pos.getZ());

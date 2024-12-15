@@ -6,10 +6,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -17,33 +17,38 @@ import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
 
 public class LerasiumItem extends Item {
-    private static final FoodProperties lerasium =
-            new FoodProperties.Builder().fast().alwaysEdible().saturationModifier(0).nutrition(0).build();
+    private static final FoodProperties lerasium_food =
+            new FoodProperties.Builder().alwaysEdible().saturationModifier(0).nutrition(0).build();
 
-    public LerasiumItem() {
-        super(new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).food(lerasium));
+    private static final Consumable lerasium_consumable = Consumable
+            .builder()
+            .consumeSeconds(0.2f)
+            .animation(ItemUseAnimation.EAT)
+            .sound(SoundEvents.GENERIC_EAT)
+            .hasConsumeParticles(false)
+            .build();
+
+    public LerasiumItem(Item.Properties props) {
+        super(props.rarity(Rarity.EPIC).stacksTo(1).food(lerasium_food, lerasium_consumable));
     }
 
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemStackIn = player.getItemInHand(hand);
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
 
         if (!player.getData(AllomancerAttachment.ALLOMANCY_DATA).isMistborn()) {
             player.startUsingItem(hand);
-            return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStackIn);
+            return InteractionResult.SUCCESS;
         }
 
-        return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
+        return InteractionResult.FAIL;
 
     }
 

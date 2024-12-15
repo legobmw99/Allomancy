@@ -1,11 +1,16 @@
 package com.legobmw99.allomancy.modules.extras.block;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsable;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,8 +34,8 @@ import java.util.function.BiConsumer;
 
 public class IronLeverBlock extends LeverBlock {
 
-    public IronLeverBlock() {
-        super(Block.Properties.of().noCollission().strength(1.0F));
+    public IronLeverBlock(Properties props) {
+        super(props);
     }
 
     @Override
@@ -44,7 +49,7 @@ public class IronLeverBlock extends LeverBlock {
 
     @Override
     protected void onExplosionHit(BlockState pState,
-                                  Level pLevel,
+                                  ServerLevel pLevel,
                                   BlockPos pPos,
                                   Explosion pExplosion,
                                   BiConsumer<ItemStack, BlockPos> pDropConsumer) {

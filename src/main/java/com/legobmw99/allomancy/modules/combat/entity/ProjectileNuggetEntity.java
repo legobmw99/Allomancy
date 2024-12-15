@@ -5,6 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,7 +30,7 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
 
 
     public ProjectileNuggetEntity(LivingEntity livingEntityIn, Level worldIn, ItemStack itemIn, float damageIn) {
-        super(CombatSetup.NUGGET_PROJECTILE.get(), livingEntityIn, worldIn);
+        super(CombatSetup.NUGGET_PROJECTILE.get(), livingEntityIn, worldIn, itemIn);
         if (livingEntityIn instanceof Player player) {
             if (player.getAbilities().instabuild) {
                 this.dropItem = false;
@@ -62,20 +63,19 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
         }
 
         if (rayTraceResult.getType() == HitResult.Type.ENTITY) {
-            ((EntityHitResult) rayTraceResult).getEntity().hurt(this.makeDamage(), this.damage);
+            ((EntityHitResult) rayTraceResult).getEntity().hurtOrSimulate(this.makeDamage(), this.damage);
         }
 
-        if (!this.level().isClientSide) {
+        if (this.level() instanceof ServerLevel level) {
             ItemStack ammo = new ItemStack(this.entityData.get(ITEM).getItem(), 1);
-            if (this.level().getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) &&
+            if (level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) &&
                 rayTraceResult.getType() != HitResult.Type.ENTITY && this.dropItem) {
-                this
-                        .level()
-                        .addFreshEntity(new ItemEntity(this.level(), this.position().x(), this.position().y(),
-                                                       this.position().z(), ammo));
+                level.addFreshEntity(
+                        new ItemEntity(this.level(), this.position().x(), this.position().y(), this.position().z(),
+                                       ammo));
             }
 
-            this.kill();
+            this.kill(level);
         }
     }
 
@@ -83,8 +83,8 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
         return new DamageSource(this
                                         .level()
                                         .registryAccess()
-                                        .registryOrThrow(Registries.DAMAGE_TYPE)
-                                        .getHolderOrThrow(CombatSetup.COIN_DAMAGE), this, this.getOwner());
+                                        .lookupOrThrow(Registries.DAMAGE_TYPE)
+                                        .getOrThrow(CombatSetup.COIN_DAMAGE), this, this.getOwner());
     }
 
     public ItemStack getItem() {

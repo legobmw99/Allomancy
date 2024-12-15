@@ -21,7 +21,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -83,7 +84,7 @@ public class MetalSelectScreen extends Screen {
 
         RenderSystem.disableCull();
         RenderSystem.enableBlend();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(CoreShaders.POSITION_COLOR);
 
 
         for (int seg = 0; seg < segments; seg++) {
@@ -156,9 +157,10 @@ public class MetalSelectScreen extends Screen {
             double mod = 0.8;
             int xdp = (int) ((xp - x) * mod + x);
             int ydp = (int) ((yp - y) * mod + y);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShader(CoreShaders.POSITION_TEX);
             RenderSystem.setShaderTexture(0, METAL_ICONS[toMetalIndex(seg)]);
-            guiGraphics.blit(METAL_ICONS[toMetalIndex(seg)], xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
+            guiGraphics.blit(RenderType::guiTexturedOverlay, METAL_ICONS[toMetalIndex(seg)], xdp - 8, ydp - 8, 0, 0,
+                             16, 16, 16, 16);
 
         }
 

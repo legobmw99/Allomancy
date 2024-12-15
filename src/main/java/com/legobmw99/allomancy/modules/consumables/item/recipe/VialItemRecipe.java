@@ -106,22 +106,13 @@ public class VialItemRecipe extends CustomRecipe {
     }
 
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
 
     @Nonnull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return ConsumeSetup.VIAL_RECIPE_SERIALIZER.get();
     }
 
 
-    public static class Serializer extends SimpleCraftingRecipeSerializer<VialItemRecipe> {
 
-        public Serializer() {
-            super(VialItemRecipe::new);
-        }
-    }
 }

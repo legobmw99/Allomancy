@@ -22,10 +22,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.BellBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
@@ -51,21 +52,23 @@ public final class ExtrasSetup {
                     // Provide the queried type. Here, we want to look up `IItemHandler` instances.
                     IAllomanticallyUsable.class);
 
+
+    private static final BlockBehaviour.Properties IRON_REDSTONE_PROPS =
+            Block.Properties.of().noCollission().strength(1.0F);
+
     public static final DeferredBlock<IronButtonBlock> IRON_BUTTON =
-            BLOCKS.register("iron_button", () -> new IronButtonBlock(true));
+            BLOCKS.registerBlock("iron_button", (props) -> new IronButtonBlock(true, props), IRON_REDSTONE_PROPS);
+    public static final DeferredItem<BlockItem> IRON_BUTTON_ITEM = ITEMS.registerSimpleBlockItem(IRON_BUTTON);
 
-    public static final DeferredItem<Item> IRON_BUTTON_ITEM =
-            ITEMS.register("iron_button", () -> new BlockItem(IRON_BUTTON.get(), new Item.Properties()));
     public static final DeferredBlock<IronButtonBlock> INVERTED_IRON_BUTTON =
-            BLOCKS.register("inverted_iron_button", () -> new IronButtonBlock(false));
+            BLOCKS.registerBlock("inverted_iron_button", (props) -> new IronButtonBlock(false, props),
+                                 IRON_REDSTONE_PROPS);
+    public static final DeferredItem<BlockItem> INVERTED_IRON_BUTTON_ITEM =
+            ITEMS.registerSimpleBlockItem(INVERTED_IRON_BUTTON);
 
-    public static final DeferredItem<Item> INVERTED_IRON_BUTTON_ITEM = ITEMS.register("inverted_iron_button",
-                                                                                      () -> new BlockItem(
-                                                                                              INVERTED_IRON_BUTTON.get(),
-                                                                                              new Item.Properties()));
-    public static final DeferredBlock<IronLeverBlock> IRON_LEVER = BLOCKS.register("iron_lever", IronLeverBlock::new);
-    public static final DeferredItem<Item> IRON_LEVER_ITEM =
-            ITEMS.register("iron_lever", () -> new BlockItem(IRON_LEVER.get(), new Item.Properties()));
+    public static final DeferredBlock<IronLeverBlock> IRON_LEVER =
+            BLOCKS.registerBlock("iron_lever", IronLeverBlock::new, IRON_REDSTONE_PROPS);
+    public static final DeferredItem<BlockItem> IRON_LEVER_ITEM = ITEMS.registerSimpleBlockItem(IRON_LEVER);
 
     public static final List<ResourceKey<BannerPattern>> PATTERNS = new ArrayList<>();
     public static final List<TagKey<BannerPattern>> PATTERN_KEYS = new ArrayList<>();
@@ -92,9 +95,8 @@ public final class ExtrasSetup {
                                             ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, name));
             PATTERN_KEYS.add(pattern_key);
 
-            var pattern_item = ITEMS.register(name + "_pattern", () -> new BannerPatternItem(pattern_key,
-                                                                                             new Item.Properties().stacksTo(
-                                                                                                     1)));
+            var pattern_item = ITEMS.registerItem(name + "_pattern",
+                                                  (props) -> new BannerPatternItem(pattern_key, props.stacksTo(1)));
             PATTERN_ITEMS.add(pattern_item);
         }
     }
