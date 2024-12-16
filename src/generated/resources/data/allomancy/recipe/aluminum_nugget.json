@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:aluminum_ingot"
-    }
+    "allomancy:aluminum_ingot"
   ],
   "result": {
     "count": 9,

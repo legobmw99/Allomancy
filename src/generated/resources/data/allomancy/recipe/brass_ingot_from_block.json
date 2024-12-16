@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:brass_block"
-    }
+    "allomancy:brass_block"
   ],
   "result": {
     "count": 9,

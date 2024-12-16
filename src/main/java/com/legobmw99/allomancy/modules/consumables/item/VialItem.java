@@ -17,17 +17,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.level.Level;
-
-import java.util.List;
 
 import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STORAGE;
 
 public class VialItem extends Item {
-
-    private static final CustomModelData FILLED_MODEL_DATA =
-            new CustomModelData(List.of(), List.of(true), List.of(), List.of());
 
     public VialItem(Item.Properties props) {
         super(props.stacksTo(32).rarity(Rarity.COMMON));
@@ -89,10 +83,8 @@ public class VialItem extends Item {
     public static void fillVial(ItemStack stack, FlakeStorage storage) {
         stack.set(FLAKE_STORAGE, storage);
         if (storage == null) {
-            stack.set(DataComponents.CUSTOM_MODEL_DATA, null);
             stack.set(DataComponents.RARITY, Rarity.COMMON);
         } else {
-            stack.set(DataComponents.CUSTOM_MODEL_DATA, FILLED_MODEL_DATA);
             stack.set(DataComponents.RARITY, Rarity.UNCOMMON);
         }
 

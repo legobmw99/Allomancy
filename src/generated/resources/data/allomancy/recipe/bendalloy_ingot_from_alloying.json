@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:ingots/cadmium"
-    },
-    {
-      "tag": "c:ingots/cadmium"
-    },
-    {
-      "tag": "c:ingots/lead"
-    }
+    "#c:ingots/cadmium",
+    "#c:ingots/cadmium",
+    "#c:ingots/lead"
   ],
   "result": {
     "count": 3,

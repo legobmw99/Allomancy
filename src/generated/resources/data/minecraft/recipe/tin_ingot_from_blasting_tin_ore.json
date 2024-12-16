@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.6,
+  "group": "tin_ingot",
+  "ingredient": "allomancy:tin_ore",
+  "result": {
+    "count": 1,
+    "id": "allomancy:tin_ingot"
+  }
+}

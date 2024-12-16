@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:brass_nugget"
-    },
-    {
-      "item": "allomancy:brass_nugget"
-    },
-    {
-      "item": "allomancy:brass_nugget"
-    },
-    {
-      "item": "allomancy:brass_nugget"
-    },
-    {
-      "item": "allomancy:brass_nugget"
-    },
-    {
-      "item": "allomancy:brass_nugget"
-    },
-    {
-      "item": "allomancy:brass_nugget"
-    },
-    {
-      "item": "allomancy:brass_nugget"
-    },
-    {
-      "item": "allomancy:brass_nugget"
-    }
+    "allomancy:brass_nugget",
+    "allomancy:brass_nugget",
+    "allomancy:brass_nugget",
+    "allomancy:brass_nugget",
+    "allomancy:brass_nugget",
+    "allomancy:brass_nugget",
+    "allomancy:brass_nugget",
+    "allomancy:brass_nugget",
+    "allomancy:brass_nugget"
   ],
   "result": {
     "count": 1,

@@ -6,6 +6,7 @@ import com.legobmw99.allomancy.modules.combat.item.CoinBagItem;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.combat.item.ObsidianDaggerItem;
 import net.minecraft.Util;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -18,8 +19,8 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -49,6 +50,8 @@ public final class CombatSetup {
     public static final DeferredItem<KolossBladeItem> KOLOSS_BLADE =
             ITEMS.registerItem("koloss_blade", KolossBladeItem::new);
 
+    public static TagKey<Item> REPAIRS_MISTCLOAK =
+            ItemTags.create(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "repairs_wool_armor"));
 
     private static final ArmorMaterial WOOL_ARMOR =
             new ArmorMaterial(5, Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -57,11 +60,13 @@ public final class CombatSetup {
                 map.put(ArmorType.CHESTPLATE, 4);
                 map.put(ArmorType.HELMET, 0);
                 map.put(ArmorType.BODY, 0);
-            }), 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, ItemTags.create(
-                    ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "repairs_wool_armor")), // TODO
-
+            }), 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, REPAIRS_MISTCLOAK,
                               ResourceKey.create(EquipmentAssets.ROOT_ID,
                                                  ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "wool")));
+
+
+    public static TagKey<Item> REPAIRS_ALUMINUM =
+            ItemTags.create(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "repairs_aluminum_armor"));
 
     private static final ArmorMaterial ALUMINUM_ARMOR =
             new ArmorMaterial(15, Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -70,32 +75,40 @@ public final class CombatSetup {
                 map.put(ArmorType.CHESTPLATE, 0);
                 map.put(ArmorType.HELMET, 2);
                 map.put(ArmorType.BODY, 0);
-            }), 1 /* TODO: make sure aluminium is unenchantable */, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F,
-                              ItemTags.create(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID,
-                                                                                    "repairs_aluminum_armor")),
-                              // TODO
+            }), 1, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, REPAIRS_ALUMINUM,
                               ResourceKey.create(EquipmentAssets.ROOT_ID,
                                                  ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "aluminum")));
 
 
-    private static final Item.Properties MISTCLOAK_PROPS =
+    public static final DeferredItem<Item> MISTCLOAK =
 
-            new Item.Properties().attributes(ItemAttributeModifiers
-                                                     .builder()
-                                                     .add(Attributes.MOVEMENT_SPEED, new AttributeModifier(
-                                                                  ResourceLocation.fromNamespaceAndPath(Allomancy.MODID,
-                                                                                                        "mistcloak_speed"),
-                                                                  0.25,
-                                                                  AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
-                                                          EquipmentSlotGroup.CHEST)
-                                                     .build());
+            ITEMS.registerItem("mistcloak", (props) ->
 
-    public static final DeferredItem<ArmorItem> MISTCLOAK =
-            ITEMS.registerItem("mistcloak", (props) -> new ArmorItem(WOOL_ARMOR, ArmorType.CHESTPLATE, props),
-                               MISTCLOAK_PROPS);
+                    new Item(WOOL_ARMOR.humanoidProperties(props, ArmorType.CHESTPLATE)
+                                       // note: overrides normal armor, which is fine
+                                       .attributes(ItemAttributeModifiers
+                                                           .builder()
+                                                           .add(Attributes.MOVEMENT_SPEED, new AttributeModifier(
+                                                                        ResourceLocation.fromNamespaceAndPath(
+                                                                                Allomancy.MODID, "mistcloak_speed")
+                                                                        , 0.25,
+                                                                        AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                                                                EquipmentSlotGroup.CHEST)
+                                                           .build())));
 
-    public static final DeferredItem<ArmorItem> ALUMINUM_HELMET =
-            ITEMS.registerItem("aluminum_helmet", (props) -> new ArmorItem(ALUMINUM_ARMOR, ArmorType.HELMET, props));
+    // TODO smithing one day
+    public static final DeferredItem<Item> ALUMINUM_HELMET =
+
+            ITEMS.registerItem("aluminum_helmet", (props) -> new Item(ALUMINUM_ARMOR
+                                                                              .humanoidProperties(props,
+                                                                                                  ArmorType.HELMET)
+                                                                              .component(DataComponents.ENCHANTABLE,
+                                                                                         null)) {
+                @Override
+                public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+                    return false;
+                }
+            });
 
 
     public static final Supplier<EntityType<ProjectileNuggetEntity>> NUGGET_PROJECTILE =

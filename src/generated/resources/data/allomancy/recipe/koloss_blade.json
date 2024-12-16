@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "C": {
-      "item": "minecraft:cobblestone"
-    },
-    "s": {
-      "item": "minecraft:stick"
-    }
+    "C": "minecraft:cobblestone",
+    "s": "minecraft:stick"
   },
   "pattern": [
     "CC",

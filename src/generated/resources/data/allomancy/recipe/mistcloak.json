@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "W": {
-      "item": "minecraft:gray_wool"
-    }
+    "W": "minecraft:gray_wool"
   },
   "pattern": [
     "W W",

@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:silver_nugget"
-    },
-    {
-      "item": "allomancy:silver_nugget"
-    },
-    {
-      "item": "allomancy:silver_nugget"
-    },
-    {
-      "item": "allomancy:silver_nugget"
-    },
-    {
-      "item": "allomancy:silver_nugget"
-    },
-    {
-      "item": "allomancy:silver_nugget"
-    },
-    {
-      "item": "allomancy:silver_nugget"
-    },
-    {
-      "item": "allomancy:silver_nugget"
-    },
-    {
-      "item": "allomancy:silver_nugget"
-    }
+    "allomancy:silver_nugget",
+    "allomancy:silver_nugget",
+    "allomancy:silver_nugget",
+    "allomancy:silver_nugget",
+    "allomancy:silver_nugget",
+    "allomancy:silver_nugget",
+    "allomancy:silver_nugget",
+    "allomancy:silver_nugget",
+    "allomancy:silver_nugget"
   ],
   "result": {
     "count": 1,

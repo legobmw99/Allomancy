@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:paper"
-    },
-    {
-      "item": "allomancy:electrum_flakes"
-    }
+    "minecraft:paper",
+    "allomancy:electrum_flakes"
   ],
   "result": {
     "count": 1,

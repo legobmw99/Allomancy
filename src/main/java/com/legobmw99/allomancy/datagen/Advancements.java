@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
+import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.extras.advancement.AllomanticallyActivatedBlockTrigger;
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnEntityTrigger;
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnPlayerTrigger;
@@ -74,8 +75,9 @@ class Advancements implements AdvancementProvider.AdvancementGenerator {
                 .save(saver, "allomancy:main/become_mistborn");
 
         ItemStack vial = new ItemStack(ConsumeSetup.VIAL.get());
-        vial.set(DataComponents.CUSTOM_MODEL_DATA,
-                 new CustomModelData(List.of(), List.of(true), List.of(), List.of()));
+        var storage = new FlakeStorage.Mutable();
+        storage.add(Metal.GOLD);
+        vial.set(ConsumeSetup.FLAKE_STORAGE.get(), storage.toImmutable());
 
         var allMetals = Advancement.Builder
                 .advancement()

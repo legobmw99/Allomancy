@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "O": {
-      "tag": "c:obsidians"
-    },
-    "s": {
-      "item": "minecraft:stick"
-    }
+    "O": "#c:obsidians",
+    "s": "minecraft:stick"
   },
   "pattern": [
     "  O",

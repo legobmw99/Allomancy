@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:electrum_block"
-    }
+    "allomancy:electrum_block"
   ],
   "result": {
     "count": 9,

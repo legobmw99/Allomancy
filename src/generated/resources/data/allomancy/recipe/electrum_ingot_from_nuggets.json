@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:electrum_nugget"
-    },
-    {
-      "item": "allomancy:electrum_nugget"
-    },
-    {
-      "item": "allomancy:electrum_nugget"
-    },
-    {
-      "item": "allomancy:electrum_nugget"
-    },
-    {
-      "item": "allomancy:electrum_nugget"
-    },
-    {
-      "item": "allomancy:electrum_nugget"
-    },
-    {
-      "item": "allomancy:electrum_nugget"
-    },
-    {
-      "item": "allomancy:electrum_nugget"
-    },
-    {
-      "item": "allomancy:electrum_nugget"
-    }
+    "allomancy:electrum_nugget",
+    "allomancy:electrum_nugget",
+    "allomancy:electrum_nugget",
+    "allomancy:electrum_nugget",
+    "allomancy:electrum_nugget",
+    "allomancy:electrum_nugget",
+    "allomancy:electrum_nugget",
+    "allomancy:electrum_nugget",
+    "allomancy:electrum_nugget"
   ],
   "result": {
     "count": 1,

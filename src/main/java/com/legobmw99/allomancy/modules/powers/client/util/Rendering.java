@@ -40,7 +40,6 @@ public final class Rendering {
 
     public static void doneDrawingLines(PoseStack stack) {
         stack.popPose();
-//        RenderSystem.applyModelViewMatrix(); // TODO?
 
         RenderSystem.disableBlend();
         RenderSystem.enablePolygonOffset();
@@ -62,7 +61,6 @@ public final class Rendering {
         start.pushPose();
         Vec3 view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         start.translate(-view.x, -view.y, -view.z);
-        //        RenderSystem.applyModelViewMatrix(); // TODO?
         return start;
     }
 }

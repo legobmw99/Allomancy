@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:nicrosil_nugget"
-    },
-    {
-      "item": "allomancy:nicrosil_nugget"
-    },
-    {
-      "item": "allomancy:nicrosil_nugget"
-    },
-    {
-      "item": "allomancy:nicrosil_nugget"
-    },
-    {
-      "item": "allomancy:nicrosil_nugget"
-    },
-    {
-      "item": "allomancy:nicrosil_nugget"
-    },
-    {
-      "item": "allomancy:nicrosil_nugget"
-    },
-    {
-      "item": "allomancy:nicrosil_nugget"
-    },
-    {
-      "item": "allomancy:nicrosil_nugget"
-    }
+    "allomancy:nicrosil_nugget",
+    "allomancy:nicrosil_nugget",
+    "allomancy:nicrosil_nugget",
+    "allomancy:nicrosil_nugget",
+    "allomancy:nicrosil_nugget",
+    "allomancy:nicrosil_nugget",
+    "allomancy:nicrosil_nugget",
+    "allomancy:nicrosil_nugget",
+    "allomancy:nicrosil_nugget"
   ],
   "result": {
     "count": 1,

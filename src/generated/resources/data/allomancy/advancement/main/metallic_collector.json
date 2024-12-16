@@ -189,7 +189,9 @@
     "frame": "challenge",
     "icon": {
       "components": {
-        "minecraft:custom_model_data": 1
+        "allomancy:flake_storage": [
+          "gold"
+        ]
       },
       "count": 1,
       "id": "allomancy:vial"

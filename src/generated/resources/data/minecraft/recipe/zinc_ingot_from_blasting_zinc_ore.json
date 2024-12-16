@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.6,
+  "group": "zinc_ingot",
+  "ingredient": "allomancy:zinc_ore",
+  "result": {
+    "count": 1,
+    "id": "allomancy:zinc_ingot"
+  }
+}

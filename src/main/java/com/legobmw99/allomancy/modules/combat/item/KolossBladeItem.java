@@ -20,7 +20,7 @@ import java.util.List;
 
 public class KolossBladeItem extends SwordItem {
 
-    private static final int ATTACK_DAMAGE = 9;
+    private static final int ATTACK_DAMAGE = 17;
     private static final float ATTACK_SPEED = -2.6F;
 
     private static final ToolMaterial SLOW_STONE =

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:lead_ingot"
-    }
+    "allomancy:lead_ingot"
   ],
   "result": {
     "count": 9,

@@ -46,7 +46,8 @@ public final class MetalOverlay implements LayeredDraw.Layer {
                              float vOffset,
                              int uWidth,
                              int vHeight) {
-        graphics.blit(RenderType::guiTextured, meterLoc, x, y, uOffset, vOffset, uWidth, vHeight, 128, 128, 0);
+        graphics.blit(RenderType::guiTexturedOverlay, meterLoc, x, y, uOffset, vOffset, uWidth, vHeight, 128, 128,
+                      128, 128);
     }
 
     @Override

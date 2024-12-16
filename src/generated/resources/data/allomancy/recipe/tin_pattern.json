@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:paper"
-    },
-    {
-      "item": "allomancy:tin_flakes"
-    }
+    "minecraft:paper",
+    "allomancy:tin_flakes"
   ],
   "result": {
     "count": 1,

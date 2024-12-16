@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:nether_star"
-    },
-    {
-      "tag": "c:storage_blocks/gold"
-    }
+    "minecraft:nether_star",
+    "#c:storage_blocks/gold"
   ],
   "result": {
     "count": 1,

@@ -75,17 +75,11 @@ class ItemModels extends ItemModelProvider {
         }
 
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial (filled)");
-        var mf = getBuilder("vial_filled")
+        getBuilder("vial_filled")
                 .parent(getExistingFile(mcLoc("item/generated")))
                 .texture("layer0", modLoc("item/full_vial"));
         Allomancy.LOGGER.debug("Creating Item Model for allomancy:vial");
-        getBuilder("vial")
-                .parent(getExistingFile(mcLoc("item/generated")))
-                .texture("layer0", modLoc("item/vial"))
-                .override()
-                .predicate(mcLoc("custom_model_data"), 1)
-                .model(mf)
-                .end();
+        getBuilder("vial").parent(getExistingFile(mcLoc("item/generated"))).texture("layer0", modLoc("item/vial"));
 
     }
 

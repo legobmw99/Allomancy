@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:paper"
-    },
-    {
-      "item": "allomancy:nicrosil_flakes"
-    }
+    "minecraft:paper",
+    "allomancy:nicrosil_flakes"
   ],
   "result": {
     "count": 1,

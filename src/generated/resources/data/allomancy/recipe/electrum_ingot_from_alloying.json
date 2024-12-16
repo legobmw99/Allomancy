@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:ingots/silver"
-    },
-    {
-      "item": "minecraft:gold_ingot"
-    }
+    "#c:ingots/silver",
+    "minecraft:gold_ingot"
   ],
   "result": {
     "count": 2,

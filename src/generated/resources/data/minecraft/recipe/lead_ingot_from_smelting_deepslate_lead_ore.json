@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.4,
+  "group": "lead_ingot",
+  "ingredient": "allomancy:deepslate_lead_ore",
+  "result": {
+    "count": 1,
+    "id": "allomancy:lead_ingot"
+  }
+}
