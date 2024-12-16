@@ -64,7 +64,7 @@ public class Tracking {
 
             // Add metal blobs to metal list
             if (this.blobFuture == null || this.blobFuture.isDone()) {
-                // TODO cache chunks? https://github.com/TelepathicGrunt/Bumblezone/blob/c8ca66e62e102d512393bec7186e3764e13434bf/common/src/main/java/com/telepathicgrunt/the_bumblezone/items/essence/LifeEssence.java#L150-L192
+                // future: cache chunks? https://github.com/TelepathicGrunt/Bumblezone/blob/c8ca66e62e102d512393bec7186e3764e13434bf/common/src/main/java/com/telepathicgrunt/the_bumblezone/items/essence/LifeEssence.java#L150-L192
                 this.blobFuture = Util.backgroundExecutor().service().submit(() -> {
                     this.seen.clear();
                     BlockPos

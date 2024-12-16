@@ -47,7 +47,7 @@ public final class Emotional {
                 //Add new goals
                 target.setTarget(allomancer);
                 target.setLastHurtByMob(allomancer);
-                // TODO: try to use PrioritizedGoal::startExecuting for already hostiles
+                // future: try to use PrioritizedGoal::startExecuting for already hostiles
                 target.targetSelector.addGoal(1, new AIAttackOnCollideExtended(target, 1.0d, false));
                 target.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(target, Player.class, false));
                 target.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(target, target.getClass(), false));

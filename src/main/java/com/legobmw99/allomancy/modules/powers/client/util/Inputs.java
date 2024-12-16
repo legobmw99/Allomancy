@@ -82,15 +82,18 @@ public final class Inputs {
     }
 
     public static void fakeMovement(ClientInput input) {
+        // TODO not working
         Options options = Minecraft.getInstance().options;
         LocalPlayer player = Minecraft.getInstance().player;
         var window = Minecraft.getInstance().getWindow().getWindow();
+
+        input.tick();
         // from KeyboardInput#tick
-        input.keyPresses = new Input(options.keyUp.isDown(), options.keyDown.isDown(), options.keyLeft.isDown(),
-                                     options.keyRight.isDown(), options.keyJump.isDown(), options.keyShift.isDown(),
-                                     options.keySprint.isDown());
-        input.forwardImpulse = calculateImpulse(input.keyPresses.forward(), input.keyPresses.backward());
-        input.leftImpulse = calculateImpulse(input.keyPresses.left(), input.keyPresses.right());
+//        input.keyPresses = new Input(options.keyUp.isDown(), options.keyDown.isDown(), options.keyLeft.isDown(),
+//                                     options.keyRight.isDown(), options.keyJump.isDown(), options.keyShift.isDown(),
+//                                     options.keySprint.isDown());
+//        input.forwardImpulse = calculateImpulse(input.keyPresses.forward(), input.keyPresses.backward());
+//        input.leftImpulse = calculateImpulse(input.keyPresses.left(), input.keyPresses.right());
 
         // from LocalPlayer#aiStep
         if (!player.isSprinting() && (!(player.isInWater() || player.isInFluidType(

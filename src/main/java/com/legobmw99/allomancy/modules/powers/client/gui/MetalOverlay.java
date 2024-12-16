@@ -35,7 +35,7 @@ public final class MetalOverlay implements LayeredDraw.Layer {
     private MetalOverlay() {}
 
     public static void registerGUI(final RegisterGuiLayersEvent evt) {
-        evt.registerBelowAll(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "metal_display"),
+        evt.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "metal_display"),
                              new MetalOverlay());
     }
 
@@ -46,8 +46,8 @@ public final class MetalOverlay implements LayeredDraw.Layer {
                              float vOffset,
                              int uWidth,
                              int vHeight) {
-        graphics.blit(RenderType::guiTexturedOverlay, meterLoc, x, y, uOffset, vOffset, uWidth, vHeight, 128, 128,
-                      128, 128);
+        graphics.blit(RenderType::guiTexturedOverlay, meterLoc, x, y, uOffset, vOffset, uWidth, vHeight, uWidth,
+                      vHeight, 128, 128);
     }
 
     @Override

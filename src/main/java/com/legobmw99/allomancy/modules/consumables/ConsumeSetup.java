@@ -55,7 +55,6 @@ public final class ConsumeSetup {
         storage.add(Metal.GOLD);
         FlakeStorage gold = storage.toImmutable();
 
-        // TODO hide tooltip on these?
         event.modify(Items.GOLDEN_APPLE, builder -> builder.set(FLAKE_STORAGE.get(), gold));
         event.modify(Items.GOLDEN_CARROT, builder -> builder.set(FLAKE_STORAGE.get(), gold));
         event.modify(Items.ENCHANTED_GOLDEN_APPLE, builder -> builder.set(FLAKE_STORAGE.get(), gold));
