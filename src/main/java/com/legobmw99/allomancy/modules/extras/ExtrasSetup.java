@@ -95,7 +95,6 @@ public final class ExtrasSetup {
                                             ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, name));
             PATTERN_KEYS.add(pattern_key);
 
-            // TODO make new textures
             var pattern_item = ITEMS.registerItem(name + "_pattern",
                                                   (props) -> new BannerPatternItem(pattern_key, props.stacksTo(1)));
             PATTERN_ITEMS.add(pattern_item);

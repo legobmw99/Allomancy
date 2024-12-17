@@ -83,6 +83,7 @@ public final class Inputs {
 
     public static void fakeMovement(ClientInput input) {
         // TODO not working
+        // See similar code in https://github.com/gigaherz/ToolBelt/blob/master/src/main/java/dev/gigaherz/toolbelt/client/ToolBeltClient.java#L186
         Options options = Minecraft.getInstance().options;
         LocalPlayer player = Minecraft.getInstance().player;
         var window = Minecraft.getInstance().getWindow().getWindow();

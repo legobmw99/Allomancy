@@ -96,7 +96,6 @@ public final class CombatSetup {
                                                                 EquipmentSlotGroup.CHEST)
                                                            .build())));
 
-    // TODO smithing one day
     public static final DeferredItem<Item> ALUMINUM_HELMET =
 
             ITEMS.registerItem("aluminum_helmet", (props) -> new Item(ALUMINUM_ARMOR

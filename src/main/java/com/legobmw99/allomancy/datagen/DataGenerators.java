@@ -52,5 +52,7 @@ public class DataGenerators {
 
         event.addProvider(new EquipmentAssets(packOutput));
         // TODO client item models. None are interesting except Vial is conditional on having the component
+        // can also support smithing for aluminum hats
+        // waiting on https://github.com/neoforged/NeoForge/pull/1725
     }
 }

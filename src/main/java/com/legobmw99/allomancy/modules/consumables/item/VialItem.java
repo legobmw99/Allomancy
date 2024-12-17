@@ -10,21 +10,34 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
 import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STORAGE;
 
 public class VialItem extends Item {
+    private static final FoodProperties vial_food =
+            new FoodProperties.Builder().alwaysEdible().saturationModifier(0).nutrition(0).build();
+
+    private static final Consumable vial_consumable = Consumable
+            .builder()
+            .consumeSeconds(0.3f)
+            .animation(ItemUseAnimation.DRINK)
+            .sound(SoundEvents.GENERIC_DRINK)
+            .hasConsumeParticles(false)
+            .build();
 
     public VialItem(Item.Properties props) {
-        super(props.stacksTo(32).rarity(Rarity.COMMON));
+        super(props.stacksTo(32).food(vial_food, vial_consumable).rarity(Rarity.COMMON));
     }
 
 
@@ -45,12 +58,6 @@ public class VialItem extends Item {
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity livingEntity) {
         return 6;
-    }
-
-
-    @Override
-    public ItemUseAnimation getUseAnimation(ItemStack stack) {
-        return ItemUseAnimation.DRINK;
     }
 
 
