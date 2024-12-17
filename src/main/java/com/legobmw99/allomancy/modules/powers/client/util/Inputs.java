@@ -13,7 +13,6 @@ import net.minecraft.client.player.ClientInput;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.AABB;
@@ -90,11 +89,13 @@ public final class Inputs {
 
         input.tick();
         // from KeyboardInput#tick
-//        input.keyPresses = new Input(options.keyUp.isDown(), options.keyDown.isDown(), options.keyLeft.isDown(),
-//                                     options.keyRight.isDown(), options.keyJump.isDown(), options.keyShift.isDown(),
-//                                     options.keySprint.isDown());
-//        input.forwardImpulse = calculateImpulse(input.keyPresses.forward(), input.keyPresses.backward());
-//        input.leftImpulse = calculateImpulse(input.keyPresses.left(), input.keyPresses.right());
+        //        input.keyPresses = new Input(options.keyUp.isDown(), options.keyDown.isDown(), options.keyLeft
+        //        .isDown(),
+        //                                     options.keyRight.isDown(), options.keyJump.isDown(), options
+        //                                     .keyShift.isDown(),
+        //                                     options.keySprint.isDown());
+        //        input.forwardImpulse = calculateImpulse(input.keyPresses.forward(), input.keyPresses.backward());
+        //        input.leftImpulse = calculateImpulse(input.keyPresses.left(), input.keyPresses.right());
 
         // from LocalPlayer#aiStep
         if (!player.isSprinting() && (!(player.isInWater() || player.isInFluidType(

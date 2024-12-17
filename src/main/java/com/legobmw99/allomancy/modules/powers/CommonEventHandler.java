@@ -3,7 +3,6 @@ package com.legobmw99.allomancy.modules.powers;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
-import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
@@ -26,13 +25,11 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerSetSpawnEvent;
@@ -40,8 +37,6 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 import java.io.File;
 import java.util.Arrays;
-
-import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STORAGE;
 
 public final class CommonEventHandler {
 
@@ -217,27 +212,6 @@ public final class CommonEventHandler {
                 // Note that they took damage, will come in to play if they stop burning
                 data.setDamageStored(data.getDamageStored() + 2);
                 Network.syncAllomancerData(player);
-            }
-        }
-    }
-
-
-    @SubscribeEvent
-    public static void onPlayerFinishUsingItem(final LivingEntityUseItemEvent.Finish event) {
-        FlakeStorage storage = event.getItem().get(FLAKE_STORAGE);
-
-        if (storage == null || !event.getEntity().hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
-            return;
-        }
-        var data = event.getEntity().getData(AllomancerAttachment.ALLOMANCY_DATA);
-        if (event.getItem().getItem() == Items.ENCHANTED_GOLDEN_APPLE && storage.contains(Metal.GOLD)) {
-            for (int i = 0; i < AllomancerData.MAX_STORAGE; i++) {
-                data.incrementStored(Metal.GOLD);
-            }
-        }
-        for (Metal mt : Metal.values()) {
-            if (storage.contains(mt)) {
-                data.incrementStored(mt);
             }
         }
     }

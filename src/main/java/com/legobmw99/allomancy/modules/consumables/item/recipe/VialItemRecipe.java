@@ -106,13 +106,11 @@ public class VialItemRecipe extends CustomRecipe {
     }
 
 
-
     @Nonnull
     @Override
     public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return ConsumeSetup.VIAL_RECIPE_SERIALIZER.get();
     }
-
 
 
 }

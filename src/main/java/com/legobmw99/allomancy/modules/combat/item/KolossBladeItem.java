@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -12,7 +12,11 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -28,7 +32,11 @@ public class KolossBladeItem extends SwordItem {
                              ItemTags.STONE_TOOL_MATERIALS);
 
     public KolossBladeItem(Item.Properties props) {
-        super(SLOW_STONE.applySwordProperties(props, ATTACK_DAMAGE, ATTACK_SPEED));
+        super(SLOW_STONE
+                      .applySwordProperties(props, ATTACK_DAMAGE, ATTACK_SPEED)
+                      .component(DataComponents.LORE, new ItemLore(
+                              List.of(ItemDisplay.addColorToText("item.allomancy.koloss_blade.lore",
+                                                                 ChatFormatting.GRAY)))));
     }
 
     @Override
@@ -51,16 +59,6 @@ public class KolossBladeItem extends SwordItem {
     public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
         return (attacker instanceof Player) &&
                (attacker.getData(AllomancerAttachment.ALLOMANCY_DATA).isBurning(Metal.PEWTER));
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack,
-                                Item.TooltipContext ctx,
-                                List<Component> tooltip,
-                                TooltipFlag flagIn) {
-        super.appendHoverText(stack, ctx, tooltip, flagIn);
-        Component lore = ItemDisplay.addColorToText("item.allomancy.koloss_blade.lore", ChatFormatting.GRAY);
-        tooltip.add(lore);
     }
 
     @Override

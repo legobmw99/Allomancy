@@ -88,6 +88,10 @@ class ItemTags extends ItemTagsProvider {
         tag(ObsidianDaggerItem.OBSIDIAN_REPAIR).add(Items.OBSIDIAN).add(Items.CRYING_OBSIDIAN);
         tag(CombatSetup.REPAIRS_ALUMINUM).addTag(
                 net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/aluminum")));
+
+        tag(net.minecraft.tags.ItemTags.GAZE_DISGUISE_EQUIPMENT)
+                .replace(false)
+                .add(CombatSetup.ALUMINUM_HELMET.get());
     }
 
     @SafeVarargs

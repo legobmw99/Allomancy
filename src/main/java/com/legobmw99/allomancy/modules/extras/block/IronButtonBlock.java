@@ -2,18 +2,12 @@ package com.legobmw99.allomancy.modules.extras.block;
 
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsable;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.util.ItemDisplay;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -27,7 +21,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.IBlockCapabilityProvider;
 
-import java.util.List;
 import java.util.function.BiConsumer;
 
 public class IronButtonBlock extends ButtonBlock {
@@ -68,17 +61,6 @@ public class IronButtonBlock extends ButtonBlock {
             return super.getShape(pState.cycle(POWERED), pLevel, pPos, pContext);
         }
         return super.getShape(pState, pLevel, pPos, pContext);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack,
-                                Item.TooltipContext ctx,
-                                List<Component> tooltip,
-                                TooltipFlag flagIn) {
-        super.appendHoverText(stack, ctx, tooltip, flagIn);
-        MutableComponent lore =
-                ItemDisplay.addColorToText("block.allomancy.iron_activation.lore", ChatFormatting.GRAY);
-        tooltip.add(lore);
     }
 
 

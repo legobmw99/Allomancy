@@ -10,10 +10,13 @@ import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
 import com.legobmw99.allomancy.modules.extras.command.AllomancyPowerCommand;
 import com.legobmw99.allomancy.modules.extras.command.AllomancyPowerType;
+import com.legobmw99.allomancy.util.ItemDisplay;
+import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -22,6 +25,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.block.BellBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -56,19 +61,26 @@ public final class ExtrasSetup {
     private static final BlockBehaviour.Properties IRON_REDSTONE_PROPS =
             Block.Properties.of().noCollission().strength(1.0F);
 
+    private static final Item.Properties IRON_REDSTONE_LORE = new Item.Properties().component(DataComponents.LORE,
+                                                                                              new ItemLore(
+                                                                                                      List.of(ItemDisplay.addColorToText(
+                                                                                                              "block.allomancy.iron_activation.lore",
+                                                                                                              ChatFormatting.GRAY))));
     public static final DeferredBlock<IronButtonBlock> IRON_BUTTON =
             BLOCKS.registerBlock("iron_button", (props) -> new IronButtonBlock(true, props), IRON_REDSTONE_PROPS);
-    public static final DeferredItem<BlockItem> IRON_BUTTON_ITEM = ITEMS.registerSimpleBlockItem(IRON_BUTTON);
+    public static final DeferredItem<BlockItem> IRON_BUTTON_ITEM =
+            ITEMS.registerSimpleBlockItem(IRON_BUTTON, IRON_REDSTONE_LORE);
 
     public static final DeferredBlock<IronButtonBlock> INVERTED_IRON_BUTTON =
             BLOCKS.registerBlock("inverted_iron_button", (props) -> new IronButtonBlock(false, props),
                                  IRON_REDSTONE_PROPS);
     public static final DeferredItem<BlockItem> INVERTED_IRON_BUTTON_ITEM =
-            ITEMS.registerSimpleBlockItem(INVERTED_IRON_BUTTON);
+            ITEMS.registerSimpleBlockItem(INVERTED_IRON_BUTTON, IRON_REDSTONE_LORE);
 
     public static final DeferredBlock<IronLeverBlock> IRON_LEVER =
             BLOCKS.registerBlock("iron_lever", IronLeverBlock::new, IRON_REDSTONE_PROPS);
-    public static final DeferredItem<BlockItem> IRON_LEVER_ITEM = ITEMS.registerSimpleBlockItem(IRON_LEVER);
+    public static final DeferredItem<BlockItem> IRON_LEVER_ITEM =
+            ITEMS.registerSimpleBlockItem(IRON_LEVER, IRON_REDSTONE_LORE);
 
     public static final List<ResourceKey<BannerPattern>> PATTERNS = new ArrayList<>();
     public static final List<TagKey<BannerPattern>> PATTERN_KEYS = new ArrayList<>();

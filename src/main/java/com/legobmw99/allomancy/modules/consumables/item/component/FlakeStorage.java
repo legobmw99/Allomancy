@@ -1,6 +1,8 @@
 package com.legobmw99.allomancy.modules.consumables.item.component;
 
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
@@ -8,14 +10,22 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.ConsumableListener;
 import net.minecraft.world.item.component.TooltipProvider;
+import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 import java.util.function.Consumer;
 
-public final class FlakeStorage implements TooltipProvider {
+import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STORAGE;
+
+public final class FlakeStorage implements TooltipProvider, ConsumableListener {
 
     private final EnumSet<Metal> flakes;
 
@@ -103,6 +113,26 @@ public final class FlakeStorage implements TooltipProvider {
                     tooltip.accept(
                             ItemDisplay.addColorToText("allomancy.flake_storage.lore_inst", ChatFormatting.GRAY));
                 }
+            }
+        }
+    }
+
+    @Override
+    public void onConsume(Level level, LivingEntity entity, ItemStack stack, Consumable consumable) {
+        FlakeStorage storage = stack.get(FLAKE_STORAGE);
+
+        if (storage == null || !entity.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
+            return;
+        }
+        var data = entity.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        if (stack.getItem() == Items.ENCHANTED_GOLDEN_APPLE && storage.contains(Metal.GOLD)) {
+            for (int i = 0; i < AllomancerData.MAX_STORAGE; i++) {
+                data.incrementStored(Metal.GOLD);
+            }
+        }
+        for (Metal mt : Metal.values()) {
+            if (storage.contains(mt)) {
+                data.incrementStored(mt);
             }
         }
     }
