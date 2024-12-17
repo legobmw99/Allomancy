@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:tin_flakes"
-    },
-    {
-      "item": "allomancy:tin_flakes"
-    },
-    {
-      "item": "allomancy:lead_flakes"
-    }
+    "allomancy:tin_flakes",
+    "allomancy:tin_flakes",
+    "allomancy:lead_flakes"
   ],
   "result": {
     "count": 3,

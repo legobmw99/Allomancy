@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.modules.powers.client.util;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
@@ -39,7 +39,6 @@ public final class Rendering {
 
     public static void doneDrawingLines(PoseStack stack) {
         stack.popPose();
-        RenderSystem.applyModelViewMatrix();
 
         RenderSystem.disableBlend();
         RenderSystem.enablePolygonOffset();
@@ -50,7 +49,7 @@ public final class Rendering {
     }
 
     public static PoseStack prepareToDrawLines(PoseStack start) {
-        RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
+        RenderSystem.setShader(CoreShaders.RENDERTYPE_LINES);
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.disableCull();
@@ -61,7 +60,6 @@ public final class Rendering {
         start.pushPose();
         Vec3 view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         start.translate(-view.x, -view.y, -view.z);
-        RenderSystem.applyModelViewMatrix();
         return start;
     }
 }

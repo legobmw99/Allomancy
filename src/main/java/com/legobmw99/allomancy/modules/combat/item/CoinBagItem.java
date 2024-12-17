@@ -4,11 +4,11 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.util.Physical;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -27,8 +27,8 @@ public class CoinBagItem extends ProjectileWeaponItem {
                BuiltInRegistries.ITEM.getKey(item).getPath().contains("nugget");
     };
 
-    public CoinBagItem() {
-        super(new Item.Properties().stacksTo(1));
+    public CoinBagItem(Item.Properties props) {
+        super(props.stacksTo(1).component(DataComponents.ENCHANTABLE, null));
     }
 
     private static Ammo getAmmoFromItem(Item itemIn) {
@@ -45,7 +45,7 @@ public class CoinBagItem extends ProjectileWeaponItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
         ItemStack weapon = player.getItemInHand(hand);
         ItemStack ammo = player.getProjectile(weapon);
         if (ammo.getItem() instanceof ArrowItem) { // the above get function has silly default behavior
@@ -63,13 +63,13 @@ public class CoinBagItem extends ProjectileWeaponItem {
                     ammo.shrink(1);
                 }
 
-                return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
+                return InteractionResult.SUCCESS;
 
             }
 
 
         }
-        return new InteractionResultHolder<>(InteractionResult.FAIL, player.getItemInHand(hand));
+        return InteractionResult.FAIL;
 
     }
 
@@ -87,10 +87,6 @@ public class CoinBagItem extends ProjectileWeaponItem {
         return new ProjectileNuggetEntity(pShooter, pLevel, pAmmo, dmg);
     }
 
-    @Override
-    public int getEnchantmentValue() {
-        return 0;
-    }
 
     @Override
     public int getDefaultProjectileRange() {

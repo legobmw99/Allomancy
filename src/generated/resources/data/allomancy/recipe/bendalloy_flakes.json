@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:allomantic_grinder"
-    },
-    {
-      "tag": "c:ingots/bendalloy"
-    }
+    "allomancy:allomantic_grinder",
+    "#c:ingots/bendalloy"
   ],
   "result": {
     "count": 2,

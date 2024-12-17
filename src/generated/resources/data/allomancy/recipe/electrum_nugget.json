@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:electrum_ingot"
-    }
+    "allomancy:electrum_ingot"
   ],
   "result": {
     "count": 9,

@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:steel_nugget"
-    },
-    {
-      "item": "allomancy:steel_nugget"
-    },
-    {
-      "item": "allomancy:steel_nugget"
-    },
-    {
-      "item": "allomancy:steel_nugget"
-    },
-    {
-      "item": "allomancy:steel_nugget"
-    },
-    {
-      "item": "allomancy:steel_nugget"
-    },
-    {
-      "item": "allomancy:steel_nugget"
-    },
-    {
-      "item": "allomancy:steel_nugget"
-    },
-    {
-      "item": "allomancy:steel_nugget"
-    }
+    "allomancy:steel_nugget",
+    "allomancy:steel_nugget",
+    "allomancy:steel_nugget",
+    "allomancy:steel_nugget",
+    "allomancy:steel_nugget",
+    "allomancy:steel_nugget",
+    "allomancy:steel_nugget",
+    "allomancy:steel_nugget",
+    "allomancy:steel_nugget"
   ],
   "result": {
     "count": 1,

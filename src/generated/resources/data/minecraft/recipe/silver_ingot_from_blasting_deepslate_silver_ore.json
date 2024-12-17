@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 1.0,
+  "group": "silver_ingot",
+  "ingredient": "allomancy:deepslate_silver_ore",
+  "result": {
+    "count": 1,
+    "id": "allomancy:silver_ingot"
+  }
+}

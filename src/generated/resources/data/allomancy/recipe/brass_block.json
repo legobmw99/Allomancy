@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "allomancy:brass_ingot"
-    },
-    {
-      "item": "allomancy:brass_ingot"
-    },
-    {
-      "item": "allomancy:brass_ingot"
-    },
-    {
-      "item": "allomancy:brass_ingot"
-    },
-    {
-      "item": "allomancy:brass_ingot"
-    },
-    {
-      "item": "allomancy:brass_ingot"
-    },
-    {
-      "item": "allomancy:brass_ingot"
-    },
-    {
-      "item": "allomancy:brass_ingot"
-    },
-    {
-      "item": "allomancy:brass_ingot"
-    }
+    "allomancy:brass_ingot",
+    "allomancy:brass_ingot",
+    "allomancy:brass_ingot",
+    "allomancy:brass_ingot",
+    "allomancy:brass_ingot",
+    "allomancy:brass_ingot",
+    "allomancy:brass_ingot",
+    "allomancy:brass_ingot",
+    "allomancy:brass_ingot"
   ],
   "result": {
     "count": 1,

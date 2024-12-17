@@ -76,15 +76,15 @@ public final class MaterialsSetup {
     public static final List<DeferredItem<Item>> NUGGETS = new ArrayList<>();
     public static final List<DeferredItem<Item>> INGOTS = new ArrayList<>();
     public static final List<DeferredBlock<Block>> STORAGE_BLOCKS = new ArrayList<>();
-    public static final List<DeferredItem<Item>> STORAGE_BLOCK_ITEMS = new ArrayList<>();
+    public static final List<DeferredItem<BlockItem>> STORAGE_BLOCK_ITEMS = new ArrayList<>();
 
 
     public static final List<DeferredBlock<Block>> ORE_BLOCKS = new ArrayList<>();
-    public static final List<DeferredItem<Item>> ORE_BLOCKS_ITEMS = new ArrayList<>();
+    public static final List<DeferredItem<BlockItem>> ORE_BLOCKS_ITEMS = new ArrayList<>();
     public static final List<DeferredBlock<Block>> DEEPSLATE_ORE_BLOCKS = new ArrayList<>();
-    public static final List<DeferredItem<Item>> DEEPSLATE_ORE_BLOCKS_ITEMS = new ArrayList<>();
+    public static final List<DeferredItem<BlockItem>> DEEPSLATE_ORE_BLOCKS_ITEMS = new ArrayList<>();
     public static final List<DeferredBlock<Block>> RAW_ORE_BLOCKS = new ArrayList<>();
-    public static final List<DeferredItem<Item>> RAW_ORE_BLOCKS_ITEMS = new ArrayList<>();
+    public static final List<DeferredItem<BlockItem>> RAW_ORE_BLOCKS_ITEMS = new ArrayList<>();
     public static final List<DeferredItem<Item>> RAW_ORE_ITEMS = new ArrayList<>();
 
     public static int METAL_ITEM_LEN = Metal.values().length;
@@ -94,7 +94,7 @@ public final class MaterialsSetup {
     static {
         for (Metal mt : Metal.values()) {
             String name = mt.getName();
-            FLAKES.add(ITEMS.register(name + "_flakes", MaterialsSetup::createStandardItem));
+            FLAKES.add(ITEMS.registerSimpleItem(name + "_flakes"));
 
             if (mt.isVanilla()) {
                 NUGGETS.add(null);
@@ -102,47 +102,39 @@ public final class MaterialsSetup {
                 STORAGE_BLOCKS.add(null);
                 STORAGE_BLOCK_ITEMS.add(null);
             } else {
-                NUGGETS.add(ITEMS.register(name + "_nugget", MaterialsSetup::createStandardItem));
-                INGOTS.add(ITEMS.register(name + "_ingot", MaterialsSetup::createStandardItem));
-                STORAGE_BLOCKS.add(BLOCKS.register(name + "_block", MaterialsSetup::createStandardBlock));
-                STORAGE_BLOCK_ITEMS.add(ITEMS.register(name + "_block",
-                                                       () -> new BlockItem(STORAGE_BLOCKS.get(mt.getIndex()).get(),
-                                                                           new Item.Properties())));
+                NUGGETS.add(ITEMS.registerSimpleItem(name + "_nugget"));
+                INGOTS.add(ITEMS.registerSimpleItem(name + "_ingot"));
+                STORAGE_BLOCKS.add(registerStandardBlock(name + "_block"));
+                STORAGE_BLOCK_ITEMS.add(ITEMS.registerSimpleBlockItem(STORAGE_BLOCKS.get(mt.getIndex())));
             }
         }
-        FLAKES.add(ITEMS.register("lead_flakes", MaterialsSetup::createStandardItem));
-        NUGGETS.add(ITEMS.register("lead_nugget", MaterialsSetup::createStandardItem));
-        INGOTS.add(ITEMS.register("lead_ingot", MaterialsSetup::createStandardItem));
-        STORAGE_BLOCKS.add(BLOCKS.register("lead_block", MaterialsSetup::createStandardBlock));
-        STORAGE_BLOCK_ITEMS.add(ITEMS.register("lead_block", () -> new BlockItem(STORAGE_BLOCKS.get(LEAD).get(),
-                                                                                 new Item.Properties())));
+        FLAKES.add(ITEMS.registerSimpleItem("lead_flakes"));
+        NUGGETS.add(ITEMS.registerSimpleItem("lead_nugget"));
+        INGOTS.add(ITEMS.registerSimpleItem("lead_ingot"));
+        STORAGE_BLOCKS.add(registerStandardBlock("lead_block"));
+        STORAGE_BLOCK_ITEMS.add(ITEMS.registerSimpleBlockItem(STORAGE_BLOCKS.get(LEAD)));
 
-        FLAKES.add(ITEMS.register("silver_flakes", MaterialsSetup::createStandardItem));
-        NUGGETS.add(ITEMS.register("silver_nugget", MaterialsSetup::createStandardItem));
-        INGOTS.add(ITEMS.register("silver_ingot", MaterialsSetup::createStandardItem));
-        STORAGE_BLOCKS.add(BLOCKS.register("silver_block", MaterialsSetup::createStandardBlock));
-        STORAGE_BLOCK_ITEMS.add(ITEMS.register("silver_block", () -> new BlockItem(STORAGE_BLOCKS.get(SILVER).get(),
-                                                                                   new Item.Properties())));
+        FLAKES.add(ITEMS.registerSimpleItem("silver_flakes"));
+        NUGGETS.add(ITEMS.registerSimpleItem("silver_nugget"));
+        INGOTS.add(ITEMS.registerSimpleItem("silver_ingot"));
+        STORAGE_BLOCKS.add(registerStandardBlock("silver_block"));
+        STORAGE_BLOCK_ITEMS.add(ITEMS.registerSimpleBlockItem(STORAGE_BLOCKS.get(SILVER)));
 
         for (var ore_config : ORE_METALS) {
             String ore = ore_config.name();
-            var ore_block = BLOCKS.register(ore + "_ore", MaterialsSetup::createStandardOre);
+            var ore_block = registerStandardOre(ore + "_ore");
             ORE_BLOCKS.add(ore_block);
-            ORE_BLOCKS_ITEMS.add(
-                    ITEMS.register(ore + "_ore", () -> new BlockItem(ore_block.get(), new Item.Properties())));
+            ORE_BLOCKS_ITEMS.add(ITEMS.registerSimpleBlockItem(ore_block));
 
-            var ds_ore_block = BLOCKS.register("deepslate_" + ore + "_ore", MaterialsSetup::createDeepslateBlock);
+            var ds_ore_block = registerDeepslateOre("deepslate_" + ore + "_ore");
             DEEPSLATE_ORE_BLOCKS.add(ds_ore_block);
-            DEEPSLATE_ORE_BLOCKS_ITEMS.add(ITEMS.register("deepslate_" + ore + "_ore",
-                                                          () -> new BlockItem(ds_ore_block.get(),
-                                                                              new Item.Properties())));
+            DEEPSLATE_ORE_BLOCKS_ITEMS.add(ITEMS.registerSimpleBlockItem((ds_ore_block)));
 
-            var raw_ore_block = BLOCKS.register("raw_" + ore + "_block", MaterialsSetup::createStandardBlock);
+            var raw_ore_block = registerStandardBlock("raw_" + ore + "_block");
             RAW_ORE_BLOCKS.add(raw_ore_block);
-            RAW_ORE_BLOCKS_ITEMS.add(ITEMS.register("raw_" + ore + "_block",
-                                                    () -> new BlockItem(raw_ore_block.get(), new Item.Properties())));
+            RAW_ORE_BLOCKS_ITEMS.add(ITEMS.registerSimpleBlockItem(raw_ore_block));
 
-            RAW_ORE_ITEMS.add(ITEMS.register("raw_" + ore, MaterialsSetup::createStandardItem));
+            RAW_ORE_ITEMS.add(ITEMS.registerSimpleItem("raw_" + ore));
         }
     }
 
@@ -159,22 +151,21 @@ public final class MaterialsSetup {
         GLM.register(bus);
     }
 
-    private static Block createStandardBlock() {
-        return new Block(Blocks.STONE.properties().strength(2.1F).requiresCorrectToolForDrops());
+    private static DeferredBlock<Block> registerStandardBlock(String name) {
+        return BLOCKS.registerBlock(name, Block::new,
+                                    Blocks.STONE.properties().strength(2.1F).requiresCorrectToolForDrops());
     }
 
-    private static Block createStandardOre() {
-        return new DropExperienceBlock(UniformInt.of(2, 5), Blocks.IRON_ORE.properties());
+    private static DeferredBlock<Block> registerStandardOre(String name) {
+        return BLOCKS.registerBlock(name, props -> new DropExperienceBlock(UniformInt.of(2, 5), props),
+                                    Blocks.IRON_ORE.properties());
     }
 
-    private static Block createDeepslateBlock() {
-        return new DropExperienceBlock(UniformInt.of(2, 5),
-                                       Blocks.DEEPSLATE_IRON_ORE.properties().strength(4.5F, 3.0F));
+    private static DeferredBlock<Block> registerDeepslateOre(String name) {
+        return BLOCKS.registerBlock(name, props -> new DropExperienceBlock(UniformInt.of(2, 5), props),
+                                    Blocks.DEEPSLATE_IRON_ORE.properties().strength(4.5F, 3.0F));
     }
 
-    private static Item createStandardItem() {
-        return new Item(new Item.Properties());
-    }
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> bootstrap) {
         RuleTest stone = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);

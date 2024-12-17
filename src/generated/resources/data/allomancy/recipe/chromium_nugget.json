@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:chromium_ingot"
-    }
+    "allomancy:chromium_ingot"
   ],
   "result": {
     "count": 9,

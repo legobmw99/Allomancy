@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "allomancy:lead_ingot"
-    },
-    {
-      "item": "allomancy:lead_ingot"
-    },
-    {
-      "item": "allomancy:lead_ingot"
-    },
-    {
-      "item": "allomancy:lead_ingot"
-    },
-    {
-      "item": "allomancy:lead_ingot"
-    },
-    {
-      "item": "allomancy:lead_ingot"
-    },
-    {
-      "item": "allomancy:lead_ingot"
-    },
-    {
-      "item": "allomancy:lead_ingot"
-    },
-    {
-      "item": "allomancy:lead_ingot"
-    }
+    "allomancy:lead_ingot",
+    "allomancy:lead_ingot",
+    "allomancy:lead_ingot",
+    "allomancy:lead_ingot",
+    "allomancy:lead_ingot",
+    "allomancy:lead_ingot",
+    "allomancy:lead_ingot",
+    "allomancy:lead_ingot",
+    "allomancy:lead_ingot"
   ],
   "result": {
     "count": 1,

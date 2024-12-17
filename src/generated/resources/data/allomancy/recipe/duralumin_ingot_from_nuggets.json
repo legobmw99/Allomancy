@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:duralumin_nugget"
-    },
-    {
-      "item": "allomancy:duralumin_nugget"
-    },
-    {
-      "item": "allomancy:duralumin_nugget"
-    },
-    {
-      "item": "allomancy:duralumin_nugget"
-    },
-    {
-      "item": "allomancy:duralumin_nugget"
-    },
-    {
-      "item": "allomancy:duralumin_nugget"
-    },
-    {
-      "item": "allomancy:duralumin_nugget"
-    },
-    {
-      "item": "allomancy:duralumin_nugget"
-    },
-    {
-      "item": "allomancy:duralumin_nugget"
-    }
+    "allomancy:duralumin_nugget",
+    "allomancy:duralumin_nugget",
+    "allomancy:duralumin_nugget",
+    "allomancy:duralumin_nugget",
+    "allomancy:duralumin_nugget",
+    "allomancy:duralumin_nugget",
+    "allomancy:duralumin_nugget",
+    "allomancy:duralumin_nugget",
+    "allomancy:duralumin_nugget"
   ],
   "result": {
     "count": 1,

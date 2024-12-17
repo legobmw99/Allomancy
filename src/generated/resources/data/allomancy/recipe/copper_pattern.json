@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:paper"
-    },
-    {
-      "item": "allomancy:copper_flakes"
-    }
+    "minecraft:paper",
+    "allomancy:copper_flakes"
   ],
   "result": {
     "count": 1,

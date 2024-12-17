@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:allomantic_grinder"
-    },
-    {
-      "tag": "c:ingots/electrum"
-    }
+    "allomancy:allomantic_grinder",
+    "#c:ingots/electrum"
   ],
   "result": {
     "count": 2,

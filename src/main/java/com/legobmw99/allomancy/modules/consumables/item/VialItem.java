@@ -6,60 +6,42 @@ import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.component.CustomModelData;
+import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.level.Level;
 
 import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STORAGE;
 
 public class VialItem extends Item {
+    private static final FoodProperties vial_food =
+            new FoodProperties.Builder().alwaysEdible().saturationModifier(0).nutrition(0).build();
 
-    private static final CustomModelData FILLED_MODEL_DATA = new CustomModelData(1);
+    private static final Consumable vial_consumable = Consumable
+            .builder()
+            .consumeSeconds(0.3f)
+            .animation(ItemUseAnimation.DRINK)
+            .sound(SoundEvents.GENERIC_DRINK)
+            .hasConsumeParticles(false)
+            .build();
 
-    public VialItem() {
-        super(new Item.Properties().stacksTo(32).rarity(Rarity.COMMON));
-    }
-
-
-    @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity livingEntity) {
-        if (livingEntity instanceof ServerPlayer serverplayer) {
-            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, stack);
-            serverplayer.awardStat(Stats.ITEM_USED.get(this));
-        }
-        if (livingEntity instanceof Player player) {
-            return ItemUtils.createFilledResult(stack, player, new ItemStack(ConsumeSetup.VIAL.get()), true);
-        } else {
-            stack.consume(1, livingEntity);
-            return stack;
-        }
+    public VialItem(Item.Properties props) {
+        super(props.stacksTo(32).food(vial_food, vial_consumable).rarity(Rarity.COMMON));
     }
 
     @Override
-    public int getUseDuration(ItemStack stack, LivingEntity livingEntity) {
-        return 6;
-    }
-
-
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.DRINK;
-    }
-
-
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
+    public InteractionResult use(Level worldIn, Player playerIn, InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
 
         var data = playerIn.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -78,19 +60,18 @@ public class VialItem extends Item {
 
             if (filling != full) {
                 playerIn.startUsingItem(hand);
-                return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStackIn);
+                return InteractionResult.SUCCESS;
             }
         }
-        return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
+        return InteractionResult.FAIL;
     }
 
     public static void fillVial(ItemStack stack, FlakeStorage storage) {
         stack.set(FLAKE_STORAGE, storage);
         if (storage == null) {
-            stack.set(DataComponents.CUSTOM_MODEL_DATA, null);
             stack.set(DataComponents.RARITY, Rarity.COMMON);
         } else {
-            stack.set(DataComponents.CUSTOM_MODEL_DATA, FILLED_MODEL_DATA);
+            stack.set(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(ConsumeSetup.VIAL.get())));
             stack.set(DataComponents.RARITY, Rarity.UNCOMMON);
         }
 
@@ -105,6 +86,9 @@ public class VialItem extends Item {
     public void verifyComponentsAfterLoad(ItemStack pStack) {
         super.verifyComponentsAfterLoad(pStack);
         if (pStack.has(FLAKE_STORAGE)) {
+            if (!pStack.has(DataComponents.USE_REMAINDER)) {
+                pStack.set(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(ConsumeSetup.VIAL.get())));
+            }
             return;
         }
 

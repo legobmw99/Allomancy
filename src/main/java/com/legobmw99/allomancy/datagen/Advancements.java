@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
+import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.extras.advancement.AllomanticallyActivatedBlockTrigger;
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnEntityTrigger;
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnPlayerTrigger;
@@ -11,12 +12,11 @@ import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -30,6 +30,8 @@ class Advancements implements AdvancementProvider.AdvancementGenerator {
     public void generate(HolderLookup.Provider registries,
                          Consumer<AdvancementHolder> saver,
                          ExistingFileHelper existingFileHelper) {
+        var getter = registries.lookupOrThrow(Registries.ITEM);
+
         Advancement.Builder
                 .advancement()
                 .parent(Advancement.Builder
@@ -65,12 +67,14 @@ class Advancements implements AdvancementProvider.AdvancementGenerator {
                          Component.translatable("advancements.become_mistborn.desc"), null, AdvancementType.CHALLENGE,
                          true, true, true)
                 .addCriterion("lerasium_nugget",
-                              ConsumeItemTrigger.TriggerInstance.usedItem(ConsumeSetup.LERASIUM_NUGGET.get()))
+                              ConsumeItemTrigger.TriggerInstance.usedItem(getter, ConsumeSetup.LERASIUM_NUGGET.get()))
                 .rewards(AdvancementRewards.Builder.experience(100))
                 .save(saver, "allomancy:main/become_mistborn");
 
         ItemStack vial = new ItemStack(ConsumeSetup.VIAL.get());
-        vial.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(1));
+        var storage = new FlakeStorage.Mutable();
+        storage.add(Metal.GOLD);
+        vial.set(ConsumeSetup.FLAKE_STORAGE.get(), storage.toImmutable());
 
         var allMetals = Advancement.Builder
                 .advancement()
@@ -110,7 +114,8 @@ class Advancements implements AdvancementProvider.AdvancementGenerator {
                                                                                .equipment()
                                                                                .head(ItemPredicate.Builder
                                                                                              .item()
-                                                                                             .of(CombatSetup.ALUMINUM_HELMET))));
+                                                                                             .of(getter,
+                                                                                                 CombatSetup.ALUMINUM_HELMET))));
 
         Advancement.Builder
                 .advancement()
@@ -129,7 +134,10 @@ class Advancements implements AdvancementProvider.AdvancementGenerator {
                 .requirements(AdvancementRequirements.Strategy.OR)
                 .save(saver, "allomancy:main/tin_foil_hat");
 
-        var ironGolemPredicate = EntityPredicate.wrap(EntityPredicate.Builder.entity().of(EntityType.IRON_GOLEM));
+        var ironGolemPredicate = EntityPredicate.wrap(EntityPredicate.Builder
+                                                              .entity()
+                                                              .of(registries.lookupOrThrow(Registries.ENTITY_TYPE),
+                                                                  EntityType.IRON_GOLEM));
 
         Advancement.Builder
                 .advancement()

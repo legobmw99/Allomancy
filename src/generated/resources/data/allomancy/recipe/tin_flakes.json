@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:allomantic_grinder"
-    },
-    {
-      "tag": "c:ingots/tin"
-    }
+    "allomancy:allomantic_grinder",
+    "#c:ingots/tin"
   ],
   "result": {
     "count": 2,

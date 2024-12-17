@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:zinc_block"
-    }
+    "allomancy:zinc_block"
   ],
   "result": {
     "count": 9,

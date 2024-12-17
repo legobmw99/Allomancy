@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:chromium_block"
-    }
+    "allomancy:chromium_block"
   ],
   "result": {
     "count": 9,

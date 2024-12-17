@@ -10,7 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 
@@ -34,7 +35,7 @@ public final class MetalOverlay implements LayeredDraw.Layer {
     private MetalOverlay() {}
 
     public static void registerGUI(final RegisterGuiLayersEvent evt) {
-        evt.registerBelowAll(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "metal_display"),
+        evt.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "metal_display"),
                              new MetalOverlay());
     }
 
@@ -45,7 +46,8 @@ public final class MetalOverlay implements LayeredDraw.Layer {
                              float vOffset,
                              int uWidth,
                              int vHeight) {
-        graphics.blit(meterLoc, x, y, 0, uOffset, vOffset, uWidth, vHeight, 128, 128);
+        graphics.blit(RenderType::guiTexturedOverlay, meterLoc, x, y, uOffset, vOffset, uWidth, vHeight, uWidth,
+                      vHeight, 128, 128);
     }
 
     @Override
@@ -71,7 +73,7 @@ public final class MetalOverlay implements LayeredDraw.Layer {
         int renderX = PowersConfig.overlay_position.get().getX(gui.guiWidth());
         int renderY = PowersConfig.overlay_position.get().getY(gui.guiHeight());
 
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         RenderSystem.setShaderTexture(0, meterLoc);
 
 

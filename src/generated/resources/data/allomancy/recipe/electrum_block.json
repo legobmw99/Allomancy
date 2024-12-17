@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "allomancy:electrum_ingot"
-    },
-    {
-      "item": "allomancy:electrum_ingot"
-    },
-    {
-      "item": "allomancy:electrum_ingot"
-    },
-    {
-      "item": "allomancy:electrum_ingot"
-    },
-    {
-      "item": "allomancy:electrum_ingot"
-    },
-    {
-      "item": "allomancy:electrum_ingot"
-    },
-    {
-      "item": "allomancy:electrum_ingot"
-    },
-    {
-      "item": "allomancy:electrum_ingot"
-    },
-    {
-      "item": "allomancy:electrum_ingot"
-    }
+    "allomancy:electrum_ingot",
+    "allomancy:electrum_ingot",
+    "allomancy:electrum_ingot",
+    "allomancy:electrum_ingot",
+    "allomancy:electrum_ingot",
+    "allomancy:electrum_ingot",
+    "allomancy:electrum_ingot",
+    "allomancy:electrum_ingot",
+    "allomancy:electrum_ingot"
   ],
   "result": {
     "count": 1,

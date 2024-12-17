@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:bendalloy_block"
-    }
+    "allomancy:bendalloy_block"
   ],
   "result": {
     "count": 9,

@@ -8,8 +8,10 @@ import com.legobmw99.allomancy.modules.consumables.item.recipe.VialItemRecipe;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -21,18 +23,18 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-class Recipes extends RecipeProvider {
-
+final class Recipes extends RecipeProvider {
     private final Map<Character, Ingredient> defaultIngredients = new HashMap<>();
 
-    Recipes(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(packOutput, lookupProvider);
+    private final HolderGetter<Item> items;
+
+    private Recipes(HolderLookup.Provider registries, RecipeOutput output) {
+        super(registries, output);
+        this.items = registries.lookupOrThrow(Registries.ITEM);
+
         add('i', Tags.Items.INGOTS_IRON);
         add('g', Tags.Items.INGOTS_GOLD);
         add('s', Items.STICK);
@@ -47,26 +49,26 @@ class Recipes extends RecipeProvider {
     }
 
 
-    private static void buildShapeless(RecipeOutput consumer,
-                                       RecipeCategory cat,
-                                       ItemLike result,
-                                       int count,
-                                       Item criterion,
-                                       Ingredient... ingredients) {
+    private void buildShapeless(RecipeOutput consumer,
+                                RecipeCategory cat,
+                                ItemLike result,
+                                int count,
+                                Item criterion,
+                                Ingredient... ingredients) {
         buildShapeless(consumer, cat, result, count, criterion, "", ingredients);
     }
 
-    private static void buildShapeless(RecipeOutput consumer,
-                                       RecipeCategory cat,
-                                       ItemLike result,
-                                       int count,
-                                       Item criterion,
-                                       String save,
-                                       Ingredient... ingredients) {
+    private void buildShapeless(RecipeOutput consumer,
+                                RecipeCategory cat,
+                                ItemLike result,
+                                int count,
+                                Item criterion,
+                                String save,
+                                Ingredient... ingredients) {
         Allomancy.LOGGER.debug("Creating Shapeless Recipe for {}",
                                BuiltInRegistries.ITEM.getKey(result.asItem()) + " " + save);
 
-        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(cat, result, count);
+        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(this.items, cat, result, count);
 
         builder.unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(criterion).getPath(),
                            InventoryChangeTrigger.TriggerInstance.hasItems(criterion));
@@ -82,29 +84,12 @@ class Recipes extends RecipeProvider {
         }
     }
 
-    private static void buildSmeltingAndBlasting(RecipeOutput consumer,
-                                                 ItemLike result,
-                                                 ItemLike ingredient,
-                                                 float xp) {
-        Allomancy.LOGGER.debug("Creating Smelting and Blasting Recipe for {}",
-                               BuiltInRegistries.ITEM.getKey(result.asItem()));
+    private void buildSmeltingAndBlasting(ItemLike result, List<ItemLike> ingredient, float xp) {
+        String name = BuiltInRegistries.ITEM.getKey(result.asItem()).getPath();
+        Allomancy.LOGGER.debug("Creating Smelting and Blasting Recipe for {}", name);
 
-        SimpleCookingRecipeBuilder smelt =
-                SimpleCookingRecipeBuilder.smelting(ing(ingredient), RecipeCategory.MISC, result, xp, 200);
-        SimpleCookingRecipeBuilder blast =
-                SimpleCookingRecipeBuilder.blasting(ing(ingredient), RecipeCategory.MISC, result, xp, 100);
-
-        smelt.unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(ingredient.asItem()).getPath(),
-                         InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
-        blast.unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(ingredient.asItem()).getPath(),
-                         InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
-
-        var name = BuiltInRegistries.ITEM.getKey(result.asItem()) + "_from_" +
-                   BuiltInRegistries.ITEM.getKey(ingredient.asItem()).getPath();
-
-        smelt.save(consumer, name);
-        blast.save(consumer, name + "_from_blasting");
-
+        this.oreBlasting(ingredient, RecipeCategory.MISC, result, xp, 100, name);
+        this.oreSmelting(ingredient, RecipeCategory.MISC, result, xp, 200, name);
     }
 
     private static String mixing_save(String metal) {
@@ -115,12 +100,12 @@ class Recipes extends RecipeProvider {
         return metal + "_ingot_from_alloying";
     }
 
-    private static Ingredient ing(String tag) {
-        return Ingredient.of(ItemTags.create(ResourceLocation.parse(tag)));
+    private Ingredient ing(String tag) {
+        return tag(ItemTags.create(ResourceLocation.parse(tag)));
     }
 
-    private static Ingredient ing(TagKey<Item> tag) {
-        return Ingredient.of(tag);
+    private Ingredient ing(TagKey<Item> tag) {
+        return tag(tag);
     }
 
     private static Ingredient ing(ItemLike itemProvider) {
@@ -146,8 +131,8 @@ class Recipes extends RecipeProvider {
     }
 
     @Override
-    protected void buildRecipes(RecipeOutput consumer) {
-
+    protected void buildRecipes() {
+        var consumer = this.output;
         // Basic Shaped Recipes
         buildShaped(consumer, RecipeCategory.REDSTONE, ExtrasSetup.IRON_LEVER.get(), Items.IRON_INGOT, "s", "I");
         buildShaped(consumer, RecipeCategory.REDSTONE, ExtrasSetup.IRON_BUTTON.get(), Items.IRON_INGOT, "i", "I");
@@ -161,6 +146,7 @@ class Recipes extends RecipeProvider {
 
         buildShaped(consumer, RecipeCategory.FOOD, ConsumeSetup.ALLOMANTIC_GRINDER.get(), Items.IRON_INGOT, "ggg",
                     "iii", "ggg");
+
         buildShaped(consumer, RecipeCategory.FOOD, ConsumeSetup.VIAL.get(), 4, Items.GLASS, " S ", "G G", " G ");
         buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.MISTCLOAK.get(), ConsumeSetup.VIAL.get(), "W W",
                     "WWW", "WWW");
@@ -183,9 +169,7 @@ class Recipes extends RecipeProvider {
             var ore = MaterialsSetup.ORE_BLOCKS_ITEMS.get(i).get();
             var deep_ore = MaterialsSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).get();
             var ingot = MaterialsSetup.INGOTS.get(ore_metal_indexes[i]).get();
-            buildSmeltingAndBlasting(consumer, ingot, raw, ore_metal_xp[i]);
-            buildSmeltingAndBlasting(consumer, ingot, ore, ore_metal_xp[i]);
-            buildSmeltingAndBlasting(consumer, ingot, deep_ore, ore_metal_xp[i]);
+            buildSmeltingAndBlasting(ingot, List.of(raw, ore, deep_ore), ore_metal_xp[i]);
         }
 
 
@@ -308,7 +292,8 @@ class Recipes extends RecipeProvider {
 
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
         ShapedRecipeBuilder
-                .shaped(RecipeCategory.COMBAT, CombatSetup.COIN_BAG.get())
+                .shaped(this.registries.lookupOrThrow(Registries.ITEM), RecipeCategory.COMBAT,
+                        CombatSetup.COIN_BAG.get())
                 .unlockedBy("has_gold_nugget", InventoryChangeTrigger.TriggerInstance.hasItems(Items.GOLD_NUGGET))
                 .showNotification(true)
                 .define('#', Items.LEAD)
@@ -332,7 +317,8 @@ class Recipes extends RecipeProvider {
                              String... lines) {
         Allomancy.LOGGER.debug("Creating Shaped Recipe for {}", BuiltInRegistries.ITEM.getKey(result.asItem()));
 
-        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(cat, result, count);
+        ShapedRecipeBuilder builder =
+                ShapedRecipeBuilder.shaped(this.registries.lookupOrThrow(Registries.ITEM), cat, result, count);
 
         builder.unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(criterion).getPath(),
                            InventoryChangeTrigger.TriggerInstance.hasItems(criterion));
@@ -362,7 +348,7 @@ class Recipes extends RecipeProvider {
     }
 
     private void add(char c, TagKey<Item> itemTag) {
-        this.defaultIngredients.put(c, Ingredient.of(itemTag));
+        this.defaultIngredients.put(c, tag(itemTag));
     }
 
     private void add(char c, ItemLike itemProvider) {
@@ -373,5 +359,19 @@ class Recipes extends RecipeProvider {
         this.defaultIngredients.put(c, ingredient);
     }
 
+    public static class Runner extends RecipeProvider.Runner {
+        public Runner(PackOutput out, CompletableFuture<HolderLookup.Provider> lookup) {
+            super(out, lookup);
+        }
 
+        @Override
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+            return new Recipes(registries, output);
+        }
+
+        @Override
+        public String getName() {
+            return "Allomancy recipes";
+        }
+    }
 }

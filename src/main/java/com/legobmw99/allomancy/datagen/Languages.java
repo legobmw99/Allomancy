@@ -79,8 +79,7 @@ class Languages extends LanguageProvider {
             add("key.metals." + mt.getName(), "Toggle " + getDisplayName(mt));
 
             add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), getDisplayName(mt) + " Flakes");
-            add(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), "Banner Pattern");
-            add("item.allomancy." + mt.getName() + "_pattern.desc", getDisplayName(mt) + " Symbol");
+            add(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), getDisplayName(mt) + " Banner Pattern");
 
             if (mt.isVanilla()) {
                 continue;

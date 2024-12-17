@@ -1,29 +1,35 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
+import com.legobmw99.allomancy.Allomancy;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class ObsidianDaggerItem extends SwordItem {
 
-    private static final int ATTACK_DAMAGE = 12;
+    private static final int ATTACK_DAMAGE = 23;
     private static final float ATTACK_SPEED = 9.2F;
 
-    private static final Tier tier = new ObsidianTier();
+    public static final TagKey<Item> OBSIDIAN_REPAIR =
+            ItemTags.create(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "obsidian_tool_materials"));
+    private static final ToolMaterial OBSIDIAN =
+            new ToolMaterial(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 2, ATTACK_SPEED, 1.0F, ATTACK_DAMAGE,
+                             OBSIDIAN_REPAIR);
 
-    public ObsidianDaggerItem() {
-        super(tier, new Item.Properties()
-                .attributes(createAttributes(tier, ATTACK_DAMAGE, ATTACK_SPEED))
-                .rarity(Rarity.UNCOMMON));
+    public ObsidianDaggerItem(Item.Properties props) {
+        super(OBSIDIAN
+                      .applySwordProperties(props, ATTACK_DAMAGE, ATTACK_SPEED)
+                      .rarity(Rarity.UNCOMMON)
+                      .component(DataComponents.ENCHANTABLE, null));
     }
 
     // prevent dagger from mining
@@ -52,43 +58,5 @@ public class ObsidianDaggerItem extends SwordItem {
             return false;
         }
         return super.isPrimaryItemFor(stack, enchantment);
-    }
-
-    @Override
-    public float getXpRepairRatio(ItemStack stack) {
-        return 0;
-    }
-
-    private static class ObsidianTier implements Tier {
-        @Override
-        public int getUses() {
-            return 2;
-        }
-
-        @Override
-        public float getSpeed() {
-            return ATTACK_SPEED;
-        }
-
-        @Override
-        public float getAttackDamageBonus() {
-            return ATTACK_DAMAGE;
-        }
-
-        @Override
-        public TagKey<Block> getIncorrectBlocksForDrops() {
-            return BlockTags.INCORRECT_FOR_WOODEN_TOOL;
-        }
-
-        @Override
-        public int getEnchantmentValue() {
-            return 1;
-        }
-
-        @Override
-        public Ingredient getRepairIngredient() {
-            return Ingredient.of(Blocks.OBSIDIAN);
-        }
-
     }
 }

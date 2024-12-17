@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:lead_nugget"
-    },
-    {
-      "item": "allomancy:lead_nugget"
-    },
-    {
-      "item": "allomancy:lead_nugget"
-    },
-    {
-      "item": "allomancy:lead_nugget"
-    },
-    {
-      "item": "allomancy:lead_nugget"
-    },
-    {
-      "item": "allomancy:lead_nugget"
-    },
-    {
-      "item": "allomancy:lead_nugget"
-    },
-    {
-      "item": "allomancy:lead_nugget"
-    },
-    {
-      "item": "allomancy:lead_nugget"
-    }
+    "allomancy:lead_nugget",
+    "allomancy:lead_nugget",
+    "allomancy:lead_nugget",
+    "allomancy:lead_nugget",
+    "allomancy:lead_nugget",
+    "allomancy:lead_nugget",
+    "allomancy:lead_nugget",
+    "allomancy:lead_nugget",
+    "allomancy:lead_nugget"
   ],
   "result": {
     "count": 1,

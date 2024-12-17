@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.datagen;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
+import com.legobmw99.allomancy.modules.combat.item.ObsidianDaggerItem;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -11,6 +12,7 @@ import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -78,10 +80,18 @@ class ItemTags extends ItemTagsProvider {
             addCommonTag("raw_materials/" + MaterialsSetup.ORE_METALS[i], raw);
         }
 
-        tag(net.minecraft.tags.ItemTags.SWORDS)
+        tag(net.minecraft.tags.ItemTags.SWORDS).replace(false).add(CombatSetup.KOLOSS_BLADE.get());
+
+        tag(net.minecraft.tags.ItemTags.CHEST_ARMOR).replace(false).add(CombatSetup.MISTCLOAK.get());
+
+        tag(CombatSetup.REPAIRS_MISTCLOAK).add(Items.GRAY_WOOL);
+        tag(ObsidianDaggerItem.OBSIDIAN_REPAIR).add(Items.OBSIDIAN).add(Items.CRYING_OBSIDIAN);
+        tag(CombatSetup.REPAIRS_ALUMINUM).addTag(
+                net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/aluminum")));
+
+        tag(net.minecraft.tags.ItemTags.GAZE_DISGUISE_EQUIPMENT)
                 .replace(false)
-                .add(CombatSetup.OBSIDIAN_DAGGER.get())
-                .add(CombatSetup.KOLOSS_BLADE.get());
+                .add(CombatSetup.ALUMINUM_HELMET.get());
     }
 
     @SafeVarargs

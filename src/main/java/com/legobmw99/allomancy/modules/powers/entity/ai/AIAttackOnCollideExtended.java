@@ -140,7 +140,7 @@ public class AIAttackOnCollideExtended extends Goal {
                 }
 
                 if (this.attacker instanceof Monster) {
-                    this.attacker.doHurtTarget(livingEntity);
+                    this.attacker.doHurtTarget(getServerLevel(livingEntity), livingEntity);
                 } else {
                     livingEntity.hurt(livingEntity.level().damageSources().mobAttack(this.attacker), 3);
                 }

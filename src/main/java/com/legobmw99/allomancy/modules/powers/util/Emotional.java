@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIAttackOnCollideExtended;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIEvilAttack;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -46,7 +47,7 @@ public final class Emotional {
                 //Add new goals
                 target.setTarget(allomancer);
                 target.setLastHurtByMob(allomancer);
-                // TODO: try to use PrioritizedGoal::startExecuting for already hostiles
+                // future: try to use PrioritizedGoal::startExecuting for already hostiles
                 target.targetSelector.addGoal(1, new AIAttackOnCollideExtended(target, 1.0d, false));
                 target.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(target, Player.class, false));
                 target.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(target, target.getClass(), false));
@@ -75,7 +76,9 @@ public final class Emotional {
                         .level()
                         .explode(target, target.position().x(), target.position().y(), target.position().z(), 1.2F,
                                  false, Level.ExplosionInteraction.MOB);
-                target.kill();
+                if (target.level() instanceof ServerLevel level) {
+                    target.kill(level);
+                }
             }
         } catch (Exception e) {
             Allomancy.LOGGER.error("Failed to riot entity {}! Please report this error!", target, e);

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:steel_block"
-    }
+    "allomancy:steel_block"
   ],
   "result": {
     "count": 9,

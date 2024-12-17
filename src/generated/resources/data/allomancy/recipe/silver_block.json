@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "allomancy:silver_ingot"
-    },
-    {
-      "item": "allomancy:silver_ingot"
-    },
-    {
-      "item": "allomancy:silver_ingot"
-    },
-    {
-      "item": "allomancy:silver_ingot"
-    },
-    {
-      "item": "allomancy:silver_ingot"
-    },
-    {
-      "item": "allomancy:silver_ingot"
-    },
-    {
-      "item": "allomancy:silver_ingot"
-    },
-    {
-      "item": "allomancy:silver_ingot"
-    },
-    {
-      "item": "allomancy:silver_ingot"
-    }
+    "allomancy:silver_ingot",
+    "allomancy:silver_ingot",
+    "allomancy:silver_ingot",
+    "allomancy:silver_ingot",
+    "allomancy:silver_ingot",
+    "allomancy:silver_ingot",
+    "allomancy:silver_ingot",
+    "allomancy:silver_ingot",
+    "allomancy:silver_ingot"
   ],
   "result": {
     "count": 1,

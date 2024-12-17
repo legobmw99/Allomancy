@@ -132,6 +132,7 @@ public final class Physical {
 
         // Only save players from fall damage
         if (toMove instanceof ServerPlayer) {
+            // TODO should also change startingToFallPosition?
             toMove.fallDistance = 0;
         }
     }
@@ -206,6 +207,9 @@ public final class Physical {
         add(Items.MUSIC_DISC_CREATOR_MUSIC_BOX);
         add(Items.TRIAL_KEY);
         add(Items.OMINOUS_TRIAL_KEY);
+        add(Items.MACE);
+        add(Items.SPYGLASS);
+        add(Items.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE);
 
         add(Blocks.ANVIL);
         add(Blocks.CHIPPED_ANVIL);

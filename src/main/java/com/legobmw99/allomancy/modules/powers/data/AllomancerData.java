@@ -202,7 +202,6 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         if (this.death_dimension == null) {
             return null;
         }
-        // TODO figure out if this is what the holder is for
         return ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(this.death_dimension));
 
     }

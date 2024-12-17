@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "allomancy:cadmium_flakes"
-    },
-    {
-      "item": "allomancy:cadmium_flakes"
-    },
-    {
-      "item": "allomancy:lead_flakes"
-    }
+    "allomancy:cadmium_flakes",
+    "allomancy:cadmium_flakes",
+    "allomancy:lead_flakes"
   ],
   "result": {
     "count": 3,
