@@ -5,13 +5,9 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.modules.powers.client.network.PowerRequests;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.player.ClientInput;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -82,13 +78,13 @@ public final class Inputs {
 
     public static void fakeMovement(ClientInput input) {
         // TODO not working
-        // See similar code in https://github.com/gigaherz/ToolBelt/blob/master/src/main/java/dev/gigaherz/toolbelt/client/ToolBeltClient.java#L186
-        Options options = Minecraft.getInstance().options;
-        LocalPlayer player = Minecraft.getInstance().player;
-        var window = Minecraft.getInstance().getWindow().getWindow();
-
-        input.tick();
-        // from KeyboardInput#tick
+        // // See similar code in https://github.com/gigaherz/ToolBelt/blob/master/src/main/java/dev/gigaherz/toolbelt/client/ToolBeltClient.java#L186
+        //        Options options = Minecraft.getInstance().options;
+        //        LocalPlayer player = Minecraft.getInstance().player;
+        //        var window = Minecraft.getInstance().getWindow().getWindow();
+        //
+        //        input.tick();
+        // // from KeyboardInput#tick
         //        input.keyPresses = new Input(options.keyUp.isDown(), options.keyDown.isDown(), options.keyLeft
         //        .isDown(),
         //                                     options.keyRight.isDown(), options.keyJump.isDown(), options
@@ -97,16 +93,16 @@ public final class Inputs {
         //        input.forwardImpulse = calculateImpulse(input.keyPresses.forward(), input.keyPresses.backward());
         //        input.leftImpulse = calculateImpulse(input.keyPresses.left(), input.keyPresses.right());
 
-        // from LocalPlayer#aiStep
-        if (!player.isSprinting() && (!(player.isInWater() || player.isInFluidType(
-                (fluidType, height) -> player.canSwimInFluidType(fluidType))) ||
-                                      (player.isUnderWater() || player.canStartSwimming())) &&
-            input.forwardImpulse >= 0.8 && !player.isUsingItem() &&
-            (player.getFoodData().getFoodLevel() > 6.0F || player.mayFly()) &&
-            !player.hasEffect(MobEffects.BLINDNESS) &&
-            InputConstants.isKeyDown(window, options.keySprint.getKey().getValue())) {
-            player.setSprinting(true);
-        }
+        // // from LocalPlayer#aiStep
+        //        if (!player.isSprinting() && (!(player.isInWater() || player.isInFluidType(
+        //                (fluidType, height) -> player.canSwimInFluidType(fluidType))) ||
+        //                                      (player.isUnderWater() || player.canStartSwimming())) &&
+        //            input.forwardImpulse >= 0.8 && !player.isUsingItem() &&
+        //            (player.getFoodData().getFoodLevel() > 6.0F || player.mayFly()) &&
+        //            !player.hasEffect(MobEffects.BLINDNESS) &&
+        //            InputConstants.isKeyDown(window, options.keySprint.getKey().getValue())) {
+        //            player.setSprinting(true);
+        //        }
     }
 
     public static void registerKeyBinding(final RegisterKeyMappingsEvent evt) {

@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.util.Physical;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -27,7 +28,7 @@ public class CoinBagItem extends ProjectileWeaponItem {
     };
 
     public CoinBagItem(Item.Properties props) {
-        super(props.stacksTo(1));
+        super(props.stacksTo(1).component(DataComponents.ENCHANTABLE, null));
     }
 
     private static Ammo getAmmoFromItem(Item itemIn) {

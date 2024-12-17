@@ -43,7 +43,7 @@ public class DataGenerators {
 
         event.addProvider(datapackProvider);
         event.addProvider(new DamageTags(packOutput, lookupProvider, fileHelper));
-        event.addProvider(new BannerTags(packOutput, lookup, fileHelper));
+        event.addProvider(new BannerTags(packOutput, lookupProvider, fileHelper));
 
 
         event.addProvider(new Languages(packOutput));
