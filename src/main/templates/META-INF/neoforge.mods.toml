@@ -43,7 +43,7 @@ description = '''${mod_description}'''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
 [[mixins]]
-config="${mod_id}.mixins.json"
+config = "${mod_id}.mixins.json"
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.${ mod_id }]] #optional

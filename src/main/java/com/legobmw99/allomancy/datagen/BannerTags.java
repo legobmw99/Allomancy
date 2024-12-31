@@ -11,10 +11,8 @@ import java.util.concurrent.CompletableFuture;
 
 class BannerTags extends BannerPatternTagsProvider {
 
-    BannerTags(PackOutput pGenerator,
-               CompletableFuture<HolderLookup.Provider> registries,
-               net.neoforged.neoforge.common.data.ExistingFileHelper existingFileHelper) {
-        super(pGenerator, registries, Allomancy.MODID, existingFileHelper);
+    BannerTags(PackOutput pGenerator, CompletableFuture<HolderLookup.Provider> registries) {
+        super(pGenerator, registries, Allomancy.MODID);
     }
 
     @Override

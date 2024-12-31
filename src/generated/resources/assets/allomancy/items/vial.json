@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "component": "allomancy:flake_storage",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "allomancy:item/vial"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "allomancy:item/vial_filled"
+    },
+    "property": "minecraft:has_component"
+  }
+}

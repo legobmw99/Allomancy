@@ -14,7 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -23,9 +22,8 @@ class ItemTags extends ItemTagsProvider {
 
     ItemTags(PackOutput gen,
              CompletableFuture<HolderLookup.Provider> lookupProvider,
-             CompletableFuture<TagsProvider.TagLookup<Block>> blockTagProvider,
-             ExistingFileHelper exFileHelper) {
-        super(gen, lookupProvider, blockTagProvider, Allomancy.MODID, exFileHelper);
+             CompletableFuture<TagsProvider.TagLookup<Block>> blockTagProvider) {
+        super(gen, lookupProvider, blockTagProvider, Allomancy.MODID);
     }
 
     @Override

@@ -13,23 +13,21 @@ import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.common.data.AdvancementProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
-class Advancements implements AdvancementProvider.AdvancementGenerator {
+class Advancements implements AdvancementSubProvider {
+
 
     @Override
-    public void generate(HolderLookup.Provider registries,
-                         Consumer<AdvancementHolder> saver,
-                         ExistingFileHelper existingFileHelper) {
+    public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
         var getter = registries.lookupOrThrow(Registries.ITEM);
 
         Advancement.Builder
@@ -168,4 +166,6 @@ class Advancements implements AdvancementProvider.AdvancementGenerator {
                               AllomanticallyActivatedBlockTrigger.TriggerInstance.activatedBlock(Blocks.BELL))
                 .save(saver, "allomancy:main/going_loud");
     }
+
+
 }

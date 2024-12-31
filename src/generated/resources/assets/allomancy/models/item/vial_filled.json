@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "allomancy:item/full_vial"
+    "layer0": "allomancy:item/vial_filled"
   }
 }

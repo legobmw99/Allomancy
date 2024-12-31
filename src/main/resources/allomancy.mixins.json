@@ -3,7 +3,9 @@
   "minVersion": "0.8",
   "package": "com.legobmw99.allomancy.modules.extras.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": ["BannerDFUMixin"],
+  "mixins": [
+    "BannerDFUMixin"
+  ],
   "client": [],
   "server": [],
   "injectors": {

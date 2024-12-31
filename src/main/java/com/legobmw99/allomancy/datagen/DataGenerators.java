@@ -2,12 +2,12 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
@@ -23,7 +23,6 @@ public class DataGenerators {
         var generator = event.getGenerator();
         var packOutput = generator.getPackOutput();
         var lookup = event.getLookupProvider();
-        var fileHelper = event.getExistingFileHelper();
 
         event.addProvider(new Recipes.Runner(packOutput, lookup));
 
@@ -33,26 +32,22 @@ public class DataGenerators {
                                                 lookup));
         event.addProvider(new LootModifiers(packOutput, lookup));
 
-        BlockTags blocktags = new BlockTags(packOutput, lookup, fileHelper);
+        BlockTags blocktags = new BlockTags(packOutput, lookup);
         event.addProvider(blocktags);
-        event.addProvider(new ItemTags(packOutput, lookup, blocktags.contentsGetter(), fileHelper));
-        event.addProvider(new AdvancementProvider(packOutput, lookup, fileHelper, List.of(new Advancements())));
+        event.addProvider(new ItemTags(packOutput, lookup, blocktags.contentsGetter()));
+        event.addProvider(new AdvancementProvider(packOutput, lookup, List.of(new Advancements())));
 
         DatapackBuiltinEntriesProvider datapackProvider = new DatapackEntries(packOutput, lookup);
         CompletableFuture<HolderLookup.Provider> lookupProvider = datapackProvider.getRegistryProvider();
 
         event.addProvider(datapackProvider);
-        event.addProvider(new DamageTags(packOutput, lookupProvider, fileHelper));
-        event.addProvider(new BannerTags(packOutput, lookupProvider, fileHelper));
+        event.addProvider(new DamageTags(packOutput, lookupProvider));
+        event.addProvider(new BannerTags(packOutput, lookupProvider));
 
 
         event.addProvider(new Languages(packOutput));
-        event.addProvider(new BlockStates(packOutput, fileHelper));
-        event.addProvider(new ItemModels(packOutput, fileHelper));
-
+        event.addProvider(new ModelFiles(packOutput));
         event.addProvider(new EquipmentAssets(packOutput));
-        // TODO client item models. None are interesting except Vial is conditional on having the component
-        // can also support smithing for aluminum hats
-        // waiting on https://github.com/neoforged/NeoForge/pull/1725
+
     }
 }

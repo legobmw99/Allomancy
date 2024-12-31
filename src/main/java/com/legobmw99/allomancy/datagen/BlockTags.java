@@ -9,17 +9,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
 
 
 class BlockTags extends BlockTagsProvider {
 
-    BlockTags(PackOutput gen,
-              CompletableFuture<HolderLookup.Provider> lookupProvider,
-              ExistingFileHelper exFileHelper) {
-        super(gen, lookupProvider, Allomancy.MODID, exFileHelper);
+    BlockTags(PackOutput gen, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(gen, lookupProvider, Allomancy.MODID);
     }
 
     @Override
