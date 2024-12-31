@@ -51,8 +51,14 @@ public final class CombatSetup {
     public static final DeferredItem<KolossBladeItem> KOLOSS_BLADE =
             ITEMS.registerItem("koloss_blade", KolossBladeItem::new);
 
+    public static final ResourceKey<EquipmentAsset> WOOL = ResourceKey.create(EquipmentAssets.ROOT_ID,
+                                                                              ResourceLocation.fromNamespaceAndPath(
+                                                                                      Allomancy.MODID, "wool"));
+
+
     public static final TagKey<Item> REPAIRS_MISTCLOAK =
             ItemTags.create(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "repairs_wool_armor"));
+
 
     private static final ArmorMaterial WOOL_ARMOR =
             new ArmorMaterial(5, Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -61,18 +67,31 @@ public final class CombatSetup {
                 map.put(ArmorType.CHESTPLATE, 4);
                 map.put(ArmorType.HELMET, 0);
                 map.put(ArmorType.BODY, 0);
-            }), 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, REPAIRS_MISTCLOAK,
-                              ResourceKey.create(EquipmentAssets.ROOT_ID,
-                                                 ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "wool")));
+            }), 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, REPAIRS_MISTCLOAK, WOOL);
+
+    public static final DeferredItem<Item> MISTCLOAK = ITEMS.registerItem("mistcloak", (props) -> new Item(
+            WOOL_ARMOR.humanoidProperties(props, ArmorType.CHESTPLATE)
+                      // note: overrides normal armor, which is fine
+                      .attributes(ItemAttributeModifiers
+                                          .builder()
+                                          .add(Attributes.MOVEMENT_SPEED, new AttributeModifier(
+                                                       ResourceLocation.fromNamespaceAndPath(Allomancy.MODID,
+                                                                                             "mistcloak_speed"), 0.25,
+                                                       AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                                               EquipmentSlotGroup.CHEST)
+                                          .build())));
+
+
+    // TODO: would be nice if this used the iron_darker override
+    public static final ResourceKey<EquipmentAsset> ALUMINUM = ResourceKey.create(EquipmentAssets.ROOT_ID,
+                                                                                  ResourceLocation.fromNamespaceAndPath(
+                                                                                          Allomancy.MODID,
+                                                                                          "aluminum"));
 
 
     public static final TagKey<Item> REPAIRS_ALUMINUM =
             ItemTags.create(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "repairs_aluminum_armor"));
 
-    public static final ResourceKey<EquipmentAsset> ALUMINUM = ResourceKey.create(EquipmentAssets.ROOT_ID,
-                                                                                  ResourceLocation.fromNamespaceAndPath(
-                                                                                          Allomancy.MODID,
-                                                                                          "aluminum"));
     private static final ArmorMaterial ALUMINUM_ARMOR =
             new ArmorMaterial(15, Util.make(new EnumMap<>(ArmorType.class), map -> {
                 map.put(ArmorType.BOOTS, 0);
@@ -82,22 +101,6 @@ public final class CombatSetup {
                 map.put(ArmorType.BODY, 0);
             }), 1, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, REPAIRS_ALUMINUM, ALUMINUM);
 
-
-    public static final DeferredItem<Item> MISTCLOAK =
-
-            ITEMS.registerItem("mistcloak", (props) ->
-
-                    new Item(WOOL_ARMOR.humanoidProperties(props, ArmorType.CHESTPLATE)
-                                       // note: overrides normal armor, which is fine
-                                       .attributes(ItemAttributeModifiers
-                                                           .builder()
-                                                           .add(Attributes.MOVEMENT_SPEED, new AttributeModifier(
-                                                                        ResourceLocation.fromNamespaceAndPath(
-                                                                                Allomancy.MODID, "mistcloak_speed")
-                                                                        , 0.25,
-                                                                        AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
-                                                                EquipmentSlotGroup.CHEST)
-                                                           .build())));
 
     public static final DeferredItem<Item> ALUMINUM_HELMET =
 

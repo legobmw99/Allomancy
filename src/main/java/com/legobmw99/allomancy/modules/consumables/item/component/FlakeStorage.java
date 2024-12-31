@@ -82,31 +82,29 @@ public final class FlakeStorage implements TooltipProvider, ConsumableListener {
 
     @Override
     public void addToTooltip(Item.TooltipContext ctx, Consumer<Component> tooltip, TooltipFlag flag) {
+        int count = 0;
+        Metal last = Metal.IRON;
+        for (Metal mt : Metal.values()) {
+            if (this.contains(mt)) {
+                count++;
+                last = mt;
+            }
+        }
+        switch (count) {
+            case 0 -> {
+            }
+            case 1 -> tooltip.accept(
+                    ItemDisplay.addColorToText("allomancy.flake_storage.lore_single", ChatFormatting.GRAY,
+                                               Component.translatable("metals." + last.getName()).getString()));
 
-        if (Screen.hasShiftDown()) {
-            for (Metal mt : Metal.values()) {
-                if (this.contains(mt)) {
-                    tooltip.accept(ItemDisplay.addColorToText("metals." + mt.getName(), ChatFormatting.GRAY));
-                }
-            }
-        } else {
-            int count = 0;
-            Metal last = Metal.IRON;
-            for (Metal mt : Metal.values()) {
-                if (this.contains(mt)) {
-                    count++;
-                    last = mt;
-                }
-            }
-            switch (count) {
-                case 0 -> {
-                }
-                case 1 -> {
-                    tooltip.accept(
-                            ItemDisplay.addColorToText("allomancy.flake_storage.lore_single", ChatFormatting.GRAY));
-                    tooltip.accept(ItemDisplay.addColorToText("metals." + last.getName(), ChatFormatting.GRAY));
-                }
-                default -> {
+            default -> {
+                if (Screen.hasShiftDown()) {
+                    for (Metal mt : Metal.values()) {
+                        if (this.contains(mt)) {
+                            tooltip.accept(ItemDisplay.addColorToText("metals." + mt.getName(), ChatFormatting.GRAY));
+                        }
+                    }
+                } else {
                     tooltip.accept(
                             ItemDisplay.addColorToText("allomancy.flake_storage.lore_count", ChatFormatting.GRAY,
                                                        count));

@@ -51,5 +51,7 @@ public final class DataGenerators {
         event.addProvider(new ModelFiles(packOutput));
         event.addProvider(new EquipmentAssets(packOutput));
 
+        event.addProvider(new ParticleDescriptions(packOutput));
+
     }
 }

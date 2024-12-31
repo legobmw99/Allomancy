@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -13,7 +14,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
-public class EquipmentAssets implements DataProvider {
+class EquipmentAssets implements DataProvider {
 
     private final PackOutput.PathProvider path;
 
@@ -22,7 +23,7 @@ public class EquipmentAssets implements DataProvider {
     }
 
     private static void add(BiConsumer<ResourceLocation, EquipmentClientInfo> registrar) {
-        registrar.accept(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "wool"),
+        registrar.accept(CombatSetup.WOOL.location(),
 
                          EquipmentClientInfo
                                  .builder()
@@ -31,7 +32,7 @@ public class EquipmentAssets implements DataProvider {
                                          Optional.empty(), false))
                                  .build());
 
-        registrar.accept(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "aluminum"),
+        registrar.accept(CombatSetup.ALUMINUM.location(),
 
                          EquipmentClientInfo
                                  .builder()

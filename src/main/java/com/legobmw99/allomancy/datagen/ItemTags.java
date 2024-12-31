@@ -91,7 +91,10 @@ class ItemTags extends ItemTagsProvider {
                 .replace(false)
                 .add(CombatSetup.ALUMINUM_HELMET.get());
 
-        tag(net.minecraft.tags.ItemTags.TRIMMABLE_ARMOR).replace(false).add(CombatSetup.ALUMINUM_HELMET.get());
+        tag(net.minecraft.tags.ItemTags.TRIMMABLE_ARMOR)
+                .replace(false)
+                .add(CombatSetup.ALUMINUM_HELMET.get())
+                .add(CombatSetup.MISTCLOAK.get());
     }
 
     @SafeVarargs

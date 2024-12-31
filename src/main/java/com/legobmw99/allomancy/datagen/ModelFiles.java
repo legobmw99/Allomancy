@@ -19,10 +19,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.equipment.EquipmentAssets;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplate;
 
 import java.util.Collection;
 import java.util.stream.Stream;
@@ -39,18 +41,30 @@ class ModelFiles extends ModelProvider {
         createItemModels(itemModels);
     }
 
+    private static final ExtendedModelTemplate FLAT_HANDHELD_LARGE = ModelTemplates.FLAT_ITEM
+            .extend()
+            .transform(ItemDisplayContext.GROUND, builder -> builder.scale(1.2f).translation(0, 5, 0))
+            .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,
+                       builder -> builder.scale(1.2f).rotation(0, -90, 55).translation(0, 8, 0.5f))
+            .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
+                       builder -> builder.scale(1.2f).rotation(0, 90, -55).translation(0, 8, 0.5f))
+            .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
+                       builder -> builder.scale(1).rotation(0, -90, 25).translation(0.5f, 5, 0.5f))
+            .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
+                       builder -> builder.scale(1).rotation(0, 90, -25).translation(0.5f, 5, 0.5f))
+            .build();
+
     private static void createItemModels(ItemModelGenerators itemModels) {
 
-
-        itemModels.generateFlatItem(CombatSetup.MISTCLOAK.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateTrimmableItem(CombatSetup.MISTCLOAK.get(), CombatSetup.WOOL, "chestplate", false);
 
         itemModels.generateTrimmableItem(CombatSetup.ALUMINUM_HELMET.get(), CombatSetup.ALUMINUM, "helmet", false);
 
         itemModels.generateFlatItem(CombatSetup.COIN_BAG.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(CombatSetup.OBSIDIAN_DAGGER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModels.generateFlatItem(CombatSetup.KOLOSS_BLADE.get(),
-                                    ModelTemplates.createItem("allomancy:handheld_large", TextureSlot.LAYER0));
+
+        itemModels.generateFlatItem(CombatSetup.KOLOSS_BLADE.get(), FLAT_HANDHELD_LARGE);
 
         itemModels.generateFlatItem(ConsumeSetup.ALLOMANTIC_GRINDER.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ConsumeSetup.LERASIUM_NUGGET.get(), ModelTemplates.FLAT_ITEM);
@@ -97,8 +111,9 @@ class ModelFiles extends ModelProvider {
     }
 
     private static void createBlockModels(BlockModelGenerators blockModels) {
+        Allomancy.LOGGER.debug("Creating Block Data for allomancy:iron_lever");
 
-        createIronLeverBlock(blockModels);
+        createLever(blockModels, ExtrasSetup.IRON_LEVER.get(), TextureMapping.getBlockTexture(Blocks.IRON_BLOCK));
         createIronButtonBlocks(blockModels);
 
         Stream
@@ -114,7 +129,6 @@ class ModelFiles extends ModelProvider {
     }
 
     private static void createIronButtonBlocks(BlockModelGenerators blockModels) {
-        Allomancy.LOGGER.debug("Creating Block Data for allomancy:iron_button");
 
         var block = ExtrasSetup.IRON_BUTTON.get();
         TextureMapping iron = TextureMapping.defaultTexture(Blocks.IRON_BLOCK);
@@ -122,40 +136,37 @@ class ModelFiles extends ModelProvider {
         ResourceLocation sunken = ModelTemplates.BUTTON_PRESSED.create(block, iron, blockModels.modelOutput);
         ResourceLocation inventory = ModelTemplates.BUTTON_INVENTORY.create(block, iron, blockModels.modelOutput);
 
+        Allomancy.LOGGER.debug("Creating Block Data for allomancy:iron_button");
         blockModels.blockStateOutput.accept(BlockModelGenerators.createButton(block, extended, sunken));
         blockModels.registerSimpleItemModel(block, inventory);
 
         var inverted = ExtrasSetup.INVERTED_IRON_BUTTON.get();
+        Allomancy.LOGGER.debug("Creating Block Data for allomancy:inverted_iron_button");
         blockModels.blockStateOutput.accept(BlockModelGenerators.createButton(inverted, sunken, extended));
         blockModels.registerSimpleItemModel(inverted, inventory);
     }
 
-    private static void createIronLeverBlock(BlockModelGenerators blockModels) {
-        Allomancy.LOGGER.debug("Creating Block Data for allomancy:iron_lever");
-
+    private static void createLever(BlockModelGenerators blockModels, Block block, ResourceLocation base) {
         // annoyingly, this isn't an existing model template or helper
         TextureSlot base_slot = TextureSlot.create("base");
         TextureSlot lever_slot = TextureSlot.create("lever");
-        ModelTemplate lever = ModelTemplates.create("lever", TextureSlot.PARTICLE, base_slot, lever_slot);
-        ModelTemplate lever_off =
-                ModelTemplates.create("lever_on", "_off", TextureSlot.PARTICLE, base_slot, lever_slot);
+        ModelTemplate lever_template = ModelTemplates.create("lever", TextureSlot.PARTICLE, base_slot, lever_slot);
+        ModelTemplate lever_on_template =
+                ModelTemplates.create("lever_on", "_on", TextureSlot.PARTICLE, base_slot, lever_slot);
 
-        TextureMapping iron_lever_textures = new TextureMapping();
-        iron_lever_textures.put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(Blocks.IRON_BLOCK));
-        iron_lever_textures.put(base_slot, TextureMapping.getBlockTexture(Blocks.IRON_BLOCK));
-        iron_lever_textures.put(lever_slot,
-                                ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "block/iron_lever"));
+        TextureMapping textures = new TextureMapping();
+        textures.put(TextureSlot.PARTICLE, base);
+        textures.put(base_slot, base);
+        textures.put(lever_slot, TextureMapping.getBlockTexture(block));
 
-        ResourceLocation iron_lever =
-                lever.create(ExtrasSetup.IRON_LEVER.get(), iron_lever_textures, blockModels.modelOutput);
-        ResourceLocation iron_lever_off =
-                lever_off.create(ExtrasSetup.IRON_LEVER.get(), iron_lever_textures, blockModels.modelOutput);
+        ResourceLocation lever = lever_template.create(block, textures, blockModels.modelOutput);
+        ResourceLocation lever_on = lever_on_template.create(block, textures, blockModels.modelOutput);
 
 
         blockModels.blockStateOutput.accept(MultiVariantGenerator
-                                                    .multiVariant(ExtrasSetup.IRON_LEVER.get())
+                                                    .multiVariant(block)
                                                     .with(BlockModelGenerators.createBooleanModelDispatch(
-                                                            BlockStateProperties.POWERED, iron_lever, iron_lever_off))
+                                                            BlockStateProperties.POWERED, lever, lever_on))
                                                     .with(PropertyDispatch
                                                                   .properties(BlockStateProperties.ATTACH_FACE,
                                                                               BlockStateProperties.HORIZONTAL_FACING)
@@ -219,9 +230,7 @@ class ModelFiles extends ModelProvider {
                                                                                 VariantProperties.Rotation.R270))));
 
 
-        blockModels.registerSimpleFlatItemModel(ExtrasSetup.IRON_LEVER.get());
-
-
+        blockModels.registerSimpleFlatItemModel(block);
     }
 
 }

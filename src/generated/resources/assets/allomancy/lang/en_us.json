@@ -170,7 +170,7 @@
   "allomancy.electrum.yellow": "Yellow Electrum Symbol",
   "allomancy.flake_storage.lore_count": "Contains %s metals",
   "allomancy.flake_storage.lore_inst": "Hold SHIFT to view",
-  "allomancy.flake_storage.lore_single": "Contains 1 metal",
+  "allomancy.flake_storage.lore_single": "Contains %s",
   "allomancy.gold.black": "Black Gold Symbol",
   "allomancy.gold.blue": "Blue Gold Symbol",
   "allomancy.gold.brown": "Brown Gold Symbol",
