@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "allomancy:block/inverted_iron_button_inventory"
+    "model": "allomancy:block/iron_button_inventory"
   }
 }

@@ -90,6 +90,8 @@ class ItemTags extends ItemTagsProvider {
         tag(net.minecraft.tags.ItemTags.GAZE_DISGUISE_EQUIPMENT)
                 .replace(false)
                 .add(CombatSetup.ALUMINUM_HELMET.get());
+
+        tag(net.minecraft.tags.ItemTags.TRIMMABLE_ARMOR).replace(false).add(CombatSetup.ALUMINUM_HELMET.get());
     }
 
     @SafeVarargs

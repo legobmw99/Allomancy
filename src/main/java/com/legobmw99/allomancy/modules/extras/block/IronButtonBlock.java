@@ -33,10 +33,6 @@ public class IronButtonBlock extends ButtonBlock {
         this.activatedOnPush = activatedOnPush;
     }
 
-    public boolean activatedOnPush() {
-        return this.activatedOnPush;
-    }
-
     @Override
     protected InteractionResult useWithoutItem(BlockState pState,
                                                Level pLevel,
@@ -83,7 +79,7 @@ public class IronButtonBlock extends ButtonBlock {
                 }
 
                 IronButtonBlock block = (IronButtonBlock) state.getBlock();
-                if (isPush == block.activatedOnPush()) {
+                if (isPush == block.activatedOnPush) {
                     block.press(state, level, pos, player);
                     block.playSound(player, level, pos, false);
                     level.gameEvent(player, GameEvent.BLOCK_ACTIVATE, pos);

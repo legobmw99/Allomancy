@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Allomancy.MODID, value = Dist.CLIENT)
-public class DataGenerators {
+public final class DataGenerators {
+
+    private DataGenerators() {}
 
     @SubscribeEvent
     public static void gatherData(final GatherDataEvent.Client event) {

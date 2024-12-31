@@ -21,7 +21,7 @@ public class EquipmentAssets implements DataProvider {
         this.path = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "equipment");
     }
 
-    private void add(BiConsumer<ResourceLocation, EquipmentClientInfo> registrar) {
+    private static void add(BiConsumer<ResourceLocation, EquipmentClientInfo> registrar) {
         registrar.accept(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "wool"),
 
                          EquipmentClientInfo
@@ -44,7 +44,7 @@ public class EquipmentAssets implements DataProvider {
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
         Map<ResourceLocation, EquipmentClientInfo> map = new HashMap<>();
-        this.add((name, model) -> {
+        EquipmentAssets.add((name, model) -> {
             if (map.putIfAbsent(name, model) != null) {
                 throw new IllegalStateException("Tried to register equipment model twice for id: " + name);
             }

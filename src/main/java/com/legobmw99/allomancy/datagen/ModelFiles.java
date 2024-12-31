@@ -19,12 +19,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Stream;
 
 class ModelFiles extends ModelProvider {
@@ -44,8 +44,8 @@ class ModelFiles extends ModelProvider {
 
         itemModels.generateFlatItem(CombatSetup.MISTCLOAK.get(), ModelTemplates.FLAT_ITEM);
 
-        // TODO can also support smithing for aluminum hats?
-        itemModels.generateFlatItem(CombatSetup.ALUMINUM_HELMET.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateTrimmableItem(CombatSetup.ALUMINUM_HELMET.get(), CombatSetup.ALUMINUM, "helmet", false);
+
         itemModels.generateFlatItem(CombatSetup.COIN_BAG.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(CombatSetup.OBSIDIAN_DAGGER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
@@ -117,28 +117,17 @@ class ModelFiles extends ModelProvider {
         Allomancy.LOGGER.debug("Creating Block Data for allomancy:iron_button");
 
         var block = ExtrasSetup.IRON_BUTTON.get();
-        TextureMapping iron = TextureMapping.cube(Blocks.IRON_BLOCK);
+        TextureMapping iron = TextureMapping.defaultTexture(Blocks.IRON_BLOCK);
         ResourceLocation extended = ModelTemplates.BUTTON.create(block, iron, blockModels.modelOutput);
         ResourceLocation sunken = ModelTemplates.BUTTON_PRESSED.create(block, iron, blockModels.modelOutput);
+        ResourceLocation inventory = ModelTemplates.BUTTON_INVENTORY.create(block, iron, blockModels.modelOutput);
 
-        for (var button : List.of(block, ExtrasSetup.INVERTED_IRON_BUTTON.get())) {
-            ResourceLocation primary, secondary;
-            if (button.activatedOnPush()) {
-                primary = extended;
-                secondary = sunken;
-            } else {
-                primary = sunken;
-                secondary = extended;
-            }
+        blockModels.blockStateOutput.accept(BlockModelGenerators.createButton(block, extended, sunken));
+        blockModels.registerSimpleItemModel(block, inventory);
 
-            blockModels.blockStateOutput.accept(BlockModelGenerators.createButton(button, primary, secondary));
-
-            ResourceLocation inventory =
-                    ModelTemplates.BUTTON_INVENTORY.create(button, iron, blockModels.modelOutput);
-            blockModels.registerSimpleItemModel(button, inventory);
-        }
-
-
+        var inverted = ExtrasSetup.INVERTED_IRON_BUTTON.get();
+        blockModels.blockStateOutput.accept(BlockModelGenerators.createButton(inverted, sunken, extended));
+        blockModels.registerSimpleItemModel(inverted, inventory);
     }
 
     private static void createIronLeverBlock(BlockModelGenerators blockModels) {

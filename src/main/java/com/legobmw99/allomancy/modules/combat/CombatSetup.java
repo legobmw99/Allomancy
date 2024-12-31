@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -50,7 +51,7 @@ public final class CombatSetup {
     public static final DeferredItem<KolossBladeItem> KOLOSS_BLADE =
             ITEMS.registerItem("koloss_blade", KolossBladeItem::new);
 
-    public static TagKey<Item> REPAIRS_MISTCLOAK =
+    public static final TagKey<Item> REPAIRS_MISTCLOAK =
             ItemTags.create(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "repairs_wool_armor"));
 
     private static final ArmorMaterial WOOL_ARMOR =
@@ -65,9 +66,13 @@ public final class CombatSetup {
                                                  ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "wool")));
 
 
-    public static TagKey<Item> REPAIRS_ALUMINUM =
+    public static final TagKey<Item> REPAIRS_ALUMINUM =
             ItemTags.create(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "repairs_aluminum_armor"));
 
+    public static final ResourceKey<EquipmentAsset> ALUMINUM = ResourceKey.create(EquipmentAssets.ROOT_ID,
+                                                                                  ResourceLocation.fromNamespaceAndPath(
+                                                                                          Allomancy.MODID,
+                                                                                          "aluminum"));
     private static final ArmorMaterial ALUMINUM_ARMOR =
             new ArmorMaterial(15, Util.make(new EnumMap<>(ArmorType.class), map -> {
                 map.put(ArmorType.BOOTS, 0);
@@ -75,9 +80,7 @@ public final class CombatSetup {
                 map.put(ArmorType.CHESTPLATE, 0);
                 map.put(ArmorType.HELMET, 2);
                 map.put(ArmorType.BODY, 0);
-            }), 1, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, REPAIRS_ALUMINUM,
-                              ResourceKey.create(EquipmentAssets.ROOT_ID,
-                                                 ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "aluminum")));
+            }), 1, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, REPAIRS_ALUMINUM, ALUMINUM);
 
 
     public static final DeferredItem<Item> MISTCLOAK =
