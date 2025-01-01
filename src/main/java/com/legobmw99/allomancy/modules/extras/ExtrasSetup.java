@@ -20,7 +20,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BannerPatternItem;
@@ -53,7 +52,7 @@ public final class ExtrasSetup {
     public static final BlockCapability<IAllomanticallyUsable, Void> ALLOMANTICALLY_USABLE_BLOCK =
             BlockCapability.createVoid(
                     // Provide a name to uniquely identify the capability.
-                    ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "allomantically_usable_block"),
+                    Allomancy.rl("allomantically_usable_block"),
                     // Provide the queried type. Here, we want to look up `IItemHandler` instances.
                     IAllomanticallyUsable.class);
 
@@ -99,12 +98,10 @@ public final class ExtrasSetup {
         for (Metal mt : Metal.values()) {
 
             String name = mt.getName();
-            var pattern = ResourceKey.create(Registries.BANNER_PATTERN,
-                                             ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, name));
+            var pattern = ResourceKey.create(Registries.BANNER_PATTERN, Allomancy.rl(name));
             PATTERNS.add(pattern);
 
-            var pattern_key = TagKey.create(Registries.BANNER_PATTERN,
-                                            ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, name));
+            var pattern_key = TagKey.create(Registries.BANNER_PATTERN, Allomancy.rl(name));
             PATTERN_KEYS.add(pattern_key);
 
             var pattern_item = ITEMS.registerItem(name + "_pattern",

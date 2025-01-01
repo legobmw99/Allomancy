@@ -2,7 +2,6 @@ package com.legobmw99.allomancy.modules.extras.mixin;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.datafix.fixes.BannerPatternFormatFix;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,8 +36,7 @@ public class BannerDFUMixin {
         for (Metal mt : Metal.values()) {
             String name = mt.getName();
             Allomancy.LOGGER.info("Redirecting banner pattern for {}", name);
-            patternMap.put("ALLOMANCY" + name.toUpperCase(Locale.ROOT),
-                           ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, name).toString());
+            patternMap.put("ALLOMANCY" + name.toUpperCase(Locale.ROOT), Allomancy.rl(name).toString());
         }
 
         PATTERN_ID_MAP = patternMap;

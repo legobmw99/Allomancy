@@ -12,7 +12,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -49,8 +48,7 @@ public final class MaterialsSetup {
     public record OreConfig(String name, int size, int placementCount, int minHeight, int maxHeight) {
 
         <T> ResourceKey<T> getRegistryKey(ResourceKey<Registry<T>> registry, String suffix) {
-            return ResourceKey.create(registry,
-                                      ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, this.name + suffix));
+            return ResourceKey.create(registry, Allomancy.rl(this.name + suffix));
         }
 
         @Override
@@ -66,8 +64,7 @@ public final class MaterialsSetup {
              new OreConfig("zinc", 8, 12, 40, 80)};
 
     private static final ResourceKey<BiomeModifier> ADD_ALLOMANCY_ORES =
-            ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
-                               ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "overworld_ores"));
+            ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, Allomancy.rl("overworld_ores"));
 
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);

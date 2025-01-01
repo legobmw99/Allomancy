@@ -5,12 +5,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 
 public record EntityPushPullPayload(int entityID, int force) implements CustomPacketPayload {
 
-    public static final Type<EntityPushPullPayload> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "entity_push_pull"));
+    public static final Type<EntityPushPullPayload> TYPE = new Type<>(Allomancy.rl("entity_push_pull"));
 
     public static final StreamCodec<ByteBuf, EntityPushPullPayload> STREAM_CODEC =
             StreamCodec.composite(ByteBufCodecs.INT, EntityPushPullPayload::entityID, ByteBufCodecs.INT,

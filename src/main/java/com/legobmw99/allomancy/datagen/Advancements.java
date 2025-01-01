@@ -45,9 +45,7 @@ class Advancements implements AdvancementSubProvider {
 
         Advancement.Builder
                 .advancement()
-                .parent(Advancement.Builder
-                                .advancement()
-                                .build(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "main/metallurgist")))
+                .parent(Advancement.Builder.advancement().build(Allomancy.rl("main/metallurgist")))
                 .display(ConsumeSetup.LERASIUM_NUGGET.get(),
                          Component.translatable("advancements.dna_entangled.title"),
                          Component.translatable("advancements.dna_entangled.desc"), null, AdvancementType.TASK, true,
@@ -58,9 +56,7 @@ class Advancements implements AdvancementSubProvider {
 
         Advancement.Builder
                 .advancement()
-                .parent(Advancement.Builder
-                                .advancement()
-                                .build(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "main/metallurgist")))
+                .parent(Advancement.Builder.advancement().build(Allomancy.rl("main/metallurgist")))
                 .display(CombatSetup.MISTCLOAK.get(), Component.translatable("advancements.become_mistborn.title"),
                          Component.translatable("advancements.become_mistborn.desc"), null, AdvancementType.CHALLENGE,
                          true, true, true)
@@ -76,9 +72,7 @@ class Advancements implements AdvancementSubProvider {
 
         var allMetals = Advancement.Builder
                 .advancement()
-                .parent(Advancement.Builder
-                                .advancement()
-                                .build(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "main/metallurgist")))
+                .parent(Advancement.Builder.advancement().build(Allomancy.rl("main/metallurgist")))
                 .display(vial, Component.translatable("advancements.metallic_collector.title"),
                          Component.translatable("advancements.metallic_collector.desc"), null,
                          AdvancementType.CHALLENGE, true, true, false);
@@ -92,9 +86,7 @@ class Advancements implements AdvancementSubProvider {
 
         Advancement.Builder
                 .advancement()
-                .parent(Advancement.Builder
-                                .advancement()
-                                .build(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "main/metallurgist")))
+                .parent(Advancement.Builder.advancement().build(Allomancy.rl("main/metallurgist")))
                 .display(CombatSetup.COIN_BAG.get(), Component.translatable("advancements.coinshot.title"),
                          Component.translatable("advancements.coinshot.desc"), null, AdvancementType.TASK, true, true,
                          false)
@@ -117,9 +109,7 @@ class Advancements implements AdvancementSubProvider {
 
         Advancement.Builder
                 .advancement()
-                .parent(Advancement.Builder
-                                .advancement()
-                                .build(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "main/metallurgist")))
+                .parent(Advancement.Builder.advancement().build(Allomancy.rl("main/metallurgist")))
                 .display(CombatSetup.ALUMINUM_HELMET.get(), Component.translatable("advancements.tin_foil_hat.title"),
                          Component.translatable("advancements.tin_foil_hat.desc"), null, AdvancementType.TASK, true,
                          false, true)
@@ -139,9 +129,7 @@ class Advancements implements AdvancementSubProvider {
 
         Advancement.Builder
                 .advancement()
-                .parent(Advancement.Builder
-                                .advancement()
-                                .build(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "main/metallurgist")))
+                .parent(Advancement.Builder.advancement().build(Allomancy.rl("main/metallurgist")))
                 .display(Blocks.IRON_BLOCK, Component.translatable("advancements.consequences.title"),
                          Component.translatable("advancements.consequences.desc"), null, AdvancementType.TASK, true,
                          false, true)
@@ -156,9 +144,7 @@ class Advancements implements AdvancementSubProvider {
 
         Advancement.Builder
                 .advancement()
-                .parent(Advancement.Builder
-                                .advancement()
-                                .build(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "main/coinshot")))
+                .parent(Advancement.Builder.advancement().build(Allomancy.rl("main/coinshot")))
                 .display(Blocks.BELL, Component.translatable("advancements.going_loud.title"),
                          Component.translatable("advancements.going_loud.desc"), null, AdvancementType.TASK, true,
                          true, true)

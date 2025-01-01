@@ -8,15 +8,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.UUID;
 
 public record AllomancerDataPayload(CompoundTag nbt, UUID player) implements CustomPacketPayload {
 
-    public static final Type<AllomancerDataPayload> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "player_data"));
+    public static final Type<AllomancerDataPayload> TYPE = new Type<>(Allomancy.rl("player_data"));
 
     public static final StreamCodec<ByteBuf, AllomancerDataPayload> STREAM_CODEC =
             StreamCodec.composite(ByteBufCodecs.COMPOUND_TAG, AllomancerDataPayload::nbt, UUIDUtil.STREAM_CODEC,

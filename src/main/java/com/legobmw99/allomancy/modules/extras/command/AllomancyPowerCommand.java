@@ -53,7 +53,7 @@ public final class AllomancyPowerCommand {
         LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("allomancy").requires(permissions(0));
         root.then(Commands
                           .literal("get")
-                          .requires(permissions(0))
+                          .requires(permissions(Commands.LEVEL_ALL))
                           .executes(ctx -> handleMultiPlayer(ctx, sender(ctx), AllomancyPowerCommand::getPowers))
                           .then(Commands
                                         .argument("targets", EntityArgument.players())
@@ -62,7 +62,7 @@ public final class AllomancyPowerCommand {
 
         root.then(Commands
                           .literal("add")
-                          .requires(permissions(2))
+                          .requires(permissions(Commands.LEVEL_GAMEMASTERS))
                           .then(Commands
                                         .argument("type", AllomancyPowerType.INSTANCE)
                                         .executes(ctx -> handleMultiPlayer(ctx, sender(ctx),
@@ -74,7 +74,7 @@ public final class AllomancyPowerCommand {
 
         root.then(Commands
                           .literal("remove")
-                          .requires(permissions(2))
+                          .requires(permissions(Commands.LEVEL_GAMEMASTERS))
                           .then(Commands
                                         .argument("type", AllomancyPowerType.INSTANCE)
                                         .executes(ctx -> handleMultiPlayer(ctx, sender(ctx),

@@ -27,18 +27,18 @@ class EquipmentAssets implements DataProvider {
 
                          EquipmentClientInfo
                                  .builder()
-                                 .addLayers(EquipmentClientInfo.LayerType.HUMANOID, new EquipmentClientInfo.Layer(
-                                         ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "mistcloak"),
-                                         Optional.empty(), false))
+                                 .addLayers(EquipmentClientInfo.LayerType.HUMANOID,
+                                            new EquipmentClientInfo.Layer(Allomancy.rl("mistcloak"), Optional.empty(),
+                                                                          false))
                                  .build());
 
         registrar.accept(CombatSetup.ALUMINUM.location(),
 
                          EquipmentClientInfo
                                  .builder()
-                                 .addLayers(EquipmentClientInfo.LayerType.HUMANOID, new EquipmentClientInfo.Layer(
-                                         ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "aluminum"),
-                                         Optional.empty(), false))
+                                 .addLayers(EquipmentClientInfo.LayerType.HUMANOID,
+                                            new EquipmentClientInfo.Layer(Allomancy.rl("aluminum"), Optional.empty(),
+                                                                          false))
                                  .build());
     }
 

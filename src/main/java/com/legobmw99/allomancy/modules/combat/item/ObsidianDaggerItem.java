@@ -3,7 +3,6 @@ package com.legobmw99.allomancy.modules.combat.item;
 import com.legobmw99.allomancy.Allomancy;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -19,8 +18,7 @@ public class ObsidianDaggerItem extends SwordItem {
     private static final int ATTACK_DAMAGE = 23;
     private static final float ATTACK_SPEED = 9.2F;
 
-    public static final TagKey<Item> OBSIDIAN_REPAIR =
-            ItemTags.create(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "obsidian_tool_materials"));
+    public static final TagKey<Item> OBSIDIAN_REPAIR = ItemTags.create(Allomancy.rl("obsidian_tool_materials"));
     private static final ToolMaterial OBSIDIAN =
             new ToolMaterial(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 2, ATTACK_SPEED, 1.0F, ATTACK_DAMAGE,
                              OBSIDIAN_REPAIR);

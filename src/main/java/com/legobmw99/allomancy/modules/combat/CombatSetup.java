@@ -56,8 +56,7 @@ public final class CombatSetup {
                                                                                       Allomancy.MODID, "wool"));
 
 
-    public static final TagKey<Item> REPAIRS_MISTCLOAK =
-            ItemTags.create(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "repairs_wool_armor"));
+    public static final TagKey<Item> REPAIRS_MISTCLOAK = ItemTags.create(Allomancy.rl("repairs_wool_armor"));
 
 
     private static final ArmorMaterial WOOL_ARMOR =
@@ -74,10 +73,9 @@ public final class CombatSetup {
                       // note: overrides normal armor, which is fine
                       .attributes(ItemAttributeModifiers
                                           .builder()
-                                          .add(Attributes.MOVEMENT_SPEED, new AttributeModifier(
-                                                       ResourceLocation.fromNamespaceAndPath(Allomancy.MODID,
-                                                                                             "mistcloak_speed"), 0.25,
-                                                       AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                                          .add(Attributes.MOVEMENT_SPEED,
+                                               new AttributeModifier(Allomancy.rl("mistcloak_speed"), 0.25,
+                                                                     AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
                                                EquipmentSlotGroup.CHEST)
                                           .build())));
 
@@ -89,8 +87,7 @@ public final class CombatSetup {
                                                                                           "aluminum"));
 
 
-    public static final TagKey<Item> REPAIRS_ALUMINUM =
-            ItemTags.create(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "repairs_aluminum_armor"));
+    public static final TagKey<Item> REPAIRS_ALUMINUM = ItemTags.create(Allomancy.rl("repairs_aluminum_armor"));
 
     private static final ArmorMaterial ALUMINUM_ARMOR =
             new ArmorMaterial(15, Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -122,9 +119,7 @@ public final class CombatSetup {
                     .setShouldReceiveVelocityUpdates(true)
                     .setUpdateInterval(20)
                     .sized(0.25F, 0.25F)
-                    .build(ResourceKey.create(Registries.ENTITY_TYPE,
-                                              ResourceLocation.fromNamespaceAndPath(Allomancy.MODID,
-                                                                                    "nugget_projectile"))));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Allomancy.rl("nugget_projectile"))));
 
     private CombatSetup() {}
 

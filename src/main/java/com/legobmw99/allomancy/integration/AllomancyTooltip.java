@@ -54,6 +54,6 @@ public class AllomancyTooltip implements IEntityComponentProvider {
 
     @Override
     public ResourceLocation getUid() {
-        return ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "waila_bronze");
+        return Allomancy.rl("waila_bronze");
     }
 }

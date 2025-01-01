@@ -13,6 +13,7 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.network.Network;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.ItemDisplay;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -31,6 +32,9 @@ public class Allomancy {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
+    public static ResourceLocation rl(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    }
 
     public Allomancy(IEventBus bus, ModContainer container, Dist dist) {
 

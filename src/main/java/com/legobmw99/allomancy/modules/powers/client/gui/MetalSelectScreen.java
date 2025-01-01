@@ -40,7 +40,7 @@ public class MetalSelectScreen extends Screen {
             Arrays.stream(METAL_NAMES).map(s -> "metals." + s).toArray(String[]::new);
     private static final ResourceLocation[] METAL_ICONS = Arrays
             .stream(METAL_NAMES)
-            .map(s -> ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, String.format(GUI_METAL, s)))
+            .map(s -> Allomancy.rl(String.format(GUI_METAL, s)))
             .toArray(ResourceLocation[]::new);
     private final Minecraft mc;
     private int timeIn = PowersConfig.animate_selection.get() ? 0 : 16;

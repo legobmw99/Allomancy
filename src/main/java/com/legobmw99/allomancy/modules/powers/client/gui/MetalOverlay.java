@@ -20,8 +20,7 @@ import java.awt.*;
 public final class MetalOverlay implements LayeredDraw.Layer {
 
     private static final Point[] Frames = new Point[4];
-    private static final ResourceLocation meterLoc =
-            ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "textures/gui/overlay/meter.png");
+    private static final ResourceLocation meterLoc = Allomancy.rl("textures/gui/overlay/meter.png");
     private int currentFrame = 0;
 
     static {
@@ -35,8 +34,7 @@ public final class MetalOverlay implements LayeredDraw.Layer {
     private MetalOverlay() {}
 
     public static void registerGUI(final RegisterGuiLayersEvent evt) {
-        evt.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Allomancy.MODID, "metal_display"),
-                             new MetalOverlay());
+        evt.registerAboveAll(Allomancy.rl("metal_display"), new MetalOverlay());
     }
 
     private static void blit(GuiGraphics graphics,
