@@ -26,7 +26,12 @@ base {
 }
 
 // Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
+
+def gametest_mod_id = mod_id + "_test"
 
 neoForge {
     version = project.neo_version
@@ -36,37 +41,32 @@ neoForge {
         minecraftVersion = project.parchment_minecraft_version
     }
 
+    addModdingDependenciesTo(sourceSets.test)
+
     runs {
         client {
             client()
-            gameDirectory = project.file('runs/client')
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            sourceSet = sourceSets.test
         }
 
         client2 {
             client()
-            gameDirectory = project.file('runs/client')
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
             programArguments.addAll('--username', 'Dev2')
         }
 
         server {
             server()
-            gameDirectory = project.file('runs/server')
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
         // By default, the server will crash when no gametests are provided.
         gameTestServer {
             type = "gameTestServer"
-            gameDirectory = project.file('runs/gameTestServer')
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            sourceSet = sourceSets.test
         }
 
         clientData {
             clientData()
-            gameDirectory = project.file('runs/clientData')
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
@@ -75,9 +75,13 @@ neoForge {
         configureEach {
             // Recommended logging data for a userdev environment
             systemProperty 'forge.logging.markers', 'REGISTRIES'
-
+            systemProperty 'neoforge.enableGameTest', 'true'
+            systemProperty 'neoforge.enabledGameTestNamespaces', "${project.mod_id},${gametest_mod_id}"
+            gameDirectory = project.file('runs/' + name)
             // Recommended logging level for the console
             logLevel = org.slf4j.event.Level.DEBUG
+
+            jvmArguments.addAll '-Xmx4G'
         }
     }
 
@@ -85,6 +89,9 @@ neoForge {
         // define mod <-> source bindings
         "${mod_id}" {
             sourceSet(sourceSets.main)
+        }
+        "${gametest_mod_id}" {
+            sourceSet(sourceSets.test)
         }
     }
 }
@@ -116,10 +123,10 @@ repositories {
 
 
 dependencies {
-    dependencies {
-        implementation "curse.maven:jade-324717:${jade_id}"
-        // api "curse.maven:jade-324717:${jade_api}"
-    }
+    implementation "curse.maven:jade-324717:${jade_id}"
+    // api "curse.maven:jade-324717:${jade_api}"
+
+    localRuntime(testImplementation("net.neoforged:testframework:${neo_version}"))
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -195,6 +202,10 @@ artifacts {
     archives jar
     archives apiJar
     archives deobfJar
+}
+
+test {
+    enabled = false
 }
 
 
