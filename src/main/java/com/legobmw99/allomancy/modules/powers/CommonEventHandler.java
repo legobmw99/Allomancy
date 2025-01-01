@@ -340,10 +340,10 @@ public final class CommonEventHandler {
                 curPlayer.removeEffect(MobEffects.NIGHT_VISION);
             }
             if (data.isBurning(Metal.PEWTER)) {
-                //Add jump boost and speed to pewter burners
-                curPlayer.addEffect(new MobEffectInstance(MobEffects.JUMP, 10, 1, true, false));
-                curPlayer.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 10, 0, true, false));
-                curPlayer.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 10, 1, true, false));
+                // Add jump boost and speed to pewter burners
+                curPlayer.addEffect(new MobEffectInstance(MobEffects.JUMP, 11, 1, true, false));
+                curPlayer.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 11, 0, true, false));
+                curPlayer.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 11, 1, true, false));
 
                 if (data.getDamageStored() > 0) {
                     if (level.random.nextInt(200) == 0) {

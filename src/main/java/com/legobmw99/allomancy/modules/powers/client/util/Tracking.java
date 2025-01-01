@@ -175,7 +175,7 @@ public class Tracking {
         private void add(BlockPos pos, BlockState state) {
             this.blocks += 1;
             this.center =
-                    this.center.scale(this.blocks - 1).add(getCenterOfBlock(pos, state)).scale(1.0D / this.blocks);
+                    this.center.add(getCenterOfBlock(pos, state).subtract(this.center).scale(1.0D / this.blocks));
         }
 
         public Vec3 getCenter() {
