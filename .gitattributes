@@ -2,3 +2,4 @@
 # Add any extra files or paths here to make git stop saying they
 # are changed when only line endings change.
 src/generated/  linguist-generated=true text eol=lf
+src/main/generated_resources/  linguist-generated=true text eol=lf

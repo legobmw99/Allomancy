@@ -48,7 +48,6 @@ public class IronButtonBlock extends ButtonBlock {
                                   BlockPos pPos,
                                   Explosion pExplosion,
                                   BiConsumer<ItemStack, BlockPos> pDropConsumer) {
-        super.onExplosionHit(pState, pLevel, pPos, pExplosion, pDropConsumer);
     }
 
     @Override
