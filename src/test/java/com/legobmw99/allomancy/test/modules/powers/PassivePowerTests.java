@@ -93,8 +93,26 @@ public class PassivePowerTests {
         data.setBurning(Metal.TIN, true);
 
         helper.succeedOnTickWhen(1, () -> {
-            helper.assertFalse(player.hasEffect(MobEffects.BLINDNESS), "Tin didn't remove blindness");
-            helper.assertTrue(player.hasEffect(MobEffects.NIGHT_VISION), "Tin didn't grant night vision");
+            helper.assertMobEffectAbsent(player, MobEffects.BLINDNESS, "Tin didn't remove blindness");
+            helper.assertMobEffectPresent(player, MobEffects.NIGHT_VISION, "Tin didn't grant night vision");
+        });
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder
+    public static void pewterGivesBuffs(ExtendedGameTestHelper helper) {
+        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+        data.setMistborn();
+        data.incrementStored(Metal.PEWTER);
+        data.setBurning(Metal.PEWTER, true);
+
+        helper.succeedOnTickWhen(1, () -> {
+            helper.assertMobEffectPresent(player, MobEffects.MOVEMENT_SPEED, "Pewter didn't grant speed");
+            helper.assertMobEffectPresent(player, MobEffects.DIG_SPEED, "Pewter didn't grant haste");
+            helper.assertMobEffectPresent(player, MobEffects.JUMP, "Pewter didn't grant jump boost");
         });
     }
 
@@ -116,7 +134,7 @@ public class PassivePowerTests {
 
         helper.succeedWhen(() -> {
             helper.assertTrue(data.isEnhanced(), "Duralumin isn't enhancing");
-            helper.assertTrue(player.hasEffect(MobEffects.CONFUSION), "Player is not confused");
+            helper.assertMobEffectPresent(player, MobEffects.CONFUSION, "Player is not confused");
         });
     }
 
@@ -135,7 +153,7 @@ public class PassivePowerTests {
 
         helper.succeedOnTickWhen(1, () -> {
             helper.assertTrue(data.isEnhanced(), "Duralumin isn't enhancing");
-            helper.assertTrue(player.hasEffect(MobEffects.INVISIBILITY), "Player is not invisible");
+            helper.assertMobEffectPresent(player, MobEffects.INVISIBILITY, "Player is not invisible");
         });
     }
 

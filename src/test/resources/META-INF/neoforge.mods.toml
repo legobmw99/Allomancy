@@ -9,3 +9,8 @@ modId = "allomancy_test" #mandatory
 version = "1.0" #mandatory
 displayName = "Allomancy Test"
 description = "Allomancy Test"
+
+[[dependencies.allomancy_test]]
+modId = "allomancy"
+type = "required"
+ordering = "AFTER"
