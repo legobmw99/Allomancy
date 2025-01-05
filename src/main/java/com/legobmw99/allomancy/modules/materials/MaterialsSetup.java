@@ -14,9 +14,12 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
@@ -69,6 +72,8 @@ public final class MaterialsSetup {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
 
+
+    public static final TagKey<Item> FLAKES_TAG = ItemTags.create(Allomancy.rl("metal_flakes"));
     public static final List<DeferredItem<Item>> FLAKES = new ArrayList<>();
     public static final List<DeferredItem<Item>> NUGGETS = new ArrayList<>();
     public static final List<DeferredItem<Item>> INGOTS = new ArrayList<>();

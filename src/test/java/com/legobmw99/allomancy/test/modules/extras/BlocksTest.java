@@ -1,12 +1,12 @@
 package com.legobmw99.allomancy.test.modules.extras;
 
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
+import com.legobmw99.allomancy.test.AllomancyTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
@@ -63,17 +63,15 @@ public class BlocksTest {
     @GameTest
     @EmptyTemplate
     @TestHolder
-    public static void cantJustClick(ExtendedGameTestHelper helper) {
-
+    public static void cantJustClick(AllomancyTestHelper helper) {
 
         BlockPos button = new BlockPos(1, 2, 1);
         BlockPos inv_button = button.east();
         BlockPos lever = button.west();
 
-        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
+        var player = helper.makeTickingPlayer();
         helper
                 .startSequence()
-                .thenExecute(player::moveToCentre)
                 .thenExecute(() -> helper.setBlock(button.below(), Blocks.REDSTONE_LAMP))
                 .thenExecute(() -> helper.setBlock(button, ExtrasSetup.IRON_BUTTON
                         .get()
@@ -105,10 +103,9 @@ public class BlocksTest {
 
 
     @GameTest
-    @EmptyTemplate(value = "3x4x3")
+    @EmptyTemplate("3x4x3")
     @TestHolder
     public static void chargesDoNothing(ExtendedGameTestHelper helper) {
-
 
         BlockPos button = new BlockPos(1, 1, 1);
         BlockPos inv_button = button.east();
@@ -146,5 +143,4 @@ public class BlocksTest {
                 .thenSucceed();
 
     }
-
 }

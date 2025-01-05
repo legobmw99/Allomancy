@@ -1,9 +1,11 @@
 package com.legobmw99.allomancy.test.modules.powers;
 
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import net.minecraft.core.BlockPos;
+import com.legobmw99.allomancy.test.AllomancyTestHelper;
 import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -13,9 +15,9 @@ import net.neoforged.testframework.gametest.EmptyTemplate;
 import net.neoforged.testframework.gametest.ExtendedGameTestHelper;
 
 @ForEachTest(groups = "data")
-public class DataTests {
+public class DataTest {
     @GameTest
-    @EmptyTemplate
+    @EmptyTemplate("1x3x1")
     @TestHolder
     public static void emptyDataTest(ExtendedGameTestHelper helper) {
         var player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -26,21 +28,34 @@ public class DataTests {
     }
 
     @GameTest
-    @EmptyTemplate
+    @EmptyTemplate("1x3x1")
     @TestHolder
-    public static void dataOnRespawnTest(ExtendedGameTestHelper helper) {
-        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
+    public static void randomMistingTest(AllomancyTestHelper helper) {
+        var player = helper.makeTickingPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-        data.setMistborn();
-        data.incrementStored(Metal.STEEL);
-        player.setRespawnPosition(Level.OVERWORLD, helper.relativePos(BlockPos.ZERO), 0.0f, true, true);
+
+        helper.assertFalse(data.isUninvested(), "Player is not misting");
+        helper.assertFalse(data.isMistborn(), "Player is full mistborn");
+        helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).is(MaterialsSetup.FLAKES_TAG),
+                          "Misting wasn't given flake");
+        helper.succeed();
+    }
+
+
+    @GameTest
+    @EmptyTemplate("1x3x1")
+    @TestHolder
+    public static void dataOnRespawnTest(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
+
+        player.setRespawnPosition(Level.OVERWORLD, player.blockPosition(), 0.0f, true, true);
 
         var returningPlayer =
                 player.getServer().getPlayerList().respawn(player, true, Entity.RemovalReason.CHANGED_DIMENSION);
 
         helper.assertTrue(returningPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA).isMistborn(),
                           "Player lost investment on teleport");
-        helper.assertTrue(returningPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA).getStored(Metal.STEEL) == 1,
+        helper.assertTrue(returningPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA).getStored(Metal.STEEL) == 10,
                           "Player lost inventory on teleport");
 
         var respawnedPlayer =

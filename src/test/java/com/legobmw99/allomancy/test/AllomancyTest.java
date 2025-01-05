@@ -24,11 +24,11 @@ public class AllomancyTest {
                     builder.openManagerKey(GLFW.GLFW_KEY_N);
                     return builder.build();
                 })
-                .enable(Feature.CLIENT_SYNC, Feature.CLIENT_MODIFICATIONS)
+                .enable(Feature.CLIENT_SYNC, Feature.CLIENT_MODIFICATIONS, Feature.MAGIC_ANNOTATIONS,
+                        Feature.GAMETEST)
                 .dumpers(new GitHubActionsStepSummaryDumper())
                 .build()
                 .create();
-
         framework.init(bus, container);
     }
 

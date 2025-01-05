@@ -4,13 +4,14 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.AllomancyTest;
+import com.legobmw99.allomancy.test.AllomancyTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
@@ -20,28 +21,25 @@ import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.RegisterStructureTemplate;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
-import net.neoforged.testframework.gametest.ExtendedGameTestHelper;
 import net.neoforged.testframework.gametest.StructureTemplateBuilder;
 
+import java.util.List;
+
 @ForEachTest(groups = "passive_powers")
-public class PassivePowerTests {
+public class PassivePowerTest {
 
     @GameTest
-    @EmptyTemplate
+    @EmptyTemplate("1x3x1")
     @TestHolder
-    public static void aluminiumDrainsInstantly(ExtendedGameTestHelper helper) {
-        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
+    public static void aluminiumDrainsInstantly(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-        data.setMistborn();
-        for (int i = 0; i < 10; i++) {
-            data.incrementStored(Metal.PEWTER);
-            data.incrementStored(Metal.STEEL);
-        }
-        data.setBurning(Metal.PEWTER, true);
-        data.incrementStored(Metal.ALUMINUM);
-        data.setBurning(Metal.ALUMINUM, true);
 
         player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, -1, 0, true, true));
+
+        data.setBurning(Metal.PEWTER, true);
+        data.setBurning(Metal.ALUMINUM, true);
+
 
         helper.succeedOnTickWhen(1, () -> {
             helper.assertFalse(data.isBurning(Metal.ALUMINUM), "Aluminum still burning after a tick");
@@ -55,17 +53,13 @@ public class PassivePowerTests {
     }
 
     @GameTest
-    @EmptyTemplate
+    @EmptyTemplate("1x3x1")
     @TestHolder
-    public static void duraluminDrainsWhenExtinguished(ExtendedGameTestHelper helper) {
-        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
+    public static void duraluminDrainsWhenExtinguished(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-        data.setMistborn();
-        for (int i = 0; i < 10; i++) {
-            data.incrementStored(Metal.PEWTER);
-            data.incrementStored(Metal.STEEL);
-        }
         data.setBurning(Metal.PEWTER, true);
+        data.drainMetals(List.of(Metal.DURALUMIN).toArray(Metal[]::new));
         data.incrementStored(Metal.DURALUMIN);
         data.setBurning(Metal.DURALUMIN, true);
 
@@ -81,15 +75,14 @@ public class PassivePowerTests {
     }
 
     @GameTest
-    @EmptyTemplate
+    @EmptyTemplate("1x3x1")
     @TestHolder
-    public static void tinClearsBlindness(ExtendedGameTestHelper helper) {
-        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
+    public static void tinClearsBlindness(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, -1, 0, true, true));
-        data.setMistborn();
-        data.incrementStored(Metal.TIN);
+
         data.setBurning(Metal.TIN, true);
 
         helper.succeedOnTickWhen(1, () -> {
@@ -99,14 +92,13 @@ public class PassivePowerTests {
     }
 
     @GameTest
-    @EmptyTemplate
+    @EmptyTemplate("1x3x1")
     @TestHolder
-    public static void pewterGivesBuffs(ExtendedGameTestHelper helper) {
-        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
+    public static void pewterGivesBuffs(AllomancyTestHelper helper) {
+        // TODO test pewter health
+        var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
-        data.setMistborn();
-        data.incrementStored(Metal.PEWTER);
         data.setBurning(Metal.PEWTER, true);
 
         helper.succeedOnTickWhen(1, () -> {
@@ -117,17 +109,12 @@ public class PassivePowerTests {
     }
 
     @GameTest(timeoutTicks = 400)
-    @EmptyTemplate
+    @EmptyTemplate("1x3x1")
     @TestHolder
-    public static void duraluminTinMakesYouIll(ExtendedGameTestHelper helper) {
+    public static void duraluminTinMakesYouIll(AllomancyTestHelper helper) {
         // technically random
-        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
+        var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-        data.setMistborn();
-        for (int i = 0; i < 10; i++) {
-            data.incrementStored(Metal.TIN);
-            data.incrementStored(Metal.DURALUMIN);
-        }
 
         data.setBurning(Metal.TIN, true);
         data.setBurning(Metal.DURALUMIN, true);
@@ -138,15 +125,46 @@ public class PassivePowerTests {
         });
     }
 
+    // TODO test pewter dura invuln
+    // TODO test dura gold tp
+    // TODO test dura electrum tp
+
     @GameTest
-    @EmptyTemplate
+    @EmptyTemplate("5x3x5")
     @TestHolder
-    public static void duraluminCopperMakesYouInvis(ExtendedGameTestHelper helper) {
-        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
+    public static void duraluminChromeWipesOthers(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-        data.setMistborn();
-        data.incrementStored(Metal.COPPER);
-        data.incrementStored(Metal.DURALUMIN);
+
+        data.setBurning(Metal.CHROMIUM, true);
+        data.setBurning(Metal.DURALUMIN, true);
+
+        var player2 = helper.makeMistbornPlayer();
+        player2.moveToCorner();
+        player2.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+        var data2 = player2.getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+        var player3 = helper.makeMistbornPlayer();
+        player3.moveTo(helper
+                               .absoluteVec(
+                                       new BlockPos(4, helper.testInfo.getStructureName().endsWith("_floor") ? 2 : 1,
+                                                    4).getCenter())
+                               .subtract(0, 0.5, 0));
+        var data3 = player3.getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+        helper.succeedOnTickWhen(1, () -> {
+            helper.assertTrue(data.isEnhanced(), "Duralumin isn't enhancing");
+            helper.assertTrue(data2.getStored(Metal.STEEL) == 0, "Player2 wasn't wiped");
+            helper.assertTrue(data3.getStored(Metal.STEEL) == 10, "Player3 was wiped");
+        });
+    }
+
+    @GameTest
+    @EmptyTemplate("1x3x1")
+    @TestHolder
+    public static void duraluminCopperMakesYouInvis(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
         data.setBurning(Metal.COPPER, true);
         data.setBurning(Metal.DURALUMIN, true);
@@ -167,24 +185,18 @@ public class PassivePowerTests {
 
     @GameTest(template = AllomancyTest.MODID + ":wheat")
     @TestHolder
-    public static void bendalloyGrowsCrops(ExtendedGameTestHelper helper) {
+    public static void bendalloyGrowsCrops(AllomancyTestHelper helper) {
         BlockPos wheat = new BlockPos(2, 2, 2);
 
-        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
-        player.moveToCentre();
+        var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-        data.setMistborn();
-        for (int i = 0; i < 10; i++) {
-            data.incrementStored(Metal.BENDALLOY);
-        }
+
         data.setBurning(Metal.BENDALLOY, true);
+
         helper.succeedWhen(() -> {
             helper.assertTrue(data.isBurning(Metal.BENDALLOY), "Bendalloy went out");
-            helper.assertTrue(helper.getBlockState(wheat).is(Blocks.WHEAT), "Wheat isn't wheat");
-
-            helper.assertTrue(((CropBlock) Blocks.WHEAT).isMaxAge(helper.getBlockState(wheat)),
-                              "Wheat didn't grow up");
-
+            helper.assertBlockPresent(Blocks.WHEAT, wheat);
+            helper.assertBlockProperty(wheat, CropBlock.AGE, CropBlock.MAX_AGE);
         });
 
     }
@@ -196,25 +208,21 @@ public class PassivePowerTests {
 
     @GameTest(template = AllomancyTest.MODID + ":furnace")
     @TestHolder
-    public static void bendalloyAcceleratesFurnaces(ExtendedGameTestHelper helper) {
+    public static void bendalloyAcceleratesFurnaces(AllomancyTestHelper helper) {
         BlockPos furnace = new BlockPos(0, 0, 0);
         FurnaceBlockEntity furnaceEntity = helper.getBlockEntity(furnace, FurnaceBlockEntity.class);
         furnaceEntity.setItem(0, new ItemStack(MaterialsSetup.RAW_ORE_ITEMS.getFirst().get(), 1));
         furnaceEntity.setItem(1, new ItemStack(Items.STICK, 2));
 
-        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
-        player.moveToCentre();
+        var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-        data.setMistborn();
-        data.incrementStored(Metal.BENDALLOY);
         data.setBurning(Metal.BENDALLOY, true);
         helper.succeedOnTickWhen(29, () -> {
             helper.assertTrue(data.isBurning(Metal.BENDALLOY), "Bendalloy went out");
+            helper.assertContainerContains(furnace, MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get());
+
             helper.assertTrue(furnaceEntity.getItem(1).isEmpty(), "Fuel didn't burn out");
             helper.assertTrue(furnaceEntity.getItem(0).isEmpty(), "item didn't smelt");
-            helper.assertTrue(furnaceEntity.getItem(2).is(MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get()),
-                              "item didn't smelt");
-
         });
 
     }

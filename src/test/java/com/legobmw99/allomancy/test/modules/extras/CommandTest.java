@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -25,7 +26,7 @@ import java.util.function.Supplier;
 public class CommandTest {
 
     @GameTest
-    @EmptyTemplate
+    @EmptyTemplate("1x3x1")
     @TestHolder
     public static void allomancyPowerWorks(ExtendedGameTestHelper helper) {
         var player = helper.makeOpMockPlayer(Commands.LEVEL_GAMEMASTERS);
@@ -57,7 +58,7 @@ public class CommandTest {
     }
 
     @GameTest
-    @EmptyTemplate
+    @EmptyTemplate("1x3x1")
     @TestHolder
     public static void allomancyPowerNeedsPerms(ExtendedGameTestHelper helper) {
         var player = helper.makeOpMockPlayer(Commands.LEVEL_ALL);
@@ -78,10 +79,11 @@ public class CommandTest {
     }
 
     @GameTest
-    @EmptyTemplate
+    @EmptyTemplate("1x3x1")
     @TestHolder
     public static void allomancyGet(ExtendedGameTestHelper helper) {
         var player = helper.makeOpMockPlayer(Commands.LEVEL_ALL);
+        player.moveTo(Vec3.atCenterOf(helper.absolutePos(BlockPos.ZERO)));
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
         data.setMistborn();
         var stack = TattleTaleStack.createCommandSourceStack(player);
