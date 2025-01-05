@@ -12,6 +12,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
@@ -126,11 +127,52 @@ public class PassivePowerTest {
     }
 
     // TODO test pewter dura invuln
-    // TODO test dura gold tp
-    // TODO test dura electrum tp
 
     @GameTest
-    @EmptyTemplate("5x3x5")
+    @EmptyTemplate(value = "5x3x5", floor = true)
+    @TestHolder
+    public static void duraluminElectrumMovesToSpawn(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
+        player.moveToCorner();
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+        var farCorner = helper.absolutePos(new BlockPos(4, 0, 4));
+        player.setRespawnPosition(Level.OVERWORLD, farCorner, 0.0f, true, true);
+        data.setBurning(Metal.ELECTRUM, true);
+        data.setBurning(Metal.DURALUMIN, true);
+
+
+        helper.succeedOnTickWhen(1, () -> {
+            helper.assertFalse(data.isBurning(Metal.ELECTRUM), "Electrum didn't extinguish");
+            helper.assertTrue(data.getStored(Metal.ELECTRUM) == 0, "Electrum didn't run out");
+            helper.assertTrue(data.getStored(Metal.DURALUMIN) == 0, "Duralumin didn't run out");
+            helper.assertEntityInstancePresent(player, new BlockPos(4, 2, 4));
+        });
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "5x3x5", floor = true)
+    @TestHolder
+    public static void duraluminGoldMovesToDeath(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
+        player.moveToCorner();
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+        var farCorner = helper.absolutePos(new BlockPos(4, 0, 4));
+        // can't test actual death due to it creating a non-GameTestPlayer
+        data.setDeathLoc(farCorner, player.level().dimension());
+        data.setBurning(Metal.GOLD, true);
+        data.setBurning(Metal.DURALUMIN, true);
+        helper.succeedOnTickWhen(1, () -> {
+            helper.assertFalse(data.isBurning(Metal.GOLD), "Gold didn't extinguish");
+            helper.assertTrue(data.getStored(Metal.GOLD) == 0, "Gold didn't run out");
+            helper.assertTrue(data.getStored(Metal.DURALUMIN) == 0, "Duralumin didn't run out");
+            helper.assertEntityInstancePresent(player, new BlockPos(4, 2, 4));
+        });
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "5x3x5", floor = true)
     @TestHolder
     public static void duraluminChromeWipesOthers(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
@@ -145,11 +187,7 @@ public class PassivePowerTest {
         var data2 = player2.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
         var player3 = helper.makeMistbornPlayer();
-        player3.moveTo(helper
-                               .absoluteVec(
-                                       new BlockPos(4, helper.testInfo.getStructureName().endsWith("_floor") ? 2 : 1,
-                                                    4).getCenter())
-                               .subtract(0, 0.5, 0));
+        player3.moveTo(helper.absoluteVec(new BlockPos(4, 1, 4).getCenter()).subtract(0, 0.5, 0));
         var data3 = player3.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
         helper.succeedOnTickWhen(1, () -> {

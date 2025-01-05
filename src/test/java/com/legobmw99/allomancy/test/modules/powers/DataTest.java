@@ -66,6 +66,16 @@ public class DataTest {
         helper.assertTrue(respawnedPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA).getStored(Metal.STEEL) == 0,
                           "Player kept inventory on death");
 
+
+        var respawnedPlayerKeepInv =
+                player.getServer().getPlayerList().respawn(returningPlayer, true, Entity.RemovalReason.KILLED);
+
+        helper.assertTrue(respawnedPlayerKeepInv.getData(AllomancerAttachment.ALLOMANCY_DATA).isMistborn(),
+                          "Player lost investment on death");
+        helper.assertTrue(
+                respawnedPlayerKeepInv.getData(AllomancerAttachment.ALLOMANCY_DATA).getStored(Metal.STEEL) == 10,
+                "Player lost inventory with KeepInventory");
+
         helper.succeed();
     }
 }

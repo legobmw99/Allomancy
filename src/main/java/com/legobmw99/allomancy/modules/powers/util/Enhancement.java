@@ -57,8 +57,8 @@ public final class Enhancement {
                             new TeleportTransition(world.getServer().getLevel(dimension), Vec3.atBottomCenterOf(pos),
                                                    Vec3.ZERO, player.getXRot(), player.getYRot(), DO_NOTHING));
                 }
-
-                player.teleportTo(pos.getX(), pos.getY() + 1.5, pos.getZ());
+                var center = pos.above().getCenter();
+                player.teleportTo(center.x(), center.y(), center.z());
                 player.fallDistance = 0.0F;
             }
         }
