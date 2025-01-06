@@ -18,6 +18,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -207,8 +208,9 @@ public final class CommonEventHandler {
         if (event.getEntity() instanceof ServerPlayer player) {
             var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
             if (data.isBurning(Metal.PEWTER)) {
-                Allomancy.LOGGER.debug("Reducing Damage");
-                event.setAmount(event.getAmount() - 2);
+                float newDamage = Math.max(0, event.getAmount() - 2);
+                Allomancy.LOGGER.trace("Reducing damage to {} on {}", newDamage, player);
+                event.setAmount(newDamage);
                 // Note that they took damage, will come in to play if they stop burning
                 data.setDamageStored(data.getDamageStored() + 2);
                 Network.syncAllomancerData(player);
@@ -222,7 +224,7 @@ public final class CommonEventHandler {
             var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
             if (data.isBurning(Metal.PEWTER) && data.isEnhanced()) { // Duralumin invulnerability
-                Allomancy.LOGGER.debug("Canceling Damage");
+                Allomancy.LOGGER.debug("Canceling damage for {}", player);
                 event.setInvulnerable(true);
             }
 
@@ -249,45 +251,43 @@ public final class CommonEventHandler {
     @SubscribeEvent
     public static void onWorldTick(final LevelTickEvent.Post event) {
         Level level = event.getLevel();
-        var list = level.players();
-        for (int i = list.size() - 1; i >= 0; i--) {
-            Player curPlayer = list.get(i);
-            playerPowerTick(curPlayer, level);
+        if (level instanceof ServerLevel l) {
+            var list = l.players();
+            for (int i = list.size() - 1; i >= 0; i--) {
+                var curPlayer = list.get(i);
+                playerPowerTick(curPlayer, l);
+            }
         }
+
 
     }
 
-    private static void playerPowerTick(Player curPlayer, Level level) {
+    private static void playerPowerTick(ServerPlayer curPlayer, ServerLevel level) {
         var data = curPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA);
         if (!data.isUninvested()) {
 
-            if (curPlayer instanceof ServerPlayer player) {
-                // Run the necessary updates on the player's metals
-                boolean syncRequired = data.tickBurning();
+            // Run the necessary updates on the player's metals
+            boolean syncRequired = data.tickBurning();
 
-                /*********************************************
-                 * ALUMINUM AND DURALUMIN                    *
-                 *********************************************/
-                if (data.isBurning(Metal.ALUMINUM)) {
-                    Enhancement.wipePlayer(curPlayer);
+            /*********************************************
+             * ALUMINUM AND DURALUMIN                    *
+             *********************************************/
+            if (data.isBurning(Metal.ALUMINUM)) {
+                Enhancement.wipePlayer(curPlayer);
+                syncRequired = true;
+            }
+            if (data.isBurning(Metal.DURALUMIN) && !data.isEnhanced()) {
+                data.setEnhanced(2);
+                Network.sync(new EnhanceTimePayload(2, curPlayer.getId()), curPlayer);
+            } else if (!data.isBurning(Metal.DURALUMIN) && data.isEnhanced()) {
+                data.decrementEnhanced();
+                if (!data.isEnhanced()) { //Enhancement ran out this tick
+                    Network.sync(new EnhanceTimePayload(false, curPlayer.getId()), curPlayer);
+                    data.drainMetals(Arrays.stream(Metal.values()).filter(data::isBurning).toArray(Metal[]::new));
                     syncRequired = true;
                 }
-                if (data.isBurning(Metal.DURALUMIN) && !data.isEnhanced()) {
-                    data.setEnhanced(2);
-                    Network.sync(new EnhanceTimePayload(2, player.getId()), player);
-                } else if (!data.isBurning(Metal.DURALUMIN) && data.isEnhanced()) {
-                    data.decrementEnhanced();
-                    if (!data.isEnhanced()) { //Enhancement ran out this tick
-                        Network.sync(new EnhanceTimePayload(false, player.getId()), player);
-                        data.drainMetals(Arrays.stream(Metal.values()).filter(data::isBurning).toArray(Metal[]::new));
-                        syncRequired = true;
-                    }
-                }
-
-                if (syncRequired) {
-                    Network.syncAllomancerData(player);
-                }
             }
+
 
             /*********************************************
              * CHROMIUM (enhanced)                       *
@@ -348,6 +348,7 @@ public final class CommonEventHandler {
                 if (data.getDamageStored() > 0) {
                     if (level.random.nextInt(200) == 0) {
                         data.setDamageStored(data.getDamageStored() - 1);
+                        syncRequired = true;
                     }
                 }
 
@@ -355,7 +356,8 @@ public final class CommonEventHandler {
             // Damage the player if they have stored damage and pewter cuts out
             if (!data.isBurning(Metal.PEWTER) && (data.getDamageStored() > 0)) {
                 data.setDamageStored(data.getDamageStored() - 1);
-                curPlayer.hurt(level.damageSources().magic(), 2);
+                curPlayer.hurtServer(level, level.damageSources().magic(), 2);
+                syncRequired = true;
             }
 
 
@@ -364,6 +366,10 @@ public final class CommonEventHandler {
              *********************************************/
             if (data.isEnhanced() && data.isBurning(Metal.COPPER)) {
                 curPlayer.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 50, true, false));
+            }
+
+            if (syncRequired) {
+                Network.syncAllomancerData(curPlayer);
             }
         }
     }

@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.AABB;
@@ -26,14 +25,11 @@ public final class Enhancement {
      *
      * @param player The player to wipe
      */
-    public static void wipePlayer(Player player) {
+    public static void wipePlayer(ServerPlayer player) {
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
         data.drainMetals(Metal.values());
         player.removeAllEffects();
-
-        if (player instanceof ServerPlayer sp) {
-            Network.syncAllomancerData(sp);
-        }
+        Network.syncAllomancerData(player);
     }
 
     /**
@@ -44,27 +40,25 @@ public final class Enhancement {
      * @param dimension Dimension to call {@link Entity#changeDimension} on
      * @param pos       BlockPos to move the player to using {@link Entity#teleportTo(double, double, double)}
      */
-    private static void teleport(Player player, Level world, ResourceKey<Level> dimension, BlockPos pos) {
-        if (!world.isClientSide) {
-            if (player != null) {
-                if (player.isPassenger()) {
-                    player.stopRiding();
-                }
-
-                if (player.level().dimension() != dimension) {
-                    //change dimension
-                    player = (Player) player.teleport(
-                            new TeleportTransition(world.getServer().getLevel(dimension), Vec3.atBottomCenterOf(pos),
-                                                   Vec3.ZERO, player.getXRot(), player.getYRot(), DO_NOTHING));
-                }
-                var center = pos.above().getCenter();
-                player.teleportTo(center.x(), center.y(), center.z());
-                player.fallDistance = 0.0F;
+    private static void teleport(ServerPlayer player, ServerLevel world, ResourceKey<Level> dimension, BlockPos pos) {
+        if (player != null) {
+            if (player.isPassenger()) {
+                player.stopRiding();
             }
+
+            if (player.level().dimension() != dimension) {
+                //change dimension
+                player = player.teleport(
+                        new TeleportTransition(world.getServer().getLevel(dimension), Vec3.atBottomCenterOf(pos),
+                                               Vec3.ZERO, player.getXRot(), player.getYRot(), DO_NOTHING));
+            }
+            var center = pos.above().getCenter();
+            player.teleportTo(center.x(), center.y(), center.z());
+            player.fallDistance = 0.0F;
         }
     }
 
-    public static void teleportToLastDeath(Player curPlayer, Level level, IAllomancerData data) {
+    public static void teleportToLastDeath(ServerPlayer curPlayer, ServerLevel level, IAllomancerData data) {
         ResourceKey<Level> deathDim = data.getDeathDim();
         if (deathDim != null) {
             teleport(curPlayer, level, deathDim, data.getDeathLoc());
@@ -75,7 +69,7 @@ public final class Enhancement {
         }
     }
 
-    public static void teleportToSpawn(Player curPlayer, Level level, IAllomancerData data) {
+    public static void teleportToSpawn(ServerPlayer curPlayer, ServerLevel level, IAllomancerData data) {
         ResourceKey<Level> spawnDim = data.getSpawnDim();
         BlockPos spawnLoc;
 
@@ -94,16 +88,14 @@ public final class Enhancement {
         data.drainMetals(Metal.ELECTRUM);
     }
 
-    public static void wipeNearby(Player curPlayer, Level level) {
-        if (level instanceof ServerLevel) {
-            int max = 20;
-            Vec3 negative = curPlayer.position().add(-max, -max, -max);
-            Vec3 positive = curPlayer.position().add(max, max, max);
-            level
-                    .getEntitiesOfClass(Player.class, new AABB(negative, positive))
-                    .stream()
-                    .filter(player -> !Emotional.hasTinFoilHat(player))
-                    .forEach(Enhancement::wipePlayer);
-        }
+    public static void wipeNearby(ServerPlayer curPlayer, ServerLevel level) {
+        int max = 20;
+        Vec3 negative = curPlayer.position().add(-max, -max, -max);
+        Vec3 positive = curPlayer.position().add(max, max, max);
+        level
+                .getEntitiesOfClass(ServerPlayer.class, new AABB(negative, positive))
+                .stream()
+                .filter(player -> !Emotional.hasTinFoilHat(player))
+                .forEach(Enhancement::wipePlayer);
     }
 }

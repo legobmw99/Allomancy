@@ -1,14 +1,17 @@
 package com.legobmw99.allomancy.test.modules.powers;
 
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.AllomancyTest;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -96,7 +99,6 @@ public class PassivePowerTest {
     @EmptyTemplate("1x3x1")
     @TestHolder(description = "Tests that pewter provides general buff potion effects")
     public static void pewterGivesBuffs(AllomancyTestHelper helper) {
-        // TODO test pewter health
         var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
@@ -107,6 +109,34 @@ public class PassivePowerTest {
             helper.assertMobEffectPresent(player, MobEffects.DIG_SPEED, "Pewter didn't grant haste");
             helper.assertMobEffectPresent(player, MobEffects.JUMP, "Pewter didn't grant jump boost");
         });
+    }
+
+    @GameTest(timeoutTicks = 150)
+    @EmptyTemplate("1x3x1")
+    @TestHolder(description = "Tests that pewter stores some of the damage it prevents")
+    public static void pewterPreventsAndStoresSomeDamage(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        helper
+                .startSequence()
+                .thenExecute(() -> {
+                    player.causeFoodExhaustion(40);
+                    data.setBurning(Metal.PEWTER, true);
+                })
+                .thenExecute(() -> helper.setBlock(0, 0, 0, Blocks.CACTUS))
+                .thenIdle(40)
+
+                .thenExecute(() -> helper.assertValueEqual(player.getHealth(), player.getMaxHealth(),
+                                                           "Player health after some paper cuts"))
+                .thenExecute(() -> {
+                    data.setBurning(Metal.PEWTER, false);
+                    helper.setBlock(0, 0, 0, Blocks.AIR);
+                })
+                .thenIdle(80)
+                .thenExecute(() -> helper.assertTrue(Math.abs(2.0 - player.getHealth()) < 0.0001,
+                                                     "Player not damaged after pewter extinguished: " +
+                                                     player.getHealth()))
+                .thenSucceed();
     }
 
     @GameTest(timeoutTicks = 400)
@@ -126,7 +156,57 @@ public class PassivePowerTest {
         });
     }
 
-    // TODO test pewter dura invuln
+    @GameTest
+    @EmptyTemplate("1x3x1")
+    @TestHolder(description = "Tests that duralumin and pewter cancel damage")
+    public static void duraluminPewterMakesInvuln(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        helper
+                .startSequence()
+                .thenExecute(() -> {
+                    data.setBurning(Metal.PEWTER, true);
+                    data.setBurning(Metal.DURALUMIN, true);
+                })
+                .thenIdle(1)
+                .thenMap(() -> player.hurtServer(player.serverLevel(), player.damageSources().wither(), 100))
+                .thenExecute(res -> helper.assertFalse(res, "Player still injured"))
+                .thenExecute(() -> helper.assertValueEqual(player.getHealth(), player.getMaxHealth(),
+                                                           "Player health changed"))
+                .thenSucceed();
+    }
+
+
+    @GameTest
+    @EmptyTemplate(value = "5x3x5", floor = true)
+    @TestHolder(description = "Tests that duralumin and pewter let you instakill with the Koloss sword")
+    public static void duraluminPewterDamageOutput(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        helper
+                .startSequence()
+                .thenExecute(() -> {
+                    data.setBurning(Metal.PEWTER, true);
+                    data.setBurning(Metal.DURALUMIN, true);
+                })
+                .thenIdle(1)
+                .thenMap(() -> helper.spawnWithNoFreeWill(EntityType.WITHER, 1, 0, 1))
+                .thenExecute(
+                        wither -> wither.hurtServer(player.serverLevel(), player.damageSources().playerAttack(player),
+                                                    4))
+                .thenExecute(
+                        wither -> helper.assertTrue(Math.abs((wither.getMaxHealth() - 12) - wither.getHealth()) < 1,
+                                                    "Wither damaged an unexpected amount"))
+                .thenExecute(
+                        () -> player.setItemInHand(InteractionHand.MAIN_HAND, CombatSetup.KOLOSS_BLADE.toStack()))
+                .thenExecute(
+                        wither -> wither.hurtServer(player.serverLevel(), player.damageSources().playerAttack(player),
+                                                    1))
+                .thenExecute(wither -> helper.assertTrue(wither.isDeadOrDying(), "Wither lived"))
+                .thenSucceed();
+    }
+
+
 
     @GameTest
     @EmptyTemplate(value = "5x3x5", floor = true)
