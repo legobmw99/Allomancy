@@ -135,17 +135,20 @@ public final class FlakeStorage implements TooltipProvider, ConsumableListener {
         }
     }
 
+
     public static class Mutable {
         private final EnumSet<Metal> flakes = EnumSet.noneOf(Metal.class);
 
-        public void add(Metal mt) {
+        public Mutable add(Metal mt) {
             this.flakes.add(mt);
+            return this;
         }
 
-        public void addAll(FlakeStorage other) {
+        public Mutable addAll(FlakeStorage other) {
             if (other != null) {
                 this.flakes.addAll(other.flakes);
             }
+            return this;
         }
 
         public FlakeStorage toImmutable() {

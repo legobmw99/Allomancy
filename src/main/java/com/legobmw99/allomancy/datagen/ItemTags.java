@@ -14,8 +14,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 class ItemTags extends ItemTagsProvider {
 
@@ -95,6 +97,8 @@ class ItemTags extends ItemTagsProvider {
                 .replace(false)
                 .add(CombatSetup.ALUMINUM_HELMET.get())
                 .add(CombatSetup.MISTCLOAK.get());
+
+        tag(MaterialsSetup.FLAKES_TAG).add(MaterialsSetup.FLAKES.stream().map(Supplier::get).toArray(Item[]::new));
     }
 
     @SafeVarargs

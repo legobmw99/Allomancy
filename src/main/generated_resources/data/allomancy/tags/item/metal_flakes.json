@@ -1,0 +1,22 @@
+{
+  "values": [
+    "allomancy:iron_flakes",
+    "allomancy:steel_flakes",
+    "allomancy:tin_flakes",
+    "allomancy:pewter_flakes",
+    "allomancy:zinc_flakes",
+    "allomancy:brass_flakes",
+    "allomancy:copper_flakes",
+    "allomancy:bronze_flakes",
+    "allomancy:aluminum_flakes",
+    "allomancy:duralumin_flakes",
+    "allomancy:chromium_flakes",
+    "allomancy:nicrosil_flakes",
+    "allomancy:gold_flakes",
+    "allomancy:electrum_flakes",
+    "allomancy:cadmium_flakes",
+    "allomancy:bendalloy_flakes",
+    "allomancy:lead_flakes",
+    "allomancy:silver_flakes"
+  ]
+}

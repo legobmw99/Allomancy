@@ -29,7 +29,7 @@ public final class ClientPayloadHandler {
                 if (burningAfter < burningBefore) {
                     Sounds.soundForBurnChange(false);
                 }
-            } else {
+            } else if (player != null) {
                 player
                         .getData(AllomancerAttachment.ALLOMANCY_DATA)
                         .deserializeNBT(ctx.player().registryAccess(), payload.nbt());

@@ -66,9 +66,7 @@ class Advancements implements AdvancementSubProvider {
                 .save(saver, "allomancy:main/become_mistborn");
 
         ItemStack vial = new ItemStack(ConsumeSetup.VIAL.get());
-        var storage = new FlakeStorage.Mutable();
-        storage.add(Metal.GOLD);
-        vial.set(ConsumeSetup.FLAKE_STORAGE.get(), storage.toImmutable());
+        vial.set(ConsumeSetup.FLAKE_STORAGE.get(), new FlakeStorage.Mutable().add(Metal.GOLD).toImmutable());
 
         var allMetals = Advancement.Builder
                 .advancement()

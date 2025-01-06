@@ -13,4 +13,4 @@
 TODO.txt
 /.vscode
 /logs
-/src/generated/resources/.cache/
+/src/main/generated_resources/.cache/
