@@ -5,7 +5,7 @@ import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.VialItem;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.test.AllomancyTestHelper;
+import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +24,7 @@ public class ConsumingTest {
 
     @GameTest
     @EmptyTemplate("1x10x1")
-    @TestHolder
+    @TestHolder(description = "Tests that using Lerasium makes a player a Mistborn")
     public static void lerasiumMakesMistborn(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
 
@@ -46,7 +46,7 @@ public class ConsumingTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that existing Mistborn can't consume lerasium")
     public static void mistbornCantEatLerasium(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
 
@@ -61,7 +61,7 @@ public class ConsumingTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that drinking a vial gives the player metals")
     public static void vialIncreasesStorage(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
         var vial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
@@ -83,7 +83,7 @@ public class ConsumingTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that you can't drink a vial when those metals are full")
     public static void vialStopsWhenFull(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
         var vial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
@@ -111,7 +111,7 @@ public class ConsumingTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that consuming golden apples also grants stored gold")
     public static void specialItemConsumption(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
         var vial = new ItemStack(ConsumeSetup.VIAL.get(), 1);

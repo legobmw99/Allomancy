@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.test.modules.powers;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.test.AllomancyTestHelper;
+import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -18,7 +18,7 @@ import net.neoforged.testframework.gametest.ExtendedGameTestHelper;
 public class DataTest {
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that an empty cap is uninvested")
     public static void emptyDataTest(ExtendedGameTestHelper helper) {
         var player = helper.makeMockPlayer(GameType.SURVIVAL);
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -29,7 +29,7 @@ public class DataTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that a new player is made a Misting and given a flake")
     public static void randomMistingTest(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -44,7 +44,7 @@ public class DataTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that data is handled correctly during various respawns")
     public static void dataOnRespawnTest(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
 

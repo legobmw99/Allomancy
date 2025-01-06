@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.test.modules.extras;
 
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.test.AllomancyTestHelper;
+import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
@@ -23,7 +23,7 @@ public class BlocksTest {
 
     @GameTest
     @EmptyTemplate
-    @TestHolder
+    @TestHolder(description = "Tests that blocks have expected capability")
     public static void haveCaps(ExtendedGameTestHelper helper) {
 
         BlockPos button = new BlockPos(1, 2, 1);
@@ -62,7 +62,7 @@ public class BlocksTest {
 
     @GameTest
     @EmptyTemplate
-    @TestHolder
+    @TestHolder(description = "Tests that you can't just click to use the iron redstone components")
     public static void cantJustClick(AllomancyTestHelper helper) {
 
         BlockPos button = new BlockPos(1, 2, 1);
@@ -104,7 +104,7 @@ public class BlocksTest {
 
     @GameTest
     @EmptyTemplate("3x4x3")
-    @TestHolder
+    @TestHolder(description = "Tests that wind charges don't activate the iron redstone components")
     public static void chargesDoNothing(ExtendedGameTestHelper helper) {
 
         BlockPos button = new BlockPos(1, 1, 1);

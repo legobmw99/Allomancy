@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.test;
 
+import com.legobmw99.allomancy.test.modules.consumables.recipe.GrinderCraftingTest;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -29,6 +30,9 @@ public class AllomancyTest {
                 .dumpers(new GitHubActionsStepSummaryDumper())
                 .build()
                 .create();
+
+        GrinderCraftingTest.register(framework.tests()::register);
+
         framework.init(bus, container);
     }
 

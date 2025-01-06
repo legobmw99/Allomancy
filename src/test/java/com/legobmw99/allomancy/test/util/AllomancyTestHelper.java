@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.test;
+package com.legobmw99.allomancy.test.util;
 
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;

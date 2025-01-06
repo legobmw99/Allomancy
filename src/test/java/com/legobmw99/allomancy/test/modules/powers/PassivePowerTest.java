@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.AllomancyTest;
-import com.legobmw99.allomancy.test.AllomancyTestHelper;
+import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -31,7 +31,7 @@ public class PassivePowerTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that burning aluminum drains all metals and removes effects")
     public static void aluminiumDrainsInstantly(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -55,7 +55,7 @@ public class PassivePowerTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that duralumin drains all burning metals when it runs out")
     public static void duraluminDrainsWhenExtinguished(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -77,7 +77,7 @@ public class PassivePowerTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that burning tin removes blindness and grants night vision")
     public static void tinClearsBlindness(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -94,7 +94,7 @@ public class PassivePowerTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that pewter provides general buff potion effects")
     public static void pewterGivesBuffs(AllomancyTestHelper helper) {
         // TODO test pewter health
         var player = helper.makeMistbornPlayer();
@@ -111,7 +111,7 @@ public class PassivePowerTest {
 
     @GameTest(timeoutTicks = 400)
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that duralumin and tin may give you nausea")
     public static void duraluminTinMakesYouIll(AllomancyTestHelper helper) {
         // technically random
         var player = helper.makeMistbornPlayer();
@@ -130,7 +130,7 @@ public class PassivePowerTest {
 
     @GameTest
     @EmptyTemplate(value = "5x3x5", floor = true)
-    @TestHolder
+    @TestHolder(description = "Tests that duralumin and electrum moves you to your spawn")
     public static void duraluminElectrumMovesToSpawn(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         player.moveToCorner();
@@ -152,7 +152,7 @@ public class PassivePowerTest {
 
     @GameTest
     @EmptyTemplate(value = "5x3x5", floor = true)
-    @TestHolder
+    @TestHolder(description = "Tests that duralumin and gold moves you to your death location")
     public static void duraluminGoldMovesToDeath(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         player.moveToCorner();
@@ -173,7 +173,7 @@ public class PassivePowerTest {
 
     @GameTest
     @EmptyTemplate(value = "5x3x5", floor = true)
-    @TestHolder
+    @TestHolder(description = "Tests that duralumin and chrome wipes nearby players")
     public static void duraluminChromeWipesOthers(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -199,7 +199,7 @@ public class PassivePowerTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that duralumin and copper grants invisibility")
     public static void duraluminCopperMakesYouInvis(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -222,7 +222,7 @@ public class PassivePowerTest {
             .build();
 
     @GameTest(template = AllomancyTest.MODID + ":wheat")
-    @TestHolder
+    @TestHolder(description = "Tests that bendalloy speeds up random ticks")
     public static void bendalloyGrowsCrops(AllomancyTestHelper helper) {
         BlockPos wheat = new BlockPos(2, 2, 2);
 
@@ -245,7 +245,7 @@ public class PassivePowerTest {
             StructureTemplateBuilder.withSize(1, 3, 1).set(0, 0, 0, Blocks.FURNACE.defaultBlockState()).build();
 
     @GameTest(template = AllomancyTest.MODID + ":furnace")
-    @TestHolder
+    @TestHolder(description = "Tests that bendalloy accelerates ticking blocks")
     public static void bendalloyAcceleratesFurnaces(AllomancyTestHelper helper) {
         BlockPos furnace = new BlockPos(0, 0, 0);
         FurnaceBlockEntity furnaceEntity = helper.getBlockEntity(furnace, FurnaceBlockEntity.class);

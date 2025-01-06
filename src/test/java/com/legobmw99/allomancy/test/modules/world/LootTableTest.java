@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.test.modules.world;
 
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
-import com.legobmw99.allomancy.test.AllomancyTestHelper;
+import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -18,7 +18,7 @@ import net.neoforged.testframework.gametest.EmptyTemplate;
 public class LootTableTest {
     @GameTest
     @EmptyTemplate("1x2x1")
-    @TestHolder
+    @TestHolder(description = "Tests that lerasium shows up in vanilla loot tables")
     public static void lerasiumLootInjected(AllomancyTestHelper helper) {
         helper.startSequence().thenWaitUntil(() -> {
             helper.setBlock(BlockPos.ZERO, Blocks.CHEST);
@@ -34,7 +34,7 @@ public class LootTableTest {
 
     @GameTest
     @EmptyTemplate("1x2x1")
-    @TestHolder
+    @TestHolder(description = "Tests that daggers shows up in vanilla loot tables")
     public static void daggerLootInjected(AllomancyTestHelper helper) {
         helper.startSequence().thenWaitUntil(() -> {
             helper.setBlock(BlockPos.ZERO, Blocks.CHEST);

@@ -5,7 +5,7 @@ import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.VialItem;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
-import com.legobmw99.allomancy.test.AllomancyTestHelper;
+import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.testframework.annotation.ForEachTest;
@@ -17,7 +17,7 @@ public class VialCraftingTest {
 
     @GameTest
     @EmptyTemplate("1x2x2")
-    @TestHolder
+    @TestHolder(description = "Tests that vial crafting works for multiple flakes")
     public static void vialCraftingWorks(AllomancyTestHelper helper) {
         helper.succeedIfCrafts(barrel -> {
                                    ItemStack out = barrel.getItem(0);
@@ -32,7 +32,7 @@ public class VialCraftingTest {
 
     @GameTest
     @EmptyTemplate("1x2x2")
-    @TestHolder
+    @TestHolder(description = "Tests that vial crafting is prevented if a specific metal is already present")
     public static void vialCraftingPreventDupes(AllomancyTestHelper helper) {
         var vial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
         VialItem.fillVial(vial, new FlakeStorage.Mutable().add(Metal.IRON).toImmutable());

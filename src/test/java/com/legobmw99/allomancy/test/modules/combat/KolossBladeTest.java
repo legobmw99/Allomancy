@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.test.modules.combat;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.test.AllomancyTestHelper;
+import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -17,7 +17,7 @@ public class KolossBladeTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that a not-strong player gets debuffs from holding a Koloss sword")
     public static void kolossBladeDebuffs(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
 
@@ -36,7 +36,7 @@ public class KolossBladeTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that a pewter burner can wield a Koloss sword")
     public static void kolossBladePewter(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -57,7 +57,7 @@ public class KolossBladeTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder
+    @TestHolder(description = "Tests that a strenghtened player can wield a Koloss sword")
     public static void kolossBladeStrength(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
 
