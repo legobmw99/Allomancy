@@ -207,7 +207,6 @@ public class PassivePowerTest {
     }
 
 
-
     @GameTest
     @EmptyTemplate(value = "5x3x5", floor = true)
     @TestHolder(description = "Tests that duralumin and electrum moves you to your spawn")
@@ -292,6 +291,73 @@ public class PassivePowerTest {
             helper.assertMobEffectPresent(player, MobEffects.INVISIBILITY, "Player is not invisible");
         });
     }
+
+    @GameTest
+    @EmptyTemplate("1x3x1")
+    @TestHolder(description = "Tests that cadmium grants slow falling")
+    public static void cadmiumGrantsSlowFall(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+        data.setBurning(Metal.CADMIUM, true);
+
+        helper.succeedOnTickWhen(1, () -> {
+            helper.assertMobEffectPresent(player, MobEffects.SLOW_FALLING, "Cadmium didn't grant slow fall");
+            helper.assertMobEffectPresent(player, MobEffects.MOVEMENT_SLOWDOWN, "Cadmium also slowed player");
+        });
+    }
+
+
+    @GameTest
+    @EmptyTemplate(value = "5x3x5", floor = true)
+    @TestHolder(description = "Tests that cadmium slows nearby entities falling")
+    public static void cadmiumSlowsNearby(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+        data.setBurning(Metal.CADMIUM, true);
+
+        var zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+
+        helper.succeedOnTickWhen(1, () -> {
+            helper.assertMobEffectPresent(zombie, MobEffects.SLOW_FALLING, "Cadmium didn't grant slow fall");
+            helper.assertMobEffectPresent(zombie, MobEffects.MOVEMENT_SLOWDOWN, "Cadmium didn't grant slow fall");
+        });
+    }
+
+    @GameTest
+    @EmptyTemplate("1x3x1")
+    @TestHolder(description = "Tests that bendalloy grants haste")
+    public static void bendalloyGrantsHaste(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+        data.setBurning(Metal.BENDALLOY, true);
+
+        helper.succeedOnTickWhen(1, () -> {
+            helper.assertMobEffectPresent(player, MobEffects.DIG_SPEED, "Bendalloy didn't grant haste");
+        });
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "5x3x5", floor = true)
+    @TestHolder(description = "Tests that bendalloy grants haste")
+    public static void bendalloyAndCadmiumCancel(AllomancyTestHelper helper) {
+        var player = helper.makeMistbornPlayer();
+        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+
+        var zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+
+        data.setBurning(Metal.BENDALLOY, true);
+        data.setBurning(Metal.CADMIUM, true);
+        helper.startSequence().thenIdle(10).thenExecute(() -> {
+            helper.assertMobEffectAbsent(player, MobEffects.DIG_SPEED, "Bendalloy still grant haste");
+            helper.assertMobEffectAbsent(player, MobEffects.SLOW_FALLING, "Cadmium still grant slow fall");
+            helper.assertMobEffectAbsent(zombie, MobEffects.SLOW_FALLING, "Cadmium still grant slow fall");
+            helper.assertMobEffectAbsent(zombie, MobEffects.MOVEMENT_SLOWDOWN, "Cadmium still grant slow fall");
+        }).thenSucceed();
+    }
+
 
     @RegisterStructureTemplate(AllomancyTest.MODID + ":wheat")
     public static final StructureTemplate WHEAT = StructureTemplateBuilder

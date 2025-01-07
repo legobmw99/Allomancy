@@ -9,7 +9,6 @@ import net.minecraft.Util;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -39,21 +38,18 @@ public final class CombatSetup {
 
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
 
-    public static final TagKey<DamageType> IS_COIN_HIT = TagKey.create(Registries.DAMAGE_TYPE,
-                                                                       ResourceLocation.fromNamespaceAndPath(
-                                                                               Allomancy.MODID, "is_coin_hit"));
-    public static final ResourceKey<DamageType> COIN_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE,
-                                                                                 ResourceLocation.fromNamespaceAndPath(
-                                                                                         Allomancy.MODID, "coin"));
+    public static final TagKey<DamageType> IS_COIN_HIT =
+            TagKey.create(Registries.DAMAGE_TYPE, Allomancy.rl("is_coin_hit"));
+    public static final ResourceKey<DamageType> COIN_DAMAGE =
+            ResourceKey.create(Registries.DAMAGE_TYPE, Allomancy.rl("coin"));
     public static final DeferredItem<CoinBagItem> COIN_BAG = ITEMS.registerItem("coin_bag", CoinBagItem::new);
     public static final DeferredItem<ObsidianDaggerItem> OBSIDIAN_DAGGER =
             ITEMS.registerItem("obsidian_dagger", ObsidianDaggerItem::new);
     public static final DeferredItem<KolossBladeItem> KOLOSS_BLADE =
             ITEMS.registerItem("koloss_blade", KolossBladeItem::new);
 
-    public static final ResourceKey<EquipmentAsset> WOOL = ResourceKey.create(EquipmentAssets.ROOT_ID,
-                                                                              ResourceLocation.fromNamespaceAndPath(
-                                                                                      Allomancy.MODID, "wool"));
+    public static final ResourceKey<EquipmentAsset> WOOL =
+            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.rl("wool"));
 
 
     public static final TagKey<Item> REPAIRS_MISTCLOAK = ItemTags.create(Allomancy.rl("repairs_wool_armor"));
@@ -81,10 +77,8 @@ public final class CombatSetup {
 
 
     // TODO: would be nice if this used the iron_darker override
-    public static final ResourceKey<EquipmentAsset> ALUMINUM = ResourceKey.create(EquipmentAssets.ROOT_ID,
-                                                                                  ResourceLocation.fromNamespaceAndPath(
-                                                                                          Allomancy.MODID,
-                                                                                          "aluminum"));
+    public static final ResourceKey<EquipmentAsset> ALUMINUM =
+            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.rl("aluminum"));
 
 
     public static final TagKey<Item> REPAIRS_ALUMINUM = ItemTags.create(Allomancy.rl("repairs_aluminum_armor"));

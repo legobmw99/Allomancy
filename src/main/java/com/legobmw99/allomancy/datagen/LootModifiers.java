@@ -15,8 +15,8 @@ import java.util.concurrent.CompletableFuture;
 
 class LootModifiers extends GlobalLootModifierProvider {
 
-    LootModifiers(PackOutput output, CompletableFuture<HolderLookup.Provider> regisrties) {
-        super(output, regisrties, Allomancy.MODID);
+    LootModifiers(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries, Allomancy.MODID);
     }
 
     private static final ResourceLocation DUNGEON = ResourceLocation.withDefaultNamespace("chests/simple_dungeon");
