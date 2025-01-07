@@ -5,10 +5,14 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.modules.powers.client.network.PowerRequests;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.player.ClientInput;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.AABB;
@@ -68,42 +72,6 @@ public final class Inputs {
 
     }
 
-    private static float calculateImpulse(boolean input, boolean otherInput) {
-        if (input == otherInput) {
-            return 0.0F;
-        } else {
-            return input ? 1.0F : -1.0F;
-        }
-    }
-
-    public static void fakeMovement(ClientInput input) {
-        // TODO not working
-        // // See similar code in https://github.com/gigaherz/ToolBelt/blob/master/src/main/java/dev/gigaherz/toolbelt/client/ToolBeltClient.java#L186
-        //        Options options = Minecraft.getInstance().options;
-        //        LocalPlayer player = Minecraft.getInstance().player;
-        //        var window = Minecraft.getInstance().getWindow().getWindow();
-        //
-        //        input.tick();
-        // // from KeyboardInput#tick
-        //        input.keyPresses = new Input(options.keyUp.isDown(), options.keyDown.isDown(), options.keyLeft
-        //        .isDown(),
-        //                                     options.keyRight.isDown(), options.keyJump.isDown(), options
-        //                                     .keyShift.isDown(),
-        //                                     options.keySprint.isDown());
-        //        input.forwardImpulse = calculateImpulse(input.keyPresses.forward(), input.keyPresses.backward());
-        //        input.leftImpulse = calculateImpulse(input.keyPresses.left(), input.keyPresses.right());
-
-        // // from LocalPlayer#aiStep
-        //        if (!player.isSprinting() && (!(player.isInWater() || player.isInFluidType(
-        //                (fluidType, height) -> player.canSwimInFluidType(fluidType))) ||
-        //                                      (player.isUnderWater() || player.canStartSwimming())) &&
-        //            input.forwardImpulse >= 0.8 && !player.isUsingItem() &&
-        //            (player.getFoodData().getFoodLevel() > 6.0F || player.mayFly()) &&
-        //            !player.hasEffect(MobEffects.BLINDNESS) &&
-        //            InputConstants.isKeyDown(window, options.keySprint.getKey().getValue())) {
-        //            player.setSprinting(true);
-        //        }
-    }
 
     public static void registerKeyBinding(final RegisterKeyMappingsEvent evt) {
         burn = new KeyMapping("key.burn", GLFW.GLFW_KEY_V, "key.categories.allomancy");
@@ -131,18 +99,18 @@ public final class Inputs {
             return;
         }
 
-        if (hud.isDown()) {
+        if (isKeyDown(hud)) {
             PowersConfig.enable_overlay.set(!PowersConfig.enable_overlay.get());
             return;
         }
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
         for (int i = 0; i < powers.length; i++) {
-            if (powers[i].isDown()) {
+            if (isKeyDown(powers[i])) {
                 PowerRequests.toggleBurn(Metal.getMetal(i), data);
             }
         }
-        if (burn.isDown()) {
+        if (isKeyDown(burn)) {
             switch (data.getPowerCount()) {
                 case 0:
                     break;
@@ -153,6 +121,64 @@ public final class Inputs {
                     mc.setScreen(new MetalSelectScreen());
                     break;
             }
+        }
+    }
+
+
+    private static float calculateImpulse(boolean input, boolean otherInput) {
+        if (input == otherInput) {
+            return 0.0F;
+        } else {
+            return input ? 1.0F : -1.0F;
+        }
+    }
+
+    // See similar code in https://github.com/gigaherz/ToolBelt/blob/master/src/main/java/dev/gigaherz/toolbelt/client/ToolBeltClient.java#L186
+    private static boolean isKeyDown0(KeyMapping keybind) {
+        if (keybind.isUnbound()) {
+            return false;
+        }
+
+        return switch (keybind.getKey().getType()) {
+            case KEYSYM -> InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(),
+                                                    keybind.getKey().getValue());
+            case MOUSE -> GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().getWindow(),
+                                                  keybind.getKey().getValue()) == GLFW.GLFW_PRESS;
+            default -> false;
+        };
+    }
+
+
+    private static boolean isKeyDown(KeyMapping keybind) {
+        return isKeyDown0(keybind) && keybind.getKeyConflictContext().isActive() &&
+               keybind.getKeyModifier().isActive(keybind.getKeyConflictContext());
+    }
+
+
+    public static void fakeMovement(ClientInput input) {
+        // basically KeyboardInput#tick()
+        Options settings = Minecraft.getInstance().options;
+        input.keyPresses =
+                new Input(isKeyDown0(settings.keyUp), isKeyDown0(settings.keyDown), isKeyDown0(settings.keyLeft),
+                          isKeyDown0(settings.keyRight), isKeyDown0(settings.keyJump), isKeyDown0(settings.keyShift),
+                          isKeyDown0(settings.keySprint));
+        input.forwardImpulse = calculateImpulse(input.keyPresses.forward(), input.keyPresses.backward());
+        input.leftImpulse = calculateImpulse(input.keyPresses.left(), input.keyPresses.right());
+
+        // See #LocalPlayer.aiStep()
+        var player = Minecraft.getInstance().player;
+        if (player.isMovingSlowly()) {
+            input.leftImpulse = (float) (input.leftImpulse * 0.3D);
+            input.forwardImpulse = (float) (input.forwardImpulse * 0.3D);
+        }
+
+        if (!player.isSprinting() && (!(player.isInWater() || player.isInFluidType(
+                (fluidType, height) -> player.canSwimInFluidType(fluidType))) ||
+                                      (player.isUnderWater() || player.canStartSwimming())) &&
+            input.forwardImpulse >= 0.8 && !player.isUsingItem() &&
+            (player.getFoodData().getFoodLevel() > 6.0F || player.mayFly()) &&
+            !player.hasEffect(MobEffects.BLINDNESS) && isKeyDown0(settings.keySprint)) {
+            player.setSprinting(true);
         }
     }
 }

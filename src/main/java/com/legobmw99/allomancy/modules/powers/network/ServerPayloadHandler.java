@@ -101,7 +101,7 @@ public final class ServerPayloadHandler {
                     Physical.lurch(payload.force(), player, target.blockPosition());
                 } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity ||
                            target instanceof ArmorStand ||
-                           (target instanceof AbstractMinecart && !target.isVehicle())) {
+                           (target instanceof AbstractMinecart && target.getControllingPassenger() != player)) {
                     Physical.lurch(payload.force() / 2.0, target, player.blockPosition());
 
                     // Split the difference
