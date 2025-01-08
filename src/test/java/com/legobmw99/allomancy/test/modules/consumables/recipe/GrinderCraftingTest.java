@@ -52,7 +52,8 @@ public class GrinderCraftingTest {
         String structureName = AllomancyTest.MODID + ":crafter";
         for (int i = 0; i < MaterialsSetup.METAL_ITEM_LEN; i++) {
             int I = i;
-            add.accept(new CallbackTest("crafting_" + getMetalName(i) + "_flakes", helper -> {
+            String metal = getMetalName(i);
+            add.accept(new CallbackTest("crafting_" + metal + "_flakes", helper -> {
                 var ingot = getIngotItem(I);
                 var flake = MaterialsSetup.FLAKES.get(I).get();
                 helper.succeedIfCrafts(barrel -> {
@@ -61,7 +62,8 @@ public class GrinderCraftingTest {
                     var damagedGrinder = barrel.getItem(1).getDamageValue() == 1;
                     return craftedFlake && retainedGrinder && damagedGrinder;
                 }, () -> "Failed to craft flakes", ConsumeSetup.ALLOMANTIC_GRINDER, ingot);
-            }, structureName, "crafting"));
+            }, structureName, "crafting", "Tests that " + metal +
+                                          " flake crafting works and the grinder is maintained"));
         }
     }
 }

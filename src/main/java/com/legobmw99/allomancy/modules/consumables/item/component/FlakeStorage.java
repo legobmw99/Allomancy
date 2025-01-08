@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.consumables.item.component;
 
+import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
@@ -124,7 +124,7 @@ public final class FlakeStorage implements TooltipProvider, ConsumableListener {
         }
         var data = entity.getData(AllomancerAttachment.ALLOMANCY_DATA);
         if (stack.getItem() == Items.ENCHANTED_GOLDEN_APPLE && storage.contains(Metal.GOLD)) {
-            for (int i = 0; i < AllomancerData.MAX_STORAGE; i++) {
+            for (int i = 0; i < IAllomancerData.MAX_STORAGE; i++) {
                 data.incrementStored(Metal.GOLD);
             }
         }

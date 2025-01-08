@@ -8,6 +8,11 @@ import net.minecraft.world.level.Level;
 public interface IAllomancerData {
 
     /**
+     * Maximum amount of metal that can be stored.
+     */
+    int MAX_STORAGE = 10;
+
+    /**
      * Called each worldTick, checking the burn times, abilities, and metal
      * amounts. Then syncs to the client to make sure everyone is on the same
      * page

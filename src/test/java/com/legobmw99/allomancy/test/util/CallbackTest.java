@@ -19,11 +19,13 @@ public class CallbackTest extends AbstractTest.Dynamic {
     public CallbackTest(String id,
                         Consumer<AllomancyTestHelper> callback,
                         String structureName,
-                        @Nullable String group) {
+                        @Nullable String group,
+                        @Nullable String description) {
         this.callback = callback;
 
         this.id = id;
-        this.visuals = new Visuals(Component.literal(TestFrameworkImpl.capitaliseWords(id, "_")), List.of());
+        this.visuals = new Visuals(Component.literal(TestFrameworkImpl.capitaliseWords(id, "_")),
+                                   description == null ? List.of() : List.of(Component.literal(description)));
         if (group != null) {
             this.groups.add(group);
         }
@@ -32,7 +34,7 @@ public class CallbackTest extends AbstractTest.Dynamic {
     }
 
     CallbackTest(String id, Consumer<AllomancyTestHelper> callback, String structureName) {
-        this(id, callback, structureName, null);
+        this(id, callback, structureName, null, null);
     }
 
     @Override

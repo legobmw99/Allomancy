@@ -14,7 +14,6 @@ import net.neoforged.neoforge.common.util.INBTSerializable;
 import java.util.Arrays;
 
 public class AllomancerData implements IAllomancerData, INBTSerializable<CompoundTag> {
-    public static final int MAX_STORAGE = 10;
     private static final int[] MAX_BURN_TIME =
             {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
     private final boolean[] allomantic_powers;

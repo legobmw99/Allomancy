@@ -1,11 +1,11 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -52,7 +52,7 @@ public class VialItem extends Item {
             for (Metal mt : Metal.values()) {
                 if (storage.contains(mt)) {
                     filling++;
-                    if (data.getStored(mt) >= AllomancerData.MAX_STORAGE) {
+                    if (data.getStored(mt) >= IAllomancerData.MAX_STORAGE) {
                         full++;
                     }
                 }
