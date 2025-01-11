@@ -1,7 +1,7 @@
 Allomancy 5.2.0
 ===============
 
-[![ CurseForge](http://cf.way2muchnoise.eu/256282.svg)](https://minecraft.curseforge.com/projects/allomancy) [![Modrinth Downloads](https://img.shields.io/modrinth/dt/allomancy?color=00AF5C&label=downloads&style=flat-square&logo=modrinth)](https://modrinth.com/mod/allomancy) [![Build status](https://github.com/legobmw99/Allomancy/actions/workflows/gradle.yml/badge.svg)](https://github.com/legobmw99/Allomancy/actions)
+[![CurseForge](http://cf.way2muchnoise.eu/256282.svg)](https://www.curseforge.com/minecraft/mc-mods/allomancy) [![Modrinth Downloads](https://img.shields.io/modrinth/dt/allomancy?color=00AF5C&label=downloads&style=flat-square&logo=modrinth)](https://modrinth.com/mod/allomancy) [![Build status](https://github.com/legobmw99/Allomancy/actions/workflows/gradle.yml/badge.svg)](https://github.com/legobmw99/Allomancy/actions)
 
 This mod adds the basics of [Allomancy](http://coppermind.net/wiki/Allomancy) from Brandon Sanderson's book series *Mistborn*.
 
