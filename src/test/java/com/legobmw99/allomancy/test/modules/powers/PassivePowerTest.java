@@ -250,7 +250,7 @@ public class PassivePowerTest {
         });
     }
 
-    @GameTest
+    @GameTest(batch = "chrome_wipe")
     @EmptyTemplate(value = "5x3x5", floor = true)
     @TestHolder(description = "Tests that duralumin and chrome wipes nearby players")
     public static void duraluminChromeWipesOthers(AllomancyTestHelper helper) {
@@ -292,7 +292,7 @@ public class PassivePowerTest {
         });
     }
 
-    @GameTest
+    @GameTest(batch = "cadmium_self")
     @EmptyTemplate("1x3x1")
     @TestHolder(description = "Tests that cadmium grants slow falling")
     public static void cadmiumGrantsSlowFall(AllomancyTestHelper helper) {
@@ -303,12 +303,12 @@ public class PassivePowerTest {
 
         helper.succeedOnTickWhen(1, () -> {
             helper.assertMobEffectPresent(player, MobEffects.SLOW_FALLING, "Cadmium didn't grant slow fall");
-            helper.assertMobEffectPresent(player, MobEffects.MOVEMENT_SLOWDOWN, "Cadmium also slowed player");
+            helper.assertMobEffectAbsent(player, MobEffects.MOVEMENT_SLOWDOWN, "Cadmium also slowed player");
         });
     }
 
 
-    @GameTest
+    @GameTest(batch = "cadmium_other")
     @EmptyTemplate(value = "5x3x5", floor = true)
     @TestHolder(description = "Tests that cadmium slows nearby entities falling")
     public static void cadmiumSlowsNearby(AllomancyTestHelper helper) {
@@ -339,7 +339,7 @@ public class PassivePowerTest {
         });
     }
 
-    @GameTest
+    @GameTest(batch = "cadmium_bendalloy")
     @EmptyTemplate(value = "5x3x5", floor = true)
     @TestHolder(description = "Tests that bendalloy grants haste")
     public static void bendalloyAndCadmiumCancel(AllomancyTestHelper helper) {
@@ -367,7 +367,7 @@ public class PassivePowerTest {
             .set(2, 2, 2, Blocks.WHEAT.defaultBlockState())
             .build();
 
-    @GameTest(template = AllomancyTest.MODID + ":wheat")
+    @GameTest(batch = "bendalloy_crop", template = AllomancyTest.MODID + ":wheat")
     @TestHolder(description = "Tests that bendalloy speeds up random ticks")
     public static void bendalloyGrowsCrops(AllomancyTestHelper helper) {
         BlockPos wheat = new BlockPos(2, 2, 2);
@@ -390,7 +390,7 @@ public class PassivePowerTest {
     public static final StructureTemplate FURNACE =
             StructureTemplateBuilder.withSize(1, 3, 1).set(0, 0, 0, Blocks.FURNACE.defaultBlockState()).build();
 
-    @GameTest(template = AllomancyTest.MODID + ":furnace")
+    @GameTest(batch = "bendalloy_blockentity", template = AllomancyTest.MODID + ":furnace")
     @TestHolder(description = "Tests that bendalloy accelerates ticking blocks")
     public static void bendalloyAcceleratesFurnaces(AllomancyTestHelper helper) {
         BlockPos furnace = new BlockPos(0, 0, 0);

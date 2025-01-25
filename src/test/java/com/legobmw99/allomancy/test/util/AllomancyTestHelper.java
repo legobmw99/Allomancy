@@ -89,6 +89,7 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
     public void succeedIfCraftingFails(ItemStack stack, ItemLike... items) {
         this.startSequence().thenExecute(() -> this.craft(stack, items)).thenExecuteAfter(4, () -> {
             this.assertContainerEmpty(OUTPUT);
+            this.assertContainerContains(CRAFTER, stack.getItem());
             for (var item : items) {
                 this.assertContainerContains(CRAFTER, item.asItem());
             }
