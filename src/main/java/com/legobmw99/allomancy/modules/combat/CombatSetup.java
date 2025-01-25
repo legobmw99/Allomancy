@@ -33,8 +33,7 @@ import java.util.EnumMap;
 import java.util.function.Supplier;
 
 public final class CombatSetup {
-    private static final DeferredRegister<EntityType<?>> ENTITIES =
-            DeferredRegister.create(Registries.ENTITY_TYPE, Allomancy.MODID);
+    private static final DeferredRegister.Entities ENTITIES = DeferredRegister.createEntities(Allomancy.MODID);
 
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
 
