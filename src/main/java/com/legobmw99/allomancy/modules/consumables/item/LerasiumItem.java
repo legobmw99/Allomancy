@@ -1,9 +1,12 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -46,13 +49,20 @@ public class LerasiumItem extends Item {
 
     @Override
     public InteractionResult use(Level world, Player player, InteractionHand hand) {
-        if (!player.getData(AllomancerAttachment.ALLOMANCY_DATA).isMistborn()) {
+        if (world instanceof ServerLevel level && player instanceof ServerPlayer sp) {
+            if (player.getData(AllomancerAttachment.ALLOMANCY_DATA).isMistborn()) {
+                return InteractionResult.FAIL;
+            }
+
+            var entangled = level.getServer().getAdvancements().get(Allomancy.rl("main/dna_entangled"));
+            if (entangled != null && sp.getAdvancements().getOrStartProgress(entangled).isDone()) {
+                return InteractionResult.FAIL;
+            }
+
             player.startUsingItem(hand);
             return InteractionResult.SUCCESS;
         }
-
-        return InteractionResult.FAIL;
-
+        return InteractionResult.PASS;
     }
 
     @Override

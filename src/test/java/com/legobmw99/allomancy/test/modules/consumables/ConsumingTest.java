@@ -7,13 +7,17 @@ import com.legobmw99.allomancy.modules.consumables.item.VialItem;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
@@ -45,6 +49,37 @@ public class ConsumingTest {
                 .thenSucceed();
     }
 
+    @GameTest
+    @EmptyTemplate("1x3x1")
+    @TestHolder(description = "Tests that players with the dna_entangled advancement can't consume lerasium")
+    public static void entangledDnaCantEatLerasium(AllomancyTestHelper helper) {
+        var player = helper.makeTickingPlayer();
+
+        var dna = Allomancy.rl("main/dna_entangled");
+
+        helper
+                .startSequence()
+                .thenExecute(() -> helper.getLevel().getServer().getPlayerList().op(player.getGameProfile()))
+                .thenExecute(() -> helper
+                        .getLevel()
+                        .getServer()
+                        .getCommands()
+                        .performPrefixedCommand(new CommandSourceStack(player.commandSource(),
+                                                                       Vec3.atCenterOf(player.blockPosition()),
+                                                                       Vec2.ZERO, helper.getLevel(), 4, "Testing",
+                                                                       Component.literal("Testing"),
+                                                                       helper.getLevel().getServer(), null),
+                                                "/advancement grant @p only " + dna))
+                .thenExecute(() -> helper.assertPlayerHasAdvancement(player, dna))
+                .thenIdle(1)
+                .thenMap(() -> helper.useItem(player, ConsumeSetup.LERASIUM_NUGGET))
+                .thenExecute(
+                        () -> helper.assertFalse(player.getData(AllomancerAttachment.ALLOMANCY_DATA).isMistborn(),
+                                                 "player got invested"))
+                .thenExecute(res -> helper.assertValueEqual(res, InteractionResult.FAIL, "Still consumed lerasium"))
+                .thenExecute(() -> helper.assertPlayerHasItem(player, ConsumeSetup.LERASIUM_NUGGET.get()))
+                .thenSucceed();
+    }
 
     @GameTest
     @EmptyTemplate("1x3x1")

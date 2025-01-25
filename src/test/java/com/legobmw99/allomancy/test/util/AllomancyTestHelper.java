@@ -121,7 +121,7 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
     public void assertPlayerHasAdvancement(ServerPlayer player, ResourceLocation advancement) {
         var advancementHolder = player.getServer().getAdvancements().get(advancement);
         this.assertTrue(player.getAdvancements().getOrStartProgress(advancementHolder).isDone(),
-                        "Player did not have " + advancement.toString());
+                        "Player did not have " + advancement);
     }
 
 }
