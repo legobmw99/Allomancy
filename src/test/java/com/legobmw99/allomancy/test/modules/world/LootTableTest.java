@@ -14,7 +14,7 @@ import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
 
-@ForEachTest(groups = "world")
+@ForEachTest(groups = "item")
 public class LootTableTest {
     @GameTest
     @EmptyTemplate("1x2x1")

@@ -18,6 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.Optional;
@@ -112,13 +113,24 @@ class Advancements implements AdvancementSubProvider {
                          Component.translatable("advancements.tin_foil_hat.desc"), null, AdvancementType.TASK, true,
                          false, true)
                 .addCriterion("attempted_nicrosil_manipulation",
-                              MetalUsedOnPlayerTrigger.TriggerInstance.instance(tinFoilPredicate, Metal.NICROSIL,
-                                                                                false))
+                              MetalUsedOnPlayerTrigger.TriggerInstance.instance(tinFoilPredicate, Metal.NICROSIL))
                 .addCriterion("attempted_chromium_manipulation",
-                              MetalUsedOnPlayerTrigger.TriggerInstance.instance(tinFoilPredicate, Metal.CHROMIUM,
-                                                                                false))
+                              MetalUsedOnPlayerTrigger.TriggerInstance.instance(tinFoilPredicate, Metal.CHROMIUM))
                 .requirements(AdvancementRequirements.Strategy.OR)
                 .save(saver, "allomancy:main/tin_foil_hat");
+
+        Advancement.Builder
+                .advancement()
+                .parent(Advancement.Builder.advancement().build(Allomancy.rl("main/metallurgist")))
+                .display(Items.CLOCK, Component.translatable("advancements.time_warp.title"),
+                         Component.translatable("advancements.time_warp.desc"), null, AdvancementType.TASK, true,
+                         true, true)
+                .addCriterion("got_slowed_down",
+                              MetalUsedOnPlayerTrigger.TriggerInstance.instance(null, Metal.CADMIUM))
+                .addCriterion("got_sped_up", MetalUsedOnPlayerTrigger.TriggerInstance.instance(null, Metal.BENDALLOY))
+                .requirements(AdvancementRequirements.Strategy.AND)
+                .save(saver, "allomancy:main/time_warp");
+
 
         var ironGolemPredicate = EntityPredicate.wrap(EntityPredicate.Builder
                                                               .entity()

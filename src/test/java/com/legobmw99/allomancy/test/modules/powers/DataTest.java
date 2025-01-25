@@ -33,12 +33,12 @@ public class DataTest {
     public static void randomMistingTest(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-
-        helper.assertFalse(data.isUninvested(), "Player is not misting");
-        helper.assertFalse(data.isMistborn(), "Player is full mistborn");
-        helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).is(MaterialsSetup.FLAKES_TAG),
-                          "Misting wasn't given flake");
-        helper.succeed();
+        helper.succeedWhen(() -> {
+            helper.assertFalse(data.isUninvested(), "Player is not misting");
+            helper.assertFalse(data.isMistborn(), "Player is full mistborn");
+            helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).is(MaterialsSetup.FLAKES_TAG),
+                              "Misting wasn't given flake");
+        });
     }
 
 

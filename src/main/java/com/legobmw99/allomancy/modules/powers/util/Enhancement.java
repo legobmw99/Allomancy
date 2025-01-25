@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.modules.powers.util;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.network.Network;
 import net.minecraft.core.BlockPos;
@@ -36,8 +37,8 @@ public final class Enhancement {
      * Teleports a player to the given dimension and blockpos
      *
      * @param player    The player to move
-     * @param world     The server world. Fails if clientside
-     * @param dimension Dimension to call {@link Entity#changeDimension} on
+     * @param world     The server world
+     * @param dimension Dimension to transport to
      * @param pos       BlockPos to move the player to using {@link Entity#teleportTo(double, double, double)}
      */
     private static void teleport(ServerPlayer player, ServerLevel world, ResourceKey<Level> dimension, BlockPos pos) {
@@ -92,10 +93,11 @@ public final class Enhancement {
         int max = 20;
         Vec3 negative = curPlayer.position().add(-max, -max, -max);
         Vec3 positive = curPlayer.position().add(max, max, max);
-        level
-                .getEntitiesOfClass(ServerPlayer.class, new AABB(negative, positive))
-                .stream()
-                .filter(player -> !Emotional.hasTinFoilHat(player))
-                .forEach(Enhancement::wipePlayer);
+        level.getEntitiesOfClass(ServerPlayer.class, new AABB(negative, positive)).stream().forEach(player -> {
+            ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(curPlayer, player, Metal.CHROMIUM, true);
+            if (!Emotional.hasTinFoilHat(player)) {
+                wipePlayer(player);
+            }
+        });
     }
 }

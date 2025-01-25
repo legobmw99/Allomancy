@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
 import net.minecraft.gametest.framework.GameTestAssertPosException;
 import net.minecraft.gametest.framework.GameTestInfo;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -115,6 +116,12 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
         }
 
         return player;
+    }
+
+    public void assertPlayerHasAdvancement(ServerPlayer player, ResourceLocation advancement) {
+        var advancementHolder = player.getServer().getAdvancements().get(advancement);
+        this.assertTrue(player.getAdvancements().getOrStartProgress(advancementHolder).isDone(),
+                        "Player did not have " + advancement.toString());
     }
 
 }

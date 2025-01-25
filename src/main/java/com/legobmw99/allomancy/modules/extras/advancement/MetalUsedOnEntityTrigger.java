@@ -26,6 +26,9 @@ public class MetalUsedOnEntityTrigger extends SimpleCriterionTrigger<MetalUsedOn
     }
 
     public void trigger(ServerPlayer player, Entity entity, Metal mt, boolean enhanced) {
+        if (entity instanceof ServerPlayer target && !player.equals(target)) {
+            ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(target, mt, enhanced);
+        }
         LootContext lootcontext = EntityPredicate.createContext(player, entity);
         this.trigger(player, p_48112_ -> p_48112_.matches(lootcontext, mt, enhanced));
     }

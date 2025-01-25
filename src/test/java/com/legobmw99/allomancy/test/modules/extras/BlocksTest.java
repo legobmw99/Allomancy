@@ -17,7 +17,7 @@ import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
 import net.neoforged.testframework.gametest.ExtendedGameTestHelper;
 
-@ForEachTest(groups = "blocks")
+@ForEachTest(groups = "block")
 public class BlocksTest {
 
 

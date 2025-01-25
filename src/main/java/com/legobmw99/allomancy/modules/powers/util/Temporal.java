@@ -1,6 +1,8 @@
 package com.legobmw99.allomancy.modules.powers.util;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
+import com.legobmw99.allomancy.api.enums.Metal;
+import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +30,9 @@ public final class Temporal {
         level
                 .getEntitiesOfClass(LivingEntity.class, AABB.encapsulatingFullBlocks(negative, positive))
                 .forEach(entity -> {
+                    ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER
+                            .get()
+                            .trigger(curPlayer, entity, Metal.BENDALLOY, data.isEnhanced());
                     entity.aiStep();
                     entity.aiStep();
                 });
@@ -60,6 +65,9 @@ public final class Temporal {
         Vec3 positive = curPlayer.position().add(max, max, max);
         int slowness_amplifier = data.isEnhanced() ? 255 : 2; // Duralumin freezes entities
         level.getEntitiesOfClass(LivingEntity.class, new AABB(negative, positive)).forEach(entity -> {
+            ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER
+                    .get()
+                    .trigger(curPlayer, entity, Metal.CADMIUM, data.isEnhanced());
             entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 10, 0, true, false));
             if (entity != curPlayer) {
                 entity.addEffect(

@@ -16,8 +16,6 @@ import net.neoforged.testframework.gametest.StructureTemplateBuilder;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-// for automation, this class is done in a more vanilla GameTest style.
-@GameTestHolder(AllomancyTest.MODID)
 public class GrinderCraftingTest {
 
     @RegisterStructureTemplate(AllomancyTest.MODID + ":crafter")
@@ -62,7 +60,7 @@ public class GrinderCraftingTest {
                     var damagedGrinder = barrel.getItem(1).getDamageValue() == 1;
                     return craftedFlake && retainedGrinder && damagedGrinder;
                 }, () -> "Failed to craft flakes", ConsumeSetup.ALLOMANTIC_GRINDER, ingot);
-            }, structureName, "crafting", "Tests that " + metal +
+            }, structureName, "item", "Tests that " + metal +
                                           " flake crafting works and the grinder is maintained"));
         }
     }

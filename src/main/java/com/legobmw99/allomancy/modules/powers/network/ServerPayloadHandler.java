@@ -106,11 +106,6 @@ public final class ServerPayloadHandler {
 
                     // Split the difference
                 } else if (!(target instanceof ThrowableItemProjectile)) {
-                    if (target instanceof ServerPlayer targetPlayer) {
-                        ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER
-                                .get()
-                                .trigger(targetPlayer, which, data.isEnhanced());
-                    }
                     Physical.lurch(payload.force() / 2.0, target, player.blockPosition());
                     Physical.lurch(payload.force() / 2.0, player, target.blockPosition());
                 }
@@ -165,14 +160,10 @@ public final class ServerPayloadHandler {
 
             Entity e = source.level().getEntity(payload.entityID());
             ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(source, e, Metal.NICROSIL, data.isEnhanced());
-            if (e instanceof ServerPlayer target) {
-                ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(target, Metal.NICROSIL, data.isEnhanced());
-                if (!Emotional.hasTinFoilHat(target)) {
-                    target.getData(AllomancerAttachment.ALLOMANCY_DATA).setEnhanced(payload.enhanceTime());
-                    // broadcast back to player and tracking
-                    Network.sync(payload, target);
-
-                }
+            if (e instanceof ServerPlayer target && !Emotional.hasTinFoilHat(target)) {
+                target.getData(AllomancerAttachment.ALLOMANCY_DATA).setEnhanced(payload.enhanceTime());
+                // broadcast back to player and tracking
+                Network.sync(payload, target);
             }
         }).exceptionally(e -> {
             Allomancy.LOGGER.error("Failed to handle sever updateEnhanced", e);

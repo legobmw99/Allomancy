@@ -114,6 +114,8 @@ class Languages extends LanguageProvider {
         add("advancements.coinshot.desc", "Kill a mob with the bag of coins.");
         add("advancements.tin_foil_hat.title", "Tin foil hat");
         add("advancements.tin_foil_hat.desc", "Protect yourself, and be a bit paranoid too");
+        add("advancements.time_warp.title", "Sub-time bubble?");
+        add("advancements.time_warp.desc", "Time travel? Not quite!");
         add("advancements.consequences.title", "Consequences, Vin");
         add("advancements.consequences.desc", "Learn what happens when you push on a much heavier target.");
         add("advancements.going_loud.title", "Going Loud");

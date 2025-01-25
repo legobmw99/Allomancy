@@ -3,7 +3,6 @@
   "criteria": {
     "attempted_chromium_manipulation": {
       "conditions": {
-        "enhanced": false,
         "metal": "chromium",
         "player": [
           {
@@ -23,7 +22,6 @@
     },
     "attempted_nicrosil_manipulation": {
       "conditions": {
-        "enhanced": false,
         "metal": "nicrosil",
         "player": [
           {

@@ -1,0 +1,39 @@
+{
+  "parent": "allomancy:main/metallurgist",
+  "criteria": {
+    "got_slowed_down": {
+      "conditions": {
+        "metal": "cadmium"
+      },
+      "trigger": "allomancy:metal_used_on_player"
+    },
+    "got_sped_up": {
+      "conditions": {
+        "metal": "bendalloy"
+      },
+      "trigger": "allomancy:metal_used_on_player"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.time_warp.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:clock"
+    },
+    "title": {
+      "translate": "advancements.time_warp.title"
+    }
+  },
+  "requirements": [
+    [
+      "got_slowed_down"
+    ],
+    [
+      "got_sped_up"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

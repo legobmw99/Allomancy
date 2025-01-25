@@ -12,7 +12,7 @@ import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
 
-@ForEachTest(groups = "items")
+@ForEachTest(groups = "item")
 public class KolossBladeTest {
 
     @GameTest

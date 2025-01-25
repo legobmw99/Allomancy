@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.test.modules.consumables;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.VialItem;
@@ -38,6 +39,7 @@ public class ConsumingTest {
                                       "Player never got invested");
                     helper.assertFalse(helper.getEntities(EntityType.LIGHTNING_BOLT).isEmpty(),
                                        "Didn't spawn lightning");
+                    helper.assertPlayerHasAdvancement(player, Allomancy.rl("main/become_mistborn"));
                 })
                 .thenIdle(4)
                 .thenSucceed();

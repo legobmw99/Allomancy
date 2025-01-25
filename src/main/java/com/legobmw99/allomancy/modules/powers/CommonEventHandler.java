@@ -85,9 +85,6 @@ public final class CommonEventHandler {
 
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity().level().isClientSide()) {
-            return;
-        }
         if (event.getEntity() instanceof ServerPlayer player) {
             if (!player.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
                 var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
@@ -149,7 +146,8 @@ public final class CommonEventHandler {
 
     @SubscribeEvent
     public static void onStartTracking(final PlayerEvent.StartTracking event) {
-        if (!event.getTarget().level().isClientSide && event.getTarget() instanceof ServerPlayer player) {
+        if (!event.getTarget().level().isClientSide && event.getTarget() instanceof ServerPlayer player &&
+            player.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
             Network.syncAllomancerData(player);
         }
     }
@@ -195,11 +193,8 @@ public final class CommonEventHandler {
                 ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER
                         .get()
                         .trigger(source, event.getEntity(), Metal.CHROMIUM, data.isEnhanced());
-                if (event.getEntity() instanceof ServerPlayer player) {
-                    ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER.get().trigger(player, Metal.CHROMIUM, data.isEnhanced());
-                    if (!Emotional.hasTinFoilHat(player)) {
-                        Enhancement.wipePlayer(player);
-                    }
+                if (event.getEntity() instanceof ServerPlayer player && !Emotional.hasTinFoilHat(player)) {
+                    Enhancement.wipePlayer(player);
                 }
             }
         }
