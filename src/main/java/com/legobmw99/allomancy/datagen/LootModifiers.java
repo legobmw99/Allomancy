@@ -26,6 +26,7 @@ class LootModifiers extends GlobalLootModifierProvider {
     private static final ResourceLocation END_CITY =
             ResourceLocation.withDefaultNamespace("chests/end_city_treasure");
     private static final ResourceLocation OUTPOST = ResourceLocation.withDefaultNamespace("chests/pillager_outpost");
+    private static final ResourceLocation WELL = ResourceLocation.withDefaultNamespace("archaeology/desert_well");
 
     @Override
     protected void start() {
@@ -34,6 +35,9 @@ class LootModifiers extends GlobalLootModifierProvider {
                                      LootTableIdCondition.builder(JUNGLE), LootTableIdCondition.builder(WOODLAND),
                                      LootTableIdCondition.builder(END_CITY)).build()};
         add("lerasium_loot", new LerasiumLootModifier(lerasiumLocations, 5));
+
+        add("lerasium_well",
+            new LerasiumLootModifier(new LootItemCondition[]{new LootTableIdCondition.Builder(WELL).build()}, 6));
 
         var daggerLocations = new LootItemCondition[]{
                 AnyOfCondition.anyOf(LootTableIdCondition.builder(WOODLAND), LootTableIdCondition.builder(END_CITY),

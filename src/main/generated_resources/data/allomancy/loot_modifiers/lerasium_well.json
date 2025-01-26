@@ -1,0 +1,10 @@
+{
+  "type": "allomancy:lerasium_loot",
+  "chance_one_in": 6,
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:archaeology/desert_well"
+    }
+  ]
+}

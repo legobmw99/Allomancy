@@ -7,6 +7,7 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
+import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestAssertPosException;
 import net.minecraft.gametest.framework.GameTestInfo;
 import net.minecraft.resources.ResourceLocation;
@@ -119,9 +120,14 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
     }
 
     public void assertPlayerHasAdvancement(ServerPlayer player, ResourceLocation advancement) {
-        var advancementHolder = player.getServer().getAdvancements().get(advancement);
-        this.assertTrue(player.getAdvancements().getOrStartProgress(advancementHolder).isDone(),
-                        "Player did not have " + advancement);
+        var advancementHolder = this.getLevel().getServer().getAdvancements().get(advancement);
+        if (advancementHolder == null) {
+            throw new GameTestAssertException("Advancement " + advancement + " was not found in the server");
+        }
+        if (!player.getAdvancements().getOrStartProgress(advancementHolder).isDone()) {
+            throw new GameTestAssertPosException("Player did not have " + advancement, player.blockPosition(),
+                                                 this.relativePos(player.blockPosition()), this.getTick());
+        }
     }
 
 }
