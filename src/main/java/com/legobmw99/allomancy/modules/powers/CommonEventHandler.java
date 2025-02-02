@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
+import com.legobmw99.allomancy.modules.extras.item.BronzeEarringItem;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
@@ -14,6 +15,7 @@ import com.legobmw99.allomancy.modules.powers.util.Enhancement;
 import com.legobmw99.allomancy.modules.powers.util.Physical;
 import com.legobmw99.allomancy.modules.powers.util.Temporal;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
@@ -23,14 +25,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerSetSpawnEvent;
@@ -162,15 +165,6 @@ public final class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void onLivingDeath(final LivingDeathEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-            data.setDeathLoc(player.blockPosition(), player.level().dimension());
-            Network.syncAllomancerData(player);
-        }
-    }
-
-    @SubscribeEvent
     public static void onEntityHurt(final LivingIncomingDamageEvent event) {
         // Increase outgoing damage for pewter burners
         if (event.getSource().getEntity() instanceof ServerPlayer source) {
@@ -259,10 +253,37 @@ public final class CommonEventHandler {
 
     private static void playerPowerTick(ServerPlayer curPlayer, ServerLevel level) {
         var data = curPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        // Run the necessary updates on the player's metals
+        boolean syncRequired = data.tickBurning();
+
+
+        ItemStack helmet = curPlayer.getItemBySlot(EquipmentSlot.HEAD);
+        if (helmet.getItem() == ExtrasSetup.CHARGED_BRONZE_EARRING.get()) {
+            GlobalPos seeking = data.getSpecialSeekingLoc();
+            if (seeking == null) {
+                BlockPos blockpos =
+                        level.findNearestMapStructure(BronzeEarringItem.SEEKABLE, curPlayer.blockPosition(), 100,
+                                                      false);
+                if (blockpos == null) {
+                    Allomancy.LOGGER.info("Player {} failed to locate well with {}", curPlayer, helmet);
+                } else {
+                    data.setSpecialSeekingLoc(blockpos, curPlayer.level().dimension());
+                    syncRequired = true;
+                }
+            } else if (level.isLoaded(seeking.pos())) {
+                BlockPos raised = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, seeking.pos()).below(18);
+                if (raised != seeking.pos()) {
+                    data.setSpecialSeekingLoc(raised, seeking.dimension());
+                    syncRequired = true;
+                }
+            }
+        } else {
+            syncRequired = data.getSpecialSeekingLoc() != null;
+            data.setSpecialSeekingLoc(null, null);
+        }
+
         if (!data.isUninvested()) {
 
-            // Run the necessary updates on the player's metals
-            boolean syncRequired = data.tickBurning();
 
             /*********************************************
              * ALUMINUM AND DURALUMIN                    *
@@ -362,10 +383,9 @@ public final class CommonEventHandler {
             if (data.isEnhanced() && data.isBurning(Metal.COPPER)) {
                 curPlayer.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 50, true, false));
             }
-
-            if (syncRequired) {
-                Network.syncAllomancerData(curPlayer);
-            }
+        }
+        if (syncRequired) {
+            Network.syncAllomancerData(curPlayer);
         }
     }
 }

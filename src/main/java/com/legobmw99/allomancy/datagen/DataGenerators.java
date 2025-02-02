@@ -45,7 +45,7 @@ public final class DataGenerators {
         event.addProvider(datapackProvider);
         event.addProvider(new DamageTags(packOutput, lookupProvider));
         event.addProvider(new BannerTags(packOutput, lookupProvider));
-
+        event.addProvider(new EntityTypeTags(packOutput, lookupProvider));
 
         event.addProvider(new Languages(packOutput));
         event.addProvider(new ModelFiles(packOutput));

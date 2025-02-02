@@ -63,6 +63,8 @@ class Languages extends LanguageProvider {
         add("item.allomancy.lerasium_nugget.lore",
             "This item is endowed with strange powers, perhaps you should ingest it?");
         add(CombatSetup.MISTCLOAK.get(), "Mistcloak");
+        add(ExtrasSetup.BRONZE_EARRING.get(), "Bronze Earring");
+        add(ExtrasSetup.CHARGED_BRONZE_EARRING.get(), "Charged Bronze Earring");
         add(CombatSetup.ALUMINUM_HELMET.get(), "Aluminum Helmet");
         add(CombatSetup.COIN_BAG.get(), "Coin Bag");
         add(CombatSetup.OBSIDIAN_DAGGER.get(), "Obsidian Dagger");

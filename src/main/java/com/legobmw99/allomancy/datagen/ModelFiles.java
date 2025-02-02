@@ -69,6 +69,8 @@ class ModelFiles extends ModelProvider {
         itemModels.generateFlatItem(ConsumeSetup.ALLOMANTIC_GRINDER.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ConsumeSetup.LERASIUM_NUGGET.get(), ModelTemplates.FLAT_ITEM);
 
+        itemModels.generateFlatItem(ExtrasSetup.BRONZE_EARRING.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ExtrasSetup.CHARGED_BRONZE_EARRING.get(), ModelTemplates.FLAT_ITEM);
 
         for (var ritem : MaterialsSetup.RAW_ORE_ITEMS) {
             itemModels.generateFlatItem(ritem.get(), ModelTemplates.FLAT_ITEM);

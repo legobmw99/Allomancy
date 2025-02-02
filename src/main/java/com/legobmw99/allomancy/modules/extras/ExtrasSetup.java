@@ -10,6 +10,7 @@ import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
 import com.legobmw99.allomancy.modules.extras.command.AllomancyPowerCommand;
 import com.legobmw99.allomancy.modules.extras.command.AllomancyPowerType;
+import com.legobmw99.allomancy.modules.extras.item.BronzeEarringItem;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriterionTrigger;
@@ -22,9 +23,11 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.block.BellBlock;
 import net.minecraft.world.level.block.Block;
@@ -48,6 +51,12 @@ import java.util.function.Supplier;
 public final class ExtrasSetup {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
+
+    public static final DeferredItem<BronzeEarringItem> BRONZE_EARRING =
+            ITEMS.registerItem("bronze_earring", BronzeEarringItem::new, new Item.Properties().stacksTo(1));
+    public static final DeferredItem<BronzeEarringItem> CHARGED_BRONZE_EARRING =
+            ITEMS.registerItem("charged_bronze_earring", BronzeEarringItem::new,
+                               new Item.Properties().stacksTo(1).rarity(Rarity.RARE).equippable(EquipmentSlot.HEAD));
 
     public static final BlockCapability<IAllomanticallyUsable, Void> ALLOMANTICALLY_USABLE_BLOCK =
             BlockCapability.createVoid(
