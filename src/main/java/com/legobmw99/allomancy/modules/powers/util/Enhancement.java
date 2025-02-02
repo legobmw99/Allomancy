@@ -6,6 +6,7 @@ import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.network.Network;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -60,29 +61,24 @@ public final class Enhancement {
     }
 
     public static void teleportToLastDeath(ServerPlayer curPlayer, ServerLevel level, IAllomancerData data) {
-        ResourceKey<Level> deathDim = data.getDeathDim();
-        if (deathDim != null) {
-            teleport(curPlayer, level, deathDim, data.getDeathLoc());
+
+        curPlayer.getLastDeathLocation().ifPresent(death -> {
+            teleport(curPlayer, level, death.dimension(), death.pos());
             if (data.isBurning(Metal.DURALUMIN)) {
                 data.drainMetals(Metal.DURALUMIN);
             }
             data.drainMetals(Metal.GOLD);
-        }
+        });
     }
 
     public static void teleportToSpawn(ServerPlayer curPlayer, ServerLevel level, IAllomancerData data) {
-        ResourceKey<Level> spawnDim = data.getSpawnDim();
-        BlockPos spawnLoc;
+        var spawn = data.getSpawnLoc();
 
-        if (spawnDim != null) {
-            spawnLoc = data.getSpawnLoc();
-        } else {
-            spawnDim = Level.OVERWORLD; // no spawn --> use world spawn
-            spawnLoc = level.getLevelData().getSpawnPos();
-
+        if (spawn == null) {  // no spawn --> use world spawn
+            spawn = GlobalPos.of(Level.OVERWORLD, level.getLevelData().getSpawnPos());
         }
 
-        teleport(curPlayer, level, spawnDim, spawnLoc);
+        teleport(curPlayer, level, spawn.dimension(), spawn.pos());
         if (data.isBurning(Metal.DURALUMIN)) {
             data.drainMetals(Metal.DURALUMIN);
         }

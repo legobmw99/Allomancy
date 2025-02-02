@@ -2,8 +2,10 @@ package com.legobmw99.allomancy.api.data;
 
 import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 public interface IAllomancerData {
 
@@ -140,29 +142,6 @@ public interface IAllomancerData {
      */
     void setDamageStored(int damageStored);
 
-    /**
-     * Set the death location and dimension
-     *
-     * @param pos BlockPos of the death location
-     * @param dim The RegistryKey representing the dimension the death occurred in
-     */
-    void setDeathLoc(BlockPos pos, ResourceKey<Level> dim);
-
-    void setDeathLoc(BlockPos pos, String dim_name);
-
-    /**
-     * Returns the location of the most recent player's death, or null
-     *
-     * @return BlockPos of player's death, or null
-     */
-    BlockPos getDeathLoc();
-
-    /**
-     * Returns the dimension of the most recent player's death, or null
-     *
-     * @return RegistryKey corresponding to the dimension, or null
-     */
-    ResourceKey<Level> getDeathDim();
 
     /**
      * Set the spawn location and dimension
@@ -172,21 +151,30 @@ public interface IAllomancerData {
      */
     void setSpawnLoc(BlockPos pos, ResourceKey<Level> dim);
 
-    void setSpawnLoc(BlockPos pos, String dim_name);
-
     /**
      * Returns the location of the players spawn point if set, or null
      *
-     * @return BlockPos of player's death, or null
+     * @return BlockPos and dimension of player's spawn point, or null
      */
-    BlockPos getSpawnLoc();
+    @Nullable
+    GlobalPos getSpawnLoc();
+
 
     /**
-     * Returns the dimension of the most player's spawn point, or null if unset.
+     * Set the location we're trying to find with an earring
      *
-     * @return RegistryKey corresponding to the dimension, or null
+     * @param pos BlockPos of the point
+     * @param dim The RegistryKey representing the dimension
      */
-    ResourceKey<Level> getSpawnDim();
+    void setSpecialSeekingLoc(BlockPos pos, ResourceKey<Level> dim);
+
+    /**
+     * Returns the location of the players seeking point if set, or null
+     *
+     * @return BlockPos and dimension of player's seeking point, or null
+     */
+    @Nullable
+    GlobalPos getSpecialSeekingLoc();
 
     void decrementEnhanced();
 

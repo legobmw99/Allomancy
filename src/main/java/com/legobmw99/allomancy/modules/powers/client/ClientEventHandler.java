@@ -12,8 +12,8 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -132,6 +132,11 @@ public final class ClientEventHandler {
         /*********************************************
          * BRONZE LINES                              *
          *********************************************/
+        GlobalPos seeking = data.getSpecialSeekingLoc();
+        if (seeking != null && player.level().dimension() == seeking.dimension()) {
+
+            Rendering.drawMetalLine(stack, playervec, seeking.pos().getCenter(), 5.0F, 0.7F, 0.15F, 0.15F);
+        }
         if ((data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER)))) {
             tracking.forEachSeeked(
                     playerEntity -> Rendering.drawMetalLine(stack, playervec, playerEntity.position(), 5.0F, 0.7F,
@@ -142,22 +147,21 @@ public final class ClientEventHandler {
          * GOLD AND ELECTRUM LINES                   *
          *********************************************/
         if (data.isBurning(Metal.GOLD)) {
-            ResourceKey<Level> deathDim = data.getDeathDim();
-            if (deathDim != null && player.level().dimension() == deathDim) {
-                Rendering.drawMetalLine(stack, playervec, Vec3.atCenterOf(data.getDeathLoc()), 3.0F, 0.9F, 0.85F,
-                                        0.0F);
-            }
+            player.getLastDeathLocation().ifPresent(death -> {
+                if (player.level().dimension() == death.dimension()) {
+                    Rendering.drawMetalLine(stack, playervec, Vec3.atCenterOf(death.pos()), 3.0F, 0.9F, 0.85F, 0.0F);
+                }
+            });
         }
         if (data.isBurning(Metal.ELECTRUM)) {
-            ResourceKey<Level> spawnDim = data.getSpawnDim();
-            if (spawnDim == null &&
+            GlobalPos spawn = data.getSpawnLoc();
+            if (spawn == null &&
                 player.level().dimension() == Level.OVERWORLD) { // overworld, no spawn --> use world spawn
                 var levelData = player.level().getLevelData();
                 Rendering.drawMetalLine(stack, playervec, Vec3.atCenterOf(levelData.getSpawnPos()), 3.0F, 0.7F, 0.8F,
                                         0.2F);
-            } else if (spawnDim != null && player.level().dimension() == spawnDim) {
-                Rendering.drawMetalLine(stack, playervec, Vec3.atCenterOf(data.getSpawnLoc()), 3.0F, 0.7F, 0.8F,
-                                        0.2F);
+            } else if (spawn != null && player.level().dimension() == spawn.dimension()) {
+                Rendering.drawMetalLine(stack, playervec, Vec3.atCenterOf(spawn.pos()), 3.0F, 0.7F, 0.8F, 0.2F);
             }
         }
 
