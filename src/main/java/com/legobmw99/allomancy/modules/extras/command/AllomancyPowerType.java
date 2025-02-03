@@ -34,7 +34,7 @@ public final class AllomancyPowerType implements ArgumentType<String> {
     }
 
     public static AllomancyPowerType allomancyPowerType() {
-        return new AllomancyPowerType();
+        return INSTANCE;
     }
 
     @Override
