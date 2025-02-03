@@ -4,7 +4,6 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.extras.item.BronzeEarringItem;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
@@ -262,11 +261,8 @@ public final class CommonEventHandler {
             GlobalPos seeking = data.getSpecialSeekingLoc();
             if (seeking == null) {
                 BlockPos blockpos =
-                        level.findNearestMapStructure(BronzeEarringItem.SEEKABLE, curPlayer.blockPosition(), 100,
-                                                      false);
-                if (blockpos == null) {
-                    Allomancy.LOGGER.info("Player {} failed to locate well with {}", curPlayer, helmet);
-                } else {
+                        level.findNearestMapStructure(ExtrasSetup.SEEKABLE, curPlayer.blockPosition(), 100, false);
+                if (blockpos != null) {
                     data.setSpecialSeekingLoc(blockpos, curPlayer.level().dimension());
                     syncRequired = true;
                 }

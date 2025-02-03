@@ -1,8 +1,6 @@
 {
   "entries": [
-    "allomancy:unbreakable_dagger_loot",
-    "allomancy:lerasium_loot",
-    "allomancy:lerasium_well"
+    "allomancy:unbreakable_dagger_loot"
   ],
   "replace": false
 }

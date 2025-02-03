@@ -57,6 +57,7 @@ class Languages extends LanguageProvider {
         add(ExtrasSetup.INVERTED_IRON_BUTTON.get(), "Inverted Iron Button");
         add(ExtrasSetup.IRON_LEVER.get(), "Iron Lever");
         add("block.allomancy.iron_activation.lore", "This item seems too heavy to activate by ordinary means");
+        add(ExtrasSetup.LIQUID_LERASIUM.get(), "Concentrated Leras");
 
         add(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "Hand Grinder");
         add(ConsumeSetup.LERASIUM_NUGGET.get(), "Lerasium Nugget");
@@ -64,7 +65,9 @@ class Languages extends LanguageProvider {
             "This item is endowed with strange powers, perhaps you should ingest it?");
         add(CombatSetup.MISTCLOAK.get(), "Mistcloak");
         add(ExtrasSetup.BRONZE_EARRING.get(), "Bronze Earring");
+        add("item.allomancy.bronze_earring.lore", "Useless, but sharp...");
         add(ExtrasSetup.CHARGED_BRONZE_EARRING.get(), "Charged Bronze Earring");
+        add("item.allomancy.charged_bronze_earring.lore", "You hear a pulsing in the distance...");
         add(CombatSetup.ALUMINUM_HELMET.get(), "Aluminum Helmet");
         add(CombatSetup.COIN_BAG.get(), "Coin Bag");
         add(CombatSetup.OBSIDIAN_DAGGER.get(), "Obsidian Dagger");
@@ -104,24 +107,32 @@ class Languages extends LanguageProvider {
 
         add(CombatSetup.NUGGET_PROJECTILE.get(), "Nugget Projectile");
 
-        add("advancements.local_metallurgist.title", "Local Metallurgist!");
-        add("advancements.local_metallurgist.desc", "Craft a grinder to begin mixing metals");
-        add("advancements.dna_entangled.title", "Spiritual DNA Entanglement");
-        add("advancements.dna_entangled.desc", "Your DNA is too entangled with the spiritual realm to use Lerasium");
-        add("advancements.become_mistborn.title", "Become Mistborn!");
-        add("advancements.become_mistborn.desc", "You have a power most people envy...");
-        add("advancements.metallic_collector.title", "Metallic Collector");
-        add("advancements.metallic_collector.desc", "Collect every single metallic flake, even the useless ones");
-        add("advancements.coinshot.title", "Coinshot");
-        add("advancements.coinshot.desc", "Kill a mob with the bag of coins.");
-        add("advancements.tin_foil_hat.title", "Tin foil hat");
-        add("advancements.tin_foil_hat.desc", "Protect yourself, and be a bit paranoid too");
-        add("advancements.time_warp.title", "Sub-time bubble?");
-        add("advancements.time_warp.desc", "Time travel? Not quite!");
-        add("advancements.consequences.title", "Consequences, Vin");
-        add("advancements.consequences.desc", "Learn what happens when you push on a much heavier target.");
-        add("advancements.going_loud.title", "Going Loud");
-        add("advancements.going_loud.desc", "Allomancy can grant great stealth, unless you do that!");
+        add("advancements.allomancy.local_metallurgist.title", "Local Metallurgist!");
+        add("advancements.allomancy.local_metallurgist.desc", "Craft a grinder to begin mixing metals");
+        add("advancements.allomancy.dna_entangled.title", "Spiritual DNA Entanglement");
+        add("advancements.allomancy.dna_entangled.desc",
+            "Your DNA is too entangled with the spiritual realm to use Lerasium");
+        add("advancements.allomancy.blinged_out.title", "A small gift");
+        add("advancements.allomancy.blinged_out.desc", "What harm could a simple earring do?");
+        add("advancements.allomancy.bloody.title", "Local... Hemalurgist?");
+        add("advancements.allomancy.bloody.desc", "You now have blood on your hands (and ears)");
+        add("advancements.allomancy.well.title", "Ascendant");
+        add("advancements.allomancy.well.desc", "A well of great power");
+        add("advancements.allomancy.become_mistborn.title", "Mistborn.");
+        add("advancements.allomancy.become_mistborn.desc", "You have a power most people envy...");
+        add("advancements.allomancy.metallic_collector.title", "Metallic Collector");
+        add("advancements.allomancy.metallic_collector.desc",
+            "Collect every single metallic flake, even the useless ones");
+        add("advancements.allomancy.coinshot.title", "Coinshot");
+        add("advancements.allomancy.coinshot.desc", "Kill a mob with the bag of coins.");
+        add("advancements.allomancy.tin_foil_hat.title", "Tin foil hat");
+        add("advancements.allomancy.tin_foil_hat.desc", "Protect yourself, and be a bit paranoid too");
+        add("advancements.allomancy.time_warp.title", "Sub-time bubble?");
+        add("advancements.allomancy.time_warp.desc", "Time travel? Not quite!");
+        add("advancements.allomancy.consequences.title", "Consequences, Vin");
+        add("advancements.allomancy.consequences.desc", "Learn what happens when you push on a much heavier target.");
+        add("advancements.allomancy.going_loud.title", "Going Loud");
+        add("advancements.allomancy.going_loud.desc", "Allomancy can grant great stealth, unless you do that!");
 
         add("key.categories.allomancy", "Allomancy");
         add("key.burn", "Burn Metals");

@@ -45,6 +45,9 @@ final class Recipes extends RecipeProvider {
         add('O', Tags.Items.OBSIDIANS);
         add('C', Items.COBBLESTONE);
         add('A', ing("c:ingots/aluminum"));
+        add('B', ing("c:storage_blocks/bronze"));
+        add('b', ing("c:ingots/bronze"));
+        add('n', ing("c:nuggets/bronze"));
 
     }
 
@@ -158,6 +161,9 @@ final class Recipes extends RecipeProvider {
         buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.KOLOSS_BLADE.get(),
                     ConsumeSetup.LERASIUM_NUGGET.get(), "CC", "CC", "sC");
 
+        buildShaped(consumer, RecipeCategory.MISC, ExtrasSetup.BRONZE_EARRING.get(),
+                    ConsumeSetup.ALLOMANTIC_GRINDER.get(), " b ", "B n");
+
         // Ore Recipes
         // order must be the same as MaterialsSetup.ORE_METALS
         int[] ore_metal_indexes =
@@ -172,9 +178,6 @@ final class Recipes extends RecipeProvider {
             buildSmeltingAndBlasting(ingot, List.of(raw, ore, deep_ore), ore_metal_xp[i]);
         }
 
-
-        buildShapeless(consumer, RecipeCategory.MISC, ConsumeSetup.LERASIUM_NUGGET.get(), 1, Items.NETHER_STAR,
-                       ing(Items.NETHER_STAR), ing(Tags.Items.STORAGE_BLOCKS_GOLD));
 
         // Most metal based recipes
         for (int i = 0; i < MaterialsSetup.METAL_ITEM_LEN; i++) {

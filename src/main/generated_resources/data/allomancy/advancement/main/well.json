@@ -1,0 +1,41 @@
+{
+  "parent": "allomancy:main/bloody",
+  "criteria": {
+    "in_well": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "allomancy:well"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.allomancy.well.desc"
+    },
+    "frame": "goal",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "allomancy:lerasium_nugget"
+    },
+    "title": {
+      "translate": "advancements.allomancy.well.title"
+    }
+  },
+  "requirements": [
+    [
+      "in_well"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

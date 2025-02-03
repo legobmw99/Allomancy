@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
+import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -257,6 +258,9 @@ public final class Physical {
         add(ConsumeSetup.ALLOMANTIC_GRINDER.get());
         add(CombatSetup.COIN_BAG.get());
 
+        add(ExtrasSetup.BRONZE_EARRING.get());
+        add(ExtrasSetup.CHARGED_BRONZE_EARRING.get());
+        add(ExtrasSetup.LIQUID_LERASIUM.get());
 
         BuiltInRegistries.ITEM
                 .keySet()

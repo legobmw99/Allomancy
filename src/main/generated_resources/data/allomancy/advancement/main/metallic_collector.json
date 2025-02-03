@@ -184,7 +184,7 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.metallic_collector.desc"
+      "translate": "advancements.allomancy.metallic_collector.desc"
     },
     "frame": "challenge",
     "icon": {
@@ -197,7 +197,7 @@
       "id": "allomancy:vial"
     },
     "title": {
-      "translate": "advancements.metallic_collector.title"
+      "translate": "advancements.allomancy.metallic_collector.title"
     }
   },
   "requirements": [

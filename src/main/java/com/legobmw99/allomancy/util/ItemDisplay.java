@@ -7,7 +7,6 @@ import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.VialItem;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.extras.item.BronzeEarringItem;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
@@ -36,8 +35,6 @@ public final class ItemDisplay {
                     .title(Component.translatable("tabs" + ".allomancy.main_tab"))
                     .displayItems((featureFlags, output) -> {
                         output.accept(ConsumeSetup.LERASIUM_NUGGET.get());
-                        output.accept(ExtrasSetup.BRONZE_EARRING.get());
-                        output.accept(ExtrasSetup.CHARGED_BRONZE_EARRING.get());
 
                         output.accept(CombatSetup.ALUMINUM_HELMET.get());
                         output.accept(CombatSetup.MISTCLOAK.get());
@@ -56,6 +53,9 @@ public final class ItemDisplay {
 
                         output.accept(CombatSetup.KOLOSS_BLADE.get());
                         output.accept(CombatSetup.OBSIDIAN_DAGGER.get());
+
+                        output.accept(ExtrasSetup.BRONZE_EARRING.get());
+                        output.accept(ExtrasSetup.CHARGED_BRONZE_EARRING.get());
 
                         output.accept(ExtrasSetup.IRON_LEVER.get());
                         output.accept(ExtrasSetup.IRON_BUTTON.get());

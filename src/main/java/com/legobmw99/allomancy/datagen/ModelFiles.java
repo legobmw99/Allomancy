@@ -118,6 +118,7 @@ class ModelFiles extends ModelProvider {
         createLever(blockModels, ExtrasSetup.IRON_LEVER.get(), TextureMapping.getBlockTexture(Blocks.IRON_BLOCK));
         createIronButtonBlocks(blockModels);
 
+        blockModels.createNonTemplateModelBlock(ExtrasSetup.LIQUID_LERASIUM.get(), Blocks.WATER);
         Stream
                 .of(MaterialsSetup.ORE_BLOCKS, MaterialsSetup.DEEPSLATE_ORE_BLOCKS, MaterialsSetup.RAW_ORE_BLOCKS,
                     MaterialsSetup.STORAGE_BLOCKS)

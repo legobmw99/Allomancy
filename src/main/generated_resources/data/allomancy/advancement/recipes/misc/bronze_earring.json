@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_nether_star": {
+    "has_allomantic_grinder": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:nether_star"
+            "items": "allomancy:allomantic_grinder"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:lerasium_nugget"
+        "recipe": "allomancy:bronze_earring"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_nether_star"
+      "has_allomantic_grinder"
     ]
   ],
   "rewards": {
     "recipes": [
-      "allomancy:lerasium_nugget"
+      "allomancy:bronze_earring"
     ]
   }
 }
