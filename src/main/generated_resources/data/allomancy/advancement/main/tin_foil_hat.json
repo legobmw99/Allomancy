@@ -43,7 +43,7 @@
   "display": {
     "announce_to_chat": false,
     "description": {
-      "translate": "advancements.tin_foil_hat.desc"
+      "translate": "advancements.allomancy.tin_foil_hat.desc"
     },
     "hidden": true,
     "icon": {
@@ -51,7 +51,7 @@
       "id": "allomancy:aluminum_helmet"
     },
     "title": {
-      "translate": "advancements.tin_foil_hat.title"
+      "translate": "advancements.allomancy.tin_foil_hat.title"
     }
   },
   "requirements": [

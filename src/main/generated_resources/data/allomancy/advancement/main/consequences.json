@@ -35,7 +35,7 @@
   "display": {
     "announce_to_chat": false,
     "description": {
-      "translate": "advancements.consequences.desc"
+      "translate": "advancements.allomancy.consequences.desc"
     },
     "hidden": true,
     "icon": {
@@ -43,7 +43,7 @@
       "id": "minecraft:iron_block"
     },
     "title": {
-      "translate": "advancements.consequences.title"
+      "translate": "advancements.allomancy.consequences.title"
     }
   },
   "requirements": [

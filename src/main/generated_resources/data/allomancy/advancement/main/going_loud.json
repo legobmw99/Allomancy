@@ -15,7 +15,7 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.going_loud.desc"
+      "translate": "advancements.allomancy.going_loud.desc"
     },
     "hidden": true,
     "icon": {
@@ -23,7 +23,7 @@
       "id": "minecraft:bell"
     },
     "title": {
-      "translate": "advancements.going_loud.title"
+      "translate": "advancements.allomancy.going_loud.title"
     }
   },
   "requirements": [

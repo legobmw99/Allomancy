@@ -2,6 +2,7 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
+import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -39,6 +40,15 @@ class EquipmentAssets implements DataProvider {
                                  .addLayers(EquipmentClientInfo.LayerType.HUMANOID,
                                             new EquipmentClientInfo.Layer(Allomancy.rl("aluminum"), Optional.empty(),
                                                                           false))
+                                 .build());
+
+        registrar.accept(ExtrasSetup.BRONZE.location(),
+
+                         EquipmentClientInfo
+                                 .builder()
+                                 .addLayers(EquipmentClientInfo.LayerType.HUMANOID,
+                                            new EquipmentClientInfo.Layer(Allomancy.rl("bronze_earring"),
+                                                                          Optional.empty(), false))
                                  .build());
     }
 

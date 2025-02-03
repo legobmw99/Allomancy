@@ -1,11 +1,11 @@
 {
-  "parent": "minecraft:adventure/root",
+  "parent": "allomancy:main/metallurgist",
   "criteria": {
-    "grinder": {
+    "earring": {
       "conditions": {
         "items": [
           {
-            "items": "allomancy:allomantic_grinder"
+            "items": "allomancy:bronze_earring"
           }
         ]
       },
@@ -13,20 +13,21 @@
     }
   },
   "display": {
+    "announce_to_chat": false,
     "description": {
-      "translate": "advancements.allomancy.local_metallurgist.desc"
+      "translate": "advancements.allomancy.blinged_out.desc"
     },
     "icon": {
       "count": 1,
-      "id": "allomancy:allomantic_grinder"
+      "id": "allomancy:bronze_earring"
     },
     "title": {
-      "translate": "advancements.allomancy.local_metallurgist.title"
+      "translate": "advancements.allomancy.blinged_out.title"
     }
   },
   "requirements": [
     [
-      "grinder"
+      "earring"
     ]
   ],
   "sends_telemetry_event": true

@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.combat.item.ObsidianDaggerItem;
+import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -14,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -99,6 +100,8 @@ class ItemTags extends ItemTagsProvider {
                 .add(CombatSetup.MISTCLOAK.get());
 
         tag(MaterialsSetup.FLAKES_TAG).add(MaterialsSetup.FLAKES.stream().map(Supplier::get).toArray(Item[]::new));
+
+        tag(ExtrasSetup.LERASIUM_CONVERSION).replace(false).addTag(Tags.Items.NETHER_STARS);
     }
 
     @SafeVarargs

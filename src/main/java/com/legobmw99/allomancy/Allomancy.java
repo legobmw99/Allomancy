@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.combat.client.CombatClientSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
+import com.legobmw99.allomancy.modules.extras.client.ExtrasClientSetup;
 import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.PowersSetup;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
@@ -42,6 +43,7 @@ public class Allomancy {
             PowersClientSetup.register(bus);
             bus.addListener(PowersClientSetup::clientInit);
             bus.addListener(PowersClientSetup::registerParticle);
+            bus.addListener(ExtrasClientSetup::registerClientExtensions);
 
             bus.addListener(MetalOverlay::registerGUI);
             bus.addListener(Inputs::registerKeyBinding);
