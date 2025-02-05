@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
@@ -20,12 +20,12 @@ class BlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-        for (int i = 0; i < MaterialsSetup.ORE_METALS.length; i++) {
-            Allomancy.LOGGER.debug("Creating loot tables for ore: {}", MaterialsSetup.ORE_METALS[i].name());
-            var ore = MaterialsSetup.ORE_BLOCKS.get(i).get();
-            var ds = MaterialsSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
-            var raw = MaterialsSetup.RAW_ORE_ITEMS.get(i).get();
-            var rawb = MaterialsSetup.RAW_ORE_BLOCKS.get(i).get();
+        for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
+            Allomancy.LOGGER.debug("Creating loot tables for ore: {}", WorldSetup.ORE_METALS[i].name());
+            var ore = WorldSetup.ORE_BLOCKS.get(i).get();
+            var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
+            var raw = WorldSetup.RAW_ORE_ITEMS.get(i).get();
+            var rawb = WorldSetup.RAW_ORE_BLOCKS.get(i).get();
 
             this.add(ore, block -> this.createOreDrop(block, raw));
             this.add(ds, block -> this.createOreDrop(block, raw));
@@ -37,7 +37,7 @@ class BlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ExtrasSetup.IRON_LEVER.get());
 
 
-        for (Supplier<Block> rblock : MaterialsSetup.STORAGE_BLOCKS) {
+        for (Supplier<Block> rblock : WorldSetup.STORAGE_BLOCKS) {
             if (rblock != null) {
                 this.dropSelf(rblock.get());
             }
@@ -46,7 +46,7 @@ class BlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return Stream.concat(MaterialsSetup.BLOCKS.getEntries().stream().map(DeferredHolder::get),
+        return Stream.concat(WorldSetup.BLOCKS.getEntries().stream().map(DeferredHolder::get),
                              ExtrasSetup.BLOCKS.getEntries().stream().map(DeferredHolder::get))::iterator;
     }
 }

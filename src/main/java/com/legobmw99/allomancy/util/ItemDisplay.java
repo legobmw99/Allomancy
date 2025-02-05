@@ -7,7 +7,7 @@ import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.VialItem;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -62,28 +62,28 @@ public final class ItemDisplay {
                         output.accept(ExtrasSetup.INVERTED_IRON_BUTTON.get());
 
 
-                        for (var block : MaterialsSetup.STORAGE_BLOCKS) {
+                        for (var block : WorldSetup.STORAGE_BLOCKS) {
                             if (block == null) {
                                 continue;
                             }
                             output.accept(block.get());
                         }
 
-                        for (var ingot : MaterialsSetup.INGOTS) {
+                        for (var ingot : WorldSetup.INGOTS) {
                             if (ingot == null) {
                                 continue;
                             }
                             output.accept(ingot.get());
                         }
 
-                        for (var nug : MaterialsSetup.NUGGETS) {
+                        for (var nug : WorldSetup.NUGGETS) {
                             if (nug == null) {
                                 continue;
                             }
                             output.accept(nug.get());
                         }
 
-                        for (var flake : MaterialsSetup.FLAKES) {
+                        for (var flake : WorldSetup.FLAKES) {
                             if (flake == null) {
                                 continue;
                             }
@@ -94,19 +94,19 @@ public final class ItemDisplay {
                             output.accept(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get());
                         }
 
-                        for (var ore : MaterialsSetup.ORE_BLOCKS) {
+                        for (var ore : WorldSetup.ORE_BLOCKS) {
                             output.accept(ore.get());
                         }
 
-                        for (var ore : MaterialsSetup.DEEPSLATE_ORE_BLOCKS) {
+                        for (var ore : WorldSetup.DEEPSLATE_ORE_BLOCKS) {
                             output.accept(ore.get());
                         }
 
-                        for (var ore : MaterialsSetup.RAW_ORE_BLOCKS) {
+                        for (var ore : WorldSetup.RAW_ORE_BLOCKS) {
                             output.accept(ore.get());
                         }
 
-                        for (var ore : MaterialsSetup.RAW_ORE_ITEMS) {
+                        for (var ore : WorldSetup.RAW_ORE_ITEMS) {
                             output.accept(ore.get());
                         }
 
@@ -115,7 +115,7 @@ public final class ItemDisplay {
 
     private ItemDisplay() {}
 
-    public static void addTabContents(final BuildCreativeModeTabContentsEvent event) {
+    private static void addTabContents(final BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
             event.accept(CombatSetup.ALUMINUM_HELMET);
             event.accept(CombatSetup.MISTCLOAK);
@@ -130,6 +130,8 @@ public final class ItemDisplay {
 
     public static void register(IEventBus bus) {
         CREATIVETABS.register(bus);
+
+        bus.addListener(ItemDisplay::addTabContents);
     }
 
     public static MutableComponent addColorToText(String translationKey, ChatFormatting color) {

@@ -149,7 +149,7 @@ public interface IAllomancerData {
      * @param pos BlockPos of the spawn point
      * @param dim The RegistryKey representing the spawn dimension
      */
-    void setSpawnLoc(BlockPos pos, ResourceKey<Level> dim);
+    void setSpawnLoc(@Nullable BlockPos pos, @Nullable ResourceKey<Level> dim);
 
     /**
      * Returns the location of the players spawn point if set, or null
@@ -166,7 +166,7 @@ public interface IAllomancerData {
      * @param pos BlockPos of the point
      * @param dim The RegistryKey representing the dimension
      */
-    void setSpecialSeekingLoc(BlockPos pos, ResourceKey<Level> dim);
+    void setSpecialSeekingLoc(@Nullable BlockPos pos, @Nullable ResourceKey<Level> dim);
 
     /**
      * Returns the location of the players seeking point if set, or null

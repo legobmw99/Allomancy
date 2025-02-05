@@ -4,7 +4,6 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import com.legobmw99.allomancy.modules.powers.network.EnhanceTimePayload;
@@ -13,6 +12,8 @@ import com.legobmw99.allomancy.modules.powers.util.Emotional;
 import com.legobmw99.allomancy.modules.powers.util.Enhancement;
 import com.legobmw99.allomancy.modules.powers.util.Physical;
 import com.legobmw99.allomancy.modules.powers.util.Temporal;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
@@ -99,7 +100,7 @@ public final class CommonEventHandler {
                         randomMisting = (byte) (player.getRandom().nextInt(Metal.values().length));
                     }
                     data.addPower(Metal.getMetal(randomMisting));
-                    ItemStack flakes = new ItemStack(MaterialsSetup.FLAKES.get(randomMisting).get());
+                    ItemStack flakes = new ItemStack(WorldSetup.FLAKES.get(randomMisting).get());
                     // Give the player one flake of their metal
                     if (!player.getInventory().add(flakes)) {
                         ItemEntity entity = new ItemEntity(player.getCommandSenderWorld(), player.position().x(),
@@ -261,7 +262,7 @@ public final class CommonEventHandler {
             GlobalPos seeking = data.getSpecialSeekingLoc();
             if (seeking == null) {
                 BlockPos blockpos =
-                        level.findNearestMapStructure(ExtrasSetup.SEEKABLE, curPlayer.blockPosition(), 100, false);
+                        level.findNearestMapStructure(AllomancyTags.SEEKABLE, curPlayer.blockPosition(), 100, false);
                 if (blockpos != null) {
                     data.setSpecialSeekingLoc(blockpos, curPlayer.level().dimension());
                     syncRequired = true;

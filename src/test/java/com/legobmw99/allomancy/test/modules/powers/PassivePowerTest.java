@@ -2,8 +2,8 @@ package com.legobmw99.allomancy.test.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.test.AllomancyTest;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.core.BlockPos;
@@ -344,7 +344,7 @@ public class PassivePowerTest {
     public static void bendalloyAcceleratesFurnaces(AllomancyTestHelper helper) {
         BlockPos furnace = new BlockPos(0, 0, 0);
         FurnaceBlockEntity furnaceEntity = helper.getBlockEntity(furnace, FurnaceBlockEntity.class);
-        furnaceEntity.setItem(0, new ItemStack(MaterialsSetup.RAW_ORE_ITEMS.getFirst().get(), 1));
+        furnaceEntity.setItem(0, new ItemStack(WorldSetup.RAW_ORE_ITEMS.getFirst().get(), 1));
         furnaceEntity.setItem(1, new ItemStack(Items.STICK, 2));
 
         var player = helper.makeMistbornPlayer();
@@ -352,7 +352,7 @@ public class PassivePowerTest {
         data.setBurning(Metal.BENDALLOY, true);
         helper.succeedOnTickWhen(29, () -> {
             helper.assertTrue(data.isBurning(Metal.BENDALLOY), "Bendalloy went out");
-            helper.assertContainerContains(furnace, MaterialsSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get());
+            helper.assertContainerContains(furnace, WorldSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get());
 
             helper.assertTrue(furnaceEntity.getItem(1).isEmpty(), "Fuel didn't burn out");
             helper.assertTrue(furnaceEntity.getItem(0).isEmpty(), "item didn't smelt");

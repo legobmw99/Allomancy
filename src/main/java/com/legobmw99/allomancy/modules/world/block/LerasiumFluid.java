@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.modules.extras.block;
+package com.legobmw99.allomancy.modules.world.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
