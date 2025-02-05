@@ -1,7 +1,7 @@
-package com.legobmw99.allomancy.modules.extras.block;
+package com.legobmw99.allomancy.modules.world.block;
 
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
-import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -16,7 +16,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
-import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 public class LiquidLerasiumBlock extends LiquidBlock {
@@ -36,7 +35,7 @@ public class LiquidLerasiumBlock extends LiquidBlock {
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         super.entityInside(state, level, pos, entity);
         if (entity instanceof ItemEntity item) {
-            if (item.getItem().is(ExtrasSetup.LERASIUM_CONVERSION)) {
+            if (item.getItem().is(AllomancyTags.LERASIUM_CONVERSION)) {
                 item.setItem(new ItemStack(ConsumeSetup.LERASIUM_NUGGET.get(), item.getItem().getCount()));
                 if (!level.isClientSide()) {
                     level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE,

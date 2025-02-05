@@ -5,7 +5,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
@@ -72,13 +72,13 @@ class ModelFiles extends ModelProvider {
         itemModels.generateFlatItem(ExtrasSetup.BRONZE_EARRING.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ExtrasSetup.CHARGED_BRONZE_EARRING.get(), ModelTemplates.FLAT_ITEM);
 
-        for (var ritem : MaterialsSetup.RAW_ORE_ITEMS) {
+        for (var ritem : WorldSetup.RAW_ORE_ITEMS) {
             itemModels.generateFlatItem(ritem.get(), ModelTemplates.FLAT_ITEM);
         }
 
-        for (int i = 0; i < MaterialsSetup.METAL_ITEM_LEN; i++) {
+        for (int i = 0; i < WorldSetup.METAL_ITEM_LEN; i++) {
 
-            Item flake = MaterialsSetup.FLAKES.get(i).get();
+            Item flake = WorldSetup.FLAKES.get(i).get();
             itemModels.generateFlatItem(flake, ModelTemplates.FLAT_ITEM);
 
 
@@ -91,10 +91,10 @@ class ModelFiles extends ModelProvider {
                 }
             }
 
-            Item nugget = MaterialsSetup.NUGGETS.get(i).get();
+            Item nugget = WorldSetup.NUGGETS.get(i).get();
             itemModels.generateFlatItem(nugget, ModelTemplates.FLAT_ITEM);
 
-            Item ingot = MaterialsSetup.INGOTS.get(i).get();
+            Item ingot = WorldSetup.INGOTS.get(i).get();
             itemModels.generateFlatItem(ingot, ModelTemplates.FLAT_ITEM);
 
         }
@@ -118,10 +118,10 @@ class ModelFiles extends ModelProvider {
         createLever(blockModels, ExtrasSetup.IRON_LEVER.get(), TextureMapping.getBlockTexture(Blocks.IRON_BLOCK));
         createIronButtonBlocks(blockModels);
 
-        blockModels.createNonTemplateModelBlock(ExtrasSetup.LIQUID_LERASIUM.get(), Blocks.WATER);
+        blockModels.createNonTemplateModelBlock(WorldSetup.LIQUID_LERASIUM.get(), Blocks.WATER);
         Stream
-                .of(MaterialsSetup.ORE_BLOCKS, MaterialsSetup.DEEPSLATE_ORE_BLOCKS, MaterialsSetup.RAW_ORE_BLOCKS,
-                    MaterialsSetup.STORAGE_BLOCKS)
+                .of(WorldSetup.ORE_BLOCKS, WorldSetup.DEEPSLATE_ORE_BLOCKS, WorldSetup.RAW_ORE_BLOCKS,
+                    WorldSetup.STORAGE_BLOCKS)
                 .flatMap(Collection::stream)
                 .forEach(rblock -> {
                     if (rblock != null) {

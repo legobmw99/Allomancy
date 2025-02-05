@@ -5,7 +5,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -39,12 +39,12 @@ class Languages extends LanguageProvider {
         add("tabs.allomancy.main_tab", "Allomancy");
 
 
-        for (int i = 0; i < MaterialsSetup.ORE_METALS.length; i++) {
-            String metal = MaterialsSetup.ORE_METALS[i].name();
-            var ore = MaterialsSetup.ORE_BLOCKS.get(i).get();
-            var ds = MaterialsSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
-            var rawb = MaterialsSetup.RAW_ORE_BLOCKS.get(i).get();
-            var raw = MaterialsSetup.RAW_ORE_ITEMS.get(i).get();
+        for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
+            String metal = WorldSetup.ORE_METALS[i].name();
+            var ore = WorldSetup.ORE_BLOCKS.get(i).get();
+            var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
+            var rawb = WorldSetup.RAW_ORE_BLOCKS.get(i).get();
+            var raw = WorldSetup.RAW_ORE_ITEMS.get(i).get();
 
             add(ore, toTitleCase(metal) + " Ore");
             add(ds, "Deepslate " + toTitleCase(metal) + " Ore");
@@ -57,7 +57,7 @@ class Languages extends LanguageProvider {
         add(ExtrasSetup.INVERTED_IRON_BUTTON.get(), "Inverted Iron Button");
         add(ExtrasSetup.IRON_LEVER.get(), "Iron Lever");
         add("block.allomancy.iron_activation.lore", "This item seems too heavy to activate by ordinary means");
-        add(ExtrasSetup.LIQUID_LERASIUM.get(), "Concentrated Leras");
+        add(WorldSetup.LIQUID_LERASIUM.get(), "Concentrated Leras");
 
         add(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "Hand Grinder");
         add(ConsumeSetup.LERASIUM_NUGGET.get(), "Lerasium Nugget");
@@ -83,27 +83,27 @@ class Languages extends LanguageProvider {
             add("metals." + mt.getName(), getDisplayName(mt));
             add("key.metals." + mt.getName(), "Toggle " + getDisplayName(mt));
 
-            add(MaterialsSetup.FLAKES.get(mt.getIndex()).get(), getDisplayName(mt) + " Flakes");
+            add(WorldSetup.FLAKES.get(mt.getIndex()).get(), getDisplayName(mt) + " Flakes");
             add(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), getDisplayName(mt) + " Banner Pattern");
 
             if (mt.isVanilla()) {
                 continue;
             }
 
-            add(MaterialsSetup.NUGGETS.get(mt.getIndex()).get(), getDisplayName(mt) + " Nugget");
-            add(MaterialsSetup.INGOTS.get(mt.getIndex()).get(), getDisplayName(mt) + " Ingot");
-            add(MaterialsSetup.STORAGE_BLOCKS.get(mt.getIndex()).get(), getDisplayName(mt) + " Block");
+            add(WorldSetup.NUGGETS.get(mt.getIndex()).get(), getDisplayName(mt) + " Nugget");
+            add(WorldSetup.INGOTS.get(mt.getIndex()).get(), getDisplayName(mt) + " Ingot");
+            add(WorldSetup.STORAGE_BLOCKS.get(mt.getIndex()).get(), getDisplayName(mt) + " Block");
         }
 
-        add(MaterialsSetup.FLAKES.get(MaterialsSetup.LEAD).get(), "Lead Flakes");
-        add(MaterialsSetup.NUGGETS.get(MaterialsSetup.LEAD).get(), "Lead Nugget");
-        add(MaterialsSetup.INGOTS.get(MaterialsSetup.LEAD).get(), "Lead Ingot");
-        add(MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.LEAD).get(), "Lead Block");
+        add(WorldSetup.FLAKES.get(WorldSetup.LEAD).get(), "Lead Flakes");
+        add(WorldSetup.NUGGETS.get(WorldSetup.LEAD).get(), "Lead Nugget");
+        add(WorldSetup.INGOTS.get(WorldSetup.LEAD).get(), "Lead Ingot");
+        add(WorldSetup.STORAGE_BLOCKS.get(WorldSetup.LEAD).get(), "Lead Block");
 
-        add(MaterialsSetup.FLAKES.get(MaterialsSetup.SILVER).get(), "Silver Flakes");
-        add(MaterialsSetup.NUGGETS.get(MaterialsSetup.SILVER).get(), "Silver Nugget");
-        add(MaterialsSetup.INGOTS.get(MaterialsSetup.SILVER).get(), "Silver Ingot");
-        add(MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.SILVER).get(), "Silver Block");
+        add(WorldSetup.FLAKES.get(WorldSetup.SILVER).get(), "Silver Flakes");
+        add(WorldSetup.NUGGETS.get(WorldSetup.SILVER).get(), "Silver Nugget");
+        add(WorldSetup.INGOTS.get(WorldSetup.SILVER).get(), "Silver Ingot");
+        add(WorldSetup.STORAGE_BLOCKS.get(WorldSetup.SILVER).get(), "Silver Block");
 
         add(CombatSetup.NUGGET_PROJECTILE.get(), "Nugget Projectile");
 

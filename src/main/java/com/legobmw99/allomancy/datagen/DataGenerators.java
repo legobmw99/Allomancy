@@ -15,8 +15,6 @@ import java.util.List;
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Allomancy.MODID, value = Dist.CLIENT)
 public final class DataGenerators {
 
-    private DataGenerators() {}
-
     @SubscribeEvent
     public static void gatherData(final GatherDataEvent.Client event) {
         var generator = event.getGenerator();
@@ -26,7 +24,14 @@ public final class DataGenerators {
 
         var lookup = event.getLookupProvider();
 
+
+        event.addProvider(new Languages(packOutput));
+        event.addProvider(new ModelFiles(packOutput));
+        event.addProvider(new EquipmentAssets(packOutput));
+        event.addProvider(new ParticleDescriptions(packOutput));
+
         event.addProvider(new Recipes.Runner(packOutput, lookup));
+        event.addProvider(new AdvancementProvider(packOutput, lookup, List.of(new Advancements())));
 
         event.addProvider(new LootTableProvider(packOutput, Collections.emptySet(),
                                                 List.of(new LootTableProvider.SubProviderEntry(BlockLootTables::new,
@@ -34,22 +39,15 @@ public final class DataGenerators {
                                                 lookup));
         event.addProvider(new LootModifiers(packOutput, lookup));
 
-        BlockTags blocktags = new BlockTags(packOutput, lookup);
-        event.addProvider(blocktags);
-        event.addProvider(new ItemTags(packOutput, lookup, blocktags.contentsGetter()));
-        event.addProvider(new AdvancementProvider(packOutput, lookup, List.of(new Advancements())));
-
-        event.addProvider(new BiomeTags(packOutput, lookup));
-        event.addProvider(new StructureTags(packOutput, lookup));
-        event.addProvider(new DamageTags(packOutput, lookup));
-        event.addProvider(new BannerTags(packOutput, lookup));
-        event.addProvider(new EntityTypeTags(packOutput, lookup));
-
-        event.addProvider(new Languages(packOutput));
-        event.addProvider(new ModelFiles(packOutput));
-        event.addProvider(new EquipmentAssets(packOutput));
-
-        event.addProvider(new ParticleDescriptions(packOutput));
+        var blocktags = event.addProvider(new TagProvider.Blocks(packOutput, lookup));
+        event.addProvider(new TagProvider.Items(packOutput, lookup, blocktags.contentsGetter()));
+        event.addProvider(new TagProvider.Biomes(packOutput, lookup));
+        event.addProvider(new TagProvider.Structures(packOutput, lookup));
+        event.addProvider(new TagProvider.DamageTypes(packOutput, lookup));
+        event.addProvider(new TagProvider.Banners(packOutput, lookup));
+        event.addProvider(new TagProvider.EntityTypes(packOutput, lookup));
 
     }
+
+    private DataGenerators() {}
 }

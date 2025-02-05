@@ -8,7 +8,8 @@ import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.extras.advancement.AllomanticallyActivatedBlockTrigger;
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnEntityTrigger;
 import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnPlayerTrigger;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
@@ -78,7 +79,7 @@ class Advancements implements AdvancementSubProvider {
                               KilledTrigger.TriggerInstance.playerKilledEntity(
                                       new EntityPredicate.Builder().entityType(
                                               EntityTypePredicate.of(registries.lookupOrThrow(Registries.ENTITY_TYPE),
-                                                                     ExtrasSetup.HEMALURGIC_CHARGERS)),
+                                                                     AllomancyTags.HEMALURGIC_CHARGERS)),
                                       new DamageSourcePredicate.Builder().source(
                                               new EntityPredicate.Builder().equipment(
                                                       new EntityEquipmentPredicate.Builder().mainhand(
@@ -96,7 +97,7 @@ class Advancements implements AdvancementSubProvider {
                          Component.translatable("advancements.allomancy.well.desc"), null, AdvancementType.GOAL, true,
                          true, true)
                 .addCriterion("in_well", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(
-                        registries.lookupOrThrow(Registries.STRUCTURE).getOrThrow(ExtrasSetup.WELL))))
+                        registries.lookupOrThrow(Registries.STRUCTURE).getOrThrow(WorldSetup.WELL))))
                 .save(saver, "allomancy:main/well");
 
         Advancement.Builder
@@ -120,7 +121,7 @@ class Advancements implements AdvancementSubProvider {
                 .display(vial, Component.translatable("advancements.allomancy.metallic_collector.title"),
                          Component.translatable("advancements.allomancy.metallic_collector.desc"), null,
                          AdvancementType.CHALLENGE, true, true, false);
-        for (var flake : MaterialsSetup.FLAKES) {
+        for (var flake : WorldSetup.FLAKES) {
             allMetals.addCriterion("has_" + flake.getId().getPath(),
                                    InventoryChangeTrigger.TriggerInstance.hasItems(flake.get()));
         }
@@ -138,7 +139,7 @@ class Advancements implements AdvancementSubProvider {
                                                                                               DamageSourcePredicate.Builder
                                                                                                       .damageType()
                                                                                                       .tag(TagPredicate.is(
-                                                                                                              CombatSetup.IS_COIN_HIT))))
+                                                                                                              AllomancyTags.IS_COIN_HIT))))
                 .save(saver, "allomancy:main/coinshot");
 
 

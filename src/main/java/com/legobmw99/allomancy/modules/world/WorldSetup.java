@@ -1,39 +1,62 @@
-package com.legobmw99.allomancy.modules.materials;
+package com.legobmw99.allomancy.modules.world;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.materials.world.DaggerLootModifier;
-import com.legobmw99.allomancy.modules.materials.world.LerasiumLootModifier;
+import com.legobmw99.allomancy.modules.world.block.LerasiumFluid;
+import com.legobmw99.allomancy.modules.world.block.LiquidLerasiumBlock;
+import com.legobmw99.allomancy.modules.world.loot.DaggerLootModifier;
+import com.legobmw99.allomancy.modules.world.loot.LerasiumLootModifier;
+import com.legobmw99.allomancy.util.AllomancyTags;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
+import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
+import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
 import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
+import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
+import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -41,11 +64,55 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
-public final class MaterialsSetup {
+public final class WorldSetup {
 
-    private MaterialsSetup() {}
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
+    private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
+    private static final DeferredRegister<FluidType> FLUID_TYPES =
+            DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, Allomancy.MODID);
+    private static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(Registries.FLUID, Allomancy.MODID);
+
+
+    public static final Supplier<FluidType> LERAS_TYPE = FLUID_TYPES.register("lerasium", () -> new FluidType(
+            FluidType.Properties
+                    .create()
+                    .canConvertToSource(false)
+                    .lightLevel(14)
+                    .canHydrate(false)
+                    .canSwim(false)
+                    .supportsBoating(false)
+                    .canDrown(false)
+                    .rarity(Rarity.EPIC)
+                    .pathType(PathType.LAVA)));
+
+    private static BaseFlowingFluid.Properties makeProps() {
+        return new BaseFlowingFluid.Properties(LERAS_TYPE, LERASIUM_FLUID, LERASIUM_FLUID)
+                .block(LIQUID_LERASIUM)
+                .explosionResistance(100)
+                .levelDecreasePerBlock(8);
+    }
+
+    public static final Supplier<FlowingFluid> LERASIUM_FLUID =
+            FLUIDS.register("lerasium", () -> new LerasiumFluid(makeProps()));
+
+
+    public static final DeferredBlock<LiquidBlock> LIQUID_LERASIUM =
+            BLOCKS.registerBlock("liquid_lerasium", props -> new LiquidLerasiumBlock(LERASIUM_FLUID.get(), props),
+                                 BlockBehaviour.Properties
+                                         .of()
+                                         .mapColor(MapColor.SNOW)
+                                         .noCollission()
+                                         .strength(100.0F)
+                                         .pushReaction(PushReaction.DESTROY)
+                                         .noLootTable()
+                                         .lightLevel((state) -> 14)
+                                         .liquid()
+                                         .sound(SoundType.EMPTY));
+
 
     public record OreConfig(String name, int size, int placementCount, int minHeight, int maxHeight) {
 
@@ -65,14 +132,15 @@ public final class MaterialsSetup {
              new OreConfig("silver", 7, 8, -40, 30), new OreConfig("tin", 11, 12, 30, 112),
              new OreConfig("zinc", 8, 9, 40, 80)};
 
+
+    public static final ResourceKey<Structure> WELL = ResourceKey.create(Registries.STRUCTURE, Allomancy.rl("well"));
+    private static final ResourceKey<StructureTemplatePool> WELL_POOL =
+            ResourceKey.create(Registries.TEMPLATE_POOL, Allomancy.rl("well_pool"));
+    private static final ResourceKey<StructureSet> WELLS =
+            ResourceKey.create(Registries.STRUCTURE_SET, Allomancy.rl("wells"));
     private static final ResourceKey<BiomeModifier> ADD_ALLOMANCY_ORES =
             ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, Allomancy.rl("overworld_ores"));
 
-    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
-    private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
-
-
-    public static final TagKey<Item> FLAKES_TAG = ItemTags.create(Allomancy.rl("metal_flakes"));
     public static final List<DeferredItem<Item>> FLAKES = new ArrayList<>();
     public static final List<DeferredItem<Item>> NUGGETS = new ArrayList<>();
     public static final List<DeferredItem<Item>> INGOTS = new ArrayList<>();
@@ -150,6 +218,8 @@ public final class MaterialsSetup {
         BLOCKS.register(bus);
         ITEMS.register(bus);
         GLM.register(bus);
+        FLUID_TYPES.register(bus);
+        FLUIDS.register(bus);
     }
 
     private static DeferredBlock<Block> registerStandardBlock(String name) {
@@ -212,5 +282,47 @@ public final class MaterialsSetup {
                            new BiomeModifiers.AddFeaturesBiomeModifier(overworldTag, HolderSet.direct(ores),
                                                                        GenerationStep.Decoration.UNDERGROUND_ORES));
     }
+
+    public static void bootstrapStructures(BootstrapContext<Structure> bootstrapContext) {
+        bootstrapContext.register(WELL, new JigsawStructure(
+
+                new Structure.StructureSettings.Builder(
+                        bootstrapContext.lookup(Registries.BIOME).getOrThrow(AllomancyTags.SPAWNS_WELLS))
+                        .generationStep(GenerationStep.Decoration.UNDERGROUND_STRUCTURES)
+                        .terrainAdapation(TerrainAdjustment.NONE)
+                        .spawnOverrides(Map.of(MobCategory.AMBIENT,
+
+                                               new StructureSpawnOverride(
+                                                       StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                                                       WeightedRandomList.create()), MobCategory.MONSTER,
+                                               new StructureSpawnOverride(
+                                                       StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                                                       WeightedRandomList.create())))
+                        .build(), bootstrapContext.lookup(Registries.TEMPLATE_POOL).getOrThrow(WELL_POOL),
+                Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(-16)), false,
+                Optional.of(Heightmap.Types.WORLD_SURFACE_WG), 3, List.of(), DimensionPadding.ZERO,
+                LiquidSettings.IGNORE_WATERLOGGING));
+    }
+
+    public static void bootstrapTemplatePools(BootstrapContext<StructureTemplatePool> bootstrapContext) {
+        bootstrapContext.register(WELL_POOL, new StructureTemplatePool(
+                bootstrapContext.lookup(Registries.TEMPLATE_POOL).getOrThrow(Pools.EMPTY), List.of(Pair.of(
+                StructurePoolElement.single(Allomancy.rl("mountain_well").toString(),
+                                            LiquidSettings.IGNORE_WATERLOGGING), 1)),
+                StructureTemplatePool.Projection.RIGID));
+    }
+
+    public static void bootstrapStructureSets(BootstrapContext<StructureSet> bootstrapContext) {
+        bootstrapContext.register(WELLS,
+                                  new StructureSet(bootstrapContext.lookup(Registries.STRUCTURE).getOrThrow(WELL),
+                                                   new RandomSpreadStructurePlacement(Vec3i.ZERO,
+                                                                                      StructurePlacement.FrequencyReductionMethod.DEFAULT,
+                                                                                      1, 161616, Optional.empty(), 16,
+                                                                                      8, RandomSpreadType.LINEAR)));
+    }
+
+
+    private WorldSetup() {}
+
 }
 

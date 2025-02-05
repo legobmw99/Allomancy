@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.modules.extras.item;
 
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +21,7 @@ public class BronzeEarringItem extends Item {
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         System.out.println(target);
-        if (target.isDeadOrDying() && target.getType().is(ExtrasSetup.HEMALURGIC_CHARGERS) &&
+        if (target.isDeadOrDying() && target.getType().is(AllomancyTags.HEMALURGIC_CHARGERS) &&
             stack.getItem() != ExtrasSetup.CHARGED_BRONZE_EARRING.get()) {
             attacker.setItemInHand(InteractionHand.MAIN_HAND,
                                    stack.transmuteCopy(ExtrasSetup.CHARGED_BRONZE_EARRING.get()));

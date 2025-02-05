@@ -4,14 +4,12 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.combat.client.CombatClientSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.extras.client.ExtrasClientSetup;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.PowersSetup;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
-import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
-import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.network.Network;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
+import com.legobmw99.allomancy.modules.world.client.WorldClientSetup;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +19,6 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,38 +38,20 @@ public class Allomancy {
 
         if (dist.isClient()) {
             PowersClientSetup.register(bus);
-            bus.addListener(PowersClientSetup::clientInit);
-            bus.addListener(PowersClientSetup::registerParticle);
-            bus.addListener(ExtrasClientSetup::registerClientExtensions);
-
-            bus.addListener(MetalOverlay::registerGUI);
-            bus.addListener(Inputs::registerKeyBinding);
+            WorldClientSetup.register(bus);
+            CombatClientSetup.register(bus);
             container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         }
 
         AllomancerAttachment.register(bus);
-        bus.addListener(PowersSetup::init);
-        bus.addListener(Network::registerPayloads);
-
+        PowersSetup.register(bus);
+        Network.register(bus);
         ExtrasSetup.register(bus);
-        bus.addListener(ExtrasSetup::registerCapabilities);
-        NeoForge.EVENT_BUS.addListener(ExtrasSetup::registerCommands);
-
         CombatSetup.register(bus);
-        bus.addListener(CombatClientSetup::registerEntityRenders);
-
         ConsumeSetup.register(bus);
-        bus.addListener(ConsumeSetup::onModifyComponents);
-
-        MaterialsSetup.register(bus);
-
+        WorldSetup.register(bus);
         ItemDisplay.register(bus);
-        bus.addListener(ItemDisplay::addTabContents);
-
-        AllomancyConfig.register(container);
-        bus.addListener(AllomancyConfig::onLoad);
-        bus.addListener(AllomancyConfig::onReload);
-
+        AllomancyConfig.register(container, bus);
 
     }
 }

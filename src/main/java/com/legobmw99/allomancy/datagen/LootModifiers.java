@@ -1,7 +1,7 @@
 package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.materials.world.DaggerLootModifier;
+import com.legobmw99.allomancy.modules.world.loot.DaggerLootModifier;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;

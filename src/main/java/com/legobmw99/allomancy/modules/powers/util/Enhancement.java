@@ -89,7 +89,7 @@ public final class Enhancement {
         int max = 20;
         Vec3 negative = curPlayer.position().add(-max, -max, -max);
         Vec3 positive = curPlayer.position().add(max, max, max);
-        level.getEntitiesOfClass(ServerPlayer.class, new AABB(negative, positive)).stream().forEach(player -> {
+        level.getEntitiesOfClass(ServerPlayer.class, new AABB(negative, positive)).forEach(player -> {
             ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(curPlayer, player, Metal.CHROMIUM, true);
             if (!Emotional.hasTinFoilHat(player)) {
                 wipePlayer(player);
