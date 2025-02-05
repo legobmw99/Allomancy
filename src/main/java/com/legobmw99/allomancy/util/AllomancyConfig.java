@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.util;
 
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -29,18 +30,21 @@ public final class AllomancyConfig {
 
     private AllomancyConfig() {}
 
-    public static void onReload(final ModConfigEvent.Reloading e) {
+    private static void onReload(final ModConfigEvent.Reloading e) {
         PowersConfig.refresh(e);
     }
 
 
-    public static void onLoad(final ModConfigEvent.Loading e) {
+    private static void onLoad(final ModConfigEvent.Loading e) {
         PowersConfig.refresh(e);
     }
 
-    public static void register(ModContainer container) {
+    public static void register(ModContainer container, IEventBus bus) {
         container.registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG);
         container.registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG);
         container.registerConfig(ModConfig.Type.SERVER, SERVER_CONFIG);
+
+        bus.addListener(AllomancyConfig::onLoad);
+        bus.addListener(AllomancyConfig::onReload);
     }
 }

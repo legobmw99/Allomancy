@@ -1,8 +1,10 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticle;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
+import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.Registries;
@@ -38,14 +40,19 @@ public final class PowersClientSetup {
 
     public static void register(IEventBus bus) {
         PARTICLES.register(bus);
+
+        bus.addListener(PowersClientSetup::clientInit);
+        bus.addListener(PowersClientSetup::registerParticle);
+        bus.addListener(MetalOverlay::registerGUI);
+        bus.addListener(Inputs::registerKeyBinding);
     }
 
-    public static void registerParticle(final RegisterParticleProvidersEvent event) {
+    private static void registerParticle(final RegisterParticleProvidersEvent event) {
         Allomancy.LOGGER.info("Allomancy: Registering custom particles");
         event.registerSprite(SOUND_PARTICLE_TYPE.get(), new SoundParticle.Factory());
     }
 
-    public static void clientInit(final FMLClientSetupEvent e) {
+    private static void clientInit(final FMLClientSetupEvent e) {
         e.enqueueWork(() -> NeoForge.EVENT_BUS.register(ClientEventHandler.class));
     }
 }

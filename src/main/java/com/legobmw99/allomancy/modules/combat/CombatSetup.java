@@ -5,13 +5,12 @@ import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.combat.item.CoinBagItem;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.combat.item.ObsidianDaggerItem;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.Util;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -33,26 +32,25 @@ import java.util.EnumMap;
 import java.util.function.Supplier;
 
 public final class CombatSetup {
-    private static final DeferredRegister.Entities ENTITIES = DeferredRegister.createEntities(Allomancy.MODID);
 
-    private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
-
-    public static final TagKey<DamageType> IS_COIN_HIT =
-            TagKey.create(Registries.DAMAGE_TYPE, Allomancy.rl("is_coin_hit"));
     public static final ResourceKey<DamageType> COIN_DAMAGE =
             ResourceKey.create(Registries.DAMAGE_TYPE, Allomancy.rl("coin"));
+    public static final ResourceKey<EquipmentAsset> WOOL =
+            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.rl("wool"));
+    // TODO: would be nice if this used the iron_darker override
+    public static final ResourceKey<EquipmentAsset> ALUMINUM =
+            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.rl("aluminum"));
+
+
+    private static final DeferredRegister.Entities ENTITIES = DeferredRegister.createEntities(Allomancy.MODID);
+    private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
+
+
     public static final DeferredItem<CoinBagItem> COIN_BAG = ITEMS.registerItem("coin_bag", CoinBagItem::new);
     public static final DeferredItem<ObsidianDaggerItem> OBSIDIAN_DAGGER =
             ITEMS.registerItem("obsidian_dagger", ObsidianDaggerItem::new);
     public static final DeferredItem<KolossBladeItem> KOLOSS_BLADE =
             ITEMS.registerItem("koloss_blade", KolossBladeItem::new);
-
-    public static final ResourceKey<EquipmentAsset> WOOL =
-            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.rl("wool"));
-
-
-    public static final TagKey<Item> REPAIRS_MISTCLOAK = ItemTags.create(Allomancy.rl("repairs_wool_armor"));
-
 
     private static final ArmorMaterial WOOL_ARMOR =
             new ArmorMaterial(5, Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -61,7 +59,7 @@ public final class CombatSetup {
                 map.put(ArmorType.CHESTPLATE, 4);
                 map.put(ArmorType.HELMET, 0);
                 map.put(ArmorType.BODY, 0);
-            }), 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, REPAIRS_MISTCLOAK, WOOL);
+            }), 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, AllomancyTags.REPAIRS_MISTCLOAK, WOOL);
 
     public static final DeferredItem<Item> MISTCLOAK = ITEMS.registerItem("mistcloak", (props) -> new Item(
             WOOL_ARMOR.humanoidProperties(props, ArmorType.CHESTPLATE)
@@ -75,13 +73,6 @@ public final class CombatSetup {
                                           .build())));
 
 
-    // TODO: would be nice if this used the iron_darker override
-    public static final ResourceKey<EquipmentAsset> ALUMINUM =
-            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.rl("aluminum"));
-
-
-    public static final TagKey<Item> REPAIRS_ALUMINUM = ItemTags.create(Allomancy.rl("repairs_aluminum_armor"));
-
     private static final ArmorMaterial ALUMINUM_ARMOR =
             new ArmorMaterial(15, Util.make(new EnumMap<>(ArmorType.class), map -> {
                 map.put(ArmorType.BOOTS, 0);
@@ -89,7 +80,7 @@ public final class CombatSetup {
                 map.put(ArmorType.CHESTPLATE, 0);
                 map.put(ArmorType.HELMET, 2);
                 map.put(ArmorType.BODY, 0);
-            }), 1, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, REPAIRS_ALUMINUM, ALUMINUM);
+            }), 1, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, AllomancyTags.REPAIRS_ALUMINUM, ALUMINUM);
 
 
     public static final DeferredItem<Item> ALUMINUM_HELMET =

@@ -10,6 +10,8 @@ import com.legobmw99.allomancy.modules.extras.block.IronButtonBlock;
 import com.legobmw99.allomancy.modules.extras.block.IronLeverBlock;
 import com.legobmw99.allomancy.modules.extras.command.AllomancyPowerCommand;
 import com.legobmw99.allomancy.modules.extras.command.AllomancyPowerType;
+import com.legobmw99.allomancy.modules.extras.item.BronzeEarringItem;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriterionTrigger;
@@ -22,10 +24,15 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.equipment.EquipmentAsset;
+import net.minecraft.world.item.equipment.EquipmentAssets;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.BellBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -36,7 +43,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -48,6 +55,28 @@ import java.util.function.Supplier;
 public final class ExtrasSetup {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Allomancy.MODID);
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
+
+
+    public static final DeferredItem<BronzeEarringItem> BRONZE_EARRING =
+            ITEMS.registerItem("bronze_earring", BronzeEarringItem::new, new Item.Properties()
+                    .stacksTo(1)
+                    .attributes(BronzeEarringItem.createAttributes())
+                    .component(DataComponents.LORE, new ItemLore(
+                            List.of(ItemDisplay.addColorToText("item.allomancy.bronze_earring.lore",
+                                                               ChatFormatting.GRAY)))));
+
+    public static final ResourceKey<EquipmentAsset> BRONZE =
+            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.rl("bronze_jewelry"));
+
+    public static final DeferredItem<BronzeEarringItem> CHARGED_BRONZE_EARRING =
+            ITEMS.registerItem("charged_bronze_earring", BronzeEarringItem::new, new Item.Properties()
+                    .stacksTo(1)
+                    .rarity(Rarity.RARE)
+                    .component(DataComponents.EQUIPPABLE,
+                               Equippable.builder(EquipmentSlot.HEAD).setAsset(BRONZE).build())
+                    .component(DataComponents.LORE, new ItemLore(
+                            List.of(ItemDisplay.addColorToText("item.allomancy.charged_bronze_earring.lore",
+                                                               ChatFormatting.BLUE)))));
 
     public static final BlockCapability<IAllomanticallyUsable, Void> ALLOMANTICALLY_USABLE_BLOCK =
             BlockCapability.createVoid(
@@ -82,16 +111,10 @@ public final class ExtrasSetup {
             ITEMS.registerSimpleBlockItem(IRON_LEVER, IRON_REDSTONE_LORE);
 
     public static final List<ResourceKey<BannerPattern>> PATTERNS = new ArrayList<>();
-    public static final List<TagKey<BannerPattern>> PATTERN_KEYS = new ArrayList<>();
 
     public static final List<DeferredItem<BannerPatternItem>> PATTERN_ITEMS = new ArrayList<>();
     private static final DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES =
             DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, Allomancy.MODID);
-    private static final Supplier<SingletonArgumentInfo<AllomancyPowerType>> CONTAINER_CLASS =
-            COMMAND_ARGUMENT_TYPES.register("allomancy_power",
-                                            () -> ArgumentTypeInfos.registerByClass(AllomancyPowerType.class,
-                                                                                    SingletonArgumentInfo.contextFree(
-                                                                                            AllomancyPowerType::allomancyPowerType)));
 
 
     static {
@@ -102,13 +125,14 @@ public final class ExtrasSetup {
             PATTERNS.add(pattern);
 
             var pattern_key = TagKey.create(Registries.BANNER_PATTERN, Allomancy.rl(name));
-            PATTERN_KEYS.add(pattern_key);
+            AllomancyTags.PATTERN_TAGS.add(pattern_key);
 
             var pattern_item = ITEMS.registerItem(name + "_pattern",
                                                   (props) -> new BannerPatternItem(pattern_key, props.stacksTo(1)));
             PATTERN_ITEMS.add(pattern_item);
         }
     }
+
 
     private static final DeferredRegister<CriterionTrigger<?>> CT =
             DeferredRegister.create(Registries.TRIGGER_TYPE, Allomancy.MODID);
@@ -119,6 +143,12 @@ public final class ExtrasSetup {
     public static final Supplier<AllomanticallyActivatedBlockTrigger> ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER =
             CT.register("activated_allomancy_block", AllomanticallyActivatedBlockTrigger::new);
 
+    private static final Supplier<SingletonArgumentInfo<AllomancyPowerType>> CONTAINER_CLASS =
+            COMMAND_ARGUMENT_TYPES.register("allomancy_power",
+                                            () -> ArgumentTypeInfos.registerByClass(AllomancyPowerType.class,
+                                                                                    SingletonArgumentInfo.contextFree(
+                                                                                            AllomancyPowerType::allomancyPowerType)));
+
     private ExtrasSetup() {}
 
     public static void register(IEventBus bus) {
@@ -126,16 +156,12 @@ public final class ExtrasSetup {
         ITEMS.register(bus);
         CT.register(bus);
         COMMAND_ARGUMENT_TYPES.register(bus);
+
+        bus.addListener(ExtrasSetup::registerCapabilities);
+        NeoForge.EVENT_BUS.addListener(AllomancyPowerCommand::register);
     }
 
-    public static void bootstrapBanners(BootstrapContext<BannerPattern> bootstrapContext) {
-        for (var banner : PATTERNS) {
-            bootstrapContext.register(banner,
-                                      new BannerPattern(banner.location(), banner.location().toShortLanguageKey()));
-        }
-    }
-
-    public static void registerCapabilities(final RegisterCapabilitiesEvent event) {
+    private static void registerCapabilities(final RegisterCapabilitiesEvent event) {
         event.registerBlock(ALLOMANTICALLY_USABLE_BLOCK, new IronLeverBlock.AllomanticUseCapabilityProvider(),
                             IRON_LEVER.get());
         event.registerBlock(ALLOMANTICALLY_USABLE_BLOCK, new IronButtonBlock.AllomanticUseCapabilityProvider(),
@@ -162,8 +188,10 @@ public final class ExtrasSetup {
 
     }
 
-    public static void registerCommands(final RegisterCommandsEvent e) {
-        AllomancyPowerCommand.register(e.getDispatcher());
+    public static void bootstrapBanners(BootstrapContext<BannerPattern> bootstrapContext) {
+        for (var banner : PATTERNS) {
+            bootstrapContext.register(banner,
+                                      new BannerPattern(banner.location(), banner.location().toShortLanguageKey()));
+        }
     }
-
 }

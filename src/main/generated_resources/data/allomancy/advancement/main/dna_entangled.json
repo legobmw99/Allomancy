@@ -8,7 +8,7 @@
   "display": {
     "announce_to_chat": false,
     "description": {
-      "translate": "advancements.dna_entangled.desc"
+      "translate": "advancements.allomancy.dna_entangled.desc"
     },
     "hidden": true,
     "icon": {
@@ -16,7 +16,7 @@
       "id": "allomancy:lerasium_nugget"
     },
     "title": {
-      "translate": "advancements.dna_entangled.title"
+      "translate": "advancements.allomancy.dna_entangled.title"
     }
   },
   "requirements": [

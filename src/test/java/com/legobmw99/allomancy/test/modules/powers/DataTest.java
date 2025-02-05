@@ -1,9 +1,9 @@
 package com.legobmw99.allomancy.test.modules.powers;
 
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -36,7 +36,7 @@ public class DataTest {
         helper.succeedWhen(() -> {
             helper.assertFalse(data.isUninvested(), "Player is not misting");
             helper.assertFalse(data.isMistborn(), "Player is full mistborn");
-            helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).is(MaterialsSetup.FLAKES_TAG),
+            helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).is(AllomancyTags.FLAKES_TAG),
                               "Misting wasn't given flake");
         });
     }

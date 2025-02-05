@@ -1,11 +1,9 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
-import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
@@ -18,10 +16,9 @@ public class ObsidianDaggerItem extends SwordItem {
     private static final int ATTACK_DAMAGE = 23;
     private static final float ATTACK_SPEED = 9.2F;
 
-    public static final TagKey<Item> OBSIDIAN_REPAIR = ItemTags.create(Allomancy.rl("obsidian_tool_materials"));
     private static final ToolMaterial OBSIDIAN =
             new ToolMaterial(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 2, ATTACK_SPEED, 1.0F, ATTACK_DAMAGE,
-                             OBSIDIAN_REPAIR);
+                             AllomancyTags.OBSIDIAN_REPAIR);
 
     public ObsidianDaggerItem(Item.Properties props) {
         super(OBSIDIAN

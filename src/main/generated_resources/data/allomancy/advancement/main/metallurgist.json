@@ -14,14 +14,14 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.local_metallurgist.desc"
+      "translate": "advancements.allomancy.local_metallurgist.desc"
     },
     "icon": {
       "count": 1,
       "id": "allomancy:allomantic_grinder"
     },
     "title": {
-      "translate": "advancements.local_metallurgist.title"
+      "translate": "advancements.allomancy.local_metallurgist.title"
     }
   },
   "requirements": [

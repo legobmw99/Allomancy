@@ -7,6 +7,7 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
@@ -16,6 +17,8 @@ import net.minecraft.world.level.Level;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
+
+import java.util.Optional;
 
 @ForEachTest(groups = "powers")
 public class ActivePowerTest {
@@ -115,7 +118,7 @@ public class ActivePowerTest {
 
         var farCorner = helper.absolutePos(new BlockPos(4, 0, 4));
         // can't test actual death due to it creating a non-GameTestPlayer
-        data.setDeathLoc(farCorner, player.level().dimension());
+        player.setLastDeathLocation(Optional.of(GlobalPos.of(player.level().dimension(), farCorner)));
         data.setBurning(Metal.GOLD, true);
         data.setBurning(Metal.DURALUMIN, true);
         helper.succeedOnTickWhen(1, () -> {

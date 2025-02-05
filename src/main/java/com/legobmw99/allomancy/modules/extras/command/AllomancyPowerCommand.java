@@ -15,6 +15,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -48,8 +49,8 @@ public final class AllomancyPowerCommand {
     }
 
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-
+    public static void register(final RegisterCommandsEvent e) {
+        CommandDispatcher<CommandSourceStack> dispatcher = e.getDispatcher();
         LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("allomancy").requires(permissions(0));
         root.then(Commands
                           .literal("get")

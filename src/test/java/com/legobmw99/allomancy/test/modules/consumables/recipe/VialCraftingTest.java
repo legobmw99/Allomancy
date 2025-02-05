@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.VialItem;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.item.ItemStack;
@@ -25,8 +25,8 @@ public class VialCraftingTest {
                                           out.get(ConsumeSetup.FLAKE_STORAGE).contains(Metal.IRON) &&
                                           out.get(ConsumeSetup.FLAKE_STORAGE).contains(Metal.GOLD);
                                }, () -> "Didn't craft vial!", ConsumeSetup.VIAL,
-                               MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()),
-                               MaterialsSetup.FLAKES.get(Metal.GOLD.getIndex()));
+                               WorldSetup.FLAKES.get(Metal.IRON.getIndex()),
+                               WorldSetup.FLAKES.get(Metal.GOLD.getIndex()));
     }
 
 
@@ -37,8 +37,8 @@ public class VialCraftingTest {
         var vial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
         VialItem.fillVial(vial, new FlakeStorage.Mutable().add(Metal.IRON).toImmutable());
 
-        helper.succeedIfCraftingFails(vial, MaterialsSetup.FLAKES.get(Metal.IRON.getIndex()),
-                                      MaterialsSetup.FLAKES.get(Metal.GOLD.getIndex()));
+        helper.succeedIfCraftingFails(vial, WorldSetup.FLAKES.get(Metal.IRON.getIndex()),
+                                      WorldSetup.FLAKES.get(Metal.GOLD.getIndex()));
 
     }
 }

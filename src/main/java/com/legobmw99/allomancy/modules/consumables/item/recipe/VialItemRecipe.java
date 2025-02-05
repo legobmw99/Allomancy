@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.VialItem;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -54,7 +54,7 @@ public class VialItemRecipe extends CustomRecipe {
             }
             boolean any = false;
             for (Metal mt : Metal.values()) {
-                if (stack.getItem() == MaterialsSetup.FLAKES.get(mt.getIndex()).get()) {
+                if (stack.getItem() == WorldSetup.FLAKES.get(mt.getIndex()).get()) {
                     if (metals[mt.getIndex()]) {
                         return false;
                     }
@@ -87,7 +87,7 @@ public class VialItemRecipe extends CustomRecipe {
                 continue;
             }
             for (Metal mt : Metal.values()) {
-                if (stack.getItem() == MaterialsSetup.FLAKES.get(mt.getIndex()).get()) {
+                if (stack.getItem() == WorldSetup.FLAKES.get(mt.getIndex()).get()) {
                     storage.add(mt);
                     break;
                 }

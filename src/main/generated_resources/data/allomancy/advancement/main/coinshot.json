@@ -17,14 +17,14 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.coinshot.desc"
+      "translate": "advancements.allomancy.coinshot.desc"
     },
     "icon": {
       "count": 1,
       "id": "allomancy:coin_bag"
     },
     "title": {
-      "translate": "advancements.coinshot.title"
+      "translate": "advancements.allomancy.coinshot.title"
     }
   },
   "requirements": [

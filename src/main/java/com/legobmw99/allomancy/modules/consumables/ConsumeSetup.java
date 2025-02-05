@@ -47,10 +47,12 @@ public final class ConsumeSetup {
         DATA_COMPONENTS.register(bus);
         ITEMS.register(bus);
         RECIPES.register(bus);
+
+        bus.addListener(ConsumeSetup::onModifyComponents);
     }
 
 
-    public static void onModifyComponents(final ModifyDefaultComponentsEvent event) {
+    private static void onModifyComponents(final ModifyDefaultComponentsEvent event) {
         FlakeStorage gold = new FlakeStorage.Mutable().add(Metal.GOLD).toImmutable();
 
         event.modify(Items.GOLDEN_APPLE, builder -> builder.set(FLAKE_STORAGE.get(), gold));

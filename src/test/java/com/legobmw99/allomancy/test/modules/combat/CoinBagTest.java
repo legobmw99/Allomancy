@@ -3,8 +3,8 @@ package com.legobmw99.allomancy.test.modules.combat;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -31,7 +31,7 @@ public class CoinBagTest {
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
         data.setBurning(Metal.STEEL, true);
 
-        var nugget = MaterialsSetup.NUGGETS.get(Metal.CADMIUM.getIndex()).get();
+        var nugget = WorldSetup.NUGGETS.get(Metal.CADMIUM.getIndex()).get();
         player.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(nugget, 1));
 
         helper
@@ -56,7 +56,7 @@ public class CoinBagTest {
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
         data.setBurning(Metal.STEEL, true);
 
-        var nugget = MaterialsSetup.NUGGETS.get(Metal.CADMIUM.getIndex()).get();
+        var nugget = WorldSetup.NUGGETS.get(Metal.CADMIUM.getIndex()).get();
         player.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(nugget, 1));
 
         var chicken = helper.spawnWithNoFreeWill(EntityType.CHICKEN, BlockPos.ZERO);
@@ -90,7 +90,7 @@ public class CoinBagTest {
         var player = helper.makeMistbornPlayer();
         player.preventItemPickup();
 
-        var nugget = MaterialsSetup.NUGGETS.get(Metal.CADMIUM.getIndex()).get();
+        var nugget = WorldSetup.NUGGETS.get(Metal.CADMIUM.getIndex()).get();
         player.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(nugget, 1));
 
         helper

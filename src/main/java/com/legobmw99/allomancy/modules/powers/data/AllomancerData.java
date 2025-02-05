@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.powers.data;
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -10,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -21,10 +23,8 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
     private final int[] metal_amounts;
     private final boolean[] burning_metals;
     private int damage_stored;
-    private String death_dimension;
-    private BlockPos death_pos;
-    private String spawn_dimension;
-    private BlockPos spawn_pos;
+    private GlobalPos spawn_pos;
+    private GlobalPos seeking_pos;
     private int enhanced_time;
 
     public AllomancerData() {
@@ -43,8 +43,8 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
 
         this.enhanced_time = 0;
         this.damage_stored = 0;
-        this.death_pos = null;
         this.spawn_pos = null;
+        this.seeking_pos = null;
     }
 
 
@@ -179,54 +179,26 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
     }
 
 
-    public void setDeathLoc(BlockPos pos, ResourceKey<Level> dim) {
-        if (dim != null) {
-            setDeathLoc(pos, dim.location().toString());
-        }
-    }
-
-
-    public void setDeathLoc(BlockPos pos, String dim_name) {
-        this.death_pos = pos;
-        this.death_dimension = dim_name;
-    }
-
-
-    public BlockPos getDeathLoc() {
-        return this.death_pos;
-    }
-
-
-    public ResourceKey<Level> getDeathDim() {
-        if (this.death_dimension == null) {
-            return null;
-        }
-        return ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(this.death_dimension));
-
-    }
-
-
     public void setSpawnLoc(BlockPos pos, ResourceKey<Level> dim) {
-        setSpawnLoc(pos, dim.location().toString());
+        if (pos != null && dim != null) {
+            this.spawn_pos = GlobalPos.of(dim, pos);
+        }
     }
 
-
-    public void setSpawnLoc(BlockPos pos, String dim_name) {
-        this.spawn_pos = pos;
-        this.spawn_dimension = dim_name;
-    }
-
-
-    public BlockPos getSpawnLoc() {
+    public @Nullable GlobalPos getSpawnLoc() {
         return this.spawn_pos;
     }
 
-
-    public ResourceKey<Level> getSpawnDim() {
-        if (this.spawn_dimension == null) {
-            return null;
+    public void setSpecialSeekingLoc(BlockPos pos, ResourceKey<Level> dim) {
+        if (pos != null && dim != null) {
+            this.seeking_pos = GlobalPos.of(dim, pos);
+        } else {
+            this.seeking_pos = null;
         }
-        return ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(this.spawn_dimension));
+    }
+
+    public @Nullable GlobalPos getSpecialSeekingLoc() {
+        return this.seeking_pos;
     }
 
     public void decrementEnhanced() {
@@ -269,19 +241,19 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         allomancy_data.put("metal_burning", metal_burning);
 
         CompoundTag position = new CompoundTag();
-        BlockPos death_block = this.death_pos;
-        if (death_block != null) {
-            position.putString("death_dimension", this.getDeathDim().location().toString());
-            position.putInt("death_x", death_block.getX());
-            position.putInt("death_y", death_block.getY());
-            position.putInt("death_z", death_block.getZ());
-        }
-        BlockPos spawn_block = this.spawn_pos;
-        if (spawn_block != null) {
-            position.putString("spawn_dimension", this.getSpawnDim().location().toString());
+        if (this.spawn_pos != null) {
+            position.putString("spawn_dimension", this.spawn_pos.dimension().location().toString());
+            BlockPos spawn_block = this.spawn_pos.pos();
             position.putInt("spawn_x", spawn_block.getX());
             position.putInt("spawn_y", spawn_block.getY());
             position.putInt("spawn_z", spawn_block.getZ());
+        }
+        if (this.seeking_pos != null) {
+            position.putString("seeking_dimension", this.seeking_pos.dimension().location().toString());
+            BlockPos spawn_block = this.seeking_pos.pos();
+            position.putInt("seeking_x", spawn_block.getX());
+            position.putInt("seeking_y", spawn_block.getY());
+            position.putInt("seeking_z", spawn_block.getZ());
         }
         allomancy_data.put("position", position);
 
@@ -310,15 +282,19 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         }
 
         CompoundTag position = allomancy_data.getCompound("position");
-        if (position.contains("death_dimension")) {
-            this.setDeathLoc(
-                    new BlockPos(position.getInt("death_x"), position.getInt("death_y"), position.getInt("death_z")),
-                    position.getString("death_dimension"));
-        }
         if (position.contains("spawn_dimension")) {
             this.setSpawnLoc(
                     new BlockPos(position.getInt("spawn_x"), position.getInt("spawn_y"), position.getInt("spawn_z")),
-                    position.getString("spawn_dimension"));
+                    ResourceKey.create(Registries.DIMENSION,
+                                       ResourceLocation.parse(position.getString("spawn_dimension"))));
+        }
+        if (position.contains("seeking_dimension")) {
+            this.setSpecialSeekingLoc(new BlockPos(position.getInt("seeking_x"), position.getInt("seeking_y"),
+                                                   position.getInt("seeking_z")),
+                                      ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(
+                                              position.getString("seeking_dimension"))));
+        } else {
+            this.setSpecialSeekingLoc(null, null);
         }
 
     }

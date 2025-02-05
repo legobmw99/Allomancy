@@ -18,8 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 
 public class ProjectileNuggetEntity extends ThrowableItemProjectile implements ItemSupplier {
     private static final EntityDataAccessor<ItemStack> ITEM =
@@ -54,20 +54,22 @@ public class ProjectileNuggetEntity extends ThrowableItemProjectile implements I
 
 
     @Override
-    protected void onHit(HitResult rayTraceResult) {
-        if (rayTraceResult.getType() == HitResult.Type.ENTITY &&
-            ((EntityHitResult) rayTraceResult).getEntity() == this.getOwner()) {
+    protected void onHitEntity(EntityHitResult result) {
+        if (result.getEntity() == this.getOwner()) {
             return;
         }
-
-        if (rayTraceResult.getType() == HitResult.Type.ENTITY) {
-            ((EntityHitResult) rayTraceResult).getEntity().hurtOrSimulate(this.makeDamage(), this.damage);
+        result.getEntity().hurtOrSimulate(this.makeDamage(), this.damage);
+        if (this.level() instanceof ServerLevel level) {
+            this.kill(level);
         }
+    }
 
+    @Override
+    protected void onHitBlock(BlockHitResult result) {
+        super.onHitBlock(result);
         if (this.level() instanceof ServerLevel level) {
             ItemStack ammo = new ItemStack(this.entityData.get(ITEM).getItem(), 1);
-            if (level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) &&
-                rayTraceResult.getType() != HitResult.Type.ENTITY && this.dropItem) {
+            if (level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && this.dropItem) {
                 level.addFreshEntity(
                         new ItemEntity(this.level(), this.position().x(), this.position().y(), this.position().z(),
                                        ammo));

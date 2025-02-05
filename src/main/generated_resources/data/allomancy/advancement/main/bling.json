@@ -1,0 +1,34 @@
+{
+  "parent": "allomancy:main/metallurgist",
+  "criteria": {
+    "earring": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:bronze_earring"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.allomancy.blinged_out.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "allomancy:bronze_earring"
+    },
+    "title": {
+      "translate": "advancements.allomancy.blinged_out.title"
+    }
+  },
+  "requirements": [
+    [
+      "earring"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

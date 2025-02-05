@@ -1,6 +1,5 @@
 package com.legobmw99.allomancy.test.util;
 
-import com.legobmw99.allomancy.test.modules.extras.CommandTest;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;

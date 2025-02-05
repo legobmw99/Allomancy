@@ -16,7 +16,7 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.time_warp.desc"
+      "translate": "advancements.allomancy.time_warp.desc"
     },
     "hidden": true,
     "icon": {
@@ -24,7 +24,7 @@
       "id": "minecraft:clock"
     },
     "title": {
-      "translate": "advancements.time_warp.title"
+      "translate": "advancements.allomancy.time_warp.title"
     }
   },
   "requirements": [

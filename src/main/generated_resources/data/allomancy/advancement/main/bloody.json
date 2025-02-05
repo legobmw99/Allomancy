@@ -1,0 +1,47 @@
+{
+  "parent": "allomancy:main/bling",
+  "criteria": {
+    "earring": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "#allomancy:killing_charges_earring"
+            }
+          }
+        ],
+        "killing_blow": {
+          "source_entity": {
+            "equipment": {
+              "mainhand": {
+                "items": "allomancy:bronze_earring"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.allomancy.bloody.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "allomancy:charged_bronze_earring"
+    },
+    "title": {
+      "translate": "advancements.allomancy.bloody.title"
+    }
+  },
+  "requirements": [
+    [
+      "earring"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

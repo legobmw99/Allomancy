@@ -4,6 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.client.network.ClientPayloadHandler;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
@@ -11,9 +12,11 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 
 public final class Network {
-    private Network() {}
+    public static void register(IEventBus bus) {
+        bus.addListener(Network::registerPayloads);
+    }
 
-    public static void registerPayloads(final RegisterPayloadHandlersEvent event) {
+    private static void registerPayloads(final RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(Allomancy.MODID).versioned("3.0");
 
         registrar.playToClient(AllomancerDataPayload.TYPE, AllomancerDataPayload.STREAM_CODEC,
@@ -40,4 +43,6 @@ public final class Network {
     public static void sync(CustomPacketPayload msg, ServerPlayer player) {
         PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, msg);
     }
+
+    private Network() {}
 }
