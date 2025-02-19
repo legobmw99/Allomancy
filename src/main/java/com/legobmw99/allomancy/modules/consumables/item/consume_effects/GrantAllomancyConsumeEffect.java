@@ -3,11 +3,13 @@ package com.legobmw99.allomancy.modules.consumables.item.consume_effects;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.legobmw99.allomancy.modules.powers.network.Network;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -65,6 +67,9 @@ public final class GrantAllomancyConsumeEffect implements ConsumeEffect {
                     flag = true;
                 }
             }
+        }
+        if (flag && entity instanceof ServerPlayer player) {
+            Network.syncAllomancerData(player);
         }
         return flag;
     }
