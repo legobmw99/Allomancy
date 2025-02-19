@@ -1,6 +1,8 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
 import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.modules.consumables.item.consume_effects.GrantAllomancyConsumeEffect;
+import com.legobmw99.allomancy.modules.consumables.item.consume_effects.SummonLightningConsumeEffect;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
@@ -12,9 +14,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LightningBolt;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +21,7 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -33,6 +33,10 @@ public class LerasiumItem extends Item {
             .consumeSeconds(0.2f)
             .animation(ItemUseAnimation.EAT)
             .sound(SoundEvents.GENERIC_EAT)
+            .onConsume(GrantAllomancyConsumeEffect.makeMistborn())
+            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                    new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20, 0, true, false)))
+            .onConsume(SummonLightningConsumeEffect.INSTANCE)
             .hasConsumeParticles(false)
             .build();
 
@@ -64,23 +68,6 @@ public class LerasiumItem extends Item {
         }
         return InteractionResult.PASS;
     }
-
-    @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity livingEntity) {
-
-        if (livingEntity instanceof Player) {
-            livingEntity.getData(AllomancerAttachment.ALLOMANCY_DATA).setMistborn();
-            //Fancy-shmancy effects
-            LightningBolt lightning = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
-            lightning.setVisualOnly(true);
-            lightning.moveTo(livingEntity.position().add(0, 3, 0));
-            world.addFreshEntity(lightning);
-            livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20, 0, true, false));
-        }
-
-        return super.finishUsingItem(stack, world, livingEntity);
-    }
-
 
     @Override
     public boolean isFoil(ItemStack stack) {
