@@ -6,10 +6,13 @@ import com.legobmw99.allomancy.modules.consumables.item.GrinderItem;
 import com.legobmw99.allomancy.modules.consumables.item.LerasiumItem;
 import com.legobmw99.allomancy.modules.consumables.item.VialItem;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
+import com.legobmw99.allomancy.modules.consumables.item.consume_effects.GrantAllomancyConsumeEffect;
+import com.legobmw99.allomancy.modules.consumables.item.consume_effects.SummonLightningConsumeEffect;
 import com.legobmw99.allomancy.modules.consumables.item.recipe.VialItemRecipe;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.bus.api.IEventBus;
@@ -27,6 +30,19 @@ public final class ConsumeSetup {
             DATA_COMPONENTS.registerComponentType("flake_storage", builder -> builder
                     .persistent(FlakeStorage.CODEC)
                     .networkSynchronized(FlakeStorage.STREAM_CODEC));
+
+    private static final DeferredRegister<ConsumeEffect.Type<?>> CONSUME_EFFECTS =
+            DeferredRegister.create(Registries.CONSUME_EFFECT_TYPE, Allomancy.MODID);
+
+    public static final Supplier<ConsumeEffect.Type<GrantAllomancyConsumeEffect>> GRANT_ALLOMANCY_ON_CONSUME =
+            CONSUME_EFFECTS.register("grant_allomancy_on_consume",
+                                     () -> new ConsumeEffect.Type<>(GrantAllomancyConsumeEffect.CODEC,
+                                                                    GrantAllomancyConsumeEffect.STREAM_CODEC));
+
+    public static final Supplier<ConsumeEffect.Type<SummonLightningConsumeEffect>> SUMMON_LIGHTNING_ON_CONSUME =
+            CONSUME_EFFECTS.register("summon_lightning_on_consume",
+                                     () -> new ConsumeEffect.Type<>(SummonLightningConsumeEffect.CODEC,
+                                                                    SummonLightningConsumeEffect.STREAM_CODEC));
 
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Allomancy.MODID);
 
@@ -47,6 +63,7 @@ public final class ConsumeSetup {
         DATA_COMPONENTS.register(bus);
         ITEMS.register(bus);
         RECIPES.register(bus);
+        CONSUME_EFFECTS.register(bus);
 
         bus.addListener(ConsumeSetup::onModifyComponents);
     }
