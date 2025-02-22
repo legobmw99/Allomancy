@@ -20,7 +20,6 @@ public class BronzeEarringItem extends Item {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        System.out.println(target);
         if (target.isDeadOrDying() && target.getType().is(AllomancyTags.HEMALURGIC_CHARGERS) &&
             stack.getItem() != ExtrasSetup.CHARGED_BRONZE_EARRING.get()) {
             attacker.setItemInHand(InteractionHand.MAIN_HAND,
