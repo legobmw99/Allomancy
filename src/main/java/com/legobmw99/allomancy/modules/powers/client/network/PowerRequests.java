@@ -12,6 +12,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -66,15 +67,15 @@ public final class PowerRequests {
             case EntityHitResult e: {
                 if (Physical.isEntityMetallic((e).getEntity())) {
                     sendToServer(new EntityPushPullPayload((e).getEntity().getId(), force));
-
                 }
                 break;
             }
             case BlockHitResult b: {
                 BlockPos bp = b.getBlockPos();
                 Player player = Minecraft.getInstance().player;
-                if (Physical.isBlockStateMetallic(player.level().getBlockState(bp)) ||
-                    (player.isCrouching() && metal == Metal.STEEL &&
+                BlockState state = player.level().getBlockState(bp);
+                if (Physical.isBlockStateMetallic(state) ||
+                    (!state.isAir() && player.isCrouching() && metal == Metal.STEEL &&
                      player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() &&
                      (!player.getProjectile(player.getMainHandItem()).isEmpty()))) {
                     sendToServer(new BlockPushPullPayload(bp, force));
