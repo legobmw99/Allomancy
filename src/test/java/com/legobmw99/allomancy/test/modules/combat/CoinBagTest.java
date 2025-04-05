@@ -8,7 +8,6 @@ import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -16,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
+import net.neoforged.testframework.gametest.GameTest;
 
 import java.util.Set;
 

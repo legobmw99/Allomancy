@@ -16,7 +16,7 @@ import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
@@ -294,10 +294,10 @@ public final class WorldSetup {
 
                                                new StructureSpawnOverride(
                                                        StructureSpawnOverride.BoundingBoxType.STRUCTURE,
-                                                       WeightedRandomList.create()), MobCategory.MONSTER,
+                                                       WeightedList.of()), MobCategory.MONSTER,
                                                new StructureSpawnOverride(
                                                        StructureSpawnOverride.BoundingBoxType.STRUCTURE,
-                                                       WeightedRandomList.create())))
+                                                       WeightedList.of())))
                         .build(), bootstrapContext.lookup(Registries.TEMPLATE_POOL).getOrThrow(WELL_POOL),
                 Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(-16)), false,
                 Optional.of(Heightmap.Types.WORLD_SURFACE_WG), 3, List.of(), DimensionPadding.ZERO,

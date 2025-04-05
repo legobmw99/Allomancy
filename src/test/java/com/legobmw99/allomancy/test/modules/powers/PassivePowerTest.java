@@ -7,7 +7,7 @@ import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.test.AllomancyTest;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -23,6 +23,7 @@ import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.RegisterStructureTemplate;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
+import net.neoforged.testframework.gametest.GameTest;
 import net.neoforged.testframework.gametest.StructureTemplateBuilder;
 
 import java.util.List;
@@ -88,8 +89,10 @@ public class PassivePowerTest {
         data.setBurning(Metal.TIN, true);
 
         helper.succeedOnTickWhen(1, () -> {
-            helper.assertMobEffectAbsent(player, MobEffects.BLINDNESS, "Tin didn't remove blindness");
-            helper.assertMobEffectPresent(player, MobEffects.NIGHT_VISION, "Tin didn't grant night vision");
+            helper.assertMobEffectAbsent(player, MobEffects.BLINDNESS,
+                                         Component.literal("Tin didn't remove blindness"));
+            helper.assertMobEffectPresent(player, MobEffects.NIGHT_VISION,
+                                          Component.literal("Tin didn't grant night vision"));
         });
     }
 
@@ -103,9 +106,10 @@ public class PassivePowerTest {
         data.setBurning(Metal.PEWTER, true);
 
         helper.succeedOnTickWhen(1, () -> {
-            helper.assertMobEffectPresent(player, MobEffects.MOVEMENT_SPEED, "Pewter didn't grant speed");
-            helper.assertMobEffectPresent(player, MobEffects.DIG_SPEED, "Pewter didn't grant haste");
-            helper.assertMobEffectPresent(player, MobEffects.JUMP, "Pewter didn't grant jump boost");
+            helper.assertMobEffectPresent(player, MobEffects.SPEED, Component.literal("Pewter didn't grant speed"));
+            helper.assertMobEffectPresent(player, MobEffects.HASTE, Component.literal("Pewter didn't grant haste"));
+            helper.assertMobEffectPresent(player, MobEffects.JUMP_BOOST,
+                                          Component.literal("Pewter didn't grant jump boost"));
         });
     }
 
@@ -150,7 +154,7 @@ public class PassivePowerTest {
 
         helper.succeedWhen(() -> {
             helper.assertTrue(data.isEnhanced(), "Duralumin isn't enhancing");
-            helper.assertMobEffectPresent(player, MobEffects.CONFUSION, "Player is not confused");
+            helper.assertMobEffectPresent(player, MobEffects.NAUSEA, Component.literal("Player is not confused"));
         });
     }
 
@@ -188,7 +192,7 @@ public class PassivePowerTest {
         var data2 = player2.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
         var player3 = helper.makeMistbornPlayer();
-        player3.moveTo(helper.absoluteVec(new BlockPos(4, 1, 4).getCenter()).subtract(0, 0.5, 0));
+        player3.snapTo(helper.absoluteVec(new BlockPos(4, 1, 4).getCenter()).subtract(0, 0.5, 0));
         var data3 = player3.getData(AllomancerAttachment.ALLOMANCY_DATA);
         helper.startSequence().thenExecute(() -> {
             data.setBurning(Metal.CHROMIUM, true);
@@ -213,7 +217,8 @@ public class PassivePowerTest {
 
         helper.succeedOnTickWhen(1, () -> {
             helper.assertTrue(data.isEnhanced(), "Duralumin isn't enhancing");
-            helper.assertMobEffectPresent(player, MobEffects.INVISIBILITY, "Player is not invisible");
+            helper.assertMobEffectPresent(player, MobEffects.INVISIBILITY,
+                                          Component.literal("Player is not invisible"));
         });
     }
 
@@ -227,8 +232,10 @@ public class PassivePowerTest {
         data.setBurning(Metal.CADMIUM, true);
 
         helper.succeedOnTickWhen(1, () -> {
-            helper.assertMobEffectPresent(player, MobEffects.SLOW_FALLING, "Cadmium didn't grant slow fall");
-            helper.assertMobEffectAbsent(player, MobEffects.MOVEMENT_SLOWDOWN, "Cadmium also slowed player");
+            helper.assertMobEffectPresent(player, MobEffects.SLOW_FALLING,
+                                          Component.literal("Cadmium didn't grant slow fall"));
+            helper.assertMobEffectAbsent(player, MobEffects.SLOWNESS,
+                                         Component.literal("Cadmium also slowed player"));
         });
     }
 
@@ -245,8 +252,10 @@ public class PassivePowerTest {
         var zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
 
         helper.succeedOnTickWhen(1, () -> {
-            helper.assertMobEffectPresent(zombie, MobEffects.SLOW_FALLING, "Cadmium didn't grant slow fall");
-            helper.assertMobEffectPresent(zombie, MobEffects.MOVEMENT_SLOWDOWN, "Cadmium didn't grant slow fall");
+            helper.assertMobEffectPresent(zombie, MobEffects.SLOW_FALLING,
+                                          Component.literal("Cadmium didn't grant slow fall"));
+            helper.assertMobEffectPresent(zombie, MobEffects.SLOWNESS,
+                                          Component.literal("Cadmium didn't grant slow fall"));
         });
     }
 
@@ -284,7 +293,8 @@ public class PassivePowerTest {
         data.setBurning(Metal.BENDALLOY, true);
 
         helper.succeedOnTickWhen(1, () -> {
-            helper.assertMobEffectPresent(player, MobEffects.DIG_SPEED, "Bendalloy didn't grant haste");
+            helper.assertMobEffectPresent(player, MobEffects.HASTE,
+                                          Component.literal("Bendalloy didn't grant haste"));
         });
     }
 
@@ -300,10 +310,13 @@ public class PassivePowerTest {
         data.setBurning(Metal.BENDALLOY, true);
         data.setBurning(Metal.CADMIUM, true);
         helper.startSequence().thenIdle(10).thenExecute(() -> {
-            helper.assertMobEffectAbsent(player, MobEffects.DIG_SPEED, "Bendalloy still grant haste");
-            helper.assertMobEffectAbsent(player, MobEffects.SLOW_FALLING, "Cadmium still grant slow fall");
-            helper.assertMobEffectAbsent(zombie, MobEffects.SLOW_FALLING, "Cadmium still grant slow fall");
-            helper.assertMobEffectAbsent(zombie, MobEffects.MOVEMENT_SLOWDOWN, "Cadmium still grant slow fall");
+            helper.assertMobEffectAbsent(player, MobEffects.HASTE, Component.literal("Bendalloy still grant haste"));
+            helper.assertMobEffectAbsent(player, MobEffects.SLOW_FALLING,
+                                         Component.literal("Cadmium still grant slow fall"));
+            helper.assertMobEffectAbsent(zombie, MobEffects.SLOW_FALLING,
+                                         Component.literal("Cadmium still grant slow fall"));
+            helper.assertMobEffectAbsent(zombie, MobEffects.SLOWNESS,
+                                         Component.literal("Cadmium still grant slow fall"));
         }).thenSucceed();
     }
 

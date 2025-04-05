@@ -262,41 +262,53 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
 
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag allomancy_data) {
-        CompoundTag abilities = allomancy_data.getCompound("abilities");
-        for (Metal mt : Metal.values()) {
-            if (abilities.getBoolean(mt.getName())) {
-                this.addPower(mt);
-            } else {
-                this.revokePower(mt);
+        allomancy_data.getCompound("abilities").ifPresent(abilities -> {
+            for (Metal mt : Metal.values()) {
+                if (abilities.getBoolean(mt.getName()).orElse(false)) {
+                    this.addPower(mt);
+                } else {
+                    this.revokePower(mt);
+                }
             }
-        }
+        });
 
-        CompoundTag metal_storage = allomancy_data.getCompound("metal_storage");
-        for (Metal mt : Metal.values()) {
-            this.metal_amounts[mt.getIndex()] = metal_storage.getInt(mt.getName());
-        }
 
-        CompoundTag metal_burning = allomancy_data.getCompound("metal_burning");
-        for (Metal mt : Metal.values()) {
-            this.setBurning(mt, metal_burning.getBoolean(mt.getName()));
-        }
+        allomancy_data.getCompound("metal_storage").ifPresent(metal_storage -> {
+            for (Metal mt : Metal.values()) {
+                this.metal_amounts[mt.getIndex()] = metal_storage.getInt(mt.getName()).orElse(0);
+            }
+        });
 
-        CompoundTag position = allomancy_data.getCompound("position");
-        if (position.contains("spawn_dimension")) {
-            this.setSpawnLoc(
-                    new BlockPos(position.getInt("spawn_x"), position.getInt("spawn_y"), position.getInt("spawn_z")),
-                    ResourceKey.create(Registries.DIMENSION,
-                                       ResourceLocation.parse(position.getString("spawn_dimension"))));
-        }
-        if (position.contains("seeking_dimension")) {
-            this.setSpecialSeekingLoc(new BlockPos(position.getInt("seeking_x"), position.getInt("seeking_y"),
-                                                   position.getInt("seeking_z")),
-                                      ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(
-                                              position.getString("seeking_dimension"))));
-        } else {
-            this.setSpecialSeekingLoc(null, null);
-        }
 
+        allomancy_data.getCompound("metal_burning").ifPresent(metal_burning -> {
+            for (Metal mt : Metal.values()) {
+                this.setBurning(mt, metal_burning.getBoolean(mt.getName()).orElse(false));
+            }
+        });
+
+
+        allomancy_data.getCompound("position").ifPresent(position -> {
+
+            if (position.contains("spawn_dimension")) {
+                this.setSpawnLoc(new BlockPos(position.getInt("spawn_x").get(), position.getInt("spawn_y").get(),
+                                              position.getInt("spawn_z").get()),
+                                 ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(
+                                         position.getString("spawn_dimension").get())));
+            }
+            if (position.contains("seeking_dimension")) {
+                this.setSpecialSeekingLoc(
+                        new BlockPos(position.getInt("seeking_x").get(), position.getInt("seeking_y").get(),
+                                     position.getInt("seeking_z").get()), ResourceKey.create(Registries.DIMENSION,
+                                                                                             ResourceLocation.parse(
+                                                                                                     position
+                                                                                                             .getString(
+                                                                                                                     "seeking_dimension")
+                                                                                                             .get())));
+            } else {
+                this.setSpecialSeekingLoc(null, null);
+            }
+
+        });
     }
 }
 

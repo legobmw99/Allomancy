@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -88,12 +89,8 @@ public final class Physical {
             case AbstractMinecart ignored -> true;
             case IronGolem ignored -> true;
             case LivingEntity ent -> {
-                for (ItemStack itemStack : ent.getHandSlots()) {
-                    if (isItemMetallic(itemStack)) {
-                        yield true;
-                    }
-                }
-                for (ItemStack itemStack : ent.getArmorAndBodyArmorSlots()) {
+                for (EquipmentSlot slot : EquipmentSlot.VALUES) {
+                    var itemStack = ent.getItemBySlot(slot);
                     if (isItemMetallic(itemStack)) {
                         yield true;
                     }

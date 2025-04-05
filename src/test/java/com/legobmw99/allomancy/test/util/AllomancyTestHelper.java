@@ -7,8 +7,6 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
-import net.minecraft.gametest.framework.GameTestAssertException;
-import net.minecraft.gametest.framework.GameTestAssertPosException;
 import net.minecraft.gametest.framework.GameTestInfo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,7 +25,6 @@ import net.neoforged.testframework.gametest.GameTestPlayer;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class AllomancyTestHelper extends ExtendedGameTestHelper {
@@ -73,7 +70,7 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
     }
 
     public void succeedIfCrafts(Predicate<BaseContainerBlockEntity> pred,
-                                Supplier<String> exceptionMessage,
+                                String exceptionMessage,
                                 ItemLike... items) {
         this.startSequence().thenExecute(() -> this.craft(items)).thenExecuteAfter(4, () -> {
             this.assertContainerEmpty(CRAFTER);
@@ -81,9 +78,7 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
 
             BaseContainerBlockEntity output = this.getBlockEntity(OUTPUT, BaseContainerBlockEntity.class);
             if (!pred.test(output)) {
-                throw new GameTestAssertPosException(exceptionMessage.get(), this.absolutePos(CRAFTER), CRAFTER,
-                                                     this.getTick());
-
+                throw this.assertionException(CRAFTER, exceptionMessage);
             }
         }).thenSucceed();
     }
@@ -122,11 +117,11 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
     public void assertPlayerHasAdvancement(ServerPlayer player, ResourceLocation advancement) {
         var advancementHolder = this.getLevel().getServer().getAdvancements().get(advancement);
         if (advancementHolder == null) {
-            throw new GameTestAssertException("Advancement " + advancement + " was not found in the server");
+            throw this.assertionException(("Advancement " + advancement + " was not found in the server"));
         }
         if (!player.getAdvancements().getOrStartProgress(advancementHolder).isDone()) {
-            throw new GameTestAssertPosException("Player did not have " + advancement, player.blockPosition(),
-                                                 this.relativePos(player.blockPosition()), this.getTick());
+            throw this.assertionException(this.relativePos(player.blockPosition()),
+                                          "Player did not have " + advancement);
         }
     }
 

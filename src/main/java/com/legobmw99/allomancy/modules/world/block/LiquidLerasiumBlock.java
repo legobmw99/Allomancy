@@ -8,6 +8,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,17 +25,23 @@ public class LiquidLerasiumBlock extends LiquidBlock {
         super(fluid, properties);
     }
 
+
     @Override
-    public ItemStack pickupBlock(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState state) {
-        if (player != null && player.getAbilities().instabuild) {
-            return super.pickupBlock(player, level, pos, state);
+    public ItemStack pickupBlock(@Nullable LivingEntity entity, LevelAccessor level, BlockPos pos, BlockState state) {
+        if (entity instanceof Player p && p.getAbilities().instabuild) {
+            return super.pickupBlock(entity, level, pos, state);
         }
         return ItemStack.EMPTY;
     }
 
+
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        super.entityInside(state, level, pos, entity);
+    protected void entityInside(BlockState state,
+                                Level level,
+                                BlockPos pos,
+                                Entity entity,
+                                InsideBlockEffectApplier eff) {
+        super.entityInside(state, level, pos, entity, eff);
         if (entity instanceof ItemEntity item) {
             if (item.getItem().is(AllomancyTags.LERASIUM_CONVERSION)) {
                 item.setItem(new ItemStack(ConsumeSetup.LERASIUM_NUGGET.get(), item.getItem().getCount()));

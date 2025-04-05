@@ -7,8 +7,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
@@ -35,7 +35,7 @@ public class DaggerLootModifier extends LootModifier {
                                                           LootContext context) {
         if (context.getRandom().nextInt(this.chance_one_in) == 0) {
             ItemStack dagger = new ItemStack(CombatSetup.OBSIDIAN_DAGGER.get());
-            dagger.set(DataComponents.UNBREAKABLE, new Unbreakable(true));
+            dagger.set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
             generatedLoot.add(dagger);
         }
         return generatedLoot;

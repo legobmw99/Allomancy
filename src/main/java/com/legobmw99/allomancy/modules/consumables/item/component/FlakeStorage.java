@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.LivingEntity;
@@ -81,7 +82,10 @@ public final class FlakeStorage implements TooltipProvider, ConsumableListener {
     }
 
     @Override
-    public void addToTooltip(Item.TooltipContext ctx, Consumer<Component> tooltip, TooltipFlag flag) {
+    public void addToTooltip(Item.TooltipContext ctx,
+                             Consumer<Component> tooltip,
+                             TooltipFlag flag,
+                             DataComponentGetter getter) {
         int count = 0;
         Metal last = Metal.IRON;
         for (Metal mt : Metal.values()) {

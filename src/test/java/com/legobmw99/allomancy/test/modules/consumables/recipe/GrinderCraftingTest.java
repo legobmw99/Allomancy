@@ -58,7 +58,7 @@ public class GrinderCraftingTest {
                     var retainedGrinder = barrel.getItem(1).is(ConsumeSetup.ALLOMANTIC_GRINDER.get());
                     var damagedGrinder = barrel.getItem(1).getDamageValue() == 1;
                     return craftedFlake && retainedGrinder && damagedGrinder;
-                }, () -> "Failed to craft flakes", ConsumeSetup.ALLOMANTIC_GRINDER, ingot);
+                }, "Failed to craft flakes", ConsumeSetup.ALLOMANTIC_GRINDER, ingot);
             }, structureName, "item", "Tests that " + metal + " flake crafting works and the grinder is maintained"));
         }
     }
