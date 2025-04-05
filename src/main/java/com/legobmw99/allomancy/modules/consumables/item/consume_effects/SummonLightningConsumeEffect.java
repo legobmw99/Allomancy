@@ -27,7 +27,7 @@ public record SummonLightningConsumeEffect() implements ConsumeEffect {
     public boolean apply(Level level, ItemStack stack, LivingEntity entity) {
         LightningBolt lightning = new LightningBolt(EntityType.LIGHTNING_BOLT, level);
         lightning.setVisualOnly(true);
-        lightning.moveTo(entity.position().add(0, 3, 0));
+        lightning.snapTo(entity.position().add(0, 3, 0));
         level.addFreshEntity(lightning);
         return true;
     }

@@ -19,13 +19,12 @@ public class BronzeEarringItem extends Item {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (target.isDeadOrDying() && target.getType().is(AllomancyTags.HEMALURGIC_CHARGERS) &&
             stack.getItem() != ExtrasSetup.CHARGED_BRONZE_EARRING.get()) {
             attacker.setItemInHand(InteractionHand.MAIN_HAND,
                                    stack.transmuteCopy(ExtrasSetup.CHARGED_BRONZE_EARRING.get()));
         }
-        return false;
     }
 
     public static ItemAttributeModifiers createAttributes() {
@@ -37,7 +36,6 @@ public class BronzeEarringItem extends Item {
                 .add(Attributes.ATTACK_SPEED,
                      new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -2, AttributeModifier.Operation.ADD_VALUE),
                      EquipmentSlotGroup.MAINHAND)
-                .build()
-                .withTooltip(true);
+                .build();
     }
 }

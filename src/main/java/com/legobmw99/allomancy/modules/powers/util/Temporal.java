@@ -22,7 +22,7 @@ public final class Temporal {
 
     @SuppressWarnings("unchecked")
     public static void speedUpNearby(ServerPlayer curPlayer, ServerLevel level, IAllomancerData data) {
-        curPlayer.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 10, 3, true, false));
+        curPlayer.addEffect(new MobEffectInstance(MobEffects.HASTE, 10, 3, true, false));
 
         int max = data.isEnhanced() ? 10 : 5;
         BlockPos negative = curPlayer.blockPosition().offset(-max, -max, -max);
@@ -71,7 +71,7 @@ public final class Temporal {
             entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 10, 0, true, false));
             if (entity != curPlayer) {
                 entity.addEffect(
-                        new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, slowness_amplifier, true, false));
+                        new MobEffectInstance(MobEffects.SLOWNESS, 10, slowness_amplifier, true, false));
             }
         });
     }

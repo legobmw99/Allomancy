@@ -11,8 +11,6 @@ import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.blockstates.Variant;
-import net.minecraft.client.data.models.blockstates.VariantProperties;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.core.Direction;
@@ -56,9 +54,11 @@ class ModelFiles extends ModelProvider {
 
     private static void createItemModels(ItemModelGenerators itemModels) {
 
-        itemModels.generateTrimmableItem(CombatSetup.MISTCLOAK.get(), CombatSetup.WOOL, "chestplate", false);
+        itemModels.generateTrimmableItem(CombatSetup.MISTCLOAK.get(), CombatSetup.WOOL,
+                                         ItemModelGenerators.TRIM_PREFIX_CHESTPLATE, false);
 
-        itemModels.generateTrimmableItem(CombatSetup.ALUMINUM_HELMET.get(), CombatSetup.ALUMINUM, "helmet", false);
+        itemModels.generateTrimmableItem(CombatSetup.ALUMINUM_HELMET.get(), CombatSetup.ALUMINUM,
+                                         ItemModelGenerators.TRIM_PREFIX_HELMET, false);
 
         itemModels.generateFlatItem(CombatSetup.COIN_BAG.get(), ModelTemplates.FLAT_ITEM);
 
@@ -139,13 +139,18 @@ class ModelFiles extends ModelProvider {
         ResourceLocation sunken = ModelTemplates.BUTTON_PRESSED.create(block, iron, blockModels.modelOutput);
         ResourceLocation inventory = ModelTemplates.BUTTON_INVENTORY.create(block, iron, blockModels.modelOutput);
 
+        var sunken_variant = BlockModelGenerators.plainVariant(sunken);
+        var extended_variant = BlockModelGenerators.plainVariant(extended);
+
         Allomancy.LOGGER.debug("Creating Block Data for allomancy:iron_button");
-        blockModels.blockStateOutput.accept(BlockModelGenerators.createButton(block, extended, sunken));
+        blockModels.blockStateOutput.accept(
+                BlockModelGenerators.createButton(block, extended_variant, sunken_variant));
         blockModels.registerSimpleItemModel(block, inventory);
 
         var inverted = ExtrasSetup.INVERTED_IRON_BUTTON.get();
         Allomancy.LOGGER.debug("Creating Block Data for allomancy:inverted_iron_button");
-        blockModels.blockStateOutput.accept(BlockModelGenerators.createButton(inverted, sunken, extended));
+        blockModels.blockStateOutput.accept(
+                BlockModelGenerators.createButton(inverted, sunken_variant, extended_variant));
         blockModels.registerSimpleItemModel(inverted, inventory);
     }
 
@@ -165,72 +170,48 @@ class ModelFiles extends ModelProvider {
         ResourceLocation lever = lever_template.create(block, textures, blockModels.modelOutput);
         ResourceLocation lever_on = lever_on_template.create(block, textures, blockModels.modelOutput);
 
+        var lever_variant = BlockModelGenerators.plainVariant(lever);
+        var lever_on_variant = BlockModelGenerators.plainVariant(lever_on);
+
 
         blockModels.blockStateOutput.accept(MultiVariantGenerator
-                                                    .multiVariant(block)
+                                                    .dispatch(block)
                                                     .with(BlockModelGenerators.createBooleanModelDispatch(
-                                                            BlockStateProperties.POWERED, lever, lever_on))
+                                                            BlockStateProperties.POWERED, lever_variant,
+                                                            lever_on_variant))
                                                     .with(PropertyDispatch
-                                                                  .properties(BlockStateProperties.ATTACH_FACE,
-                                                                              BlockStateProperties.HORIZONTAL_FACING)
-                                                                  .select(AttachFace.CEILING, Direction.NORTH, Variant
-                                                                          .variant()
-                                                                          .with(VariantProperties.X_ROT,
-                                                                                VariantProperties.Rotation.R180)
-                                                                          .with(VariantProperties.Y_ROT,
-                                                                                VariantProperties.Rotation.R180))
-                                                                  .select(AttachFace.CEILING, Direction.EAST, Variant
-                                                                          .variant()
-                                                                          .with(VariantProperties.X_ROT,
-                                                                                VariantProperties.Rotation.R180)
-                                                                          .with(VariantProperties.Y_ROT,
-                                                                                VariantProperties.Rotation.R270))
-                                                                  .select(AttachFace.CEILING, Direction.SOUTH, Variant
-                                                                          .variant()
-                                                                          .with(VariantProperties.X_ROT,
-                                                                                VariantProperties.Rotation.R180))
-                                                                  .select(AttachFace.CEILING, Direction.WEST, Variant
-                                                                          .variant()
-                                                                          .with(VariantProperties.X_ROT,
-                                                                                VariantProperties.Rotation.R180)
-                                                                          .with(VariantProperties.Y_ROT,
-                                                                                VariantProperties.Rotation.R90))
+                                                                  .modify(BlockStateProperties.ATTACH_FACE,
+                                                                          BlockStateProperties.HORIZONTAL_FACING)
+                                                                  .select(AttachFace.CEILING, Direction.NORTH,
+                                                                          BlockModelGenerators.X_ROT_180.then(
+                                                                                  BlockModelGenerators.Y_ROT_180))
+                                                                  .select(AttachFace.CEILING, Direction.EAST,
+                                                                          BlockModelGenerators.X_ROT_180.then(
+                                                                                  BlockModelGenerators.Y_ROT_270))
+                                                                  .select(AttachFace.CEILING, Direction.SOUTH,
+                                                                          BlockModelGenerators.X_ROT_180)
+                                                                  .select(AttachFace.CEILING, Direction.WEST,
+                                                                          BlockModelGenerators.X_ROT_180.then(
+                                                                                  BlockModelGenerators.Y_ROT_90))
                                                                   .select(AttachFace.FLOOR, Direction.NORTH,
-                                                                          Variant.variant())
-                                                                  .select(AttachFace.FLOOR, Direction.EAST, Variant
-                                                                          .variant()
-                                                                          .with(VariantProperties.Y_ROT,
-                                                                                VariantProperties.Rotation.R90))
-                                                                  .select(AttachFace.FLOOR, Direction.SOUTH, Variant
-                                                                          .variant()
-                                                                          .with(VariantProperties.Y_ROT,
-                                                                                VariantProperties.Rotation.R180))
-                                                                  .select(AttachFace.FLOOR, Direction.WEST, Variant
-                                                                          .variant()
-                                                                          .with(VariantProperties.Y_ROT,
-                                                                                VariantProperties.Rotation.R270))
-                                                                  .select(AttachFace.WALL, Direction.NORTH, Variant
-                                                                          .variant()
-                                                                          .with(VariantProperties.X_ROT,
-                                                                                VariantProperties.Rotation.R90))
-                                                                  .select(AttachFace.WALL, Direction.EAST, Variant
-                                                                          .variant()
-                                                                          .with(VariantProperties.X_ROT,
-                                                                                VariantProperties.Rotation.R90)
-                                                                          .with(VariantProperties.Y_ROT,
-                                                                                VariantProperties.Rotation.R90))
-                                                                  .select(AttachFace.WALL, Direction.SOUTH, Variant
-                                                                          .variant()
-                                                                          .with(VariantProperties.X_ROT,
-                                                                                VariantProperties.Rotation.R90)
-                                                                          .with(VariantProperties.Y_ROT,
-                                                                                VariantProperties.Rotation.R180))
-                                                                  .select(AttachFace.WALL, Direction.WEST, Variant
-                                                                          .variant()
-                                                                          .with(VariantProperties.X_ROT,
-                                                                                VariantProperties.Rotation.R90)
-                                                                          .with(VariantProperties.Y_ROT,
-                                                                                VariantProperties.Rotation.R270))));
+                                                                          BlockModelGenerators.NOP)
+                                                                  .select(AttachFace.FLOOR, Direction.EAST,
+                                                                          BlockModelGenerators.Y_ROT_90)
+                                                                  .select(AttachFace.FLOOR, Direction.SOUTH,
+                                                                          BlockModelGenerators.Y_ROT_180)
+                                                                  .select(AttachFace.FLOOR, Direction.WEST,
+                                                                          BlockModelGenerators.Y_ROT_270)
+                                                                  .select(AttachFace.WALL, Direction.NORTH,
+                                                                          BlockModelGenerators.X_ROT_90)
+                                                                  .select(AttachFace.WALL, Direction.EAST,
+                                                                          BlockModelGenerators.X_ROT_90.then(
+                                                                                  BlockModelGenerators.Y_ROT_90))
+                                                                  .select(AttachFace.WALL, Direction.SOUTH,
+                                                                          BlockModelGenerators.X_ROT_90.then(
+                                                                                  BlockModelGenerators.Y_ROT_180))
+                                                                  .select(AttachFace.WALL, Direction.WEST,
+                                                                          BlockModelGenerators.X_ROT_90.then(
+                                                                                  BlockModelGenerators.Y_ROT_270))));
 
 
         blockModels.registerSimpleFlatItemModel(block);

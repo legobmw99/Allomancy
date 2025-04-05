@@ -11,7 +11,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ObsidianDaggerItem extends SwordItem {
+public class ObsidianDaggerItem extends Item {
 
     private static final int ATTACK_DAMAGE = 23;
     private static final float ATTACK_SPEED = 9.2F;

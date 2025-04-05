@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -61,16 +62,17 @@ public final class CombatSetup {
                 map.put(ArmorType.BODY, 0);
             }), 15, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, AllomancyTags.REPAIRS_MISTCLOAK, WOOL);
 
-    public static final DeferredItem<Item> MISTCLOAK = ITEMS.registerItem("mistcloak", (props) -> new Item(
-            WOOL_ARMOR.humanoidProperties(props, ArmorType.CHESTPLATE)
-                      // note: overrides normal armor, which is fine
-                      .attributes(ItemAttributeModifiers
-                                          .builder()
-                                          .add(Attributes.MOVEMENT_SPEED,
-                                               new AttributeModifier(Allomancy.rl("mistcloak_speed"), 0.25,
-                                                                     AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
-                                               EquipmentSlotGroup.CHEST)
-                                          .build())));
+    public static final DeferredItem<Item> MISTCLOAK = ITEMS.registerItem("mistcloak", (props) ->
+
+            new Item(props
+                             .equippable(EquipmentSlot.CHEST)
+                             .attributes(ItemAttributeModifiers
+                                                 .builder()
+                                                 .add(Attributes.MOVEMENT_SPEED,
+                                                      new AttributeModifier(Allomancy.rl("mistcloak_speed"), 0.25,
+                                                                            AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                                                      EquipmentSlotGroup.CHEST)
+                                                 .build())));
 
 
     private static final ArmorMaterial ALUMINUM_ARMOR =
@@ -85,9 +87,10 @@ public final class CombatSetup {
 
     public static final DeferredItem<Item> ALUMINUM_HELMET =
 
-            ITEMS.registerItem("aluminum_helmet", (props) -> new Item(ALUMINUM_ARMOR
-                                                                              .humanoidProperties(props,
-                                                                                                  ArmorType.HELMET)
+            ITEMS.registerItem("aluminum_helmet", (props) -> new Item(props
+                                                                              .attributes(
+                                                                                      ALUMINUM_ARMOR.createAttributes(
+                                                                                              ArmorType.HELMET))
                                                                               .component(DataComponents.ENCHANTABLE,
                                                                                          null)) {
                 @Override

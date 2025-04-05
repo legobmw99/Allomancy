@@ -8,7 +8,7 @@ import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,12 +17,13 @@ import net.minecraft.world.level.Level;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
+import net.neoforged.testframework.gametest.GameTest;
 
 import java.util.Optional;
 
 @ForEachTest(groups = "powers")
 public class ActivePowerTest {
-    // todo can test client powers somehow?
+    // TODO can test client powers somehow?
 
     @GameTest(batch = "chrome_wipe")
     @EmptyTemplate(value = "5x3x5", floor = true)
@@ -37,7 +38,7 @@ public class ActivePowerTest {
         var data2 = player2.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
         var player3 = helper.makeMistbornPlayer();
-        player3.moveTo(helper.absoluteVec(new BlockPos(4, 1, 4).getCenter()).subtract(0, 0.5, 0));
+        player3.snapTo(helper.absoluteVec(new BlockPos(4, 1, 4).getCenter()).subtract(0, 0.5, 0));
         var data3 = player3.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
         helper.startSequence().thenExecute(() -> {
@@ -95,7 +96,7 @@ public class ActivePowerTest {
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
         var farCorner = helper.absolutePos(new BlockPos(4, 0, 4));
-        player.setRespawnPosition(Level.OVERWORLD, farCorner, 0.0f, true, true);
+        player.setRespawnPosition(new ServerPlayer.RespawnConfig(Level.OVERWORLD, farCorner, 0.0f, true), true);
         data.setBurning(Metal.ELECTRUM, true);
         data.setBurning(Metal.DURALUMIN, true);
 

@@ -208,7 +208,8 @@ public final class ClientEventHandler {
         FlakeStorage storage = event.getItemStack().get(FLAKE_STORAGE);
         if (storage != null) {
             List<Component> components = new ArrayList<>(16);
-            storage.addToTooltip(event.getContext(), components::add, event.getFlags());
+            storage.addToTooltip(event.getContext(), components::add, event.getFlags(),
+                                 event.getItemStack().getComponents());
             int len = event.getToolTip().size();
             int insertLoc = event.getFlags().isAdvanced() ? len - 2 : len;
             event.getToolTip().addAll(insertLoc, components);

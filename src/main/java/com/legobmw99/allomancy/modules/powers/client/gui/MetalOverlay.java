@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.CoreShaders;
+//import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
@@ -71,8 +71,9 @@ public final class MetalOverlay implements LayeredDraw.Layer {
         int renderX = PowersConfig.overlay_position.get().getX(gui.guiWidth());
         int renderY = PowersConfig.overlay_position.get().getY(gui.guiHeight());
 
-        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-        RenderSystem.setShaderTexture(0, meterLoc);
+        // TODO(update, render)?
+//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
+//        RenderSystem.setShaderTexture(0, meterLoc);
 
 
         /*

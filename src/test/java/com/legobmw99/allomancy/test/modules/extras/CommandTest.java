@@ -4,12 +4,12 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.util.TattleTaleStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
 import net.neoforged.testframework.gametest.ExtendedGameTestHelper;
+import net.neoforged.testframework.gametest.GameTest;
 
 @ForEachTest(groups = "command")
 public class CommandTest {
@@ -71,7 +71,7 @@ public class CommandTest {
     @TestHolder(description = "Tests that anyone can use /ap get")
     public static void allomancyGet(ExtendedGameTestHelper helper) {
         var player = helper.makeOpMockPlayer(Commands.LEVEL_ALL);
-        player.moveTo(Vec3.atCenterOf(helper.absolutePos(BlockPos.ZERO)));
+        player.snapTo(Vec3.atCenterOf(helper.absolutePos(BlockPos.ZERO)));
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
         data.setMistborn();
         var stack = TattleTaleStack.createCommandSourceStack(player);

@@ -25,7 +25,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -112,7 +111,7 @@ public final class ExtrasSetup {
 
     public static final List<ResourceKey<BannerPattern>> PATTERNS = new ArrayList<>();
 
-    public static final List<DeferredItem<BannerPatternItem>> PATTERN_ITEMS = new ArrayList<>();
+    public static final List<DeferredItem<Item>> PATTERN_ITEMS = new ArrayList<>();
     private static final DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES =
             DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, Allomancy.MODID);
 
@@ -127,8 +126,8 @@ public final class ExtrasSetup {
             var pattern_key = TagKey.create(Registries.BANNER_PATTERN, Allomancy.rl(name));
             AllomancyTags.PATTERN_TAGS.add(pattern_key);
 
-            var pattern_item = ITEMS.registerItem(name + "_pattern",
-                                                  (props) -> new BannerPatternItem(pattern_key, props.stacksTo(1)));
+            var pattern_item = ITEMS.registerItem(name + "_pattern", (props) -> new Item(
+                    props.stacksTo(1).component(DataComponents.PROVIDES_BANNER_PATTERNS, pattern_key)));
             PATTERN_ITEMS.add(pattern_item);
         }
     }

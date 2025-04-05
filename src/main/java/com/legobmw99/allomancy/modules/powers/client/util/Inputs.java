@@ -8,11 +8,8 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.player.ClientInput;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.AABB;
@@ -156,29 +153,33 @@ public final class Inputs {
 
 
     public static void fakeMovement(ClientInput input) {
+        // TODO(update) -- investigate if still possible now that fields are private
+
         // basically KeyboardInput#tick()
-        Options settings = Minecraft.getInstance().options;
-        input.keyPresses =
-                new Input(isKeyDown0(settings.keyUp), isKeyDown0(settings.keyDown), isKeyDown0(settings.keyLeft),
-                          isKeyDown0(settings.keyRight), isKeyDown0(settings.keyJump), isKeyDown0(settings.keyShift),
-                          isKeyDown0(settings.keySprint));
-        input.forwardImpulse = calculateImpulse(input.keyPresses.forward(), input.keyPresses.backward());
-        input.leftImpulse = calculateImpulse(input.keyPresses.left(), input.keyPresses.right());
-
-        // See #LocalPlayer.aiStep()
-        var player = Minecraft.getInstance().player;
-        if (player.isMovingSlowly()) {
-            input.leftImpulse = (float) (input.leftImpulse * 0.3D);
-            input.forwardImpulse = (float) (input.forwardImpulse * 0.3D);
-        }
-
-        if (!player.isSprinting() && (!(player.isInWater() || player.isInFluidType(
-                (fluidType, height) -> player.canSwimInFluidType(fluidType))) ||
-                                      (player.isUnderWater() || player.canStartSwimming())) &&
-            input.forwardImpulse >= 0.8 && !player.isUsingItem() &&
-            (player.getFoodData().getFoodLevel() > 6.0F || player.mayFly()) &&
-            !player.hasEffect(MobEffects.BLINDNESS) && isKeyDown0(settings.keySprint)) {
-            player.setSprinting(true);
-        }
+        //        Options settings = Minecraft.getInstance().options;
+        //        input.keyPresses =
+        //                new Input(isKeyDown0(settings.keyUp), isKeyDown0(settings.keyDown), isKeyDown0(settings
+        //                .keyLeft),
+        //                          isKeyDown0(settings.keyRight), isKeyDown0(settings.keyJump), isKeyDown0
+        //                          (settings.keyShift),
+        //                          isKeyDown0(settings.keySprint));
+        //        input.forwardImpulse = calculateImpulse(input.keyPresses.forward(), input.keyPresses.backward());
+        //        input.leftImpulse = calculateImpulse(input.keyPresses.left(), input.keyPresses.right());
+        //
+        //        // See #LocalPlayer.aiStep()
+        //        var player = Minecraft.getInstance().player;
+        //        if (player.isMovingSlowly()) {
+        //            input.leftImpulse = (float) (input.leftImpulse * 0.3D);
+        //            input.forwardImpulse = (float) (input.forwardImpulse * 0.3D);
+        //        }
+        //
+        //        if (!player.isSprinting() && (!(player.isInWater() || player.isInFluidType(
+        //                (fluidType, height) -> player.canSwimInFluidType(fluidType))) ||
+        //                                      (player.isUnderWater() || player.canStartSwimming())) &&
+        //            input.forwardImpulse >= 0.8 && !player.isUsingItem() &&
+        //            (player.getFoodData().getFoodLevel() > 6.0F || player.mayFly()) &&
+        //            !player.hasEffect(MobEffects.BLINDNESS) && isKeyDown0(settings.keySprint)) {
+        //            player.setSprinting(true);
+        //        }
     }
 }

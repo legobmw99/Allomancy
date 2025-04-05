@@ -21,7 +21,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.CoreShaders;
+//import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -82,9 +82,10 @@ public class MetalSelectScreen extends Screen {
 
         BufferBuilder buf = tess.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
 
-        RenderSystem.disableCull();
-        RenderSystem.enableBlend();
-        RenderSystem.setShader(CoreShaders.POSITION_COLOR);
+        // TODO(update, render)?
+//        RenderSystem.disableCull();
+//        RenderSystem.enableBlend();
+//        RenderSystem.setShader(CoreShaders.POSITION_COLOR);
 
 
         for (int seg = 0; seg < segments; seg++) {
@@ -124,7 +125,9 @@ public class MetalSelectScreen extends Screen {
                 buf.addVertex(xp, yp, 0).setColor(r, g, b, a);
             }
         }
-        BufferUploader.drawWithShader(buf.buildOrThrow());
+
+        // TODO(update, render)
+//        BufferUploader.drawWithShader(buf.buildOrThrow());
 
         for (int seg = 0; seg < segments; seg++) {
             Metal mt = Metal.getMetal(toMetalIndex(seg));
@@ -157,16 +160,19 @@ public class MetalSelectScreen extends Screen {
             double mod = 0.8;
             int xdp = (int) ((xp - x) * mod + x);
             int ydp = (int) ((yp - y) * mod + y);
-            RenderSystem.setShader(CoreShaders.POSITION_TEX);
-            RenderSystem.setShaderTexture(0, METAL_ICONS[toMetalIndex(seg)]);
+
+            // TODO(update, render)?
+//            RenderSystem.setShader(CoreShaders.POSITION_TEX);
+//            RenderSystem.setShaderTexture(0, METAL_ICONS[toMetalIndex(seg)]);
             guiGraphics.blit(RenderType::guiTexturedOverlay, METAL_ICONS[toMetalIndex(seg)], xdp - 8, ydp - 8, 0, 0,
                              16, 16, 16, 16);
 
         }
 
-        RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        RenderSystem.disableBlend();
+        // TODO(update, render)?
+//        RenderSystem.enableBlend();
+//        RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+//        RenderSystem.disableBlend();
 
     }
 

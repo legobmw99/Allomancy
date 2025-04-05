@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import com.legobmw99.allomancy.util.AllomancyTags;
-import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
@@ -13,6 +13,7 @@ import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
 import net.neoforged.testframework.gametest.ExtendedGameTestHelper;
+import net.neoforged.testframework.gametest.GameTest;
 
 @ForEachTest(groups = "data")
 public class DataTest {
@@ -48,7 +49,8 @@ public class DataTest {
     public static void dataOnRespawnTest(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
 
-        player.setRespawnPosition(Level.OVERWORLD, player.blockPosition(), 0.0f, true, true);
+        player.setRespawnPosition(new ServerPlayer.RespawnConfig(Level.OVERWORLD, player.blockPosition(), 0.0f, true),
+                                  true);
 
         var returningPlayer =
                 player.getServer().getPlayerList().respawn(player, true, Entity.RemovalReason.CHANGED_DIMENSION);

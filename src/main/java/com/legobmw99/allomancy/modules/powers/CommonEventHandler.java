@@ -67,21 +67,24 @@ public final class CommonEventHandler {
                 Allomancy.LOGGER.warn("Failed to load old player data for {}", player.getName().getString());
             }
 
-            if (compoundtag != null && compoundtag.contains("ForgeCaps")) {
-                CompoundTag caps = compoundtag.getCompound("ForgeCaps");
-                if (caps.contains("allomancy:allomancy_data")) {
-                    Allomancy.LOGGER.info("Found old forge data for player {}, trying to load!",
-                                          player.getName().getString());
-                    var data = new AllomancerData();
-                    try {
-                        data.deserializeNBT(player.registryAccess(), caps.getCompound("allomancy:allomancy_data"));
-                        player.setData(AllomancerAttachment.ALLOMANCY_DATA, data);
-                        Allomancy.LOGGER.info("Loaded old forge data for player {}!", player.getName().getString());
+            if (compoundtag != null) {
+                compoundtag
+                        .getCompound("ForgeCaps")
+                        .flatMap(caps -> caps.getCompound("allomancy:allomancy_data"))
+                        .ifPresent(oldData -> {
+                            Allomancy.LOGGER.info("Found old forge data for player {}, trying to load!",
+                                                  player.getName().getString());
+                            var data = new AllomancerData();
+                            try {
+                                data.deserializeNBT(player.registryAccess(), oldData);
+                                player.setData(AllomancerAttachment.ALLOMANCY_DATA, data);
+                                Allomancy.LOGGER.info("Loaded old forge data for player {}!",
+                                                      player.getName().getString());
 
-                    } catch (Exception exception) {
-                        Allomancy.LOGGER.error("Failed to deserialize old data!", exception);
-                    }
-                }
+                            } catch (Exception exception) {
+                                Allomancy.LOGGER.error("Failed to deserialize old data!", exception);
+                            }
+                        });
             }
         }
     }
@@ -338,7 +341,7 @@ public final class CommonEventHandler {
                 curPlayer.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 5, true, false));
                 if (data.isEnhanced()) { // Tin and Duralumin is too much to handle
                     if (level.random.nextInt(50) == 0) {
-                        curPlayer.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0, true, false));
+                        curPlayer.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 100, 0, true, false));
                     }
                 }
                 // Remove blindness from normal tin burners
@@ -354,9 +357,9 @@ public final class CommonEventHandler {
             }
             if (data.isBurning(Metal.PEWTER)) {
                 // Add jump boost and speed to pewter burners
-                curPlayer.addEffect(new MobEffectInstance(MobEffects.JUMP, 11, 1, true, false));
-                curPlayer.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 11, 0, true, false));
-                curPlayer.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 11, 1, true, false));
+                curPlayer.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 11, 1, true, false));
+                curPlayer.addEffect(new MobEffectInstance(MobEffects.SPEED, 11, 0, true, false));
+                curPlayer.addEffect(new MobEffectInstance(MobEffects.HASTE, 11, 1, true, false));
 
                 if (data.getDamageStored() > 0) {
                     if (level.random.nextInt(200) == 0) {
