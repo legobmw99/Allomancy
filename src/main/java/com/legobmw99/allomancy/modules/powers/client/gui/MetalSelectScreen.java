@@ -15,21 +15,30 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.network.PowerRequests;
 import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.mojang.blaze3d.buffers.BufferType;
+import com.mojang.blaze3d.buffers.BufferUsage;
+import com.mojang.blaze3d.buffers.GpuBuffer;
+import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-//import net.minecraft.client.renderer.CoreShaders;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import org.lwjgl.opengl.GL11;
+import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 
 import java.util.Arrays;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
 
 public class MetalSelectScreen extends Screen {
 
@@ -46,6 +55,19 @@ public class MetalSelectScreen extends Screen {
     private int timeIn = PowersConfig.animate_selection.get() ? 0 : 16;
     // Config setting for whether the wheel animates open or instantly appears
     private int slotSelected = -1;
+
+
+    private static final RenderSystem.AutoStorageIndexBuffer indices =
+            RenderSystem.getSequentialBuffer(VertexFormat.Mode.TRIANGLE_FAN);
+    private static final RenderPipeline SELECTION_BACKGROUND = RenderPipeline
+            .builder(RenderPipelines.GUI_SNIPPET)
+            .withLocation("pipeline/allomancy_selection")
+            .withVertexShader("core/position_color")
+            .withFragmentShader("core/position_color")
+            .withCull(false)
+            .withBlend(BlendFunction.TRANSLUCENT)
+            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_FAN)
+            .build();
 
     public MetalSelectScreen() {
         super(Component.translatable("allomancy.gui"));
@@ -64,6 +86,7 @@ public class MetalSelectScreen extends Screen {
     public void render(GuiGraphics guiGraphics, int mx, int my, float partialTicks) {
         super.render(guiGraphics, mx, my, partialTicks);
 
+
         var data = this.mc.player.getData(AllomancerAttachment.ALLOMANCY_DATA);
 
         int x = this.width / 2;
@@ -80,12 +103,8 @@ public class MetalSelectScreen extends Screen {
 
         Tesselator tess = Tesselator.getInstance();
 
-        BufferBuilder buf = tess.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
-
-        // TODO(update, render)?
-//        RenderSystem.disableCull();
-//        RenderSystem.enableBlend();
-//        RenderSystem.setShader(CoreShaders.POSITION_COLOR);
+        BufferBuilder buf =
+                tess.begin(SELECTION_BACKGROUND.getVertexFormatMode(), SELECTION_BACKGROUND.getVertexFormat());
 
 
         for (int seg = 0; seg < segments; seg++) {
@@ -126,8 +145,32 @@ public class MetalSelectScreen extends Screen {
             }
         }
 
-        // TODO(update, render)
-//        BufferUploader.drawWithShader(buf.buildOrThrow());
+        try (MeshData meshData = buf.buildOrThrow()) {
+            GpuBuffer vertexBuffer = RenderSystem
+                    .getDevice()
+                    .createBuffer(() -> "Allomancy selection buffer", BufferType.VERTICES, BufferUsage.STATIC_WRITE,
+                                  meshData.vertexBuffer());
+
+            RenderTarget renderTarget = Minecraft.getInstance().getMainRenderTarget();
+            if (renderTarget.getColorTexture() == null) {
+                return;
+            }
+            int indexCount = meshData.drawState().indexCount();
+            GpuBuffer gpuBuffer = indices.getBuffer(indexCount);
+            try (RenderPass renderPass = RenderSystem
+                    .getDevice()
+                    .createCommandEncoder()
+                    .createRenderPass(renderTarget.getColorTexture(), OptionalInt.empty(),
+                                      renderTarget.getDepthTexture(), OptionalDouble.empty())) {
+
+                renderPass.setPipeline(SELECTION_BACKGROUND);
+                renderPass.setIndexBuffer(gpuBuffer, indices.type());
+                renderPass.setVertexBuffer(0, vertexBuffer);
+                renderPass.drawIndexed(0, indexCount);
+
+            }
+        }
+
 
         for (int seg = 0; seg < segments; seg++) {
             Metal mt = Metal.getMetal(toMetalIndex(seg));
@@ -161,18 +204,11 @@ public class MetalSelectScreen extends Screen {
             int xdp = (int) ((xp - x) * mod + x);
             int ydp = (int) ((yp - y) * mod + y);
 
-            // TODO(update, render)?
-//            RenderSystem.setShader(CoreShaders.POSITION_TEX);
-//            RenderSystem.setShaderTexture(0, METAL_ICONS[toMetalIndex(seg)]);
             guiGraphics.blit(RenderType::guiTexturedOverlay, METAL_ICONS[toMetalIndex(seg)], xdp - 8, ydp - 8, 0, 0,
                              16, 16, 16, 16);
 
         }
 
-        // TODO(update, render)?
-//        RenderSystem.enableBlend();
-//        RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-//        RenderSystem.disableBlend();
 
     }
 
@@ -229,5 +265,10 @@ public class MetalSelectScreen extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+
+    public static void registerPipeline(RegisterRenderPipelinesEvent event) {
+        event.registerPipeline(SELECTION_BACKGROUND);
     }
 }
