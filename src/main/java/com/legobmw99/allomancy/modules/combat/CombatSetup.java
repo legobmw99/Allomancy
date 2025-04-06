@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -65,7 +64,7 @@ public final class CombatSetup {
     public static final DeferredItem<Item> MISTCLOAK = ITEMS.registerItem("mistcloak", (props) ->
 
             new Item(props
-                             .equippable(EquipmentSlot.CHEST)
+                             .humanoidArmor(WOOL_ARMOR, ArmorType.CHESTPLATE)
                              .attributes(ItemAttributeModifiers
                                                  .builder()
                                                  .add(Attributes.MOVEMENT_SPEED,
@@ -88,9 +87,8 @@ public final class CombatSetup {
     public static final DeferredItem<Item> ALUMINUM_HELMET =
 
             ITEMS.registerItem("aluminum_helmet", (props) -> new Item(props
-                                                                              .attributes(
-                                                                                      ALUMINUM_ARMOR.createAttributes(
-                                                                                              ArmorType.HELMET))
+                                                                              .humanoidArmor(ALUMINUM_ARMOR,
+                                                                                             ArmorType.HELMET)
                                                                               .component(DataComponents.ENCHANTABLE,
                                                                                          null)) {
                 @Override

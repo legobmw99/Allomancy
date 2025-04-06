@@ -71,11 +71,6 @@ public final class MetalOverlay implements LayeredDraw.Layer {
         int renderX = PowersConfig.overlay_position.get().getX(gui.guiWidth());
         int renderY = PowersConfig.overlay_position.get().getY(gui.guiHeight());
 
-        // TODO(update, render)?
-//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-//        RenderSystem.setShaderTexture(0, meterLoc);
-
-
         /*
          * The rendering for the overlay
          */

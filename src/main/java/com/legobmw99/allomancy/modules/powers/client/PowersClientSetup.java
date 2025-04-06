@@ -2,9 +2,11 @@ package com.legobmw99.allomancy.modules.powers.client;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
+import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticle;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
 import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
+import com.legobmw99.allomancy.modules.powers.client.util.Rendering;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.Registries;
@@ -45,6 +47,8 @@ public final class PowersClientSetup {
         bus.addListener(PowersClientSetup::registerParticle);
         bus.addListener(MetalOverlay::registerGUI);
         bus.addListener(Inputs::registerKeyBinding);
+        bus.addListener(Rendering::registerPipeline);
+        bus.addListener(MetalSelectScreen::registerPipeline);
     }
 
     private static void registerParticle(final RegisterParticleProvidersEvent event) {
