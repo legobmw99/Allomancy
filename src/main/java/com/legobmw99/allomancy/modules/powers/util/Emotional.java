@@ -129,9 +129,9 @@ public final class Emotional {
                             animal.tame(allomancer);
                         }
                     }
-                    case Sheep unused -> target.goalSelector.addGoal(1, new EatBlockGoal(target));
+                    case Sheep ignored -> target.goalSelector.addGoal(1, new EatBlockGoal(target));
                     case Villager villager -> villager.onReputationEventFrom(ReputationEventType.TRADE, allomancer);
-                    case WanderingTrader unused ->
+                    case WanderingTrader ignored ->
                             target.goalSelector.addGoal(1, new TradeWithPlayerGoal((AbstractVillager) target));
                     default -> {
                     }

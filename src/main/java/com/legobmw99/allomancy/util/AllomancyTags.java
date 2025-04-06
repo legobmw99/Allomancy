@@ -23,7 +23,7 @@ public final class AllomancyTags {
 
     public static final TagKey<Biome> SPAWNS_WELLS =
             TagKey.create(Registries.BIOME, Allomancy.rl("has_structure/well"));
-    public static TagKey<Structure> SEEKABLE = TagKey.create(Registries.STRUCTURE, Allomancy.rl("seekable"));
+    public static final TagKey<Structure> SEEKABLE = TagKey.create(Registries.STRUCTURE, Allomancy.rl("seekable"));
 
     public static final TagKey<EntityType<?>> HEMALURGIC_CHARGERS =
             TagKey.create(Registries.ENTITY_TYPE, Allomancy.rl("killing_charges_earring"));

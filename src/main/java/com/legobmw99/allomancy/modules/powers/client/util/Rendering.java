@@ -54,7 +54,7 @@ public final class Rendering {
                                      float g,
                                      float b) {
         Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder builder = tessellator.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
+        BufferBuilder builder = tessellator.begin(METAL_LINES.getVertexFormatMode(), METAL_LINES.getVertexFormat());
 
         Matrix4f matrix4f = stack.last().pose();
         builder.addVertex(matrix4f, (float) player.x, (float) player.y, (float) player.z).setColor(r, g, b, 0.6f);

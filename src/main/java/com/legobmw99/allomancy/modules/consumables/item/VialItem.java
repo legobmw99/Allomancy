@@ -99,7 +99,7 @@ public class VialItem extends Item {
             Allomancy.LOGGER.info("Found old custom item data for vial: {}", tag.toString());
             FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
             for (Metal mt : Metal.values()) {
-                if (tag.getBoolean(mt.getName()).orElse(false)) {
+                if (tag.getBooleanOr(mt.getName(), false)) {
                     storage.add(mt);
                 }
                 tag.remove(mt.getName());
