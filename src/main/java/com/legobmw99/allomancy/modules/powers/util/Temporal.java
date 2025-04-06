@@ -70,8 +70,7 @@ public final class Temporal {
                     .trigger(curPlayer, entity, Metal.CADMIUM, data.isEnhanced());
             entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 10, 0, true, false));
             if (entity != curPlayer) {
-                entity.addEffect(
-                        new MobEffectInstance(MobEffects.SLOWNESS, 10, slowness_amplifier, true, false));
+                entity.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 10, slowness_amplifier, true, false));
             }
         });
     }
