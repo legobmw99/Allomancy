@@ -23,7 +23,6 @@ import java.util.Optional;
 
 @ForEachTest(groups = "powers")
 public class ActivePowerTest {
-    // TODO can test client powers somehow?
 
     @GameTest(batch = "chrome_wipe")
     @EmptyTemplate(value = "5x3x5", floor = true)

@@ -226,13 +226,11 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         }
         allomancy_data.put("abilities", abilities);
 
-
         CompoundTag metal_storage = new CompoundTag();
         for (Metal mt : Metal.values()) {
             metal_storage.putInt(mt.getName(), this.getStored(mt));
         }
         allomancy_data.put("metal_storage", metal_storage);
-
 
         CompoundTag metal_burning = new CompoundTag();
         for (Metal mt : Metal.values()) {
@@ -264,7 +262,7 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag allomancy_data) {
         allomancy_data.getCompound("abilities").ifPresent(abilities -> {
             for (Metal mt : Metal.values()) {
-                if (abilities.getBoolean(mt.getName()).orElse(false)) {
+                if (abilities.getBooleanOr(mt.getName(), false)) {
                     this.addPower(mt);
                 } else {
                     this.revokePower(mt);
@@ -272,20 +270,17 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
             }
         });
 
-
         allomancy_data.getCompound("metal_storage").ifPresent(metal_storage -> {
             for (Metal mt : Metal.values()) {
-                this.metal_amounts[mt.getIndex()] = metal_storage.getInt(mt.getName()).orElse(0);
+                this.metal_amounts[mt.getIndex()] = metal_storage.getIntOr(mt.getName(), 0);
             }
         });
-
 
         allomancy_data.getCompound("metal_burning").ifPresent(metal_burning -> {
             for (Metal mt : Metal.values()) {
-                this.setBurning(mt, metal_burning.getBoolean(mt.getName()).orElse(false));
+                this.setBurning(mt, metal_burning.getBooleanOr(mt.getName(), false));
             }
         });
-
 
         allomancy_data.getCompound("position").ifPresent(position -> {
 
@@ -307,7 +302,6 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
             } else {
                 this.setSpecialSeekingLoc(null, null);
             }
-
         });
     }
 }
