@@ -209,6 +209,73 @@ public class MetalSelectScreen extends Screen {
         }
 
 
+        // second circle
+
+        tess.clear();
+        buf = tess.begin(SELECTION_BACKGROUND.getVertexFormatMode(), SELECTION_BACKGROUND.getVertexFormat());
+
+        x = x / 4;
+        y = y / 2 * 3;
+
+        segments = 2;
+        step = (float) Math.PI / 180;
+        degPer = (float) Math.PI * 2 / segments;
+
+        for (int seg = 0; seg < segments; seg++) {
+            float radius = 20;
+
+            int gs = 0x55;
+
+            int r = gs;
+            int g = gs;
+            int b = gs;
+            int a = 0x99;
+
+            if (seg == 0) {
+                buf.addVertex(x, y, 0).setColor(r, g, b, a);
+            }
+
+            for (float v = 0; v < degPer + step / 2; v += step) {
+                float rad = v + seg * degPer;
+                float xp = x + Mth.cos(rad) * radius;
+                float yp = y + Mth.sin(rad) * radius;
+
+                if (v == 0) {
+                    buf.addVertex(xp, yp, 0).setColor(r, g, b, a);
+                }
+                buf.addVertex(xp, yp, 0).setColor(r, g, b, a);
+            }
+        }
+
+        try (MeshData meshData = buf.buildOrThrow()) {
+            GpuBuffer vertexBuffer = RenderSystem
+                    .getDevice()
+                    .createBuffer(() -> "Allomancy selection buffer 2", BufferType.VERTICES, BufferUsage.STATIC_WRITE,
+                                  meshData.vertexBuffer());
+
+            RenderTarget renderTarget = Minecraft.getInstance().getMainRenderTarget();
+            if (renderTarget.getColorTexture() == null) {
+                return;
+            }
+            int indexCount = meshData.drawState().indexCount();
+            GpuBuffer gpuBuffer = indices.getBuffer(indexCount);
+            try (RenderPass renderPass = RenderSystem
+                    .getDevice()
+                    .createCommandEncoder()
+                    .createRenderPass(renderTarget.getColorTexture(), OptionalInt.empty(),
+                                      renderTarget.getDepthTexture(), OptionalDouble.empty())) {
+
+                renderPass.setPipeline(SELECTION_BACKGROUND);
+                renderPass.setIndexBuffer(gpuBuffer, indices.type());
+                renderPass.setVertexBuffer(0, vertexBuffer);
+                renderPass.drawIndexed(0, indexCount);
+
+            }
+        }
+
+        guiGraphics.blit(RenderType::guiTexturedOverlay, Allomancy.rl(String.format(GUI_METAL, "unused_atium")),
+                         x - 8, y - 8, 0, 0, 16, 16, 16, 16);
+
     }
 
     @Override

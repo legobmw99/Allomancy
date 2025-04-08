@@ -7,6 +7,7 @@ import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import com.legobmw99.allomancy.modules.powers.network.EnhanceTimePayload;
+import com.legobmw99.allomancy.modules.powers.network.EntityPathPayload;
 import com.legobmw99.allomancy.modules.powers.network.Network;
 import com.legobmw99.allomancy.modules.powers.util.Emotional;
 import com.legobmw99.allomancy.modules.powers.util.Enhancement;
@@ -26,21 +27,26 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerSetSpawnEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Objects;
 
 public final class CommonEventHandler {
 
@@ -382,6 +388,28 @@ public final class CommonEventHandler {
              *********************************************/
             if (data.isEnhanced() && data.isBurning(Metal.COPPER)) {
                 curPlayer.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 50, true, false));
+            }
+
+            if (curPlayer instanceof ServerPlayer sp) {
+                //                                        if (false) {
+                BlockPos negative = curPlayer.blockPosition().offset(-30, -30, -30);
+                BlockPos positive = curPlayer.blockPosition().offset(30, 30, 30);
+                var nearby_players =
+                        level.getEntitiesOfClass(Mob.class, AABB.encapsulatingFullBlocks(negative, positive),
+                                                 Objects::nonNull);
+
+                for (Mob mob : nearby_players) {
+                    Path path = mob.getNavigation().getPath();
+                    if (path != null) {
+                        int count = path.getNodeCount();
+                        for (int i = path.getNextNodeIndex(); i < count; i++) {
+                            var point = path.getNode(i);
+                            PacketDistributor.sendToPlayer(curPlayer,
+                                                           new EntityPathPayload(mob.getId(), point.asBlockPos()));
+                        }
+                    }
+                }
+                //                                        }
             }
         }
         if (syncRequired) {

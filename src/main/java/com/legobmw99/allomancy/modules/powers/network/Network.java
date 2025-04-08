@@ -34,6 +34,8 @@ public final class Network {
                                     new DirectionalPayloadHandler<>(ClientPayloadHandler::updateEnhanced,
                                                                     ServerPayloadHandler::updateEnhanced));
 
+        registrar.playToClient(EntityPathPayload.TYPE, EntityPathPayload.STREAM_CODEC, ClientPayloadHandler::takePath);
+
     }
 
     public static void syncAllomancerData(ServerPlayer player) {

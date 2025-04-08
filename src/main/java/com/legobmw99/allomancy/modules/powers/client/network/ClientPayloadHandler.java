@@ -6,9 +6,12 @@ import com.legobmw99.allomancy.modules.powers.client.util.Sounds;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.network.AllomancerDataPayload;
 import com.legobmw99.allomancy.modules.powers.network.EnhanceTimePayload;
+import com.legobmw99.allomancy.modules.powers.network.EntityPathPayload;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -51,6 +54,17 @@ public final class ClientPayloadHandler {
             Allomancy.LOGGER.error("Failed to handle client updateEnhanced", e);
             ctx.disconnect(Component.translatable("allomancy.networking.failed", e.getMessage()));
             return null;
+        });
+    }
+
+    public static void takePath(EntityPathPayload payload, IPayloadContext ctx) {
+        ctx.enqueueWork(() -> {
+            Mob mob = (Mob) Minecraft.getInstance().level.getEntity(payload.entityID());
+            if (mob != null) {
+                Minecraft.getInstance().level.addParticle(ParticleTypes.DUST_PLUME, payload.pos().getX() + 0.5,
+                                                          payload.pos().getY() + 0.5, payload.pos().getZ() + 0.5, 0,
+                                                          0, 0);
+            }
         });
     }
 }
