@@ -95,14 +95,21 @@ public final class Rendering {
                                       renderTarget.getDepthTexture(), OptionalDouble.empty())) {
 
                 renderPass.setPipeline(METAL_LINES);
-                RenderSystem.lineWidth(width);
                 renderPass.setIndexBuffer(gpuBuffer, indices.type());
                 renderPass.setVertexBuffer(0, vertexBuffer);
+
+                RenderSystem.lineWidth(width * 2.5f);
+                RenderSystem.setShaderColor(0, 0, 0, 0.3f);
+                renderPass.drawIndexed(0, indexCount);
+
+                RenderSystem.lineWidth(width);
+                RenderSystem.setShaderColor(1, 1, 1, 1);
                 renderPass.drawIndexed(0, indexCount);
             }
         }
 
         RenderSystem.lineWidth(1.0F);
+        tesselator.clear();
         stack.popPose();
     }
 

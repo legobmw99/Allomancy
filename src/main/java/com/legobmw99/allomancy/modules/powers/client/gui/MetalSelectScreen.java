@@ -107,6 +107,8 @@ public class MetalSelectScreen extends Screen {
                 tess.begin(SELECTION_BACKGROUND.getVertexFormatMode(), SELECTION_BACKGROUND.getVertexFormat());
 
 
+        buf.addVertex(x, y, 0).setColor(0x19, 0x19, 0x19, 0x05);
+
         for (int seg = 0; seg < segments; seg++) {
             Metal mt = Metal.getMetal(toMetalIndex(seg));
             boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
@@ -128,10 +130,6 @@ public class MetalSelectScreen extends Screen {
             int g = gs;
             int b = gs;
             int a = 0x99;
-
-            if (seg == 0) {
-                buf.addVertex(x, y, 0).setColor(0x19, 0x19, 0x19, 0x15);
-            }
 
             for (float v = 0; v < degPer + step / 2; v += step) {
                 float rad = v + seg * degPer;
@@ -170,6 +168,7 @@ public class MetalSelectScreen extends Screen {
 
             }
         }
+        tess.clear();
 
 
         for (int seg = 0; seg < segments; seg++) {
