@@ -14,8 +14,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
-import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
+import java.util.List;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 
@@ -23,8 +24,13 @@ public final class Rendering {
     private Rendering() {}
 
 
+    public record Line(Vec3 dest, float r, float g, float b) {
+    }
+
+
     private static final RenderSystem.AutoStorageIndexBuffer indices =
             RenderSystem.getSequentialBuffer(VertexFormat.Mode.LINES);
+
     private static final RenderPipeline METAL_LINES = RenderPipeline
             .builder(RenderPipelines.LINES_SNIPPET)
             .withLocation("pipeline/allomancy_lines")
@@ -34,32 +40,41 @@ public final class Rendering {
             .withBlend(BlendFunction.TRANSLUCENT)
             .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
             .withDepthWrite(false)
-            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.LINES)
+            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.LINES)
             .build();
 
 
     /**
-     * Draws a line from the player (denoted pX,Y,Z) to the given set of
-     * coordinates (oX,Y,Z) in a certain color (r,g,b)
+     * Draws lines from the player to each destination
      *
      * @param player location of the player
-     * @param dest   location to draw toward
+     * @param lines  locations to draw toward
      * @param width  the width of the line
      */
-    public static void drawMetalLine(PoseStack stack,
-                                     Vec3 player,
-                                     Vec3 dest,
-                                     float width,
-                                     float r,
-                                     float g,
-                                     float b) {
-        Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder builder = tessellator.begin(METAL_LINES.getVertexFormatMode(), METAL_LINES.getVertexFormat());
+    public static void drawMetalLines(PoseStack stack, Vec3 player, List<Line> lines, float width) {
+        if (lines.isEmpty()) {
+            return;
+        }
 
-        Matrix4f matrix4f = stack.last().pose();
-        builder.addVertex(matrix4f, (float) player.x, (float) player.y, (float) player.z).setColor(r, g, b, 0.6f);
-        builder.addVertex(matrix4f, (float) dest.x, (float) dest.y, (float) dest.z).setColor(r, g, b, 0.6f);
-        RenderSystem.lineWidth(width);
+        stack.pushPose();
+        Vec3 view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+        stack.translate(-view.x, -view.y, -view.z);
+
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder builder = tesselator.begin(METAL_LINES.getVertexFormatMode(), METAL_LINES.getVertexFormat());
+
+        PoseStack.Pose pose = stack.last();
+        Vector3f source = player.toVector3f();
+        Vector3f normal = new Vector3f();
+
+        for (var line : lines) {
+            Vector3f dest = line.dest.toVector3f();
+            dest.normalize(normal);
+
+            builder.addVertex(pose, source).setColor(line.r, line.g, line.b, 0.6f).setNormal(pose, normal);
+            builder.addVertex(pose, dest).setColor(line.r, line.g, line.b, 0.6f).setNormal(pose, normal);
+        }
+
 
         try (MeshData meshData = builder.buildOrThrow()) {
             GpuBuffer vertexBuffer = RenderSystem
@@ -80,22 +95,15 @@ public final class Rendering {
                                       renderTarget.getDepthTexture(), OptionalDouble.empty())) {
 
                 renderPass.setPipeline(METAL_LINES);
+                RenderSystem.lineWidth(width);
                 renderPass.setIndexBuffer(gpuBuffer, indices.type());
                 renderPass.setVertexBuffer(0, vertexBuffer);
                 renderPass.drawIndexed(0, indexCount);
             }
         }
-    }
 
-    public static void doneDrawingLines(PoseStack stack) {
+        RenderSystem.lineWidth(1.0F);
         stack.popPose();
-    }
-
-    public static PoseStack prepareToDrawLines(PoseStack start) {
-        start.pushPose();
-        Vec3 view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-        start.translate(-view.x, -view.y, -view.z);
-        return start;
     }
 
     public static void registerPipeline(RegisterRenderPipelinesEvent event) {
