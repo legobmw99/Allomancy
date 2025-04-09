@@ -70,6 +70,7 @@ public final class ClientEventHandler {
             PowerRequests.nicrosilEnhance(data, trace);
         }
 
+        // TODO also track nearby atium burners and generate random shadows
         tracking.tick();
     }
 

@@ -273,6 +273,13 @@ public class MetalSelectScreen extends Screen {
             }
         }
 
+
+        String name = (false /* TODO */ ? ChatFormatting.UNDERLINE : ChatFormatting.RESET) +
+                      Component.literal("Atium").getString();
+        int textwidth = this.font.width(name);
+
+        guiGraphics.drawString(this.font, name, x - textwidth / 2, y + 14, 0xFFFFFF, true);
+
         guiGraphics.blit(RenderType::guiTexturedOverlay, Allomancy.rl(String.format(GUI_METAL, "unused_atium")),
                          x - 8, y - 8, 0, 0, 16, 16, 16, 16);
 

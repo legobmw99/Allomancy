@@ -390,27 +390,24 @@ public final class CommonEventHandler {
                 curPlayer.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 50, true, false));
             }
 
-            if (curPlayer instanceof ServerPlayer sp) {
-                //                                        if (false) {
-                BlockPos negative = curPlayer.blockPosition().offset(-30, -30, -30);
-                BlockPos positive = curPlayer.blockPosition().offset(30, 30, 30);
-                var nearby_players =
-                        level.getEntitiesOfClass(Mob.class, AABB.encapsulatingFullBlocks(negative, positive),
-                                                 Objects::nonNull);
+            // if (false) { // TODO: atium data -- make it its own bool rather than Metal enum?
+            BlockPos negative = curPlayer.blockPosition().offset(-30, -30, -30);
+            BlockPos positive = curPlayer.blockPosition().offset(30, 30, 30);
+            var nearby_players = level.getEntitiesOfClass(Mob.class, AABB.encapsulatingFullBlocks(negative, positive),
+                                                          Objects::nonNull);
 
-                for (Mob mob : nearby_players) {
-                    Path path = mob.getNavigation().getPath();
-                    if (path != null) {
-                        int count = path.getNodeCount();
-                        for (int i = path.getNextNodeIndex(); i < count; i++) {
-                            var point = path.getNode(i);
-                            PacketDistributor.sendToPlayer(curPlayer,
-                                                           new EntityPathPayload(mob.getId(), point.asBlockPos()));
-                        }
+            for (Mob mob : nearby_players) {
+                Path path = mob.getNavigation().getPath();
+                if (path != null) {
+                    int count = path.getNodeCount();
+                    for (int i = path.getNextNodeIndex(); i < count; i++) {
+                        var point = path.getNode(i);
+                        PacketDistributor.sendToPlayer(curPlayer,
+                                                       new EntityPathPayload(mob.getId(), point.asBlockPos()));
                     }
                 }
-                //                                        }
             }
+            // }
         }
         if (syncRequired) {
             Network.syncAllomancerData(curPlayer);
