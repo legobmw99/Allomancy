@@ -24,7 +24,7 @@ public final class Rendering {
     private Rendering() {}
 
 
-    public record Line(Vec3 dest, float r, float g, float b) {
+    public record Line(Vec3 dest, int color) {
     }
 
 
@@ -67,8 +67,8 @@ public final class Rendering {
             Vector3f dest = line.dest.toVector3f();
             dest.normalize(normal);
 
-            builder.addVertex(pose, src).setColor(line.r, line.g, line.b, 0.6f).setNormal(pose, normal);
-            builder.addVertex(pose, dest).setColor(line.r, line.g, line.b, 0.6f).setNormal(pose, normal);
+            builder.addVertex(pose, src).setColor(line.color).setNormal(pose, normal);
+            builder.addVertex(pose, dest).setColor(line.color).setNormal(pose, normal);
         }
 
 

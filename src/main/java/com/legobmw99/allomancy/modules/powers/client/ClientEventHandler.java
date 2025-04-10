@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -34,6 +35,11 @@ public final class ClientEventHandler {
     private static final List<Rendering.Line> narrowLines = new ArrayList<>(); // 1.5 wide
     private static final List<Rendering.Line> mediumLines = new ArrayList<>(); // 3 wide
     private static final List<Rendering.Line> thickLines = new ArrayList<>(); // 5 wide
+
+    private static final int IRON_STEEL_LINE_COLOR = ARGB.colorFromFloat(0.6f, 0.0F, 0.6F, 1.0F);
+    private static final int BRONZE_LINE_COLOR = ARGB.colorFromFloat(0.6f, 0.7F, 0.15F, 0.15F);
+    private static final int GOLD_LINE_COLOR = ARGB.colorFromFloat(0.6f, 0.9F, 0.85F, 0.0F);
+    private static final int ELECTRUM_LINE_COLOR = ARGB.colorFromFloat(0.6f, 0.7F, 0.8F, 0.2F);
 
     private ClientEventHandler() {}
 
@@ -115,10 +121,10 @@ public final class ClientEventHandler {
          *********************************************/
         if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
             tracking.forEachMetallicEntity(
-                    entity -> narrowLines.add(new Rendering.Line(entity.position(), 0.0F, 0.6F, 1.0F)));
+                    entity -> narrowLines.add(new Rendering.Line(entity.position(), IRON_STEEL_LINE_COLOR)));
 
             tracking.forEachMetalBlob(blob -> {
-                Rendering.Line line = new Rendering.Line(blob.getCenter(), 0.0F, 0.6F, 1.0F);
+                Rendering.Line line = new Rendering.Line(blob.getCenter(), IRON_STEEL_LINE_COLOR);
                 float perfectWidth = 0.3F + blob.size() * 0.4F;
                 if (perfectWidth < 2.25f) {
                     narrowLines.add(line);
@@ -135,11 +141,11 @@ public final class ClientEventHandler {
          *********************************************/
         GlobalPos seeking = data.getSpecialSeekingLoc();
         if (seeking != null && player.level().dimension() == seeking.dimension()) {
-            thickLines.add(new Rendering.Line(seeking.pos().getCenter(), 0.7F, 0.15F, 0.15F));
+            thickLines.add(new Rendering.Line(seeking.pos().getCenter(), BRONZE_LINE_COLOR));
         }
         if ((data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER)))) {
             tracking.forEachSeeked(
-                    playerEntity -> thickLines.add(new Rendering.Line(playerEntity.position(), 0.7F, 0.15F, 0.15F)));
+                    playerEntity -> thickLines.add(new Rendering.Line(playerEntity.position(), BRONZE_LINE_COLOR)));
         }
 
         /*********************************************
@@ -148,7 +154,7 @@ public final class ClientEventHandler {
         if (data.isBurning(Metal.GOLD)) {
             player.getLastDeathLocation().ifPresent(death -> {
                 if (player.level().dimension() == death.dimension()) {
-                    mediumLines.add(new Rendering.Line(Vec3.atCenterOf(death.pos()), 0.9F, 0.85F, 0.0F));
+                    mediumLines.add(new Rendering.Line(Vec3.atCenterOf(death.pos()), GOLD_LINE_COLOR));
                 }
             });
         }
@@ -157,9 +163,9 @@ public final class ClientEventHandler {
             if (spawn == null &&
                 player.level().dimension() == Level.OVERWORLD) { // overworld, no spawn --> use world spawn
                 var levelData = player.level().getLevelData();
-                mediumLines.add(new Rendering.Line(Vec3.atCenterOf(levelData.getSpawnPos()), 0.7F, 0.8F, 0.2F));
+                mediumLines.add(new Rendering.Line(Vec3.atCenterOf(levelData.getSpawnPos()), ELECTRUM_LINE_COLOR));
             } else if (spawn != null && player.level().dimension() == spawn.dimension()) {
-                mediumLines.add(new Rendering.Line(Vec3.atCenterOf(spawn.pos()), 0.7F, 0.8F, 0.2F));
+                mediumLines.add(new Rendering.Line(Vec3.atCenterOf(spawn.pos()), ELECTRUM_LINE_COLOR));
             }
         }
 
@@ -177,10 +183,9 @@ public final class ClientEventHandler {
 
         var stack = event.getPoseStack();
         stack.pushPose();
-
-        Vec3 view = event.getCamera().getPosition();
         // TODO: also account for view bobbing, FOV
         //  See GameRenderer#bobView
+        Vec3 view = event.getCamera().getPosition();
         stack.translate(-view.x, -view.y, -view.z);
 
         Rendering.drawMetalLines(stack, source, narrowLines, 1.5f);
