@@ -58,6 +58,7 @@ public final class Rendering {
 
         stack.pushPose();
         Vec3 view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+        // TODO: also account for view bobbing somehow. See GameRenderer#bobView
         stack.translate(-view.x, -view.y, -view.z);
 
         Tesselator tesselator = Tesselator.getInstance();

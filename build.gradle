@@ -35,13 +35,14 @@ def gametest_mod_id = mod_id + "_test"
 
 neoForge {
     version = project.neo_version
-
     parchment {
         mappingsVersion = project.parchment_mappings_version
         minecraftVersion = project.parchment_minecraft_version
     }
 
     addModdingDependenciesTo(sourceSets.test)
+
+    validateAccessTransformers = true
 
     runs {
         client {
