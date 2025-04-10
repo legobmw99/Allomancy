@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -164,19 +163,31 @@ public final class ClientEventHandler {
             }
         }
 
-        float partialTick = event.getPartialTick().getGameTimeDeltaPartialTick(false);
-        double rho = 1;
-        float theta = (float) ((player.getViewYRot(partialTick) + 90) * Math.PI / 180);
-        float phi = Mth.clamp((float) ((player.getViewXRot(partialTick) + 90) * Math.PI / 180), 0.0001F, 3.14F);
 
-        Vec3 playervec = mc.player
-                .getPosition(partialTick)
-                .add(rho * Mth.sin(phi) * Mth.cos(theta), rho * Mth.cos(phi) - 0.35F,
-                     rho * Mth.sin(phi) * Mth.sin(theta));
+        float partialTicks = event.getPartialTick().getGameTimeDeltaPartialTick(false);
+        Vec3 source = mc.player.getPosition(partialTicks);
+        if (mc.options.getCameraType().isFirstPerson()) {
+            // get a point slightly in front of the player
+            source = source.add(mc.player.getViewVector(partialTicks));
+        } else {
+            // get the chest
+            source = source.add(0, mc.player.getEyeHeight() / 3 * 2, 0);
+        }
 
-        Rendering.drawMetalLines(event.getPoseStack(), playervec, narrowLines, 1.5f);
-        Rendering.drawMetalLines(event.getPoseStack(), playervec, mediumLines, 3.0f);
-        Rendering.drawMetalLines(event.getPoseStack(), playervec, thickLines, 5.0f);
+
+        var stack = event.getPoseStack();
+        stack.pushPose();
+
+        Vec3 view = event.getCamera().getPosition();
+        // TODO: also account for view bobbing, FOV
+        //  See GameRenderer#bobView
+        stack.translate(-view.x, -view.y, -view.z);
+
+        Rendering.drawMetalLines(stack, source, narrowLines, 1.5f);
+        Rendering.drawMetalLines(stack, source, mediumLines, 3.0f);
+        Rendering.drawMetalLines(stack, source, thickLines, 5.0f);
+
+        stack.popPose();
     }
 
     @SubscribeEvent

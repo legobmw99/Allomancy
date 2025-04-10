@@ -47,32 +47,27 @@ public final class Rendering {
     /**
      * Draws lines from the player to each destination
      *
-     * @param player location of the player
+     * @param source location of the player
      * @param lines  locations to draw toward
      * @param width  the width of the line
      */
-    public static void drawMetalLines(PoseStack stack, Vec3 player, List<Line> lines, float width) {
+    public static void drawMetalLines(PoseStack stack, Vec3 source, List<Line> lines, float width) {
         if (lines.isEmpty()) {
             return;
         }
-
-        stack.pushPose();
-        Vec3 view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-        // TODO: also account for view bobbing somehow. See GameRenderer#bobView
-        stack.translate(-view.x, -view.y, -view.z);
 
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder builder = tesselator.begin(METAL_LINES.getVertexFormatMode(), METAL_LINES.getVertexFormat());
 
         PoseStack.Pose pose = stack.last();
-        Vector3f source = player.toVector3f();
+        Vector3f src = source.toVector3f();
         Vector3f normal = new Vector3f();
 
         for (var line : lines) {
             Vector3f dest = line.dest.toVector3f();
             dest.normalize(normal);
 
-            builder.addVertex(pose, source).setColor(line.r, line.g, line.b, 0.6f).setNormal(pose, normal);
+            builder.addVertex(pose, src).setColor(line.r, line.g, line.b, 0.6f).setNormal(pose, normal);
             builder.addVertex(pose, dest).setColor(line.r, line.g, line.b, 0.6f).setNormal(pose, normal);
         }
 
@@ -111,7 +106,6 @@ public final class Rendering {
 
         RenderSystem.lineWidth(1.0F);
         tesselator.clear();
-        stack.popPose();
     }
 
     public static void registerPipeline(RegisterRenderPipelinesEvent event) {
