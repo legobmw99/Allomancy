@@ -281,7 +281,7 @@ public final class CommonEventHandler {
                 }
             }
         } else {
-            syncRequired = data.getSpecialSeekingLoc() != null;
+            syncRequired = syncRequired || data.getSpecialSeekingLoc() != null;
             data.setSpecialSeekingLoc(null, null);
         }
 
