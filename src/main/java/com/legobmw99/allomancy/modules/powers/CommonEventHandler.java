@@ -50,7 +50,6 @@ public final class CommonEventHandler {
     /**
      * TEMPORARY: Used to port Forge worlds to Neoforged.
      * Loads the player's data file and sees if they have an old forge Capability stored.
-     * TODO: Remove in future version once worlds have updated
      */
     @SubscribeEvent
     public static void onPlayerLoad(final PlayerEvent.LoadFromFile event) {
@@ -94,21 +93,25 @@ public final class CommonEventHandler {
         if (event.getEntity() instanceof ServerPlayer player) {
             if (!player.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
                 var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-                //Handle random misting case
+                // Handle random misting case
                 if (PowersConfig.random_mistings.get() && data.isUninvested()) {
-                    byte randomMisting;
+                    int randomMisting;
+                    // if (FMLEnvironment.dist.isClient()){
+                    //   // TODO prevent certain 'useless' choices?
+                    // }
                     if (PowersConfig.respect_player_UUID.get()) {
-                        randomMisting = (byte) (Math.abs(player.getUUID().hashCode()) % 16);
+                        randomMisting = Math.abs(player.getUUID().hashCode()) % Metal.values().length;
                     } else {
-                        randomMisting = (byte) (player.getRandom().nextInt(Metal.values().length));
+                        randomMisting = player.getRandom().nextInt(Metal.values().length);
                     }
                     data.addPower(Metal.getMetal(randomMisting));
                     ItemStack flakes = new ItemStack(WorldSetup.FLAKES.get(randomMisting).get());
                     // Give the player one flake of their metal
                     if (!player.getInventory().add(flakes)) {
-                        ItemEntity entity = new ItemEntity(player.getCommandSenderWorld(), player.position().x(),
-                                                           player.position().y(), player.position().z(), flakes);
-                        player.getCommandSenderWorld().addFreshEntity(entity);
+                        ItemEntity entity =
+                                new ItemEntity(player.level(), player.position().x(), player.position().y(),
+                                               player.position().z(), flakes);
+                        player.level().addFreshEntity(entity);
                     }
                 }
             }

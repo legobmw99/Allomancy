@@ -18,7 +18,6 @@ import java.util.Map;
 
 /**
  * TEMPORARY: Used to port 1.20 banners to 1.21
- * TODO: Remove in future version once worlds have updated
  */
 @Mixin(BannerPatternFormatFix.class)
 public class BannerDFUMixin {

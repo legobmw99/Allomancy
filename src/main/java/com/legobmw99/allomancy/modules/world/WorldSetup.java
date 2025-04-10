@@ -17,12 +17,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.random.WeightedList;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -228,13 +230,11 @@ public final class WorldSetup {
     }
 
     private static DeferredBlock<Block> registerStandardOre(String name) {
-        return BLOCKS.registerBlock(name, props -> new DropExperienceBlock(UniformInt.of(2, 5), props),
-                                    Blocks.IRON_ORE.properties());
+        return BLOCKS.registerBlock(name, Block::new, Blocks.IRON_ORE.properties());
     }
 
     private static DeferredBlock<Block> registerDeepslateOre(String name) {
-        return BLOCKS.registerBlock(name, props -> new DropExperienceBlock(UniformInt.of(2, 5), props),
-                                    Blocks.DEEPSLATE_IRON_ORE.properties().strength(4.5F, 3.0F));
+        return BLOCKS.registerBlock(name, Block::new, Blocks.DEEPSLATE_IRON_ORE.properties().strength(4.5F, 3.0F));
     }
 
 

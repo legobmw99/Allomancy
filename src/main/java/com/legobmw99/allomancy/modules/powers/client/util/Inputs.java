@@ -154,7 +154,6 @@ public final class Inputs {
 
     public static void fakeMovement(ClientInput input) {
         // TODO(update) -- investigate if still possible now that fields are private
-
         // basically KeyboardInput#tick()
         //        Options settings = Minecraft.getInstance().options;
         //        input.keyPresses =

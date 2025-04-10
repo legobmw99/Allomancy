@@ -40,7 +40,6 @@ public final class TagProvider {
                     .addTag(EntityTypeTags.RAIDERS)
                     .add(EntityType.WITHER)
                     .add(EntityType.ENDER_DRAGON)
-                    .add(EntityType.WITHER_SKELETON)
                     .add(EntityType.ELDER_GUARDIAN)
                     .add(EntityType.GHAST)
                     .add(EntityType.ZOGLIN)

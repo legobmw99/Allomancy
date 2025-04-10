@@ -131,7 +131,6 @@ public final class Physical {
 
         // Only save players from fall damage
         if (toMove instanceof ServerPlayer) {
-            // TODO: should also change startingToFallPosition?
             toMove.fallDistance = 0;
         }
     }
@@ -156,7 +155,6 @@ public final class Physical {
     private static HashSet<String> defaultSet;
     private static List<String> defaultList = null;
 
-    // TODO? this could be a Tag one day
     public static List<String> default_whitelist() {
         if (defaultList != null) {
             return defaultList;
