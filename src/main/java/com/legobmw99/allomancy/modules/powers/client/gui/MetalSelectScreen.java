@@ -18,7 +18,6 @@ import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
