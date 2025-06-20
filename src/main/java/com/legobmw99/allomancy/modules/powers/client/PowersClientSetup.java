@@ -48,8 +48,8 @@ public final class PowersClientSetup {
         bus.addListener(MetalOverlay::registerGUI);
         bus.addListener(Inputs::registerKeyBinding);
         bus.addListener(Rendering::registerPipeline);
-        bus.addListener(MetalSelectScreen.MetalSelectPiPRenderer::registerPipeline);
-        bus.addListener(MetalSelectScreen.MetalSelectPiPRenderer::registerPiP);
+        bus.addListener(MetalSelectScreen.SelectionWheelRenderer::registerPipeline);
+        bus.addListener(MetalSelectScreen.SelectionWheelRenderer::registerPiP);
     }
 
     private static void registerParticle(final RegisterParticleProvidersEvent event) {
