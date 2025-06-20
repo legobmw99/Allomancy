@@ -19,8 +19,8 @@ public record AllomancerDataPayload(AllomancerData data, UUID player) implements
             StreamCodec.composite(AllomancerData.STREAM_CODEC, AllomancerDataPayload::data, UUIDUtil.STREAM_CODEC,
                                   AllomancerDataPayload::player, AllomancerDataPayload::new);
 
-    public static AllomancerDataPayload fromPlayer(ServerPlayer player) {
-        return new AllomancerDataPayload(player.getData(AllomancerAttachment.ALLOMANCY_DATA), player.getUUID());
+    public AllomancerDataPayload (ServerPlayer player) {
+        this(player.getData(AllomancerAttachment.ALLOMANCY_DATA), player.getUUID());
     }
 
     @Override
