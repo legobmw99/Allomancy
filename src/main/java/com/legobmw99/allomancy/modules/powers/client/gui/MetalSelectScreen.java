@@ -61,10 +61,6 @@ public class MetalSelectScreen extends Screen {
     private int timeIn = PowersConfig.animate_selection.get() ? 0 : 16;
     private int slotSelected = -1;
 
-
-    private static final RenderSystem.AutoStorageIndexBuffer indices =
-            RenderSystem.getSequentialBuffer(VertexFormat.Mode.TRIANGLE_FAN);
-
     public MetalSelectScreen() {
         super(Component.translatable("allomancy.gui"));
         this.mc = Minecraft.getInstance();
@@ -96,7 +92,7 @@ public class MetalSelectScreen extends Screen {
         this.slotSelected = -1;
 
         guiGraphics.submitPictureInPictureRenderState(
-                new MetalSelectPiPState(data, angle, this.timeIn + partialTicks, 0, 0, this.width, this.height,
+                new SelectionWheelState(data, angle, this.timeIn + partialTicks, 0, 0, this.width, this.height,
                                         guiGraphics.peekScissorStack()));
 
         for (int seg = 0; seg < segments; seg++) {
@@ -193,7 +189,7 @@ public class MetalSelectScreen extends Screen {
     }
 
 
-    private record MetalSelectPiPState(IAllomancerData data, double mouseAngle, float timeInPartial, int x0, int y0,
+    private record SelectionWheelState(IAllomancerData data, double mouseAngle, float timeInPartial, int x0, int y0,
                                        int x1, int y1,
                                        @Nullable ScreenRectangle scissorArea) implements PictureInPictureRenderState {
 
@@ -208,7 +204,7 @@ public class MetalSelectScreen extends Screen {
         }
     }
 
-    public static class MetalSelectPiPRenderer extends PictureInPictureRenderer<MetalSelectPiPState> {
+    public static class SelectionWheelRenderer extends PictureInPictureRenderer<SelectionWheelState> {
         private static final RenderPipeline SELECTION_BACKGROUND = RenderPipeline
                 .builder(RenderPipelines.GUI_SNIPPET)
                 .withLocation("pipeline/allomancy_selection")
@@ -223,17 +219,17 @@ public class MetalSelectScreen extends Screen {
                                   RenderType.CompositeState.builder().createCompositeState(false));
 
 
-        public MetalSelectPiPRenderer(MultiBufferSource.BufferSource s) {
+        public SelectionWheelRenderer(MultiBufferSource.BufferSource s) {
             super(s);
         }
 
         @Override
-        public Class<MetalSelectPiPState> getRenderStateClass() {
-            return MetalSelectPiPState.class;
+        public Class<SelectionWheelState> getRenderStateClass() {
+            return SelectionWheelState.class;
         }
 
         @Override
-        protected void renderToTexture(MetalSelectPiPState state, PoseStack stack) {
+        protected void renderToTexture(SelectionWheelState state, PoseStack stack) {
             VertexConsumer vertexconsumer = this.bufferSource.getBuffer(SELECTION_BACKGROUND_TYPE);
 
             var data = state.data;
@@ -303,7 +299,7 @@ public class MetalSelectScreen extends Screen {
         }
 
         public static void registerPiP(RegisterPictureInPictureRenderersEvent event) {
-            event.register(MetalSelectPiPRenderer::new);
+            event.register(SelectionWheelRenderer::new);
         }
     }
 }
