@@ -8,7 +8,6 @@ import com.legobmw99.allomancy.modules.powers.network.AllomancerDataPayload;
 import com.legobmw99.allomancy.modules.powers.network.EnhanceTimePayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -42,8 +41,8 @@ public final class ClientPayloadHandler {
 
     public static void updateEnhanced(EnhanceTimePayload payload, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
-            Entity e = Minecraft.getInstance().level.getEntity(payload.entityID());
-            if (e instanceof Player player) {
+            Player player = Minecraft.getInstance().level.getPlayerByUUID(payload.player());
+            if (player != null) {
                 player.getData(AllomancerAttachment.ALLOMANCY_DATA).setEnhanced(payload.enhanceTime());
             }
         }).exceptionally(e -> {

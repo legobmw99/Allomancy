@@ -18,6 +18,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.Level;
@@ -158,9 +159,11 @@ public final class ServerPayloadHandler {
                 return;
             }
 
-            Entity e = source.level().getEntity(payload.entityID());
-            ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(source, e, Metal.NICROSIL, data.isEnhanced());
-            if (e instanceof ServerPlayer target && !Emotional.hasTinFoilHat(target)) {
+            Player player = source.level().getPlayerByUUID(payload.player());
+            if (player instanceof ServerPlayer target && !Emotional.hasTinFoilHat(target)) {
+                ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER
+                        .get()
+                        .trigger(source, player, Metal.NICROSIL, data.isEnhanced());
                 target.getData(AllomancerAttachment.ALLOMANCY_DATA).setEnhanced(payload.enhanceTime());
                 // broadcast back to player and tracking
                 Network.sync(payload, target);
