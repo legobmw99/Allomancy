@@ -90,8 +90,8 @@ public final class PowerRequests {
         if (data.isBurning(Metal.NICROSIL)) {
             if ((trace != null) && (trace.getType() == HitResult.Type.ENTITY)) {
                 Entity entity = ((EntityHitResult) trace).getEntity();
-                if (entity instanceof Player) {
-                    sendToServer(new EnhanceTimePayload(true, entity.getId()));
+                if (entity instanceof Player p) {
+                    sendToServer(new EnhanceTimePayload(true, p.getUUID()));
                 }
             }
         }

@@ -8,6 +8,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -21,14 +23,13 @@ public class AllomancerData implements IAllomancerData {
     private static final int[] MAX_BURN_TIME =
             {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
 
-    // available on the client
+    // serialized to disk
     private final EnumMap<Metal, Boolean> allomantic_powers;
     private final EnumMap<Metal, Integer> metal_amounts;
     private final EnumMap<Metal, Boolean> burning_metals;
     private GlobalPos spawn_pos = null;
     private GlobalPos seeking_pos = null;
-
-    // TODO odd child out
+    // available on the client but not serialized
     private int enhanced_time = 0;
 
     // only available on the server
@@ -67,12 +68,69 @@ public class AllomancerData implements IAllomancerData {
                    metalMapCodec(Codec.INT).fieldOf("metal_storage").forGetter(data -> data.metal_amounts), Codec
                            .pair(GlobalPos.CODEC.lenientOptionalFieldOf("spawn_pos").codec(),
                                  GlobalPos.CODEC.lenientOptionalFieldOf("seeking_pos").codec())
-                           .fieldOf("positions")
+                           .lenientOptionalFieldOf("positions", new Pair<>(Optional.empty(), Optional.empty()))
                            .forGetter(data -> new Pair<>(Optional.ofNullable(data.spawn_pos),
                                                          Optional.ofNullable(data.seeking_pos)))
 
             )
             .apply(instance, AllomancerData::new));
+
+    public static final StreamCodec<FriendlyByteBuf, AllomancerData> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public AllomancerData decode(FriendlyByteBuf buffer) {
+            var data = new AllomancerData();
+            for (Metal mt : Metal.values()) {
+                data.allomantic_powers.put(mt, buffer.readBoolean());
+            }
+            for (Metal mt : Metal.values()) {
+                data.burning_metals.put(mt, buffer.readBoolean());
+            }
+            for (Metal mt : Metal.values()) {
+                data.metal_amounts.put(mt, buffer.readInt());
+            }
+
+            if (buffer.readBoolean()) {
+                data.spawn_pos = buffer.readGlobalPos();
+            }
+
+            if (buffer.readBoolean()) {
+                data.seeking_pos = buffer.readGlobalPos();
+            }
+
+            data.enhanced_time = buffer.readInt();
+
+            return data;
+        }
+
+        @Override
+        public void encode(FriendlyByteBuf buffer, AllomancerData data) {
+            for (Metal mt : Metal.values()) {
+                buffer.writeBoolean(data.allomantic_powers.getOrDefault(mt, false));
+            }
+            for (Metal mt : Metal.values()) {
+                buffer.writeBoolean(data.burning_metals.getOrDefault(mt, false));
+            }
+            for (Metal mt : Metal.values()) {
+                buffer.writeInt(data.metal_amounts.getOrDefault(mt, 0));
+            }
+
+            if (data.spawn_pos != null) {
+                buffer.writeBoolean(true);
+                buffer.writeGlobalPos(data.spawn_pos);
+            } else {
+                buffer.writeBoolean(false);
+            }
+
+            if (data.seeking_pos != null) {
+                buffer.writeBoolean(true);
+                buffer.writeGlobalPos(data.seeking_pos);
+            } else {
+                buffer.writeBoolean(false);
+            }
+
+            buffer.writeInt(data.enhanced_time);
+        }
+    };
 
 
     public boolean tickBurning() {
@@ -238,6 +296,5 @@ public class AllomancerData implements IAllomancerData {
     private static <V> Codec<EnumMap<Metal, V>> metalMapCodec(Codec<V> v) {
         return Codec.unboundedMap(Metal.CODEC, v).xmap(EnumMap::new, Function.identity());
     }
-
 }
 

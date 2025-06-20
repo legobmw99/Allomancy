@@ -295,11 +295,10 @@ public final class CommonEventHandler {
             }
             if (data.isBurning(Metal.DURALUMIN) && !data.isEnhanced()) {
                 data.setEnhanced(2);
-                Network.sync(new EnhanceTimePayload(2, curPlayer.getId()), curPlayer);
+                Network.sync(new EnhanceTimePayload(2, curPlayer.getUUID()), curPlayer);
             } else if (!data.isBurning(Metal.DURALUMIN) && data.isEnhanced()) {
                 data.decrementEnhanced();
                 if (!data.isEnhanced()) { //Enhancement ran out this tick
-                    Network.sync(new EnhanceTimePayload(false, curPlayer.getId()), curPlayer);
                     data.drainMetals(Arrays.stream(Metal.values()).filter(data::isBurning).toArray(Metal[]::new));
                     syncRequired = true;
                 }
