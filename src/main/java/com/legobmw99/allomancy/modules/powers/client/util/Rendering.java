@@ -1,7 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.client.util;
 
 import com.mojang.blaze3d.buffers.GpuBuffer;
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.pipeline.RenderTarget;
@@ -14,6 +13,7 @@ import net.minecraft.client.renderer.DynamicUniforms;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -72,11 +72,17 @@ public final class Rendering {
             builder.addVertex(pose, dest).setColor(line.color).setNormal(pose, normal);
         }
 
-
+        var dynamic = RenderSystem
+                .getDynamicUniforms()
+                .writeTransforms(new DynamicUniforms.Transform(RenderSystem.getModelViewMatrix(),
+                                                               new Vector4f(0.0F, 0.0F, 0.0F, 0.3F), new Vector3f(),
+                                                               new Matrix4f(), width * 2.5F),
+                                 new DynamicUniforms.Transform(RenderSystem.getModelViewMatrix(),
+                                                               new Vector4f(1.0F, 1.0F, 1.0F, 1.0F), new Vector3f(),
+                                                               new Matrix4f(), width));
         try (MeshData meshData = builder.buildOrThrow()) {
             GpuBuffer vertexBuffer =
                     METAL_LINES.getVertexFormat().uploadImmediateVertexBuffer(meshData.vertexBuffer());
-
 
             RenderTarget renderTarget = Minecraft.getInstance().getMainRenderTarget();
             if (renderTarget.getColorTextureView() == null) {
@@ -84,33 +90,22 @@ public final class Rendering {
             }
             int indexCount = meshData.drawState().indexCount();
             GpuBuffer gpuBuffer = indices.getBuffer(indexCount);
-
-            GpuBufferSlice[] agpubufferslice = RenderSystem
-                    .getDynamicUniforms()
-                    .writeTransforms(new DynamicUniforms.Transform(RenderSystem.getModelViewMatrix(),
-                                                                   new Vector4f(0.0F, 0.0F, 0.0F, 0.3F),
-                                                                   RenderSystem.getModelOffset(),
-                                                                   RenderSystem.getTextureMatrix(), width * 2.5F),
-                                     new DynamicUniforms.Transform(RenderSystem.getModelViewMatrix(),
-                                                                   new Vector4f(1.0F, 1.0F, 1.0F, 1.0F),
-                                                                   RenderSystem.getModelOffset(),
-                                                                   RenderSystem.getTextureMatrix(), width));
-
             try (RenderPass renderPass = RenderSystem
                     .getDevice()
                     .createCommandEncoder()
                     .createRenderPass(() -> "allomancy lines", renderTarget.getColorTextureView(),
-                                      OptionalInt.empty(), renderTarget.getColorTextureView(),
+                                      OptionalInt.empty(), renderTarget.getDepthTextureView(),
                                       OptionalDouble.empty())) {
 
                 renderPass.setPipeline(METAL_LINES);
                 RenderSystem.bindDefaultUniforms(renderPass);
-                renderPass.setVertexBuffer(0, vertexBuffer);
                 renderPass.setIndexBuffer(gpuBuffer, indices.type());
-                renderPass.setUniform("DynamicTransforms", agpubufferslice[0]);
+                renderPass.setVertexBuffer(0, vertexBuffer);
+
+                renderPass.setUniform("DynamicTransforms", dynamic[0]);
                 renderPass.drawIndexed(0, 0, indexCount, 1);
 
-                renderPass.setUniform("DynamicTransforms", agpubufferslice[0]);
+                renderPass.setUniform("DynamicTransforms", dynamic[1]);
                 renderPass.drawIndexed(0, 0, indexCount, 1);
             }
         }
