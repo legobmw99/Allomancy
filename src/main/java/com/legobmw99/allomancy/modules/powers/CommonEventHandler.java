@@ -37,6 +37,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerRespawnPositionEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerSetSpawnEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
@@ -156,6 +157,21 @@ public final class CommonEventHandler {
         if (!event.getTarget().level().isClientSide && event.getTarget() instanceof ServerPlayer player &&
             player.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
             Network.syncAllomancerData(player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRespawnPosition(final PlayerRespawnPositionEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            var pos = new BlockPos((int) event.getTeleportTransition().position().x(),
+                                   (int) event.getTeleportTransition().position().y(),
+                                   (int) event.getTeleportTransition().position().z());
+            var dimension = event.getTeleportTransition().newLevel().dimension();
+            if (data.getSpawnLoc() == null || !data.getSpawnLoc().isCloseEnough(dimension, pos, 10)) {
+                data.setSpawnLoc(pos, dimension);
+                Network.syncAllomancerData(player);
+            }
         }
     }
 
