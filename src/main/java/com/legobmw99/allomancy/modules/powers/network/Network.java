@@ -37,7 +37,7 @@ public final class Network {
     }
 
     public static void syncAllomancerData(ServerPlayer player) {
-        sync(AllomancerDataPayload.fromPlayer(player), player);
+        sync(new AllomancerDataPayload(player), player);
     }
 
     public static void sync(CustomPacketPayload msg, ServerPlayer player) {
