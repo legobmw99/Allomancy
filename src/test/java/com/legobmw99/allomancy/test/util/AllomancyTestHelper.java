@@ -1,9 +1,9 @@
 package com.legobmw99.allomancy.test.util;
 
+import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
@@ -106,7 +106,7 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
 
         data.setMistborn();
         for (Metal m : Metal.values()) {
-            for (int i = 0; i < AllomancerData.MAX_STORAGE; i++) {
+            for (int i = 0; i < IAllomancerData.MAX_STORAGE; i++) {
                 data.incrementStored(m);
             }
         }

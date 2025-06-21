@@ -34,6 +34,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -44,6 +45,8 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import java.io.File;
 import java.util.Arrays;
 
+
+@EventBusSubscriber(modid = Allomancy.MODID)
 public final class CommonEventHandler {
 
 
