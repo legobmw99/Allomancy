@@ -125,23 +125,14 @@ public final class CommonEventHandler {
 
     }
 
-    @SubscribeEvent
-    public static void onPlayerClone(final PlayerEvent.Clone event) {
-        if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
-            if (event.isWasDeath()) {
-                var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-                for (Metal mt : Metal.values()) {
-                    data.drainMetals(mt);
-                    data.setBurning(mt, false);
-                }
-            }
-            Network.syncAllomancerData(player);
-        }
-    }
 
     @SubscribeEvent
     public static void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
         if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
+            if (!event.isEndConquered() /* poorly named, is really equivalent to keepInventory... */) {
+                var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+                data.drainMetals(Metal.values());
+            }
             Network.syncAllomancerData(player);
         }
     }
@@ -302,7 +293,6 @@ public final class CommonEventHandler {
 
         if (!data.isUninvested()) {
 
-
             /*********************************************
              * ALUMINUM AND DURALUMIN                    *
              *********************************************/
@@ -334,9 +324,11 @@ public final class CommonEventHandler {
              *********************************************/
             if (data.isEnhanced() && data.isBurning(Metal.ELECTRUM) && data.getStored(Metal.ELECTRUM) >= 9) {
                 Enhancement.teleportToSpawn(curPlayer, level, data);
+                syncRequired = true;
             } else if (data.isEnhanced() && data.isBurning(Metal.GOLD) &&
                        data.getStored(Metal.GOLD) >= 9) { // These should be mutually exclusive
                 Enhancement.teleportToLastDeath(curPlayer, level, data);
+                syncRequired = true;
             }
 
             /*********************************************
@@ -381,7 +373,6 @@ public final class CommonEventHandler {
                 if (data.getDamageStored() > 0) {
                     if (level.random.nextInt(200) == 0) {
                         data.setDamageStored(data.getDamageStored() - 1);
-                        syncRequired = true;
                     }
                 }
 
@@ -390,7 +381,6 @@ public final class CommonEventHandler {
             if (!data.isBurning(Metal.PEWTER) && (data.getDamageStored() > 0)) {
                 data.setDamageStored(data.getDamageStored() - 1);
                 curPlayer.hurtServer(level, level.damageSources().magic(), 2);
-                syncRequired = true;
             }
 
 

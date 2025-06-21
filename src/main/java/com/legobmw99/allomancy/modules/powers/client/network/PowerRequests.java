@@ -34,9 +34,8 @@ public final class PowerRequests {
 
         if (data.getStored(metal) > 0) {
             data.setBurning(metal, !data.isBurning(metal));
+            sendToServer(new ToggleBurnPayload(metal, data.isBurning(metal)));
         }
-
-        sendToServer(new ToggleBurnPayload(metal, data.isBurning(metal)));
 
         Sounds.soundForBurnChange(data.isBurning(metal));
     }
