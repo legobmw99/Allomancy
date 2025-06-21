@@ -7,6 +7,7 @@ import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.combat.item.ObsidianDaggerItem;
 import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.Util;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -20,6 +21,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.EquipmentAsset;
@@ -91,8 +93,9 @@ public final class CombatSetup {
                                                                                              ArmorType.HELMET)
                                                                               .component(DataComponents.ENCHANTABLE,
                                                                                          null)) {
+
                 @Override
-                public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+                public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
                     return false;
                 }
             });

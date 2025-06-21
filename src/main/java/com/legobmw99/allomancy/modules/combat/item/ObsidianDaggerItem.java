@@ -10,7 +10,6 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -38,16 +37,10 @@ public class ObsidianDaggerItem extends Item {
 
     // Disable mending on daggers
     @Override
-    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        if (EnchantmentHelper
-                .getEnchantmentsForCrafting(book)
-                .keySet()
-                .stream()
-                .anyMatch(holder -> holder.value().effects().has(EnchantmentEffectComponents.REPAIR_WITH_XP) ||
-                                    holder.value().effects().has(EnchantmentEffectComponents.ITEM_DAMAGE))) {
-            return false;
-        }
-        return super.isBookEnchantable(stack, book);
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        return !(enchantment.value().effects().has(EnchantmentEffectComponents.REPAIR_WITH_XP) ||
+                 enchantment.value().effects().has(EnchantmentEffectComponents.ITEM_DAMAGE)) &&
+               super.supportsEnchantment(stack, enchantment);
     }
 
     @Override
