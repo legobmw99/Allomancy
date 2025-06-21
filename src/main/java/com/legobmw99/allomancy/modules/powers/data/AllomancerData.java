@@ -12,6 +12,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -47,90 +48,6 @@ public class AllomancerData implements IAllomancerData {
             burning_metals.put(mt, false);
         }
     }
-
-
-    private AllomancerData(EnumMap<Metal, Boolean> powers,
-                           EnumMap<Metal, Boolean> burning,
-                           EnumMap<Metal, Integer> amounts,
-                           Pair<Optional<GlobalPos>, Optional<GlobalPos>> positions) {
-        this.allomantic_powers = powers;
-        this.burning_metals = burning;
-        this.metal_amounts = amounts;
-
-        positions.getFirst().ifPresent(spawn_pos -> this.spawn_pos = spawn_pos);
-        positions.getSecond().ifPresent(seeking_pos -> this.seeking_pos = seeking_pos);
-    }
-
-    // a bit esoteric to match the previous nbt serialization
-    public static final MapCodec<AllomancerData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-            .group(metalMapCodec(Codec.BOOL).fieldOf("abilities").forGetter(data -> data.allomantic_powers),
-                   metalMapCodec(Codec.BOOL).fieldOf("metal_burning").forGetter(data -> data.burning_metals),
-                   metalMapCodec(Codec.INT).fieldOf("metal_storage").forGetter(data -> data.metal_amounts), Codec
-                           .pair(GlobalPos.CODEC.lenientOptionalFieldOf("spawn_pos").codec(),
-                                 GlobalPos.CODEC.lenientOptionalFieldOf("seeking_pos").codec())
-                           .lenientOptionalFieldOf("positions", new Pair<>(Optional.empty(), Optional.empty()))
-                           .forGetter(data -> new Pair<>(Optional.ofNullable(data.spawn_pos),
-                                                         Optional.ofNullable(data.seeking_pos)))
-
-            )
-            .apply(instance, AllomancerData::new));
-
-    public static final StreamCodec<FriendlyByteBuf, AllomancerData> STREAM_CODEC = new StreamCodec<>() {
-        @Override
-        public AllomancerData decode(FriendlyByteBuf buffer) {
-            var data = new AllomancerData();
-            for (Metal mt : Metal.values()) {
-                data.allomantic_powers.put(mt, buffer.readBoolean());
-            }
-            for (Metal mt : Metal.values()) {
-                data.burning_metals.put(mt, buffer.readBoolean());
-            }
-            for (Metal mt : Metal.values()) {
-                data.metal_amounts.put(mt, buffer.readInt());
-            }
-
-            if (buffer.readBoolean()) {
-                data.spawn_pos = buffer.readGlobalPos();
-            }
-
-            if (buffer.readBoolean()) {
-                data.seeking_pos = buffer.readGlobalPos();
-            }
-
-            data.enhanced_time = buffer.readInt();
-
-            return data;
-        }
-
-        @Override
-        public void encode(FriendlyByteBuf buffer, AllomancerData data) {
-            for (Metal mt : Metal.values()) {
-                buffer.writeBoolean(data.allomantic_powers.getOrDefault(mt, false));
-            }
-            for (Metal mt : Metal.values()) {
-                buffer.writeBoolean(data.burning_metals.getOrDefault(mt, false));
-            }
-            for (Metal mt : Metal.values()) {
-                buffer.writeInt(data.metal_amounts.getOrDefault(mt, 0));
-            }
-
-            if (data.spawn_pos != null) {
-                buffer.writeBoolean(true);
-                buffer.writeGlobalPos(data.spawn_pos);
-            } else {
-                buffer.writeBoolean(false);
-            }
-
-            if (data.seeking_pos != null) {
-                buffer.writeBoolean(true);
-                buffer.writeGlobalPos(data.seeking_pos);
-            } else {
-                buffer.writeBoolean(false);
-            }
-
-            buffer.writeInt(data.enhanced_time);
-        }
-    };
 
 
     public boolean tickBurning() {
@@ -293,8 +210,93 @@ public class AllomancerData implements IAllomancerData {
         this.enhanced_time = time;
     }
 
+    // ser/de for data
+
     private static <V> Codec<EnumMap<Metal, V>> metalMapCodec(Codec<V> v) {
         return Codec.unboundedMap(Metal.CODEC, v).xmap(EnumMap::new, Function.identity());
     }
+
+    private AllomancerData(EnumMap<Metal, Boolean> powers,
+                           EnumMap<Metal, Boolean> burning,
+                           EnumMap<Metal, Integer> amounts,
+                           Pair<Optional<GlobalPos>, Optional<GlobalPos>> positions) {
+        this.allomantic_powers = powers;
+        this.burning_metals = burning;
+        this.metal_amounts = amounts;
+
+        positions.getFirst().ifPresent(spawn_pos -> this.spawn_pos = spawn_pos);
+        positions.getSecond().ifPresent(seeking_pos -> this.seeking_pos = seeking_pos);
+    }
+
+    // a bit esoteric to match the previous nbt serialization
+    public static final MapCodec<AllomancerData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+            .group(metalMapCodec(Codec.BOOL).fieldOf("abilities").forGetter(data -> data.allomantic_powers),
+                   metalMapCodec(Codec.BOOL).fieldOf("metal_burning").forGetter(data -> data.burning_metals),
+                   metalMapCodec(Codec.INT).fieldOf("metal_storage").forGetter(data -> data.metal_amounts), Codec
+                           .pair(GlobalPos.CODEC.lenientOptionalFieldOf("spawn_pos").codec(),
+                                 GlobalPos.CODEC.lenientOptionalFieldOf("seeking_pos").codec())
+                           .lenientOptionalFieldOf("positions", new Pair<>(Optional.empty(), Optional.empty()))
+                           .forGetter(data -> new Pair<>(Optional.ofNullable(data.spawn_pos),
+                                                         Optional.ofNullable(data.seeking_pos)))
+
+            )
+            .apply(instance, AllomancerData::new));
+
+    public static final StreamCodec<FriendlyByteBuf, AllomancerData> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public @NotNull AllomancerData decode(@NotNull FriendlyByteBuf buffer) {
+            var data = new AllomancerData();
+            for (Metal mt : Metal.values()) {
+                data.allomantic_powers.put(mt, buffer.readBoolean());
+            }
+            for (Metal mt : Metal.values()) {
+                data.burning_metals.put(mt, buffer.readBoolean());
+            }
+            for (Metal mt : Metal.values()) {
+                data.metal_amounts.put(mt, buffer.readInt());
+            }
+
+            if (buffer.readBoolean()) {
+                data.spawn_pos = buffer.readGlobalPos();
+            }
+
+            if (buffer.readBoolean()) {
+                data.seeking_pos = buffer.readGlobalPos();
+            }
+
+            data.enhanced_time = buffer.readInt();
+
+            return data;
+        }
+
+        @Override
+        public void encode(@NotNull FriendlyByteBuf buffer, AllomancerData data) {
+            for (Metal mt : Metal.values()) {
+                buffer.writeBoolean(data.allomantic_powers.getOrDefault(mt, false));
+            }
+            for (Metal mt : Metal.values()) {
+                buffer.writeBoolean(data.burning_metals.getOrDefault(mt, false));
+            }
+            for (Metal mt : Metal.values()) {
+                buffer.writeInt(data.metal_amounts.getOrDefault(mt, 0));
+            }
+
+            if (data.spawn_pos != null) {
+                buffer.writeBoolean(true);
+                buffer.writeGlobalPos(data.spawn_pos);
+            } else {
+                buffer.writeBoolean(false);
+            }
+
+            if (data.seeking_pos != null) {
+                buffer.writeBoolean(true);
+                buffer.writeGlobalPos(data.seeking_pos);
+            } else {
+                buffer.writeBoolean(false);
+            }
+
+            buffer.writeInt(data.enhanced_time);
+        }
+    };
 }
 

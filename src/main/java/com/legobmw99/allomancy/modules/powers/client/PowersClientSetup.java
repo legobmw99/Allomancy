@@ -13,9 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -43,7 +41,6 @@ public final class PowersClientSetup {
     public static void register(IEventBus bus) {
         PARTICLES.register(bus);
 
-        bus.addListener(PowersClientSetup::clientInit);
         bus.addListener(PowersClientSetup::registerParticle);
         bus.addListener(MetalOverlay::registerGUI);
         bus.addListener(Inputs::registerKeyBinding);
@@ -57,7 +54,5 @@ public final class PowersClientSetup {
         event.registerSprite(SOUND_PARTICLE_TYPE.get(), new SoundParticle.Factory());
     }
 
-    private static void clientInit(final FMLClientSetupEvent e) {
-        e.enqueueWork(() -> NeoForge.EVENT_BUS.register(ClientEventHandler.class));
-    }
+
 }

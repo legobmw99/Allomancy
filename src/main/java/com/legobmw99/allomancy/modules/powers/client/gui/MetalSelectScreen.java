@@ -40,7 +40,6 @@ import net.neoforged.neoforge.client.event.RegisterPictureInPictureRenderersEven
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import org.joml.Matrix4f;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 
 public class MetalSelectScreen extends Screen {
@@ -91,7 +90,7 @@ public class MetalSelectScreen extends Screen {
         this.slotSelected = -1;
 
         guiGraphics.submitPictureInPictureRenderState(
-                new SelectionWheelState(data, angle, this.timeIn + partialTicks, 0, 0, this.width, this.height,
+                new SelectionWheelState(data, angle, this.timeIn + partialTicks, this.width, this.height,
                                         guiGraphics.peekScissorStack()));
 
         for (int seg = 0; seg < segments; seg++) {
@@ -188,19 +187,25 @@ public class MetalSelectScreen extends Screen {
     }
 
 
-    private record SelectionWheelState(IAllomancerData data, double mouseAngle, float timeInPartial, int x0, int y0,
-                                       int x1, int y1,
-                                       @Nullable ScreenRectangle scissorArea) implements PictureInPictureRenderState {
+    public record SelectionWheelState(IAllomancerData data, double mouseAngle, float timeInPartial, int x0, int y0,
+                                      int x1, int y1, ScreenRectangle scissorArea,
+                                      ScreenRectangle bounds) implements PictureInPictureRenderState {
+
+        private SelectionWheelState(IAllomancerData data,
+                                    double mouseAngle,
+                                    float timeInPartial,
+                                    int width,
+                                    int height,
+                                    ScreenRectangle scissorArea) {
+            this(data, mouseAngle, timeInPartial, 0, 0, width, height, scissorArea,
+                 PictureInPictureRenderState.getBounds(0, 0, width, height, scissorArea));
+        }
 
         @Override
         public float scale() {
             return 1.0F;
         }
 
-        @Override
-        public ScreenRectangle bounds() {
-            return PictureInPictureRenderState.getBounds(x0, y0, x1, y1, scissorArea);
-        }
     }
 
     public static class SelectionWheelRenderer extends PictureInPictureRenderer<SelectionWheelState> {
@@ -283,9 +288,8 @@ public class MetalSelectScreen extends Screen {
         }
 
         @Override
-        protected float getTranslateY(int i, int j) {
-            // don't understand this, but the F3 profiler chart does it!
-            return i / 2.0F;
+        protected float getTranslateY(int y, int guiScale) {
+            return y / 2.0F;
         }
 
         @Override

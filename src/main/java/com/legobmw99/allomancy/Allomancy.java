@@ -4,7 +4,6 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.combat.client.CombatClientSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.powers.PowersSetup;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.network.Network;
@@ -44,7 +43,6 @@ public class Allomancy {
         }
 
         AllomancerAttachment.register(bus);
-        PowersSetup.register(bus);
         Network.register(bus);
         ExtrasSetup.register(bus);
         CombatSetup.register(bus);

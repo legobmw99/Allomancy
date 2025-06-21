@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.client;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
@@ -17,7 +18,9 @@ import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
@@ -28,6 +31,7 @@ import java.util.List;
 
 import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STORAGE;
 
+@EventBusSubscriber(modid = Allomancy.MODID, value = Dist.CLIENT)
 public final class ClientEventHandler {
     private static final Tracking tracking = new Tracking();
 

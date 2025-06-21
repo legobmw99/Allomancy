@@ -22,7 +22,8 @@ import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
 import net.neoforged.testframework.gametest.GameTest;
 
-import static com.legobmw99.allomancy.modules.powers.data.AllomancerData.MAX_STORAGE;
+import static com.legobmw99.allomancy.api.data.IAllomancerData.MAX_STORAGE;
+
 
 @ForEachTest(groups = "items")
 public class ConsumingTest {
