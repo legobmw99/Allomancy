@@ -162,7 +162,7 @@ public class AllomancerData implements IAllomancerData {
         for (Metal mt : metals) {
             this.metal_amounts.put(mt, 0);
             this.burn_time[mt.getIndex()] = MAX_BURN_TIME[mt.getIndex()];
-            this.setBurning(mt, false);
+            this.burning_metals.put(mt, false);
         }
     }
 

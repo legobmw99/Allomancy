@@ -58,20 +58,20 @@ public final class GrantAllomancyConsumeEffect implements ConsumeEffect {
 
     @Override
     public boolean apply(Level level, ItemStack stack, LivingEntity entity) {
-        boolean flag = false;
+        boolean addedPower = false;
         if (entity instanceof Player player) {
             var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
             for (Metal mt : powers) {
                 if (!data.hasPower(mt)) {
                     data.addPower(mt);
-                    flag = true;
+                    addedPower = true;
                 }
             }
         }
-        if (flag && entity instanceof ServerPlayer player) {
+        if (addedPower && entity instanceof ServerPlayer player) {
             Network.syncAllomancerData(player);
         }
-        return flag;
+        return addedPower;
     }
 
     public static class Mutable {
