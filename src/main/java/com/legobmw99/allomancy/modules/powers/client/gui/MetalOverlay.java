@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.GuiLayer;
 
@@ -17,17 +18,20 @@ import java.awt.*;
 
 public final class MetalOverlay implements GuiLayer {
 
-    private static final Point[] Frames = new Point[4];
-    private static final ResourceLocation meterLoc = Allomancy.rl("textures/gui/overlay/meter.png");
-    private int currentFrame = 0;
+    private static final ResourceLocation METER_TEXTURE = Allomancy.rl("textures/gui/overlay/meter.png");
+    private static final int OUTLINE_COLOR = ARGB.color(0x55 + 0x10, 0x55 + 0x10, 0x55 + 0x10);
+    private static final Point[] BURNING_FRAMES = new Point[4];
 
     static {
         int x = 0;
         int firsty = 22;
         for (int i = 0; i < 4; i++) {
-            Frames[i] = new Point(x, firsty + (4 * i));
+            BURNING_FRAMES[i] = new Point(x, firsty + (4 * i));
         }
     }
+
+
+    private int currentFrame = 0;
 
     private MetalOverlay() {}
 
@@ -42,7 +46,7 @@ public final class MetalOverlay implements GuiLayer {
                              float vOffset,
                              int uWidth,
                              int vHeight) {
-        graphics.blit(RenderPipelines.GUI_TEXTURED, meterLoc, x, y, uOffset, vOffset, uWidth, vHeight, uWidth,
+        graphics.blit(RenderPipelines.GUI_TEXTURED, METER_TEXTURE, x, y, uOffset, vOffset, uWidth, vHeight, uWidth,
                       vHeight, 128, 128);
     }
 
@@ -66,6 +70,10 @@ public final class MetalOverlay implements GuiLayer {
             return;
         }
 
+        Metal highlight = null;
+        if (mc.screen instanceof MetalSelectScreen select) {
+            highlight = select.selectedMetal;
+        }
 
         int renderX = PowersConfig.overlay_position.get().getX(gui.guiWidth());
         int renderY = PowersConfig.overlay_position.get().getY(gui.guiHeight());
@@ -78,16 +86,21 @@ public final class MetalOverlay implements GuiLayer {
                 int metalY = 9 - data.getStored(mt);
                 int i = mt.getIndex();
                 int offset = (i / 2) * 4; // Adding a gap between pairs
+
+                int xCorner = renderX + (7 * i) + offset;
                 // Draw the bars first
-                blit(gui, renderX + 1 + (7 * i) + offset, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3,
-                     10 - metalY);
+                blit(gui, xCorner + 1, renderY + 5 + metalY, 7 + (6 * i), 1 + metalY, 3, 10 - metalY);
                 // Draw the gauges second, so that highlights and decorations show over the bar.
-                blit(gui, renderX + (7 * i) + offset, renderY, 0, 0, 5, 20);
+                blit(gui, xCorner, renderY, 0, 0, 5, 20);
                 // Draw the fire if it is burning
                 if (data.isBurning(mt)) {
                     int frameCount = (currentFrame + i) % 4;
-                    var frame = Frames[frameCount];
-                    blit(gui, renderX + (7 * i) + offset, renderY + 4 + metalY, frame.x, frame.y, 5, 3);
+                    var frame = BURNING_FRAMES[frameCount];
+                    blit(gui, xCorner, renderY + 4 + metalY, frame.x, frame.y, 5, 3);
+                }
+
+                if (highlight == mt) {
+                    gui.renderOutline(xCorner - 1, renderY - 1, 7, 21, OUTLINE_COLOR);
                 }
             }
 

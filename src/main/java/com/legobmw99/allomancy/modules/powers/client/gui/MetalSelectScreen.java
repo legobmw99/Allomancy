@@ -57,7 +57,7 @@ public class MetalSelectScreen extends Screen {
 
     // Config setting for whether the wheel animates open or instantly appears
     private int timeIn = PowersConfig.animate_selection.get() ? 0 : 16;
-    private int slotSelected = -1;
+    protected Metal selectedMetal = null;
 
     public MetalSelectScreen() {
         super(Component.translatable("allomancy.gui"));
@@ -87,7 +87,7 @@ public class MetalSelectScreen extends Screen {
         int segments = METAL_NAMES.length;
         float degPer = (float) Math.PI * 2 / segments;
 
-        this.slotSelected = -1;
+        this.selectedMetal = null;
 
         guiGraphics.submitPictureInPictureRenderState(
                 new SelectionWheelState(data, angle, this.timeIn + partialTicks, this.width, this.height,
@@ -99,7 +99,7 @@ public class MetalSelectScreen extends Screen {
             float radius =
                     Math.max(0.0F, Math.min((this.timeIn + partialTicks - seg * 6.0F / segments) * 40.0F, maxRadius));
             if (mouseInSector) {
-                this.slotSelected = seg;
+                this.selectedMetal = Metal.getMetal(toMetalIndex(seg));
                 radius *= 1.025f;
             }
 
@@ -163,15 +163,13 @@ public class MetalSelectScreen extends Screen {
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
-
     /**
      * Toggles the metal the mouse is currently over
      */
     private void toggleSelected() {
-        if (this.slotSelected != -1) {
-            Metal mt = Metal.getMetal(toMetalIndex(this.slotSelected));
+        if (this.selectedMetal != null) {
             var data = this.mc.player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-            PowerRequests.toggleBurn(mt, data);
+            PowerRequests.toggleBurn(this.selectedMetal, data);
             this.mc.player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.1F, 2.0F);
         }
     }
