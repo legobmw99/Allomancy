@@ -156,8 +156,7 @@ public interface IAllomancerData {
      *
      * @return BlockPos and dimension of player's spawn point, or null
      */
-    @Nullable
-    GlobalPos getSpawnLoc();
+    @Nullable GlobalPos getSpawnLoc();
 
 
     /**
@@ -173,8 +172,7 @@ public interface IAllomancerData {
      *
      * @return BlockPos and dimension of player's seeking point, or null
      */
-    @Nullable
-    GlobalPos getSpecialSeekingLoc();
+    @Nullable GlobalPos getSpecialSeekingLoc();
 
     void decrementEnhanced();
 

@@ -17,7 +17,7 @@ public final class Network {
     }
 
     private static void registerPayloads(final RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar(Allomancy.MODID).versioned("3.0");
+        PayloadRegistrar registrar = event.registrar(Allomancy.MODID).versioned("3.1");
 
         registrar.playToClient(AllomancerDataPayload.TYPE, AllomancerDataPayload.STREAM_CODEC,
                                ClientPayloadHandler::updateAllomancer);
@@ -37,7 +37,7 @@ public final class Network {
     }
 
     public static void syncAllomancerData(ServerPlayer player) {
-        sync(new AllomancerDataPayload(player), player);
+        sync(AllomancerDataPayload.fromPlayer(player), player);
     }
 
     public static void sync(CustomPacketPayload msg, ServerPlayer player) {

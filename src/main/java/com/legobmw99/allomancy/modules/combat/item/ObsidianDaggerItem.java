@@ -43,6 +43,7 @@ public class ObsidianDaggerItem extends Item {
                super.supportsEnchantment(stack, enchantment);
     }
 
+
     @Override
     public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
         if (enchantment.is(Enchantments.MENDING) || enchantment.is(Enchantments.UNBREAKING)) {

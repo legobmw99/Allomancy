@@ -76,7 +76,7 @@ public class AIAttackOnCollideExtended extends Goal {
         }
 
         return (livingEntity.isAlive() && (!this.longMemory ? !this.attacker.getNavigation().isDone() :
-                                           this.attacker.isWithinRestriction(livingEntity.blockPosition())));
+                                           this.attacker.isWithinMeleeAttackRange(livingEntity)));
     }
 
     /**

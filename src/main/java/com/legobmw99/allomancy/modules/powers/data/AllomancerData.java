@@ -2,50 +2,77 @@ package com.legobmw99.allomancy.modules.powers.data;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Optional;
+import java.util.function.Function;
 
-public class AllomancerData implements IAllomancerData, INBTSerializable<CompoundTag> {
+public class AllomancerData implements IAllomancerData {
     private static final int[] MAX_BURN_TIME =
             {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
-    private final boolean[] allomantic_powers;
-    private final int[] burn_time;
-    private final int[] metal_amounts;
-    private final boolean[] burning_metals;
-    private int damage_stored;
-    private GlobalPos spawn_pos;
-    private GlobalPos seeking_pos;
-    private int enhanced_time;
+
+    // available on the client
+    private final EnumMap<Metal, Boolean> allomantic_powers;
+    private final EnumMap<Metal, Integer> metal_amounts;
+    private final EnumMap<Metal, Boolean> burning_metals;
+    private GlobalPos spawn_pos = null;
+    private GlobalPos seeking_pos = null;
+
+    // TODO odd child out
+    private int enhanced_time = 0;
+
+    // only available on the server
+    private final int[] burn_time = Arrays.copyOf(MAX_BURN_TIME, Metal.values().length);
+    private int damage_stored = 0;
 
     public AllomancerData() {
+        allomantic_powers = new EnumMap<>(Metal.class);
+        metal_amounts = new EnumMap<>(Metal.class);
+        burning_metals = new EnumMap<>(Metal.class);
 
-        int powers = Metal.values().length;
-        this.allomantic_powers = new boolean[powers];
-        Arrays.fill(this.allomantic_powers, false);
-
-        this.metal_amounts = new int[powers];
-        Arrays.fill(this.metal_amounts, 0);
-
-        this.burn_time = Arrays.copyOf(MAX_BURN_TIME, powers);
-
-        this.burning_metals = new boolean[powers];
-        Arrays.fill(this.burning_metals, false);
-
-        this.enhanced_time = 0;
-        this.damage_stored = 0;
-        this.spawn_pos = null;
-        this.seeking_pos = null;
+        for (Metal mt : Metal.values()) {
+            allomantic_powers.put(mt, false);
+            metal_amounts.put(mt, 0);
+            burning_metals.put(mt, false);
+        }
     }
+
+
+    private AllomancerData(EnumMap<Metal, Boolean> powers,
+                           EnumMap<Metal, Boolean> burning,
+                           EnumMap<Metal, Integer> amounts,
+                           Pair<Optional<GlobalPos>, Optional<GlobalPos>> positions) {
+        this.allomantic_powers = powers;
+        this.burning_metals = burning;
+        this.metal_amounts = amounts;
+
+        positions.getFirst().ifPresent(spawn_pos -> this.spawn_pos = spawn_pos);
+        positions.getSecond().ifPresent(seeking_pos -> this.seeking_pos = seeking_pos);
+    }
+
+    // a bit esoteric to match the previous nbt serialization
+    public static final MapCodec<AllomancerData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+            .group(metalMapCodec(Codec.BOOL).fieldOf("abilities").forGetter(data -> data.allomantic_powers),
+                   metalMapCodec(Codec.BOOL).fieldOf("metal_burning").forGetter(data -> data.burning_metals),
+                   metalMapCodec(Codec.INT).fieldOf("metal_storage").forGetter(data -> data.metal_amounts), Codec
+                           .pair(GlobalPos.CODEC.lenientOptionalFieldOf("spawn_pos").codec(),
+                                 GlobalPos.CODEC.lenientOptionalFieldOf("seeking_pos").codec())
+                           .fieldOf("positions")
+                           .forGetter(data -> new Pair<>(Optional.ofNullable(data.spawn_pos),
+                                                         Optional.ofNullable(data.seeking_pos)))
+
+            )
+            .apply(instance, AllomancerData::new));
 
 
     public boolean tickBurning() {
@@ -74,15 +101,13 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         return sync;
     }
 
-
     public boolean hasPower(Metal metal) {
-        return this.allomantic_powers[metal.getIndex()];
+        return this.allomantic_powers.getOrDefault(metal, false);
     }
-
 
     public int getPowerCount() {
         int count = 0;
-        for (boolean power : this.allomantic_powers) {
+        for (boolean power : this.allomantic_powers.values()) {
             if (power) {
                 count++;
             }
@@ -90,14 +115,12 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         return count;
     }
 
-
     public Metal[] getPowers() {
         return Arrays.stream(Metal.values()).filter(this::hasPower).toArray(Metal[]::new);
     }
 
-
     public boolean isMistborn() {
-        for (boolean power : this.allomantic_powers) {
+        for (boolean power : this.allomantic_powers.values()) {
             if (!power) {
                 return false;
             }
@@ -105,14 +128,14 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         return true;
     }
 
-
     public void setMistborn() {
-        Arrays.fill(this.allomantic_powers, true);
+        for (Metal mt : Metal.values()) {
+            this.allomantic_powers.put(mt, true);
+        }
     }
 
-
     public boolean isUninvested() {
-        for (boolean power : this.allomantic_powers) {
+        for (boolean power : this.allomantic_powers.values()) {
             if (power) {
                 return false;
             }
@@ -120,50 +143,49 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         return true;
     }
 
-
     public void setUninvested() {
-        Arrays.fill(this.allomantic_powers, false);
+        for (Metal mt : Metal.values()) {
+            this.allomantic_powers.put(mt, false);
+        }
     }
-
 
     public void addPower(Metal metal) {
-        this.allomantic_powers[metal.getIndex()] = true;
+        this.allomantic_powers.put(metal, true);
     }
 
-
     public void revokePower(Metal metal) {
-        this.allomantic_powers[metal.getIndex()] = false;
+        this.allomantic_powers.put(metal, false);
     }
 
     public boolean isBurning(Metal metal) {
-        return this.burning_metals[metal.getIndex()];
+        return this.burning_metals.getOrDefault(metal, false);
     }
-
 
     public void setBurning(Metal metal, boolean metalBurning) {
-        this.burning_metals[metal.getIndex()] = metalBurning;
+        this.burning_metals.put(metal, metalBurning);
     }
 
-
     public int getStored(Metal metal) {
-        return this.metal_amounts[metal.getIndex()];
+        return this.metal_amounts.getOrDefault(metal, 0);
     }
 
     public void incrementStored(Metal metal) {
-        if (this.metal_amounts[metal.getIndex()] < MAX_STORAGE) {
-            this.metal_amounts[metal.getIndex()]++;
+        int current = this.metal_amounts.getOrDefault(metal, 0);
+        if (current < MAX_STORAGE) {
+            this.metal_amounts.put(metal, current + 1);
         }
     }
 
     public void decrementStored(Metal metal) {
-        if (this.metal_amounts[metal.getIndex()] > 0) {
-            this.metal_amounts[metal.getIndex()]--;
+        int current = this.metal_amounts.getOrDefault(metal, 0);
+        if (current > 0) {
+            this.metal_amounts.put(metal, current - 1);
         }
     }
 
     public void drainMetals(Metal... metals) {
         for (Metal mt : metals) {
-            this.metal_amounts[mt.getIndex()] = 0;
+            this.metal_amounts.put(mt, 0);
             this.burn_time[mt.getIndex()] = MAX_BURN_TIME[mt.getIndex()];
             this.setBurning(mt, false);
         }
@@ -173,11 +195,9 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         return this.damage_stored;
     }
 
-
     public void setDamageStored(int damageStored) {
         this.damage_stored = damageStored;
     }
-
 
     public void setSpawnLoc(BlockPos pos, ResourceKey<Level> dim) {
         if (pos != null && dim != null) {
@@ -215,94 +235,9 @@ public class AllomancerData implements IAllomancerData, INBTSerializable<Compoun
         this.enhanced_time = time;
     }
 
-
-    @Override
-    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
-        CompoundTag allomancy_data = new CompoundTag();
-
-        CompoundTag abilities = new CompoundTag();
-        for (Metal mt : Metal.values()) {
-            abilities.putBoolean(mt.getName(), this.hasPower(mt));
-        }
-        allomancy_data.put("abilities", abilities);
-
-        CompoundTag metal_storage = new CompoundTag();
-        for (Metal mt : Metal.values()) {
-            metal_storage.putInt(mt.getName(), this.getStored(mt));
-        }
-        allomancy_data.put("metal_storage", metal_storage);
-
-        CompoundTag metal_burning = new CompoundTag();
-        for (Metal mt : Metal.values()) {
-            metal_burning.putBoolean(mt.getName(), this.isBurning(mt));
-        }
-        allomancy_data.put("metal_burning", metal_burning);
-
-        CompoundTag position = new CompoundTag();
-        if (this.spawn_pos != null) {
-            position.putString("spawn_dimension", this.spawn_pos.dimension().location().toString());
-            BlockPos spawn_block = this.spawn_pos.pos();
-            position.putInt("spawn_x", spawn_block.getX());
-            position.putInt("spawn_y", spawn_block.getY());
-            position.putInt("spawn_z", spawn_block.getZ());
-        }
-        if (this.seeking_pos != null) {
-            position.putString("seeking_dimension", this.seeking_pos.dimension().location().toString());
-            BlockPos spawn_block = this.seeking_pos.pos();
-            position.putInt("seeking_x", spawn_block.getX());
-            position.putInt("seeking_y", spawn_block.getY());
-            position.putInt("seeking_z", spawn_block.getZ());
-        }
-        allomancy_data.put("position", position);
-
-        return allomancy_data;
+    private static <V> Codec<EnumMap<Metal, V>> metalMapCodec(Codec<V> v) {
+        return Codec.unboundedMap(Metal.CODEC, v).xmap(EnumMap::new, Function.identity());
     }
 
-    @Override
-    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag allomancy_data) {
-        allomancy_data.getCompound("abilities").ifPresent(abilities -> {
-            for (Metal mt : Metal.values()) {
-                if (abilities.getBooleanOr(mt.getName(), false)) {
-                    this.addPower(mt);
-                } else {
-                    this.revokePower(mt);
-                }
-            }
-        });
-
-        allomancy_data.getCompound("metal_storage").ifPresent(metal_storage -> {
-            for (Metal mt : Metal.values()) {
-                this.metal_amounts[mt.getIndex()] = metal_storage.getIntOr(mt.getName(), 0);
-            }
-        });
-
-        allomancy_data.getCompound("metal_burning").ifPresent(metal_burning -> {
-            for (Metal mt : Metal.values()) {
-                this.setBurning(mt, metal_burning.getBooleanOr(mt.getName(), false));
-            }
-        });
-
-        allomancy_data.getCompound("position").ifPresent(position -> {
-
-            if (position.contains("spawn_dimension")) {
-                this.setSpawnLoc(new BlockPos(position.getInt("spawn_x").get(), position.getInt("spawn_y").get(),
-                                              position.getInt("spawn_z").get()),
-                                 ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(
-                                         position.getString("spawn_dimension").get())));
-            }
-            if (position.contains("seeking_dimension")) {
-                this.setSpecialSeekingLoc(
-                        new BlockPos(position.getInt("seeking_x").get(), position.getInt("seeking_y").get(),
-                                     position.getInt("seeking_z").get()), ResourceKey.create(Registries.DIMENSION,
-                                                                                             ResourceLocation.parse(
-                                                                                                     position
-                                                                                                             .getString(
-                                                                                                                     "seeking_dimension")
-                                                                                                             .get())));
-            } else {
-                this.setSpecialSeekingLoc(null, null);
-            }
-        });
-    }
 }
 

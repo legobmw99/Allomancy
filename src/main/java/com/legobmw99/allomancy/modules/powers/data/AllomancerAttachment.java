@@ -14,8 +14,11 @@ public final class AllomancerAttachment {
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Allomancy.MODID);
 
     public static final Supplier<AttachmentType<AllomancerData>> ALLOMANCY_DATA =
-            ATTACHMENT_TYPES.register("allomancy_data",
-                                      () -> AttachmentType.serializable(AllomancerData::new).copyOnDeath().build());
+            ATTACHMENT_TYPES.register("allomancy_data", () -> AttachmentType
+                    .builder(AllomancerData::new)
+                    .serialize(AllomancerData.CODEC)
+                    .copyOnDeath()
+                    .build());
 
     private AllomancerAttachment() {}
 

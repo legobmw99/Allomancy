@@ -44,12 +44,12 @@ public class ActivePowerTest {
             data.setBurning(Metal.CHROMIUM, true);
         }).thenExecute(() -> {
             player.lookAt(EntityAnchorArgument.Anchor.EYES, player2.position());
-            player2.hurtServer(player.serverLevel(), player.damageSources().playerAttack(player), 1);
+            player2.hurtServer(player.level(), player.damageSources().playerAttack(player), 1);
         }).thenExecuteAfter(1, () -> {
             helper.assertTrue(data2.getStored(Metal.STEEL) == 0, "Player2 wasn't wiped");
         }).thenExecute(() -> {
             player.lookAt(EntityAnchorArgument.Anchor.EYES, player3.position());
-            player3.hurtServer(player.serverLevel(), player.damageSources().playerAttack(player), 1);
+            player3.hurtServer(player.level(), player.damageSources().playerAttack(player), 1);
         }).thenExecuteAfter(1, () -> {
             helper.assertTrue(data3.getStored(Metal.STEEL) == 10, "Player3 was wiped");
             helper.assertPlayerHasAdvancement(player3, Allomancy.rl("main/tin_foil_hat"));
@@ -71,16 +71,14 @@ public class ActivePowerTest {
                 .thenIdle(1)
                 .thenMap(() -> helper.spawnWithNoFreeWill(EntityType.WITHER, 1, 0, 1))
                 .thenExecute(
-                        wither -> wither.hurtServer(player.serverLevel(), player.damageSources().playerAttack(player),
-                                                    4))
+                        wither -> wither.hurtServer(player.level(), player.damageSources().playerAttack(player), 4))
                 .thenExecute(
                         wither -> helper.assertTrue(Math.abs((wither.getMaxHealth() - 12) - wither.getHealth()) < 1,
                                                     "Wither damaged an unexpected amount"))
                 .thenExecute(
                         () -> player.setItemInHand(InteractionHand.MAIN_HAND, CombatSetup.KOLOSS_BLADE.toStack()))
                 .thenExecute(
-                        wither -> wither.hurtServer(player.serverLevel(), player.damageSources().playerAttack(player),
-                                                    1))
+                        wither -> wither.hurtServer(player.level(), player.damageSources().playerAttack(player), 1))
                 .thenExecute(wither -> helper.assertTrue(wither.isDeadOrDying(), "Wither lived"))
                 .thenSucceed();
     }
