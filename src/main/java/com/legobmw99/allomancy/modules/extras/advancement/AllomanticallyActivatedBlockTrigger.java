@@ -26,7 +26,7 @@ import java.util.Optional;
 public class AllomanticallyActivatedBlockTrigger extends SimpleCriterionTrigger<AllomanticallyActivatedBlockTrigger.TriggerInstance> {
 
     public void trigger(ServerPlayer player, BlockPos blockPos, boolean isPush) {
-        ServerLevel serverlevel = player.serverLevel();
+        ServerLevel serverlevel = player.level();
         BlockState blockstate = serverlevel.getBlockState(blockPos);
         LootParams lootparams = new LootParams.Builder(serverlevel)
                 .withParameter(LootContextParams.ORIGIN, blockPos.getCenter())

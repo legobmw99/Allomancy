@@ -9,7 +9,6 @@ import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.*;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
@@ -19,6 +18,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.BlockTagCopyingItemTagProvider;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 
 import java.util.concurrent.CompletableFuture;
@@ -62,7 +62,7 @@ public final class TagProvider {
     }
 
 
-    static class Items extends ItemTagsProvider {
+    static class Items extends BlockTagCopyingItemTagProvider {
 
         Items(PackOutput gen,
               CompletableFuture<HolderLookup.Provider> lookupProvider,
@@ -72,15 +72,16 @@ public final class TagProvider {
 
         @Override
         protected void addTags(HolderLookup.Provider provider) {
+            // TODO clean up to use Copy?
 
             for (Metal mt : Metal.values()) {
                 if (mt.isVanilla()) {
                     continue;
                 }
 
-                var nugget = WorldSetup.NUGGETS.get(mt.getIndex()).getKey();
-                var ingot = WorldSetup.INGOTS.get(mt.getIndex()).getKey();
-                var block = WorldSetup.STORAGE_BLOCK_ITEMS.get(mt.getIndex()).getKey();
+                var nugget = WorldSetup.NUGGETS.get(mt.getIndex()).get();
+                var ingot = WorldSetup.INGOTS.get(mt.getIndex()).get();
+                var block = WorldSetup.STORAGE_BLOCK_ITEMS.get(mt.getIndex()).get();
 
                 addCommonTag("nuggets", nugget);
                 addCommonTag("nuggets/" + mt.getName(), nugget);
@@ -91,26 +92,26 @@ public final class TagProvider {
 
 
             }
-            addCommonTag("nuggets", WorldSetup.NUGGETS.get(WorldSetup.LEAD).getKey());
-            addCommonTag("nuggets/lead", WorldSetup.NUGGETS.get(WorldSetup.LEAD).getKey());
-            addCommonTag("ingots", WorldSetup.INGOTS.get(WorldSetup.LEAD).getKey());
-            addCommonTag("ingots/lead", WorldSetup.INGOTS.get(WorldSetup.LEAD).getKey());
-            addCommonTag("storage_blocks", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.LEAD).getKey());
-            addCommonTag("storage_blocks/lead", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.LEAD).getKey());
+            addCommonTag("nuggets", WorldSetup.NUGGETS.get(WorldSetup.LEAD).get());
+            addCommonTag("nuggets/lead", WorldSetup.NUGGETS.get(WorldSetup.LEAD).get());
+            addCommonTag("ingots", WorldSetup.INGOTS.get(WorldSetup.LEAD).get());
+            addCommonTag("ingots/lead", WorldSetup.INGOTS.get(WorldSetup.LEAD).get());
+            addCommonTag("storage_blocks", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.LEAD).get());
+            addCommonTag("storage_blocks/lead", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.LEAD).get());
 
-            addCommonTag("nuggets", WorldSetup.NUGGETS.get(WorldSetup.SILVER).getKey());
-            addCommonTag("nuggets/silver", WorldSetup.NUGGETS.get(WorldSetup.SILVER).getKey());
-            addCommonTag("ingots", WorldSetup.INGOTS.get(WorldSetup.SILVER).getKey());
-            addCommonTag("ingots/silver", WorldSetup.INGOTS.get(WorldSetup.SILVER).getKey());
-            addCommonTag("storage_blocks", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.SILVER).getKey());
-            addCommonTag("storage_blocks/silver", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.SILVER).getKey());
+            addCommonTag("nuggets", WorldSetup.NUGGETS.get(WorldSetup.SILVER).get());
+            addCommonTag("nuggets/silver", WorldSetup.NUGGETS.get(WorldSetup.SILVER).get());
+            addCommonTag("ingots", WorldSetup.INGOTS.get(WorldSetup.SILVER).get());
+            addCommonTag("ingots/silver", WorldSetup.INGOTS.get(WorldSetup.SILVER).get());
+            addCommonTag("storage_blocks", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.SILVER).get());
+            addCommonTag("storage_blocks/silver", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.SILVER).get());
 
 
             for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
-                var ore = WorldSetup.ORE_BLOCKS_ITEMS.get(i).getKey();
-                var ds_ore = WorldSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).getKey();
-                var raw_block = WorldSetup.RAW_ORE_BLOCKS_ITEMS.get(i).getKey();
-                var raw = WorldSetup.RAW_ORE_ITEMS.get(i).getKey();
+                var ore = WorldSetup.ORE_BLOCKS_ITEMS.get(i).get();
+                var ds_ore = WorldSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).get();
+                var raw_block = WorldSetup.RAW_ORE_BLOCKS_ITEMS.get(i).get();
+                var raw = WorldSetup.RAW_ORE_ITEMS.get(i).get();
 
                 addCommonTag("ores/" + WorldSetup.ORE_METALS[i], ore, ds_ore);
                 addCommonTag("ores", ore, ds_ore);
@@ -144,8 +145,7 @@ public final class TagProvider {
             tag(AllomancyTags.LERASIUM_CONVERSION).replace(false).addTag(Tags.Items.NETHER_STARS);
         }
 
-        @SafeVarargs
-        private void addCommonTag(String name, ResourceKey<Item>... items) {
+        private void addCommonTag(String name, Item... items) {
             Allomancy.LOGGER.debug("Creating item tag for c:{}", name);
             tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name))).replace(false).add(items);
         }
@@ -162,9 +162,9 @@ public final class TagProvider {
         protected void addTags(HolderLookup.Provider provider) {
 
             for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
-                var block = WorldSetup.ORE_BLOCKS.get(i).getKey();
-                var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i).getKey();
-                var raw = WorldSetup.RAW_ORE_BLOCKS.get(i).getKey();
+                var block = WorldSetup.ORE_BLOCKS.get(i).get();
+                var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
+                var raw = WorldSetup.RAW_ORE_BLOCKS.get(i).get();
 
                 addCommonTag("ores/" + WorldSetup.ORE_METALS[i], block, ds);
                 addCommonTag("ores", block, ds);
@@ -181,7 +181,7 @@ public final class TagProvider {
                 if (mt.isVanilla()) {
                     continue;
                 }
-                var block = WorldSetup.STORAGE_BLOCKS.get(mt.getIndex()).getKey();
+                var block = WorldSetup.STORAGE_BLOCKS.get(mt.getIndex()).get();
                 addCommonTag("storage_blocks/" + mt.getName(), block);
                 addCommonTag("storage_blocks", block);
                 makePickaxeMineable(block);
@@ -191,9 +191,9 @@ public final class TagProvider {
 
             }
 
-            var lead = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.LEAD).getKey();
+            var lead = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.LEAD).get();
             addCommonTag("storage_blocks/lead", lead);
-            var silver = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.SILVER).getKey();
+            var silver = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.SILVER).get();
             addCommonTag("storage_blocks/silver", silver);
             addBeacon(silver);
 
@@ -202,22 +202,20 @@ public final class TagProvider {
 
         }
 
-        @SafeVarargs
-        private void addCommonTag(String name, ResourceKey<Block>... items) {
+        private void addCommonTag(String name, Block... items) {
             Allomancy.LOGGER.debug("Creating block tag for c:{}", name);
             tag(BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", name))).replace(false).add(items);
         }
 
 
-        @SafeVarargs
-        private void makePickaxeMineable(ResourceKey<Block>... items) {
+        private void makePickaxeMineable(Block... items) {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).replace(false).add(items);
             this.tag(BlockTags.NEEDS_STONE_TOOL).replace(false).add(items);
 
         }
 
-        @SafeVarargs
-        private void addBeacon(ResourceKey<Block>... items) {
+
+        private void addBeacon(Block... items) {
             this.tag(BlockTags.BEACON_BASE_BLOCKS).replace(false).add(items);
         }
     }

@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.modules.world.client;
 import com.legobmw99.allomancy.modules.world.WorldSetup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -19,8 +19,8 @@ public final class WorldClientSetup {
     }
 
     private static void clientInit(final FMLClientSetupEvent e) {
-        e.enqueueWork(
-                () -> ItemBlockRenderTypes.setRenderLayer(WorldSetup.LERASIUM_FLUID.get(), RenderType.translucent()));
+        e.enqueueWork(() -> ItemBlockRenderTypes.setRenderLayer(WorldSetup.LERASIUM_FLUID.get(),
+                                                                ChunkSectionLayer.TRANSLUCENT));
     }
 
     private static void registerClientExtensions(RegisterClientExtensionsEvent event) {

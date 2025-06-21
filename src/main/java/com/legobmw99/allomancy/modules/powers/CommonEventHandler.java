@@ -20,6 +20,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -73,9 +74,8 @@ public final class CommonEventHandler {
                         .ifPresent(oldData -> {
                             Allomancy.LOGGER.info("Found old forge data for player {}, trying to load!",
                                                   player.getName().getString());
-                            var data = new AllomancerData();
                             try {
-                                data.deserializeNBT(player.registryAccess(), oldData);
+                                var data = AllomancerData.CODEC.codec().parse(NbtOps.INSTANCE, oldData).getOrThrow();
                                 player.setData(AllomancerAttachment.ALLOMANCY_DATA, data);
                                 Allomancy.LOGGER.info("Loaded old forge data for player {}!",
                                                       player.getName().getString());
@@ -125,7 +125,7 @@ public final class CommonEventHandler {
     @SubscribeEvent
     public static void onPlayerClone(final PlayerEvent.Clone event) {
         if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
-            if (event.isWasDeath() && !player.serverLevel().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+            if (event.isWasDeath() && !player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
                 // if they died and keepInventory isn't set, they shouldn't keep their metals.
                 var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
                 for (Metal mt : Metal.values()) {
@@ -139,16 +139,14 @@ public final class CommonEventHandler {
 
     @SubscribeEvent
     public static void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.getEntity().getCommandSenderWorld().isClientSide() &&
-            event.getEntity() instanceof ServerPlayer player) {
+        if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
             Network.syncAllomancerData(player);
         }
     }
 
     @SubscribeEvent
     public static void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (!event.getEntity().getCommandSenderWorld().isClientSide() &&
-            event.getEntity() instanceof ServerPlayer player) {
+        if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
             Network.syncAllomancerData(player);
         }
     }

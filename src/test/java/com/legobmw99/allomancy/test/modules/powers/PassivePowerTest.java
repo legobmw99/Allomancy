@@ -171,7 +171,7 @@ public class PassivePowerTest {
                     data.setBurning(Metal.DURALUMIN, true);
                 })
                 .thenIdle(1)
-                .thenMap(() -> player.hurtServer(player.serverLevel(), player.damageSources().wither(), 100))
+                .thenMap(() -> player.hurtServer(player.level(), player.damageSources().wither(), 100))
                 .thenExecute(res -> helper.assertFalse(res, "Player still injured"))
                 .thenExecute(() -> helper.assertValueEqual(player.getHealth(), player.getMaxHealth(),
                                                            "Player health changed"))

@@ -39,7 +39,7 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
 
     public InteractionResult useItem(ServerPlayer player, ItemStack stack) {
         player.setItemInHand(InteractionHand.MAIN_HAND, stack);
-        return player.gameMode.useItem(player, player.serverLevel(), player.getItemInHand(InteractionHand.MAIN_HAND),
+        return player.gameMode.useItem(player, player.level(), player.getItemInHand(InteractionHand.MAIN_HAND),
                                        InteractionHand.MAIN_HAND);
     }
 

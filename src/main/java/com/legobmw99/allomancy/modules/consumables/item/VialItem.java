@@ -95,7 +95,7 @@ public class VialItem extends Item {
         if (customData != null && customData.contains("steel")) {
 
             CompoundTag tag = customData.copyTag();
-            Allomancy.LOGGER.info("Found old custom item data for vial: {}", tag.toString());
+            Allomancy.LOGGER.info("Found old custom item data for vial: {}", tag);
             FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
             for (Metal mt : Metal.values()) {
                 if (tag.getBooleanOr(mt.getName(), false)) {

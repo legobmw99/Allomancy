@@ -16,9 +16,9 @@ import java.util.function.Supplier;
 
 public final class TattleTaleStack extends CommandSourceStack {
     public static TattleTaleStack createCommandSourceStack(ServerPlayer player) {
-        return new TattleTaleStack(CommandSource.NULL, player.position(), player.getRotationVector(),
-                                   player.serverLevel(), player.getPermissionLevel(), player.getName().getString(),
-                                   player.getDisplayName(), player.level().getServer(), player);
+        return new TattleTaleStack(CommandSource.NULL, player.position(), player.getRotationVector(), player.level(),
+                                   player.getPermissionLevel(), player.getName().getString(), player.getDisplayName(),
+                                   player.level().getServer(), player);
     }
 
     public TattleTaleStack(CommandSource p_81302_,

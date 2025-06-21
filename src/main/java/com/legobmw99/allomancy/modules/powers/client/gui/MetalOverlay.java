@@ -7,15 +7,15 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.GuiLayer;
 
 import java.awt.*;
 
-public final class MetalOverlay implements LayeredDraw.Layer {
+public final class MetalOverlay implements GuiLayer {
 
     private static final Point[] Frames = new Point[4];
     private static final ResourceLocation meterLoc = Allomancy.rl("textures/gui/overlay/meter.png");
@@ -42,9 +42,10 @@ public final class MetalOverlay implements LayeredDraw.Layer {
                              float vOffset,
                              int uWidth,
                              int vHeight) {
-        graphics.blit(RenderType::guiTexturedOverlay, meterLoc, x, y, uOffset, vOffset, uWidth, vHeight, uWidth,
+        graphics.blit(RenderPipelines.GUI_TEXTURED, meterLoc, x, y, uOffset, vOffset, uWidth, vHeight, uWidth,
                       vHeight, 128, 128);
     }
+
 
     @Override
     public void render(GuiGraphics gui, DeltaTracker deltaTracker) {
@@ -100,7 +101,6 @@ public final class MetalOverlay implements LayeredDraw.Layer {
             }
         }
     }
-
 
     public enum SCREEN_LOC {
         TOP_RIGHT,

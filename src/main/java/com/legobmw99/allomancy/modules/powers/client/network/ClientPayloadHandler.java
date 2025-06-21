@@ -21,18 +21,17 @@ public final class ClientPayloadHandler {
     public static void updateAllomancer(AllomancerDataPayload payload, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             Player player = Minecraft.getInstance().level.getPlayerByUUID(payload.player());
-            if (player == Minecraft.getInstance().player) {
-                var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-                long burningBefore = Arrays.stream(Metal.values()).filter(data::isBurning).count();
-                data.deserializeNBT(ctx.player().registryAccess(), payload.nbt());
-                long burningAfter = Arrays.stream(Metal.values()).filter(data::isBurning).count();
-                if (burningAfter < burningBefore) {
+            if (player != null) {
+                long burningBefore = Arrays
+                        .stream(Metal.values())
+                        .filter(player.getData(AllomancerAttachment.ALLOMANCY_DATA)::isBurning)
+                        .count();
+
+                long burningAfter = Arrays.stream(Metal.values()).filter(payload.data()::isBurning).count();
+                if (player == Minecraft.getInstance().player && burningAfter < burningBefore) {
                     Sounds.soundForBurnChange(false);
                 }
-            } else if (player != null) {
-                player
-                        .getData(AllomancerAttachment.ALLOMANCY_DATA)
-                        .deserializeNBT(ctx.player().registryAccess(), payload.nbt());
+                player.setData(AllomancerAttachment.ALLOMANCY_DATA, payload.data());
             }
         }).exceptionally(e -> {
             Allomancy.LOGGER.error("Failed to handle allomancerData update", e);
