@@ -160,10 +160,8 @@ public final class ServerPayloadHandler {
             }
 
             Player player = source.level().getPlayerByUUID(payload.player());
+            ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(source, player, Metal.NICROSIL, data.isEnhanced());
             if (player instanceof ServerPlayer target && !Emotional.hasTinFoilHat(target)) {
-                ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER
-                        .get()
-                        .trigger(source, player, Metal.NICROSIL, data.isEnhanced());
                 target.getData(AllomancerAttachment.ALLOMANCY_DATA).setEnhanced(payload.enhanceTime());
                 // broadcast back to player and tracking
                 Network.sync(payload, target);
