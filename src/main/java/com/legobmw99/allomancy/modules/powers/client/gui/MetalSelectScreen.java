@@ -2,7 +2,7 @@
  * This class was modified from one created by <Vazkii>. The original is
  * distributed as part of the Psi Mod.
  * This code is used under the
- * Psi License: http://psi.vazkii.us/license.php
+ * Psi License: https://psi.vazkii.net/license.php
  * <p>
  * The code was used as a template for the circular GUI,
  * and was heavily modified
