@@ -99,10 +99,7 @@ public final class ClientEventHandler {
 
 
     @SubscribeEvent
-    public static void onRenderLevelStage(final RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_WEATHER) {
-            return;
-        }
+    public static void onRenderLevelStage(final RenderLevelStageEvent.AfterWeather event) {
 
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;

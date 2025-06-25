@@ -125,8 +125,8 @@ public class MetalSelectScreen extends Screen {
             int xdp = (int) ((xp - x) * mod + x);
             int ydp = (int) ((yp - y) * mod + y);
 
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, METAL_ICONS[toMetalIndex(seg)], xdp - 8, ydp - 8, 0, 0, 16,
-                             16, 16, 16);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED_PREMULTIPLIED_ALPHA, METAL_ICONS[toMetalIndex(seg)],
+                             xdp - 8, ydp - 8, 0, 0, 16, 16, 16, 16);
 
         }
     }
@@ -300,7 +300,7 @@ public class MetalSelectScreen extends Screen {
         }
 
         public static void registerPiP(RegisterPictureInPictureRenderersEvent event) {
-            event.register(SelectionWheelRenderer::new);
+            event.register(SelectionWheelState.class, SelectionWheelRenderer::new);
         }
     }
 }
