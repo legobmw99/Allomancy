@@ -286,8 +286,8 @@ public class MetalSelectScreen extends Screen {
         }
 
         @Override
-        protected float getTranslateY(int y, int guiScale) {
-            return y / 2.0F;
+        protected float getTranslateY(int height, int guiScale) {
+            return height / 2.0F;
         }
 
         @Override

@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 public final class PowerRequests {
     private PowerRequests() {}
@@ -97,6 +97,6 @@ public final class PowerRequests {
     }
 
     private static void sendToServer(CustomPacketPayload msg) {
-        PacketDistributor.sendToServer(msg);
+        ClientPacketDistributor.sendToServer(msg);
     }
 }

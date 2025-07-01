@@ -9,6 +9,7 @@ import com.legobmw99.allomancy.modules.powers.network.EnhanceTimePayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Arrays;
@@ -17,7 +18,7 @@ public final class ClientPayloadHandler {
 
     private ClientPayloadHandler() {}
 
-    public static void updateAllomancer(AllomancerDataPayload payload, IPayloadContext ctx) {
+    private static void updateAllomancer(AllomancerDataPayload payload, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             Player player = Minecraft.getInstance().level.getPlayerByUUID(payload.player());
             if (player != null) {
@@ -39,7 +40,7 @@ public final class ClientPayloadHandler {
         });
     }
 
-    public static void updateEnhanced(EnhanceTimePayload payload, IPayloadContext ctx) {
+    private static void updateEnhanced(EnhanceTimePayload payload, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             Player player = Minecraft.getInstance().level.getPlayerByUUID(payload.player());
             if (player != null) {
@@ -50,5 +51,10 @@ public final class ClientPayloadHandler {
             ctx.disconnect(Component.translatable("allomancy.networking.failed", e.getMessage()));
             return null;
         });
+    }
+
+    public static void registerClientPayloadHandlers(final RegisterClientPayloadHandlersEvent event) {
+        event.register(EnhanceTimePayload.TYPE, ClientPayloadHandler::updateEnhanced);
+        event.register(AllomancerDataPayload.TYPE, ClientPayloadHandler::updateAllomancer);
     }
 }

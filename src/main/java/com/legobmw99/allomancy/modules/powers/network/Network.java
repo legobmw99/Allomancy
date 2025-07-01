@@ -1,13 +1,11 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.powers.client.network.ClientPayloadHandler;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 
@@ -19,8 +17,8 @@ public final class Network {
     private static void registerPayloads(final RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(Allomancy.MODID).versioned("3.1");
 
-        registrar.playToClient(AllomancerDataPayload.TYPE, AllomancerDataPayload.STREAM_CODEC,
-                               ClientPayloadHandler::updateAllomancer);
+        registrar.playToClient(AllomancerDataPayload.TYPE, AllomancerDataPayload.STREAM_CODEC);
+
         registrar.playToServer(EmotionPayload.TYPE, EmotionPayload.STREAM_CODEC, ServerPayloadHandler::changeEmotion);
         registrar.playToServer(BlockPushPullPayload.TYPE, BlockPushPullPayload.STREAM_CODEC,
                                ServerPayloadHandler::tryPushPullBlock);
@@ -31,8 +29,7 @@ public final class Network {
                                ServerPayloadHandler::toggleBurnRequest);
 
         registrar.playBidirectional(EnhanceTimePayload.TYPE, EnhanceTimePayload.STREAM_CODEC,
-                                    new DirectionalPayloadHandler<>(ClientPayloadHandler::updateEnhanced,
-                                                                    ServerPayloadHandler::updateEnhanced));
+                                    ServerPayloadHandler::updateEnhanced);
 
     }
 

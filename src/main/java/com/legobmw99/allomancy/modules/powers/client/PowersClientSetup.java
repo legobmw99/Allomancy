@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.powers.client;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
+import com.legobmw99.allomancy.modules.powers.client.network.ClientPayloadHandler;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticle;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
 import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
@@ -41,6 +42,7 @@ public final class PowersClientSetup {
     public static void register(IEventBus bus) {
         PARTICLES.register(bus);
 
+        bus.addListener(ClientPayloadHandler::registerClientPayloadHandlers);
         bus.addListener(PowersClientSetup::registerParticle);
         bus.addListener(MetalOverlay::registerGUI);
         bus.addListener(Inputs::registerKeyBinding);
