@@ -3,7 +3,6 @@ package com.legobmw99.allomancy.modules.extras.command;
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.modules.powers.network.Network;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -147,9 +146,10 @@ public final class AllomancyPowerCommand {
 
     private static void removePower(CommandContext<CommandSourceStack> ctx,
                                     ServerPlayer player) throws CommandSyntaxException {
-        handlePowerChange(ctx, player, IAllomancerData::setUninvested, (data) -> data::hasPower,
-                          (mt, data) -> data.revokePower(mt), ERROR_CANT_REMOVE::create,
-                          "commands.allomancy.removepower");
+        handlePowerChange(ctx, player, IAllomancerData::setUninvested, (data) -> data::hasPower, (mt, data) -> {
+            data.revokePower(mt);
+            data.setBurning(mt, false);
+        }, ERROR_CANT_REMOVE::create, "commands.allomancy.removepower");
     }
 
     /**
@@ -194,7 +194,7 @@ public final class AllomancyPowerCommand {
                 }
             }
         }
-        Network.syncAllomancerData(player);
+        player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
 
         ctx.getSource().sendSuccess(() -> Component.translatable(success, player.getDisplayName(), type), true);
 

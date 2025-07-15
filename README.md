@@ -6,7 +6,7 @@ Allomancy 6.1.0
 This mod adds the basics of [Allomancy](http://coppermind.net/wiki/Allomancy) from Brandon Sanderson's book series
 *Mistborn*.
 
-This mod is currently updated for `Minecraft 1.21.7` and `NeoForge 21.7.1-beta`
+This mod is currently updated for `Minecraft 1.21.7` and `NeoForge 21.23.1-beta`
 
 Please verify and report any issues!
 

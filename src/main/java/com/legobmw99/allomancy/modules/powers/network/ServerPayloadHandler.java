@@ -136,7 +136,7 @@ public final class ServerPayloadHandler {
                 data.drainMetals(mt);
             }
 
-            Network.syncAllomancerData(player);
+            player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
 
         }).exceptionally(e -> {
             Allomancy.LOGGER.error("Failed to handle toggleBurn", e);

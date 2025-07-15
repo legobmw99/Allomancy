@@ -4,7 +4,6 @@ import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.modules.powers.network.Network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceKey;
@@ -31,7 +30,7 @@ public final class Enhancement {
         var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
         data.drainMetals(Metal.values());
         player.removeAllEffects();
-        Network.syncAllomancerData(player);
+        player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
     }
 
     /**

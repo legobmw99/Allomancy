@@ -93,36 +93,31 @@ public final class CommonEventHandler {
 
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            if (!player.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
-                var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
-                // Handle random misting case
-                if (PowersConfig.random_mistings.get() && data.isUninvested()) {
-                    int randomMisting;
-                    // if (FMLEnvironment.dist.isClient()){
-                    //   // TODO prevent certain 'useless' choices?
-                    // }
-                    if (PowersConfig.respect_player_UUID.get()) {
-                        randomMisting = Math.abs(player.getUUID().hashCode()) % Metal.values().length;
-                    } else {
-                        randomMisting = player.getRandom().nextInt(Metal.values().length);
-                    }
-                    data.addPower(Metal.getMetal(randomMisting));
-                    ItemStack flakes = new ItemStack(WorldSetup.FLAKES.get(randomMisting).get());
-                    // Give the player one flake of their metal
-                    if (!player.getInventory().add(flakes)) {
-                        ItemEntity entity =
-                                new ItemEntity(player.level(), player.position().x(), player.position().y(),
-                                               player.position().z(), flakes);
-                        player.level().addFreshEntity(entity);
-                    }
+        if (event.getEntity() instanceof ServerPlayer player &&
+            !player.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
+            var data = new AllomancerData();
+            // Handle random misting case
+            if (PowersConfig.random_mistings.get() && data.isUninvested()) {
+                int randomMisting;
+                // if (FMLEnvironment.dist.isClient()){
+                //   // TODO prevent certain 'useless' choices?
+                // }
+                if (PowersConfig.respect_player_UUID.get()) {
+                    randomMisting = Math.abs(player.getUUID().hashCode()) % Metal.values().length;
+                } else {
+                    randomMisting = player.getRandom().nextInt(Metal.values().length);
+                }
+                data.addPower(Metal.getMetal(randomMisting));
+                player.setData(AllomancerAttachment.ALLOMANCY_DATA, data);
+                ItemStack flakes = new ItemStack(WorldSetup.FLAKES.get(randomMisting).get());
+                // Give the player one flake of their metal
+                if (!player.getInventory().add(flakes)) {
+                    ItemEntity entity = new ItemEntity(player.level(), player.position().x(), player.position().y(),
+                                                       player.position().z(), flakes);
+                    player.level().addFreshEntity(entity);
                 }
             }
-
-            //Sync cap to client
-            Network.syncAllomancerData(player);
         }
-
     }
 
 
@@ -133,24 +128,10 @@ public final class CommonEventHandler {
                 var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
                 data.drainMetals(Metal.values());
             }
-            Network.syncAllomancerData(player);
+            player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
         }
     }
 
-    @SubscribeEvent
-    public static void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
-            Network.syncAllomancerData(player);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onStartTracking(final PlayerEvent.StartTracking event) {
-        if (!event.getTarget().level().isClientSide && event.getTarget() instanceof ServerPlayer player &&
-            player.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
-            Network.syncAllomancerData(player);
-        }
-    }
 
     @SubscribeEvent
     public static void onRespawnPosition(final PlayerRespawnPositionEvent event) {
@@ -162,7 +143,7 @@ public final class CommonEventHandler {
             var dimension = event.getTeleportTransition().newLevel().dimension();
             if (data.getSpawnLoc() == null || !data.getSpawnLoc().isCloseEnough(dimension, pos, 10)) {
                 data.setSpawnLoc(pos, dimension);
-                Network.syncAllomancerData(player);
+                player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
             }
         }
     }
@@ -172,7 +153,7 @@ public final class CommonEventHandler {
         if (event.getEntity() instanceof ServerPlayer player) {
             var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
             data.setSpawnLoc(event.getNewSpawn(), event.getSpawnLevel());
-            Network.syncAllomancerData(player);
+            player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
         }
     }
 
@@ -214,7 +195,7 @@ public final class CommonEventHandler {
                 event.setAmount(newDamage);
                 // Note that they took damage, will come in to play if they stop burning
                 data.setDamageStored(data.getDamageStored() + 2);
-                Network.syncAllomancerData(player);
+                player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
             }
         }
     }
@@ -392,7 +373,7 @@ public final class CommonEventHandler {
             }
         }
         if (syncRequired) {
-            Network.syncAllomancerData(curPlayer);
+            curPlayer.syncData(AllomancerAttachment.ALLOMANCY_DATA);
         }
     }
 }

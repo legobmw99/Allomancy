@@ -3,7 +3,6 @@ package com.legobmw99.allomancy.modules.consumables.item.consume_effects;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.modules.powers.network.Network;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -69,7 +68,7 @@ public final class GrantAllomancyConsumeEffect implements ConsumeEffect {
             }
         }
         if (addedPower && entity instanceof ServerPlayer player) {
-            Network.syncAllomancerData(player);
+            player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
         }
         return addedPower;
     }

@@ -17,7 +17,6 @@ public final class Network {
     private static void registerPayloads(final RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(Allomancy.MODID).versioned("3.1");
 
-        registrar.playToClient(AllomancerDataPayload.TYPE, AllomancerDataPayload.STREAM_CODEC);
 
         registrar.playToServer(EmotionPayload.TYPE, EmotionPayload.STREAM_CODEC, ServerPayloadHandler::changeEmotion);
         registrar.playToServer(BlockPushPullPayload.TYPE, BlockPushPullPayload.STREAM_CODEC,
@@ -33,9 +32,9 @@ public final class Network {
 
     }
 
-    public static void syncAllomancerData(ServerPlayer player) {
-        sync(new AllomancerDataPayload(player), player);
-    }
+    //    public static void syncAllomancerData(ServerPlayer player) {
+    //        sync(new AllomancerDataPayload(player), player);
+    //    }
 
     public static void sync(CustomPacketPayload msg, ServerPlayer player) {
         PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, msg);
