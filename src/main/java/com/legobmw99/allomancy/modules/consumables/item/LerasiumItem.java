@@ -54,7 +54,7 @@ public class LerasiumItem extends Item {
     @Override
     public InteractionResult use(Level world, Player player, InteractionHand hand) {
         if (world instanceof ServerLevel level && player instanceof ServerPlayer sp) {
-            if (player.getData(AllomancerAttachment.ALLOMANCY_DATA).isMistborn()) {
+            if (AllomancerAttachment.get(player).isMistborn()) {
                 return InteractionResult.FAIL;
             }
 

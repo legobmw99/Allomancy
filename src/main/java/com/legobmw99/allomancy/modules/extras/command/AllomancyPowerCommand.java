@@ -115,7 +115,7 @@ public final class AllomancyPowerCommand {
 
     private static void getPowers(CommandContext<CommandSourceStack> ctx, ServerPlayer player) {
         StringBuilder powers = new StringBuilder();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         if (data.isMistborn()) {
             powers.append("all");
@@ -173,7 +173,7 @@ public final class AllomancyPowerCommand {
                                           String success) throws CommandSyntaxException {
 
         String type = ctx.getArgument("type", String.class);
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         if ("all".equalsIgnoreCase(type)) {
             all.accept(data);
@@ -194,8 +194,7 @@ public final class AllomancyPowerCommand {
                 }
             }
         }
-        player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
-
+        AllomancerAttachment.sync(player);
         ctx.getSource().sendSuccess(() -> Component.translatable(success, player.getDisplayName(), type), true);
 
     }

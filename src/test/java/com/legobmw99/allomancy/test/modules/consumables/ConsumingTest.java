@@ -40,8 +40,7 @@ public class ConsumingTest {
                 .thenWaitUntil(4, () -> {
                     helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty(),
                                       "Lerasium never got eaten");
-                    helper.assertTrue(player.getData(AllomancerAttachment.ALLOMANCY_DATA).isMistborn(),
-                                      "Player never got invested");
+                    helper.assertTrue(AllomancerAttachment.get(player).isMistborn(), "Player never got invested");
                     helper.assertFalse(helper.getEntities(EntityType.LIGHTNING_BOLT).isEmpty(),
                                        "Didn't spawn lightning");
                     helper.assertPlayerHasAdvancement(player, Allomancy.rl("main/become_mistborn"));
@@ -74,9 +73,8 @@ public class ConsumingTest {
                 .thenExecute(() -> helper.assertPlayerHasAdvancement(player, dna))
                 .thenIdle(1)
                 .thenMap(() -> helper.useItem(player, ConsumeSetup.LERASIUM_NUGGET))
-                .thenExecute(
-                        () -> helper.assertFalse(player.getData(AllomancerAttachment.ALLOMANCY_DATA).isMistborn(),
-                                                 "player got invested"))
+                .thenExecute(() -> helper.assertFalse(AllomancerAttachment.get(player).isMistborn(),
+                                                      "player got invested"))
                 .thenExecute(res -> helper.assertValueEqual(res, InteractionResult.FAIL, "Still consumed lerasium"))
                 .thenExecute(() -> helper.assertPlayerHasItem(player, ConsumeSetup.LERASIUM_NUGGET.get()))
                 .thenSucceed();
@@ -104,16 +102,16 @@ public class ConsumingTest {
         var player = helper.makeTickingPlayer();
         var vial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
         VialItem.fillVial(vial, new FlakeStorage.Mutable().add(Metal.IRON).add(Metal.GOLD).toImmutable());
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         for (int i = 0; i < MAX_STORAGE; i++) {
             data.incrementStored(Metal.GOLD);
         }
 
         helper.startSequence().thenMap(() -> helper.useItem(player, vial)).thenWaitUntil(6, () -> {
-            helper.assertValueEqual(player.getData(AllomancerAttachment.ALLOMANCY_DATA).getStored(Metal.IRON), 1,
+            helper.assertValueEqual(AllomancerAttachment.get(player).getStored(Metal.IRON), 1,
                                     "Player never got more metal");
-            helper.assertValueEqual(player.getData(AllomancerAttachment.ALLOMANCY_DATA).getStored(Metal.GOLD),
-                                    MAX_STORAGE, "Player got too much gold");
+            helper.assertValueEqual(AllomancerAttachment.get(player).getStored(Metal.GOLD), MAX_STORAGE,
+                                    "Player got too much gold");
             helper.assertFalse(player.getItemInHand(InteractionHand.MAIN_HAND).has(ConsumeSetup.FLAKE_STORAGE),
                                "Vial never got eaten");
         }).thenSucceed();
@@ -126,7 +124,7 @@ public class ConsumingTest {
         var player = helper.makeTickingPlayer();
         var vial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
         VialItem.fillVial(vial, new FlakeStorage.Mutable().add(Metal.IRON).toImmutable());
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         for (int i = 0; i < MAX_STORAGE; i++) {
             for (Metal m : Metal.values()) {
                 data.incrementStored(m);
@@ -138,8 +136,8 @@ public class ConsumingTest {
                 .thenMap(() -> helper.useItem(player, vial))
                 .thenExecute(res -> helper.assertValueEqual(res, InteractionResult.FAIL, "Still consumed vial"))
                 .thenExecute(() -> {
-                    helper.assertValueEqual(player.getData(AllomancerAttachment.ALLOMANCY_DATA).getStored(Metal.IRON),
-                                            MAX_STORAGE, "Player never got more metal");
+                    helper.assertValueEqual(AllomancerAttachment.get(player).getStored(Metal.IRON), MAX_STORAGE,
+                                            "Player never got more metal");
                     helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).has(ConsumeSetup.FLAKE_STORAGE),
                                       "Vial got eaten");
                 })
@@ -162,16 +160,16 @@ public class ConsumingTest {
                 .thenMap(() -> helper.useItem(player, Items.GOLDEN_APPLE))
                 .thenExecute(res -> helper.assertValueEqual(res, InteractionResult.CONSUME, "Didn't eat"))
                 .thenWaitUntil(32, () -> {
-                    helper.assertValueEqual(player.getData(AllomancerAttachment.ALLOMANCY_DATA).getStored(Metal.GOLD),
-                                            1, "Player never got more metal");
+                    helper.assertValueEqual(AllomancerAttachment.get(player).getStored(Metal.GOLD), 1,
+                                            "Player never got more metal");
                     helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty(),
                                       "Gapple never got eaten");
                 })
                 .thenMap(() -> helper.useItem(player, Items.ENCHANTED_GOLDEN_APPLE))
                 .thenExecute(res -> helper.assertValueEqual(res, InteractionResult.CONSUME, "Didn't eat"))
                 .thenWaitUntil(32, () -> {
-                    helper.assertValueEqual(player.getData(AllomancerAttachment.ALLOMANCY_DATA).getStored(Metal.GOLD),
-                                            10, "Player never got more metal");
+                    helper.assertValueEqual(AllomancerAttachment.get(player).getStored(Metal.GOLD), 10,
+                                            "Player never got more metal");
                     helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty(),
                                       "Gapple never got eaten");
                 })

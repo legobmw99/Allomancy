@@ -17,7 +17,7 @@ public final class ClientPayloadHandler {
         ctx.enqueueWork(() -> {
             Player player = Minecraft.getInstance().level.getPlayerByUUID(payload.player());
             if (player != null) {
-                player.getData(AllomancerAttachment.ALLOMANCY_DATA).setEnhanced(payload.enhanceTime());
+                AllomancerAttachment.get(player).setEnhanced(payload.enhanceTime());
             }
         }).exceptionally(e -> {
             Allomancy.LOGGER.error("Failed to handle client updateEnhanced", e);

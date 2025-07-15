@@ -47,7 +47,7 @@ public class KolossBladeItem extends Item {
             if (player.getMainHandItem() == stack) {
                 if (!(player.hasEffect(MobEffects.STRENGTH) &&
                       player.getEffect(MobEffects.STRENGTH).getAmplifier() >= 2) &&
-                    !player.getData(AllomancerAttachment.ALLOMANCY_DATA).isBurning(Metal.PEWTER)) {
+                    !AllomancerAttachment.get(player).isBurning(Metal.PEWTER)) {
                     player.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 10, 10, true, false));
                     player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10, 10, true, false));
                     player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 10, 0, true, false));

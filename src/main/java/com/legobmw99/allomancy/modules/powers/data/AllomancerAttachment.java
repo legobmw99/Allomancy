@@ -5,6 +5,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.client.util.Sounds;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -21,7 +22,7 @@ public final class AllomancerAttachment {
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Allomancy.MODID);
 
-    public static final Supplier<AttachmentType<AllomancerData>> ALLOMANCY_DATA =
+    private static final Supplier<AttachmentType<AllomancerData>> ALLOMANCY_DATA =
             ATTACHMENT_TYPES.register("allomancy_data", () -> AttachmentType
                     .builder(AllomancerData::new)
                     .serialize(AllomancerData.CODEC)
@@ -59,5 +60,19 @@ public final class AllomancerAttachment {
         ATTACHMENT_TYPES.register(bus);
     }
 
+    public static AllomancerData get(Player player) {
+        return player.getData(ALLOMANCY_DATA);
+    }
 
+    public static boolean needsData(Player player) {
+        return !player.hasData(ALLOMANCY_DATA);
+    }
+
+    public static void sync(Player player) {
+        player.syncData(ALLOMANCY_DATA);
+    }
+
+    public static void set(Player player, AllomancerData data) {
+        player.setData(ALLOMANCY_DATA, data);
+    }
 }

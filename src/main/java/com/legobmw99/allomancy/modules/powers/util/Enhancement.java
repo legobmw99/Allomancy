@@ -27,10 +27,10 @@ public final class Enhancement {
      * @param player The player to wipe
      */
     public static void wipePlayer(ServerPlayer player) {
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         data.drainMetals(Metal.values());
         player.removeAllEffects();
-        player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
+        AllomancerAttachment.sync(player);
     }
 
     /**

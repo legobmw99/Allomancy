@@ -44,7 +44,7 @@ public class VialItem extends Item {
     public InteractionResult use(Level worldIn, Player playerIn, InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
 
-        var data = playerIn.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(playerIn);
         //If all the ones being filled are full, don't allow
         int filling = 0, full = 0;
         FlakeStorage storage = itemStackIn.get(FLAKE_STORAGE);

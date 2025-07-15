@@ -6,6 +6,7 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -23,12 +24,12 @@ public class AllomancyTooltip implements IEntityComponentProvider {
 
     @Override
     public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig iPluginConfig) {
-        var data = accessor.getPlayer().getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(accessor.getPlayer());
 
         if (data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER))) {
 
-            if (accessor.getEntity().hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
-                var dataOther = accessor.getEntity().getData(AllomancerAttachment.ALLOMANCY_DATA);
+            if (accessor.getEntity() instanceof Player player) {
+                var dataOther = AllomancerAttachment.get(player);
 
                 if (!dataOther.isBurning(Metal.COPPER) || (data.isEnhanced() && !dataOther.isEnhanced())) {
 

@@ -51,13 +51,13 @@ public class CoinBagItem extends ProjectileWeaponItem {
         if (ammo.getItem() instanceof ArrowItem) { // the above get function has silly default behavior
             ammo = new ItemStack(Items.GOLD_NUGGET, 1);
         }
-
-        if (!ammo.isEmpty() && player.getData(AllomancerAttachment.ALLOMANCY_DATA).isBurning(Metal.STEEL)) {
+        var data = AllomancerAttachment.get(player);
+        if (!ammo.isEmpty() && data.isBurning(Metal.STEEL)) {
             if (world instanceof ServerLevel level) {
                 Ammo type = getAmmoFromItem(ammo.getItem());
 
                 this.shoot(level, player, hand, weapon, List.of(ammo), type.velocity, type.inaccuracy,
-                           player.getData(AllomancerAttachment.ALLOMANCY_DATA).isEnhanced(), null);
+                           data.isEnhanced(), null);
 
                 if (!player.getAbilities().instabuild) {
                     ammo.shrink(1);

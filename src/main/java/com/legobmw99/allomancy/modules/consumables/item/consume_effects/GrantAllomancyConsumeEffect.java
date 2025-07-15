@@ -59,7 +59,7 @@ public final class GrantAllomancyConsumeEffect implements ConsumeEffect {
     public boolean apply(Level level, ItemStack stack, LivingEntity entity) {
         boolean addedPower = false;
         if (entity instanceof Player player) {
-            var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            var data = AllomancerAttachment.get(player);
             for (Metal mt : powers) {
                 if (!data.hasPower(mt)) {
                     data.addPower(mt);
@@ -68,7 +68,7 @@ public final class GrantAllomancyConsumeEffect implements ConsumeEffect {
             }
         }
         if (addedPower && entity instanceof ServerPlayer player) {
-            player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
+            AllomancerAttachment.sync(player);
         }
         return addedPower;
     }

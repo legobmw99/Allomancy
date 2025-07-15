@@ -28,7 +28,7 @@ public class CoinBagTest {
     public static void coinBagShoots(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         player.preventItemPickup();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         data.setBurning(Metal.STEEL, true);
 
         var nugget = WorldSetup.NUGGETS.get(Metal.CADMIUM.getIndex()).get();
@@ -53,7 +53,7 @@ public class CoinBagTest {
     public static void coinBagKills(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         player.preventItemPickup();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         data.setBurning(Metal.STEEL, true);
 
         var nugget = WorldSetup.NUGGETS.get(Metal.CADMIUM.getIndex()).get();

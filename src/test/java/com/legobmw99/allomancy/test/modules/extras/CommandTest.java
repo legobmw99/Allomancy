@@ -29,8 +29,8 @@ public class CommandTest {
                       .getCommands()
                       .performPrefixedCommand(stack, "/ap add random")).thenExecuteAfter(5, () -> {
                   helper.assertFalse(stack.hadError(), "Command failed: " + stack.errors());
-                  helper.assertFalse(player.getData(AllomancerAttachment.ALLOMANCY_DATA).isUninvested(),
-                                     "Player is still uninvested");
+                  helper.assertFalse(AllomancerAttachment.get(player).isUninvested(), "Player is still " +
+                                                                                      "uninvested");
 
               })
               // remove it
@@ -40,8 +40,7 @@ public class CommandTest {
                       .getCommands()
                       .performPrefixedCommand(stack, "/allomancy remove random")).thenExecuteAfter(5, () -> {
                   helper.assertFalse(stack.hadError(), "Command failed: " + stack.errors());
-                  helper.assertTrue(player.getData(AllomancerAttachment.ALLOMANCY_DATA).isUninvested(),
-                                    "Player is still invested");
+                  helper.assertTrue(AllomancerAttachment.get(player).isUninvested(), "Player is still invested");
               }).thenSucceed();
     }
 
@@ -61,8 +60,7 @@ public class CommandTest {
                       .performPrefixedCommand(stack, "/ap add random")).thenExecuteAfter(5, () -> {
 
                   helper.assertTrue(stack.hadError(), "No permission error");
-                  helper.assertTrue(player.getData(AllomancerAttachment.ALLOMANCY_DATA).isUninvested(),
-                                    "Player got invested");
+                  helper.assertTrue(AllomancerAttachment.get(player).isUninvested(), "Player got invested");
               }).thenSucceed();
     }
 
@@ -72,7 +70,7 @@ public class CommandTest {
     public static void allomancyGet(ExtendedGameTestHelper helper) {
         var player = helper.makeOpMockPlayer(Commands.LEVEL_ALL);
         player.snapTo(Vec3.atCenterOf(helper.absolutePos(BlockPos.ZERO)));
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         data.setMistborn();
         var stack = TattleTaleStack.createCommandSourceStack(player);
 

@@ -56,7 +56,7 @@ public final class ClientEventHandler {
         }
 
         Player player = mc.player;
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         if (data.isUninvested()) {
             return;
         }
@@ -106,7 +106,7 @@ public final class ClientEventHandler {
         if (player == null || !player.isAlive()) {
             return;
         }
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
 
         if (data.isUninvested()) {
@@ -198,7 +198,7 @@ public final class ClientEventHandler {
 
     @SubscribeEvent
     public static void onFovCompute(final ComputeFovModifierEvent event) {
-        var data = event.getPlayer().getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(event.getPlayer());
         // tin and duralumin give a zoom effect
         if (data.isBurning(Metal.TIN) && data.isEnhanced()) {
             event.setNewFovModifier(0.2F);
@@ -213,7 +213,7 @@ public final class ClientEventHandler {
         if ((player == null) || (sound == null) || !player.isAlive()) {
             return;
         }
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         if (data.isBurning(Metal.TIN)) {
             Sounds.spawnParticleForSound(player, sound);

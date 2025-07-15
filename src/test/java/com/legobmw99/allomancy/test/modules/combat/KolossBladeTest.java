@@ -42,7 +42,7 @@ public class KolossBladeTest {
     @TestHolder(description = "Tests that a pewter burner can wield a Koloss sword")
     public static void kolossBladePewter(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         data.setBurning(Metal.PEWTER, true);
 

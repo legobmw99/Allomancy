@@ -102,7 +102,7 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
         var player = this.makeTickingPlayer();
         player.setItemSlot(EquipmentSlot.HEAD, CombatSetup.ALUMINUM_HELMET.toStack());
         player.setItemSlot(EquipmentSlot.CHEST, CombatSetup.MISTCLOAK.toStack());
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         data.setMistborn();
         for (Metal m : Metal.values()) {

@@ -46,7 +46,7 @@ public class Tracking {
 
     public void tick() {
         Player player = Minecraft.getInstance().player;
-        IAllomancerData data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        IAllomancerData data = AllomancerAttachment.get(player);
 
         if (data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL)) {
             int max = PowersConfig.max_metal_detection.get();
@@ -137,7 +137,7 @@ public class Tracking {
     }
 
     private boolean seek(IAllomancerData data, Player otherPlayer) {
-        var otherData = otherPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var otherData = AllomancerAttachment.get(otherPlayer);
         if (otherData.isBurning(Metal.COPPER) && (!data.isEnhanced() || otherData.isEnhanced())) {
             return false;
         }

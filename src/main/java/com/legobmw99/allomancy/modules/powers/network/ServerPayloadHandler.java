@@ -38,7 +38,7 @@ public final class ServerPayloadHandler {
             if (target == null) {
                 return;
             }
-            boolean enhanced = allomancer.getData(AllomancerAttachment.ALLOMANCY_DATA).isEnhanced();
+            boolean enhanced = AllomancerAttachment.get(allomancer).isEnhanced();
             ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER
                     .get()
                     .trigger(allomancer, target, data.makeAggressive() ? Metal.ZINC : Metal.BRASS, enhanced);
@@ -90,7 +90,7 @@ public final class ServerPayloadHandler {
         ServerPlayer player = (ServerPlayer) ctx.player();
         Level level = player.level();
         Entity target = level.getEntity(payload.entityID());
-        IAllomancerData data = player.getData(AllomancerAttachment.ALLOMANCY_DATA.get());
+        IAllomancerData data = AllomancerAttachment.get(player);
         Metal which = payload.isPush() ? Metal.STEEL : Metal.IRON;
 
         if (target != null) {
@@ -120,7 +120,7 @@ public final class ServerPayloadHandler {
         ctx.enqueueWork(() -> {
             ServerPlayer player = (ServerPlayer) ctx.player();
             Metal mt = payload.metal();
-            IAllomancerData data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            IAllomancerData data = AllomancerAttachment.get(player);
 
             boolean value = payload.on();
 
@@ -136,8 +136,7 @@ public final class ServerPayloadHandler {
                 data.drainMetals(mt);
             }
 
-            player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
-
+            AllomancerAttachment.sync(player);
         }).exceptionally(e -> {
             Allomancy.LOGGER.error("Failed to handle toggleBurn", e);
             ctx.disconnect(Component.translatable("allomancy.networking.failed", e.getMessage()));
@@ -150,7 +149,7 @@ public final class ServerPayloadHandler {
 
         ctx.enqueueWork(() -> {
             ServerPlayer source = (ServerPlayer) ctx.player();
-            IAllomancerData data = source.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            IAllomancerData data = AllomancerAttachment.get(source);
             if (!data.isBurning(Metal.NICROSIL)) {
                 Allomancy.LOGGER.warn("Illegal use of Nicrosil by player: {}!", source);
                 ctx.disconnect(Component.translatable("allomancy.networking.kicked",
@@ -162,7 +161,7 @@ public final class ServerPayloadHandler {
             Player player = source.level().getPlayerByUUID(payload.player());
             ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(source, player, Metal.NICROSIL, data.isEnhanced());
             if (player instanceof ServerPlayer target && !Emotional.hasTinFoilHat(target)) {
-                target.getData(AllomancerAttachment.ALLOMANCY_DATA).setEnhanced(payload.enhanceTime());
+                AllomancerAttachment.get(target).setEnhanced(payload.enhanceTime());
                 // broadcast back to player and tracking
                 Network.sync(payload, target);
             }

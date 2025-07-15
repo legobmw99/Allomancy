@@ -12,6 +12,7 @@ import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -123,20 +124,23 @@ public final class FlakeStorage implements TooltipProvider, ConsumableListener {
     public void onConsume(Level level, LivingEntity entity, ItemStack stack, Consumable consumable) {
         FlakeStorage storage = stack.get(FLAKE_STORAGE);
 
-        if (storage == null || !entity.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
+        if (storage == null) {
             return;
         }
-        var data = entity.getData(AllomancerAttachment.ALLOMANCY_DATA);
-        if (stack.getItem() == Items.ENCHANTED_GOLDEN_APPLE && storage.contains(Metal.GOLD)) {
-            for (int i = 0; i < IAllomancerData.MAX_STORAGE; i++) {
-                data.incrementStored(Metal.GOLD);
+        if (entity instanceof Player player) {
+            var data = AllomancerAttachment.get(player);
+            if (stack.getItem() == Items.ENCHANTED_GOLDEN_APPLE && storage.contains(Metal.GOLD)) {
+                for (int i = 0; i < IAllomancerData.MAX_STORAGE; i++) {
+                    data.incrementStored(Metal.GOLD);
+                }
+            }
+            for (Metal mt : Metal.values()) {
+                if (storage.contains(mt)) {
+                    data.incrementStored(mt);
+                }
             }
         }
-        for (Metal mt : Metal.values()) {
-            if (storage.contains(mt)) {
-                data.incrementStored(mt);
-            }
-        }
+
     }
 
 

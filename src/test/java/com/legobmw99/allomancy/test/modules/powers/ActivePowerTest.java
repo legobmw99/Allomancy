@@ -29,16 +29,16 @@ public class ActivePowerTest {
     @TestHolder(description = "Tests that chrome attacking wipes players")
     public static void chromeHitWipesPlayer(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         var player2 = helper.makeMistbornPlayer();
         player2.moveToCorner();
         player2.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
-        var data2 = player2.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data2 = AllomancerAttachment.get(player2);
 
         var player3 = helper.makeMistbornPlayer();
         player3.snapTo(helper.absoluteVec(new BlockPos(4, 1, 4).getCenter()).subtract(0, 0.5, 0));
-        var data3 = player3.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data3 = AllomancerAttachment.get(player3);
 
         helper.startSequence().thenExecute(() -> {
             data.setBurning(Metal.CHROMIUM, true);
@@ -61,7 +61,7 @@ public class ActivePowerTest {
     @TestHolder(description = "Tests that duralumin and pewter let you instakill with the Koloss sword")
     public static void duraluminPewterDamageOutput(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         helper
                 .startSequence()
                 .thenExecute(() -> {
@@ -90,7 +90,7 @@ public class ActivePowerTest {
     public static void duraluminElectrumMovesToSpawn(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         player.moveToCorner();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         var farCorner = helper.absolutePos(new BlockPos(4, 0, 4));
         player.setRespawnPosition(new ServerPlayer.RespawnConfig(Level.OVERWORLD, farCorner, 0.0f, true), true);
@@ -112,7 +112,7 @@ public class ActivePowerTest {
     public static void duraluminGoldMovesToDeath(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
         player.moveToCorner();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         var farCorner = helper.absolutePos(new BlockPos(4, 0, 4));
         // can't test actual death due to it creating a non-GameTestPlayer

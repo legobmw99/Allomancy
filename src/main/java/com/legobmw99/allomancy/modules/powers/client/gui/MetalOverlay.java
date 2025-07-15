@@ -64,7 +64,7 @@ public final class MetalOverlay implements GuiLayer {
             return;
         }
 
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         if (data.isUninvested()) {
             return;

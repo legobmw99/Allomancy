@@ -76,7 +76,7 @@ public class MetalSelectScreen extends Screen {
     public void render(GuiGraphics guiGraphics, int mx, int my, float partialTicks) {
         super.render(guiGraphics, mx, my, partialTicks);
 
-        var data = this.mc.player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(this.mc.player);
 
         int x = this.width / 2;
         int y = this.height / 2;
@@ -168,7 +168,7 @@ public class MetalSelectScreen extends Screen {
      */
     private void toggleSelected() {
         if (this.selectedMetal != null) {
-            var data = this.mc.player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            var data = AllomancerAttachment.get(this.mc.player);
             PowerRequests.toggleBurn(this.selectedMetal, data);
             this.mc.player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.1F, 2.0F);
         }

@@ -36,7 +36,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that burning aluminum drains all metals and removes effects")
     public static void aluminiumDrainsInstantly(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, -1, 0, true, true));
 
@@ -60,7 +60,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that duralumin drains all burning metals when it runs out")
     public static void duraluminDrainsWhenExtinguished(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         data.setBurning(Metal.PEWTER, true);
         data.drainMetals(List.of(Metal.DURALUMIN).toArray(Metal[]::new));
         data.incrementStored(Metal.DURALUMIN);
@@ -82,7 +82,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that burning tin removes blindness and grants night vision")
     public static void tinClearsBlindness(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, -1, 0, true, true));
 
@@ -101,7 +101,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that pewter provides general buff potion effects")
     public static void pewterGivesBuffs(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         data.setBurning(Metal.PEWTER, true);
 
@@ -118,7 +118,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that pewter stores some of the damage it prevents")
     public static void pewterPreventsAndStoresSomeDamage(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         helper
                 .startSequence()
                 .thenExecute(() -> {
@@ -147,7 +147,7 @@ public class PassivePowerTest {
     public static void duraluminTinMakesYouIll(AllomancyTestHelper helper) {
         // technically random
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         data.setBurning(Metal.TIN, true);
         data.setBurning(Metal.DURALUMIN, true);
@@ -163,7 +163,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that duralumin and pewter cancel damage")
     public static void duraluminPewterMakesInvuln(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         helper
                 .startSequence()
                 .thenExecute(() -> {
@@ -184,16 +184,16 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that duralumin and chrome wipes nearby players")
     public static void duraluminChromeWipesOthers(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         var player2 = helper.makeMistbornPlayer();
         player2.moveToCorner();
         player2.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
-        var data2 = player2.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data2 = AllomancerAttachment.get(player2);
 
         var player3 = helper.makeMistbornPlayer();
         player3.snapTo(helper.absoluteVec(new BlockPos(4, 1, 4).getCenter()).subtract(0, 0.5, 0));
-        var data3 = player3.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data3 = AllomancerAttachment.get(player3);
         helper.startSequence().thenExecute(() -> {
             data.setBurning(Metal.CHROMIUM, true);
             data.setBurning(Metal.DURALUMIN, true);
@@ -210,7 +210,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that duralumin and copper grants invisibility")
     public static void duraluminCopperMakesYouInvis(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         data.setBurning(Metal.COPPER, true);
         data.setBurning(Metal.DURALUMIN, true);
@@ -227,7 +227,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that cadmium grants slow falling")
     public static void cadmiumGrantsSlowFall(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         data.setBurning(Metal.CADMIUM, true);
 
@@ -245,7 +245,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that cadmium slows nearby entities falling")
     public static void cadmiumSlowsNearby(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         data.setBurning(Metal.CADMIUM, true);
 
@@ -264,7 +264,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that getting sped and slowed grants an advancement")
     public static void cadmiumBendalloyAdvancement(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
 
         var player2 = helper.makeTickingPlayer();
@@ -288,7 +288,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that bendalloy grants haste")
     public static void bendalloyGrantsHaste(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         data.setBurning(Metal.BENDALLOY, true);
 
@@ -303,7 +303,7 @@ public class PassivePowerTest {
     @TestHolder(description = "Tests that bendalloy grants haste")
     public static void bendalloyAndCadmiumCancel(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         var zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
 
@@ -335,7 +335,7 @@ public class PassivePowerTest {
         BlockPos wheat = new BlockPos(2, 2, 2);
 
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         data.setBurning(Metal.BENDALLOY, true);
 
@@ -361,7 +361,7 @@ public class PassivePowerTest {
         furnaceEntity.setItem(1, new ItemStack(Items.STICK, 2));
 
         var player = helper.makeMistbornPlayer();
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
         data.setBurning(Metal.BENDALLOY, true);
         helper.succeedOnTickWhen(29, () -> {
             helper.assertTrue(data.isBurning(Metal.BENDALLOY), "Bendalloy went out");

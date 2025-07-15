@@ -59,7 +59,7 @@ public final class CommonEventHandler {
     public static void onPlayerLoad(final PlayerEvent.LoadFromFile event) {
         Player player = event.getEntity();
 
-        if (!player.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
+        if (AllomancerAttachment.needsData(player)) {
             CompoundTag compoundtag = null;
             try {
                 File file1 = new File(event.getPlayerDirectory(), event.getPlayerUUID() + ".dat");
@@ -79,7 +79,7 @@ public final class CommonEventHandler {
                                                   player.getName().getString());
                             try {
                                 var data = AllomancerData.CODEC.codec().parse(NbtOps.INSTANCE, oldData).getOrThrow();
-                                player.setData(AllomancerAttachment.ALLOMANCY_DATA, data);
+                                AllomancerAttachment.set(player, data);
                                 Allomancy.LOGGER.info("Loaded old forge data for player {}!",
                                                       player.getName().getString());
 
@@ -93,8 +93,7 @@ public final class CommonEventHandler {
 
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player &&
-            !player.hasData(AllomancerAttachment.ALLOMANCY_DATA)) {
+        if (event.getEntity() instanceof ServerPlayer player && AllomancerAttachment.needsData(player)) {
             var data = new AllomancerData();
             // Handle random misting case
             if (PowersConfig.random_mistings.get() && data.isUninvested()) {
@@ -108,7 +107,7 @@ public final class CommonEventHandler {
                     randomMisting = player.getRandom().nextInt(Metal.values().length);
                 }
                 data.addPower(Metal.getMetal(randomMisting));
-                player.setData(AllomancerAttachment.ALLOMANCY_DATA, data);
+                AllomancerAttachment.set(player, data);
                 ItemStack flakes = new ItemStack(WorldSetup.FLAKES.get(randomMisting).get());
                 // Give the player one flake of their metal
                 if (!player.getInventory().add(flakes)) {
@@ -125,10 +124,10 @@ public final class CommonEventHandler {
     public static void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
         if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
             if (!event.isEndConquered() /* poorly named, is really equivalent to keepInventory... */) {
-                var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+                var data = AllomancerAttachment.get(player);
                 data.drainMetals(Metal.values());
             }
-            player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
+            AllomancerAttachment.sync(player);
         }
     }
 
@@ -136,14 +135,14 @@ public final class CommonEventHandler {
     @SubscribeEvent
     public static void onRespawnPosition(final PlayerRespawnPositionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            var data = AllomancerAttachment.get(player);
             var pos = new BlockPos((int) event.getTeleportTransition().position().x(),
                                    (int) event.getTeleportTransition().position().y(),
                                    (int) event.getTeleportTransition().position().z());
             var dimension = event.getTeleportTransition().newLevel().dimension();
             if (data.getSpawnLoc() == null || !data.getSpawnLoc().isCloseEnough(dimension, pos, 10)) {
                 data.setSpawnLoc(pos, dimension);
-                player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
+                AllomancerAttachment.sync(player);
             }
         }
     }
@@ -151,9 +150,9 @@ public final class CommonEventHandler {
     @SubscribeEvent
     public static void onSetSpawn(final PlayerSetSpawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            var data = AllomancerAttachment.get(player);
             data.setSpawnLoc(event.getNewSpawn(), event.getSpawnLevel());
-            player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
+            AllomancerAttachment.sync(player);
         }
     }
 
@@ -161,7 +160,7 @@ public final class CommonEventHandler {
     public static void onEntityHurt(final LivingIncomingDamageEvent event) {
         // Increase outgoing damage for pewter burners
         if (event.getSource().getEntity() instanceof ServerPlayer source) {
-            var data = source.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            var data = AllomancerAttachment.get(source);
 
             if (data.isBurning(Metal.PEWTER)) {
                 if (data.isEnhanced()) {
@@ -188,14 +187,14 @@ public final class CommonEventHandler {
 
         // Reduce incoming damage for pewter burners
         if (event.getEntity() instanceof ServerPlayer player) {
-            var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            var data = AllomancerAttachment.get(player);
             if (data.isBurning(Metal.PEWTER)) {
                 float newDamage = Math.max(0, event.getAmount() - 2);
                 Allomancy.LOGGER.trace("Reducing damage to {} on {}", newDamage, player);
                 event.setAmount(newDamage);
                 // Note that they took damage, will come in to play if they stop burning
                 data.setDamageStored(data.getDamageStored() + 2);
-                player.syncData(AllomancerAttachment.ALLOMANCY_DATA);
+                AllomancerAttachment.sync(player);
             }
         }
     }
@@ -203,7 +202,7 @@ public final class CommonEventHandler {
     @SubscribeEvent
     public static void onInvulnerabilityCheck(final EntityInvulnerabilityCheckEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+            var data = AllomancerAttachment.get(player);
 
             if (data.isBurning(Metal.PEWTER) && data.isEnhanced()) { // Duralumin invulnerability
                 Allomancy.LOGGER.debug("Canceling damage for {}", player);
@@ -245,7 +244,7 @@ public final class CommonEventHandler {
     }
 
     private static void playerPowerTick(ServerPlayer curPlayer, ServerLevel level) {
-        var data = curPlayer.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(curPlayer);
         // Run the necessary updates on the player's metals
         boolean syncRequired = data.tickBurning();
 
@@ -373,7 +372,7 @@ public final class CommonEventHandler {
             }
         }
         if (syncRequired) {
-            curPlayer.syncData(AllomancerAttachment.ALLOMANCY_DATA);
+            AllomancerAttachment.sync(curPlayer);
         }
     }
 }

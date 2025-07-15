@@ -100,7 +100,7 @@ public final class Inputs {
             PowersConfig.enable_overlay.set(!PowersConfig.enable_overlay.get());
             return;
         }
-        var data = player.getData(AllomancerAttachment.ALLOMANCY_DATA);
+        var data = AllomancerAttachment.get(player);
 
         for (int i = 0; i < powers.length; i++) {
             if (isKeyDown(powers[i])) {
