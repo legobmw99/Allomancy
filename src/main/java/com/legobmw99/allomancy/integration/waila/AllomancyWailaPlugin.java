@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.integration;
+package com.legobmw99.allomancy.integration.waila;
 
 import net.minecraft.world.entity.player.Player;
 import snownee.jade.api.IWailaClientRegistration;

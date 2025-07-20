@@ -1,9 +1,10 @@
 package com.legobmw99.allomancy.modules.world.block;
 
-import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
-import com.legobmw99.allomancy.util.AllomancyTags;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
+import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -42,20 +43,22 @@ public class LiquidLerasiumBlock extends LiquidBlock {
                                 Entity entity,
                                 InsideBlockEffectApplier eff) {
         super.entityInside(state, level, pos, entity, eff);
-        if (entity instanceof ItemEntity item) {
-            if (item.getItem().is(AllomancyTags.LERASIUM_CONVERSION)) {
-                item.setItem(new ItemStack(ConsumeSetup.LERASIUM_NUGGET.get(), item.getItem().getCount()));
-                if (!level.isClientSide()) {
-                    level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENCHANTMENT_TABLE_USE,
-                                    SoundSource.BLOCKS);
-                }
-                for (int i = 0; i < 16; i++) {
-                    float f4 = Mth.cos(i) * 0.3f;
-                    float f5 = Mth.sin(i) * 0.3f;
-                    level.addParticle(ParticleTypes.ENCHANT, entity.getX() + f4, entity.getY() + 0.4f,
-                                      entity.getZ() + f5, 0.0, 0.0, 0.0);
-                }
-            }
+        if (level instanceof ServerLevel serverLevel && entity instanceof ItemEntity item) {
+            var input = new InvestingRecipe.InvestingWrapper(item.getItem());
+            serverLevel
+                    .recipeAccess()
+                    .getRecipeFor(WorldSetup.INVESTING_RECIPE.get(), input, serverLevel)
+                    .ifPresent(recipe -> {
+                        item.setItem(recipe.value().assemble(input, serverLevel.registryAccess()));
+                        serverLevel.playSound(null, pos.getX(), pos.getY(), pos.getZ(),
+                                              SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS);
+                        for (int i = 0; i < 16; i++) {
+                            float f4 = Mth.cos(i) * 0.3f;
+                            float f5 = Mth.sin(i) * 0.3f;
+                            serverLevel.sendParticles(ParticleTypes.ENCHANT, entity.getX() + f4, entity.getY() + 0.4f,
+                                                      entity.getZ() + f5, 1, 0.0, 0.0, 0.0, 0.0);
+                        }
+                    });
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.integration;
+package com.legobmw99.allomancy.integration.waila;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;

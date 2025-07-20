@@ -6,13 +6,17 @@ import com.legobmw99.allomancy.modules.world.block.LerasiumFluid;
 import com.legobmw99.allomancy.modules.world.block.LiquidLerasiumBlock;
 import com.legobmw99.allomancy.modules.world.loot.DaggerLootModifier;
 import com.legobmw99.allomancy.modules.world.loot.LerasiumLootModifier;
+import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
 import com.legobmw99.allomancy.util.AllomancyTags;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.Pools;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
@@ -20,7 +24,11 @@ import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -84,6 +92,7 @@ public final class WorldSetup {
                     .create()
                     .canConvertToSource(false)
                     .lightLevel(14)
+                    .fallDistanceModifier(0)
                     .canHydrate(false)
                     .canSwim(false)
                     .supportsBoating(false)
@@ -216,12 +225,39 @@ public final class WorldSetup {
     public static final Supplier<MapCodec<DaggerLootModifier>> DAGGER_LOOT =
             GLM.register("unbreakable_dagger_loot", DaggerLootModifier.CODEC);
 
+    private static final DeferredRegister<RecipeSerializer<?>> RECIPES =
+            DeferredRegister.create(Registries.RECIPE_SERIALIZER, Allomancy.MODID);
+    public static final Supplier<RecipeSerializer<InvestingRecipe>> INVESTING_RECIPE_SERIALIZER =
+            RECIPES.register("investing", () -> new RecipeSerializer<InvestingRecipe>() {
+                @Override
+                public MapCodec<InvestingRecipe> codec() {
+                    return RecordCodecBuilder.mapCodec(instance -> instance
+                            .group(Ingredient.CODEC.fieldOf("input").forGetter(InvestingRecipe::getIngredient),
+                                   ItemStack.CODEC.fieldOf("result").forGetter(InvestingRecipe::getResult))
+                            .apply(instance, InvestingRecipe::new));
+                }
+
+                @Override
+                public StreamCodec<RegistryFriendlyByteBuf, InvestingRecipe> streamCodec() {
+                    return StreamCodec.composite(Ingredient.CONTENTS_STREAM_CODEC, InvestingRecipe::getIngredient,
+                                                 ItemStack.STREAM_CODEC, InvestingRecipe::getResult,
+                                                 InvestingRecipe::new);
+                }
+            });
+
+    private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
+            DeferredRegister.create(Registries.RECIPE_TYPE, Allomancy.MODID);
+    public static final Supplier<RecipeType<InvestingRecipe>> INVESTING_RECIPE =
+            RECIPE_TYPES.register("investing", () -> RecipeType.simple(Allomancy.rl("investing")));
+
     public static void register(IEventBus bus) {
         BLOCKS.register(bus);
         ITEMS.register(bus);
         GLM.register(bus);
         FLUID_TYPES.register(bus);
         FLUIDS.register(bus);
+        RECIPES.register(bus);
+        RECIPE_TYPES.register(bus);
     }
 
     private static DeferredBlock<Block> registerStandardBlock(String name) {

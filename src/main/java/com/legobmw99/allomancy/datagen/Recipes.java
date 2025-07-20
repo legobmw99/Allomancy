@@ -7,6 +7,8 @@ import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.recipe.VialItemRecipe;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.world.WorldSetup;
+import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
@@ -14,6 +16,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -310,6 +313,10 @@ final class Recipes extends RecipeProvider {
         Allomancy.LOGGER.debug("Creating Special Recipe for Vial Filling");
         SpecialRecipeBuilder.special(VialItemRecipe::new).save(consumer, "allomancy:vial_filling_recipe");
 
+        Allomancy.LOGGER.debug("Creating Special Recipe for Lerasium investing");
+        consumer.accept(ResourceKey.create(Registries.RECIPE, Allomancy.rl("lerasium_investing")),
+                        new InvestingRecipe(tag(AllomancyTags.LERASIUM_CONVERSION),
+                                            ConsumeSetup.LERASIUM_NUGGET.toStack()), null);
     }
 
     private void buildShaped(RecipeOutput consumer,
