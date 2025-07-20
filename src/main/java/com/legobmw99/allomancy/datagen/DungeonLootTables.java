@@ -19,16 +19,6 @@ public class DungeonLootTables implements LootTableSubProvider {
     @Override
     public void generate(BiConsumer<ResourceLocation, LootTable.Builder> writer) {
 
-        // Lerasium Inject
-        Allomancy.LOGGER.debug("Creating Loot Table for Lerasium inject");
-        LootPool.Builder leras_builder = LootPool
-                .lootPool()
-                .name("main")
-                .setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ConsumeSetup.LERASIUM_NUGGET.get()).setWeight(4))
-                .add(EmptyLootItem.emptyItem().setWeight(16));
-        writer.accept(new ResourceLocation(Allomancy.MODID, "inject/lerasium"), LootTable.lootTable().withPool(leras_builder));
-
         CompoundTag nbt = new CompoundTag();
         nbt.putBoolean("Unbreakable", true);
         Allomancy.LOGGER.debug("Creating Loot Table for Obsidian Dagger inject");

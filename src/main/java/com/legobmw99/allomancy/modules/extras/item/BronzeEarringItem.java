@@ -32,7 +32,7 @@ public class BronzeEarringItem extends ArmorItem {
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
 
     public BronzeEarringItem() {
-        super(new BronzeMaterial(), Type.HELMET, new Item.Properties().stacksTo(1).durability());
+        super(new BronzeMaterial(), Type.HELMET, new Item.Properties().stacksTo(1));
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 2,
                                                                     AttributeModifier.Operation.ADDITION));

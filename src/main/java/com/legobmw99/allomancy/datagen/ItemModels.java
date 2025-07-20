@@ -131,9 +131,8 @@ public class ItemModels extends ItemModelProvider {
                     material.location().getPath());
             getBuilder(ForgeRegistries.ITEMS.getKey(item).getPath() + "_trim_" + material.location().getPath())
                     .parent(getExistingFile(mcLoc("item/generated")))
-                    .texture("layer0", modLoc("item/" + ForgeRegistries.ITEMS.getKey(item).getPath()));
-            //         TODO           .texture("layer1", mcLoc("trims/items/" + type + "_trim_" + material.location
-            //          ().getPath()));
+                    .texture("layer0", modLoc("item/" + ForgeRegistries.ITEMS.getKey(item).getPath()))
+                    .texture("layer1", mcLoc("trims/items/" + type + "_trim")); // TODO odd
         }
 
     }
