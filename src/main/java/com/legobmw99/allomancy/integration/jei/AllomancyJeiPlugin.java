@@ -1,25 +1,16 @@
 package com.legobmw99.allomancy.integration.jei;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.recipe.VialItemRecipe;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeHolder;
-
-import java.util.List;
 
 @JeiPlugin
 public class AllomancyJeiPlugin implements IModPlugin {
@@ -41,18 +32,21 @@ public class AllomancyJeiPlugin implements IModPlugin {
     }
 
     @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        // TODO: actually list/show mobs? Would have same registry problem as below.
-        registration.addIngredientInfo(
-                List.of(ExtrasSetup.CHARGED_BRONZE_EARRING.toStack(), ExtrasSetup.BRONZE_EARRING.toStack()),
-                VanillaTypes.ITEM_STACK, Component.translatable("allomancy.jei.charged_earring.1"),
-                Component.translatable("allomancy.jei.charged_earring.2"),
-                Component.translatable("allomancy.jei.charged_earring.3"));
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addCraftingStation(InvestingRecipeCategory.TYPE, ExtrasSetup.CHARGED_BRONZE_EARRING);
+    }
 
-        // TODO figure out how to use Registry now
-        registration.addRecipes(InvestingRecipeCategory.TYPE, List.of(new RecipeHolder<>(
-                ResourceKey.create(Registries.RECIPE, Allomancy.rl("lerasium_investing")),
-                new InvestingRecipe(Ingredient.of(Items.NETHER_STAR), ConsumeSetup.LERASIUM_NUGGET.toStack()))));
+    @Override
+    public void registerRecipes(IRecipeRegistration registration) {
+        // TODO: actually list/show mobs?
+        registration.addIngredientInfo(ExtrasSetup.CHARGED_BRONZE_EARRING,
+                                       Component.translatable("allomancy.jei.charged_earring.1"),
+                                       Component.translatable("allomancy.jei.charged_earring.2"),
+                                       Component.translatable("allomancy.jei.charged_earring.3"));
+
+        if (RecipeEventHandler.recipes != null) {
+            registration.addRecipes(InvestingRecipeCategory.TYPE, RecipeEventHandler.recipes);
+        }
     }
 
 }

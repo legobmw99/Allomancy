@@ -20,9 +20,10 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.Nullable;
 
 public class InvestingRecipeCategory implements IRecipeCategory<RecipeHolder<InvestingRecipe>> {
-    private final IDrawable icon;
     public static final IRecipeHolderType<InvestingRecipe> TYPE =
             IRecipeType.create(WorldSetup.INVESTING_RECIPE.get());
+
+    private final IDrawable icon;
 
     public InvestingRecipeCategory(IGuiHelper helper) {
         icon = helper.createDrawableItemLike(ConsumeSetup.LERASIUM_NUGGET.get());
@@ -46,6 +47,7 @@ public class InvestingRecipeCategory implements IRecipeCategory<RecipeHolder<Inv
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<InvestingRecipe> recipe, IFocusGroup focuses) {
         builder.addInputSlot(30, 14).add(recipe.value().getIngredient());
+
         // TODO better liquid rendering?
         builder.addSlot(RecipeIngredientRole.CRAFTING_STATION, 40, 24).add(WorldSetup.LERASIUM_FLUID.get());
         builder.addOutputSlot(96, 24).add(recipe.value().getResult()).setOutputSlotBackground();

@@ -232,7 +232,7 @@ public final class WorldSetup {
                 @Override
                 public MapCodec<InvestingRecipe> codec() {
                     return RecordCodecBuilder.mapCodec(instance -> instance
-                            .group(Ingredient.CODEC.fieldOf("input").forGetter(InvestingRecipe::getIngredient),
+                            .group(Ingredient.CODEC.fieldOf("ingredient").forGetter(InvestingRecipe::getIngredient),
                                    ItemStack.CODEC.fieldOf("result").forGetter(InvestingRecipe::getResult))
                             .apply(instance, InvestingRecipe::new));
                 }
