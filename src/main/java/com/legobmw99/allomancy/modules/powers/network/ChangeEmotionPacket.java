@@ -1,8 +1,8 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
-import com.legobmw99.allomancy.modules.powers.PowerUtils;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.powers.util.Emotional;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
@@ -43,11 +43,14 @@ public class ChangeEmotionPacket {
             if (target == null) {
                 return;
             }
-            boolean enhanced = allomancer.getCapability(AllomancerCapability.PLAYER_CAP).filter(IAllomancerData::isEnhanced).isPresent();
+            boolean enhanced = allomancer
+                    .getCapability(AllomancerCapability.PLAYER_CAP)
+                    .filter(IAllomancerData::isEnhanced)
+                    .isPresent();
             if (this.make_aggressive) {
-                PowerUtils.riotEntity(target, allomancer, enhanced);
+                Emotional.riot(target, allomancer, enhanced);
             } else {
-                PowerUtils.sootheEntity(target, allomancer, enhanced);
+                Emotional.soothe(target, allomancer, enhanced);
             }
         });
         ctx.get().setPacketHandled(true);

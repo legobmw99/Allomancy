@@ -30,5 +30,6 @@
     "recipes": [
       "allomancy:steel_pattern"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -2,30 +2,29 @@ package com.legobmw99.allomancy.modules.powers.data;
 
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.network.Network;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
 public class DefaultAllomancerData implements IAllomancerData {
 
-    private static final int[] MAX_BURN_TIME = {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
+    private static final int[] MAX_BURN_TIME =
+            {1800, 1800, 3600, 600, 1800, 1800, 2400, 1600, 100, 20, 300, 40, 1000, 10000, 3600, 160};
 
     private final boolean[] allomantic_powers;
     private final int[] burn_time;
     private final int[] metal_amounts;
     private final boolean[] burning_metals;
     private int damage_stored;
-    private String death_dimension;
-    private BlockPos death_pos;
-    private String spawn_dimension;
-    private BlockPos spawn_pos;
+    private GlobalPos spawn_pos;
+    private GlobalPos seeking_pos;
     private int enhanced_time;
 
     public DefaultAllomancerData() {
@@ -44,12 +43,11 @@ public class DefaultAllomancerData implements IAllomancerData {
 
         this.enhanced_time = 0;
         this.damage_stored = 0;
-        this.death_pos = null;
+        this.seeking_pos = null;
         this.spawn_pos = null;
     }
 
-
-    public void tickBurning(ServerPlayer player) {
+    public boolean tickBurning() {
         boolean sync = false;
         for (Metal metal : Metal.values()) {
             if (this.isBurning(metal)) {
@@ -58,23 +56,21 @@ public class DefaultAllomancerData implements IAllomancerData {
                     this.setBurning(metal, false);
                     sync = true;
                 } else {
-                    this.setBurnTime(metal, this.getBurnTime(metal) - 1);
-                    if (this.getBurnTime(metal) <= 0) {
-                        if (this.getAmount(metal) <= 0) {
+                    this.burn_time[metal.getIndex()]--;
+
+                    if (this.burn_time[metal.getIndex()] <= 0) {
+                        if (this.getStored(metal) <= 0) {
                             this.setBurning(metal, false);
                         } else {
-                            this.setAmount(metal, this.getAmount(metal) - 1);
+                            this.decrementStored(metal);
                         }
                         sync = true;
-                        this.setBurnTime(metal, MAX_BURN_TIME[metal.getIndex()]);
+                        this.burn_time[metal.getIndex()] = MAX_BURN_TIME[metal.getIndex()];
                     }
                 }
             }
         }
-        if (sync) {
-            Network.sync(this, player);
-        }
-
+        return sync;
     }
 
 
@@ -148,15 +144,21 @@ public class DefaultAllomancerData implements IAllomancerData {
     }
 
 
-    public int getAmount(Metal metal) {
+    public int getStored(Metal metal) {
         return this.metal_amounts[metal.getIndex()];
     }
 
-
-    public void setAmount(Metal metal, int amt) {
-        this.metal_amounts[metal.getIndex()] = amt;
+    public void incrementStored(Metal metal) {
+        if (this.metal_amounts[metal.getIndex()] < MAX_STORAGE) {
+            this.metal_amounts[metal.getIndex()]++;
+        }
     }
 
+    public void decrementStored(Metal metal) {
+        if (this.metal_amounts[metal.getIndex()] > 0) {
+            this.metal_amounts[metal.getIndex()]--;
+        }
+    }
 
     public void drainMetals(Metal... metals) {
         for (Metal mt : metals) {
@@ -176,78 +178,29 @@ public class DefaultAllomancerData implements IAllomancerData {
         this.damage_stored = damageStored;
     }
 
-
-    public void setDeathLoc(BlockPos pos, ResourceKey<Level> dim) {
-        if (dim != null) {
-            setDeathLoc(pos, dim.location().toString());
-        }
-    }
-
-
-    public void setDeathLoc(BlockPos pos, String dim_name) {
-        this.death_pos = pos;
-        this.death_dimension = dim_name;
-    }
-
-
-    public BlockPos getDeathLoc() {
-        return this.death_pos;
-    }
-
-
-    public ResourceKey<Level> getDeathDim() {
-        if (this.death_dimension == null) {
-            return null;
-        }
-        return ResourceKey.create(Registries.DIMENSION, new ResourceLocation(this.death_dimension));
-
-    }
-
-
     public void setSpawnLoc(BlockPos pos, ResourceKey<Level> dim) {
-        setSpawnLoc(pos, dim.location().toString());
+        if (pos != null && dim != null) {
+            this.spawn_pos = GlobalPos.of(dim, pos);
+        }
     }
 
-
-    public void setSpawnLoc(BlockPos pos, String dim_name) {
-        this.spawn_pos = pos;
-        this.spawn_dimension = dim_name;
-    }
-
-
-    public BlockPos getSpawnLoc() {
+    public @Nullable GlobalPos getSpawnLoc() {
         return this.spawn_pos;
     }
 
-
-    public ResourceKey<Level> getSpawnDim() {
-        if (this.spawn_dimension == null) {
-            return null;
+    public void setSpecialSeekingLoc(BlockPos pos, ResourceKey<Level> dim) {
+        if (pos != null && dim != null) {
+            this.seeking_pos = GlobalPos.of(dim, pos);
+        } else {
+            this.seeking_pos = null;
         }
-        return ResourceKey.create(Registries.DIMENSION, new ResourceLocation(this.spawn_dimension));
     }
 
-    /**
-     * Get the burn time of a specific metal
-     *
-     * @param metal the metal to retrieve
-     * @return the burn time
-     */
-    protected int getBurnTime(Metal metal) {
-        return this.burn_time[metal.getIndex()];
+    public @Nullable GlobalPos getSpecialSeekingLoc() {
+        return this.seeking_pos;
     }
 
-    /**
-     * Set the burn time of a specific metal
-     *
-     * @param metal    the metal to set
-     * @param burnTime the burn time
-     */
-    protected void setBurnTime(Metal metal, int burnTime) {
-        this.burn_time[metal.getIndex()] = burnTime;
-    }
-
-    public void decEnhanced() {
+    public void decrementEnhanced() {
         if (isEnhanced()) {
             this.enhanced_time--;
         }
@@ -273,7 +226,7 @@ public class DefaultAllomancerData implements IAllomancerData {
 
         CompoundTag metal_storage = new CompoundTag();
         for (Metal mt : Metal.values()) {
-            metal_storage.putInt(mt.getName(), this.getAmount(mt));
+            metal_storage.putInt(mt.getName(), this.getStored(mt));
         }
         allomancy_data.put("metal_storage", metal_storage);
 
@@ -285,19 +238,19 @@ public class DefaultAllomancerData implements IAllomancerData {
         allomancy_data.put("metal_burning", metal_burning);
 
         CompoundTag position = new CompoundTag();
-        BlockPos death_block = this.getDeathLoc();
-        if (death_block != null) {
-            position.putString("death_dimension", this.getDeathDim().location().toString());
-            position.putInt("death_x", death_block.getX());
-            position.putInt("death_y", death_block.getY());
-            position.putInt("death_z", death_block.getZ());
-        }
-        BlockPos spawn_block = this.getSpawnLoc();
-        if (spawn_block != null) {
-            position.putString("spawn_dimension", this.getSpawnDim().location().toString());
+        if (this.spawn_pos != null) {
+            position.putString("spawn_dimension", this.spawn_pos.dimension().location().toString());
+            BlockPos spawn_block = this.spawn_pos.pos();
             position.putInt("spawn_x", spawn_block.getX());
             position.putInt("spawn_y", spawn_block.getY());
             position.putInt("spawn_z", spawn_block.getZ());
+        }
+        if (this.seeking_pos != null) {
+            position.putString("seeking_dimension", this.seeking_pos.dimension().location().toString());
+            BlockPos spawn_block = this.seeking_pos.pos();
+            position.putInt("seeking_x", spawn_block.getX());
+            position.putInt("seeking_y", spawn_block.getY());
+            position.putInt("seeking_z", spawn_block.getZ());
         }
         allomancy_data.put("position", position);
 
@@ -305,7 +258,7 @@ public class DefaultAllomancerData implements IAllomancerData {
     }
 
     public void load(CompoundTag allomancy_data) {
-        CompoundTag abilities = (CompoundTag) allomancy_data.get("abilities");
+        CompoundTag abilities = allomancy_data.getCompound("abilities");
         for (Metal mt : Metal.values()) {
             if (abilities.getBoolean(mt.getName())) {
                 this.addPower(mt);
@@ -314,23 +267,32 @@ public class DefaultAllomancerData implements IAllomancerData {
             }
         }
 
-        CompoundTag metal_storage = (CompoundTag) allomancy_data.get("metal_storage");
+        CompoundTag metal_storage = allomancy_data.getCompound("metal_storage");
         for (Metal mt : Metal.values()) {
-            this.setAmount(mt, metal_storage.getInt(mt.getName()));
+            this.metal_amounts[mt.getIndex()] = metal_storage.getInt(mt.getName());
         }
 
-        CompoundTag metal_burning = (CompoundTag) allomancy_data.get("metal_burning");
+        CompoundTag metal_burning = allomancy_data.getCompound("metal_burning");
         for (Metal mt : Metal.values()) {
             this.setBurning(mt, metal_burning.getBoolean(mt.getName()));
         }
 
-        CompoundTag position = (CompoundTag) allomancy_data.get("position");
-        if (position.contains("death_dimension")) {
-            this.setDeathLoc(new BlockPos(position.getInt("death_x"), position.getInt("death_y"), position.getInt("death_z")), position.getString("death_dimension"));
-        }
+        CompoundTag position = allomancy_data.getCompound("position");
         if (position.contains("spawn_dimension")) {
-            this.setSpawnLoc(new BlockPos(position.getInt("spawn_x"), position.getInt("spawn_y"), position.getInt("spawn_z")), position.getString("spawn_dimension"));
+            this.setSpawnLoc(
+                    new BlockPos(position.getInt("spawn_x"), position.getInt("spawn_y"), position.getInt("spawn_z")),
+                    ResourceKey.create(Registries.DIMENSION,
+                                       new ResourceLocation(position.getString("spawn_dimension"))));
         }
+        if (position.contains("seeking_dimension")) {
+            this.setSpecialSeekingLoc(new BlockPos(position.getInt("seeking_x"), position.getInt("seeking_y"),
+                                                   position.getInt("seeking_z")),
+                                      ResourceKey.create(Registries.DIMENSION, new ResourceLocation(
+                                              position.getString("seeking_dimension"))));
+        } else {
+            this.setSpecialSeekingLoc(null, null);
+        }
+
 
     }
 }

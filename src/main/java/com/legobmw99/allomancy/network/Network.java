@@ -34,9 +34,6 @@ public class Network {
         INSTANCE.registerMessage(nextIndex(), UpdateEnhancedPacket.class, UpdateEnhancedPacket::encode, UpdateEnhancedPacket::decode, UpdateEnhancedPacket::handle);
     }
 
-    public static void sendToServer(Object msg) {
-        INSTANCE.sendToServer(msg);
-    }
 
     public static void sendTo(Object msg, ServerPlayer player) {
         if (!(player instanceof FakePlayer)) {
@@ -48,7 +45,7 @@ public class Network {
         INSTANCE.send(target, msg);
     }
 
-    public static void sync(ServerPlayer player) {
+    public static void syncAllomancerData(ServerPlayer player) {
         player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> sync(data, player));
     }
 

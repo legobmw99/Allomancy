@@ -30,5 +30,6 @@
     "recipes": [
       "allomancy:cadmium_pattern"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.util;
 
-import com.legobmw99.allomancy.modules.materials.MaterialsConfig;
+import com.legobmw99.allomancy.modules.world.WorldConfig;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -20,7 +20,7 @@ public class AllomancyConfig {
         var CLIENT_BUILDER = new ForgeConfigSpec.Builder();
         var SERVER_BUILDER = new ForgeConfigSpec.Builder();
 
-        MaterialsConfig.init(COMMON_BUILDER);
+        WorldConfig.init(COMMON_BUILDER);
         PowersConfig.init(SERVER_BUILDER, COMMON_BUILDER, CLIENT_BUILDER);
 
         COMMON_CONFIG = COMMON_BUILDER.build();

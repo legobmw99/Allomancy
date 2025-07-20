@@ -1,5 +1,5 @@
 {
-  "parent": "allomancy:main/metallurgist",
+  "parent": "allomancy:main/well",
   "criteria": {
     "lerasium_nugget": {
       "conditions": {
@@ -15,7 +15,7 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancements.become_mistborn.desc"
+      "translate": "advancements.allomancy.become_mistborn.desc"
     },
     "frame": "challenge",
     "hidden": true,
@@ -25,7 +25,7 @@
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.become_mistborn.title"
+      "translate": "advancements.allomancy.become_mistborn.title"
     }
   },
   "requirements": [
@@ -35,5 +35,6 @@
   ],
   "rewards": {
     "experience": 100
-  }
+  },
+  "sends_telemetry_event": true
 }

@@ -58,5 +58,6 @@
       "name": "deepslate_tin_ore",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/deepslate_tin_ore"
 }

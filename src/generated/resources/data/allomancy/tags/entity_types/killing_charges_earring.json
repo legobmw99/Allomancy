@@ -1,0 +1,14 @@
+{
+  "values": [
+    "#minecraft:raiders",
+    "minecraft:wither",
+    "minecraft:ender_dragon",
+    "minecraft:elder_guardian",
+    "minecraft:ghast",
+    "minecraft:zoglin",
+    "minecraft:warden",
+    "minecraft:wither_skeleton",
+    "minecraft:skeleton_horse",
+    "minecraft:shulker"
+  ]
+}

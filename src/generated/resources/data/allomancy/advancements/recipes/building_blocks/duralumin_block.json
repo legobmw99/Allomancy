@@ -30,5 +30,6 @@
     "recipes": [
       "allomancy:duralumin_block"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.consumables.item.recipe;
 
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 public class VialItemRecipe extends CustomRecipe {
     private static final Ingredient INGREDIENT_FLAKES = Ingredient.of(
-            MaterialsSetup.FLAKES.subList(0, Metal.values().length).stream().map(RegistryObject::get).toArray(Item[]::new));
+            WorldSetup.FLAKES.subList(0, Metal.values().length).stream().map(RegistryObject::get).toArray(Item[]::new));
     private static final Ingredient INGREDIENT_VIAL = Ingredient.of(ConsumeSetup.VIAL.get());
 
     private ItemStack item_result = ItemStack.EMPTY;
@@ -41,7 +41,7 @@ public class VialItemRecipe extends CustomRecipe {
             if (!itemstack.isEmpty()) {
                 if (INGREDIENT_FLAKES.test(itemstack)) {
                     for (Metal mt : Metal.values()) {
-                        if (itemstack.getItem() == MaterialsSetup.FLAKES.get(mt.getIndex()).get()) {
+                        if (itemstack.getItem() == WorldSetup.FLAKES.get(mt.getIndex()).get()) {
                             if (metals[mt.getIndex()]) {
                                 return false;
                             }

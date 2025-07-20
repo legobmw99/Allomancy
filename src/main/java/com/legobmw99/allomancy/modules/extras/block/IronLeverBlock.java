@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
@@ -29,17 +30,18 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyUsableB
     }
 
     @Override
-    public boolean useAllomantically(BlockState state, Level world, BlockPos pos, Player playerIn, boolean isPush) {
-        state = state.cycle(POWERED);
-        if (world.isClientSide) {
+    public boolean useAllomantically(BlockState state, Level level, BlockPos pos, Player player, boolean isPush) {
+
+        if (level.isClientSide()) {
             return true;
         }
-        if ((!isPush && state.getValue(POWERED)) || (isPush && !state.getValue(POWERED))) {
-
-            world.setBlock(pos, state, 3);
-            float f = state.getValue(POWERED) ? 0.6F : 0.5F;
-            world.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, f);
-            this.updateNeighbors(state, world, pos);
+        if (isPush == state.getValue(POWERED)) {
+            BlockState blockstate = this.pull(state, level, pos);
+            float f = blockstate.getValue(POWERED) ? 0.6F : 0.5F;
+            level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, f);
+            level.gameEvent(player,
+                            blockstate.getValue(POWERED) ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE,
+                            pos);
             return true;
 
         }
@@ -47,13 +49,21 @@ public class IronLeverBlock extends LeverBlock implements IAllomanticallyUsableB
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public InteractionResult use(BlockState state,
+                                 Level worldIn,
+                                 BlockPos pos,
+                                 Player player,
+                                 InteractionHand handIn,
+                                 BlockHitResult hit) {
         return InteractionResult.FAIL;
     }
 
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack,
+                                @Nullable BlockGetter worldIn,
+                                List<Component> tooltip,
+                                TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         Component lore = ItemDisplay.addColorToText("block.allomancy.iron_activation.lore", ChatFormatting.GRAY);
         tooltip.add(lore);

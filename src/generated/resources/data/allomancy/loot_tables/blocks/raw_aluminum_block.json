@@ -12,5 +12,6 @@
       "name": "raw_aluminum_block",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/raw_aluminum_block"
 }

@@ -30,5 +30,6 @@
     "recipes": [
       "allomancy:allomantic_grinder"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

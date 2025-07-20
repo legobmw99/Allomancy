@@ -30,5 +30,6 @@
     "recipes": [
       "allomancy:koloss_blade"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

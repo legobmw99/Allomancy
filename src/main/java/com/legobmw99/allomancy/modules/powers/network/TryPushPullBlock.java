@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.modules.powers.network;
 
 import com.legobmw99.allomancy.api.block.IAllomanticallyUsableBlock;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
-import com.legobmw99.allomancy.modules.powers.PowerUtils;
+import com.legobmw99.allomancy.modules.powers.util.Physical;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,11 +43,15 @@ public class TryPushPullBlock {
             if (player.level().isLoaded(pos)) {
                 // activate blocks
                 if (player.level().getBlockState(pos).getBlock() instanceof IAllomanticallyUsableBlock block) {
-                    block.useAllomantically(player.level().getBlockState(pos), player.level(), pos, player, this.direction > 0);
-                } else if (PowerUtils.isBlockStateMetal(player.level().getBlockState(pos)) // Check whitelist on server
-                           || (player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() // check coin bag
-                               && (!player.getProjectile(player.getMainHandItem()).isEmpty()) && this.direction > 0)) {
-                    PowerUtils.move(this.direction, player, pos);
+                    block.useAllomantically(player.level().getBlockState(pos), player.level(), pos, player,
+                                            this.direction > 0);
+                } else if (Physical.isBlockStateMetallic(player.level().getBlockState(pos))
+                           // Check whitelist on server
+                           || (player.isCrouching() && this.direction > 0 &&
+                               player.getMainHandItem().getItem() == CombatSetup.COIN_BAG.get() // check coin bag
+                                   /* causes problems if there is exactly 1 nugget, which just got fired!
+                                    && (!player.getProjectile(player.getMainHandItem()).isEmpty())*/)) {
+                    Physical.lurch(this.direction, player, pos);
                 }
             }
         });

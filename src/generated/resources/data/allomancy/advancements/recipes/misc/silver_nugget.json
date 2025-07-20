@@ -30,5 +30,6 @@
     "recipes": [
       "allomancy:silver_nugget"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

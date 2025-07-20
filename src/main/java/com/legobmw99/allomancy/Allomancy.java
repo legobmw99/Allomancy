@@ -4,14 +4,17 @@ import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.combat.client.CombatClientSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.modules.powers.PowersSetup;
 import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
+import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
+import com.legobmw99.allomancy.modules.world.client.WorldClientSetup;
 import com.legobmw99.allomancy.network.Network;
 import com.legobmw99.allomancy.util.AllomancyConfig;
 import com.legobmw99.allomancy.util.ItemDisplay;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
@@ -28,6 +31,10 @@ public class Allomancy {
     public static final String MODID = "allomancy";
 
     public static final Logger LOGGER = LogManager.getLogger();
+
+    public static ResourceLocation rl(String path) {
+        return new ResourceLocation(MODID, path);
+    }
 
     public static Allomancy instance;
 
@@ -46,20 +53,19 @@ public class Allomancy {
         modBus.addListener(MetalOverlay::registerGUI);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            modBus.addListener(PowersClientSetup::registerKeyBinding);
+            modBus.addListener(Inputs::registerKeyBinding);
             modBus.addListener(PowersClientSetup::registerParticle);
             PowersClientSetup.register();
         });
 
 
-        MinecraftForge.EVENT_BUS.addListener(PowersSetup::registerCommands);
+        MinecraftForge.EVENT_BUS.addListener(ExtrasSetup::registerCommands);
 
 
         // Register all Registries
-        PowersSetup.register();
         CombatSetup.register();
         ConsumeSetup.register();
-        MaterialsSetup.register();
+        WorldSetup.register();
         ExtrasSetup.register();
         ItemDisplay.register();
 
@@ -68,14 +74,14 @@ public class Allomancy {
     }
 
     public static void clientInit(final FMLClientSetupEvent e) {
-        PowersSetup.clientInit(e);
+        PowersClientSetup.clientInit(e);
+        WorldClientSetup.clientInit(e);
     }
 
     public static void init(final FMLCommonSetupEvent e) {
         PowersSetup.init(e);
-        MaterialsSetup.init(e);
+        WorldSetup.init(e);
         e.enqueueWork(Network::registerPackets);
-
     }
 
 }

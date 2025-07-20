@@ -1,6 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.network;
 
-import com.legobmw99.allomancy.modules.powers.PowerUtils;
+import com.legobmw99.allomancy.modules.powers.util.Physical;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -46,20 +46,21 @@ public class TryPushPullEntity {
             ServerPlayer player = ctx.get().getSender();
             Entity target = player.level().getEntity(this.entityIDOther);
             if (target != null) {
-                if (PowerUtils.isEntityMetal(target)) {
+                if (Physical.isEntityMetallic(target)) {
                     // The player moves
                     if (target instanceof IronGolem || target instanceof ItemFrame) {
-                        PowerUtils.move(this.direction, player, target.blockPosition());
+                        Physical.lurch(this.direction, player, target.blockPosition());
 
-                    } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity || target instanceof ArmorStand ||
+                    } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity ||
+                               target instanceof ArmorStand ||
                                (target instanceof AbstractMinecart && !target.isVehicle())) {
-                        PowerUtils.move(this.direction / 2.0, target, player.blockPosition());
+                        Physical.lurch(this.direction / 2.0, target, player.blockPosition());
 
                         // Split the difference
                     } else if (!(target instanceof ThrowableItemProjectile)) {
-                        PowerUtils.move(this.direction / 2.0, target, player.blockPosition());
+                        Physical.lurch(this.direction / 2.0, target, player.blockPosition());
 
-                        PowerUtils.move(this.direction / 2.0, player, target.blockPosition());
+                        Physical.lurch(this.direction / 2.0, player, target.blockPosition());
                     }
                 }
             }

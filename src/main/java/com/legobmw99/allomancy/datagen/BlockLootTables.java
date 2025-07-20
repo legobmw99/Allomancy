@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -58,11 +58,11 @@ public class BlockLootTables implements LootTableSubProvider {
 
     @Override
     public void generate(BiConsumer<ResourceLocation, LootTable.Builder> writer) {
-        for (int i = 0; i < MaterialsSetup.ORE_METALS.length; i++) {
-            var ore = MaterialsSetup.ORE_BLOCKS.get(i).get();
-            var ds = MaterialsSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
-            var raw = MaterialsSetup.RAW_ORE_ITEMS.get(i).get();
-            var rawb = MaterialsSetup.RAW_ORE_BLOCKS.get(i).get();
+        for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
+            var ore = WorldSetup.ORE_BLOCKS.get(i).get();
+            var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
+            var raw = WorldSetup.RAW_ORE_ITEMS.get(i).get();
+            var rawb = WorldSetup.RAW_ORE_BLOCKS.get(i).get();
 
             addSilkTouchBlock(writer, ForgeRegistries.BLOCKS.getKey(ore).getPath(), ore, raw, 1, 1);
             addSilkTouchBlock(writer, ForgeRegistries.BLOCKS.getKey(ds).getPath(), ds, raw, 1, 1);
@@ -71,9 +71,10 @@ public class BlockLootTables implements LootTableSubProvider {
         }
 
         addSimpleBlock(writer, "iron_button", ExtrasSetup.IRON_BUTTON.get());
+        addSimpleBlock(writer, "inverted_iron_button", ExtrasSetup.INVERTED_IRON_BUTTON.get());
         addSimpleBlock(writer, "iron_lever", ExtrasSetup.IRON_LEVER.get());
 
-        for (RegistryObject<Block> rblock : MaterialsSetup.STORAGE_BLOCKS) {
+        for (RegistryObject<Block> rblock : WorldSetup.STORAGE_BLOCKS) {
             if (rblock != null) {
                 Block block = rblock.get();
                 addSimpleBlock(writer, ForgeRegistries.BLOCKS.getKey(block).getPath(), block);

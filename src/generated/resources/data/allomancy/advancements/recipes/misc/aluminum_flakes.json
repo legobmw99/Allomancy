@@ -30,5 +30,6 @@
     "recipes": [
       "allomancy:aluminum_flakes"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -30,5 +30,6 @@
     "recipes": [
       "allomancy:brass_flakes"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

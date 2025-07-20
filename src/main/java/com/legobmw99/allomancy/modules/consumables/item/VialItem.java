@@ -39,8 +39,8 @@ public class VialItem extends Item {
         livingEntity.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
             for (Metal mt : Metal.values()) {
                 if (stack.getTag().contains(mt.getName()) && stack.getTag().getBoolean(mt.getName())) {
-                    if (data.getAmount(mt) < 10) {
-                        data.setAmount(mt, data.getAmount(mt) + 1);
+                    if (data.getStored(mt) < 10) {
+                        data.incrementStored(mt);
                     }
                 }
             }
@@ -78,7 +78,7 @@ public class VialItem extends Item {
                 for (Metal mt : Metal.values()) {
                     if (itemStackIn.getTag().contains(mt.getName()) && itemStackIn.getTag().getBoolean(mt.getName())) {
                         filling++;
-                        if (data.getAmount(mt) >= 10) {
+                        if (data.getStored(mt) >= 10) {
                             full++;
                         }
                     }

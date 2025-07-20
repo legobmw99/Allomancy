@@ -17,7 +17,7 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancements.local_metallurgist.desc"
+      "translate": "advancements.allomancy.local_metallurgist.desc"
     },
     "frame": "task",
     "hidden": false,
@@ -27,12 +27,13 @@
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.local_metallurgist.title"
+      "translate": "advancements.allomancy.local_metallurgist.title"
     }
   },
   "requirements": [
     [
       "grinder"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

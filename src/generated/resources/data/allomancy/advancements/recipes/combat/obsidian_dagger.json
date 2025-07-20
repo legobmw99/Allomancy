@@ -30,5 +30,6 @@
     "recipes": [
       "allomancy:obsidian_dagger"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

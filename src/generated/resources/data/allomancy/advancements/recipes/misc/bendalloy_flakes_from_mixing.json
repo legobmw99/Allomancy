@@ -30,5 +30,6 @@
     "recipes": [
       "allomancy:bendalloy_flakes_from_mixing"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

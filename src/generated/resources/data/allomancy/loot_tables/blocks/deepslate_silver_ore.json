@@ -58,5 +58,6 @@
       "name": "deepslate_silver_ore",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "allomancy:blocks/deepslate_silver_ore"
 }

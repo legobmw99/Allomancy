@@ -42,7 +42,7 @@ public class UpdateBurnPacket {
             ServerPlayer player = ctx.get().getSender();
 
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-                if (data.hasPower(this.mt) && data.getAmount(this.mt) > 0) {
+                if (data.hasPower(this.mt) && data.getStored(this.mt) > 0) {
                     data.setBurning(this.mt, this.value);
                     if (!this.value && this.mt == Metal.DURALUMIN) {
                         data.drainMetals(Arrays.stream(Metal.values()).filter(data::isBurning).toArray(Metal[]::new));

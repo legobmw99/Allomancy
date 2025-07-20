@@ -2,7 +2,7 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.materials.MaterialsSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
@@ -23,18 +23,18 @@ public class BlockTags extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
 
-        for (int i = 0; i < MaterialsSetup.ORE_METALS.length; i++) {
-            var block = MaterialsSetup.ORE_BLOCKS.get(i).getKey();
-            var ds = MaterialsSetup.DEEPSLATE_ORE_BLOCKS.get(i).getKey();
-            var raw = MaterialsSetup.RAW_ORE_BLOCKS.get(i).getKey();
+        for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
+            var block = WorldSetup.ORE_BLOCKS.get(i).getKey();
+            var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i).getKey();
+            var raw = WorldSetup.RAW_ORE_BLOCKS.get(i).getKey();
 
-            addForgeTag("ores/" + MaterialsSetup.ORE_METALS[i], block, ds);
+            addForgeTag("ores/" + WorldSetup.ORE_METALS[i], block, ds);
             addForgeTag("ores", block, ds);
             addForgeTag("ores_in_ground/stone", block);
             addForgeTag("ores_in_ground/deepslate", ds);
 
             addForgeTag("storage_blocks", raw);
-            addForgeTag("storage_blocks/raw_" + MaterialsSetup.ORE_METALS[i], raw);
+            addForgeTag("storage_blocks/raw_" + WorldSetup.ORE_METALS[i], raw);
 
             makePickaxeMineable(block, ds, raw);
         }
@@ -43,7 +43,7 @@ public class BlockTags extends BlockTagsProvider {
             if (mt.isVanilla()) {
                 continue;
             }
-            var block = MaterialsSetup.STORAGE_BLOCKS.get(mt.getIndex()).getKey();
+            var block = WorldSetup.STORAGE_BLOCKS.get(mt.getIndex()).getKey();
             addForgeTag("storage_blocks/" + mt.getName(), block);
             addForgeTag("storage_blocks", block);
             makePickaxeMineable(block);
@@ -53,9 +53,9 @@ public class BlockTags extends BlockTagsProvider {
 
         }
 
-        var lead = MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.LEAD).getKey();
+        var lead = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.LEAD).getKey();
         addForgeTag("storage_blocks/lead", lead);
-        var silver = MaterialsSetup.STORAGE_BLOCKS.get(MaterialsSetup.SILVER).getKey();
+        var silver = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.SILVER).getKey();
         addForgeTag("storage_blocks/silver", silver);
         addBeacon(silver);
 

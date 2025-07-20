@@ -11,8 +11,8 @@ package com.legobmw99.allomancy.modules.powers.client.gui;
 
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
-import com.legobmw99.allomancy.modules.powers.client.PowersClientSetup;
-import com.legobmw99.allomancy.modules.powers.client.util.ClientUtils;
+import com.legobmw99.allomancy.modules.powers.client.network.PowerRequests;
+import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -37,13 +37,19 @@ import java.util.Arrays;
 @OnlyIn(Dist.CLIENT)
 public class MetalSelectScreen extends Screen {
 
-    private static final String[] METAL_NAMES = Arrays.stream(Metal.values()).map(Metal::getName).toArray(String[]::new);
+    private static final String[] METAL_NAMES =
+            Arrays.stream(Metal.values()).map(Metal::getName).toArray(String[]::new);
     private static final String GUI_METAL = "allomancy:textures/gui/metals/%s_symbol.png";
-    private static final String[] METAL_LOCAL = Arrays.stream(METAL_NAMES).map(s -> "metals." + s).toArray(String[]::new);
-    private static final ResourceLocation[] METAL_ICONS = Arrays.stream(METAL_NAMES).map(s -> new ResourceLocation(String.format(GUI_METAL, s))).toArray(ResourceLocation[]::new);
+    private static final String[] METAL_LOCAL =
+            Arrays.stream(METAL_NAMES).map(s -> "metals." + s).toArray(String[]::new);
+    private static final ResourceLocation[] METAL_ICONS = Arrays
+            .stream(METAL_NAMES)
+            .map(s -> new ResourceLocation(String.format(GUI_METAL, s)))
+            .toArray(ResourceLocation[]::new);
     final Minecraft mc;
-    int timeIn = PowersConfig.animate_selection.get() ? 0 : 16; // Config setting for whether the wheel animates open or instantly appears
-    int slotSelected = -1;
+    int timeIn = PowersConfig.animate_selection.get() ? 0 : 16;
+    // Config setting for whether the wheel animates open or instantly appears
+    protected Metal selectedMetal = null;
 
     public MetalSelectScreen() {
         super(Component.translatable("allomancy_gui"));
@@ -74,7 +80,7 @@ public class MetalSelectScreen extends Screen {
             float step = (float) Math.PI / 180;
             float degPer = (float) Math.PI * 2 / segments;
 
-            this.slotSelected = -1;
+            this.selectedMetal = null;
 
             Tesselator tess = Tesselator.getInstance();
             BufferBuilder buf = tess.getBuilder();
@@ -88,9 +94,10 @@ public class MetalSelectScreen extends Screen {
             for (int seg = 0; seg < segments; seg++) {
                 Metal mt = Metal.getMetal(toMetalIndex(seg));
                 boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
-                float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+                float radius =
+                        Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
                 if (mouseInSector) {
-                    this.slotSelected = seg;
+                    this.selectedMetal = Metal.getMetal(toMetalIndex(seg));
                     radius *= 1.025f;
                 }
 
@@ -99,7 +106,7 @@ public class MetalSelectScreen extends Screen {
                     gs += 0x19;
                 }
 
-                gs = (!data.hasPower(mt) || data.getAmount(mt) == 0) ? 0 : gs;
+                gs = (!data.hasPower(mt) || data.getStored(mt) == 0) ? 0 : gs;
 
                 int r = data.isBurning(mt) ? 0xFF : gs;
                 int g = gs;
@@ -126,7 +133,8 @@ public class MetalSelectScreen extends Screen {
             for (int seg = 0; seg < segments; seg++) {
                 Metal mt = Metal.getMetal(toMetalIndex(seg));
                 boolean mouseInSector = data.hasPower(mt) && (degPer * seg < angle && angle < degPer * (seg + 1));
-                float radius = Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
+                float radius =
+                        Math.max(0F, Math.min((this.timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius));
                 if (mouseInSector) {
                     radius *= 1.025f;
                 }
@@ -138,7 +146,8 @@ public class MetalSelectScreen extends Screen {
 
                 float xsp = xp - 4;
                 float ysp = yp;
-                String name = (mouseInSector ? ChatFormatting.UNDERLINE : ChatFormatting.RESET) + Component.translatable(METAL_LOCAL[toMetalIndex(seg)]).getString();
+                String name = (mouseInSector ? ChatFormatting.UNDERLINE : ChatFormatting.RESET) +
+                              Component.translatable(METAL_LOCAL[toMetalIndex(seg)]).getString();
                 int textwidth = this.mc.font.width(name);
 
                 if (xsp < x) {
@@ -147,7 +156,7 @@ public class MetalSelectScreen extends Screen {
                 if (ysp < y) {
                     ysp -= 9;
                 }
-
+                guiGraphics.drawString(this.font, name, xsp, ysp, 0xFFFFFF, true);
 
                 double mod = 0.8;
                 int xdp = (int) ((xp - x) * mod + x);
@@ -178,7 +187,7 @@ public class MetalSelectScreen extends Screen {
 
     @Override
     public boolean keyReleased(int keysym, int scancode, int modifiers) {
-        if (PowersClientSetup.burn.matches(keysym, scancode)) {
+        if (Inputs.burn.matches(keysym, scancode)) {
             this.mc.setScreen(null);
             this.mc.mouseHandler.grabMouse();
             return true;
@@ -189,7 +198,7 @@ public class MetalSelectScreen extends Screen {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (PowersClientSetup.burn.matchesMouse(button)) {
+        if (Inputs.burn.matchesMouse(button)) {
             this.mc.setScreen(null);
             this.mc.mouseHandler.grabMouse();
             return true;
@@ -202,10 +211,9 @@ public class MetalSelectScreen extends Screen {
      * Toggles the metal the mouse is currently over
      */
     private void toggleSelected() {
-        if (this.slotSelected != -1) {
-            Metal mt = Metal.getMetal(toMetalIndex(this.slotSelected));
+        if (this.selectedMetal != null) {
             this.mc.player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
-                ClientUtils.toggleBurn(mt, data);
+                PowerRequests.toggleBurn(this.selectedMetal, data);
                 this.mc.player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.1F, 2.0F);
             });
         }

@@ -30,5 +30,6 @@
     "recipes": [
       "allomancy:coin_bag"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }
