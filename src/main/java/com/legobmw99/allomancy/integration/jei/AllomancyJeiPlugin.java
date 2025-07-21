@@ -38,7 +38,7 @@ public class AllomancyJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        // TODO: actually list/show mobs?
+        // TODO: actually list/show mobs? Use InventoryScreen#renderEntityInInventoryFollowsMouse
         registration.addIngredientInfo(ExtrasSetup.CHARGED_BRONZE_EARRING,
                                        Component.translatable("allomancy.jei.charged_earring.1"),
                                        Component.translatable("allomancy.jei.charged_earring.2"),
