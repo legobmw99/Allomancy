@@ -2,7 +2,6 @@ package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerData;
@@ -164,7 +163,7 @@ public final class CommonEventHandler {
 
             if (data.isBurning(Metal.PEWTER)) {
                 if (data.isEnhanced()) {
-                    if (source.getMainHandItem().getItem() instanceof KolossBladeItem) {
+                    if (source.getMainHandItem().is(AllomancyTags.ONE_HIT_WEAPONS)) {
                         event.setAmount(550); // Duralumin OHK with Koloss blade
                         Enhancement.wipePlayer(source);
                     } else {

@@ -73,7 +73,6 @@ public final class TagProvider {
         @Override
         protected void addTags(HolderLookup.Provider provider) {
             // TODO clean up to use Copy?
-
             for (Metal mt : Metal.values()) {
                 if (mt.isVanilla()) {
                     continue;
@@ -124,27 +123,24 @@ public final class TagProvider {
             }
 
             tag(ItemTags.SWORDS).replace(false).add(CombatSetup.KOLOSS_BLADE.get());
-
-            tag(ItemTags.CHEST_ARMOR).replace(false).add(CombatSetup.MISTCLOAK.get());
-
-            tag(AllomancyTags.REPAIRS_MISTCLOAK).add(net.minecraft.world.item.Items.GRAY_WOOL);
-            tag(AllomancyTags.OBSIDIAN_REPAIR).add(net.minecraft.world.item.Items.OBSIDIAN,
-                                                   net.minecraft.world.item.Items.CRYING_OBSIDIAN);
-            tag(AllomancyTags.REPAIRS_ALUMINUM).addTag(
-                    ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/aluminum")));
-
+            tag(ItemTags.HEAD_ARMOR).replace(false).add(CombatSetup.ALUMINUM_HELMET.get());
             tag(ItemTags.GAZE_DISGUISE_EQUIPMENT).replace(false).add(CombatSetup.ALUMINUM_HELMET.get());
-
+            tag(ItemTags.CHEST_ARMOR).replace(false).add(CombatSetup.MISTCLOAK.get());
             tag(ItemTags.TRIMMABLE_ARMOR)
                     .replace(false)
                     .add(CombatSetup.ALUMINUM_HELMET.get())
                     .add(CombatSetup.MISTCLOAK.get());
 
             tag(AllomancyTags.FLAKES_TAG).add(WorldSetup.FLAKES.stream().map(Supplier::get).toArray(Item[]::new));
-
-            tag(AllomancyTags.LERASIUM_CONVERSION).replace(false).addTag(Tags.Items.NETHER_STARS);
+            tag(AllomancyTags.REPAIRS_MISTCLOAK).add(net.minecraft.world.item.Items.GRAY_WOOL);
+            tag(AllomancyTags.OBSIDIAN_REPAIR).add(net.minecraft.world.item.Items.OBSIDIAN,
+                                                   net.minecraft.world.item.Items.CRYING_OBSIDIAN);
+            tag(AllomancyTags.REPAIRS_ALUMINUM).addTag(
+                    ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/aluminum")));
+            tag(AllomancyTags.LERASIUM_CONVERSION).addTag(Tags.Items.NETHER_STARS);
             tag(AllomancyTags.TIN_FOIL_HATS).add(CombatSetup.ALUMINUM_HELMET.get());
             tag(AllomancyTags.SPECIAL_EARRINGS).add(ExtrasSetup.CHARGED_BRONZE_EARRING.get());
+            tag(AllomancyTags.ONE_HIT_WEAPONS).add(CombatSetup.KOLOSS_BLADE.get());
         }
 
         private void addCommonTag(String name, Item... items) {
