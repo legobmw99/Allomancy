@@ -248,9 +248,7 @@ public final class CommonEventHandler {
         // Run the necessary updates on the player's metals
         boolean syncRequired = data.tickBurning();
 
-
-        ItemStack helmet = curPlayer.getItemBySlot(EquipmentSlot.HEAD);
-        if (helmet.getItem() == ExtrasSetup.CHARGED_BRONZE_EARRING.get()) {
+        if (curPlayer.getItemBySlot(EquipmentSlot.HEAD).is(AllomancyTags.SPECIAL_EARRINGS)) {
             GlobalPos seeking = data.getSpecialSeekingLoc();
             if (seeking == null) {
                 BlockPos blockpos =

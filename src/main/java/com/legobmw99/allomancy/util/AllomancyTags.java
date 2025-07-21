@@ -20,6 +20,8 @@ public final class AllomancyTags {
     public static final TagKey<Item> OBSIDIAN_REPAIR = ItemTags.create(Allomancy.rl("obsidian_tool_materials"));
     public static final TagKey<Item> REPAIRS_MISTCLOAK = ItemTags.create(Allomancy.rl("repairs_wool_armor"));
     public static final TagKey<Item> REPAIRS_ALUMINUM = ItemTags.create(Allomancy.rl("repairs_aluminum_armor"));
+    public static final TagKey<Item> TIN_FOIL_HATS = ItemTags.create(Allomancy.rl("tin_foil_hats"));
+    public static final TagKey<Item> SPECIAL_EARRINGS = ItemTags.create(Allomancy.rl("well_seeking_helmets"));
 
     public static final TagKey<Biome> SPAWNS_WELLS =
             TagKey.create(Registries.BIOME, Allomancy.rl("has_structure/well"));

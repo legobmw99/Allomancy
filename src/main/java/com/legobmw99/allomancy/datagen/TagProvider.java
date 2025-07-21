@@ -143,6 +143,8 @@ public final class TagProvider {
             tag(AllomancyTags.FLAKES_TAG).add(WorldSetup.FLAKES.stream().map(Supplier::get).toArray(Item[]::new));
 
             tag(AllomancyTags.LERASIUM_CONVERSION).replace(false).addTag(Tags.Items.NETHER_STARS);
+            tag(AllomancyTags.TIN_FOIL_HATS).add(CombatSetup.ALUMINUM_HELMET.get());
+            tag(AllomancyTags.SPECIAL_EARRINGS).add(ExtrasSetup.CHARGED_BRONZE_EARRING.get());
         }
 
         private void addCommonTag(String name, Item... items) {
