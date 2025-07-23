@@ -127,8 +127,8 @@ dependencies {
     implementation "maven.modrinth:jade:${jade_version}"
     // api "curse.maven:jade-324717:${jade_api}"
 
-    api "mezz.jei:jei-1.21.7-neoforge-api:${jei_version}"
-    implementation "mezz.jei:jei-1.21.7-neoforge:${jei_version}"
+    api "mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}"
+    implementation "mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}"
 
     localRuntime(testImplementation("net.neoforged:testframework:${neo_version}"))
 }
