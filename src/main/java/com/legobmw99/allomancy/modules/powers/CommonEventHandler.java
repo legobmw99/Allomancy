@@ -33,6 +33,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -90,24 +91,39 @@ public final class CommonEventHandler {
         }
     }
 
+    private static final Metal[] USEFUL_MISTINGS =
+            {Metal.IRON, Metal.STEEL, Metal.TIN, Metal.PEWTER, Metal.ZINC, Metal.BRASS, Metal.BRONZE, Metal.COPPER,
+             Metal.CHROMIUM, Metal.NICROSIL, Metal.GOLD, Metal.ELECTRUM, Metal.CADMIUM, Metal.BENDALLOY};
+
+    private static final Metal[] USEFUL_MISTINGS_SSP =
+            {Metal.IRON, Metal.STEEL, Metal.TIN, Metal.PEWTER, Metal.ZINC, Metal.BRASS, Metal.GOLD, Metal.ELECTRUM,
+             Metal.CADMIUM, Metal.BENDALLOY};
+
+    private static Metal getRandomMistingForPlayer(ServerPlayer player, Metal[] options) {
+        if (PowersConfig.respect_player_UUID.get()) {
+            return options[Math.abs(player.getUUID().hashCode()) % options.length];
+        } else {
+            return options[player.getRandom().nextInt(options.length)];
+        }
+    }
+
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
+
         if (event.getEntity() instanceof ServerPlayer player && AllomancerAttachment.needsData(player)) {
             var data = new AllomancerData();
             // Handle random misting case
             if (PowersConfig.random_mistings.get() && data.isUninvested()) {
-                int randomMisting;
-                // if (FMLEnvironment.dist.isClient()){
-                //   // TODO prevent certain 'useless' choices?
-                // }
-                if (PowersConfig.respect_player_UUID.get()) {
-                    randomMisting = Math.abs(player.getUUID().hashCode()) % Metal.values().length;
+                Metal randomMisting;
+                if (FMLEnvironment.dist.isClient()) {
+                    randomMisting = getRandomMistingForPlayer(player, USEFUL_MISTINGS_SSP);
                 } else {
-                    randomMisting = player.getRandom().nextInt(Metal.values().length);
+                    randomMisting = getRandomMistingForPlayer(player, USEFUL_MISTINGS);
                 }
-                data.addPower(Metal.getMetal(randomMisting));
+
+                data.addPower(randomMisting);
                 AllomancerAttachment.set(player, data);
-                ItemStack flakes = new ItemStack(WorldSetup.FLAKES.get(randomMisting).get());
+                ItemStack flakes = new ItemStack(WorldSetup.FLAKES.get(randomMisting.getIndex()).get());
                 // Give the player one flake of their metal
                 if (!player.getInventory().add(flakes)) {
                     ItemEntity entity = new ItemEntity(player.level(), player.position().x(), player.position().y(),
