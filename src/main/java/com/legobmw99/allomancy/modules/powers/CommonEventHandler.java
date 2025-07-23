@@ -137,7 +137,7 @@ public final class CommonEventHandler {
 
     @SubscribeEvent
     public static void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
+        if (event.getEntity() instanceof ServerPlayer player) {
             if (!event.isEndConquered() /* poorly named, is really equivalent to keepInventory... */) {
                 var data = AllomancerAttachment.get(player);
                 data.drainMetals(Metal.values());
@@ -167,6 +167,14 @@ public final class CommonEventHandler {
         if (event.getEntity() instanceof ServerPlayer player) {
             var data = AllomancerAttachment.get(player);
             data.setSpawnLoc(event.getNewSpawn(), event.getSpawnLevel());
+            AllomancerAttachment.sync(player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
+        // TODO: delete after https://github.com/neoforged/NeoForge/issues/2510 resolved
+        if (event.getEntity() instanceof ServerPlayer player) {
             AllomancerAttachment.sync(player);
         }
     }
