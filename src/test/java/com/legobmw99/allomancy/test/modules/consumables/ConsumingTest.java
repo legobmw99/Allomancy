@@ -13,7 +13,6 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -100,7 +99,7 @@ public class ConsumingTest {
     @TestHolder(description = "Tests that drinking a vial gives the player metals")
     public static void vialIncreasesStorage(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
-        var vial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
+        var vial = ConsumeSetup.VIAL.toStack();
         VialItem.fillVial(vial, new FlakeStorage.Mutable().add(Metal.IRON).add(Metal.GOLD).toImmutable());
         var data = AllomancerAttachment.get(player);
         for (int i = 0; i < MAX_STORAGE; i++) {
@@ -122,7 +121,7 @@ public class ConsumingTest {
     @TestHolder(description = "Tests that you can't drink a vial when those metals are full")
     public static void vialStopsWhenFull(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
-        var vial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
+        var vial = ConsumeSetup.VIAL.toStack();
         VialItem.fillVial(vial, new FlakeStorage.Mutable().add(Metal.IRON).toImmutable());
         var data = AllomancerAttachment.get(player);
         for (int i = 0; i < MAX_STORAGE; i++) {
@@ -150,7 +149,7 @@ public class ConsumingTest {
     @TestHolder(description = "Tests that consuming golden apples also grants stored gold")
     public static void specialItemConsumption(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
-        var vial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
+        var vial = ConsumeSetup.VIAL.toStack();
         VialItem.fillVial(vial, new FlakeStorage.Mutable().add(Metal.IRON).add(Metal.GOLD).toImmutable());
 
 

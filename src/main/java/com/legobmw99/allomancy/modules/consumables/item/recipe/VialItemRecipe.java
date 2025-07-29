@@ -94,7 +94,7 @@ public class VialItemRecipe extends CustomRecipe {
             }
         }
 
-        var item_result = new ItemStack(ConsumeSetup.VIAL.get(), 1);
+        var item_result = ConsumeSetup.VIAL.toStack();
         VialItem.fillVial(item_result, storage.toImmutable());
         return item_result;
 

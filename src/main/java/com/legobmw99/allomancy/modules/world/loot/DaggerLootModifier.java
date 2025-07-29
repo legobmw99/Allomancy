@@ -34,7 +34,7 @@ public class DaggerLootModifier extends LootModifier {
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,
                                                           LootContext context) {
         if (context.getRandom().nextInt(this.chance_one_in) == 0) {
-            ItemStack dagger = new ItemStack(CombatSetup.OBSIDIAN_DAGGER.get());
+            ItemStack dagger = CombatSetup.OBSIDIAN_DAGGER.toStack();
             dagger.set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
             generatedLoot.add(dagger);
         }

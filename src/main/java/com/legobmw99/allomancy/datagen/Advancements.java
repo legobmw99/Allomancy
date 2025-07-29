@@ -112,7 +112,7 @@ class Advancements implements AdvancementSubProvider {
                 .rewards(AdvancementRewards.Builder.experience(100))
                 .save(saver, "allomancy:main/become_mistborn");
 
-        ItemStack vial = new ItemStack(ConsumeSetup.VIAL.get());
+        ItemStack vial = ConsumeSetup.VIAL.toStack();
         vial.set(ConsumeSetup.FLAKE_STORAGE.get(), new FlakeStorage.Mutable().add(Metal.GOLD).toImmutable());
 
         var allMetals = Advancement.Builder

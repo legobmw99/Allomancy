@@ -44,7 +44,7 @@ public class VialRecipeCategoryExtension implements ICraftingCategoryExtension<V
         for (Metal metalToAdd : Metal.values()) {
             input1.add(WorldSetup.FLAKES.get(metalToAdd.getIndex()).toStack());
 
-            ItemStack vialFilled = new ItemStack(ConsumeSetup.VIAL.get());
+            ItemStack vialFilled = ConsumeSetup.VIAL.toStack();
             VialItem.fillVial(vialFilled, new FlakeStorage.Mutable().add(metalToAdd).toImmutable());
 
             outputs.add(vialFilled);

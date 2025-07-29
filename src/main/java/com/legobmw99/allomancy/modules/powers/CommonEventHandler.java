@@ -123,7 +123,7 @@ public final class CommonEventHandler {
 
                 data.addPower(randomMisting);
                 AllomancerAttachment.set(player, data);
-                ItemStack flakes = new ItemStack(WorldSetup.FLAKES.get(randomMisting.getIndex()).get());
+                ItemStack flakes = WorldSetup.FLAKES.get(randomMisting.getIndex()).toStack();
                 // Give the player one flake of their metal
                 if (!player.getInventory().add(flakes)) {
                     ItemEntity entity = new ItemEntity(player.level(), player.position().x(), player.position().y(),

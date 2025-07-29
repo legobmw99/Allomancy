@@ -357,7 +357,7 @@ public class PassivePowerTest {
     public static void bendalloyAcceleratesFurnaces(AllomancyTestHelper helper) {
         BlockPos furnace = new BlockPos(0, 0, 0);
         FurnaceBlockEntity furnaceEntity = helper.getBlockEntity(furnace, FurnaceBlockEntity.class);
-        furnaceEntity.setItem(0, new ItemStack(WorldSetup.RAW_ORE_ITEMS.getFirst().get(), 1));
+        furnaceEntity.setItem(0, WorldSetup.RAW_ORE_ITEMS.getFirst().toStack());
         furnaceEntity.setItem(1, new ItemStack(Items.STICK, 2));
 
         var player = helper.makeMistbornPlayer();

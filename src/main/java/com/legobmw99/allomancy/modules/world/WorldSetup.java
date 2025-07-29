@@ -233,7 +233,7 @@ public final class WorldSetup {
                 public MapCodec<InvestingRecipe> codec() {
                     return RecordCodecBuilder.mapCodec(instance -> instance
                             .group(Ingredient.CODEC.fieldOf("ingredient").forGetter(InvestingRecipe::getIngredient),
-                                   ItemStack.CODEC.fieldOf("result").forGetter(InvestingRecipe::getResult))
+                                   ItemStack.STRICT_CODEC.fieldOf("result").forGetter(InvestingRecipe::getResult))
                             .apply(instance, InvestingRecipe::new));
                 }
 

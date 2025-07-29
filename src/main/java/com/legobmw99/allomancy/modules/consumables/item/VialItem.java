@@ -71,7 +71,7 @@ public class VialItem extends Item {
         if (storage == null) {
             stack.set(DataComponents.RARITY, Rarity.COMMON);
         } else {
-            stack.set(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(ConsumeSetup.VIAL.get())));
+            stack.set(DataComponents.USE_REMAINDER, new UseRemainder(ConsumeSetup.VIAL.toStack()));
             stack.set(DataComponents.RARITY, Rarity.UNCOMMON);
         }
 
@@ -86,7 +86,7 @@ public class VialItem extends Item {
         super.verifyComponentsAfterLoad(pStack);
         if (pStack.has(FLAKE_STORAGE)) {
             if (!pStack.has(DataComponents.USE_REMAINDER)) {
-                pStack.set(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStack(ConsumeSetup.VIAL.get())));
+                pStack.set(DataComponents.USE_REMAINDER, new UseRemainder(ConsumeSetup.VIAL.toStack()));
             }
             return;
         }

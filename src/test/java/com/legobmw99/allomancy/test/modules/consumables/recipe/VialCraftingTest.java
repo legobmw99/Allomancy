@@ -34,7 +34,7 @@ public class VialCraftingTest {
     @EmptyTemplate("1x2x2")
     @TestHolder(description = "Tests that vial crafting is prevented if a specific metal is already present")
     public static void vialCraftingPreventDupes(AllomancyTestHelper helper) {
-        var vial = new ItemStack(ConsumeSetup.VIAL.get(), 1);
+        var vial = ConsumeSetup.VIAL.toStack();
         VialItem.fillVial(vial, new FlakeStorage.Mutable().add(Metal.IRON).toImmutable());
 
         helper.succeedIfCraftingFails(vial, WorldSetup.FLAKES.get(Metal.IRON.getIndex()),

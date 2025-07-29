@@ -42,7 +42,7 @@ public class LerasiumLootModifier extends LootModifier {
             }
         }
         if (context.getRandom().nextInt(this.chance_one_in) == 0) {
-            generatedLoot.addFirst(new ItemStack(ConsumeSetup.LERASIUM_NUGGET.get()));
+            generatedLoot.addFirst(ConsumeSetup.LERASIUM_NUGGET.toStack());
         }
         return generatedLoot;
     }

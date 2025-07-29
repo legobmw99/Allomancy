@@ -31,7 +31,7 @@ public final class ItemDisplay {
 
             CREATIVETABS.register("main_tab", () -> CreativeModeTab
                     .builder()
-                    .icon(() -> new ItemStack(CombatSetup.MISTCLOAK.get()))
+                    .icon(CombatSetup.MISTCLOAK::toStack)
                     .title(Component.translatable("tabs" + ".allomancy.main_tab"))
                     .displayItems((featureFlags, output) -> {
                         output.accept(ConsumeSetup.LERASIUM_NUGGET.get());
@@ -42,7 +42,7 @@ public final class ItemDisplay {
                         output.accept(ConsumeSetup.ALLOMANTIC_GRINDER.get());
                         output.accept(ConsumeSetup.VIAL.get());
 
-                        ItemStack fullVial = new ItemStack(ConsumeSetup.VIAL.get());
+                        ItemStack fullVial = ConsumeSetup.VIAL.toStack();
                         FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
                         for (Metal mt : Metal.values()) {
                             storage.add(mt);
