@@ -1,9 +1,9 @@
 package com.legobmw99.allomancy.modules.powers.util;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIAttackOnCollideExtended;
 import com.legobmw99.allomancy.modules.powers.entity.ai.AIEvilAttack;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -136,6 +136,6 @@ public class Emotional {
     }
 
     public static boolean hasTinFoilHat(LivingEntity entity) {
-        return entity.getItemBySlot(EquipmentSlot.HEAD).getItem() == CombatSetup.ALUMINUM_HELMET.get();
+        return entity.getItemBySlot(EquipmentSlot.HEAD).is(AllomancyTags.TIN_FOIL_HATS);
     }
 }

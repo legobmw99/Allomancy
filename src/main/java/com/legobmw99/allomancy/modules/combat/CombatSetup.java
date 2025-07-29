@@ -1,13 +1,12 @@
 package com.legobmw99.allomancy.modules.combat;
 
 import com.legobmw99.allomancy.Allomancy;
-import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.combat.item.CoinBagItem;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.combat.item.MistcloakItem;
 import com.legobmw99.allomancy.modules.combat.item.ObsidianDaggerItem;
-import com.legobmw99.allomancy.modules.world.WorldSetup;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -18,7 +17,6 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -62,7 +60,7 @@ public class CombatSetup {
 
         @Override
         public Ingredient getRepairIngredient() {
-            return Ingredient.of(Items.GRAY_WOOL);
+            return Ingredient.of(AllomancyTags.REPAIRS_MISTCLOAK);
         }
 
         @Override
@@ -107,7 +105,7 @@ public class CombatSetup {
 
         @Override
         public Ingredient getRepairIngredient() {
-            return Ingredient.of(WorldSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get());
+            return Ingredient.of(AllomancyTags.REPAIRS_ALUMINUM);
         }
 
         @Override

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "forge:storage_blocks/bronze"
+    },
+    "b": {
+      "tag": "forge:ingots/bronze"
+    },
+    "n": {
+      "tag": "forge:nuggets/bronze"
+    }
+  },
+  "pattern": [
+    " b ",
+    "B n"
+  ],
+  "result": {
+    "item": "allomancy:bronze_earring"
+  },
+  "show_notification": true
+}

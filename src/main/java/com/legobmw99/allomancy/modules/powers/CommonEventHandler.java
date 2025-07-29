@@ -2,8 +2,6 @@ package com.legobmw99.allomancy.modules.powers;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
-import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
-import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerDataProvider;
 import com.legobmw99.allomancy.modules.powers.network.UpdateEnhancedPacket;
@@ -32,11 +30,11 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.util.Arrays;
 
@@ -55,21 +53,38 @@ public final class CommonEventHandler {
         }
     }
 
+    private static final Metal[] USEFUL_MISTINGS =
+            {Metal.IRON, Metal.STEEL, Metal.TIN, Metal.PEWTER, Metal.ZINC, Metal.BRASS, Metal.BRONZE, Metal.COPPER,
+             Metal.CHROMIUM, Metal.NICROSIL, Metal.GOLD, Metal.ELECTRUM, Metal.CADMIUM, Metal.BENDALLOY};
+
+
+    private static final Metal[] USEFUL_MISTINGS_SSP =
+            {Metal.IRON, Metal.STEEL, Metal.TIN, Metal.PEWTER, Metal.ZINC, Metal.BRASS, Metal.GOLD, Metal.ELECTRUM,
+             Metal.CADMIUM, Metal.BENDALLOY};
+
+
+    private static Metal getRandomMistingForPlayer(ServerPlayer player, Metal[] options) {
+        if (PowersConfig.respect_player_UUID.get()) {
+            return options[Math.abs(player.getUUID().hashCode()) % options.length];
+        } else {
+            return options[player.getRandom().nextInt(options.length)];
+        }
+    }
+
     @SubscribeEvent
     public static void onJoinWorld(final PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(data -> {
 
                 if (PowersConfig.random_mistings.get() && data.isUninvested()) {
-                    int randomMisting;
-
-                    if (PowersConfig.respect_player_UUID.get()) {
-                        randomMisting = Math.abs(player.getUUID().hashCode()) % Metal.values().length;
+                    Metal randomMisting;
+                    if (FMLEnvironment.dist.isClient()) {
+                        randomMisting = getRandomMistingForPlayer(player, USEFUL_MISTINGS_SSP);
                     } else {
-                        randomMisting = player.getRandom().nextInt(Metal.values().length);
+                        randomMisting = getRandomMistingForPlayer(player, USEFUL_MISTINGS);
                     }
-                    data.addPower(Metal.getMetal(randomMisting));
-                    ItemStack flakes = new ItemStack(WorldSetup.FLAKES.get(randomMisting).get());
+                    data.addPower(randomMisting);
+                    ItemStack flakes = new ItemStack(WorldSetup.FLAKES.get(randomMisting.getIndex()).get());
                     // Give the player one flake of their metal
                     if (!player.getInventory().add(flakes)) {
                         ItemEntity entity =
@@ -123,7 +138,6 @@ public final class CommonEventHandler {
     }
 
 
-
     @SubscribeEvent
     public static void onEntityHurt(final LivingHurtEvent event) {
         // Increase outgoing damage for pewter burners
@@ -132,7 +146,7 @@ public final class CommonEventHandler {
 
                 if (data.isBurning(Metal.PEWTER)) {
                     if (data.isEnhanced()) {
-                        if (source.getMainHandItem().getItem() instanceof KolossBladeItem) {
+                        if (source.getMainHandItem().is(AllomancyTags.ONE_HIT_WEAPONS)) {
                             event.setAmount(550); // Duralumin OHK with Koloss blade
                             Enhancement.wipePlayer(source);
                         } else {
@@ -224,9 +238,7 @@ public final class CommonEventHandler {
 
             boolean syncRequired = data.tickBurning();
 
-
-            ItemStack helmet = curPlayer.getItemBySlot(EquipmentSlot.HEAD);
-            if (helmet.getItem() == ExtrasSetup.CHARGED_BRONZE_EARRING.get()) {
+            if (curPlayer.getItemBySlot(EquipmentSlot.HEAD).is(AllomancyTags.SPECIAL_EARRINGS)) {
                 GlobalPos seeking = data.getSpecialSeekingLoc();
                 if (seeking == null) {
                     BlockPos blockpos =

@@ -1,0 +1,60 @@
+package com.legobmw99.allomancy.integration.jei;
+
+import com.legobmw99.allomancy.Allomancy;
+import com.legobmw99.allomancy.modules.consumables.item.recipe.VialItemRecipe;
+import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
+import com.legobmw99.allomancy.modules.world.WorldSetup;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+
+@JeiPlugin
+public class AllomancyJeiPlugin implements IModPlugin {
+    private static final ResourceLocation ID = Allomancy.rl("jei_plugin");
+
+    @Override
+    public ResourceLocation getPluginUid() {
+        return ID;
+    }
+
+    @Override
+    public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
+        registration.getCraftingCategory().addCategoryExtension(VialItemRecipe.class, VialRecipeCategoryExtension::new);
+    }
+
+    @Override
+    public void registerCategories(IRecipeCategoryRegistration registration) {
+        registration.addRecipeCategories(new InvestingRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
+    }
+
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(ExtrasSetup.CHARGED_BRONZE_EARRING.get(), InvestingRecipeCategory.TYPE);
+    }
+
+    @Override
+    public void registerRecipes(IRecipeRegistration registration) {
+        // TODO: actually list/show mobs? Use InventoryScreen#renderEntityInInventoryFollowsMouse
+        registration.addIngredientInfo(ExtrasSetup.CHARGED_BRONZE_EARRING.get(),
+                                       Component.translatable("allomancy.jei.charged_earring.1"),
+                                       Component.translatable("allomancy.jei.charged_earring.2"),
+                                       Component.translatable("allomancy.jei.charged_earring.3"));
+
+
+        if (Minecraft.getInstance().level != null) {
+
+            registration.addRecipes(InvestingRecipeCategory.TYPE, Minecraft.getInstance().level
+                    .getRecipeManager()
+                    .getAllRecipesFor(WorldSetup.INVESTING_RECIPE.get())
+                    .stream()
+                    .toList());
+        }
+    }
+
+}

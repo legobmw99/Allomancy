@@ -1,0 +1,8 @@
+{
+  "type": "allomancy:investing",
+  "ingredient": {
+    "tag": "allomancy:converts_to_lerasium"
+  },
+  "result": "allomancy:lerasium_nugget",
+  "count": 1
+}

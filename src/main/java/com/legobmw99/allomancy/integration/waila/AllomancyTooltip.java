@@ -1,4 +1,4 @@
-package com.legobmw99.allomancy.integration;
+package com.legobmw99.allomancy.integration.waila;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
@@ -6,6 +6,7 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerCapability;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -25,32 +26,35 @@ public class AllomancyTooltip implements IEntityComponentProvider {
     public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig iPluginConfig) {
         accessor.getPlayer().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(cap -> {
             if (cap.isBurning(Metal.BRONZE) && (cap.isEnhanced() || !cap.isBurning(Metal.COPPER))) {
-                accessor.getEntity().getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(capOther -> {
-                    if (!capOther.isBurning(Metal.COPPER) || (cap.isEnhanced() && !capOther.isEnhanced())) {
+                if (accessor.getEntity() instanceof Player player) {
+                    player.getCapability(AllomancerCapability.PLAYER_CAP).ifPresent(capOther -> {
+                        if (!capOther.isBurning(Metal.COPPER) || (cap.isEnhanced() && !capOther.isEnhanced())) {
 
-                        MutableComponent text = null;
+                            MutableComponent text = null;
 
-                        for (Metal mt : Metal.values()) {
-                            if (capOther.isBurning(mt)) {
-                                if (text == null) {
-                                    text = translateMetal(mt);
-                                } else {
-                                    text = text.append(", ").append(translateMetal(mt));
+                            for (Metal mt : Metal.values()) {
+                                if (capOther.isBurning(mt)) {
+                                    if (text == null) {
+                                        text = translateMetal(mt);
+                                    } else {
+                                        text = text.append(", ").append(translateMetal(mt));
+                                    }
                                 }
                             }
-                        }
 
-                        if (text != null) {
-                            tooltip.add(text);
+                            if (text != null) {
+                                tooltip.add(text);
+                            }
                         }
-                    }
-                });
+                    });
+
+                }
             }
         });
     }
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(Allomancy.MODID, "waila_bronze");
+        return Allomancy.rl("waila_bronze");
     }
 }

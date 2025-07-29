@@ -1,25 +1,35 @@
 package com.legobmw99.allomancy.modules.world;
 
+import com.google.gson.JsonObject;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.world.block.LerasiumFluid;
 import com.legobmw99.allomancy.modules.world.block.LiquidLerasiumBlock;
 import com.legobmw99.allomancy.modules.world.client.WorldClientSetup;
 import com.legobmw99.allomancy.modules.world.loot.LootTableInjector;
+import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
 import com.legobmw99.allomancy.util.AllomancyTags;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.Pools;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
@@ -225,11 +235,44 @@ public class WorldSetup {
     }
 
 
+    private static final DeferredRegister<RecipeSerializer<?>> RECIPES =
+            DeferredRegister.create(Registries.RECIPE_SERIALIZER, Allomancy.MODID);
+    public static final Supplier<RecipeSerializer<InvestingRecipe>> INVESTING_RECIPE_SERIALIZER =
+            RECIPES.register("investing", () -> new RecipeSerializer<>() {
+                public InvestingRecipe fromJson(ResourceLocation pRecipeId, JsonObject pJson) {
+                    Ingredient ingredient =
+                            Ingredient.fromJson(GsonHelper.getAsJsonObject(pJson, "ingredient"), false);
+
+                    String s1 = GsonHelper.getAsString(pJson, "result");
+                    int i = GsonHelper.getAsInt(pJson, "count");
+                    ItemStack itemstack = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(s1)), i);
+                    return new InvestingRecipe(pRecipeId, ingredient, itemstack);
+                }
+
+                public InvestingRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
+                    Ingredient ingredient = Ingredient.fromNetwork(pBuffer);
+                    ItemStack itemstack = pBuffer.readItem();
+                    return new InvestingRecipe(pRecipeId, ingredient, itemstack);
+                }
+
+                public void toNetwork(FriendlyByteBuf pBuffer, InvestingRecipe pRecipe) {
+                    pRecipe.getIngredient().toNetwork(pBuffer);
+                    pBuffer.writeItem(pRecipe.getResult());
+                }
+            });
+
+    private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
+            DeferredRegister.create(Registries.RECIPE_TYPE, Allomancy.MODID);
+    public static final Supplier<RecipeType<InvestingRecipe>> INVESTING_RECIPE =
+            RECIPE_TYPES.register("investing", () -> RecipeType.simple(Allomancy.rl("investing")));
+
     public static void register() {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         FLUID_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         FLUIDS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        RECIPE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        RECIPES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     public static void init(final FMLCommonSetupEvent e) {

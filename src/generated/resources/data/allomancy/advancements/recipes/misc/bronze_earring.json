@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_allomantic_grinder": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "allomancy:allomantic_grinder"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "allomancy:bronze_earring"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_allomantic_grinder",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "allomancy:bronze_earring"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.combat.item;
 
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -8,7 +9,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class ObsidianDaggerItem extends SwordItem {
@@ -44,7 +44,7 @@ public class ObsidianDaggerItem extends SwordItem {
 
         @Override
         public Ingredient getRepairIngredient() {
-            return Ingredient.of(Blocks.OBSIDIAN);
+            return Ingredient.of(AllomancyTags.OBSIDIAN_REPAIR);
         }
     };
 
@@ -61,7 +61,8 @@ public class ObsidianDaggerItem extends SwordItem {
     // Disable mending on daggers
     @Override
     public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        if (EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.MENDING) || EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.UNBREAKING)) {
+        if (EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.MENDING) ||
+            EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.UNBREAKING)) {
             return false;
         }
         return super.isBookEnchantable(stack, book);

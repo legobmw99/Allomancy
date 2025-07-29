@@ -33,7 +33,7 @@ public class DataGenerators {
         BlockTags blocktags = new BlockTags(packOutput, lookup, fileHelper);
         generator.addProvider(event.includeServer(), blocktags);
         generator.addProvider(event.includeServer(),
-                              new ItemTags(packOutput, lookup, blocktags.contentsGetter(), fileHelper));
+                              new ItemTagProvider(packOutput, lookup, blocktags.contentsGetter(), fileHelper));
         generator.addProvider(event.includeServer(), new ForgeAdvancementProvider(packOutput, lookup, fileHelper,
                                                                                   List.of(new Advancements())));
 

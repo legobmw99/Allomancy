@@ -7,7 +7,6 @@ import com.legobmw99.allomancy.util.ItemDisplay;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -50,7 +49,9 @@ public class VialItem extends Item {
             stack.shrink(1);
 
             if (!((Player) livingEntity).getInventory().add(new ItemStack(ConsumeSetup.VIAL.get(), 1))) {
-                world.addFreshEntity(new ItemEntity(world, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), new ItemStack(ConsumeSetup.VIAL.get(), 1)));
+                world.addFreshEntity(
+                        new ItemEntity(world, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(),
+                                       new ItemStack(ConsumeSetup.VIAL.get(), 1)));
             }
         }
 
@@ -76,7 +77,8 @@ public class VialItem extends Item {
             int filling = 0, full = 0;
             if (itemStackIn.hasTag()) {
                 for (Metal mt : Metal.values()) {
-                    if (itemStackIn.getTag().contains(mt.getName()) && itemStackIn.getTag().getBoolean(mt.getName())) {
+                    if (itemStackIn.getTag().contains(mt.getName()) &&
+                        itemStackIn.getTag().getBoolean(mt.getName())) {
                         filling++;
                         if (data.getStored(mt) >= 10) {
                             full++;
@@ -96,26 +98,41 @@ public class VialItem extends Item {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack,
+                                @Nullable Level worldIn,
+                                List<Component> tooltip,
+                                TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        if (stack.hasTag()) {
-            boolean full_display = Screen.hasShiftDown();
-            int count = 0;
-            for (Metal mt : Metal.values()) {
-                if (stack.getTag().getBoolean(mt.getName())) {
-                    count++;
-                    if (full_display) {
-                        MutableComponent metal = ItemDisplay.addColorToText("metals." + mt.getName(), ChatFormatting.GRAY);
-                        tooltip.add(metal);
-                    }
-                }
+        if (!stack.hasTag()) {
+            return;
+        }
+        int count = 0;
+        Metal last = Metal.IRON;
+        for (Metal mt : Metal.values()) {
+            if (stack.getTag().getBoolean(mt.getName())) {
+                count++;
+                last = mt;
             }
-            if (!full_display) {
-                MutableComponent lcount = ItemDisplay.addColorToText("item.allomancy.vial.lore_count", ChatFormatting.GRAY, count);
-                tooltip.add(lcount);
-                MutableComponent linst = ItemDisplay.addColorToText("item.allomancy.vial.lore_inst", ChatFormatting.GRAY);
-                tooltip.add(linst);
+        }
+        switch (count) {
+            case 0 -> {
+            }
+            case 1 -> tooltip.add(
+                    ItemDisplay.addColorToText("allomancy.flake_storage.lore_single", ChatFormatting.GRAY,
+                                               Component.translatable("metals." + last.getName()).getString()));
 
+            default -> {
+                if (Screen.hasShiftDown()) {
+                    for (Metal mt : Metal.values()) {
+                        if (stack.getTag().getBoolean(mt.getName())) {
+                            tooltip.add(ItemDisplay.addColorToText("metals." + mt.getName(), ChatFormatting.GRAY));
+                        }
+                    }
+                } else {
+                    tooltip.add(ItemDisplay.addColorToText("allomancy.flake_storage.lore_count", ChatFormatting.GRAY,
+                                                           count));
+                    tooltip.add(ItemDisplay.addColorToText("allomancy.flake_storage.lore_inst", ChatFormatting.GRAY));
+                }
             }
         }
     }

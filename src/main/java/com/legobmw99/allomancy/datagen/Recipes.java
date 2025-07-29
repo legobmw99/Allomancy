@@ -1,29 +1,38 @@
 package com.legobmw99.allomancy.datagen;
 
+import com.google.gson.JsonObject;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.world.WorldSetup;
+import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
+import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import static net.minecraft.tags.TagEntry.tag;
 
 public class Recipes extends RecipeProvider {
 
@@ -40,6 +49,9 @@ public class Recipes extends RecipeProvider {
         add('W', Items.GRAY_WOOL);
         add('O', Tags.Items.OBSIDIAN);
         add('C', Items.COBBLESTONE);
+        add('B', ing("forge:storage_blocks/bronze"));
+        add('b', ing("forge:ingots/bronze"));
+        add('n', ing("forge:nuggets/bronze"));
 
     }
 
@@ -149,6 +161,13 @@ public class Recipes extends RecipeProvider {
         // Basic Shaped Recipes
         buildShaped(consumer, RecipeCategory.REDSTONE, ExtrasSetup.IRON_LEVER.get(), Items.IRON_INGOT, "s", "I");
         buildShaped(consumer, RecipeCategory.REDSTONE, ExtrasSetup.IRON_BUTTON.get(), Items.IRON_INGOT, "i", "I");
+        buildShapeless(consumer, RecipeCategory.REDSTONE, ExtrasSetup.INVERTED_IRON_BUTTON.get(), 1,
+                       ExtrasSetup.IRON_BUTTON_ITEM.get(), "inverted_from_iron_button",
+                       ing(ExtrasSetup.IRON_BUTTON.get()));
+        buildShapeless(consumer, RecipeCategory.REDSTONE, ExtrasSetup.IRON_BUTTON.get(), 1,
+                       ExtrasSetup.INVERTED_IRON_BUTTON_ITEM.get(), "iron_button_from_inverted",
+                       ing(ExtrasSetup.INVERTED_IRON_BUTTON.get()));
+
         buildShaped(consumer, RecipeCategory.FOOD, ConsumeSetup.ALLOMANTIC_GRINDER.get(), Items.IRON_INGOT, "ggg",
                     "iii", "ggg");
         buildShaped(consumer, RecipeCategory.FOOD, ConsumeSetup.VIAL.get(), 4, Items.GLASS, " S ", "G G", " G ");
@@ -159,6 +178,8 @@ public class Recipes extends RecipeProvider {
         buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.KOLOSS_BLADE.get(),
                     ConsumeSetup.LERASIUM_NUGGET.get(), "CC", "CC", "sC");
 
+        buildShaped(consumer, RecipeCategory.MISC, ExtrasSetup.BRONZE_EARRING.get(),
+                    ConsumeSetup.ALLOMANTIC_GRINDER.get(), " b ", "B n");
         // Ore Recipes
         // order must be the same as WorldSetup.ORE_METALS
         int[] ore_metal_indexes =
@@ -304,6 +325,8 @@ public class Recipes extends RecipeProvider {
         SpecialRecipeBuilder
                 .special(ConsumeSetup.VIAL_RECIPE_SERIALIZER.get())
                 .save(consumer, "allomancy:vial_filling_recipe");
+
+        Allomancy.LOGGER.debug("Creating Special Recipe for Lerasium investing");
 
     }
 

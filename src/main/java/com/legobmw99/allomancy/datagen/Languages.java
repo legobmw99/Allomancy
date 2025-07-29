@@ -58,6 +58,8 @@ public class Languages extends LanguageProvider {
         add(ExtrasSetup.INVERTED_IRON_BUTTON.get(), "Inverted Iron Button");
         add(ExtrasSetup.IRON_LEVER.get(), "Iron Lever");
         add("block.allomancy.iron_activation.lore", "This item seems too heavy to activate by ordinary means");
+        add(WorldSetup.LIQUID_LERASIUM.get(), "Concentrated Leras");
+        add("fluid_type.allomancy.lerasium", "Concentrated Leras");
 
         add(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "Hand Grinder");
         add(ConsumeSetup.LERASIUM_NUGGET.get(), "Lerasium Nugget");
@@ -74,6 +76,7 @@ public class Languages extends LanguageProvider {
         add(CombatSetup.KOLOSS_BLADE.get(), "Koloss Blade");
         add("item.allomancy.koloss_blade.lore", "This item is too heavy for the average person to wield.");
         add(ConsumeSetup.VIAL.get(), "Allomantic Vial");
+        add("allomancy.flake_storage.lore_single", "Contains %s");
         add("item.allomancy.vial.lore_count", "Contains %d metals");
         add("item.allomancy.vial.lore_inst", "Hold SHIFT to view");
         add("death.attack.allomancy.coin", "%1$s was perforated by coins from %2$s");
@@ -155,6 +158,17 @@ public class Languages extends LanguageProvider {
         }
 
         add("config.jade.plugin_allomancy.waila_bronze", "Allomancy: Show burning metals when seeking");
+
+        add("allomancy.jei.investing", "Investing");
+        add("allomancy.jei.investing.description", "Seek the Well...");
+        add("allomancy.jei.charged_earring.1", "This earring contains the life force of a magical entity.");
+        add("allomancy.jei.charged_earring.2",
+            "Obtaining it requires killing one of the more powerful monsters with the pointy end of an earring.");
+        add("allomancy.jei.charged_earring.3", "Slip it in your ear once you've done this dirty work.");
+        add("allomancy.jei.flake_input", "Multiple types of flake can be added at once.");
+        add("allomancy.jei.vial_input",
+            "Vials can have pre-existing contents, as long as they are not the same as the new flakes.");
+        add("allomancy.jei.vial_output", "Will contain both the new flakes and any old ones.");
 
         add("allomancy.networking.failed", "Allomancy packet failed to play: %s");
         add("allomancy.networking.kicked", "Requested illegal action: %s");
