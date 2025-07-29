@@ -172,14 +172,6 @@ public final class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void onChangeDimension(final PlayerEvent.PlayerChangedDimensionEvent event) {
-        // TODO: delete after https://github.com/neoforged/NeoForge/issues/2510 resolved
-        if (event.getEntity() instanceof ServerPlayer player) {
-            AllomancerAttachment.sync(player);
-        }
-    }
-
-    @SubscribeEvent
     public static void onEntityHurt(final LivingIncomingDamageEvent event) {
         // Increase outgoing damage for pewter burners
         if (event.getSource().getEntity() instanceof ServerPlayer source) {
