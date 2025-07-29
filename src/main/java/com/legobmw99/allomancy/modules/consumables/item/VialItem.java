@@ -21,6 +21,7 @@ import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STORAGE;
 
@@ -66,7 +67,7 @@ public class VialItem extends Item {
         return InteractionResult.FAIL;
     }
 
-    public static void fillVial(ItemStack stack, FlakeStorage storage) {
+    public static void fillVial(ItemStack stack, @Nullable FlakeStorage storage) {
         stack.set(FLAKE_STORAGE, storage);
         if (storage == null) {
             stack.set(DataComponents.RARITY, Rarity.COMMON);

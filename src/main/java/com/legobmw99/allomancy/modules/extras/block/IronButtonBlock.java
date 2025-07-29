@@ -20,6 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.IBlockCapabilityProvider;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
@@ -66,8 +67,8 @@ public class IronButtonBlock extends ButtonBlock {
         public IAllomanticallyUsable getCapability(Level level,
                                                    BlockPos pos,
                                                    BlockState state,
-                                                   BlockEntity blockEntity,
-                                                   Void context) {
+                                                   @Nullable BlockEntity blockEntity,
+                                                   @Nullable Void context) {
             return ((player, isPush) -> {
                 if (player instanceof ServerPlayer sp) {
                     ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);

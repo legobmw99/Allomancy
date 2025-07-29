@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.capabilities.IBlockCapabilityProvider;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
@@ -52,8 +53,8 @@ public class IronLeverBlock extends LeverBlock {
         public IAllomanticallyUsable getCapability(Level level,
                                                    BlockPos pos,
                                                    BlockState state,
-                                                   BlockEntity blockEntity,
-                                                   Void context) {
+                                                   @Nullable BlockEntity blockEntity,
+                                                   @Nullable Void context) {
             return ((player, isPush) -> {
                 if (player instanceof ServerPlayer sp) {
                     ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);

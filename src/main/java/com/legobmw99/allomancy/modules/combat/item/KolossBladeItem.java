@@ -19,6 +19,7 @@ import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class KolossBladeItem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerLevel worldIn, Entity entityIn, EquipmentSlot slot) {
+    public void inventoryTick(ItemStack stack, ServerLevel worldIn, Entity entityIn, @Nullable EquipmentSlot slot) {
         super.inventoryTick(stack, worldIn, entityIn, slot);
         if (entityIn instanceof Player player) {
             if (player.getMainHandItem() == stack) {

@@ -8,14 +8,8 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
-public class InvestingRecipe implements Recipe<InvestingRecipe.InvestingWrapper> {
-    private final ItemStack result;
-    private final Ingredient ingredient;
-
-    public InvestingRecipe(Ingredient ingredient, ItemStack result) {
-        this.result = result;
-        this.ingredient = ingredient;
-    }
+public record InvestingRecipe(Ingredient ingredient,
+                              ItemStack result) implements Recipe<InvestingRecipe.InvestingWrapper> {
 
     @Override
     public boolean matches(InvestingWrapper input, Level level) {
@@ -49,7 +43,7 @@ public class InvestingRecipe implements Recipe<InvestingRecipe.InvestingWrapper>
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return null;
+        return RecipeBookCategories.CRAFTING_MISC;
     }
 
     public static class InvestingWrapper extends RecipeWrapper {
@@ -59,11 +53,5 @@ public class InvestingRecipe implements Recipe<InvestingRecipe.InvestingWrapper>
         }
     }
 
-    public Ingredient getIngredient() {
-        return this.ingredient;
-    }
 
-    public ItemStack getResult() {
-        return this.result.copy();
-    }
 }

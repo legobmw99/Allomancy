@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
@@ -81,6 +82,7 @@ public final class GrantAllomancyConsumeEffect implements ConsumeEffect {
             return this;
         }
 
+        @Nullable
         public GrantAllomancyConsumeEffect toImmutable() {
             if (this.flakes.isEmpty()) {
                 return null;

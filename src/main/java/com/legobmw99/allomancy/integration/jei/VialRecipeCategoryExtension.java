@@ -51,20 +51,19 @@ public class VialRecipeCategoryExtension implements ICraftingCategoryExtension<V
         }
 
         var input = craftingGridHelper.createAndSetInputs(builder, Arrays.asList(input1, input2), 0, 0);
-        input.get(0).addRichTooltipCallback((recipeSlotView, tooltip) -> {
-            tooltip.add(Component.translatable("allomancy.jei.flake_input"));
-
-        });
-        input.get(1).addRichTooltipCallback((recipeSlotView, tooltip) -> {
-            tooltip.add(Component.translatable("allomancy.jei.vial_input"));
-
-        });
+        input
+                .get(0)
+                .addRichTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(
+                        Component.translatable("allomancy.jei.flake_input")));
+        input
+                .get(1)
+                .addRichTooltipCallback(
+                        (recipeSlotView, tooltip) -> tooltip.add(Component.translatable("allomancy.jei.vial_input")));
 
         var output = craftingGridHelper.createAndSetOutputs(builder, outputs);
-        output.addRichTooltipCallback((recipeSlotView, tooltip) -> {
-            tooltip.add(Component.translatable("allomancy.jei.vial_output"));
-        });
-        builder.createFocusLink(new IRecipeSlotBuilder[]{input.get(0), output});
+        output.addRichTooltipCallback(
+                (recipeSlotView, tooltip) -> tooltip.add(Component.translatable("allomancy.jei.vial_output")));
+        builder.createFocusLink(new IRecipeSlotBuilder[]{input.getFirst(), output});
     }
 
 }

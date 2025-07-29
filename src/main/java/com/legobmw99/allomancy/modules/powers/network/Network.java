@@ -32,10 +32,6 @@ public final class Network {
 
     }
 
-    //    public static void syncAllomancerData(ServerPlayer player) {
-    //        sync(new AllomancerDataPayload(player), player);
-    //    }
-
     public static void sync(CustomPacketPayload msg, ServerPlayer player) {
         PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, msg);
     }

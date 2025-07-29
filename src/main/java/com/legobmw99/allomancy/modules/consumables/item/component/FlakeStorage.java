@@ -21,6 +21,7 @@ import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.ConsumableListener;
 import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.function.Consumer;
@@ -152,13 +153,14 @@ public final class FlakeStorage implements TooltipProvider, ConsumableListener {
             return this;
         }
 
-        public Mutable addAll(FlakeStorage other) {
+        public Mutable addAll(@Nullable FlakeStorage other) {
             if (other != null) {
                 this.flakes.addAll(other.flakes);
             }
             return this;
         }
 
+        @Nullable
         public FlakeStorage toImmutable() {
             if (this.flakes.isEmpty()) {
                 return null;

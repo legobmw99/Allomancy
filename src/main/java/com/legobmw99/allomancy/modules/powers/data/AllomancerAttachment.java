@@ -35,11 +35,11 @@ public final class AllomancerAttachment {
                         }
 
                         @Override
-                        public @Nullable AllomancerData read(IAttachmentHolder holder,
-                                                             RegistryFriendlyByteBuf buf,
-                                                             @Nullable AllomancerData previousData) {
+                        public AllomancerData read(IAttachmentHolder holder,
+                                                   RegistryFriendlyByteBuf buf,
+                                                   @Nullable AllomancerData previousData) {
                             AllomancerData data = AllomancerData.STREAM_CODEC.decode(buf);
-                            if (previousData != null && holder instanceof LocalPlayer p) {
+                            if (previousData != null && holder instanceof LocalPlayer) {
                                 var burningBefore =
                                         Arrays.stream(Metal.values()).filter(previousData::isBurning).count();
                                 var burningAfter = Arrays.stream(Metal.values()).filter(data::isBurning).count();

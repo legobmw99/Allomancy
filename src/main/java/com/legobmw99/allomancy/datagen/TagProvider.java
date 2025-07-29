@@ -72,7 +72,6 @@ public final class TagProvider {
 
         @Override
         protected void addTags(HolderLookup.Provider provider) {
-            // TODO clean up to use Copy?
             for (Metal mt : Metal.values()) {
                 if (mt.isVanilla()) {
                     continue;

@@ -9,6 +9,7 @@ import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -35,13 +36,15 @@ public class MetalUsedOnPlayerTrigger extends SimpleCriterionTrigger<MetalUsedOn
                 .apply(builder, TriggerInstance::new));
 
 
-        public static Criterion<TriggerInstance> instance(ContextAwarePredicate player, Metal mt) {
+        public static Criterion<TriggerInstance> instance(@Nullable ContextAwarePredicate player, Metal mt) {
             return ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER
                     .get()
                     .createCriterion(new TriggerInstance(Optional.ofNullable(player), mt, Optional.empty()));
         }
 
-        public static Criterion<TriggerInstance> instance(ContextAwarePredicate player, Metal mt, boolean enhanced) {
+        public static Criterion<TriggerInstance> instance(@Nullable ContextAwarePredicate player,
+                                                          Metal mt,
+                                                          boolean enhanced) {
             return ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER
                     .get()
                     .createCriterion(new TriggerInstance(Optional.ofNullable(player), mt, Optional.of(enhanced)));

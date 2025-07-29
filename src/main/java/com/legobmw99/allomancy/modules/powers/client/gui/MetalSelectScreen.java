@@ -38,6 +38,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.event.RegisterPictureInPictureRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 import java.util.Arrays;
@@ -186,15 +187,15 @@ public class MetalSelectScreen extends Screen {
 
 
     public record SelectionWheelState(IAllomancerData data, double mouseAngle, float timeInPartial, int x0, int y0,
-                                      int x1, int y1, ScreenRectangle scissorArea,
-                                      ScreenRectangle bounds) implements PictureInPictureRenderState {
+                                      int x1, int y1, @Nullable ScreenRectangle scissorArea,
+                                      @Nullable ScreenRectangle bounds) implements PictureInPictureRenderState {
 
         private SelectionWheelState(IAllomancerData data,
                                     double mouseAngle,
                                     float timeInPartial,
                                     int width,
                                     int height,
-                                    ScreenRectangle scissorArea) {
+                                    @Nullable ScreenRectangle scissorArea) {
             this(data, mouseAngle, timeInPartial, 0, 0, width, height, scissorArea,
                  PictureInPictureRenderState.getBounds(0, 0, width, height, scissorArea));
         }

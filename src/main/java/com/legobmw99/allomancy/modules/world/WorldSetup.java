@@ -5,7 +5,6 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.world.block.LerasiumFluid;
 import com.legobmw99.allomancy.modules.world.block.LiquidLerasiumBlock;
 import com.legobmw99.allomancy.modules.world.loot.DaggerLootModifier;
-import com.legobmw99.allomancy.modules.world.loot.LerasiumLootModifier;
 import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
 import com.legobmw99.allomancy.util.AllomancyTags;
 import com.mojang.datafixers.util.Pair;
@@ -220,27 +219,26 @@ public final class WorldSetup {
 
     private static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> GLM =
             DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Allomancy.MODID);
-    public static final Supplier<MapCodec<LerasiumLootModifier>> LERASIUM_LOOT =
-            GLM.register("lerasium_loot", LerasiumLootModifier.CODEC);
+
     public static final Supplier<MapCodec<DaggerLootModifier>> DAGGER_LOOT =
             GLM.register("unbreakable_dagger_loot", DaggerLootModifier.CODEC);
 
     private static final DeferredRegister<RecipeSerializer<?>> RECIPES =
             DeferredRegister.create(Registries.RECIPE_SERIALIZER, Allomancy.MODID);
     public static final Supplier<RecipeSerializer<InvestingRecipe>> INVESTING_RECIPE_SERIALIZER =
-            RECIPES.register("investing", () -> new RecipeSerializer<InvestingRecipe>() {
+            RECIPES.register("investing", () -> new RecipeSerializer<>() {
                 @Override
                 public MapCodec<InvestingRecipe> codec() {
                     return RecordCodecBuilder.mapCodec(instance -> instance
-                            .group(Ingredient.CODEC.fieldOf("ingredient").forGetter(InvestingRecipe::getIngredient),
-                                   ItemStack.STRICT_CODEC.fieldOf("result").forGetter(InvestingRecipe::getResult))
+                            .group(Ingredient.CODEC.fieldOf("ingredient").forGetter(InvestingRecipe::ingredient),
+                                   ItemStack.STRICT_CODEC.fieldOf("result").forGetter(InvestingRecipe::result))
                             .apply(instance, InvestingRecipe::new));
                 }
 
                 @Override
                 public StreamCodec<RegistryFriendlyByteBuf, InvestingRecipe> streamCodec() {
-                    return StreamCodec.composite(Ingredient.CONTENTS_STREAM_CODEC, InvestingRecipe::getIngredient,
-                                                 ItemStack.STREAM_CODEC, InvestingRecipe::getResult,
+                    return StreamCodec.composite(Ingredient.CONTENTS_STREAM_CODEC, InvestingRecipe::ingredient,
+                                                 ItemStack.STREAM_CODEC, InvestingRecipe::result,
                                                  InvestingRecipe::new);
                 }
             });

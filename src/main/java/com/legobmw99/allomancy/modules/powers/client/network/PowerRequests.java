@@ -17,6 +17,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import org.jetbrains.annotations.Nullable;
 
 public final class PowerRequests {
     private PowerRequests() {}
@@ -40,7 +41,7 @@ public final class PowerRequests {
         Sounds.soundForBurnChange(data.isBurning(metal));
     }
 
-    public static void emotionPushPull(IAllomancerData data, HitResult trace, Metal metal) {
+    public static void emotionPushPull(IAllomancerData data, @Nullable HitResult trace, Metal metal) {
         if (!data.isBurning(metal) || trace == null) {
             return;
         }
@@ -55,7 +56,7 @@ public final class PowerRequests {
         }
     }
 
-    public static void metallicPushPull(IAllomancerData data, HitResult trace, Metal metal) {
+    public static void metallicPushPull(IAllomancerData data, @Nullable HitResult trace, Metal metal) {
         if (!data.isBurning(metal) || trace == null) {
             return;
         }
@@ -85,7 +86,7 @@ public final class PowerRequests {
         }
     }
 
-    public static void nicrosilEnhance(IAllomancerData data, HitResult trace) {
+    public static void nicrosilEnhance(IAllomancerData data, @Nullable HitResult trace) {
         if (data.isBurning(Metal.NICROSIL)) {
             if ((trace != null) && (trace.getType() == HitResult.Type.ENTITY)) {
                 Entity entity = ((EntityHitResult) trace).getEntity();

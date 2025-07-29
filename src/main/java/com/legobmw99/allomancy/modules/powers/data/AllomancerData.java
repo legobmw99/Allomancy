@@ -174,7 +174,7 @@ public class AllomancerData implements IAllomancerData {
         this.damage_stored = damageStored;
     }
 
-    public void setSpawnLoc(BlockPos pos, ResourceKey<Level> dim) {
+    public void setSpawnLoc(@Nullable BlockPos pos, @Nullable ResourceKey<Level> dim) {
         if (pos != null && dim != null) {
             this.spawn_pos = GlobalPos.of(dim, pos);
         }
@@ -184,7 +184,7 @@ public class AllomancerData implements IAllomancerData {
         return this.spawn_pos;
     }
 
-    public void setSpecialSeekingLoc(BlockPos pos, ResourceKey<Level> dim) {
+    public void setSpecialSeekingLoc(@Nullable BlockPos pos, @Nullable ResourceKey<Level> dim) {
         if (pos != null && dim != null) {
             this.seeking_pos = GlobalPos.of(dim, pos);
         } else {

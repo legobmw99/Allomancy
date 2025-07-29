@@ -42,21 +42,19 @@ public final class Enhancement {
      * @param pos       BlockPos to move the player to using {@link Entity#teleportTo(double, double, double)}
      */
     private static void teleport(ServerPlayer player, ServerLevel world, ResourceKey<Level> dimension, BlockPos pos) {
-        if (player != null) {
-            if (player.isPassenger()) {
-                player.stopRiding();
-            }
-
-            if (player.level().dimension() != dimension) {
-                //change dimension
-                player = player.teleport(
-                        new TeleportTransition(world.getServer().getLevel(dimension), Vec3.atBottomCenterOf(pos),
-                                               Vec3.ZERO, player.getXRot(), player.getYRot(), DO_NOTHING));
-            }
-            var center = pos.above().getCenter();
-            player.teleportTo(center.x(), center.y(), center.z());
-            player.fallDistance = 0.0F;
+        if (player.isPassenger()) {
+            player.stopRiding();
         }
+
+        if (player.level().dimension() != dimension) {
+            //change dimension
+            player = player.teleport(
+                    new TeleportTransition(world.getServer().getLevel(dimension), Vec3.atBottomCenterOf(pos),
+                                           Vec3.ZERO, player.getXRot(), player.getYRot(), DO_NOTHING));
+        }
+        var center = pos.above().getCenter();
+        player.teleportTo(center.x(), center.y(), center.z());
+        player.fallDistance = 0.0F;
     }
 
     public static void teleportToLastDeath(ServerPlayer curPlayer, ServerLevel level, IAllomancerData data) {
