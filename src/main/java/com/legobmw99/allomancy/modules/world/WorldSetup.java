@@ -5,6 +5,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.world.block.LerasiumFluid;
 import com.legobmw99.allomancy.modules.world.block.LiquidLerasiumBlock;
 import com.legobmw99.allomancy.modules.world.loot.DaggerLootModifier;
+import com.legobmw99.allomancy.modules.world.loot.PlayerInvestmentCondition;
 import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
 import com.legobmw99.allomancy.util.AllomancyTags;
 import com.mojang.datafixers.util.Pair;
@@ -60,6 +61,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.world.BiomeModifier;
@@ -223,6 +225,13 @@ public final class WorldSetup {
     public static final Supplier<MapCodec<DaggerLootModifier>> DAGGER_LOOT =
             GLM.register("unbreakable_dagger_loot", DaggerLootModifier.CODEC);
 
+    private static final DeferredRegister<LootItemConditionType> LOOT_CONDITIONS =
+            DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, Allomancy.MODID);
+
+    public static final Supplier<LootItemConditionType> PLAYER_INVESTMENT =
+            LOOT_CONDITIONS.register("player_investment",
+                                     () -> new LootItemConditionType(PlayerInvestmentCondition.CODEC));
+
     private static final DeferredRegister<RecipeSerializer<?>> RECIPES =
             DeferredRegister.create(Registries.RECIPE_SERIALIZER, Allomancy.MODID);
     public static final Supplier<RecipeSerializer<InvestingRecipe>> INVESTING_RECIPE_SERIALIZER =
@@ -256,6 +265,7 @@ public final class WorldSetup {
         FLUIDS.register(bus);
         RECIPES.register(bus);
         RECIPE_TYPES.register(bus);
+        LOOT_CONDITIONS.register(bus);
     }
 
     private static DeferredBlock<Block> registerStandardBlock(String name) {

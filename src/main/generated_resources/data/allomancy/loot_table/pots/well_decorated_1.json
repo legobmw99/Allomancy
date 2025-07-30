@@ -1,0 +1,65 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 7.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            },
+            {
+              "components": {
+                "allomancy:flake_storage": [
+                  "iron",
+                  "steel",
+                  "tin",
+                  "pewter",
+                  "zinc",
+                  "brass",
+                  "copper",
+                  "bronze",
+                  "aluminum",
+                  "duralumin",
+                  "chromium",
+                  "nicrosil",
+                  "gold",
+                  "electrum",
+                  "cadmium",
+                  "bendalloy"
+                ]
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "minecraft:use_remainder": {
+                  "count": 1,
+                  "id": "allomancy:vial"
+                }
+              },
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "minecraft:rarity": "uncommon"
+              },
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "allomancy:vial"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "allomancy:pots/well_decorated_1"
+}

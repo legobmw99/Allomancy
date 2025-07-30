@@ -22,7 +22,9 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 
@@ -382,6 +384,27 @@ final class Recipes extends RecipeProvider {
         @Override
         public String getName() {
             return "Allomancy recipes";
+        }
+    }
+
+    @Override
+    protected <T extends AbstractCookingRecipe> void oreCooking(RecipeSerializer<T> serializer,
+                                                                AbstractCookingRecipe.Factory<T> recipeFactory,
+                                                                List<ItemLike> ingredients,
+                                                                RecipeCategory category,
+                                                                ItemLike result,
+                                                                float experience,
+                                                                int cookingTime,
+                                                                String group,
+                                                                String suffix) {
+        for (ItemLike itemlike : ingredients) {
+            SimpleCookingRecipeBuilder
+                    .generic(Ingredient.of(itemlike), category, result, experience, cookingTime, serializer,
+                             recipeFactory)
+                    .group(group)
+                    .unlockedBy(getHasName(itemlike), this.has(itemlike))
+                    // overridden just to insert this allomancy:
+                    .save(this.output, "allomancy:" + getItemName(result) + suffix + "_" + getItemName(itemlike));
         }
     }
 }

@@ -35,8 +35,10 @@ public final class DataGenerators {
 
         event.addProvider(new LootTableProvider(packOutput, Collections.emptySet(),
                                                 List.of(new LootTableProvider.SubProviderEntry(BlockLootTables::new,
-                                                                                               LootContextParamSets.BLOCK)),
-                                                lookup));
+                                                                                               LootContextParamSets.BLOCK),
+                                                        new LootTableProvider.SubProviderEntry(
+                                                                StructureLootTables::new,
+                                                                LootContextParamSets.CHEST)), lookup));
         event.addProvider(new LootModifiers(packOutput, lookup));
 
         var blocktags = event.addProvider(new TagProvider.Blocks(packOutput, lookup));
