@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_inverted_iron_button": {
+    "has_aluminum_ingot": {
       "conditions": {
         "items": [
           {
             "items": [
-              "allomancy:inverted_iron_button"
+              "allomancy:aluminum_ingot"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:iron_button_from_inverted"
+        "recipe": "allomancy:aluminum_helmet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_inverted_iron_button",
+      "has_aluminum_ingot",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:iron_button_from_inverted"
+      "allomancy:aluminum_helmet"
     ]
   },
   "sends_telemetry_event": false

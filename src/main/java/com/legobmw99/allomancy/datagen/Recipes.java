@@ -49,6 +49,7 @@ public class Recipes extends RecipeProvider {
         add('W', Items.GRAY_WOOL);
         add('O', Tags.Items.OBSIDIAN);
         add('C', Items.COBBLESTONE);
+        add('A', ing("forge:ingots/aluminum"));
         add('B', ing("forge:storage_blocks/bronze"));
         add('b', ing("forge:ingots/bronze"));
         add('n', ing("forge:nuggets/bronze"));
@@ -162,10 +163,10 @@ public class Recipes extends RecipeProvider {
         buildShaped(consumer, RecipeCategory.REDSTONE, ExtrasSetup.IRON_LEVER.get(), Items.IRON_INGOT, "s", "I");
         buildShaped(consumer, RecipeCategory.REDSTONE, ExtrasSetup.IRON_BUTTON.get(), Items.IRON_INGOT, "i", "I");
         buildShapeless(consumer, RecipeCategory.REDSTONE, ExtrasSetup.INVERTED_IRON_BUTTON.get(), 1,
-                       ExtrasSetup.IRON_BUTTON_ITEM.get(), "inverted_from_iron_button",
+                       ExtrasSetup.IRON_BUTTON_ITEM.get(), "allomancy:inverted_from_iron_button",
                        ing(ExtrasSetup.IRON_BUTTON.get()));
         buildShapeless(consumer, RecipeCategory.REDSTONE, ExtrasSetup.IRON_BUTTON.get(), 1,
-                       ExtrasSetup.INVERTED_IRON_BUTTON_ITEM.get(), "iron_button_from_inverted",
+                       ExtrasSetup.INVERTED_IRON_BUTTON_ITEM.get(), "allomancy:iron_button_from_inverted",
                        ing(ExtrasSetup.INVERTED_IRON_BUTTON.get()));
 
         buildShaped(consumer, RecipeCategory.FOOD, ConsumeSetup.ALLOMANTIC_GRINDER.get(), Items.IRON_INGOT, "ggg",
@@ -173,6 +174,10 @@ public class Recipes extends RecipeProvider {
         buildShaped(consumer, RecipeCategory.FOOD, ConsumeSetup.VIAL.get(), 4, Items.GLASS, " S ", "G G", " G ");
         buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.MISTCLOAK.get(), ConsumeSetup.VIAL.get(), "W W",
                     "WWW", "WWW");
+
+        buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.ALUMINUM_HELMET.get(),
+                    WorldSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(), "AAA", "A A");
+
         buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.OBSIDIAN_DAGGER.get(), CombatSetup.MISTCLOAK.get(),
                     "  O", " O ", "s  ");
         buildShaped(consumer, RecipeCategory.COMBAT, CombatSetup.KOLOSS_BLADE.get(),

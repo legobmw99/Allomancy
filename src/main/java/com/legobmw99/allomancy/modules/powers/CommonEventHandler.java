@@ -275,6 +275,7 @@ public final class CommonEventHandler {
                 } else if (!data.isBurning(Metal.DURALUMIN) && data.isEnhanced()) {
                     data.decrementEnhanced();
                     if (!data.isEnhanced()) { //Enhancement ran out this tick
+                        Network.sync(new UpdateEnhancedPacket(0, curPlayer.getId()), curPlayer);
                         data.drainMetals(Arrays.stream(Metal.values()).filter(data::isBurning).toArray(Metal[]::new));
                         syncRequired = true;
                     }
