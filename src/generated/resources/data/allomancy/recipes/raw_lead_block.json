@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "allomancy:raw_lead"
+    },
+    {
+      "item": "allomancy:raw_lead"
+    },
+    {
+      "item": "allomancy:raw_lead"
+    },
+    {
+      "item": "allomancy:raw_lead"
+    },
+    {
+      "item": "allomancy:raw_lead"
+    },
+    {
+      "item": "allomancy:raw_lead"
+    },
+    {
+      "item": "allomancy:raw_lead"
+    },
+    {
+      "item": "allomancy:raw_lead"
+    },
+    {
+      "item": "allomancy:raw_lead"
+    }
+  ],
+  "result": {
+    "item": "allomancy:raw_lead_block"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "allomancy:raw_zinc"
+    },
+    {
+      "item": "allomancy:raw_zinc"
+    },
+    {
+      "item": "allomancy:raw_zinc"
+    },
+    {
+      "item": "allomancy:raw_zinc"
+    },
+    {
+      "item": "allomancy:raw_zinc"
+    },
+    {
+      "item": "allomancy:raw_zinc"
+    },
+    {
+      "item": "allomancy:raw_zinc"
+    },
+    {
+      "item": "allomancy:raw_zinc"
+    },
+    {
+      "item": "allomancy:raw_zinc"
+    }
+  ],
+  "result": {
+    "item": "allomancy:raw_zinc_block"
+  }
+}

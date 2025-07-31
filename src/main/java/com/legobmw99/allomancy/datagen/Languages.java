@@ -77,8 +77,8 @@ public class Languages extends LanguageProvider {
         add("item.allomancy.koloss_blade.lore", "This item is too heavy for the average person to wield.");
         add(ConsumeSetup.VIAL.get(), "Allomantic Vial");
         add("allomancy.flake_storage.lore_single", "Contains %s");
-        add("item.allomancy.vial.lore_count", "Contains %d metals");
-        add("item.allomancy.vial.lore_inst", "Hold SHIFT to view");
+        add("allomancy.flake_storage.lore_count", "Contains %s metals");
+        add("allomancy.flake_storage.lore_inst", "Hold SHIFT to view");
         add("death.attack.allomancy.coin", "%1$s was perforated by coins from %2$s");
 
         for (Metal mt : Metal.values()) {

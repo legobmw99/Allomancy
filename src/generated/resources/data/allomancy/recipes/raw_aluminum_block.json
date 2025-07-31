@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "allomancy:raw_aluminum"
+    },
+    {
+      "item": "allomancy:raw_aluminum"
+    },
+    {
+      "item": "allomancy:raw_aluminum"
+    },
+    {
+      "item": "allomancy:raw_aluminum"
+    },
+    {
+      "item": "allomancy:raw_aluminum"
+    },
+    {
+      "item": "allomancy:raw_aluminum"
+    },
+    {
+      "item": "allomancy:raw_aluminum"
+    },
+    {
+      "item": "allomancy:raw_aluminum"
+    },
+    {
+      "item": "allomancy:raw_aluminum"
+    }
+  ],
+  "result": {
+    "item": "allomancy:raw_aluminum_block"
+  }
+}

@@ -1,38 +1,30 @@
 package com.legobmw99.allomancy.datagen;
 
-import com.google.gson.JsonObject;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.combat.CombatSetup;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.world.WorldSetup;
-import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
-import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import static net.minecraft.tags.TagEntry.tag;
 
 public class Recipes extends RecipeProvider {
 
@@ -104,13 +96,12 @@ public class Recipes extends RecipeProvider {
         SimpleCookingRecipeBuilder blast =
                 SimpleCookingRecipeBuilder.blasting(ing(ingredient), RecipeCategory.MISC, result, xp, 100);
 
-        smelt.unlockedBy("has_" + ForgeRegistries.ITEMS.getKey(ingredient.asItem()).getPath(),
-                         InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
-        blast.unlockedBy("has_" + ForgeRegistries.ITEMS.getKey(ingredient.asItem()).getPath(),
-                         InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
+        String ingredientName = ForgeRegistries.ITEMS.getKey(ingredient.asItem()).getPath();
+        smelt.unlockedBy("has_" + ingredientName, InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
+        blast.unlockedBy("has_" + ingredientName, InventoryChangeTrigger.TriggerInstance.hasItems(ingredient));
 
-        smelt.save(consumer);
-        blast.save(consumer, ForgeRegistries.ITEMS.getKey(result.asItem()) + "_from_blasting");
+        smelt.save(consumer, ForgeRegistries.ITEMS.getKey(result.asItem()) + "_from_smelting_" + ingredientName);
+        blast.save(consumer, ForgeRegistries.ITEMS.getKey(result.asItem()) + "_from_blasting_" + ingredientName);
 
     }
 
@@ -193,8 +184,18 @@ public class Recipes extends RecipeProvider {
         float[] ore_metal_xp = {0.6F, 0.7F, 0.7F, 0.4F, 1.0F, 0.6F, 0.6F};
         for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
             var raw = WorldSetup.RAW_ORE_ITEMS.get(i).get();
+            var rawBlock = WorldSetup.RAW_ORE_BLOCKS_ITEMS.get(i).get();
             var ingot = WorldSetup.INGOTS.get(ore_metal_indexes[i]).get();
+            var ore = WorldSetup.ORE_BLOCKS_ITEMS.get(i).get();
+            var deep_ore = WorldSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).get();
             buildSmeltingAndBlasting(consumer, ingot, raw, ore_metal_xp[i]);
+            buildSmeltingAndBlasting(consumer, ingot, ore, ore_metal_xp[i]);
+            buildSmeltingAndBlasting(consumer, ingot, deep_ore, ore_metal_xp[i]);
+
+
+            buildShapeless(consumer, RecipeCategory.BUILDING_BLOCKS, rawBlock, 1, raw, repeat(ing(raw), 9));
+            buildShapeless(consumer, RecipeCategory.MISC, raw, 9, rawBlock,
+                           BuiltInRegistries.ITEM.getKey(raw).getPath() + "_from_block", ing(rawBlock));
         }
 
 

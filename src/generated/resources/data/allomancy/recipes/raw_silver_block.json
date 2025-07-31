@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "allomancy:raw_silver"
+    },
+    {
+      "item": "allomancy:raw_silver"
+    },
+    {
+      "item": "allomancy:raw_silver"
+    },
+    {
+      "item": "allomancy:raw_silver"
+    },
+    {
+      "item": "allomancy:raw_silver"
+    },
+    {
+      "item": "allomancy:raw_silver"
+    },
+    {
+      "item": "allomancy:raw_silver"
+    },
+    {
+      "item": "allomancy:raw_silver"
+    },
+    {
+      "item": "allomancy:raw_silver"
+    }
+  ],
+  "result": {
+    "item": "allomancy:raw_silver_block"
+  }
+}

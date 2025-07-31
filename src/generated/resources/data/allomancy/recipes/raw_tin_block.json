@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "allomancy:raw_tin"
+    },
+    {
+      "item": "allomancy:raw_tin"
+    },
+    {
+      "item": "allomancy:raw_tin"
+    },
+    {
+      "item": "allomancy:raw_tin"
+    },
+    {
+      "item": "allomancy:raw_tin"
+    },
+    {
+      "item": "allomancy:raw_tin"
+    },
+    {
+      "item": "allomancy:raw_tin"
+    },
+    {
+      "item": "allomancy:raw_tin"
+    },
+    {
+      "item": "allomancy:raw_tin"
+    }
+  ],
+  "result": {
+    "item": "allomancy:raw_tin_block"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "allomancy:raw_cadmium"
+    },
+    {
+      "item": "allomancy:raw_cadmium"
+    },
+    {
+      "item": "allomancy:raw_cadmium"
+    },
+    {
+      "item": "allomancy:raw_cadmium"
+    },
+    {
+      "item": "allomancy:raw_cadmium"
+    },
+    {
+      "item": "allomancy:raw_cadmium"
+    },
+    {
+      "item": "allomancy:raw_cadmium"
+    },
+    {
+      "item": "allomancy:raw_cadmium"
+    },
+    {
+      "item": "allomancy:raw_cadmium"
+    }
+  ],
+  "result": {
+    "item": "allomancy:raw_cadmium_block"
+  }
+}
