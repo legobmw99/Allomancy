@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "allomancy:raw_chromium",
+    "allomancy:raw_chromium",
+    "allomancy:raw_chromium",
+    "allomancy:raw_chromium",
+    "allomancy:raw_chromium",
+    "allomancy:raw_chromium",
+    "allomancy:raw_chromium",
+    "allomancy:raw_chromium",
+    "allomancy:raw_chromium"
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:raw_chromium_block"
+  }
+}

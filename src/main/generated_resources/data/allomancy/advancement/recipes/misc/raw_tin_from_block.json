@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_raw_tin_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:raw_tin_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "allomancy:raw_tin_from_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_raw_tin_block"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "allomancy:raw_tin_from_block"
+    ]
+  }
+}

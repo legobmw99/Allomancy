@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "allomancy:raw_silver",
+    "allomancy:raw_silver",
+    "allomancy:raw_silver",
+    "allomancy:raw_silver",
+    "allomancy:raw_silver",
+    "allomancy:raw_silver",
+    "allomancy:raw_silver",
+    "allomancy:raw_silver",
+    "allomancy:raw_silver"
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:raw_silver_block"
+  }
+}

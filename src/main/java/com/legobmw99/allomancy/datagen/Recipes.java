@@ -177,10 +177,15 @@ final class Recipes extends RecipeProvider {
         float[] ore_metal_xp = {0.6F, 0.7F, 0.7F, 0.4F, 1.0F, 0.6F, 0.6F};
         for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
             var raw = WorldSetup.RAW_ORE_ITEMS.get(i).get();
+            var rawBlock = WorldSetup.RAW_ORE_BLOCKS_ITEMS.get(i).get();
             var ore = WorldSetup.ORE_BLOCKS_ITEMS.get(i).get();
             var deep_ore = WorldSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).get();
             var ingot = WorldSetup.INGOTS.get(ore_metal_indexes[i]).get();
             buildSmeltingAndBlasting(ingot, List.of(raw, ore, deep_ore), ore_metal_xp[i]);
+
+            buildShapeless(consumer, RecipeCategory.BUILDING_BLOCKS, rawBlock, 1, raw, repeat(ing(raw), 9));
+            buildShapeless(consumer, RecipeCategory.MISC, raw, 9, rawBlock,
+                           BuiltInRegistries.ITEM.getKey(raw).getPath() + "_from_block", ing(rawBlock));
         }
 
 

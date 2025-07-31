@@ -28,8 +28,7 @@ public record PlayerInvestmentCondition(Metal power) implements LootItemConditio
 
     @Override
     public Set<ContextKey<?>> getReferencedContextParams() {
-        return Set.of(LootContextParams.THIS_ENTITY, LootContextParams.ATTACKING_ENTITY,
-                      LootContextParams.LAST_DAMAGE_PLAYER);
+        return Set.of(LootContextParams.THIS_ENTITY, LootContextParams.ATTACKING_ENTITY);
     }
 
     @Override
@@ -40,9 +39,7 @@ public record PlayerInvestmentCondition(Metal power) implements LootItemConditio
         if (lootContext.getOptionalParameter(LootContextParams.ATTACKING_ENTITY) instanceof Player player) {
             return AllomancerAttachment.get(player).hasPower(this.power);
         }
-        if (lootContext.getOptionalParameter(LootContextParams.LAST_DAMAGE_PLAYER) instanceof Player player) {
-            return AllomancerAttachment.get(player).hasPower(this.power);
-        }
+
         return false;
     }
 

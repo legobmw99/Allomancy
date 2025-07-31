@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "allomancy:raw_chromium_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "allomancy:raw_chromium"
+  }
+}
