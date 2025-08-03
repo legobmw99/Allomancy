@@ -26,10 +26,20 @@ public class DungeonLootTables implements LootTableSubProvider {
                 .lootPool()
                 .name("main")
                 .setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(CombatSetup.OBSIDIAN_DAGGER.get()).apply(SetNbtFunction.setTag(nbt)).setWeight(1))
+                .add(LootItem
+                             .lootTableItem(CombatSetup.OBSIDIAN_DAGGER.get())
+                             .apply(SetNbtFunction.setTag(nbt))
+                             .setWeight(1))
                 .add(EmptyLootItem.emptyItem().setWeight(19));
-        writer.accept(new ResourceLocation(Allomancy.MODID, "inject/obsidian_dagger"), LootTable.lootTable().withPool(dagger_builder));
+        writer.accept(new ResourceLocation(Allomancy.MODID, "inject/obsidian_dagger"),
+                      LootTable.lootTable().withPool(dagger_builder));
 
+        writer.accept(Allomancy.rl("pots/well_plain"), LootTable
+                .lootTable()
+                .withPool(LootPool
+                                  .lootPool()
+                                  .setRolls(ConstantValue.exactly(1.0F))
+                                  .add(LootItem.lootTableItem(ConsumeSetup.LERASIUM_NUGGET.get()))));
 
     }
 }
