@@ -1,11 +1,19 @@
 {
   "values": [
-    "allomancy:raw_aluminum",
-    "allomancy:raw_cadmium",
-    "allomancy:raw_chromium",
-    "allomancy:raw_lead",
-    "allomancy:raw_silver",
+    "allomancy:raw_steel",
     "allomancy:raw_tin",
-    "allomancy:raw_zinc"
+    "allomancy:raw_pewter",
+    "allomancy:raw_zinc",
+    "allomancy:raw_brass",
+    "allomancy:raw_bronze",
+    "allomancy:raw_aluminum",
+    "allomancy:raw_duralumin",
+    "allomancy:raw_chromium",
+    "allomancy:raw_nicrosil",
+    "allomancy:raw_electrum",
+    "allomancy:raw_cadmium",
+    "allomancy:raw_bendalloy",
+    "allomancy:raw_lead",
+    "allomancy:raw_silver"
   ]
 }

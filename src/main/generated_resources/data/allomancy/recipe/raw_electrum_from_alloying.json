@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:raw_materials/silver",
+    "minecraft:raw_gold"
+  ],
+  "result": {
+    "count": 2,
+    "id": "allomancy:raw_electrum"
+  }
+}

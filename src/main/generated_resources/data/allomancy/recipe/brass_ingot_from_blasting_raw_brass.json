@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "group": "brass_ingot",
+  "ingredient": "allomancy:raw_brass",
+  "result": {
+    "count": 1,
+    "id": "allomancy:brass_ingot"
+  }
+}

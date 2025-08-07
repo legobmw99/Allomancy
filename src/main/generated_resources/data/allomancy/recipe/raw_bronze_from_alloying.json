@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:raw_copper",
+    "minecraft:raw_copper",
+    "minecraft:raw_copper",
+    "#c:raw_materials/tin"
+  ],
+  "result": {
+    "count": 4,
+    "id": "allomancy:raw_bronze"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:raw_materials/tin",
+    "#c:raw_materials/tin",
+    "#c:raw_materials/tin",
+    "#c:raw_materials/lead"
+  ],
+  "result": {
+    "count": 4,
+    "id": "allomancy:raw_pewter"
+  }
+}

@@ -27,6 +27,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.conditions.NotCondition;
+import net.neoforged.neoforge.common.conditions.TagEmptyCondition;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -100,12 +102,8 @@ final class Recipes extends RecipeProvider {
         this.oreSmelting(ingredient, RecipeCategory.MISC, result, xp, 200, name);
     }
 
-    private static String mixing_save(String metal) {
-        return metal + "_flakes_from_mixing";
-    }
-
     private static String alloy_save(String metal) {
-        return metal + "_ingot_from_alloying";
+        return "raw_" + metal + "_from_alloying";
     }
 
     private Ingredient ing(String tag) {
@@ -170,18 +168,15 @@ final class Recipes extends RecipeProvider {
                     ConsumeSetup.ALLOMANTIC_GRINDER.get(), " b ", "B n");
 
         // Ore Recipes
-        // order must be the same as WorldSetup.ORE_METALS
-        int[] ore_metal_indexes =
-                {Metal.ALUMINUM.getIndex(), Metal.CADMIUM.getIndex(), Metal.CHROMIUM.getIndex(), WorldSetup.LEAD,
-                 WorldSetup.SILVER, Metal.TIN.getIndex(), Metal.ZINC.getIndex()};
-        float[] ore_metal_xp = {0.6F, 0.7F, 0.7F, 0.4F, 1.0F, 0.6F, 0.6F};
+
         for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
-            var raw = WorldSetup.RAW_ORE_ITEMS.get(i).get();
+            WorldSetup.OreConfig config = WorldSetup.ORE_METALS[i];
+            var raw = WorldSetup.RAW_ORE_ITEMS.get(config.index()).get();
             var rawBlock = WorldSetup.RAW_ORE_BLOCKS_ITEMS.get(i).get();
             var ore = WorldSetup.ORE_BLOCKS_ITEMS.get(i).get();
             var deep_ore = WorldSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).get();
-            var ingot = WorldSetup.INGOTS.get(ore_metal_indexes[i]).get();
-            buildSmeltingAndBlasting(ingot, List.of(raw, ore, deep_ore), ore_metal_xp[i]);
+            var ingot = WorldSetup.INGOTS.get(config.index()).get();
+            buildSmeltingAndBlasting(ingot, List.of(raw, ore, deep_ore), config.xp());
 
             buildShapeless(consumer, RecipeCategory.BUILDING_BLOCKS, rawBlock, 1, raw, repeat(ing(raw), 9));
             buildShapeless(consumer, RecipeCategory.MISC, raw, 9, rawBlock,
@@ -201,8 +196,17 @@ final class Recipes extends RecipeProvider {
             buildShapeless(consumer, RecipeCategory.MISC, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                            ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()), ing("c:" + "ingots/" + flakeType));
 
-            if (i < Metal.values().length && Metal.getMetal(i).isVanilla()) {
-                continue;
+            if (i < Metal.values().length) {
+                Metal mt = Metal.getMetal(i);
+                if (mt.isVanilla()) {
+                    continue;
+                }
+
+                if (mt.isAlloy()) {
+                    var raw = WorldSetup.RAW_ORE_ITEMS.get(i).get();
+                    var ingot = WorldSetup.INGOTS.get(i).get();
+                    buildSmeltingAndBlasting(ingot, List.of(raw), 0.7F);
+                }
             }
 
             // Block and nugget crafting/uncrafting
@@ -229,79 +233,51 @@ final class Recipes extends RecipeProvider {
                            ing(WorldSetup.FLAKES.get(mt.getIndex()).get()));
         }
 
-        // Mixing/Alloying Recipes
-        // GRINDER
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.FLAKES.get(Metal.STEEL.getIndex()).get(), 2,
-                       ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("steel"), ing(Items.COAL),
-                       ing(WorldSetup.FLAKES.get(Metal.IRON.getIndex()).get()));
-
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.FLAKES.get(Metal.PEWTER.getIndex()).get(), 3,
-                       ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("pewter"),
-                       repeatWith(ing(WorldSetup.FLAKES.get(Metal.TIN.getIndex()).get()), 2,
-                                  ing(WorldSetup.FLAKES.get(WorldSetup.LEAD).get())));
-
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.FLAKES.get(Metal.BRASS.getIndex()).get(), 4,
-                       ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("brass"),
-                       repeatWith(ing(WorldSetup.FLAKES.get(Metal.COPPER.getIndex()).get()), 3,
-                                  ing(WorldSetup.FLAKES.get(Metal.ZINC.getIndex()).get())));
-
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.FLAKES.get(Metal.BRONZE.getIndex()).get(), 4,
-                       ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("bronze"),
-                       repeatWith(ing(WorldSetup.FLAKES.get(Metal.COPPER.getIndex()).get()), 3,
-                                  ing(WorldSetup.FLAKES.get(Metal.TIN.getIndex()).get())));
-
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.FLAKES.get(Metal.DURALUMIN.getIndex()).get(), 4,
-                       ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("duralumin"),
-                       repeatWith(ing(WorldSetup.FLAKES.get(Metal.ALUMINUM.getIndex()).get()), 3,
-                                  ing(WorldSetup.FLAKES.get(Metal.COPPER.getIndex()).get())));
-
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.FLAKES.get(Metal.ELECTRUM.getIndex()).get(), 2,
-                       ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("electrum"),
-                       ing(WorldSetup.FLAKES.get(Metal.GOLD.getIndex()).get()),
-                       ing(WorldSetup.FLAKES.get(WorldSetup.SILVER).get()));
-
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.FLAKES.get(Metal.BENDALLOY.getIndex()).get(), 3,
-                       ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("bendalloy"),
-                       repeatWith(ing(WorldSetup.FLAKES.get(Metal.CADMIUM.getIndex()).get()), 2,
-                                  ing(WorldSetup.FLAKES.get(WorldSetup.LEAD).get())));
-
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.FLAKES.get(Metal.NICROSIL.getIndex()).get(), 4,
-                       ConsumeSetup.ALLOMANTIC_GRINDER.get(), mixing_save("nicrosil"),
-                       repeatWith(ing(WorldSetup.FLAKES.get(Metal.CHROMIUM.getIndex()).get()), 3,
-                                  ing(WorldSetup.FLAKES.get(Metal.IRON.getIndex()).get())));
-
         // ALLOYS
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.INGOTS.get(Metal.STEEL.getIndex()).get(), 4,
-                       Items.COAL, alloy_save("steel"), repeatWith(ing(Items.IRON_INGOT), 3, ing(Items.COAL)));
+        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.STEEL.getIndex()).get(), 2,
+                       Items.BLAZE_POWDER, alloy_save("steel"), ing(Items.RAW_IRON), ing(ItemTags.SAND),
+                       ing(Items.BLAZE_POWDER));
 
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.INGOTS.get(Metal.PEWTER.getIndex()).get(), 3,
-                       WorldSetup.INGOTS.get(Metal.TIN.getIndex()).get(), alloy_save("pewter"),
-                       repeatWith(ing("c:ingots/tin"), 2, ing("c:ingots/lead")));
+        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.PEWTER.getIndex()).get(), 4,
+                       WorldSetup.RAW_ORE_ITEMS.get(Metal.TIN.getIndex()).get(), alloy_save("pewter"),
+                       repeatWith(ing("c:raw_materials/tin"), 3, ing("c:raw_materials/lead")));
 
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.INGOTS.get(Metal.BRASS.getIndex()).get(), 4,
-                       WorldSetup.INGOTS.get(Metal.ZINC.getIndex()).get(), alloy_save("brass"),
-                       repeatWith(ing(Items.COPPER_INGOT), 3, ing("c:ingots/zinc")));
+        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.BRASS.getIndex()).get(), 2,
+                       WorldSetup.RAW_ORE_ITEMS.get(Metal.ZINC.getIndex()).get(), alloy_save("brass"),
+                       ing(Items.RAW_COPPER), ing("c:raw_materials/zinc"));
 
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.INGOTS.get(Metal.BRONZE.getIndex()).get(), 4,
-                       WorldSetup.INGOTS.get(Metal.TIN.getIndex()).get(), alloy_save("bronze"),
-                       repeatWith(ing(Items.COPPER_INGOT), 3, ing("c:ingots/tin")));
+        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.BRONZE.getIndex()).get(), 4,
+                       WorldSetup.RAW_ORE_ITEMS.get(Metal.TIN.getIndex()).get(), alloy_save("bronze"),
+                       repeatWith(ing(Items.RAW_COPPER), 3, ing("c:raw_materials/tin")));
 
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.INGOTS.get(Metal.DURALUMIN.getIndex()).get(), 4,
-                       WorldSetup.INGOTS.get(Metal.ALUMINUM.getIndex()).get(), alloy_save("duralumin"),
-                       repeatWith(ing("c:ingots/aluminum"), 3, ing(Items.COPPER_INGOT)));
+        var doesNotHaveNickel =
+                new TagEmptyCondition<>(ItemTags.create(ResourceLocation.parse("c:raw_materials/nickel")));
+        var hasNickel = new NotCondition(doesNotHaveNickel);
 
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.INGOTS.get(Metal.ELECTRUM.getIndex()).get(), 2,
-                       WorldSetup.INGOTS.get(WorldSetup.SILVER).get(), alloy_save("electrum"), ing("c:ingots/silver"),
-                       ing(Items.GOLD_INGOT));
+        buildShapeless(consumer.withConditions(hasNickel), RecipeCategory.MISC,
+                       WorldSetup.RAW_ORE_ITEMS.get(Metal.NICROSIL.getIndex()).get(), 4,
+                       WorldSetup.RAW_ORE_ITEMS.get(Metal.CHROMIUM.getIndex()).get(),
+                       alloy_save("nicrosil") + "_with_nickel",
+                       repeatWith(ing("c:raw_materials/nickel"), 2, ing("c:raw_materials/chromium"),
+                                  ing(Items.QUARTZ)));
 
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.INGOTS.get(Metal.BENDALLOY.getIndex()).get(), 3,
-                       WorldSetup.INGOTS.get(Metal.CADMIUM.getIndex()).get(), alloy_save("bendalloy"),
-                       repeatWith(ing("c:ingots/cadmium"), 2, ing("c:ingots/lead")));
+        buildShapeless(consumer.withConditions(doesNotHaveNickel), RecipeCategory.MISC,
+                       WorldSetup.RAW_ORE_ITEMS.get(Metal.NICROSIL.getIndex()).get(), 4,
+                       WorldSetup.RAW_ORE_ITEMS.get(Metal.CHROMIUM.getIndex()).get(), alloy_save("nicrosil"),
+                       repeatWith(ing("c:raw_materials/chromium"), 2, ing(Items.RAW_IRON), ing(Items.QUARTZ)));
 
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.INGOTS.get(Metal.NICROSIL.getIndex()).get(), 4,
-                       WorldSetup.INGOTS.get(Metal.CHROMIUM.getIndex()).get(), alloy_save("nicrosil"),
-                       repeatWith(ing("c:ingots/chromium"), 3, ing(Items.IRON_INGOT)));
+        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.DURALUMIN.getIndex()).get(),
+                       4, WorldSetup.RAW_ORE_ITEMS.get(Metal.ALUMINUM.getIndex()).get(), alloy_save("duralumin"),
+                       repeatWith(ing("c:raw_materials/aluminum"), 3, ing(Items.RAW_COPPER)));
 
+        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.BENDALLOY.getIndex()).get(),
+                       4, WorldSetup.RAW_ORE_ITEMS.get(Metal.CADMIUM.getIndex()).get(), alloy_save("bendalloy"),
+                       repeatWith(ing("c:raw_materials/lead"), 2, ing("c:raw_materials/cadmium"),
+                                  ing("c:raw_materials/tin")));
+
+        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.ELECTRUM.getIndex()).get(),
+                       2, WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.SILVER).get(), alloy_save("electrum"),
+                       ing("c:raw_materials/silver"), ing(Items.RAW_GOLD));
 
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
         ShapedRecipeBuilder

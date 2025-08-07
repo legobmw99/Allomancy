@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "nicrosil_ingot",
+  "ingredient": "allomancy:raw_nicrosil",
+  "result": {
+    "count": 1,
+    "id": "allomancy:nicrosil_ingot"
+  }
+}

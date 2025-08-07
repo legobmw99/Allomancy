@@ -44,12 +44,10 @@ class Languages extends LanguageProvider {
             var ore = WorldSetup.ORE_BLOCKS.get(i).get();
             var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
             var rawb = WorldSetup.RAW_ORE_BLOCKS.get(i).get();
-            var raw = WorldSetup.RAW_ORE_ITEMS.get(i).get();
 
             add(ore, toTitleCase(metal) + " Ore");
             add(ds, "Deepslate " + toTitleCase(metal) + " Ore");
             add(rawb, "Block of Raw " + toTitleCase(metal));
-            add(raw, "Raw " + toTitleCase(metal));
 
         }
 
@@ -94,17 +92,22 @@ class Languages extends LanguageProvider {
             add(WorldSetup.NUGGETS.get(mt.getIndex()).get(), getDisplayName(mt) + " Nugget");
             add(WorldSetup.INGOTS.get(mt.getIndex()).get(), getDisplayName(mt) + " Ingot");
             add(WorldSetup.STORAGE_BLOCKS.get(mt.getIndex()).get(), getDisplayName(mt) + " Block");
+            add(WorldSetup.RAW_ORE_ITEMS.get(mt.getIndex()).get(),
+                "Raw " + getDisplayName(mt) + (mt.isAlloy() ? " Blend" : ""));
+
         }
 
         add(WorldSetup.FLAKES.get(WorldSetup.LEAD).get(), "Lead Flakes");
         add(WorldSetup.NUGGETS.get(WorldSetup.LEAD).get(), "Lead Nugget");
         add(WorldSetup.INGOTS.get(WorldSetup.LEAD).get(), "Lead Ingot");
         add(WorldSetup.STORAGE_BLOCKS.get(WorldSetup.LEAD).get(), "Lead Block");
+        add(WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.LEAD).get(), "Raw Lead");
 
         add(WorldSetup.FLAKES.get(WorldSetup.SILVER).get(), "Silver Flakes");
         add(WorldSetup.NUGGETS.get(WorldSetup.SILVER).get(), "Silver Nugget");
         add(WorldSetup.INGOTS.get(WorldSetup.SILVER).get(), "Silver Ingot");
         add(WorldSetup.STORAGE_BLOCKS.get(WorldSetup.SILVER).get(), "Silver Block");
+        add(WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.SILVER).get(), "Raw Silver");
 
         add(CombatSetup.NUGGET_PROJECTILE.get(), "Nugget Projectile");
 

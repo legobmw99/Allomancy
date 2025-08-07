@@ -1,11 +1,11 @@
 {
   "values": [
-    "allomancy:deepslate_aluminum_ore",
-    "allomancy:deepslate_cadmium_ore",
-    "allomancy:deepslate_chromium_ore",
-    "allomancy:deepslate_lead_ore",
-    "allomancy:deepslate_silver_ore",
     "allomancy:deepslate_tin_ore",
-    "allomancy:deepslate_zinc_ore"
+    "allomancy:deepslate_zinc_ore",
+    "allomancy:deepslate_aluminum_ore",
+    "allomancy:deepslate_chromium_ore",
+    "allomancy:deepslate_cadmium_ore",
+    "allomancy:deepslate_lead_ore",
+    "allomancy:deepslate_silver_ore"
   ]
 }

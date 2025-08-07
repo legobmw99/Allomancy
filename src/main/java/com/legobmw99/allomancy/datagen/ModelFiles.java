@@ -73,7 +73,9 @@ class ModelFiles extends ModelProvider {
         itemModels.generateFlatItem(ExtrasSetup.CHARGED_BRONZE_EARRING.get(), ModelTemplates.FLAT_ITEM);
 
         for (var ritem : WorldSetup.RAW_ORE_ITEMS) {
-            itemModels.generateFlatItem(ritem.get(), ModelTemplates.FLAT_ITEM);
+            if (ritem != null) {
+                itemModels.generateFlatItem(ritem.get(), ModelTemplates.FLAT_ITEM);
+            }
         }
 
         for (int i = 0; i < WorldSetup.METAL_ITEM_LEN; i++) {

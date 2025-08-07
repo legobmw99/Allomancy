@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "duralumin_ingot",
+  "ingredient": "allomancy:raw_duralumin",
+  "result": {
+    "count": 1,
+    "id": "allomancy:duralumin_ingot"
+  }
+}

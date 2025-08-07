@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_raw_tin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "allomancy:raw_tin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "allomancy:raw_bronze_from_alloying"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_raw_tin"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "allomancy:raw_bronze_from_alloying"
+    ]
+  }
+}

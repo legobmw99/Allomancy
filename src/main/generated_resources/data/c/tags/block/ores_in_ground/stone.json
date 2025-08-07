@@ -1,11 +1,11 @@
 {
   "values": [
-    "allomancy:aluminum_ore",
-    "allomancy:cadmium_ore",
-    "allomancy:chromium_ore",
-    "allomancy:lead_ore",
-    "allomancy:silver_ore",
     "allomancy:tin_ore",
-    "allomancy:zinc_ore"
+    "allomancy:zinc_ore",
+    "allomancy:aluminum_ore",
+    "allomancy:chromium_ore",
+    "allomancy:cadmium_ore",
+    "allomancy:lead_ore",
+    "allomancy:silver_ore"
   ]
 }

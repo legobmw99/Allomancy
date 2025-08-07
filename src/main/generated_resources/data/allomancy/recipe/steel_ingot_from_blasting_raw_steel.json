@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "group": "steel_ingot",
+  "ingredient": "allomancy:raw_steel",
+  "result": {
+    "count": 1,
+    "id": "allomancy:steel_ingot"
+  }
+}

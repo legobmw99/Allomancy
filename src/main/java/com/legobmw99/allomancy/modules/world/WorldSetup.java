@@ -126,7 +126,8 @@ public final class WorldSetup {
                                          .sound(SoundType.EMPTY));
 
 
-    public record OreConfig(String name, int size, int placementCount, int minHeight, int maxHeight) {
+    public record OreConfig(String name, int size, int placementCount, int minHeight, int maxHeight, int index,
+                            float xp) {
 
         <T> ResourceKey<T> getRegistryKey(ResourceKey<Registry<T>> registry, String suffix) {
             return ResourceKey.create(registry, Allomancy.rl(this.name + suffix));
@@ -137,12 +138,6 @@ public final class WorldSetup {
             return this.name;
         }
     }
-
-    public static final OreConfig[] ORE_METALS =
-            {new OreConfig("aluminum", 9, 11, 40, 120), new OreConfig("cadmium", 7, 4, -60, 0),
-             new OreConfig("chromium", 6, 6, -30, 30), new OreConfig("lead", 9, 12, -40, 30),
-             new OreConfig("silver", 7, 8, -40, 30), new OreConfig("tin", 11, 12, 30, 112),
-             new OreConfig("zinc", 8, 9, 40, 80)};
 
 
     public static final ResourceKey<Structure> WELL = ResourceKey.create(Registries.STRUCTURE, Allomancy.rl("well"));
@@ -172,6 +167,17 @@ public final class WorldSetup {
     public static final int LEAD = METAL_ITEM_LEN++;
     public static final int SILVER = METAL_ITEM_LEN++;
 
+    public static final OreConfig[] ORE_METALS = {new OreConfig("tin", 11, 12, 30, 112, Metal.TIN.getIndex(), 0.6F),
+                                                  new OreConfig("zinc", 8, 9, 40, 80, Metal.ZINC.getIndex(), 0.6F),
+                                                  new OreConfig("aluminum", 9, 11, 40, 120, Metal.ALUMINUM.getIndex(),
+                                                                0.6F),
+                                                  new OreConfig("chromium", 6, 6, -30, 30, Metal.CHROMIUM.getIndex(),
+                                                                0.7F),
+                                                  new OreConfig("cadmium", 7, 4, -60, 0, Metal.CADMIUM.getIndex(),
+                                                                0.7F),
+                                                  new OreConfig("lead", 9, 12, -40, 30, LEAD, 0.4F),
+                                                  new OreConfig("silver", 7, 8, -40, 30, SILVER, 1.0F)};
+
     static {
         for (Metal mt : Metal.values()) {
             String name = mt.getName();
@@ -182,11 +188,13 @@ public final class WorldSetup {
                 INGOTS.add(null);
                 STORAGE_BLOCKS.add(null);
                 STORAGE_BLOCK_ITEMS.add(null);
+                RAW_ORE_ITEMS.add(null);
             } else {
                 NUGGETS.add(ITEMS.registerSimpleItem(name + "_nugget"));
                 INGOTS.add(ITEMS.registerSimpleItem(name + "_ingot"));
                 STORAGE_BLOCKS.add(registerStandardBlock(name + "_block"));
                 STORAGE_BLOCK_ITEMS.add(ITEMS.registerSimpleBlockItem(STORAGE_BLOCKS.get(mt.getIndex())));
+                RAW_ORE_ITEMS.add(ITEMS.registerSimpleItem("raw_" + name));
             }
         }
         FLAKES.add(ITEMS.registerSimpleItem("lead_flakes"));
@@ -194,12 +202,14 @@ public final class WorldSetup {
         INGOTS.add(ITEMS.registerSimpleItem("lead_ingot"));
         STORAGE_BLOCKS.add(registerStandardBlock("lead_block"));
         STORAGE_BLOCK_ITEMS.add(ITEMS.registerSimpleBlockItem(STORAGE_BLOCKS.get(LEAD)));
+        RAW_ORE_ITEMS.add(ITEMS.registerSimpleItem("raw_lead"));
 
         FLAKES.add(ITEMS.registerSimpleItem("silver_flakes"));
         NUGGETS.add(ITEMS.registerSimpleItem("silver_nugget"));
         INGOTS.add(ITEMS.registerSimpleItem("silver_ingot"));
         STORAGE_BLOCKS.add(registerStandardBlock("silver_block"));
         STORAGE_BLOCK_ITEMS.add(ITEMS.registerSimpleBlockItem(STORAGE_BLOCKS.get(SILVER)));
+        RAW_ORE_ITEMS.add(ITEMS.registerSimpleItem("raw_silver"));
 
         for (var ore_config : ORE_METALS) {
             String ore = ore_config.name();
@@ -214,8 +224,6 @@ public final class WorldSetup {
             var raw_ore_block = registerStandardBlock("raw_" + ore + "_block");
             RAW_ORE_BLOCKS.add(raw_ore_block);
             RAW_ORE_BLOCKS_ITEMS.add(ITEMS.registerSimpleBlockItem(raw_ore_block));
-
-            RAW_ORE_ITEMS.add(ITEMS.registerSimpleItem("raw_" + ore));
         }
     }
 

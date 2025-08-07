@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:raw_materials/nickel"
+      }
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:raw_materials/nickel",
+    "#c:raw_materials/nickel",
+    "#c:raw_materials/chromium",
+    "minecraft:quartz"
+  ],
+  "result": {
+    "count": 4,
+    "id": "allomancy:raw_nicrosil"
+  }
+}

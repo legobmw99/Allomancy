@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "pewter_ingot",
+  "ingredient": "allomancy:raw_pewter",
+  "result": {
+    "count": 1,
+    "id": "allomancy:pewter_ingot"
+  }
+}

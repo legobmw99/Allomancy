@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:raw_materials/lead",
+    "#c:raw_materials/lead",
+    "#c:raw_materials/cadmium",
+    "#c:raw_materials/tin"
+  ],
+  "result": {
+    "count": 4,
+    "id": "allomancy:raw_bendalloy"
+  }
+}

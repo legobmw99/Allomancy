@@ -80,6 +80,7 @@ public final class TagProvider {
                 var nugget = WorldSetup.NUGGETS.get(mt.getIndex()).get();
                 var ingot = WorldSetup.INGOTS.get(mt.getIndex()).get();
                 var block = WorldSetup.STORAGE_BLOCK_ITEMS.get(mt.getIndex()).get();
+                var raw = WorldSetup.RAW_ORE_ITEMS.get(mt.getIndex()).get();
 
                 addCommonTag("nuggets", nugget);
                 addCommonTag("nuggets/" + mt.getName(), nugget);
@@ -87,7 +88,8 @@ public final class TagProvider {
                 addCommonTag("ingots/" + mt.getName(), ingot);
                 addCommonTag("storage_blocks", block);
                 addCommonTag("storage_blocks/" + mt.getName(), block);
-
+                addCommonTag("raw_materials", raw);
+                addCommonTag("raw_materials/" + mt.getName(), raw);
 
             }
             addCommonTag("nuggets", WorldSetup.NUGGETS.get(WorldSetup.LEAD).get());
@@ -96,6 +98,8 @@ public final class TagProvider {
             addCommonTag("ingots/lead", WorldSetup.INGOTS.get(WorldSetup.LEAD).get());
             addCommonTag("storage_blocks", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.LEAD).get());
             addCommonTag("storage_blocks/lead", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.LEAD).get());
+            addCommonTag("raw_materials", WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.LEAD).get());
+            addCommonTag("raw_materials/lead", WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.LEAD).get());
 
             addCommonTag("nuggets", WorldSetup.NUGGETS.get(WorldSetup.SILVER).get());
             addCommonTag("nuggets/silver", WorldSetup.NUGGETS.get(WorldSetup.SILVER).get());
@@ -103,13 +107,13 @@ public final class TagProvider {
             addCommonTag("ingots/silver", WorldSetup.INGOTS.get(WorldSetup.SILVER).get());
             addCommonTag("storage_blocks", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.SILVER).get());
             addCommonTag("storage_blocks/silver", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.SILVER).get());
-
+            addCommonTag("raw_materials", WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.SILVER).get());
+            addCommonTag("raw_materials/silver", WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.SILVER).get());
 
             for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
                 var ore = WorldSetup.ORE_BLOCKS_ITEMS.get(i).get();
                 var ds_ore = WorldSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).get();
                 var raw_block = WorldSetup.RAW_ORE_BLOCKS_ITEMS.get(i).get();
-                var raw = WorldSetup.RAW_ORE_ITEMS.get(i).get();
 
                 addCommonTag("ores/" + WorldSetup.ORE_METALS[i], ore, ds_ore);
                 addCommonTag("ores", ore, ds_ore);
@@ -117,8 +121,7 @@ public final class TagProvider {
                 addCommonTag("ores_in_ground/deepslate", ds_ore);
                 addCommonTag("storage_blocks", raw_block);
                 addCommonTag("storage_blocks/raw_" + WorldSetup.ORE_METALS[i], raw_block);
-                addCommonTag("raw_materials", raw);
-                addCommonTag("raw_materials/" + WorldSetup.ORE_METALS[i], raw);
+
             }
 
             tag(ItemTags.SWORDS).replace(false).add(CombatSetup.KOLOSS_BLADE.get());

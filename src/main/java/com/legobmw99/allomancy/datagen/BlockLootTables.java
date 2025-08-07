@@ -21,10 +21,11 @@ class BlockLootTables extends BlockLootSubProvider {
     @Override
     protected void generate() {
         for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
-            Allomancy.LOGGER.debug("Creating loot tables for ore: {}", WorldSetup.ORE_METALS[i].name());
+            WorldSetup.OreConfig config = WorldSetup.ORE_METALS[i];
+            Allomancy.LOGGER.debug("Creating loot tables for ore: {}", config.name());
             var ore = WorldSetup.ORE_BLOCKS.get(i).get();
             var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
-            var raw = WorldSetup.RAW_ORE_ITEMS.get(i).get();
+            var raw = WorldSetup.RAW_ORE_ITEMS.get(config.index()).get();
             var rawb = WorldSetup.RAW_ORE_BLOCKS.get(i).get();
 
             this.add(ore, block -> this.createOreDrop(block, raw));

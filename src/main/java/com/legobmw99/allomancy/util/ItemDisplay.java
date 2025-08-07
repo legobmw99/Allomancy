@@ -107,7 +107,9 @@ public final class ItemDisplay {
                         }
 
                         for (var ore : WorldSetup.RAW_ORE_ITEMS) {
-                            output.accept(ore.get());
+                            if (ore != null) {
+                                output.accept(ore.get());
+                            }
                         }
 
                     })
