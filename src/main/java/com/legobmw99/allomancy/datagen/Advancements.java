@@ -150,7 +150,7 @@ class Advancements implements AdvancementSubProvider {
                                                                                .head(ItemPredicate.Builder
                                                                                              .item()
                                                                                              .of(getter,
-                                                                                                 CombatSetup.ALUMINUM_HELMET))));
+                                                                                                 AllomancyTags.TIN_FOIL_HATS))));
 
         Advancement.Builder
                 .advancement()

@@ -11,7 +11,7 @@
             "predicate": {
               "equipment": {
                 "head": {
-                  "items": "allomancy:aluminum_helmet"
+                  "items": "#allomancy:tin_foil_hats"
                 }
               }
             }
@@ -30,7 +30,7 @@
             "predicate": {
               "equipment": {
                 "head": {
-                  "items": "allomancy:aluminum_helmet"
+                  "items": "#allomancy:tin_foil_hats"
                 }
               }
             }

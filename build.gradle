@@ -1,7 +1,8 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.99'
+    // https://projects.neoforged.net/neoforged/moddevgradle
+    id 'net.neoforged.moddev' version '2.0.107'
     id 'idea'
 }
 
@@ -127,8 +128,8 @@ dependencies {
     implementation "maven.modrinth:jade:${jade_version}"
     // api "curse.maven:jade-324717:${jade_api}"
 
-    api "mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}"
-    implementation "mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}"
+    api "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    implementation "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     localRuntime(testImplementation("net.neoforged:testframework:${neo_version}"))
 }
