@@ -70,45 +70,33 @@ public final class TagProvider {
             super(gen, lookupProvider, blockTagProvider, Allomancy.MODID);
         }
 
+        private void addMetalTags(int index) {
+            var nugget = WorldSetup.NUGGETS.get(index).get();
+            var ingot = WorldSetup.INGOTS.get(index).get();
+            var block = WorldSetup.STORAGE_BLOCK_ITEMS.get(index).get();
+            var raw = WorldSetup.RAW_ORE_ITEMS.get(index).get();
+
+            addCommonTag("nuggets", nugget);
+            tag(AllomancyTags.NUGGET_TAGS.get(index)).add(nugget);
+            addCommonTag("ingots", ingot);
+            tag(AllomancyTags.INGOT_TAGS.get(index)).add(ingot);
+            addCommonTag("storage_blocks", block);
+            tag(AllomancyTags.STORAGE_BLOCK_ITEM_TAGS.get(index)).add(block);
+            addCommonTag("raw_materials", raw);
+            tag(AllomancyTags.RAW_ORE_TAGS.get(index)).add(raw);
+        }
+
         @Override
         protected void addTags(HolderLookup.Provider provider) {
             for (Metal mt : Metal.values()) {
                 if (mt.isVanilla()) {
                     continue;
                 }
-
-                var nugget = WorldSetup.NUGGETS.get(mt.getIndex()).get();
-                var ingot = WorldSetup.INGOTS.get(mt.getIndex()).get();
-                var block = WorldSetup.STORAGE_BLOCK_ITEMS.get(mt.getIndex()).get();
-                var raw = WorldSetup.RAW_ORE_ITEMS.get(mt.getIndex()).get();
-
-                addCommonTag("nuggets", nugget);
-                addCommonTag("nuggets/" + mt.getName(), nugget);
-                addCommonTag("ingots", ingot);
-                addCommonTag("ingots/" + mt.getName(), ingot);
-                addCommonTag("storage_blocks", block);
-                addCommonTag("storage_blocks/" + mt.getName(), block);
-                addCommonTag("raw_materials", raw);
-                addCommonTag("raw_materials/" + mt.getName(), raw);
+                addMetalTags(mt.getIndex());
 
             }
-            addCommonTag("nuggets", WorldSetup.NUGGETS.get(WorldSetup.LEAD).get());
-            addCommonTag("nuggets/lead", WorldSetup.NUGGETS.get(WorldSetup.LEAD).get());
-            addCommonTag("ingots", WorldSetup.INGOTS.get(WorldSetup.LEAD).get());
-            addCommonTag("ingots/lead", WorldSetup.INGOTS.get(WorldSetup.LEAD).get());
-            addCommonTag("storage_blocks", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.LEAD).get());
-            addCommonTag("storage_blocks/lead", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.LEAD).get());
-            addCommonTag("raw_materials", WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.LEAD).get());
-            addCommonTag("raw_materials/lead", WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.LEAD).get());
-
-            addCommonTag("nuggets", WorldSetup.NUGGETS.get(WorldSetup.SILVER).get());
-            addCommonTag("nuggets/silver", WorldSetup.NUGGETS.get(WorldSetup.SILVER).get());
-            addCommonTag("ingots", WorldSetup.INGOTS.get(WorldSetup.SILVER).get());
-            addCommonTag("ingots/silver", WorldSetup.INGOTS.get(WorldSetup.SILVER).get());
-            addCommonTag("storage_blocks", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.SILVER).get());
-            addCommonTag("storage_blocks/silver", WorldSetup.STORAGE_BLOCK_ITEMS.get(WorldSetup.SILVER).get());
-            addCommonTag("raw_materials", WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.SILVER).get());
-            addCommonTag("raw_materials/silver", WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.SILVER).get());
+            addMetalTags(WorldSetup.LEAD);
+            addMetalTags(WorldSetup.SILVER);
 
             for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
                 var ore = WorldSetup.ORE_BLOCKS_ITEMS.get(i).get();
@@ -137,8 +125,7 @@ public final class TagProvider {
             tag(AllomancyTags.REPAIRS_MISTCLOAK).add(net.minecraft.world.item.Items.GRAY_WOOL);
             tag(AllomancyTags.OBSIDIAN_REPAIR).add(net.minecraft.world.item.Items.OBSIDIAN,
                                                    net.minecraft.world.item.Items.CRYING_OBSIDIAN);
-            tag(AllomancyTags.REPAIRS_ALUMINUM).addTag(
-                    ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/aluminum")));
+            tag(AllomancyTags.REPAIRS_ALUMINUM).addTag(AllomancyTags.INGOT_TAGS.get(Metal.ALUMINUM.getIndex()));
             tag(AllomancyTags.LERASIUM_CONVERSION).addTag(Tags.Items.NETHER_STARS);
             tag(AllomancyTags.TIN_FOIL_HATS).add(CombatSetup.ALUMINUM_HELMET.get());
             tag(AllomancyTags.SPECIAL_EARRINGS).add(ExtrasSetup.CHARGED_BRONZE_EARRING.get());
@@ -182,7 +169,7 @@ public final class TagProvider {
                     continue;
                 }
                 var block = WorldSetup.STORAGE_BLOCKS.get(mt.getIndex()).get();
-                addCommonTag("storage_blocks/" + mt.getName(), block);
+                tag(AllomancyTags.STORAGE_BLOCK_TAGS.get(mt.getIndex())).add(block);
                 addCommonTag("storage_blocks", block);
                 makePickaxeMineable(block);
                 if (mt != Metal.ALUMINUM) {
@@ -192,9 +179,10 @@ public final class TagProvider {
             }
 
             var lead = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.LEAD).get();
-            addCommonTag("storage_blocks/lead", lead);
+            tag(AllomancyTags.STORAGE_BLOCK_TAGS.get(WorldSetup.LEAD)).add(lead);
+
             var silver = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.SILVER).get();
-            addCommonTag("storage_blocks/silver", silver);
+            tag(AllomancyTags.STORAGE_BLOCK_TAGS.get(WorldSetup.SILVER)).add(silver);
             addBeacon(silver);
 
             makePickaxeMineable(lead, silver);

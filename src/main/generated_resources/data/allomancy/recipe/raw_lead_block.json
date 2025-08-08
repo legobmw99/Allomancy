@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:raw_lead",
-    "allomancy:raw_lead",
-    "allomancy:raw_lead",
-    "allomancy:raw_lead",
-    "allomancy:raw_lead",
-    "allomancy:raw_lead",
-    "allomancy:raw_lead",
-    "allomancy:raw_lead",
-    "allomancy:raw_lead"
+  "key": {
+    "r": "allomancy:raw_lead",
+    "t": "#c:raw_materials/lead"
+  },
+  "pattern": [
+    "ttt",
+    "trt",
+    "ttt"
   ],
   "result": {
     "count": 1,

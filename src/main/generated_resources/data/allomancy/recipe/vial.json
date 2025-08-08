@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": "minecraft:glass",
+    "G": "#c:glass_blocks/colorless",
     "S": "#minecraft:wooden_slabs"
   },
   "pattern": [

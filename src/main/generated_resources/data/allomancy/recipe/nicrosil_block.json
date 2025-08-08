@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:nicrosil_ingot",
-    "allomancy:nicrosil_ingot",
-    "allomancy:nicrosil_ingot",
-    "allomancy:nicrosil_ingot",
-    "allomancy:nicrosil_ingot",
-    "allomancy:nicrosil_ingot",
-    "allomancy:nicrosil_ingot",
-    "allomancy:nicrosil_ingot",
-    "allomancy:nicrosil_ingot"
+  "key": {
+    "i": "allomancy:nicrosil_ingot",
+    "t": "#c:ingots/nicrosil"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

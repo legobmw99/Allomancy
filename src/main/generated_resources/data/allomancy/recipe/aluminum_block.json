@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:aluminum_ingot",
-    "allomancy:aluminum_ingot",
-    "allomancy:aluminum_ingot",
-    "allomancy:aluminum_ingot",
-    "allomancy:aluminum_ingot",
-    "allomancy:aluminum_ingot",
-    "allomancy:aluminum_ingot",
-    "allomancy:aluminum_ingot",
-    "allomancy:aluminum_ingot"
+  "key": {
+    "i": "allomancy:aluminum_ingot",
+    "t": "#c:ingots/aluminum"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

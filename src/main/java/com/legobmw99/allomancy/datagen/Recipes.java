@@ -42,19 +42,19 @@ final class Recipes extends RecipeProvider {
         super(registries, output);
         this.items = registries.lookupOrThrow(Registries.ITEM);
 
-        add('i', Tags.Items.INGOTS_IRON);
-        add('g', Tags.Items.INGOTS_GOLD);
+        add('i', AllomancyTags.INGOT_TAGS.get(Metal.IRON.getIndex()));
+        add('g', AllomancyTags.INGOT_TAGS.get(Metal.GOLD.getIndex()));
         add('s', Items.STICK);
         add('S', ItemTags.WOODEN_SLABS);
-        add('G', Items.GLASS);
-        add('I', Tags.Items.STORAGE_BLOCKS_IRON);
+        add('G', Tags.Items.GLASS_BLOCKS_COLORLESS);
+        add('I', AllomancyTags.STORAGE_BLOCK_ITEM_TAGS.get(Metal.IRON.getIndex()));
         add('W', Items.GRAY_WOOL);
         add('O', Tags.Items.OBSIDIANS);
-        add('C', Items.COBBLESTONE);
-        add('A', ing("c:ingots/aluminum"));
-        add('B', ing("c:storage_blocks/bronze"));
-        add('b', ing("c:ingots/bronze"));
-        add('n', ing("c:nuggets/bronze"));
+        add('C', Tags.Items.COBBLESTONES);
+        add('A', AllomancyTags.INGOT_TAGS.get(Metal.ALUMINUM.getIndex()));
+        add('B', AllomancyTags.STORAGE_BLOCK_ITEM_TAGS.get(Metal.BRONZE.getIndex()));
+        add('b', AllomancyTags.INGOT_TAGS.get(Metal.BRONZE.getIndex()));
+        add('n', AllomancyTags.NUGGET_TAGS.get(Metal.BRONZE.getIndex()));
 
     }
 
@@ -118,10 +118,6 @@ final class Recipes extends RecipeProvider {
         return Ingredient.of(itemProvider);
     }
 
-    private static Ingredient[] repeat(Ingredient ing, int n) {
-        return repeatWith(ing, n);
-    }
-
     private static Ingredient[] repeatWith(Ingredient ing, int n, Ingredient... extras) {
         int size = n + extras.length;
         Ingredient[] out = new Ingredient[size];
@@ -178,7 +174,18 @@ final class Recipes extends RecipeProvider {
             var ingot = WorldSetup.INGOTS.get(config.index()).get();
             buildSmeltingAndBlasting(ingot, List.of(raw, ore, deep_ore), config.xp());
 
-            buildShapeless(consumer, RecipeCategory.BUILDING_BLOCKS, rawBlock, 1, raw, repeat(ing(raw), 9));
+            ShapedRecipeBuilder
+                    .shaped(this.registries.lookupOrThrow(Registries.ITEM), RecipeCategory.BUILDING_BLOCKS, rawBlock)
+                    .unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(raw).getPath(),
+                                InventoryChangeTrigger.TriggerInstance.hasItems(raw))
+                    .showNotification(true)
+                    .define('t', AllomancyTags.RAW_ORE_TAGS.get(config.index()))
+                    .define('r', raw)
+                    .pattern("ttt")
+                    .pattern("trt")
+                    .pattern("ttt")
+                    .save(consumer);
+
             buildShapeless(consumer, RecipeCategory.MISC, raw, 9, rawBlock,
                            BuiltInRegistries.ITEM.getKey(raw).getPath() + "_from_block", ing(rawBlock));
         }
@@ -189,12 +196,8 @@ final class Recipes extends RecipeProvider {
 
             // Grinder recipes
             Item flake = WorldSetup.FLAKES.get(i).get();
-            String flakeType = BuiltInRegistries.ITEM
-                    .getKey(flake)
-                    .getPath()
-                    .substring(0, BuiltInRegistries.ITEM.getKey(flake).getPath().indexOf('_'));
             buildShapeless(consumer, RecipeCategory.MISC, flake, 2, ConsumeSetup.ALLOMANTIC_GRINDER.get(),
-                           ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()), ing("c:" + "ingots/" + flakeType));
+                           ing(ConsumeSetup.ALLOMANTIC_GRINDER.get()), ing(AllomancyTags.INGOT_TAGS.get(i)));
 
             if (i < Metal.values().length) {
                 Metal mt = Metal.getMetal(i);
@@ -213,11 +216,35 @@ final class Recipes extends RecipeProvider {
             Item block = WorldSetup.STORAGE_BLOCK_ITEMS.get(i).get();
             Item ingot = WorldSetup.INGOTS.get(i).get();
             Item nugget = WorldSetup.NUGGETS.get(i).get();
+            TagKey<Item> nugget_tag = AllomancyTags.NUGGET_TAGS.get(i);
+            TagKey<Item> ingot_tag = AllomancyTags.INGOT_TAGS.get(i);
 
             // building up
-            buildShapeless(consumer, RecipeCategory.BUILDING_BLOCKS, block, 1, ingot, repeat(ing(ingot), 9));
-            buildShapeless(consumer, RecipeCategory.MISC, ingot, 1, nugget,
-                           BuiltInRegistries.ITEM.getKey(ingot).getPath() + "_from_nuggets", repeat(ing(nugget), 9));
+            ShapedRecipeBuilder
+                    .shaped(this.registries.lookupOrThrow(Registries.ITEM), RecipeCategory.BUILDING_BLOCKS, block)
+                    .unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(ingot).getPath(),
+                                InventoryChangeTrigger.TriggerInstance.hasItems(ingot))
+                    .showNotification(true)
+                    .define('t', ingot_tag)
+                    .define('i', ingot)
+                    .pattern("ttt")
+                    .pattern("tit")
+                    .pattern("ttt")
+                    .save(consumer);
+
+            ShapedRecipeBuilder
+                    .shaped(this.registries.lookupOrThrow(Registries.ITEM), RecipeCategory.MISC, ingot)
+                    .unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(nugget).getPath(),
+                                InventoryChangeTrigger.TriggerInstance.hasItems(nugget))
+                    .showNotification(true)
+                    .define('t', nugget_tag)
+                    .define('n', nugget)
+                    .pattern("ttt")
+                    .pattern("tnt")
+                    .pattern("ttt")
+                    .save(consumer,
+                          Allomancy.MODID + ":" + BuiltInRegistries.ITEM.getKey(ingot).getPath() + "_from_nuggets");
+
 
             // breaking down
             buildShapeless(consumer, RecipeCategory.MISC, ingot, 9, block,
@@ -234,21 +261,25 @@ final class Recipes extends RecipeProvider {
         }
 
         // ALLOYS
-        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.STEEL.getIndex()).get(), 2,
-                       Items.BLAZE_POWDER, alloy_save("steel"), ing(Items.RAW_IRON), ing(ItemTags.SAND),
+        buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.STEEL.getIndex()).get(), 1,
+                       Items.BLAZE_POWDER, alloy_save("steel"),
+                       ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.IRON.getIndex())), ing(ItemTags.SAND),
                        ing(Items.BLAZE_POWDER));
 
         buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.PEWTER.getIndex()).get(), 4,
                        WorldSetup.RAW_ORE_ITEMS.get(Metal.TIN.getIndex()).get(), alloy_save("pewter"),
-                       repeatWith(ing("c:raw_materials/tin"), 3, ing("c:raw_materials/lead")));
+                       repeatWith(ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.TIN.getIndex())), 3,
+                                  ing(AllomancyTags.RAW_ORE_TAGS.get(WorldSetup.LEAD))));
 
         buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.BRASS.getIndex()).get(), 2,
                        WorldSetup.RAW_ORE_ITEMS.get(Metal.ZINC.getIndex()).get(), alloy_save("brass"),
-                       ing(Items.RAW_COPPER), ing("c:raw_materials/zinc"));
+                       ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.COPPER.getIndex())),
+                       ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.ZINC.getIndex())));
 
         buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.BRONZE.getIndex()).get(), 4,
                        WorldSetup.RAW_ORE_ITEMS.get(Metal.TIN.getIndex()).get(), alloy_save("bronze"),
-                       repeatWith(ing(Items.RAW_COPPER), 3, ing("c:raw_materials/tin")));
+                       repeatWith(ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.COPPER.getIndex())), 3,
+                                  ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.TIN.getIndex()))));
 
         var doesNotHaveNickel =
                 new TagEmptyCondition<>(ItemTags.create(ResourceLocation.parse("c:raw_materials/nickel")));
@@ -257,27 +288,33 @@ final class Recipes extends RecipeProvider {
         buildShapeless(consumer.withConditions(hasNickel), RecipeCategory.MISC,
                        WorldSetup.RAW_ORE_ITEMS.get(Metal.NICROSIL.getIndex()).get(), 4,
                        WorldSetup.RAW_ORE_ITEMS.get(Metal.CHROMIUM.getIndex()).get(),
-                       alloy_save("nicrosil") + "_with_nickel",
-                       repeatWith(ing("c:raw_materials/nickel"), 2, ing("c:raw_materials/chromium"),
-                                  ing(Items.QUARTZ)));
+                       alloy_save("nicrosil") + "_with_nickel", repeatWith(ing("c:raw_materials/nickel"), 2,
+                                                                           ing(AllomancyTags.RAW_ORE_TAGS.get(
+                                                                                   Metal.CHROMIUM.getIndex())),
+                                                                           ing(Tags.Items.GEMS_QUARTZ)));
 
         buildShapeless(consumer.withConditions(doesNotHaveNickel), RecipeCategory.MISC,
                        WorldSetup.RAW_ORE_ITEMS.get(Metal.NICROSIL.getIndex()).get(), 4,
                        WorldSetup.RAW_ORE_ITEMS.get(Metal.CHROMIUM.getIndex()).get(), alloy_save("nicrosil"),
-                       repeatWith(ing("c:raw_materials/chromium"), 2, ing(Items.RAW_IRON), ing(Items.QUARTZ)));
+                       repeatWith(ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.CHROMIUM.getIndex())), 2,
+                                  ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.IRON.getIndex())),
+                                  ing(Tags.Items.GEMS_QUARTZ)));
 
         buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.DURALUMIN.getIndex()).get(),
                        4, WorldSetup.RAW_ORE_ITEMS.get(Metal.ALUMINUM.getIndex()).get(), alloy_save("duralumin"),
-                       repeatWith(ing("c:raw_materials/aluminum"), 3, ing(Items.RAW_COPPER)));
+                       repeatWith(ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.ALUMINUM.getIndex())), 3,
+                                  ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.COPPER.getIndex()))));
 
         buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.BENDALLOY.getIndex()).get(),
                        4, WorldSetup.RAW_ORE_ITEMS.get(Metal.CADMIUM.getIndex()).get(), alloy_save("bendalloy"),
-                       repeatWith(ing("c:raw_materials/lead"), 2, ing("c:raw_materials/cadmium"),
-                                  ing("c:raw_materials/tin")));
+                       repeatWith(ing(AllomancyTags.RAW_ORE_TAGS.get(WorldSetup.LEAD)), 2,
+                                  ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.CADMIUM.getIndex())),
+                                  ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.TIN.getIndex()))));
 
         buildShapeless(consumer, RecipeCategory.MISC, WorldSetup.RAW_ORE_ITEMS.get(Metal.ELECTRUM.getIndex()).get(),
                        2, WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.SILVER).get(), alloy_save("electrum"),
-                       ing("c:raw_materials/silver"), ing(Items.RAW_GOLD));
+                       ing(AllomancyTags.RAW_ORE_TAGS.get(WorldSetup.SILVER)),
+                       ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.GOLD.getIndex())));
 
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
         ShapedRecipeBuilder
@@ -287,7 +324,7 @@ final class Recipes extends RecipeProvider {
                 .showNotification(true)
                 .define('#', Items.LEAD)
                 .define('l', Items.LEATHER)
-                .define('g', Items.GOLD_NUGGET)
+                .define('g', Tags.Items.NUGGETS_GOLD)
                 .pattern(" #g")
                 .pattern("l l")
                 .pattern(" l ")

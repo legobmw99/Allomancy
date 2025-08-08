@@ -8,6 +8,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
@@ -36,6 +37,14 @@ public final class AllomancyTags {
             TagKey.create(Registries.DAMAGE_TYPE, Allomancy.rl("is_coin_hit"));
 
     public static final List<TagKey<BannerPattern>> PATTERN_TAGS = new ArrayList<>();
+
+
+    public static final List<TagKey<Item>> NUGGET_TAGS = new ArrayList<>();
+    public static final List<TagKey<Item>> INGOT_TAGS = new ArrayList<>();
+    public static final List<TagKey<Item>> RAW_ORE_TAGS = new ArrayList<>();
+    public static final List<TagKey<Block>> STORAGE_BLOCK_TAGS = new ArrayList<>();
+    public static final List<TagKey<Item>> STORAGE_BLOCK_ITEM_TAGS = new ArrayList<>();
+
 
     private AllomancyTags() {}
 }

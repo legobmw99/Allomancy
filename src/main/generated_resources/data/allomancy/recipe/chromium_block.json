@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:chromium_ingot",
-    "allomancy:chromium_ingot",
-    "allomancy:chromium_ingot",
-    "allomancy:chromium_ingot",
-    "allomancy:chromium_ingot",
-    "allomancy:chromium_ingot",
-    "allomancy:chromium_ingot",
-    "allomancy:chromium_ingot",
-    "allomancy:chromium_ingot"
+  "key": {
+    "i": "allomancy:chromium_ingot",
+    "t": "#c:ingots/chromium"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

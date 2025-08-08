@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:bendalloy_ingot",
-    "allomancy:bendalloy_ingot",
-    "allomancy:bendalloy_ingot",
-    "allomancy:bendalloy_ingot",
-    "allomancy:bendalloy_ingot",
-    "allomancy:bendalloy_ingot",
-    "allomancy:bendalloy_ingot",
-    "allomancy:bendalloy_ingot",
-    "allomancy:bendalloy_ingot"
+  "key": {
+    "i": "allomancy:bendalloy_ingot",
+    "t": "#c:ingots/bendalloy"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:raw_cadmium",
-    "allomancy:raw_cadmium",
-    "allomancy:raw_cadmium",
-    "allomancy:raw_cadmium",
-    "allomancy:raw_cadmium",
-    "allomancy:raw_cadmium",
-    "allomancy:raw_cadmium",
-    "allomancy:raw_cadmium",
-    "allomancy:raw_cadmium"
+  "key": {
+    "r": "allomancy:raw_cadmium",
+    "t": "#c:raw_materials/cadmium"
+  },
+  "pattern": [
+    "ttt",
+    "trt",
+    "ttt"
   ],
   "result": {
     "count": 1,

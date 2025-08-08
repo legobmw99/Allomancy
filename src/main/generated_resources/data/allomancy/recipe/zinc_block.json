@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:zinc_ingot",
-    "allomancy:zinc_ingot",
-    "allomancy:zinc_ingot",
-    "allomancy:zinc_ingot",
-    "allomancy:zinc_ingot",
-    "allomancy:zinc_ingot",
-    "allomancy:zinc_ingot",
-    "allomancy:zinc_ingot",
-    "allomancy:zinc_ingot"
+  "key": {
+    "i": "allomancy:zinc_ingot",
+    "t": "#c:ingots/zinc"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

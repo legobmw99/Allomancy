@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    "allomancy:brass_nugget",
-    "allomancy:brass_nugget",
-    "allomancy:brass_nugget",
-    "allomancy:brass_nugget",
-    "allomancy:brass_nugget",
-    "allomancy:brass_nugget",
-    "allomancy:brass_nugget",
-    "allomancy:brass_nugget",
-    "allomancy:brass_nugget"
+  "key": {
+    "n": "allomancy:brass_nugget",
+    "t": "#c:nuggets/brass"
+  },
+  "pattern": [
+    "ttt",
+    "tnt",
+    "ttt"
   ],
   "result": {
     "count": 1,

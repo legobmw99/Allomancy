@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:duralumin_ingot",
-    "allomancy:duralumin_ingot",
-    "allomancy:duralumin_ingot",
-    "allomancy:duralumin_ingot",
-    "allomancy:duralumin_ingot",
-    "allomancy:duralumin_ingot",
-    "allomancy:duralumin_ingot",
-    "allomancy:duralumin_ingot",
-    "allomancy:duralumin_ingot"
+  "key": {
+    "i": "allomancy:duralumin_ingot",
+    "t": "#c:ingots/duralumin"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

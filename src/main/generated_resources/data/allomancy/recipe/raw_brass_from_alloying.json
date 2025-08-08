@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "minecraft:raw_copper",
+    "#c:raw_materials/copper",
     "#c:raw_materials/zinc"
   ],
   "result": {

@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:lead_ingot",
-    "allomancy:lead_ingot",
-    "allomancy:lead_ingot",
-    "allomancy:lead_ingot",
-    "allomancy:lead_ingot",
-    "allomancy:lead_ingot",
-    "allomancy:lead_ingot",
-    "allomancy:lead_ingot",
-    "allomancy:lead_ingot"
+  "key": {
+    "i": "allomancy:lead_ingot",
+    "t": "#c:ingots/lead"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

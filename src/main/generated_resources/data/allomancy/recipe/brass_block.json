@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:brass_ingot",
-    "allomancy:brass_ingot",
-    "allomancy:brass_ingot",
-    "allomancy:brass_ingot",
-    "allomancy:brass_ingot",
-    "allomancy:brass_ingot",
-    "allomancy:brass_ingot",
-    "allomancy:brass_ingot",
-    "allomancy:brass_ingot"
+  "key": {
+    "i": "allomancy:brass_ingot",
+    "t": "#c:ingots/brass"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

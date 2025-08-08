@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:raw_aluminum",
-    "allomancy:raw_aluminum",
-    "allomancy:raw_aluminum",
-    "allomancy:raw_aluminum",
-    "allomancy:raw_aluminum",
-    "allomancy:raw_aluminum",
-    "allomancy:raw_aluminum",
-    "allomancy:raw_aluminum",
-    "allomancy:raw_aluminum"
+  "key": {
+    "r": "allomancy:raw_aluminum",
+    "t": "#c:raw_materials/aluminum"
+  },
+  "pattern": [
+    "ttt",
+    "trt",
+    "ttt"
   ],
   "result": {
     "count": 1,

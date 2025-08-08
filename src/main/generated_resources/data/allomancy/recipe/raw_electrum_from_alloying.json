@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     "#c:raw_materials/silver",
-    "minecraft:raw_gold"
+    "#c:raw_materials/gold"
   ],
   "result": {
     "count": 2,

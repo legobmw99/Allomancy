@@ -5,7 +5,7 @@
     "#c:raw_materials/aluminum",
     "#c:raw_materials/aluminum",
     "#c:raw_materials/aluminum",
-    "minecraft:raw_copper"
+    "#c:raw_materials/copper"
   ],
   "result": {
     "count": 4,

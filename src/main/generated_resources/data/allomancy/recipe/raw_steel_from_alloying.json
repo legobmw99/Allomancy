@@ -2,12 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "minecraft:raw_iron",
+    "#c:raw_materials/iron",
     "#minecraft:sand",
     "minecraft:blaze_powder"
   ],
   "result": {
-    "count": 2,
+    "count": 1,
     "id": "allomancy:raw_steel"
   }
 }

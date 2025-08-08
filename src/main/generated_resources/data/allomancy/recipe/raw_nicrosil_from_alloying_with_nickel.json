@@ -14,7 +14,7 @@
     "#c:raw_materials/nickel",
     "#c:raw_materials/nickel",
     "#c:raw_materials/chromium",
-    "minecraft:quartz"
+    "#c:gems/quartz"
   ],
   "result": {
     "count": 4,

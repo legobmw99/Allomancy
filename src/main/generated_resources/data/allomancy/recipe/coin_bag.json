@@ -3,7 +3,7 @@
   "category": "equipment",
   "key": {
     "#": "minecraft:lead",
-    "g": "minecraft:gold_nugget",
+    "g": "#c:nuggets/gold",
     "l": "minecraft:leather"
   },
   "pattern": [

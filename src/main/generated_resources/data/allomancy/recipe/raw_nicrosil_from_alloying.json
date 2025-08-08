@@ -10,8 +10,8 @@
   "ingredients": [
     "#c:raw_materials/chromium",
     "#c:raw_materials/chromium",
-    "minecraft:raw_iron",
-    "minecraft:quartz"
+    "#c:raw_materials/iron",
+    "#c:gems/quartz"
   ],
   "result": {
     "count": 4,

@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:tin_ingot",
-    "allomancy:tin_ingot",
-    "allomancy:tin_ingot",
-    "allomancy:tin_ingot",
-    "allomancy:tin_ingot",
-    "allomancy:tin_ingot",
-    "allomancy:tin_ingot",
-    "allomancy:tin_ingot",
-    "allomancy:tin_ingot"
+  "key": {
+    "i": "allomancy:tin_ingot",
+    "t": "#c:ingots/tin"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

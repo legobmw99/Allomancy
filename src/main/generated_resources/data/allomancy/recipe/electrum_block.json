@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:electrum_ingot",
-    "allomancy:electrum_ingot",
-    "allomancy:electrum_ingot",
-    "allomancy:electrum_ingot",
-    "allomancy:electrum_ingot",
-    "allomancy:electrum_ingot",
-    "allomancy:electrum_ingot",
-    "allomancy:electrum_ingot",
-    "allomancy:electrum_ingot"
+  "key": {
+    "i": "allomancy:electrum_ingot",
+    "t": "#c:ingots/electrum"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

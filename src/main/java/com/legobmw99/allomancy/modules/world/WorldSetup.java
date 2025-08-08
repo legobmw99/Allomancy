@@ -18,8 +18,10 @@ import net.minecraft.data.worldgen.Pools;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
@@ -178,38 +180,41 @@ public final class WorldSetup {
                                                   new OreConfig("lead", 9, 12, -40, 30, LEAD, 0.4F),
                                                   new OreConfig("silver", 7, 8, -40, 30, SILVER, 1.0F)};
 
+
+    private static void createMetals(String name, boolean isVanilla) {
+        FLAKES.add(ITEMS.registerSimpleItem(name + "_flakes"));
+
+        AllomancyTags.INGOT_TAGS.add(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/" + name)));
+        AllomancyTags.RAW_ORE_TAGS.add(
+                ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "raw_materials/" + name)));
+        AllomancyTags.NUGGET_TAGS.add(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "nuggets/" + name)));
+        AllomancyTags.STORAGE_BLOCK_TAGS.add(
+                BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/" + name)));
+        AllomancyTags.STORAGE_BLOCK_ITEM_TAGS.add(
+                ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/" + name)));
+
+        if (isVanilla) {
+            NUGGETS.add(null);
+            INGOTS.add(null);
+            STORAGE_BLOCKS.add(null);
+            STORAGE_BLOCK_ITEMS.add(null);
+            RAW_ORE_ITEMS.add(null);
+        } else {
+            NUGGETS.add(ITEMS.registerSimpleItem(name + "_nugget"));
+            INGOTS.add(ITEMS.registerSimpleItem(name + "_ingot"));
+            var block = registerStandardBlock(name + "_block");
+            STORAGE_BLOCKS.add(block);
+            STORAGE_BLOCK_ITEMS.add(ITEMS.registerSimpleBlockItem(block));
+            RAW_ORE_ITEMS.add(ITEMS.registerSimpleItem("raw_" + name));
+        }
+    }
+
     static {
         for (Metal mt : Metal.values()) {
-            String name = mt.getName();
-            FLAKES.add(ITEMS.registerSimpleItem(name + "_flakes"));
-
-            if (mt.isVanilla()) {
-                NUGGETS.add(null);
-                INGOTS.add(null);
-                STORAGE_BLOCKS.add(null);
-                STORAGE_BLOCK_ITEMS.add(null);
-                RAW_ORE_ITEMS.add(null);
-            } else {
-                NUGGETS.add(ITEMS.registerSimpleItem(name + "_nugget"));
-                INGOTS.add(ITEMS.registerSimpleItem(name + "_ingot"));
-                STORAGE_BLOCKS.add(registerStandardBlock(name + "_block"));
-                STORAGE_BLOCK_ITEMS.add(ITEMS.registerSimpleBlockItem(STORAGE_BLOCKS.get(mt.getIndex())));
-                RAW_ORE_ITEMS.add(ITEMS.registerSimpleItem("raw_" + name));
-            }
+            createMetals(mt.getName(), mt.isVanilla());
         }
-        FLAKES.add(ITEMS.registerSimpleItem("lead_flakes"));
-        NUGGETS.add(ITEMS.registerSimpleItem("lead_nugget"));
-        INGOTS.add(ITEMS.registerSimpleItem("lead_ingot"));
-        STORAGE_BLOCKS.add(registerStandardBlock("lead_block"));
-        STORAGE_BLOCK_ITEMS.add(ITEMS.registerSimpleBlockItem(STORAGE_BLOCKS.get(LEAD)));
-        RAW_ORE_ITEMS.add(ITEMS.registerSimpleItem("raw_lead"));
-
-        FLAKES.add(ITEMS.registerSimpleItem("silver_flakes"));
-        NUGGETS.add(ITEMS.registerSimpleItem("silver_nugget"));
-        INGOTS.add(ITEMS.registerSimpleItem("silver_ingot"));
-        STORAGE_BLOCKS.add(registerStandardBlock("silver_block"));
-        STORAGE_BLOCK_ITEMS.add(ITEMS.registerSimpleBlockItem(STORAGE_BLOCKS.get(SILVER)));
-        RAW_ORE_ITEMS.add(ITEMS.registerSimpleItem("raw_silver"));
+        createMetals("lead", false);
+        createMetals("silver", false);
 
         for (var ore_config : ORE_METALS) {
             String ore = ore_config.name();

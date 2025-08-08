@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:pewter_ingot",
-    "allomancy:pewter_ingot",
-    "allomancy:pewter_ingot",
-    "allomancy:pewter_ingot",
-    "allomancy:pewter_ingot",
-    "allomancy:pewter_ingot",
-    "allomancy:pewter_ingot",
-    "allomancy:pewter_ingot",
-    "allomancy:pewter_ingot"
+  "key": {
+    "i": "allomancy:pewter_ingot",
+    "t": "#c:ingots/pewter"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

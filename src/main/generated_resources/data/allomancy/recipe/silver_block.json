@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:silver_ingot",
-    "allomancy:silver_ingot",
-    "allomancy:silver_ingot",
-    "allomancy:silver_ingot",
-    "allomancy:silver_ingot",
-    "allomancy:silver_ingot",
-    "allomancy:silver_ingot",
-    "allomancy:silver_ingot",
-    "allomancy:silver_ingot"
+  "key": {
+    "i": "allomancy:silver_ingot",
+    "t": "#c:ingots/silver"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,

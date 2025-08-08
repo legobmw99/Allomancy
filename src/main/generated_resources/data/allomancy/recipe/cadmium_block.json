@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    "allomancy:cadmium_ingot",
-    "allomancy:cadmium_ingot",
-    "allomancy:cadmium_ingot",
-    "allomancy:cadmium_ingot",
-    "allomancy:cadmium_ingot",
-    "allomancy:cadmium_ingot",
-    "allomancy:cadmium_ingot",
-    "allomancy:cadmium_ingot",
-    "allomancy:cadmium_ingot"
+  "key": {
+    "i": "allomancy:cadmium_ingot",
+    "t": "#c:ingots/cadmium"
+  },
+  "pattern": [
+    "ttt",
+    "tit",
+    "ttt"
   ],
   "result": {
     "count": 1,
