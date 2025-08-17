@@ -98,6 +98,23 @@ public final class CommonEventHandler {
         }
     }
 
+    @SubscribeEvent
+    public static void onPlayerClone(final PlayerEvent.Clone event) {
+        if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer player) {
+            event.getOriginal().reviveCaps();
+            player
+                    .getCapability(AllomancerCapability.PLAYER_CAP)
+                    .ifPresent(data -> event
+                            .getOriginal()
+                            .getCapability(AllomancerCapability.PLAYER_CAP)
+                            .ifPresent(oldData -> {
+                                data.load(oldData.save());
+                            }));
+            event.getOriginal().getCapability(AllomancerCapability.PLAYER_CAP).invalidate();
+            event.getOriginal().invalidateCaps();
+            Network.syncAllomancerData(player);
+        }
+    }
 
     @SubscribeEvent
     public static void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
