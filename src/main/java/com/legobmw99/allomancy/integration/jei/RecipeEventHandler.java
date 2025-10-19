@@ -13,7 +13,7 @@ import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import java.util.List;
 
 /**
- * This handles the fact that recipes are not, by default, sent to the client any more.
+ * This handles the fact that recipes are not, by default, sent to the client anymore.
  */
 @EventBusSubscriber(modid = Allomancy.MODID)
 final class RecipeEventHandler {

@@ -70,7 +70,7 @@ public record EntityIngredient(EntityType<?> type) {
 
         @Override
         public void render(GuiGraphics guiGraphics, EntityIngredient ingredient) {
-            // ignored -- we only use the version that recieves x, y
+            // ignored -- we only use the version that receives x, y
         }
 
         @Override
@@ -116,8 +116,8 @@ public record EntityIngredient(EntityType<?> type) {
                                                                 (float) (my), livingEntity);
                             return;
                         } catch (Exception e) {
-                            Allomancy.LOGGER.error(
-                                    "Error drawing entity " + BuiltInRegistries.ENTITY_TYPE.getKey(type), e);
+                            Allomancy.LOGGER.error("Error drawing entity {}",
+                                                   BuiltInRegistries.ENTITY_TYPE.getKey(type), e);
                             IGNORED_ENTITIES.add(type);
                             ENTITY_MAP.remove(type);
                         }
@@ -179,22 +179,18 @@ public record EntityIngredient(EntityType<?> type) {
                                                                 float angleXComponent,
                                                                 float angleYComponent,
                                                                 LivingEntity p_275689_) {
-            float f = (p_275688_ + p_275535_) / 2.0F;
-            float f1 = (p_275245_ + p_294406_) / 2.0F;
             //        p_282802_.enableScissor(p_275688_, p_275245_, p_275535_, p_294406_);
-            float f2 = angleXComponent;
-            float f3 = angleYComponent;
             Quaternionf quaternionf = new Quaternionf().rotateZ((float) Math.PI);
-            Quaternionf quaternionf1 = new Quaternionf().rotateX(f3 * 20.0F * (float) (Math.PI / 180.0));
+            Quaternionf quaternionf1 = new Quaternionf().rotateX(angleYComponent * 20.0F * (float) (Math.PI / 180.0));
             quaternionf.mul(quaternionf1);
             float f4 = p_275689_.yBodyRot;
             float f5 = p_275689_.getYRot();
             float f6 = p_275689_.getXRot();
             float f7 = p_275689_.yHeadRotO;
             float f8 = p_275689_.yHeadRot;
-            p_275689_.yBodyRot = 180.0F + f2 * 20.0F;
-            p_275689_.setYRot(180.0F + f2 * 40.0F);
-            p_275689_.setXRot(-f3 * 20.0F);
+            p_275689_.yBodyRot = 180.0F + angleXComponent * 20.0F;
+            p_275689_.setYRot(180.0F + angleXComponent * 40.0F);
+            p_275689_.setXRot(-angleYComponent * 20.0F);
             p_275689_.yHeadRot = p_275689_.getYRot();
             p_275689_.yHeadRotO = p_275689_.getYRot();
             float f9 = p_275689_.getScale();

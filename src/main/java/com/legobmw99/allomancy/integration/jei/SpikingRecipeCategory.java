@@ -73,7 +73,7 @@ public class SpikingRecipeCategory implements IRecipeCategory<SpikingRecipeCateg
                                         .translatableWithFallback(
                                                 Tags.getTagTranslationKey(AllomancyTags.HEMALURGIC_CHARGERS),
                                                 "#" + AllomancyTags.HEMALURGIC_CHARGERS.location())
-                                        .withColor(ChatFormatting.GRAY.getColor()));
+                                        .withStyle(ChatFormatting.GRAY));
                 });
 
         var e = builder
@@ -116,7 +116,7 @@ public class SpikingRecipeCategory implements IRecipeCategory<SpikingRecipeCateg
     }
 
     public enum Values {
-        EARRING;
+        EARRING
     }
 
 }
