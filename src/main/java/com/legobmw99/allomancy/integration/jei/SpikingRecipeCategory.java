@@ -22,6 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -65,7 +66,15 @@ public class SpikingRecipeCategory implements IRecipeCategory<SpikingRecipeCateg
         var i = builder
                 .addSlot(RecipeIngredientRole.INPUT, 4, 44)
                 .setCustomRenderer(EntityIngredient.ENTITY_TYPE, new EntityIngredient.Renderer(48))
-                .addIngredients(EntityIngredient.ENTITY_TYPE, options.stream().map(EntityIngredient::new).toList());
+                .addIngredients(EntityIngredient.ENTITY_TYPE, options.stream().map(EntityIngredient::new).toList())
+                .addRichTooltipCallback((recipeSlotView, tooltip) -> {
+                    tooltip.add(ItemDisplay.addColorToText("jei.tooltip.recipe.tag", ChatFormatting.GRAY, ""));
+                    tooltip.add(Component
+                                        .translatableWithFallback(
+                                                Tags.getTagTranslationKey(AllomancyTags.HEMALURGIC_CHARGERS),
+                                                "#" + AllomancyTags.HEMALURGIC_CHARGERS.location())
+                                        .withColor(ChatFormatting.GRAY.getColor()));
+                });
 
         var e = builder
                 .addInvisibleIngredients(RecipeIngredientRole.INPUT)
