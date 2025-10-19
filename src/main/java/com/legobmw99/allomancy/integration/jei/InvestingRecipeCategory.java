@@ -46,10 +46,10 @@ public class InvestingRecipeCategory implements IRecipeCategory<RecipeHolder<Inv
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<InvestingRecipe> recipe, IFocusGroup focuses) {
-        builder.addInputSlot(30, 14).add(recipe.value().ingredient());
+        builder.addInputSlot(28, 14).add(recipe.value().ingredient());
 
         // TODO better liquid rendering?
-        builder.addSlot(RecipeIngredientRole.CRAFTING_STATION, 40, 24).add(WorldSetup.LERASIUM_FLUID.get());
+        builder.addSlot(RecipeIngredientRole.CRAFTING_STATION, 38, 24).add(WorldSetup.LERASIUM_FLUID.get());
         builder.addOutputSlot(96, 24).add(recipe.value().result()).setOutputSlotBackground();
     }
 

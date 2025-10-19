@@ -161,10 +161,10 @@ class Languages extends LanguageProvider {
 
         add("allomancy.jei.investing", "Investing");
         add("allomancy.jei.investing.description", "Seek the Well...");
-        add("allomancy.jei.charged_earring.1", "This earring contains the life force of a magical entity.");
-        add("allomancy.jei.charged_earring.2",
-            "Obtaining it requires killing one of the more powerful monsters with the pointy end of an earring.");
-        add("allomancy.jei.charged_earring.3", "Slip it in your ear once you've done this dirty work.");
+
+        add("allomancy.jei.spiking", "Spiking");
+        add("allomancy.jei.spiking.description", "Hemalurgy is bloody work");
+
 
         add("allomancy.jei.flake_input", "Multiple types of flake can be added at once.");
         add("allomancy.jei.vial_input",

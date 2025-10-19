@@ -5,12 +5,11 @@ import com.legobmw99.allomancy.modules.consumables.item.recipe.VialItemRecipe;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
-import net.minecraft.network.chat.Component;
+import mezz.jei.api.registration.*;
 import net.minecraft.resources.ResourceLocation;
+
+import java.util.Collections;
+import java.util.List;
 
 @JeiPlugin
 public class AllomancyJeiPlugin implements IModPlugin {
@@ -29,6 +28,7 @@ public class AllomancyJeiPlugin implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(new InvestingRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new SpikingRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -38,15 +38,16 @@ public class AllomancyJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        // TODO: actually list/show mobs? Use InventoryScreen#renderEntityInInventoryFollowsMouse
-        registration.addIngredientInfo(ExtrasSetup.CHARGED_BRONZE_EARRING,
-                                       Component.translatable("allomancy.jei.charged_earring.1"),
-                                       Component.translatable("allomancy.jei.charged_earring.2"),
-                                       Component.translatable("allomancy.jei.charged_earring.3"));
+        registration.addRecipes(SpikingRecipeCategory.TYPE, List.of(SpikingRecipeCategory.Values.EARRING));
 
         if (RecipeEventHandler.recipes != null) {
             registration.addRecipes(InvestingRecipeCategory.TYPE, RecipeEventHandler.recipes);
         }
     }
 
+    @Override
+    public void registerIngredients(IModIngredientRegistration registration) {
+        registration.register(EntityIngredient.ENTITY_TYPE, Collections.emptyList(), new EntityIngredient.Helper(),
+                              new EntityIngredient.Renderer(16), EntityIngredient.CODEC);
+    }
 }
