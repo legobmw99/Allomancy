@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     // https://projects.neoforged.net/neoforged/moddevgradle
-    id 'net.neoforged.moddev' version '2.0.107'
+    id 'net.neoforged.moddev' version '2.0.115'
     id 'idea'
 }
 

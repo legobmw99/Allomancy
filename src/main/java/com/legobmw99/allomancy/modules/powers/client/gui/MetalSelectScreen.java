@@ -29,6 +29,8 @@ import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
@@ -132,10 +134,11 @@ public class MetalSelectScreen extends Screen {
         }
     }
 
+
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    public boolean mouseClicked(MouseButtonEvent evt, boolean isDoubleClick) {
         toggleSelected();
-        return super.mouseClicked(mouseX, mouseY, mouseButton);
+        return super.mouseClicked(evt, isDoubleClick);
     }
 
     @Override
@@ -144,24 +147,23 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public boolean keyReleased(int keysym, int scancode, int modifiers) {
-        if (Inputs.burn.matches(keysym, scancode)) {
+    public boolean keyReleased(KeyEvent evt) {
+        if (Inputs.BURN.matches(evt)) {
             this.mc.setScreen(null);
             this.mc.mouseHandler.grabMouse();
             return true;
         }
-        return super.keyReleased(keysym, scancode, modifiers);
+        return super.keyReleased(evt);
     }
 
-
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (Inputs.burn.matchesMouse(button)) {
+    public boolean mouseReleased(MouseButtonEvent evt) {
+        if (Inputs.BURN.matchesMouse(evt)) {
             this.mc.setScreen(null);
             this.mc.mouseHandler.grabMouse();
             return true;
         }
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(evt);
     }
 
     /**

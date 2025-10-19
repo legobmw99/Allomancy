@@ -7,7 +7,7 @@ import com.legobmw99.allomancy.util.ItemDisplay;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -104,7 +104,7 @@ public final class FlakeStorage implements TooltipProvider, ConsumableListener {
                                                Component.translatable("metals." + last.getName()).getString()));
 
             default -> {
-                if (Screen.hasShiftDown()) {
+                if (Minecraft.getInstance().hasShiftDown()) {
                     for (Metal mt : Metal.values()) {
                         if (this.contains(mt)) {
                             tooltip.accept(ItemDisplay.addColorToText("metals." + mt.getName(), ChatFormatting.GRAY));

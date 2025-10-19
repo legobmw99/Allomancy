@@ -58,7 +58,7 @@ public class ConsumingTest {
 
         helper
                 .startSequence()
-                .thenExecute(() -> helper.getLevel().getServer().getPlayerList().op(player.getGameProfile()))
+                .thenExecute(() -> helper.getLevel().getServer().getPlayerList().op(player.nameAndId()))
                 .thenExecute(() -> helper
                         .getLevel()
                         .getServer()

@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.client.util;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalSelectScreen;
@@ -23,9 +24,10 @@ import javax.annotation.Nullable;
 
 public final class Inputs {
 
-    private static KeyMapping hud;
-    public static KeyMapping burn;
-    private static KeyMapping[] powers;
+    private static final KeyMapping.Category ALLOMANCY_CATEGORY = new KeyMapping.Category(Allomancy.rl("main"));
+    private static KeyMapping HUD;
+    public static KeyMapping BURN;
+    private static KeyMapping[] POWERS;
 
     private Inputs() {}
 
@@ -71,16 +73,18 @@ public final class Inputs {
 
 
     public static void registerKeyBinding(final RegisterKeyMappingsEvent evt) {
-        burn = new KeyMapping("key.burn", GLFW.GLFW_KEY_V, "key.categories.allomancy");
-        hud = new KeyMapping("key.hud", GLFW.GLFW_KEY_UNKNOWN, "key.categories.allomancy");
-        evt.register(burn);
-        evt.register(hud);
+        evt.registerCategory(ALLOMANCY_CATEGORY);
 
-        powers = new KeyMapping[Metal.values().length];
-        for (int i = 0; i < powers.length; i++) {
-            powers[i] = new KeyMapping("key.metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN,
-                                       "key.categories.allomancy");
-            evt.register(powers[i]);
+        BURN = new KeyMapping("key.burn", GLFW.GLFW_KEY_V, ALLOMANCY_CATEGORY);
+        HUD = new KeyMapping("key.hud", GLFW.GLFW_KEY_UNKNOWN, ALLOMANCY_CATEGORY);
+        evt.register(BURN);
+        evt.register(HUD);
+
+        POWERS = new KeyMapping[Metal.values().length];
+        for (int i = 0; i < POWERS.length; i++) {
+            POWERS[i] = new KeyMapping("key.metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN,
+                                       ALLOMANCY_CATEGORY);
+            evt.register(POWERS[i]);
         }
 
     }
@@ -96,18 +100,18 @@ public final class Inputs {
             return;
         }
 
-        if (isKeyDown(hud)) {
+        if (isKeyDown(HUD)) {
             PowersConfig.enable_overlay.set(!PowersConfig.enable_overlay.get());
             return;
         }
         var data = AllomancerAttachment.get(player);
 
-        for (int i = 0; i < powers.length; i++) {
-            if (isKeyDown(powers[i])) {
+        for (int i = 0; i < POWERS.length; i++) {
+            if (isKeyDown(POWERS[i])) {
                 PowerRequests.toggleBurn(Metal.getMetal(i), data);
             }
         }
-        if (isKeyDown(burn)) {
+        if (isKeyDown(BURN)) {
             switch (data.getPowerCount()) {
                 case 0:
                     break;
@@ -138,9 +142,8 @@ public final class Inputs {
         }
 
         return switch (keybind.getKey().getType()) {
-            case KEYSYM -> InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(),
-                                                    keybind.getKey().getValue());
-            case MOUSE -> GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().getWindow(),
+            case KEYSYM -> InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), keybind.getKey().getValue());
+            case MOUSE -> GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().handle(),
                                                   keybind.getKey().getValue()) == GLFW.GLFW_PRESS;
             default -> false;
         };

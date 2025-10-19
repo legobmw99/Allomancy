@@ -138,7 +138,7 @@ class Languages extends LanguageProvider {
         add("advancements.allomancy.going_loud.title", "Going Loud");
         add("advancements.allomancy.going_loud.desc", "Allomancy can grant great stealth, unless you do that!");
 
-        add("key.categories.allomancy", "Allomancy");
+        add("key.category.allomancy.main", "Allomancy");
         add("key.burn", "Burn Metals");
         add("key.hud", "Show Vial HUD");
         add("allomancy.gui", "Select Metal");

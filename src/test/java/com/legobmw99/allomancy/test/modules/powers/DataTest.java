@@ -4,11 +4,13 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import com.legobmw99.allomancy.util.AllomancyTags;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.LevelData;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
@@ -49,27 +51,39 @@ public class DataTest {
     public static void dataOnRespawnTest(AllomancyTestHelper helper) {
         var player = helper.makeMistbornPlayer();
 
-        player.setRespawnPosition(new ServerPlayer.RespawnConfig(Level.OVERWORLD, player.blockPosition(), 0.0f, true),
+        player.setRespawnPosition(new ServerPlayer.RespawnConfig(
+                                          new LevelData.RespawnData(new GlobalPos(Level.OVERWORLD,
+                                                                                  player.blockPosition()), 0.0f,
+                                                                    0.0f), true),
                                   true);
 
-        var returningPlayer =
-                player.getServer().getPlayerList().respawn(player, true, Entity.RemovalReason.CHANGED_DIMENSION);
+        var returningPlayer = player
+                .level()
+                .getServer()
+                .getPlayerList()
+                .respawn(player, true, Entity.RemovalReason.CHANGED_DIMENSION);
 
         helper.assertTrue(AllomancerAttachment.get(returningPlayer).isMistborn(),
                           "Player lost investment on teleport");
         helper.assertTrue(AllomancerAttachment.get(returningPlayer).getStored(Metal.STEEL) == 10,
                           "Player lost inventory on teleport");
 
-        var respawnedPlayer =
-                player.getServer().getPlayerList().respawn(returningPlayer, false, Entity.RemovalReason.KILLED);
+        var respawnedPlayer = player
+                .level()
+                .getServer()
+                .getPlayerList()
+                .respawn(returningPlayer, false, Entity.RemovalReason.KILLED);
 
         helper.assertTrue(AllomancerAttachment.get(respawnedPlayer).isMistborn(), "Player lost investment on death");
         helper.assertTrue(AllomancerAttachment.get(respawnedPlayer).getStored(Metal.STEEL) == 0,
                           "Player kept inventory on death");
 
 
-        var respawnedPlayerKeepInv =
-                player.getServer().getPlayerList().respawn(returningPlayer, true, Entity.RemovalReason.KILLED);
+        var respawnedPlayerKeepInv = player
+                .level()
+                .getServer()
+                .getPlayerList()
+                .respawn(returningPlayer, true, Entity.RemovalReason.KILLED);
 
         helper.assertTrue(AllomancerAttachment.get(respawnedPlayerKeepInv).isMistborn(),
                           "Player lost investment on death");

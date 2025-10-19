@@ -5,7 +5,6 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -72,7 +71,7 @@ public final class Enhancement {
         var spawn = data.getSpawnLoc();
 
         if (spawn == null) {  // no spawn --> use world spawn
-            spawn = GlobalPos.of(Level.OVERWORLD, level.getLevelData().getSpawnPos());
+            spawn = level.getLevelData().getRespawnData().globalPos();
         }
 
         teleport(curPlayer, level, spawn.dimension(), spawn.pos());

@@ -1,13 +1,11 @@
 package com.legobmw99.allomancy.modules.consumables.item;
 
-import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.Consumable;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -74,38 +71,6 @@ public class VialItem extends Item {
         } else {
             stack.set(DataComponents.USE_REMAINDER, new UseRemainder(ConsumeSetup.VIAL.toStack()));
             stack.set(DataComponents.RARITY, Rarity.UNCOMMON);
-        }
-
-    }
-
-    /**
-     * TEMPORARY: Used to port pre-1.20.5 worlds to post.
-     * Loads custom NBT data and converts it to the data component.
-     */
-    @Override
-    public void verifyComponentsAfterLoad(ItemStack pStack) {
-        super.verifyComponentsAfterLoad(pStack);
-        if (pStack.has(FLAKE_STORAGE)) {
-            if (!pStack.has(DataComponents.USE_REMAINDER)) {
-                pStack.set(DataComponents.USE_REMAINDER, new UseRemainder(ConsumeSetup.VIAL.toStack()));
-            }
-            return;
-        }
-
-        CustomData customData = pStack.get(DataComponents.CUSTOM_DATA);
-        if (customData != null && customData.contains("steel")) {
-
-            CompoundTag tag = customData.copyTag();
-            Allomancy.LOGGER.info("Found old custom item data for vial: {}", tag);
-            FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
-            for (Metal mt : Metal.values()) {
-                if (tag.getBooleanOr(mt.getName(), false)) {
-                    storage.add(mt);
-                }
-                tag.remove(mt.getName());
-            }
-            fillVial(pStack, storage.toImmutable());
-            pStack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
         }
     }
 }

@@ -116,10 +116,10 @@ public final class WorldSetup {
 
     public static final DeferredBlock<LiquidBlock> LIQUID_LERASIUM =
             BLOCKS.registerBlock("liquid_lerasium", props -> new LiquidLerasiumBlock(LERASIUM_FLUID.get(), props),
-                                 BlockBehaviour.Properties
+                                 () -> BlockBehaviour.Properties
                                          .of()
                                          .mapColor(MapColor.SNOW)
-                                         .noCollission()
+                                         .noCollision()
                                          .strength(100.0F)
                                          .pushReaction(PushReaction.DESTROY)
                                          .noLootTable()
@@ -283,15 +283,16 @@ public final class WorldSetup {
 
     private static DeferredBlock<Block> registerStandardBlock(String name) {
         return BLOCKS.registerBlock(name, Block::new,
-                                    Blocks.STONE.properties().strength(2.1F).requiresCorrectToolForDrops());
+                                    () -> Blocks.STONE.properties().strength(2.1F).requiresCorrectToolForDrops());
     }
 
     private static DeferredBlock<Block> registerStandardOre(String name) {
-        return BLOCKS.registerBlock(name, Block::new, Blocks.IRON_ORE.properties());
+        return BLOCKS.registerBlock(name, Block::new, Blocks.IRON_ORE::properties);
     }
 
     private static DeferredBlock<Block> registerDeepslateOre(String name) {
-        return BLOCKS.registerBlock(name, Block::new, Blocks.DEEPSLATE_IRON_ORE.properties().strength(4.5F, 3.0F));
+        return BLOCKS.registerBlock(name, Block::new,
+                                    () -> Blocks.DEEPSLATE_IRON_ORE.properties().strength(4.5F, 3.0F));
     }
 
 
@@ -357,8 +358,8 @@ public final class WorldSetup {
                                                        WeightedList.of())))
                         .build(), bootstrapContext.lookup(Registries.TEMPLATE_POOL).getOrThrow(WELL_POOL),
                 Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(-16)), false,
-                Optional.of(Heightmap.Types.WORLD_SURFACE_WG), 3, List.of(), DimensionPadding.ZERO,
-                LiquidSettings.IGNORE_WATERLOGGING));
+                Optional.of(Heightmap.Types.WORLD_SURFACE_WG), new JigsawStructure.MaxDistance(3, 3), List.of(),
+                DimensionPadding.ZERO, LiquidSettings.IGNORE_WATERLOGGING));
     }
 
     public static void bootstrapTemplatePools(BootstrapContext<StructureTemplatePool> bootstrapContext) {

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.LevelData;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
@@ -93,7 +94,8 @@ public class ActivePowerTest {
         var data = AllomancerAttachment.get(player);
 
         var farCorner = helper.absolutePos(new BlockPos(4, 0, 4));
-        player.setRespawnPosition(new ServerPlayer.RespawnConfig(Level.OVERWORLD, farCorner, 0.0f, true), true);
+        player.setRespawnPosition(new ServerPlayer.RespawnConfig(
+                new LevelData.RespawnData(new GlobalPos(Level.OVERWORLD, farCorner), 0.0f, 0.0f), true), true);
         data.setBurning(Metal.ELECTRUM, true);
         data.setBurning(Metal.DURALUMIN, true);
 

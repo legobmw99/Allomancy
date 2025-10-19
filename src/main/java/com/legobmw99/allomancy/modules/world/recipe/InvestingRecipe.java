@@ -5,8 +5,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 public record InvestingRecipe(Ingredient ingredient,
                               ItemStack result) implements Recipe<InvestingRecipe.InvestingWrapper> {
@@ -46,10 +44,22 @@ public record InvestingRecipe(Ingredient ingredient,
         return RecipeBookCategories.CRAFTING_MISC;
     }
 
-    public static class InvestingWrapper extends RecipeWrapper {
+    public static class InvestingWrapper implements RecipeInput {
+
+        private final ItemStack stack;
+
         public InvestingWrapper(ItemStack stack) {
-            super(new ItemStackHandler(1));
-            this.inv.insertItem(0, stack, false);
+            this.stack = stack;
+        }
+
+        @Override
+        public ItemStack getItem(int index) {
+            return index == 0 ? stack : ItemStack.EMPTY;
+        }
+
+        @Override
+        public int size() {
+            return 1;
         }
     }
 

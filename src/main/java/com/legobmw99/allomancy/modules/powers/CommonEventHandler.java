@@ -115,7 +115,7 @@ public final class CommonEventHandler {
             // Handle random misting case
             if (PowersConfig.random_mistings.get() && data.isUninvested()) {
                 Metal randomMisting;
-                if (FMLEnvironment.dist.isClient()) {
+                if (FMLEnvironment.getDist().isClient()) {
                     randomMisting = getRandomMistingForPlayer(player, USEFUL_MISTINGS_SSP);
                 } else {
                     randomMisting = getRandomMistingForPlayer(player, USEFUL_MISTINGS);

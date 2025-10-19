@@ -57,7 +57,7 @@ public final class ExtrasSetup {
 
 
     public static final DeferredItem<BronzeEarringItem> BRONZE_EARRING =
-            ITEMS.registerItem("bronze_earring", BronzeEarringItem::new, new Item.Properties()
+            ITEMS.registerItem("bronze_earring", BronzeEarringItem::new, (p) -> p
                     .stacksTo(1)
                     .attributes(BronzeEarringItem.createAttributes())
                     .component(DataComponents.LORE, new ItemLore(
@@ -68,7 +68,7 @@ public final class ExtrasSetup {
             ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.rl("bronze_jewelry"));
 
     public static final DeferredItem<BronzeEarringItem> CHARGED_BRONZE_EARRING =
-            ITEMS.registerItem("charged_bronze_earring", BronzeEarringItem::new, new Item.Properties()
+            ITEMS.registerItem("charged_bronze_earring", BronzeEarringItem::new, (p) -> p
                     .stacksTo(1)
                     .rarity(Rarity.RARE)
                     .component(DataComponents.EQUIPPABLE,
@@ -86,28 +86,29 @@ public final class ExtrasSetup {
 
 
     private static final BlockBehaviour.Properties IRON_REDSTONE_PROPS =
-            Block.Properties.of().noCollission().strength(1.0F);
+            Block.Properties.of().noCollision().strength(1.0F);
 
-    private static final Item.Properties IRON_REDSTONE_LORE = new Item.Properties().component(DataComponents.LORE,
-                                                                                              new ItemLore(
-                                                                                                      List.of(ItemDisplay.addColorToText(
-                                                                                                              "block.allomancy.iron_activation.lore",
-                                                                                                              ChatFormatting.GRAY))));
+    private static Item.Properties ironRedstoneLore(Item.Properties props) {
+        return props.component(DataComponents.LORE, new ItemLore(
+                List.of(ItemDisplay.addColorToText("block.allomancy.iron_activation.lore", ChatFormatting.GRAY))));
+    }
+
     public static final DeferredBlock<IronButtonBlock> IRON_BUTTON =
-            BLOCKS.registerBlock("iron_button", (props) -> new IronButtonBlock(true, props), IRON_REDSTONE_PROPS);
+            BLOCKS.registerBlock("iron_button", (props) -> new IronButtonBlock(true, props),
+                                 () -> IRON_REDSTONE_PROPS);
     public static final DeferredItem<BlockItem> IRON_BUTTON_ITEM =
-            ITEMS.registerSimpleBlockItem(IRON_BUTTON, IRON_REDSTONE_LORE);
+            ITEMS.registerSimpleBlockItem(IRON_BUTTON, ExtrasSetup::ironRedstoneLore);
 
     public static final DeferredBlock<IronButtonBlock> INVERTED_IRON_BUTTON =
             BLOCKS.registerBlock("inverted_iron_button", (props) -> new IronButtonBlock(false, props),
-                                 IRON_REDSTONE_PROPS);
+                                 () -> IRON_REDSTONE_PROPS);
     public static final DeferredItem<BlockItem> INVERTED_IRON_BUTTON_ITEM =
-            ITEMS.registerSimpleBlockItem(INVERTED_IRON_BUTTON, IRON_REDSTONE_LORE);
+            ITEMS.registerSimpleBlockItem(INVERTED_IRON_BUTTON, ExtrasSetup::ironRedstoneLore);
 
     public static final DeferredBlock<IronLeverBlock> IRON_LEVER =
-            BLOCKS.registerBlock("iron_lever", IronLeverBlock::new, IRON_REDSTONE_PROPS);
+            BLOCKS.registerBlock("iron_lever", IronLeverBlock::new, () -> IRON_REDSTONE_PROPS);
     public static final DeferredItem<BlockItem> IRON_LEVER_ITEM =
-            ITEMS.registerSimpleBlockItem(IRON_LEVER, IRON_REDSTONE_LORE);
+            ITEMS.registerSimpleBlockItem(IRON_LEVER, ExtrasSetup::ironRedstoneLore);
 
     public static final List<ResourceKey<BannerPattern>> PATTERNS = new ArrayList<>();
 

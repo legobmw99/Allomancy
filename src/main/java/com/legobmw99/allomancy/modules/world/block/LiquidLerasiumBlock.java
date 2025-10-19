@@ -41,8 +41,9 @@ public class LiquidLerasiumBlock extends LiquidBlock {
                                 Level level,
                                 BlockPos pos,
                                 Entity entity,
-                                InsideBlockEffectApplier eff) {
-        super.entityInside(state, level, pos, entity, eff);
+                                InsideBlockEffectApplier eff,
+                                boolean intersects) {
+        super.entityInside(state, level, pos, entity, eff, intersects);
         if (level instanceof ServerLevel serverLevel && entity instanceof ItemEntity item) {
             var input = new InvestingRecipe.InvestingWrapper(item.getItem());
             serverLevel

@@ -13,6 +13,6 @@ class ParticleDescriptions extends ParticleDescriptionProvider {
 
     @Override
     protected void addDescriptions() {
-        sprite(PowersClientSetup.SOUND_PARTICLE_TYPE.get(), Allomancy.rl("sound_particle"));
+        spriteSet(PowersClientSetup.SOUND_PARTICLE_TYPE.get(), Allomancy.rl("sound_particle"));
     }
 }

@@ -100,7 +100,7 @@ public final class MetalOverlay implements GuiLayer {
                 }
 
                 if (highlight == mt) {
-                    gui.renderOutline(xCorner - 1, renderY - 1, 7, 21, OUTLINE_COLOR);
+                    gui.submitOutline(xCorner - 1, renderY - 1, 7, 21, OUTLINE_COLOR);
                 }
             }
 

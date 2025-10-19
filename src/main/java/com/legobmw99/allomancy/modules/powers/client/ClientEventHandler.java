@@ -15,8 +15,8 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -97,7 +97,27 @@ public final class ClientEventHandler {
         }
     }
 
+    private static final ContextKey<Vec3> ALLOMANCY_SOURCE = new ContextKey<>(Allomancy.rl("source_ctx"));
 
+    @SubscribeEvent
+    public static void onExtractLevelRenderState(final ExtractLevelRenderStateEvent event) {
+        Minecraft mc = Minecraft.getInstance();
+
+        float partialTicks = event.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        Vec3 source = mc.player.getPosition(partialTicks);
+        if (mc.options.getCameraType().isFirstPerson()) {
+            // get a point slightly in front of the player
+            source = source.add(mc.player.getViewVector(partialTicks));
+        } else {
+            // get the chest
+            source = source.add(0, mc.player.getEyeHeight() / 3 * 2, 0);
+        }
+
+        event.getRenderState().setRenderData(ALLOMANCY_SOURCE, source);
+    }
+
+    // TODO: split using ExtractLevelRenderStateEvent, c.f. https://github.com/neoforged/NeoForge/pull/2648
+    //  https://neoforged.net/news/21.9release/#level-rendering-changes
     @SubscribeEvent
     public static void onRenderLevelStage(final RenderLevelStageEvent.AfterWeather event) {
 
@@ -161,32 +181,25 @@ public final class ClientEventHandler {
         }
         if (data.isBurning(Metal.ELECTRUM)) {
             GlobalPos spawn = data.getSpawnLoc();
-            if (spawn == null &&
-                player.level().dimension() == Level.OVERWORLD) { // overworld, no spawn --> use world spawn
-                var levelData = player.level().getLevelData();
-                mediumLines.add(new Rendering.Line(Vec3.atCenterOf(levelData.getSpawnPos()), ELECTRUM_LINE_COLOR));
-            } else if (spawn != null && player.level().dimension() == spawn.dimension()) {
+            if (spawn == null) { // overworld, no spawn --> use world spawn
+                var globalSpawn = player.level().getLevelData().getRespawnData().globalPos();
+
+                if (player.level().dimension() == globalSpawn.dimension()) {
+                    mediumLines.add(new Rendering.Line(Vec3.atCenterOf(globalSpawn.pos()), ELECTRUM_LINE_COLOR));
+                }
+            } else if (player.level().dimension() == spawn.dimension()) {
                 mediumLines.add(new Rendering.Line(Vec3.atCenterOf(spawn.pos()), ELECTRUM_LINE_COLOR));
             }
         }
 
 
-        float partialTicks = event.getPartialTick().getGameTimeDeltaPartialTick(false);
-        Vec3 source = mc.player.getPosition(partialTicks);
-        if (mc.options.getCameraType().isFirstPerson()) {
-            // get a point slightly in front of the player
-            source = source.add(mc.player.getViewVector(partialTicks));
-        } else {
-            // get the chest
-            source = source.add(0, mc.player.getEyeHeight() / 3 * 2, 0);
-        }
-
+        Vec3 source = event.getLevelRenderState().getRenderDataOrThrow(ALLOMANCY_SOURCE);
 
         var stack = event.getPoseStack();
         stack.pushPose();
         // TODO: also account for view bobbing, FOV
         //  See GameRenderer#bobView
-        Vec3 view = event.getCamera().getPosition();
+        Vec3 view = event.getLevelRenderState().cameraRenderState.pos;
         stack.translate(-view.x, -view.y, -view.z);
 
         Rendering.drawMetalLines(stack, source, narrowLines, 1.5f);

@@ -2,12 +2,15 @@ package com.legobmw99.allomancy.modules.powers.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
-public final class SoundParticle extends TextureSheetParticle {
+public final class SoundParticle extends SingleQuadParticle {
+
     private SoundParticle(Level world,
                           double x,
                           double y,
@@ -15,8 +18,9 @@ public final class SoundParticle extends TextureSheetParticle {
                           double motionX,
                           double motionY,
                           double motionZ,
-                          SoundSource typeIn) {
-        super((ClientLevel) world, x, y, z, motionX, motionY, motionZ);
+                          SoundSource typeIn,
+                          SpriteSet spriteSet) {
+        super((ClientLevel) world, x, y, z, motionX, motionY, motionZ, spriteSet.first());
 
         this.xd = motionX;
         this.yd = motionY + 0.009D;
@@ -55,21 +59,31 @@ public final class SoundParticle extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    protected Layer getLayer() {
+        return Layer.OPAQUE;
     }
 
+    public static class Provider implements ParticleProvider<SoundParticleData> {
 
-    public static class Factory implements ParticleProvider.Sprite<SoundParticleData> {
-        public TextureSheetParticle createParticle(SoundParticleData data,
-                                                   ClientLevel worldIn,
-                                                   double x,
-                                                   double y,
-                                                   double z,
-                                                   double xSpeed,
-                                                   double ySpeed,
-                                                   double zSpeed) {
-            return new SoundParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, data.getSoundType());
+        private final SpriteSet spriteSet;
+
+        public Provider(SpriteSet spriteSet) {
+            this.spriteSet = spriteSet;
+        }
+
+
+        @Override
+        public @Nullable SingleQuadParticle createParticle(SoundParticleData particleOptions,
+                                                           ClientLevel level,
+                                                           double x,
+                                                           double y,
+                                                           double z,
+                                                           double xSpeed,
+                                                           double ySpeed,
+                                                           double zSpeed,
+                                                           RandomSource random) {
+            return new SoundParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, particleOptions.getSoundType(),
+                                     this.spriteSet);
         }
     }
 

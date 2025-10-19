@@ -16,6 +16,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.coppergolem.CopperGolem;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -88,6 +89,7 @@ public final class Physical {
             case ProjectileNuggetEntity ignored -> true;
             case AbstractMinecart ignored -> true;
             case IronGolem ignored -> true;
+            case CopperGolem ignored -> true;
             case LivingEntity ent -> {
                 for (EquipmentSlot slot : EquipmentSlot.VALUES) {
                     var itemStack = ent.getItemBySlot(slot);
@@ -217,7 +219,7 @@ public final class Physical {
         add(Blocks.WATER_CAULDRON);
         add(Blocks.SMITHING_TABLE);
         add(Blocks.STONECUTTER);
-        add(Blocks.CHAIN);
+        add(Blocks.IRON_CHAIN);
         add(Blocks.HOPPER);
         add(Blocks.PISTON_HEAD);
         add(Blocks.MOVING_PISTON);
@@ -239,6 +241,13 @@ public final class Physical {
         add(Blocks.LODESTONE);
         add(Blocks.GILDED_BLACKSTONE);
         add(Blocks.LIGHTNING_ROD);
+        add(Blocks.EXPOSED_LIGHTNING_ROD);
+        add(Blocks.OXIDIZED_LIGHTNING_ROD);
+        add(Blocks.WEATHERED_LIGHTNING_ROD);
+        add(Blocks.WAXED_LIGHTNING_ROD);
+        add(Blocks.WAXED_EXPOSED_LIGHTNING_ROD);
+        add(Blocks.WAXED_OXIDIZED_LIGHTNING_ROD);
+        add(Blocks.WAXED_WEATHERED_LIGHTNING_ROD);
         add(Blocks.CRAFTER);
         add(Blocks.HEAVY_CORE);
 
