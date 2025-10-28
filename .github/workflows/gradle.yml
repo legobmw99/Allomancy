@@ -33,7 +33,7 @@ jobs:
         run: ./gradlew runGameTestServer
       - name: Stop gradle daemon
         run: ./gradlew --stop
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: Allomancy jar
           path: build/libs/*.jar
