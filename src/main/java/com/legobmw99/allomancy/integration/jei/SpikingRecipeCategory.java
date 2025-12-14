@@ -18,7 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
@@ -29,7 +29,7 @@ import java.util.List;
 
 
 public class SpikingRecipeCategory implements IRecipeCategory<SpikingRecipeCategory.Values> {
-    public static final IRecipeType<Values> TYPE = IRecipeType.create(Allomancy.rl("spiking"), Values.class);
+    public static final IRecipeType<Values> TYPE = IRecipeType.create(Allomancy.id("spiking"), Values.class);
 
     private final IDrawable icon;
 
@@ -101,8 +101,8 @@ public class SpikingRecipeCategory implements IRecipeCategory<SpikingRecipeCateg
     }
 
     @Override
-    public @Nullable ResourceLocation getRegistryName(Values recipe) {
-        return Allomancy.rl("spiking_earring");
+    public @Nullable Identifier getIdentifier(Values recipe) {
+        return Allomancy.id("spiking_earring");
     }
 
     @Override

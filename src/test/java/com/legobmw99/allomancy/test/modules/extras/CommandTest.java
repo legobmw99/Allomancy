@@ -2,8 +2,8 @@ package com.legobmw99.allomancy.test.modules.extras;
 
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.util.TattleTaleStack;
-import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.permissions.LevelBasedPermissionSet;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
@@ -18,7 +18,7 @@ public class CommandTest {
     @EmptyTemplate("1x3x1")
     @TestHolder(description = "Tests that you can add and remove powers")
     public static void allomancyPowerWorks(ExtendedGameTestHelper helper) {
-        var player = helper.makeOpMockPlayer(Commands.LEVEL_GAMEMASTERS);
+        var player = helper.makeOpMockPlayer(LevelBasedPermissionSet.GAMEMASTER);
         var stack = TattleTaleStack.createCommandSourceStack(player);
 
         helper.startSequence()
@@ -48,7 +48,7 @@ public class CommandTest {
     @EmptyTemplate("1x3x1")
     @TestHolder(description = "Tests that normal players can't use /ap")
     public static void allomancyPowerNeedsPerms(ExtendedGameTestHelper helper) {
-        var player = helper.makeOpMockPlayer(Commands.LEVEL_ALL);
+        var player = helper.makeOpMockPlayer(LevelBasedPermissionSet.ALL);
         var stack = TattleTaleStack.createCommandSourceStack(player);
 
         helper.startSequence()
@@ -68,7 +68,7 @@ public class CommandTest {
     @EmptyTemplate("1x3x1")
     @TestHolder(description = "Tests that anyone can use /ap get")
     public static void allomancyGet(ExtendedGameTestHelper helper) {
-        var player = helper.makeOpMockPlayer(Commands.LEVEL_ALL);
+        var player = helper.makeOpMockPlayer(LevelBasedPermissionSet.ALL);
         player.snapTo(Vec3.atCenterOf(helper.absolutePos(BlockPos.ZERO)));
         var data = AllomancerAttachment.get(player);
         data.setMistborn();

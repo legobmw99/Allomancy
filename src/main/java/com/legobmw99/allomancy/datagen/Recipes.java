@@ -9,15 +9,15 @@ import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
 import com.legobmw99.allomancy.util.AllomancyTags;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -107,7 +107,7 @@ final class Recipes extends RecipeProvider {
     }
 
     private Ingredient ing(String tag) {
-        return tag(ItemTags.create(ResourceLocation.parse(tag)));
+        return tag(ItemTags.create(Identifier.parse(tag)));
     }
 
     private Ingredient ing(TagKey<Item> tag) {
@@ -281,8 +281,7 @@ final class Recipes extends RecipeProvider {
                        repeatWith(ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.COPPER.getIndex())), 3,
                                   ing(AllomancyTags.RAW_ORE_TAGS.get(Metal.TIN.getIndex()))));
 
-        var doesNotHaveNickel =
-                new TagEmptyCondition<>(ItemTags.create(ResourceLocation.parse("c:raw_materials/nickel")));
+        var doesNotHaveNickel = new TagEmptyCondition<>(ItemTags.create(Identifier.parse("c:raw_materials/nickel")));
         var hasNickel = new NotCondition(doesNotHaveNickel);
 
         buildShapeless(consumer.withConditions(hasNickel), RecipeCategory.MISC,
@@ -334,7 +333,7 @@ final class Recipes extends RecipeProvider {
         SpecialRecipeBuilder.special(VialItemRecipe::new).save(consumer, "allomancy:vial_filling_recipe");
 
         Allomancy.LOGGER.debug("Creating Special Recipe for Lerasium investing");
-        consumer.accept(ResourceKey.create(Registries.RECIPE, Allomancy.rl("lerasium_investing")),
+        consumer.accept(ResourceKey.create(Registries.RECIPE, Allomancy.id("lerasium_investing")),
                         new InvestingRecipe(tag(AllomancyTags.LERASIUM_CONVERSION),
                                             ConsumeSetup.LERASIUM_NUGGET.toStack()), null);
     }

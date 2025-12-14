@@ -9,11 +9,11 @@ import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.DynamicUniforms;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fStack;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -41,7 +41,7 @@ public final class Rendering {
             .withBlend(BlendFunction.TRANSLUCENT)
             .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
             .withDepthWrite(false)
-            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.LINES)
+            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH, VertexFormat.Mode.LINES)
             .build();
 
 
@@ -68,18 +68,16 @@ public final class Rendering {
             Vector3f dest = line.dest.toVector3f();
             dest.normalize(normal);
 
-            builder.addVertex(pose, src).setColor(line.color).setNormal(pose, normal);
-            builder.addVertex(pose, dest).setColor(line.color).setNormal(pose, normal);
-        }
+            builder.addVertex(pose, src).setColor(line.color).setNormal(pose, normal).setLineWidth(width);
+            builder.addVertex(pose, dest).setColor(line.color).setNormal(pose, normal).setLineWidth(width);
 
+        }
+        Matrix4fStack matrix4fStack = RenderSystem.getModelViewStack();
+        matrix4fStack.pushMatrix();
         var dynamic = RenderSystem
                 .getDynamicUniforms()
-                .writeTransforms(new DynamicUniforms.Transform(RenderSystem.getModelViewMatrix(),
-                                                               new Vector4f(0.0F, 0.0F, 0.0F, 0.3F), new Vector3f(),
-                                                               new Matrix4f(), width * 2.5F),
-                                 new DynamicUniforms.Transform(RenderSystem.getModelViewMatrix(),
-                                                               new Vector4f(1.0F, 1.0F, 1.0F, 1.0F), new Vector3f(),
-                                                               new Matrix4f(), width));
+                .writeTransform(matrix4fStack, new Vector4f(1.0F, 1.0F, 1.0F, 1.0F), new Vector3f(), new Matrix4f());
+
         try (MeshData meshData = builder.buildOrThrow()) {
             GpuBuffer vertexBuffer =
                     METAL_LINES.getVertexFormat().uploadImmediateVertexBuffer(meshData.vertexBuffer());
@@ -102,15 +100,13 @@ public final class Rendering {
                 renderPass.setIndexBuffer(gpuBuffer, indices.type());
                 renderPass.setVertexBuffer(0, vertexBuffer);
 
-                renderPass.setUniform("DynamicTransforms", dynamic[0]);
+                renderPass.setUniform("DynamicTransforms", dynamic);
                 renderPass.drawIndexed(0, 0, indexCount, 1);
 
-                renderPass.setUniform("DynamicTransforms", dynamic[1]);
-                renderPass.drawIndexed(0, 0, indexCount, 1);
             }
         }
 
-        RenderSystem.lineWidth(1.0F);
+        matrix4fStack.popMatrix();
         tesselator.clear();
     }
 

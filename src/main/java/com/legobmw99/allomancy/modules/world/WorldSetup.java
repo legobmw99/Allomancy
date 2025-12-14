@@ -17,8 +17,8 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.Pools;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -132,7 +132,7 @@ public final class WorldSetup {
                             float xp) {
 
         <T> ResourceKey<T> getRegistryKey(ResourceKey<Registry<T>> registry, String suffix) {
-            return ResourceKey.create(registry, Allomancy.rl(this.name + suffix));
+            return ResourceKey.create(registry, Allomancy.id(this.name + suffix));
         }
 
         @Override
@@ -142,13 +142,13 @@ public final class WorldSetup {
     }
 
 
-    public static final ResourceKey<Structure> WELL = ResourceKey.create(Registries.STRUCTURE, Allomancy.rl("well"));
+    public static final ResourceKey<Structure> WELL = ResourceKey.create(Registries.STRUCTURE, Allomancy.id("well"));
     private static final ResourceKey<StructureTemplatePool> WELL_POOL =
-            ResourceKey.create(Registries.TEMPLATE_POOL, Allomancy.rl("well_pool"));
+            ResourceKey.create(Registries.TEMPLATE_POOL, Allomancy.id("well_pool"));
     private static final ResourceKey<StructureSet> WELLS =
-            ResourceKey.create(Registries.STRUCTURE_SET, Allomancy.rl("wells"));
+            ResourceKey.create(Registries.STRUCTURE_SET, Allomancy.id("wells"));
     private static final ResourceKey<BiomeModifier> ADD_ALLOMANCY_ORES =
-            ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, Allomancy.rl("overworld_ores"));
+            ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, Allomancy.id("overworld_ores"));
 
     public static final List<DeferredItem<Item>> FLAKES = new ArrayList<>();
     public static final List<DeferredItem<Item>> NUGGETS = new ArrayList<>();
@@ -184,14 +184,14 @@ public final class WorldSetup {
     private static void createMetals(String name, boolean isVanilla) {
         FLAKES.add(ITEMS.registerSimpleItem(name + "_flakes"));
 
-        AllomancyTags.INGOT_TAGS.add(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/" + name)));
+        AllomancyTags.INGOT_TAGS.add(ItemTags.create(Identifier.fromNamespaceAndPath("c", "ingots/" + name)));
         AllomancyTags.RAW_ORE_TAGS.add(
-                ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "raw_materials/" + name)));
-        AllomancyTags.NUGGET_TAGS.add(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "nuggets/" + name)));
+                ItemTags.create(Identifier.fromNamespaceAndPath("c", "raw_materials/" + name)));
+        AllomancyTags.NUGGET_TAGS.add(ItemTags.create(Identifier.fromNamespaceAndPath("c", "nuggets/" + name)));
         AllomancyTags.STORAGE_BLOCK_TAGS.add(
-                BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/" + name)));
+                BlockTags.create(Identifier.fromNamespaceAndPath("c", "storage_blocks/" + name)));
         AllomancyTags.STORAGE_BLOCK_ITEM_TAGS.add(
-                ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/" + name)));
+                ItemTags.create(Identifier.fromNamespaceAndPath("c", "storage_blocks/" + name)));
 
         if (isVanilla) {
             NUGGETS.add(null);
@@ -268,7 +268,7 @@ public final class WorldSetup {
     private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
             DeferredRegister.create(Registries.RECIPE_TYPE, Allomancy.MODID);
     public static final Supplier<RecipeType<InvestingRecipe>> INVESTING_RECIPE =
-            RECIPE_TYPES.register("investing", () -> RecipeType.simple(Allomancy.rl("investing")));
+            RECIPE_TYPES.register("investing", () -> RecipeType.simple(Allomancy.id("investing")));
 
     public static void register(IEventBus bus) {
         BLOCKS.register(bus);
@@ -365,7 +365,7 @@ public final class WorldSetup {
     public static void bootstrapTemplatePools(BootstrapContext<StructureTemplatePool> bootstrapContext) {
         bootstrapContext.register(WELL_POOL, new StructureTemplatePool(
                 bootstrapContext.lookup(Registries.TEMPLATE_POOL).getOrThrow(Pools.EMPTY), List.of(Pair.of(
-                StructurePoolElement.single(Allomancy.rl("mountain_well").toString(),
+                StructurePoolElement.single(Allomancy.id("mountain_well").toString(),
                                             LiquidSettings.IGNORE_WATERLOGGING), 1)),
                 StructureTemplatePool.Projection.RIGID));
     }

@@ -33,9 +33,10 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.event.RegisterPictureInPictureRenderersEvent;
@@ -52,10 +53,8 @@ public class MetalSelectScreen extends Screen {
     private static final String GUI_METAL = "textures/gui/metals/%s_symbol.png";
     private static final String[] METAL_LOCAL =
             Arrays.stream(METAL_NAMES).map(s -> "metals." + s).toArray(String[]::new);
-    private static final ResourceLocation[] METAL_ICONS = Arrays
-            .stream(METAL_NAMES)
-            .map(s -> Allomancy.rl(String.format(GUI_METAL, s)))
-            .toArray(ResourceLocation[]::new);
+    private static final Identifier[] METAL_ICONS =
+            Arrays.stream(METAL_NAMES).map(s -> Allomancy.id(String.format(GUI_METAL, s))).toArray(Identifier[]::new);
     private final Minecraft mc;
 
     // Config setting for whether the wheel animates open or instantly appears
@@ -219,9 +218,10 @@ public class MetalSelectScreen extends Screen {
                 .withBlend(BlendFunction.TRANSLUCENT)
                 .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_FAN)
                 .build();
+        private static final RenderSetup SELECTION_SETUP =
+                RenderSetup.builder(SELECTION_BACKGROUND).bufferSize(1536).sortOnUpload().createRenderSetup();
         private static final RenderType SELECTION_BACKGROUND_TYPE =
-                RenderType.create("allomancy_selection", 1536, false, true, SELECTION_BACKGROUND,
-                                  RenderType.CompositeState.builder().createCompositeState(false));
+                RenderType.create("allomancy_selection", SELECTION_SETUP);
 
 
         public SelectionWheelRenderer(MultiBufferSource.BufferSource s) {

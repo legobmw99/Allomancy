@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 public final class Inputs {
 
-    private static final KeyMapping.Category ALLOMANCY_CATEGORY = new KeyMapping.Category(Allomancy.rl("main"));
+    private static final KeyMapping.Category ALLOMANCY_CATEGORY = new KeyMapping.Category(Allomancy.id("main"));
     private static KeyMapping HUD;
     public static KeyMapping BURN;
     private static KeyMapping[] POWERS;

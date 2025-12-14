@@ -9,6 +9,7 @@ import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.permissions.PermissionSet;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -42,7 +43,7 @@ public class ConsumingTest {
                     helper.assertTrue(AllomancerAttachment.get(player).isMistborn(), "Player never got invested");
                     helper.assertFalse(helper.getEntities(EntityType.LIGHTNING_BOLT).isEmpty(),
                                        "Didn't spawn lightning");
-                    helper.assertPlayerHasAdvancement(player, Allomancy.rl("main/become_mistborn"));
+                    helper.assertPlayerHasAdvancement(player, Allomancy.id("main/become_mistborn"));
                 })
                 .thenIdle(4)
                 .thenSucceed();
@@ -54,7 +55,7 @@ public class ConsumingTest {
     public static void entangledDnaCantEatLerasium(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
 
-        var dna = Allomancy.rl("main/dna_entangled");
+        var dna = Allomancy.id("main/dna_entangled");
 
         helper
                 .startSequence()
@@ -65,7 +66,8 @@ public class ConsumingTest {
                         .getCommands()
                         .performPrefixedCommand(new CommandSourceStack(player.commandSource(),
                                                                        Vec3.atCenterOf(player.blockPosition()),
-                                                                       Vec2.ZERO, helper.getLevel(), 4, "Testing",
+                                                                       Vec2.ZERO, helper.getLevel(),
+                                                                       PermissionSet.ALL_PERMISSIONS, "Testing",
                                                                        Component.literal("Testing"),
                                                                        helper.getLevel().getServer(), null),
                                                 "/advancement grant @p only " + dna))

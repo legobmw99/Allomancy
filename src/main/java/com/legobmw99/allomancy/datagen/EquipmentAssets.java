@@ -7,7 +7,7 @@ import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,38 +23,38 @@ class EquipmentAssets implements DataProvider {
         this.path = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "equipment");
     }
 
-    private static void add(BiConsumer<ResourceLocation, EquipmentClientInfo> registrar) {
-        registrar.accept(CombatSetup.WOOL.location(),
+    private static void add(BiConsumer<Identifier, EquipmentClientInfo> registrar) {
+        registrar.accept(CombatSetup.WOOL.identifier(),
 
                          EquipmentClientInfo
                                  .builder()
                                  .addLayers(EquipmentClientInfo.LayerType.HUMANOID,
-                                            new EquipmentClientInfo.Layer(Allomancy.rl("mistcloak"), Optional.empty(),
+                                            new EquipmentClientInfo.Layer(Allomancy.id("mistcloak"), Optional.empty(),
                                                                           false))
                                  .build());
 
-        registrar.accept(CombatSetup.ALUMINUM.location(),
+        registrar.accept(CombatSetup.ALUMINUM.identifier(),
 
                          EquipmentClientInfo
                                  .builder()
                                  .addLayers(EquipmentClientInfo.LayerType.HUMANOID,
-                                            new EquipmentClientInfo.Layer(Allomancy.rl("aluminum"), Optional.empty(),
+                                            new EquipmentClientInfo.Layer(Allomancy.id("aluminum"), Optional.empty(),
                                                                           false))
                                  .build());
 
-        registrar.accept(ExtrasSetup.BRONZE.location(),
+        registrar.accept(ExtrasSetup.BRONZE.identifier(),
 
                          EquipmentClientInfo
                                  .builder()
                                  .addLayers(EquipmentClientInfo.LayerType.HUMANOID,
-                                            new EquipmentClientInfo.Layer(Allomancy.rl("bronze_earring"),
+                                            new EquipmentClientInfo.Layer(Allomancy.id("bronze_earring"),
                                                                           Optional.empty(), false))
                                  .build());
     }
 
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
-        Map<ResourceLocation, EquipmentClientInfo> map = new HashMap<>();
+        Map<Identifier, EquipmentClientInfo> map = new HashMap<>();
         EquipmentAssets.add((name, model) -> {
             if (map.putIfAbsent(name, model) != null) {
                 throw new IllegalStateException("Tried to register equipment model twice for id: " + name);

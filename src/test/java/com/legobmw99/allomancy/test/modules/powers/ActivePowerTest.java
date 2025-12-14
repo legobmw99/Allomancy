@@ -53,7 +53,7 @@ public class ActivePowerTest {
             player3.hurtServer(player.level(), player.damageSources().playerAttack(player), 1);
         }).thenExecuteAfter(1, () -> {
             helper.assertTrue(data3.getStored(Metal.STEEL) == 10, "Player3 was wiped");
-            helper.assertPlayerHasAdvancement(player3, Allomancy.rl("main/tin_foil_hat"));
+            helper.assertPlayerHasAdvancement(player3, Allomancy.id("main/tin_foil_hat"));
         }).thenSucceed();
     }
 

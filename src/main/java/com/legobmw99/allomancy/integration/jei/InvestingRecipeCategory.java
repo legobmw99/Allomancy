@@ -15,7 +15,7 @@ import mezz.jei.api.recipe.types.IRecipeHolderType;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,8 +63,8 @@ public class InvestingRecipeCategory implements IRecipeCategory<RecipeHolder<Inv
     }
 
     @Override
-    public @Nullable ResourceLocation getRegistryName(RecipeHolder<InvestingRecipe> recipe) {
-        return recipe.id().location();
+    public @Nullable Identifier getIdentifier(RecipeHolder<InvestingRecipe> recipe) {
+        return recipe.id().identifier();
     }
 
     @Override

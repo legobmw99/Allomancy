@@ -78,7 +78,7 @@ public class CoinBagTest {
                 })
                 .thenExecuteAfter(2, () -> {
                     helper.assertItemEntityNotPresent(nugget);
-                    helper.assertPlayerHasAdvancement(player, Allomancy.rl("main/coinshot"));
+                    helper.assertPlayerHasAdvancement(player, Allomancy.id("main/coinshot"));
                 })
                 .thenSucceed();
     }

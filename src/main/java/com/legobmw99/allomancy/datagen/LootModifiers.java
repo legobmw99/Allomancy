@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.world.loot.DaggerLootModifier;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
@@ -18,10 +18,9 @@ class LootModifiers extends GlobalLootModifierProvider {
         super(output, registries, Allomancy.MODID);
     }
 
-    private static final ResourceLocation WOODLAND = ResourceLocation.withDefaultNamespace("chests/woodland_mansion");
-    private static final ResourceLocation END_CITY =
-            ResourceLocation.withDefaultNamespace("chests/end_city_treasure");
-    private static final ResourceLocation OUTPOST = ResourceLocation.withDefaultNamespace("chests/pillager_outpost");
+    private static final Identifier WOODLAND = Identifier.withDefaultNamespace("chests/woodland_mansion");
+    private static final Identifier END_CITY = Identifier.withDefaultNamespace("chests/end_city_treasure");
+    private static final Identifier OUTPOST = Identifier.withDefaultNamespace("chests/pillager_outpost");
 
     @Override
     protected void start() {

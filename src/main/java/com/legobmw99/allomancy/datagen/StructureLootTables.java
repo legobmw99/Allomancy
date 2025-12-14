@@ -38,7 +38,7 @@ public record StructureLootTables(HolderLookup.Provider registries) implements L
         // note: at the moment, pots never set THIS_ENTITY, so it doesn't really matter
         LootItemCondition.Builder is_not_mistborn = is_mistborn.invert();
 
-        output.accept(ResourceKey.create(Registries.LOOT_TABLE, Allomancy.rl("pots/well_plain")), LootTable
+        output.accept(ResourceKey.create(Registries.LOOT_TABLE, Allomancy.id("pots/well_plain")), LootTable
                 .lootTable()
                 .withPool(LootPool
                                   .lootPool()
@@ -55,7 +55,7 @@ public record StructureLootTables(HolderLookup.Provider registries) implements L
             }
             storage = mut.toImmutable();
         }
-        output.accept(ResourceKey.create(Registries.LOOT_TABLE, Allomancy.rl("pots/well_decorated_1")), LootTable
+        output.accept(ResourceKey.create(Registries.LOOT_TABLE, Allomancy.id("pots/well_decorated_1")), LootTable
                 .lootTable()
                 .withPool(LootPool
                                   .lootPool()
@@ -73,7 +73,7 @@ public record StructureLootTables(HolderLookup.Provider registries) implements L
                                                                                          Rarity.UNCOMMON)))));
 
 
-        output.accept(ResourceKey.create(Registries.LOOT_TABLE, Allomancy.rl("pots/well_decorated_2")), LootTable
+        output.accept(ResourceKey.create(Registries.LOOT_TABLE, Allomancy.id("pots/well_decorated_2")), LootTable
                 .lootTable()
                 .withPool(LootPool
                                   .lootPool()

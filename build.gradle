@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     // https://projects.neoforged.net/neoforged/moddevgradle
-    id 'net.neoforged.moddev' version '2.0.115'
+    id 'net.neoforged.moddev' version '2.0.124'
     id 'idea'
 }
 
@@ -35,7 +35,12 @@ java {
 def gametest_mod_id = mod_id + "_test"
 
 neoForge {
-    version = project.neo_version
+
+    enable {
+        version = project.neo_version
+        disableRecompilation = System.getenv("CI") == "true"
+    }
+
     parchment {
         mappingsVersion = project.parchment_mappings_version
         minecraftVersion = project.parchment_minecraft_version

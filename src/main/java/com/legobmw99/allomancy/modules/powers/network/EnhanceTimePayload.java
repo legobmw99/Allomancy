@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public record EnhanceTimePayload(int enhanceTime, UUID player) implements CustomPacketPayload {
 
-    public static final Type<EnhanceTimePayload> TYPE = new Type<>(Allomancy.rl("enhance_tick"));
+    public static final Type<EnhanceTimePayload> TYPE = new Type<>(Allomancy.id("enhance_tick"));
 
     public static final StreamCodec<ByteBuf, EnhanceTimePayload> STREAM_CODEC =
             StreamCodec.composite(ByteBufCodecs.INT, EnhanceTimePayload::enhanceTime, UUIDUtil.STREAM_CODEC,

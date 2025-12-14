@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record EmotionPayload(int entityID, boolean makeAggressive) implements CustomPacketPayload {
 
-    public static final Type<EmotionPayload> TYPE = new Type<>(Allomancy.rl("change_emotion"));
+    public static final Type<EmotionPayload> TYPE = new Type<>(Allomancy.id("change_emotion"));
     public static final StreamCodec<ByteBuf, EmotionPayload> STREAM_CODEC =
             StreamCodec.composite(ByteBufCodecs.INT, EmotionPayload::entityID, ByteBufCodecs.BOOL,
                                   EmotionPayload::makeAggressive, EmotionPayload::new);
