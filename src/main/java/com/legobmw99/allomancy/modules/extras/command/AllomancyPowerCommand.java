@@ -14,6 +14,8 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 import java.util.Arrays;
@@ -35,8 +37,8 @@ public final class AllomancyPowerCommand {
 
     private AllomancyPowerCommand() {}
 
-    private static Predicate<CommandSourceStack> permissions(int level) {
-        return (player) -> player.hasPermission(level);
+    private static Predicate<CommandSourceStack> permissions(PermissionLevel level) {
+        return (player) -> player.permissions().hasPermission(new Permission.HasCommandLevel(level));
     }
 
     private static Collection<ServerPlayer> sender(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
@@ -50,10 +52,11 @@ public final class AllomancyPowerCommand {
 
     public static void register(final RegisterCommandsEvent e) {
         CommandDispatcher<CommandSourceStack> dispatcher = e.getDispatcher();
-        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("allomancy").requires(permissions(0));
+        LiteralArgumentBuilder<CommandSourceStack> root =
+                Commands.literal("allomancy").requires(permissions(PermissionLevel.ALL));
         root.then(Commands
                           .literal("get")
-                          .requires(permissions(Commands.LEVEL_ALL))
+                          .requires(permissions(PermissionLevel.ALL))
                           .executes(ctx -> handleMultiPlayer(ctx, sender(ctx), AllomancyPowerCommand::getPowers))
                           .then(Commands
                                         .argument("targets", EntityArgument.players())
@@ -62,7 +65,7 @@ public final class AllomancyPowerCommand {
 
         root.then(Commands
                           .literal("add")
-                          .requires(permissions(Commands.LEVEL_GAMEMASTERS))
+                          .requires(permissions(PermissionLevel.GAMEMASTERS))
                           .then(Commands
                                         .argument("type", AllomancyPowerType.INSTANCE)
                                         .executes(ctx -> handleMultiPlayer(ctx, sender(ctx),
@@ -74,7 +77,7 @@ public final class AllomancyPowerCommand {
 
         root.then(Commands
                           .literal("remove")
-                          .requires(permissions(Commands.LEVEL_GAMEMASTERS))
+                          .requires(permissions(PermissionLevel.GAMEMASTERS))
                           .then(Commands
                                         .argument("type", AllomancyPowerType.INSTANCE)
                                         .executes(ctx -> handleMultiPlayer(ctx, sender(ctx),
@@ -87,7 +90,7 @@ public final class AllomancyPowerCommand {
 
         LiteralCommandNode<CommandSourceStack> command = dispatcher.register(root);
 
-        dispatcher.register(Commands.literal("ap").requires(permissions(0)).redirect(command));
+        dispatcher.register(Commands.literal("ap").requires(permissions(PermissionLevel.ALL)).redirect(command));
     }
 
 

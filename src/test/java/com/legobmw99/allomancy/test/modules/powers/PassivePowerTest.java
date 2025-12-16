@@ -201,7 +201,7 @@ public class PassivePowerTest {
             helper.assertTrue(data.isEnhanced(), "Duralumin isn't enhancing");
             helper.assertTrue(data2.getStored(Metal.STEEL) == 0, "Player2 wasn't wiped");
             helper.assertTrue(data3.getStored(Metal.STEEL) == 10, "Player3 was wiped");
-            helper.assertPlayerHasAdvancement(player3, Allomancy.rl("main/tin_foil_hat"));
+            helper.assertPlayerHasAdvancement(player3, Allomancy.id("main/tin_foil_hat"));
         }).thenSucceed();
     }
 
@@ -279,7 +279,7 @@ public class PassivePowerTest {
             data.setBurning(Metal.BENDALLOY, true);
 
         }).thenExecuteAfter(1, () -> {
-            helper.assertPlayerHasAdvancement(player2, Allomancy.rl("main/time_warp"));
+            helper.assertPlayerHasAdvancement(player2, Allomancy.id("main/time_warp"));
         }).thenSucceed();
     }
 

@@ -97,7 +97,7 @@ public final class ClientEventHandler {
         }
     }
 
-    private static final ContextKey<Vec3> ALLOMANCY_SOURCE = new ContextKey<>(Allomancy.rl("source_ctx"));
+    private static final ContextKey<Vec3> ALLOMANCY_SOURCE = new ContextKey<>(Allomancy.id("source_ctx"));
 
     @SubscribeEvent
     public static void onExtractLevelRenderState(final ExtractLevelRenderStateEvent event) {
@@ -142,7 +142,7 @@ public final class ClientEventHandler {
          *********************************************/
         if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
             tracking.forEachMetallicEntity(
-                    entity -> narrowLines.add(new Rendering.Line(entity.position(), IRON_STEEL_LINE_COLOR)));
+                    entity -> mediumLines.add(new Rendering.Line(entity.position(), IRON_STEEL_LINE_COLOR)));
 
             tracking.forEachMetalBlob(blob -> {
                 Rendering.Line line = new Rendering.Line(blob.getCenter(), IRON_STEEL_LINE_COLOR);
@@ -199,12 +199,11 @@ public final class ClientEventHandler {
         stack.pushPose();
         // TODO: also account for view bobbing, FOV
         //  See GameRenderer#bobView
-        Vec3 view = event.getLevelRenderState().cameraRenderState.pos;
-        stack.translate(-view.x, -view.y, -view.z);
-
-        Rendering.drawMetalLines(stack, source, narrowLines, 1.5f);
-        Rendering.drawMetalLines(stack, source, mediumLines, 3.0f);
-        Rendering.drawMetalLines(stack, source, thickLines, 5.0f);
+        Vec3 view = event.getLevelRenderState().cameraRenderState.pos.reverse();
+        stack.translate(view);
+        Rendering.drawMetalLines(stack, source, narrowLines, 2.0f);
+        Rendering.drawMetalLines(stack, source, mediumLines, 4.5f);
+        Rendering.drawMetalLines(stack, source, thickLines, 6.5f);
 
         stack.popPose();
     }

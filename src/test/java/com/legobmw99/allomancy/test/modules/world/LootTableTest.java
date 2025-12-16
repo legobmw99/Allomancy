@@ -43,7 +43,7 @@ public class LootTableTest {
             helper.setBlock(BlockPos.ZERO, Blocks.DECORATED_POT);
             helper
                     .getBlockEntity(BlockPos.ZERO, DecoratedPotBlockEntity.class)
-                    .setLootTable(ResourceKey.create(Registries.LOOT_TABLE, Allomancy.rl("pots/well_plain")));
+                    .setLootTable(ResourceKey.create(Registries.LOOT_TABLE, Allomancy.id("pots/well_plain")));
 
             helper.breakBlock(BlockPos.ZERO, ItemStack.EMPTY, null);
             helper.assertItemEntityPresent(ConsumeSetup.LERASIUM_NUGGET.get());
@@ -60,7 +60,7 @@ public class LootTableTest {
             helper.setBlock(BlockPos.ZERO, Blocks.DECORATED_POT);
             helper
                     .getBlockEntity(BlockPos.ZERO, DecoratedPotBlockEntity.class)
-                    .setLootTable(ResourceKey.create(Registries.LOOT_TABLE, Allomancy.rl("pots/well_plain")));
+                    .setLootTable(ResourceKey.create(Registries.LOOT_TABLE, Allomancy.id("pots/well_plain")));
             // NOTE: currently, real pots don't do this, neither does breaking,
             // so this is fairly artificial.
             helper.getBlockEntity(BlockPos.ZERO, DecoratedPotBlockEntity.class).unpackLootTable(player);

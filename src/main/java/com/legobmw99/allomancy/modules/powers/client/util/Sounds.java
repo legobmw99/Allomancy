@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.modules.powers.client.util;
 import com.legobmw99.allomancy.modules.powers.client.particle.SoundParticleData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -14,12 +14,12 @@ public final class Sounds {
     public static void soundForBurnChange(boolean burning) {
         if (burning) {
             Minecraft.getInstance().player.playSound(
-                    SoundEvent.createFixedRangeEvent(ResourceLocation.withDefaultNamespace("item.flintandsteel.use"),
-                                                     1.0f), 1, 5);
+                    SoundEvent.createFixedRangeEvent(Identifier.withDefaultNamespace("item.flintandsteel.use"), 1.0f),
+                    1, 5);
         } else {
             Minecraft.getInstance().player.playSound(
-                    SoundEvent.createFixedRangeEvent(ResourceLocation.withDefaultNamespace("block.fire.extinguish"),
-                                                     1.0f), 1, 4);
+                    SoundEvent.createFixedRangeEvent(Identifier.withDefaultNamespace("block.fire.extinguish"), 1.0f),
+                    1, 4);
         }
     }
 
@@ -32,7 +32,7 @@ public final class Sounds {
         Vec3 vec = player.position();
         double posX = vec.x(), posY = vec.y(), posZ = vec.z();
         // Spawn sound particles
-        String soundName = sound.getLocation().toString();
+        String soundName = sound.getIdentifier().toString();
         if (soundName.contains("entity") || soundName.contains("step")) {
             double motionX = ((posX - (sound.getX() + 0.5)) * -0.7) / magnitude;
             double motionY = ((posY - (sound.getY() + 0.2)) * -0.7) / magnitude;

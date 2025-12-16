@@ -9,18 +9,18 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.world.WorldSetup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.coppergolem.CopperGolem;
+import net.minecraft.world.entity.animal.golem.CopperGolem;
+import net.minecraft.world.entity.animal.golem.IronGolem;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -108,7 +108,7 @@ public final class Physical {
             ".*(iron|steel|tin_|pewter|zinc|brass|copper|bronze|duralumin|chromium|nicrosil|gold|electrum|cadmium" +
             "|bendalloy|lead_|silver|platinum|nickle).*");
 
-    public static boolean doesResourceContainMetal(ResourceLocation input) {
+    public static boolean doesResourceContainMetal(Identifier input) {
         return ACTIVE_METAL_REGEX.matcher(input.getPath()).matches();
     }
 
@@ -198,8 +198,12 @@ public final class Physical {
         add(Items.NETHERITE_PICKAXE);
         add(Items.NETHERITE_SHOVEL);
         add(Items.NETHERITE_SWORD);
+        add(Items.NETHERITE_SPEAR);
         add(Items.NETHERITE_AXE);
         add(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE);
+        add(Items.NETHERITE_HORSE_ARMOR);
+        add(Items.NETHERITE_NAUTILUS_ARMOR);
+
         add(Items.CROSSBOW);
         add(Items.BRUSH);
         add(Items.MUSIC_DISC_CREATOR);
@@ -219,7 +223,6 @@ public final class Physical {
         add(Blocks.WATER_CAULDRON);
         add(Blocks.SMITHING_TABLE);
         add(Blocks.STONECUTTER);
-        add(Blocks.IRON_CHAIN);
         add(Blocks.HOPPER);
         add(Blocks.PISTON_HEAD);
         add(Blocks.MOVING_PISTON);
@@ -292,7 +295,7 @@ public final class Physical {
         defaultSet.add(s);
     }
 
-    private static void add(ResourceLocation r) {
+    private static void add(Identifier r) {
         add(r.toString());
     }
 

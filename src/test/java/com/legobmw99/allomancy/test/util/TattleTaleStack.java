@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.PermissionSet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -17,7 +18,7 @@ import java.util.function.Supplier;
 public final class TattleTaleStack extends CommandSourceStack {
     public static TattleTaleStack createCommandSourceStack(ServerPlayer player) {
         return new TattleTaleStack(CommandSource.NULL, player.position(), player.getRotationVector(), player.level(),
-                                   player.getPermissionLevel(), player.getName().getString(), player.getDisplayName(),
+                                   player.permissions(), player.getName().getString(), player.getDisplayName(),
                                    player.level().getServer(), player);
     }
 
@@ -25,7 +26,7 @@ public final class TattleTaleStack extends CommandSourceStack {
                            Vec3 p_81303_,
                            Vec2 p_81304_,
                            ServerLevel p_81305_,
-                           int p_81306_,
+                           PermissionSet p_81306_,
                            String p_81307_,
                            Component p_81308_,
                            MinecraftServer p_81309_,

@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.GuiLayer;
@@ -18,7 +18,7 @@ import java.awt.*;
 
 public final class MetalOverlay implements GuiLayer {
 
-    private static final ResourceLocation METER_TEXTURE = Allomancy.rl("textures/gui/overlay/meter.png");
+    private static final Identifier METER_TEXTURE = Allomancy.id("textures/gui/overlay/meter.png");
     private static final int OUTLINE_COLOR = ARGB.color(0x55 + 0x10, 0x55 + 0x10, 0x55 + 0x10);
     private static final Point[] BURNING_FRAMES = new Point[4];
 
@@ -36,7 +36,7 @@ public final class MetalOverlay implements GuiLayer {
     private MetalOverlay() {}
 
     public static void registerGUI(final RegisterGuiLayersEvent evt) {
-        evt.registerAboveAll(Allomancy.rl("metal_display"), new MetalOverlay());
+        evt.registerAboveAll(Allomancy.id("metal_display"), new MetalOverlay());
     }
 
     private static void blit(GuiGraphics graphics,
@@ -100,7 +100,7 @@ public final class MetalOverlay implements GuiLayer {
                 }
 
                 if (highlight == mt) {
-                    gui.submitOutline(xCorner - 1, renderY - 1, 7, 21, OUTLINE_COLOR);
+                    gui.renderOutline(xCorner - 1, renderY - 1, 7, 21, OUTLINE_COLOR);
                 }
             }
 

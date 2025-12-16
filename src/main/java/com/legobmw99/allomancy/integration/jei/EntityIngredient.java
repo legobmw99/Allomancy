@@ -10,13 +10,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -24,8 +22,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.*;
 
@@ -37,7 +33,7 @@ public record EntityIngredient(EntityType<?> type) {
 
 
     public static class Renderer implements IIngredientRenderer<EntityIngredient> {
-        private static final ResourceLocation MISSING = Allomancy.rl("textures/item/missingno.png");
+        private static final Identifier MISSING = Allomancy.id("textures/item/missingno.png");
         /**
          * Entity types that will not render, as they either errored or are the wrong type
          */
@@ -111,9 +107,10 @@ public record EntityIngredient(EntityType<?> type) {
                             // https://github.com/XFactHD/FramedBlocks/blob/d6e578a06013369e5f2f579151564250d0e7cc3b/src/main/java/io/github/xfacthd/framedblocks/common/compat/jade/FramedBlockElement.java#L42
                             ScreenRectangle bounds =
                                     new ScreenRectangle(x, y, size, size).transformMaxBounds(graphics.pose());
-                            renderEntityInInventoryFollowsMouse(graphics, bounds.left(), bounds.top(), bounds.right(),
-                                                                bounds.bottom(), scale, 0.0625F, (float) (mx),
-                                                                (float) (my), livingEntity);
+                            InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, bounds.left(), bounds.top(),
+                                                                                bounds.right(), bounds.bottom(),
+                                                                                scale, 0.0625F, (float) (mx),
+                                                                                (float) (my), livingEntity);
                             return;
                         } catch (Exception e) {
                             Allomancy.LOGGER.error("Error drawing entity {}",
@@ -149,84 +146,6 @@ public record EntityIngredient(EntityType<?> type) {
             return tooltip;
         }
 
-
-        // Based on vanilla in InventoryScreen, but without the scissor calls
-        private static void renderEntityInInventoryFollowsMouse(GuiGraphics guiGraphics,
-                                                                int x1,
-                                                                int y1,
-                                                                int x2,
-                                                                int y2,
-                                                                int scale,
-                                                                float yOffset,
-                                                                float mouseX,
-                                                                float mouseY,
-                                                                LivingEntity entity) {
-            float f = (x1 + x2) / 2.0F;
-            float f1 = (y1 + y2) / 2.0F;
-            float f2 = (float) Math.atan((f - mouseX) / 40.0F);
-            float f3 = (float) Math.atan((f1 - mouseY) / 40.0F);
-            // Forge: Allow passing in direct angle components instead of mouse position
-            renderEntityInInventoryFollowsAngle(guiGraphics, x1, y1, x2, y2, scale, yOffset, f2, f3, entity);
-        }
-
-        private static void renderEntityInInventoryFollowsAngle(GuiGraphics p_282802_,
-                                                                int p_275688_,
-                                                                int p_275245_,
-                                                                int p_275535_,
-                                                                int p_294406_,
-                                                                int p_294663_,
-                                                                float p_275604_,
-                                                                float angleXComponent,
-                                                                float angleYComponent,
-                                                                LivingEntity p_275689_) {
-            //        p_282802_.enableScissor(p_275688_, p_275245_, p_275535_, p_294406_);
-            Quaternionf quaternionf = new Quaternionf().rotateZ((float) Math.PI);
-            Quaternionf quaternionf1 = new Quaternionf().rotateX(angleYComponent * 20.0F * (float) (Math.PI / 180.0));
-            quaternionf.mul(quaternionf1);
-            float f4 = p_275689_.yBodyRot;
-            float f5 = p_275689_.getYRot();
-            float f6 = p_275689_.getXRot();
-            float f7 = p_275689_.yHeadRotO;
-            float f8 = p_275689_.yHeadRot;
-            p_275689_.yBodyRot = 180.0F + angleXComponent * 20.0F;
-            p_275689_.setYRot(180.0F + angleXComponent * 40.0F);
-            p_275689_.setXRot(-angleYComponent * 20.0F);
-            p_275689_.yHeadRot = p_275689_.getYRot();
-            p_275689_.yHeadRotO = p_275689_.getYRot();
-            float f9 = p_275689_.getScale();
-            Vector3f vector3f = new Vector3f(0.0F, p_275689_.getBbHeight() / 2.0F + p_275604_ * f9, 0.0F);
-            float f10 = p_294663_ / f9;
-            renderEntityInInventory(p_282802_, p_275688_, p_275245_, p_275535_, p_294406_, f10, vector3f, quaternionf,
-                                    quaternionf1, p_275689_);
-            p_275689_.yBodyRot = f4;
-            p_275689_.setYRot(f5);
-            p_275689_.setXRot(f6);
-            p_275689_.yHeadRotO = f7;
-            p_275689_.yHeadRot = f8;
-            //        p_282802_.disableScissor();
-        }
-
-        private static void renderEntityInInventory(GuiGraphics guiGraphics,
-                                                    int x1,
-                                                    int y1,
-                                                    int x2,
-                                                    int y2,
-                                                    float scale,
-                                                    Vector3f translation,
-                                                    Quaternionf rotation,
-                                                    @javax.annotation.Nullable Quaternionf overrideCameraAngle,
-                                                    LivingEntity entity) {
-            EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-            EntityRenderer<? super LivingEntity, ?> entityrenderer = entityrenderdispatcher.getRenderer(entity);
-            EntityRenderState entityrenderstate = entityrenderer.createRenderState(entity, 1.0F);
-            entityrenderstate.lightCoords = 15728880;
-            entityrenderstate.hitboxesRenderState = null;
-            entityrenderstate.shadowPieces.clear();
-            entityrenderstate.outlineColor = 0;
-            guiGraphics.submitEntityRenderState(entityrenderstate, scale, translation, rotation, overrideCameraAngle,
-                                                x1, y1, x2, y2);
-        }
-
     }
 
     public static class Helper implements IIngredientHelper<EntityIngredient> {
@@ -242,11 +161,11 @@ public record EntityIngredient(EntityType<?> type) {
 
         @Override
         public Object getUid(EntityIngredient ingredient, UidContext context) {
-            return getResourceLocation(ingredient).toString();
+            return getIdentifier(ingredient).toString();
         }
 
         @Override
-        public ResourceLocation getResourceLocation(EntityIngredient type) {
+        public Identifier getIdentifier(EntityIngredient type) {
             return BuiltInRegistries.ENTITY_TYPE.getKey(type.type());
         }
 
@@ -260,7 +179,7 @@ public record EntityIngredient(EntityType<?> type) {
             if (type == null) {
                 return "null";
             }
-            return getResourceLocation(type).toString();
+            return getIdentifier(type).toString();
         }
     }
 }

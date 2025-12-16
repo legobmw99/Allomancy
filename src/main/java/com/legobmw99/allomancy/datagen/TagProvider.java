@@ -9,7 +9,7 @@ import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
@@ -134,7 +134,7 @@ public final class TagProvider {
 
         private void addCommonTag(String name, Item... items) {
             Allomancy.LOGGER.debug("Creating item tag for c:{}", name);
-            tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name))).replace(false).add(items);
+            tag(ItemTags.create(Identifier.fromNamespaceAndPath("c", name))).replace(false).add(items);
         }
     }
 
@@ -192,7 +192,7 @@ public final class TagProvider {
 
         private void addCommonTag(String name, Block... items) {
             Allomancy.LOGGER.debug("Creating block tag for c:{}", name);
-            tag(BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", name))).replace(false).add(items);
+            tag(BlockTags.create(Identifier.fromNamespaceAndPath("c", name))).replace(false).add(items);
         }
 
 

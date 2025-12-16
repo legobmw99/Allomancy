@@ -35,7 +35,7 @@ public class BannerDFUMixin {
         for (Metal mt : Metal.values()) {
             String name = mt.getName();
             Allomancy.LOGGER.info("Redirecting banner pattern for {}", name);
-            patternMap.put("ALLOMANCY" + name.toUpperCase(Locale.ROOT), Allomancy.rl(name).toString());
+            patternMap.put("ALLOMANCY" + name.toUpperCase(Locale.ROOT), Allomancy.id(name).toString());
         }
 
         PATTERN_ID_MAP = patternMap;

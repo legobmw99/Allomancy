@@ -6,17 +6,17 @@ import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Collections;
 import java.util.List;
 
 @JeiPlugin
 public class AllomancyJeiPlugin implements IModPlugin {
-    private static final ResourceLocation ID = Allomancy.rl("jei_plugin");
+    private static final Identifier ID = Allomancy.id("jei_plugin");
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return ID;
     }
 

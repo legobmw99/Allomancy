@@ -11,12 +11,12 @@ import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnPlayerTrigg
 import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -34,9 +34,7 @@ class Advancements implements AdvancementSubProvider {
 
         var metallurgist = Advancement.Builder
                 .advancement()
-                .parent(Advancement.Builder
-                                .advancement()
-                                .build(ResourceLocation.withDefaultNamespace("adventure/root")))
+                .parent(Advancement.Builder.advancement().build(Identifier.withDefaultNamespace("adventure/root")))
                 .display(ConsumeSetup.ALLOMANTIC_GRINDER.get(),
                          Component.translatable("advancements.allomancy.local_metallurgist.title"),
                          Component.translatable("advancements.allomancy.local_metallurgist.desc"), null,

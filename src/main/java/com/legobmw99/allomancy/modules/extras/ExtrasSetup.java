@@ -65,7 +65,7 @@ public final class ExtrasSetup {
                                                                ChatFormatting.GRAY)))));
 
     public static final ResourceKey<EquipmentAsset> BRONZE =
-            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.rl("bronze_jewelry"));
+            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.id("bronze_jewelry"));
 
     public static final DeferredItem<BronzeEarringItem> CHARGED_BRONZE_EARRING =
             ITEMS.registerItem("charged_bronze_earring", BronzeEarringItem::new, (p) -> p
@@ -80,7 +80,7 @@ public final class ExtrasSetup {
     public static final BlockCapability<IAllomanticallyUsable, Void> ALLOMANTICALLY_USABLE_BLOCK =
             BlockCapability.createVoid(
                     // Provide a name to uniquely identify the capability.
-                    Allomancy.rl("allomantically_usable_block"),
+                    Allomancy.id("allomantically_usable_block"),
                     // Provide the queried type. Here, we want to look up `IItemHandler` instances.
                     IAllomanticallyUsable.class);
 
@@ -121,10 +121,10 @@ public final class ExtrasSetup {
         for (Metal mt : Metal.values()) {
 
             String name = mt.getName();
-            var pattern = ResourceKey.create(Registries.BANNER_PATTERN, Allomancy.rl(name));
+            var pattern = ResourceKey.create(Registries.BANNER_PATTERN, Allomancy.id(name));
             PATTERNS.add(pattern);
 
-            var pattern_key = TagKey.create(Registries.BANNER_PATTERN, Allomancy.rl(name));
+            var pattern_key = TagKey.create(Registries.BANNER_PATTERN, Allomancy.id(name));
             AllomancyTags.PATTERN_TAGS.add(pattern_key);
 
             var pattern_item = ITEMS.registerItem(name + "_pattern", (props) -> new Item(
@@ -190,8 +190,8 @@ public final class ExtrasSetup {
 
     public static void bootstrapBanners(BootstrapContext<BannerPattern> bootstrapContext) {
         for (var banner : PATTERNS) {
-            bootstrapContext.register(banner,
-                                      new BannerPattern(banner.location(), banner.location().toShortLanguageKey()));
+            bootstrapContext.register(banner, new BannerPattern(banner.identifier(),
+                                                                banner.identifier().toShortLanguageKey()));
         }
     }
 }

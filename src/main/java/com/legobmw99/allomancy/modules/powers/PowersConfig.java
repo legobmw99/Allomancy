@@ -3,7 +3,7 @@ package com.legobmw99.allomancy.modules.powers;
 import com.legobmw99.allomancy.modules.powers.client.gui.MetalOverlay;
 import com.legobmw99.allomancy.modules.powers.util.Physical;
 import com.legobmw99.allomancy.util.AllomancyConfig;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -41,7 +41,7 @@ public final class PowersConfig {
                 .comment("List of registry names of items and blocks that are counted as 'metal'")
                 .defineListAllowEmpty("whitelist", Physical::default_whitelist, String::new, o -> {
                     if (o instanceof String s) {
-                        return ResourceLocation.tryParse(s) != null;
+                        return Identifier.tryParse(s) != null;
                     }
                     return false;
                 });

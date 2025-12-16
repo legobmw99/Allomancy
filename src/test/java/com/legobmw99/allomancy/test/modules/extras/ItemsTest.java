@@ -32,7 +32,7 @@ public class ItemsTest {
                 })
                 .thenExecute(wither -> {
                     helper.assertTrue(wither.isDeadOrDying(), "Wither skeleton lived");
-                    helper.assertPlayerHasAdvancement(player, Allomancy.rl("main/bloody"));
+                    helper.assertPlayerHasAdvancement(player, Allomancy.id("main/bloody"));
                     helper.assertEntityIsHolding(new BlockPos(2, 3, 2), EntityType.PLAYER,
                                                  ExtrasSetup.CHARGED_BRONZE_EARRING.get());
                 })

@@ -15,7 +15,7 @@ import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
@@ -137,9 +137,9 @@ class ModelFiles extends ModelProvider {
 
         var block = ExtrasSetup.IRON_BUTTON.get();
         TextureMapping iron = TextureMapping.defaultTexture(Blocks.IRON_BLOCK);
-        ResourceLocation extended = ModelTemplates.BUTTON.create(block, iron, blockModels.modelOutput);
-        ResourceLocation sunken = ModelTemplates.BUTTON_PRESSED.create(block, iron, blockModels.modelOutput);
-        ResourceLocation inventory = ModelTemplates.BUTTON_INVENTORY.create(block, iron, blockModels.modelOutput);
+        Identifier extended = ModelTemplates.BUTTON.create(block, iron, blockModels.modelOutput);
+        Identifier sunken = ModelTemplates.BUTTON_PRESSED.create(block, iron, blockModels.modelOutput);
+        Identifier inventory = ModelTemplates.BUTTON_INVENTORY.create(block, iron, blockModels.modelOutput);
 
         var sunken_variant = BlockModelGenerators.plainVariant(sunken);
         var extended_variant = BlockModelGenerators.plainVariant(extended);
@@ -156,7 +156,7 @@ class ModelFiles extends ModelProvider {
         blockModels.registerSimpleItemModel(inverted, inventory);
     }
 
-    private static void createLever(BlockModelGenerators blockModels, Block block, ResourceLocation base) {
+    private static void createLever(BlockModelGenerators blockModels, Block block, Identifier base) {
         // annoyingly, this isn't an existing model template or helper
         TextureSlot base_slot = TextureSlot.create("base");
         TextureSlot lever_slot = TextureSlot.create("lever");
@@ -169,8 +169,8 @@ class ModelFiles extends ModelProvider {
         textures.put(base_slot, base);
         textures.put(lever_slot, TextureMapping.getBlockTexture(block));
 
-        ResourceLocation lever = lever_template.create(block, textures, blockModels.modelOutput);
-        ResourceLocation lever_on = lever_on_template.create(block, textures, blockModels.modelOutput);
+        Identifier lever = lever_template.create(block, textures, blockModels.modelOutput);
+        Identifier lever_on = lever_on_template.create(block, textures, blockModels.modelOutput);
 
         var lever_variant = BlockModelGenerators.plainVariant(lever);
         var lever_on_variant = BlockModelGenerators.plainVariant(lever_on);

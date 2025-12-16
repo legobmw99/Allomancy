@@ -8,7 +8,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record BlockPushPullPayload(BlockPos block, int direction) implements CustomPacketPayload {
-    public static final Type<BlockPushPullPayload> TYPE = new Type<>(Allomancy.rl("block_push_pull"));
+    public static final Type<BlockPushPullPayload> TYPE = new Type<>(Allomancy.id("block_push_pull"));
 
 
     public static final StreamCodec<ByteBuf, BlockPushPullPayload> STREAM_CODEC =

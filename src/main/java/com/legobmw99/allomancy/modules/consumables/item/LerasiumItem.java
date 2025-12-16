@@ -58,7 +58,7 @@ public class LerasiumItem extends Item {
                 return InteractionResult.FAIL;
             }
 
-            var entangled = level.getServer().getAdvancements().get(Allomancy.rl("main/dna_entangled"));
+            var entangled = level.getServer().getAdvancements().get(Allomancy.id("main/dna_entangled"));
             if (entangled != null && sp.getAdvancements().getOrStartProgress(entangled).isDone()) {
                 return InteractionResult.FAIL;
             }

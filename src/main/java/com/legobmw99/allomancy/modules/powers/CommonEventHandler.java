@@ -30,6 +30,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -138,9 +139,12 @@ public final class CommonEventHandler {
     @SubscribeEvent
     public static void onRespawn(final PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            if (!event.isEndConquered() /* poorly named, is really equivalent to keepInventory... */) {
-                var data = AllomancerAttachment.get(player);
+            var data = AllomancerAttachment.get(player);
+            if (!(event.isEndConquered() || player.level().getGameRules().get(GameRules.KEEP_INVENTORY))) {
                 data.drainMetals(Metal.values());
+            }
+            for (Metal mt : Metal.values()) {
+                data.setBurning(mt, false);
             }
             AllomancerAttachment.sync(player);
         }

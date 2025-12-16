@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record EntityPushPullPayload(int entityID, int force) implements CustomPacketPayload {
 
-    public static final Type<EntityPushPullPayload> TYPE = new Type<>(Allomancy.rl("entity_push_pull"));
+    public static final Type<EntityPushPullPayload> TYPE = new Type<>(Allomancy.id("entity_push_pull"));
 
     public static final StreamCodec<ByteBuf, EntityPushPullPayload> STREAM_CODEC =
             StreamCodec.composite(ByteBufCodecs.INT, EntityPushPullPayload::entityID, ByteBufCodecs.INT,

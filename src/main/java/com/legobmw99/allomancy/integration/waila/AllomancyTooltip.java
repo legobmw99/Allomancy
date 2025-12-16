@@ -5,7 +5,7 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
@@ -54,7 +54,7 @@ public class AllomancyTooltip implements IEntityComponentProvider {
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return Allomancy.rl("waila_bronze");
+    public Identifier getUid() {
+        return Allomancy.id("waila_bronze");
     }
 }

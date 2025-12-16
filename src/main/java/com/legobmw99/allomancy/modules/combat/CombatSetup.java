@@ -6,12 +6,12 @@ import com.legobmw99.allomancy.modules.combat.item.CoinBagItem;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.combat.item.ObsidianDaggerItem;
 import com.legobmw99.allomancy.util.AllomancyTags;
-import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Util;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -36,12 +36,12 @@ import java.util.function.Supplier;
 public final class CombatSetup {
 
     public static final ResourceKey<DamageType> COIN_DAMAGE =
-            ResourceKey.create(Registries.DAMAGE_TYPE, Allomancy.rl("coin"));
+            ResourceKey.create(Registries.DAMAGE_TYPE, Allomancy.id("coin"));
     public static final ResourceKey<EquipmentAsset> WOOL =
-            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.rl("wool"));
+            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.id("wool"));
     // TODO: would be nice if this used the iron_darker override
     public static final ResourceKey<EquipmentAsset> ALUMINUM =
-            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.rl("aluminum"));
+            ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.id("aluminum"));
 
 
     private static final DeferredRegister.Entities ENTITIES = DeferredRegister.createEntities(Allomancy.MODID);
@@ -70,7 +70,7 @@ public final class CombatSetup {
                              .attributes(ItemAttributeModifiers
                                                  .builder()
                                                  .add(Attributes.MOVEMENT_SPEED,
-                                                      new AttributeModifier(Allomancy.rl("mistcloak_speed"), 0.25,
+                                                      new AttributeModifier(Allomancy.id("mistcloak_speed"), 0.25,
                                                                             AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
                                                       EquipmentSlotGroup.CHEST)
                                                  .build())));
@@ -107,7 +107,7 @@ public final class CombatSetup {
                     .setShouldReceiveVelocityUpdates(true)
                     .setUpdateInterval(20)
                     .sized(0.25F, 0.25F)
-                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Allomancy.rl("nugget_projectile"))));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Allomancy.id("nugget_projectile"))));
 
     private CombatSetup() {}
 

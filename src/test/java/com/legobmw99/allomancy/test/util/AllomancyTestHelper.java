@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
 import net.minecraft.gametest.framework.GameTestInfo;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -114,7 +114,7 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
         return player;
     }
 
-    public void assertPlayerHasAdvancement(ServerPlayer player, ResourceLocation advancement) {
+    public void assertPlayerHasAdvancement(ServerPlayer player, Identifier advancement) {
         var advancementHolder = this.getLevel().getServer().getAdvancements().get(advancement);
         if (advancementHolder == null) {
             throw this.assertionException(("Advancement " + advancement + " was not found in the server"));
