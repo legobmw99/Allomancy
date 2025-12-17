@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.BellBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BellBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -179,6 +180,13 @@ public final class ExtrasSetup {
                                 if (isPush) {
                                     direction = direction.getOpposite();
                                 }
+
+                                if (level.getBlockEntity(pos) instanceof BellBlockEntity bell && bell.ticks != 0 &&
+                                    bell.ticks < 5) {
+                                    // too soon
+                                    return false;
+                                }
+
                                 return ((BellBlock) state.getBlock()).onHit(level, state,
                                                                             new BlockHitResult(Vec3.atCenterOf(pos),
                                                                                                direction, pos, false),
