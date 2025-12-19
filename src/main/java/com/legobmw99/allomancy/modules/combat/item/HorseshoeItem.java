@@ -48,7 +48,7 @@ public class HorseshoeItem extends Item {
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 40;
+        return 36;
     }
 
     @Override
@@ -61,11 +61,19 @@ public class HorseshoeItem extends Item {
 
                 if (distance <= 12.0) {
                     grantFlight(player);
-                    if (remainingUseDuration % 5 == 0) {
+
+                    if (remainingUseDuration % 10 == 6) {
+                        level.addParticle(ParticleTypes.POOF, player.getX(), player.getY(), player.getZ(), 0, -4, 0);
+                    }
+                    if ((remainingUseDuration + 2) % 6 == 0) {
                         level.playSound(player, player.getX(), player.getY() - distance, player.getZ(),
                                         SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 0.4f, 0.9F);
-                        level.addParticle(ParticleTypes.POOF, player.getX(), player.getY() - distance + 0.05,
-                                          player.getZ(), 0, 0, 0);
+
+                    }
+                    if ((remainingUseDuration + 4) % 6 == 0) {
+                        level.addParticle(ParticleTypes.POOF, player.getX(), player.getY() - distance, player.getZ(),
+                                          0, 1, 0);
+
 
                     }
                     return;
