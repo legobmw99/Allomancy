@@ -4,7 +4,6 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.particles.ExplosionParticleInfo;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
@@ -23,7 +22,6 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 
 public class HorseshoeItem extends Item {
 
-    private int ticks = 0;
 
     public HorseshoeItem(Properties properties) {
         super(properties.durability(256).component(DataComponents.USE_EFFECTS, new UseEffects(true, true, 1.0f)));
@@ -63,12 +61,11 @@ public class HorseshoeItem extends Item {
 
                 if (distance <= 12.0) {
                     grantFlight(player);
-                    ticks++;
-                    if (ticks % 5 == 0) {
+                    if (remainingUseDuration % 5 == 0) {
                         level.playSound(player, player.getX(), player.getY() - distance, player.getZ(),
                                         SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 0.4f, 0.9F);
-                        level.addParticle(new ExplosionParticleInfo(ParticleTypes.POOF, 0.5F, 1.0F).particle(),
-                                          player.getX(), player.getY() - distance, player.getZ(), 0, 0, 0);
+                        level.addParticle(ParticleTypes.POOF, player.getX(), player.getY() - distance + 0.05,
+                                          player.getZ(), 0, 0, 0);
 
                     }
                     return;
