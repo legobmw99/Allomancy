@@ -4,6 +4,8 @@ import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ExplosionParticleInfo;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -53,27 +55,36 @@ public class HorseshoeItem extends Item {
 
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        super.onUseTick(level, livingEntity, stack, remainingUseDuration);
         if (livingEntity instanceof Player player) {
             var data = AllomancerAttachment.get(player);
-            if (data.isBurning(Metal.STEEL) && data.isBurning(Metal.IRON) &&
-                player.getAvailableSpaceBelow(13.0) <= 12.0) {
-                grantFlight(player);
-                ticks++;
-                if (ticks % 5 == 0) {
-                    level.playSound(player, player.getX(), player.getY() - 10, player.getZ(),
-                                    SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 0.4f, 0.9F);
+            if (data.isBurning(Metal.STEEL) && data.isBurning(Metal.IRON)) {
+                var distance = player.getAvailableSpaceBelow(13.0);
 
+                if (distance <= 12.0) {
+                    grantFlight(player);
+                    ticks++;
+                    if (ticks % 5 == 0) {
+                        level.playSound(player, player.getX(), player.getY() - distance, player.getZ(),
+                                        SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 0.4f, 0.9F);
+                        level.addParticle(new ExplosionParticleInfo(ParticleTypes.POOF, 0.5F, 1.0F).particle(),
+                                          player.getX(), player.getY() - distance, player.getZ(), 0, 0, 0);
+
+                    }
+                    return;
                 }
-            } else {
-                revokeFlight(player);
             }
+            revokeFlight(player);
+
         }
-        super.onUseTick(level, livingEntity, stack, remainingUseDuration);
     }
 
     @Override
     public void onStopUsing(ItemStack stack, LivingEntity livingEntity, int count) {
         super.onStopUsing(stack, livingEntity, count);
+        if (stack.getDamageValue() >= stack.getMaxDamage()) {
+            stack.setCount(0);
+        }
         if (livingEntity instanceof Player player) {
             revokeFlight(player);
         }
