@@ -3,6 +3,7 @@ package com.legobmw99.allomancy.modules.combat;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.combat.entity.ProjectileNuggetEntity;
 import com.legobmw99.allomancy.modules.combat.item.CoinBagItem;
+import com.legobmw99.allomancy.modules.combat.item.HorseshoeItem;
 import com.legobmw99.allomancy.modules.combat.item.KolossBladeItem;
 import com.legobmw99.allomancy.modules.combat.item.ObsidianDaggerItem;
 import com.legobmw99.allomancy.util.AllomancyTags;
@@ -100,6 +101,8 @@ public final class CombatSetup {
                 }
             });
 
+
+    public static final DeferredItem<HorseshoeItem> HORSESHOE = ITEMS.registerItem("horseshoe", HorseshoeItem::new);
 
     public static final Supplier<EntityType<ProjectileNuggetEntity>> NUGGET_PROJECTILE =
             ENTITIES.register("nugget_projectile", () -> EntityType.Builder

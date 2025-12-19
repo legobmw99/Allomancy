@@ -69,6 +69,7 @@ class Languages extends LanguageProvider {
         add("item.allomancy.charged_bronze_earring.lore", "You hear a pulsing in the distance...");
         add(CombatSetup.ALUMINUM_HELMET.get(), "Aluminum Helmet");
         add(CombatSetup.COIN_BAG.get(), "Coin Bag");
+        add(CombatSetup.HORSESHOE.get(), "Horseshoes");
         add(CombatSetup.OBSIDIAN_DAGGER.get(), "Obsidian Dagger");
         add(CombatSetup.KOLOSS_BLADE.get(), "Koloss Blade");
         add("item.allomancy.koloss_blade.lore", "This item is too heavy for the average person to wield.");

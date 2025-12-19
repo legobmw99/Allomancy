@@ -62,6 +62,8 @@ class ModelFiles extends ModelProvider {
 
         itemModels.generateFlatItem(CombatSetup.COIN_BAG.get(), ModelTemplates.FLAT_ITEM);
 
+        itemModels.generateFlatItem(CombatSetup.HORSESHOE.get(), ModelTemplates.FLAT_ITEM);
+
         itemModels.generateFlatItem(CombatSetup.OBSIDIAN_DAGGER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
 
         itemModels.generateFlatItem(CombatSetup.KOLOSS_BLADE.get(), FLAT_HANDHELD_LARGE);

@@ -10,6 +10,7 @@ import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
 import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -327,6 +328,21 @@ final class Recipes extends RecipeProvider {
                 .pattern(" #g")
                 .pattern("l l")
                 .pattern(" l ")
+                .save(consumer);
+
+        Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:horseshoe");
+        ShapedRecipeBuilder
+                .shaped(this.registries.lookupOrThrow(Registries.ITEM), RecipeCategory.COMBAT,
+                        CombatSetup.HORSESHOE.get())
+                .unlockedBy("has_steel", InventoryChangeTrigger.TriggerInstance.hasItems(
+                        new ItemPredicate.Builder().of(this.registries.lookupOrThrow(Registries.ITEM),
+                                                       AllomancyTags.INGOT_TAGS.get(Metal.STEEL.getIndex()))))
+                .showNotification(true)
+                .define('s', AllomancyTags.INGOT_TAGS.get(Metal.STEEL.getIndex()))
+                .define('S', AllomancyTags.STORAGE_BLOCK_ITEM_TAGS.get(Metal.STEEL.getIndex()))
+                .pattern(" sS")
+                .pattern("s s")
+                .pattern("Ss ")
                 .save(consumer);
 
         Allomancy.LOGGER.debug("Creating Special Recipe for Vial Filling");

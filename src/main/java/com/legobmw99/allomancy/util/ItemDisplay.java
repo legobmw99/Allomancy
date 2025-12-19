@@ -53,6 +53,7 @@ public final class ItemDisplay {
 
                         output.accept(CombatSetup.KOLOSS_BLADE.get());
                         output.accept(CombatSetup.OBSIDIAN_DAGGER.get());
+                        output.accept(CombatSetup.HORSESHOE.get());
 
                         output.accept(ExtrasSetup.BRONZE_EARRING.get());
                         output.accept(ExtrasSetup.CHARGED_BRONZE_EARRING.get());

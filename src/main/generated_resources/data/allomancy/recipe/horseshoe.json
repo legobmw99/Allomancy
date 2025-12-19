@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": "#c:storage_blocks/steel",
+    "s": "#c:ingots/steel"
+  },
+  "pattern": [
+    " sS",
+    "s s",
+    "Ss "
+  ],
+  "result": {
+    "count": 1,
+    "id": "allomancy:horseshoe"
+  }
+}
