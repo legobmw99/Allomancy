@@ -22,6 +22,7 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 
 public class HorseshoeItem extends Item {
 
+    private static final double MAX_HEIGHT = 13.0;
 
     public HorseshoeItem(Properties properties) {
         super(properties.durability(256).component(DataComponents.USE_EFFECTS, new UseEffects(true, true, 1.0f)));
@@ -33,12 +34,11 @@ public class HorseshoeItem extends Item {
 
         var data = AllomancerAttachment.get(player);
         if (data.isBurning(Metal.STEEL) && data.isBurning(Metal.IRON) &&
-            player.getAvailableSpaceBelow(13.0) <= 12.0) {
+            player.getAvailableSpaceBelow(MAX_HEIGHT) < MAX_HEIGHT) {
 
             stack.setDamageValue(stack.getDamageValue() + 1);
             player.startUsingItem(hand);
             grantFlight(player);
-
             return InteractionResult.SUCCESS;
         }
 
@@ -57,12 +57,13 @@ public class HorseshoeItem extends Item {
         if (livingEntity instanceof Player player) {
             var data = AllomancerAttachment.get(player);
             if (data.isBurning(Metal.STEEL) && data.isBurning(Metal.IRON)) {
-                var distance = player.getAvailableSpaceBelow(13.0);
+                var distance = player.getAvailableSpaceBelow(MAX_HEIGHT);
 
-                if (distance <= 12.0) {
+                if (distance < MAX_HEIGHT) {
                     grantFlight(player);
 
                     if (remainingUseDuration % 10 == 6) {
+                        // TODO: custom entity like thrown trident?
                         level.addParticle(ParticleTypes.POOF, player.getX(), player.getY(), player.getZ(), 0, -4, 0);
                     }
                     if ((remainingUseDuration + 2) % 6 == 0) {

@@ -265,6 +265,7 @@ public final class Physical {
         add(ConsumeSetup.LERASIUM_NUGGET.get());
         add(ConsumeSetup.ALLOMANTIC_GRINDER.get());
         add(CombatSetup.COIN_BAG.get());
+        add(CombatSetup.HORSESHOE.get());
 
         add(ExtrasSetup.BRONZE_EARRING.get()); // not charged, bc hemalurgy!
         add(WorldSetup.LIQUID_LERASIUM.get());
