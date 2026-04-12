@@ -17,6 +17,7 @@ import com.legobmw99.allomancy.modules.powers.client.network.PowerRequests;
 import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.blaze3d.pipeline.ColorTargetState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -24,10 +25,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
-import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -35,6 +35,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
@@ -75,8 +76,8 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mx, int my, float partialTicks) {
-        super.render(guiGraphics, mx, my, partialTicks);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mx, int my, float partialTicks) {
+        super.extractRenderState(guiGraphics, mx, my, partialTicks);
 
         var data = AllomancerAttachment.get(this.mc.player);
 
@@ -121,7 +122,7 @@ public class MetalSelectScreen extends Screen {
             if (ysp < y) {
                 ysp -= 9;
             }
-            guiGraphics.drawString(this.font, name, Math.round(xsp), Math.round(ysp), 0xffffffff, true);
+            guiGraphics.text(this.font, name, Math.round(xsp), Math.round(ysp), 0xffffffff, true);
 
             double mod = 0.8;
             int xdp = (int) ((xp - x) * mod + x);
@@ -177,7 +178,7 @@ public class MetalSelectScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         // unused
     }
 
@@ -215,7 +216,7 @@ public class MetalSelectScreen extends Screen {
                 .withVertexShader("core/position_color")
                 .withFragmentShader("core/position_color")
                 .withCull(false)
-                .withBlend(BlendFunction.TRANSLUCENT)
+                .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
                 .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_FAN)
                 .build();
         private static final RenderSetup SELECTION_SETUP =

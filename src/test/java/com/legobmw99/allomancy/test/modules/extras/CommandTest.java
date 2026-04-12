@@ -2,23 +2,29 @@ package com.legobmw99.allomancy.test.modules.extras;
 
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.util.TattleTaleStack;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.permissions.LevelBasedPermissionSet;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.testframework.annotation.ForEachTest;
+import net.minecraft.world.level.GameType;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
 import net.neoforged.testframework.gametest.ExtendedGameTestHelper;
 import net.neoforged.testframework.gametest.GameTest;
 
-@ForEachTest(groups = "command")
+import java.util.Optional;
+
 public class CommandTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder(description = "Tests that you can add and remove powers")
+    @TestHolder(description = "Tests that you can add and remove powers", groups = "command_op")
     public static void allomancyPowerWorks(ExtendedGameTestHelper helper) {
-        var player = helper.makeOpMockPlayer(LevelBasedPermissionSet.GAMEMASTER);
+        var player = helper.makeTickingMockServerPlayerInLevel(GameType.DEFAULT_MODE);
+        AllomancerAttachment.get(player).setUninvested();
+        helper
+                .getLevel()
+                .getServer()
+                .getPlayerList()
+                .op(player.nameAndId(), Optional.of(LevelBasedPermissionSet.GAMEMASTER), Optional.empty());
+
         var stack = TattleTaleStack.createCommandSourceStack(player);
 
         helper.startSequence()
@@ -46,10 +52,12 @@ public class CommandTest {
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder(description = "Tests that normal players can't use /ap")
+    @TestHolder(description = "Tests that normal players can't use /ap", groups = "command_deop")
     public static void allomancyPowerNeedsPerms(ExtendedGameTestHelper helper) {
-        var player = helper.makeOpMockPlayer(LevelBasedPermissionSet.ALL);
+        var player = helper.makeTickingMockServerPlayerInLevel(GameType.DEFAULT_MODE);
+        AllomancerAttachment.get(player).setUninvested();
         var stack = TattleTaleStack.createCommandSourceStack(player);
+        player.level().getServer().getPlayerList().deop(player.nameAndId());
 
         helper.startSequence()
               // add random power
@@ -60,18 +68,18 @@ public class CommandTest {
                       .performPrefixedCommand(stack, "/ap add random")).thenExecuteAfter(5, () -> {
 
                   helper.assertTrue(stack.hadError(), "No permission error");
-                  helper.assertTrue(AllomancerAttachment.get(player).isUninvested(), "Player got invested");
+                  helper.assertTrue(AllomancerAttachment.get(player).isUninvested(),
+                                    "Player got invested" + AllomancerAttachment.get(player).getPowerCount());
               }).thenSucceed();
     }
 
     @GameTest
     @EmptyTemplate("1x3x1")
-    @TestHolder(description = "Tests that anyone can use /ap get")
+    @TestHolder(description = "Tests that anyone can use /ap get", groups = "command_deop")
     public static void allomancyGet(ExtendedGameTestHelper helper) {
-        var player = helper.makeOpMockPlayer(LevelBasedPermissionSet.ALL);
-        player.snapTo(Vec3.atCenterOf(helper.absolutePos(BlockPos.ZERO)));
-        var data = AllomancerAttachment.get(player);
-        data.setMistborn();
+        var player = helper.makeTickingMockServerPlayerInLevel(GameType.DEFAULT_MODE);
+        player.level().getServer().getPlayerList().deop(player.nameAndId());
+        AllomancerAttachment.get(player).setMistborn();
         var stack = TattleTaleStack.createCommandSourceStack(player);
 
         helper.startSequence()

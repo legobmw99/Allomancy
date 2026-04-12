@@ -6,7 +6,6 @@
   "group": "aluminum_ingot",
   "ingredient": "allomancy:raw_aluminum",
   "result": {
-    "count": 1,
     "id": "allomancy:aluminum_ingot"
   }
 }

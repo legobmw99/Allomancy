@@ -70,10 +70,6 @@ public class IronButtonBlock extends ButtonBlock {
                                                    @Nullable BlockEntity blockEntity,
                                                    @Nullable Void context) {
             return ((player, isPush) -> {
-                if (player instanceof ServerPlayer sp) {
-                    ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
-                }
-
                 if (state.getValue(POWERED) || level.isClientSide()) {
                     return true;
                 }
@@ -83,6 +79,9 @@ public class IronButtonBlock extends ButtonBlock {
                     block.press(state, level, pos, player);
                     block.playSound(player, level, pos, false);
                     level.gameEvent(player, GameEvent.BLOCK_ACTIVATE, pos);
+                    if (player instanceof ServerPlayer sp) {
+                        ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
+                    }
                     return true;
                 } else {
                     return false;

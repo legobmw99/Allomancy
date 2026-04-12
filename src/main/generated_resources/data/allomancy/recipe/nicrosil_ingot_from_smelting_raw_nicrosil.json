@@ -6,7 +6,6 @@
   "group": "nicrosil_ingot",
   "ingredient": "allomancy:raw_nicrosil",
   "result": {
-    "count": 1,
     "id": "allomancy:nicrosil_ingot"
   }
 }

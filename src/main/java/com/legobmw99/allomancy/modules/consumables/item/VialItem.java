@@ -11,10 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUseAnimation;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.level.Level;
@@ -69,7 +66,7 @@ public class VialItem extends Item {
         if (storage == null) {
             stack.set(DataComponents.RARITY, Rarity.COMMON);
         } else {
-            stack.set(DataComponents.USE_REMAINDER, new UseRemainder(ConsumeSetup.VIAL.toStack()));
+            stack.set(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStackTemplate(ConsumeSetup.VIAL)));
             stack.set(DataComponents.RARITY, Rarity.UNCOMMON);
         }
     }

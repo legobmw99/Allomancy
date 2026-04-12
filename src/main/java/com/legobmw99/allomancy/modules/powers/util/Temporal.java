@@ -42,7 +42,7 @@ public final class Temporal {
             if (te == null) {
                 if (block.isRandomlyTicking()) {
                     for (int i = 0; i < max * 4 / 15; i++) {
-                        block.randomTick(level, bp, level.random);
+                        block.randomTick(level, bp, level.getRandom());
                     }
                 }
             } else {

@@ -6,7 +6,6 @@
   "group": "bendalloy_ingot",
   "ingredient": "allomancy:raw_bendalloy",
   "result": {
-    "count": 1,
     "id": "allomancy:bendalloy_ingot"
   }
 }

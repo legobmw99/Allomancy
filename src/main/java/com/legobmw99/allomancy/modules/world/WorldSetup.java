@@ -15,7 +15,6 @@ import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.Pools;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -26,7 +25,7 @@ import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -63,7 +62,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathType;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.world.BiomeModifier;
@@ -238,32 +237,22 @@ public final class WorldSetup {
     public static final Supplier<MapCodec<DaggerLootModifier>> DAGGER_LOOT =
             GLM.register("unbreakable_dagger_loot", DaggerLootModifier.CODEC);
 
-    private static final DeferredRegister<LootItemConditionType> LOOT_CONDITIONS =
+    private static final DeferredRegister<MapCodec<? extends LootItemCondition>> LOOT_CONDITIONS =
             DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, Allomancy.MODID);
 
-    public static final Supplier<LootItemConditionType> PLAYER_INVESTMENT =
-            LOOT_CONDITIONS.register("player_investment",
-                                     () -> new LootItemConditionType(PlayerInvestmentCondition.CODEC));
+    public static final Supplier<MapCodec<? extends LootItemCondition>> PLAYER_INVESTMENT =
+            LOOT_CONDITIONS.register("player_investment", () -> PlayerInvestmentCondition.CODEC);
 
     private static final DeferredRegister<RecipeSerializer<?>> RECIPES =
             DeferredRegister.create(Registries.RECIPE_SERIALIZER, Allomancy.MODID);
     public static final Supplier<RecipeSerializer<InvestingRecipe>> INVESTING_RECIPE_SERIALIZER =
-            RECIPES.register("investing", () -> new RecipeSerializer<>() {
-                @Override
-                public MapCodec<InvestingRecipe> codec() {
-                    return RecordCodecBuilder.mapCodec(instance -> instance
+            RECIPES.register("investing", () -> new RecipeSerializer<>(RecordCodecBuilder.mapCodec(
+                    instance -> instance
                             .group(Ingredient.CODEC.fieldOf("ingredient").forGetter(InvestingRecipe::ingredient),
-                                   ItemStack.STRICT_CODEC.fieldOf("result").forGetter(InvestingRecipe::result))
-                            .apply(instance, InvestingRecipe::new));
-                }
-
-                @Override
-                public StreamCodec<RegistryFriendlyByteBuf, InvestingRecipe> streamCodec() {
-                    return StreamCodec.composite(Ingredient.CONTENTS_STREAM_CODEC, InvestingRecipe::ingredient,
-                                                 ItemStack.STREAM_CODEC, InvestingRecipe::result,
-                                                 InvestingRecipe::new);
-                }
-            });
+                                   ItemStackTemplate.CODEC.fieldOf("result").forGetter(InvestingRecipe::result))
+                            .apply(instance, InvestingRecipe::new)), StreamCodec.composite(
+                    Ingredient.CONTENTS_STREAM_CODEC, InvestingRecipe::ingredient, ItemStackTemplate.STREAM_CODEC,
+                    InvestingRecipe::result, InvestingRecipe::new)));
 
     private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
             DeferredRegister.create(Registries.RECIPE_TYPE, Allomancy.MODID);

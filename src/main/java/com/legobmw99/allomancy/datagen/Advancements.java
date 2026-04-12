@@ -13,12 +13,13 @@ import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
@@ -110,8 +111,10 @@ class Advancements implements AdvancementSubProvider {
                 .rewards(AdvancementRewards.Builder.experience(100))
                 .save(saver, "allomancy:main/become_mistborn");
 
-        ItemStack vial = ConsumeSetup.VIAL.toStack();
-        vial.set(ConsumeSetup.FLAKE_STORAGE.get(), new FlakeStorage.Mutable().add(Metal.GOLD).toImmutable());
+        ItemStackTemplate vial = new ItemStackTemplate(ConsumeSetup.VIAL, DataComponentPatch
+                .builder()
+                .set(ConsumeSetup.FLAKE_STORAGE.get(), new FlakeStorage.Mutable().add(Metal.GOLD).toImmutable())
+                .build());
 
         var allMetals = Advancement.Builder
                 .advancement()

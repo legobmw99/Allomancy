@@ -42,7 +42,6 @@
             {
               "components": {
                 "minecraft:use_remainder": {
-                  "count": 1,
                   "id": "allomancy:vial"
                 }
               },

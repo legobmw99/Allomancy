@@ -6,7 +6,6 @@
   "group": "silver_ingot",
   "ingredient": "allomancy:raw_silver",
   "result": {
-    "count": 1,
     "id": "allomancy:silver_ingot"
   }
 }

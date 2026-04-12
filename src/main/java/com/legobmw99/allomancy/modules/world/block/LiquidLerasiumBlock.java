@@ -50,7 +50,7 @@ public class LiquidLerasiumBlock extends LiquidBlock {
                     .recipeAccess()
                     .getRecipeFor(WorldSetup.INVESTING_RECIPE.get(), input, serverLevel)
                     .ifPresent(recipe -> {
-                        item.setItem(recipe.value().assemble(input, serverLevel.registryAccess()));
+                        item.setItem(recipe.value().assemble(input));
                         serverLevel.playSound(null, pos.getX(), pos.getY(), pos.getZ(),
                                               SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS);
                         for (int i = 0; i < 16; i++) {

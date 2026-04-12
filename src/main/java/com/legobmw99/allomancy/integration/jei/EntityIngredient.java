@@ -8,7 +8,7 @@ import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -65,12 +65,12 @@ public record EntityIngredient(EntityType<?> type) {
 
 
         @Override
-        public void render(GuiGraphics guiGraphics, EntityIngredient ingredient) {
+        public void render(GuiGraphicsExtractor guiGraphics, EntityIngredient ingredient) {
             // ignored -- we only use the version that receives x, y
         }
 
         @Override
-        public void render(GuiGraphics graphics, @Nullable EntityIngredient input, int x, int y) {
+        public void render(GuiGraphicsExtractor graphics, @Nullable EntityIngredient input, int x, int y) {
             // https://github.com/SlimeKnights/Mantle/blob/27c2ea2ed33167631de79d498597880cb3067fa8/src/main/java/slimeknights/mantle/plugin/jei/entity/EntityIngredientRenderer.java#L59
 
             if (input != null) {
@@ -107,10 +107,11 @@ public record EntityIngredient(EntityType<?> type) {
                             // https://github.com/XFactHD/FramedBlocks/blob/d6e578a06013369e5f2f579151564250d0e7cc3b/src/main/java/io/github/xfacthd/framedblocks/common/compat/jade/FramedBlockElement.java#L42
                             ScreenRectangle bounds =
                                     new ScreenRectangle(x, y, size, size).transformMaxBounds(graphics.pose());
-                            InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, bounds.left(), bounds.top(),
-                                                                                bounds.right(), bounds.bottom(),
-                                                                                scale, 0.0625F, (float) (mx),
-                                                                                (float) (my), livingEntity);
+                            InventoryScreen.extractEntityInInventoryFollowsMouse(graphics, bounds.left(),
+                                                                                 bounds.top(), bounds.right(),
+                                                                                 bounds.bottom(), scale, 0.0625F,
+                                                                                 (float) (mx), (float) (my),
+                                                                                 livingEntity);
                             return;
                         } catch (Exception e) {
                             Allomancy.LOGGER.error("Error drawing entity {}",

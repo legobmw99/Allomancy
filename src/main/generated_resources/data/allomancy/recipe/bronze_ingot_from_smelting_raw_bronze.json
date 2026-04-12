@@ -6,7 +6,6 @@
   "group": "bronze_ingot",
   "ingredient": "allomancy:raw_bronze",
   "result": {
-    "count": 1,
     "id": "allomancy:bronze_ingot"
   }
 }

@@ -80,10 +80,7 @@ public class SpikingRecipeCategory implements IRecipeCategory<SpikingRecipeCateg
                 .addInvisibleIngredients(RecipeIngredientRole.INPUT)
                 .addIngredients(VanillaTypes.ITEM_STACK, options.stream().map(t -> {
                     var egg = SpawnEggItem.byId(t);
-                    if (egg != null) {
-                        return new ItemStack(egg);
-                    }
-                    return ItemStack.EMPTY;
+                    return egg.map(ItemStack::new).orElse(ItemStack.EMPTY);
                 }).toList());
 
         builder.createFocusLink(i, e);

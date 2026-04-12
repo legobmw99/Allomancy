@@ -14,6 +14,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
@@ -60,8 +61,8 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
         this.pulseRedstone(CRAFTER.above(), 0);
     }
 
-    void craft(ItemLike... items) {
-        this.craft(Arrays.stream(items).map(ItemStack::new).toArray(ItemStack[]::new));
+    void craft(ItemStackTemplate... items) {
+        this.craft(Arrays.stream(items).map(ItemStackTemplate::create).toArray(ItemStack[]::new));
     }
 
     void craft(ItemStack stack1, ItemLike... items) {
@@ -71,7 +72,7 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
 
     public void succeedIfCrafts(Predicate<BaseContainerBlockEntity> pred,
                                 String exceptionMessage,
-                                ItemLike... items) {
+                                ItemStackTemplate... items) {
         this.startSequence().thenExecute(() -> this.craft(items)).thenExecuteAfter(4, () -> {
             this.assertContainerEmpty(CRAFTER);
 
@@ -125,4 +126,13 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
         }
     }
 
+    public void assertPlayerLacksAdvancement(ServerPlayer player, Identifier advancement) {
+        var advancementHolder = this.getLevel().getServer().getAdvancements().get(advancement);
+        if (advancementHolder == null) {
+            throw this.assertionException(("Advancement " + advancement + " was not found in the server"));
+        }
+        if (player.getAdvancements().getOrStartProgress(advancementHolder).isDone()) {
+            throw this.assertionException(this.relativePos(player.blockPosition()), "Player had " + advancement);
+        }
+    }
 }

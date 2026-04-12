@@ -6,7 +6,6 @@
   "group": "cadmium_ingot",
   "ingredient": "allomancy:deepslate_cadmium_ore",
   "result": {
-    "count": 1,
     "id": "allomancy:cadmium_ingot"
   }
 }

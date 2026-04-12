@@ -21,10 +21,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.conditions.NotCondition;
@@ -98,8 +99,8 @@ final class Recipes extends RecipeProvider {
         String name = BuiltInRegistries.ITEM.getKey(result.asItem()).getPath();
         Allomancy.LOGGER.debug("Creating Smelting and Blasting Recipe for {}", name);
 
-        this.oreBlasting(ingredient, RecipeCategory.MISC, result, xp, 100, name);
-        this.oreSmelting(ingredient, RecipeCategory.MISC, result, xp, 200, name);
+        this.oreBlasting(ingredient, RecipeCategory.MISC, CookingBookCategory.MISC, result, xp, 100, name);
+        this.oreSmelting(ingredient, RecipeCategory.MISC, CookingBookCategory.MISC, result, xp, 200, name);
     }
 
     private static String alloy_save(String metal) {
@@ -330,12 +331,12 @@ final class Recipes extends RecipeProvider {
                 .save(consumer);
 
         Allomancy.LOGGER.debug("Creating Special Recipe for Vial Filling");
-        SpecialRecipeBuilder.special(VialItemRecipe::new).save(consumer, "allomancy:vial_filling_recipe");
+        SpecialRecipeBuilder.special(() -> VialItemRecipe.INSTANCE).save(consumer, "allomancy:vial_filling_recipe");
 
         Allomancy.LOGGER.debug("Creating Special Recipe for Lerasium investing");
         consumer.accept(ResourceKey.create(Registries.RECIPE, Allomancy.id("lerasium_investing")),
                         new InvestingRecipe(tag(AllomancyTags.LERASIUM_CONVERSION),
-                                            ConsumeSetup.LERASIUM_NUGGET.toStack()), null);
+                                            new ItemStackTemplate(ConsumeSetup.LERASIUM_NUGGET)), null);
     }
 
     private void buildShaped(RecipeOutput consumer,
@@ -405,23 +406,23 @@ final class Recipes extends RecipeProvider {
     }
 
     @Override
-    protected <T extends AbstractCookingRecipe> void oreCooking(RecipeSerializer<T> serializer,
-                                                                AbstractCookingRecipe.Factory<T> recipeFactory,
-                                                                List<ItemLike> ingredients,
-                                                                RecipeCategory category,
+    protected <T extends AbstractCookingRecipe> void oreCooking(AbstractCookingRecipe.Factory<T> factory,
+                                                                List<ItemLike> smeltables,
+                                                                RecipeCategory craftingCategory,
+                                                                CookingBookCategory cookingCategory,
                                                                 ItemLike result,
                                                                 float experience,
                                                                 int cookingTime,
                                                                 String group,
-                                                                String suffix) {
-        for (ItemLike itemlike : ingredients) {
+                                                                String fromDesc) {
+        for (ItemLike item : smeltables) {
             SimpleCookingRecipeBuilder
-                    .generic(Ingredient.of(itemlike), category, result, experience, cookingTime, serializer,
-                             recipeFactory)
+                    .generic(Ingredient.of(item), craftingCategory, cookingCategory, result, experience, cookingTime,
+                             factory)
                     .group(group)
-                    .unlockedBy(getHasName(itemlike), this.has(itemlike))
+                    .unlockedBy(getHasName(item), this.has(item))
                     // overridden just to insert this allomancy:
-                    .save(this.output, "allomancy:" + getItemName(result) + suffix + "_" + getItemName(itemlike));
+                    .save(this.output, "allomancy:" + getItemName(result) + fromDesc + "_" + getItemName(item));
         }
     }
 }

@@ -6,7 +6,6 @@
   "group": "silver_ingot",
   "ingredient": "allomancy:deepslate_silver_ore",
   "result": {
-    "count": 1,
     "id": "allomancy:silver_ingot"
   }
 }

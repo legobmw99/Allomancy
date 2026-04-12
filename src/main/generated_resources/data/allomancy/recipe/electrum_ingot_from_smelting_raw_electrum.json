@@ -6,7 +6,6 @@
   "group": "electrum_ingot",
   "ingredient": "allomancy:raw_electrum",
   "result": {
-    "count": 1,
     "id": "allomancy:electrum_ingot"
   }
 }

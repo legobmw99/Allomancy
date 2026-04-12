@@ -6,7 +6,6 @@
   "group": "steel_ingot",
   "ingredient": "allomancy:raw_steel",
   "result": {
-    "count": 1,
     "id": "allomancy:steel_ingot"
   }
 }
