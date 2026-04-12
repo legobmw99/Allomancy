@@ -13,6 +13,7 @@ import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
@@ -120,7 +121,7 @@ class ModelFiles extends ModelProvider {
         createLever(blockModels, ExtrasSetup.IRON_LEVER.get(), TextureMapping.getBlockTexture(Blocks.IRON_BLOCK));
         createIronButtonBlocks(blockModels);
 
-        blockModels.createNonTemplateModelBlock(WorldSetup.LIQUID_LERASIUM.get(), Blocks.WATER);
+        blockModels.createNonTemplateModelBlock(WorldSetup.LIQUID_LERASIUM.get());
         Stream
                 .of(WorldSetup.ORE_BLOCKS, WorldSetup.DEEPSLATE_ORE_BLOCKS, WorldSetup.RAW_ORE_BLOCKS,
                     WorldSetup.STORAGE_BLOCKS)
@@ -156,7 +157,7 @@ class ModelFiles extends ModelProvider {
         blockModels.registerSimpleItemModel(inverted, inventory);
     }
 
-    private static void createLever(BlockModelGenerators blockModels, Block block, Identifier base) {
+    private static void createLever(BlockModelGenerators blockModels, Block block, Material base) {
         // annoyingly, this isn't an existing model template or helper
         TextureSlot base_slot = TextureSlot.create("base");
         TextureSlot lever_slot = TextureSlot.create("lever");

@@ -5,9 +5,11 @@ import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.VialItem;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.world.WorldSetup;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
@@ -16,12 +18,11 @@ import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STO
 
 public class VialItemRecipe extends CustomRecipe {
 
+    private VialItemRecipe() {}
 
     private static final Ingredient INGREDIENT_VIAL = Ingredient.of(ConsumeSetup.VIAL.get());
 
-    public VialItemRecipe(CraftingBookCategory catIn) {
-        super(catIn);
-    }
+    public static final VialItemRecipe INSTANCE = new VialItemRecipe();
 
     @Override
     public boolean matches(CraftingInput input, Level worldIn) {
@@ -72,8 +73,9 @@ public class VialItemRecipe extends CustomRecipe {
 
     }
 
+
     @Override
-    public ItemStack assemble(CraftingInput input, HolderLookup.Provider provider) {
+    public ItemStack assemble(CraftingInput input) {
 
         FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
 

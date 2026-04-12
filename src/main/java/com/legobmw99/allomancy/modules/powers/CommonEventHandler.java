@@ -346,7 +346,7 @@ public final class CommonEventHandler {
                 // Add night vision to tin-burners
                 curPlayer.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 5, true, false));
                 if (data.isEnhanced()) { // Tin and Duralumin is too much to handle
-                    if (level.random.nextInt(50) == 0) {
+                    if (level.getRandom().nextInt(50) == 0) {
                         curPlayer.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 100, 0, true, false));
                     }
                 }
@@ -368,7 +368,7 @@ public final class CommonEventHandler {
                 curPlayer.addEffect(new MobEffectInstance(MobEffects.HASTE, 11, 1, true, false));
 
                 if (data.getDamageStored() > 0) {
-                    if (level.random.nextInt(200) == 0) {
+                    if (level.getRandom().nextInt(200) == 0) {
                         data.setDamageStored(data.getDamageStored() - 1);
                     }
                 }

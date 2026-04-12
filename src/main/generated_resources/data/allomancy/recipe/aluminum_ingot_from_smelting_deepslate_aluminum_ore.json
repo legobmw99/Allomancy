@@ -6,7 +6,6 @@
   "group": "aluminum_ingot",
   "ingredient": "allomancy:deepslate_aluminum_ore",
   "result": {
-    "count": 1,
     "id": "allomancy:aluminum_ingot"
   }
 }

@@ -7,6 +7,7 @@ import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
@@ -24,9 +25,9 @@ public class VialCraftingTest {
                                    return out.getCount() == 1 && out.is(ConsumeSetup.VIAL.get()) &&
                                           out.get(ConsumeSetup.FLAKE_STORAGE).contains(Metal.IRON) &&
                                           out.get(ConsumeSetup.FLAKE_STORAGE).contains(Metal.GOLD);
-                               }, "Didn't craft vial!", ConsumeSetup.VIAL,
-                               WorldSetup.FLAKES.get(Metal.IRON.getIndex()),
-                               WorldSetup.FLAKES.get(Metal.GOLD.getIndex()));
+                               }, "Didn't craft vial!", new ItemStackTemplate(ConsumeSetup.VIAL),
+                               new ItemStackTemplate(WorldSetup.FLAKES.get(Metal.IRON.getIndex())),
+                               new ItemStackTemplate(WorldSetup.FLAKES.get(Metal.GOLD.getIndex())));
     }
 
 

@@ -30,7 +30,7 @@ public class CallbackTest extends AbstractTest.Dynamic {
             this.groups.add(group);
         }
         this.gameTestData =
-                new GameTestData(null, structureName, true, 1, 1, this::onGameTest, 100, 0, Rotation.NONE, false,
+                new GameTestData(null, structureName, true, 1, 1, this::onGameTest, 100, 0, Rotation.NONE, false, 0,
                                  false);
     }
 

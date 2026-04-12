@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.extras.command;
 
+import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.api.data.IAllomancerData;
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
@@ -51,6 +52,7 @@ public final class AllomancyPowerCommand {
 
 
     public static void register(final RegisterCommandsEvent e) {
+        Allomancy.LOGGER.info("Registering allomancy commands");
         CommandDispatcher<CommandSourceStack> dispatcher = e.getDispatcher();
         LiteralArgumentBuilder<CommandSourceStack> root =
                 Commands.literal("allomancy").requires(permissions(PermissionLevel.ALL));

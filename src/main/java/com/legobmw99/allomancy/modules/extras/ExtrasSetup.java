@@ -128,8 +128,12 @@ public final class ExtrasSetup {
             var pattern_key = TagKey.create(Registries.BANNER_PATTERN, Allomancy.id(name));
             AllomancyTags.PATTERN_TAGS.add(pattern_key);
 
-            var pattern_item = ITEMS.registerItem(name + "_pattern", (props) -> new Item(
-                    props.stacksTo(1).component(DataComponents.PROVIDES_BANNER_PATTERNS, pattern_key)));
+            var pattern_item = ITEMS.registerItem(name + "_pattern", (props) -> new Item(props
+                                                                                                 .stacksTo(1)
+                                                                                                 .delayedComponent(
+                                                                                                         DataComponents.PROVIDES_BANNER_PATTERNS,
+                                                                                                         context -> context.getOrThrow(
+                                                                                                                 pattern_key))));
             PATTERN_ITEMS.add(pattern_item);
         }
     }
@@ -170,9 +174,7 @@ public final class ExtrasSetup {
 
         event.registerBlock(ALLOMANTICALLY_USABLE_BLOCK,
                             ((level, pos, state, blockEntity, context) -> ((player, isPush) -> {
-                                if (player instanceof ServerPlayer sp) {
-                                    ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
-                                }
+
                                 if (level.isClientSide()) {
                                     return true;
                                 }
@@ -186,11 +188,13 @@ public final class ExtrasSetup {
                                     // too soon
                                     return false;
                                 }
+                                boolean hit = ((BellBlock) state.getBlock()).onHit(level, state, new BlockHitResult(
+                                        Vec3.atCenterOf(pos), direction, pos, false), player, true);
 
-                                return ((BellBlock) state.getBlock()).onHit(level, state,
-                                                                            new BlockHitResult(Vec3.atCenterOf(pos),
-                                                                                               direction, pos, false),
-                                                                            player, true);
+                                if (hit && player instanceof ServerPlayer sp) {
+                                    ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
+                                }
+                                return hit;
 
                             })), Blocks.BELL);
 

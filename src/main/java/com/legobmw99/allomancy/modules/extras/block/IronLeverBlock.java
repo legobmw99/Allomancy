@@ -56,9 +56,6 @@ public class IronLeverBlock extends LeverBlock {
                                                    @Nullable BlockEntity blockEntity,
                                                    @Nullable Void context) {
             return ((player, isPush) -> {
-                if (player instanceof ServerPlayer sp) {
-                    ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
-                }
                 if (level.isClientSide()) {
                     return true;
                 }
@@ -69,6 +66,9 @@ public class IronLeverBlock extends LeverBlock {
                     level.gameEvent(player,
                                     state.getValue(POWERED) ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE,
                                     pos);
+                    if (player instanceof ServerPlayer sp) {
+                        ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER.get().trigger(sp, pos, isPush);
+                    }
                     return true;
 
                 }

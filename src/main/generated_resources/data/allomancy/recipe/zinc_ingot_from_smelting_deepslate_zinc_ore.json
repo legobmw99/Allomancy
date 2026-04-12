@@ -6,7 +6,6 @@
   "group": "zinc_ingot",
   "ingredient": "allomancy:deepslate_zinc_ore",
   "result": {
-    "count": 1,
     "id": "allomancy:zinc_ingot"
   }
 }

@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     // https://projects.neoforged.net/neoforged/moddevgradle
-    id 'net.neoforged.moddev' version '2.0.124'
+    id 'net.neoforged.moddev' version '2.0.141'
     id 'idea'
 }
 
@@ -26,9 +26,9 @@ base {
     archivesName = mod_id
 }
 
-// Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
+// Mojang ships Java 25 to end users in 26.1.2, so mods should target Java 25.
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
     withSourcesJar()
 }
 
@@ -41,10 +41,6 @@ neoForge {
         disableRecompilation = System.getenv("CI") == "true"
     }
 
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
-    }
 
     addModdingDependenciesTo(sourceSets.test)
 

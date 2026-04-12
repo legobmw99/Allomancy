@@ -6,7 +6,6 @@
   "group": "lead_ingot",
   "ingredient": "allomancy:deepslate_lead_ore",
   "result": {
-    "count": 1,
     "id": "allomancy:lead_ingot"
   }
 }

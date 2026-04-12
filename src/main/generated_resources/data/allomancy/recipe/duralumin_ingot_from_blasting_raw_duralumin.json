@@ -6,7 +6,6 @@
   "group": "duralumin_ingot",
   "ingredient": "allomancy:raw_duralumin",
   "result": {
-    "count": 1,
     "id": "allomancy:duralumin_ingot"
   }
 }

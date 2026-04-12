@@ -6,7 +6,6 @@
   "group": "chromium_ingot",
   "ingredient": "allomancy:chromium_ore",
   "result": {
-    "count": 1,
     "id": "allomancy:chromium_ingot"
   }
 }

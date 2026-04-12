@@ -6,7 +6,7 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
@@ -39,7 +39,7 @@ public final class MetalOverlay implements GuiLayer {
         evt.registerAboveAll(Allomancy.id("metal_display"), new MetalOverlay());
     }
 
-    private static void blit(GuiGraphics graphics,
+    private static void blit(GuiGraphicsExtractor graphics,
                              int x,
                              int y,
                              float uOffset,
@@ -52,7 +52,7 @@ public final class MetalOverlay implements GuiLayer {
 
 
     @Override
-    public void render(GuiGraphics gui, DeltaTracker deltaTracker) {
+    public void render(GuiGraphicsExtractor gui, DeltaTracker deltaTracker) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
 
@@ -100,7 +100,7 @@ public final class MetalOverlay implements GuiLayer {
                 }
 
                 if (highlight == mt) {
-                    gui.renderOutline(xCorner - 1, renderY - 1, 7, 21, OUTLINE_COLOR);
+                    gui.outline(xCorner - 1, renderY - 1, 7, 21, OUTLINE_COLOR);
                 }
             }
 

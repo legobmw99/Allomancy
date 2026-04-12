@@ -10,6 +10,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -68,7 +69,8 @@ public record StructureLootTables(HolderLookup.Provider registries) implements L
                                                        ConsumeSetup.FLAKE_STORAGE.get(), storage))
                                                .apply(SetComponentsFunction.setComponent(DataComponents.USE_REMAINDER,
                                                                                          new UseRemainder(
-                                                                                                 ConsumeSetup.VIAL.toStack())))
+                                                                                                 new ItemStackTemplate(
+                                                                                                         ConsumeSetup.VIAL.get()))))
                                                .apply(SetComponentsFunction.setComponent(DataComponents.RARITY,
                                                                                          Rarity.UNCOMMON)))));
 

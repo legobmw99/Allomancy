@@ -1,10 +1,8 @@
 package com.legobmw99.allomancy.modules.powers.client.util;
 
 import com.mojang.blaze3d.buffers.GpuBuffer;
-import com.mojang.blaze3d.pipeline.BlendFunction;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.platform.DepthTestFunction;
+import com.mojang.blaze3d.pipeline.*;
+import com.mojang.blaze3d.platform.CompareOp;
 import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -38,9 +36,8 @@ public final class Rendering {
             .withVertexShader("core/rendertype_lines")
             .withFragmentShader("core/rendertype_lines")
             .withCull(false)
-            .withBlend(BlendFunction.TRANSLUCENT)
-            .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
-            .withDepthWrite(false)
+            .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+            .withDepthStencilState(new DepthStencilState(CompareOp.ALWAYS_PASS, false, 0.0f, 0.0f))
             .withVertexFormat(DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH, VertexFormat.Mode.LINES)
             .build();
 

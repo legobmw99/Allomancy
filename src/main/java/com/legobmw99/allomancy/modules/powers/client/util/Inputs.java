@@ -11,11 +11,12 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.player.ClientInput;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.component.UseEffects;
 import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import org.lwjgl.glfw.GLFW;
@@ -175,11 +176,15 @@ public final class Inputs {
         }
         input.moveVector = new Vec2(left, forward).normalized();
 
-        if (!player.isSprinting() && (!(player.isInWater() || player.isInFluidType(
-                (fluidType, height) -> player.canSwimInFluidType(fluidType))) ||
-                                      (player.isUnderWater() || player.canStartSwimming())) && forward >= 0.8 &&
-            !player.isUsingItem() && (player.getFoodData().getFoodLevel() > 6.0F || player.mayFly()) &&
-            !player.hasEffect(MobEffects.BLINDNESS) && isKeyDown0(settings.keySprint)) {
+        if ((!player.isSprinting() && input.hasForwardImpulse() && (!player.isMobilityRestricted() &&
+                                                                    (player.isPassenger() ? false :
+                                                                     player.getFoodData().hasEnoughFood() ||
+                                                                     player.mayFly()) &&
+                                                                    (player.getAbilities().flying ||
+                                                                     !player.isInShallowWater())) &&
+             !(player.isUsingItem() &&
+               !player.getUseItem().getOrDefault(DataComponents.USE_EFFECTS, UseEffects.DEFAULT).canSprint())) &&
+            isKeyDown0(settings.keySprint)) {
             player.setSprinting(true);
         }
     }

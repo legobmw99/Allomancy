@@ -6,7 +6,6 @@
   "group": "cadmium_ingot",
   "ingredient": "allomancy:raw_cadmium",
   "result": {
-    "count": 1,
     "id": "allomancy:cadmium_ingot"
   }
 }

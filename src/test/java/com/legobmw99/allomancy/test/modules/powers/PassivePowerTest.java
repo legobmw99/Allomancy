@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.neoforged.testframework.annotation.ForEachTest;
@@ -325,7 +325,7 @@ public class PassivePowerTest {
     public static final StructureTemplate WHEAT = StructureTemplateBuilder
             .withSize(3, 5, 3)
             .placeSustainedWater(1, 1, 1, Blocks.STONE.defaultBlockState())
-            .set(2, 1, 2, Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7))
+            .set(2, 1, 2, Blocks.FARMLAND.defaultBlockState().setValue(FarmlandBlock.MOISTURE, 7))
             .set(2, 2, 2, Blocks.WHEAT.defaultBlockState())
             .build();
 

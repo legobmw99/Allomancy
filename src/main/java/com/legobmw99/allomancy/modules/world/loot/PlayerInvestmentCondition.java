@@ -2,7 +2,6 @@ package com.legobmw99.allomancy.modules.world.loot;
 
 import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
-import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.context.ContextKey;
@@ -10,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 import java.util.Set;
 
@@ -20,11 +18,6 @@ public record PlayerInvestmentCondition(Metal power) implements LootItemConditio
             .group(Metal.CODEC.fieldOf("power").forGetter(PlayerInvestmentCondition::power))
             .apply(instance, PlayerInvestmentCondition::new));
 
-
-    @Override
-    public LootItemConditionType getType() {
-        return WorldSetup.PLAYER_INVESTMENT.get();
-    }
 
     @Override
     public Set<ContextKey<?>> getReferencedContextParams() {
@@ -41,6 +34,11 @@ public record PlayerInvestmentCondition(Metal power) implements LootItemConditio
         }
 
         return false;
+    }
+
+    @Override
+    public MapCodec<? extends LootItemCondition> codec() {
+        return CODEC;
     }
 
     public static class Builder implements LootItemCondition.Builder {
