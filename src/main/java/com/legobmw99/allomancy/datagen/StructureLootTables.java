@@ -70,7 +70,7 @@ public record StructureLootTables(HolderLookup.Provider registries) implements L
                                                .apply(SetComponentsFunction.setComponent(DataComponents.USE_REMAINDER,
                                                                                          new UseRemainder(
                                                                                                  new ItemStackTemplate(
-                                                                                                         ConsumeSetup.VIAL.get()))))
+                                                                                                         ConsumeSetup.VIAL))))
                                                .apply(SetComponentsFunction.setComponent(DataComponents.RARITY,
                                                                                          Rarity.UNCOMMON)))));
 

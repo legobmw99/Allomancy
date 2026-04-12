@@ -18,7 +18,7 @@ public class ItemsTest {
     @GameTest
     @EmptyTemplate(value = "5x3x5", floor = true)
     @TestHolder(description = "Tests that the earring gets charged when killing special mobs")
-    public static void earringKillCharges(AllomancyTestHelper helper) {
+    public static void earringKillSpecialCharges(AllomancyTestHelper helper) {
         var player = helper.makeTickingPlayer();
         helper
                 .startSequence()
@@ -35,6 +35,31 @@ public class ItemsTest {
                     helper.assertPlayerHasAdvancement(player, Allomancy.id("main/bloody"));
                     helper.assertEntityIsHolding(new BlockPos(2, 3, 2), EntityType.PLAYER,
                                                  ExtrasSetup.CHARGED_BRONZE_EARRING.get());
+                })
+                .thenSucceed();
+    }
+
+
+    @GameTest
+    @EmptyTemplate(value = "5x3x5", floor = true)
+    @TestHolder(description = "Tests that the earring does not get charged when killing normal mobs")
+    public static void earringKillNormalDoesnt(AllomancyTestHelper helper) {
+        var player = helper.makeTickingPlayer();
+        helper
+                .startSequence()
+                .thenMap(() -> helper.spawnWithNoFreeWill(EntityType.SKELETON, 1, 1, 1))
+                .thenMap(helper::withLowHealth)
+                .thenExecute(
+                        () -> player.setItemInHand(InteractionHand.MAIN_HAND, ExtrasSetup.BRONZE_EARRING.toStack()))
+                .thenExecuteFor(4, skele -> {
+                    player.lookAt(EntityAnchorArgument.Anchor.EYES, skele, EntityAnchorArgument.Anchor.EYES);
+                    player.attack(skele);
+                })
+                .thenExecute(skele -> {
+                    helper.assertTrue(skele.isDeadOrDying(), "Skeleton lived");
+                    helper.assertPlayerLacksAdvancement(player, Allomancy.id("main/bloody"));
+                    helper.assertEntityIsHolding(new BlockPos(2, 3, 2), EntityType.PLAYER,
+                                                 ExtrasSetup.BRONZE_EARRING.get());
                 })
                 .thenSucceed();
     }

@@ -66,7 +66,7 @@ public class VialItem extends Item {
         if (storage == null) {
             stack.set(DataComponents.RARITY, Rarity.COMMON);
         } else {
-            stack.set(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStackTemplate(ConsumeSetup.VIAL.get())));
+            stack.set(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStackTemplate(ConsumeSetup.VIAL)));
             stack.set(DataComponents.RARITY, Rarity.UNCOMMON);
         }
     }

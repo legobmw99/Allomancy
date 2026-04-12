@@ -126,4 +126,13 @@ public class AllomancyTestHelper extends ExtendedGameTestHelper {
         }
     }
 
+    public void assertPlayerLacksAdvancement(ServerPlayer player, Identifier advancement) {
+        var advancementHolder = this.getLevel().getServer().getAdvancements().get(advancement);
+        if (advancementHolder == null) {
+            throw this.assertionException(("Advancement " + advancement + " was not found in the server"));
+        }
+        if (player.getAdvancements().getOrStartProgress(advancementHolder).isDone()) {
+            throw this.assertionException(this.relativePos(player.blockPosition()), "Player had " + advancement);
+        }
+    }
 }
