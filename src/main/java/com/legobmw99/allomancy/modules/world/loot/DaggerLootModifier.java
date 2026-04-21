@@ -25,8 +25,8 @@ public class DaggerLootModifier extends LootModifier {
                     .and(Codec.INT.fieldOf("chance_one_in").forGetter(t -> t.chance_one_in))
                     .apply(inst, DaggerLootModifier::new)));
 
-    public DaggerLootModifier(LootItemCondition[] conditionsIn, int chance_one_in) {
-        super(conditionsIn);
+    public DaggerLootModifier(LootItemCondition[] conditionsIn, int priority, int chance_one_in) {
+        super(conditionsIn, priority);
         this.chance_one_in = chance_one_in;
     }
 

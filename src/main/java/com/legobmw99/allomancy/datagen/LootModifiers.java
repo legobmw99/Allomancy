@@ -8,6 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 
 import java.util.concurrent.CompletableFuture;
@@ -28,6 +29,7 @@ class LootModifiers extends GlobalLootModifierProvider {
         var daggerLocations = new LootItemCondition[]{
                 AnyOfCondition.anyOf(LootTableIdCondition.builder(WOODLAND), LootTableIdCondition.builder(END_CITY),
                                      LootTableIdCondition.builder(OUTPOST)).build()};
-        add("unbreakable_dagger_loot", new DaggerLootModifier(daggerLocations, 20));
+        add("unbreakable_dagger_loot",
+            new DaggerLootModifier(daggerLocations, IGlobalLootModifier.DEFAULT_PRIORITY, 20));
     }
 }
