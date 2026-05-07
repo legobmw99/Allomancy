@@ -1,5 +1,6 @@
 package com.legobmw99.allomancy.modules.powers.client.util;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
@@ -9,67 +10,54 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
+import java.util.List;
+
 public class Rendering {
 
 
-    /**
-     * Draws a line from the player (denoted pX,Y,Z) to the given set of
-     * coordinates (oX,Y,Z) in a certain color (r,g,b)
-     *
-     * @param player
-     * @param dest
-     * @param width  the width of the line
-     */
-    /**Old version
-      public static void drawMetalLine(PoseStack stack,
+    public record Color(float r, float g, float b) {
+    }
 
-                                     Vec3 player,
-                                     Vec3 dest,
-                                     float width,
-                                     float r,
-                                     float g,
-                                     float b) {
+    public record Line(Vec3 dest, Color color) {
+    }
 
-        //        RenderSystem.lineWidth(width);
-        Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder builder = tessellator.getBuilder();
+    public static void drawMetalLines(PoseStack stack, Vec3 player, List<Line> lines, float width) {
 
-        builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-        Matrix4f matrix4f = stack.last().pose();
-        builder
-                .vertex(matrix4f, (float) player.x, (float) player.y, (float) player.z)
-                .color(r, g, b, 0.6f)
-                .endVertex();
-        builder.vertex(matrix4f, (float) dest.x, (float) dest.y, (float) dest.z).color(r, g, b, 0.6f).endVertex();
-        RenderSystem.lineWidth(width);
+        GlStateManager._depthMask(false);
+        GlStateManager._disableCull();
+        RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
+        Tesselator tesselator = RenderSystem.renderThreadTesselator();
+        BufferBuilder builder = tesselator.getBuilder();
+        builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
 
-        tessellator.end();
+//        var bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+//        VertexConsumer builder = bufferSource.getBuffer(RenderType.lines());
 
-    }*/
-
-    /** New version (Without width)
-     */
-    public static void drawMetalLine(PoseStack stack, Vec3 player, Vec3 dest, float width, float r, float g, float b) {
-        var bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-        VertexConsumer builder = bufferSource.getBuffer(RenderType.lines());
         Matrix4f matrix4f = stack.last().pose();
         Matrix3f normalMatrix = stack.last().normal();
+        RenderSystem.lineWidth(width);
 
-        builder.vertex(matrix4f, (float)player.x, (float)player.y, (float)player.z)
-                .color(r, g, b, 0.6F)
-                .normal(normalMatrix, 0, 1, 0)
-                .endVertex();
-        builder.vertex(matrix4f, (float)dest.x, (float)dest.y, (float)dest.z)
-                .color(r, g, b, 0.6F)
-                .normal(normalMatrix, 0, 1, 0)
-                .endVertex();
+        for (var line : lines) {
+            builder
+                    .vertex(matrix4f, (float) player.x, (float) player.y, (float) player.z)
+                    .color(line.color.r, line.color.g, line.color.b, 0.6F)
+                    .normal(normalMatrix, 0, 1, 0)
+                    .endVertex();
+            builder
+                    .vertex(matrix4f, (float) line.dest.x, (float) line.dest.y, (float) line.dest.z)
+                    .color(line.color.r, line.color.g, line.color.b, 0.6F)
+                    .normal(normalMatrix, 0, 1, 0)
+                    .endVertex();
+        }
+        tesselator.end();
+        RenderSystem.lineWidth(1.0F);
+        GlStateManager._enableCull();
+        GlStateManager._depthMask(true);
+
+        Minecraft.getInstance().renderBuffers().bufferSource().endBatch(RenderType.lines());
     }
 
     public static void doneDrawingLines(PoseStack stack) {
-
-        Minecraft.getInstance().renderBuffers().bufferSource().endBatch(RenderType.lines());
-
-        //old code (idk if it's still needed but it doesn't seem to break anything)
         stack.popPose();
         RenderSystem.applyModelViewMatrix();
 
