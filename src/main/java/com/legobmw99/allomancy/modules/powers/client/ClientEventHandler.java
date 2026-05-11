@@ -28,8 +28,21 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class ClientEventHandler {
     private static final Tracking tracking = new Tracking();
+
+
+    private static final List<Rendering.Line> narrowLines = new ArrayList<>(); // 1.5 wide
+    private static final List<Rendering.Line> mediumLines = new ArrayList<>(); // 3 wide
+    private static final List<Rendering.Line> thickLines = new ArrayList<>(); // 5 wide
+    private static final Rendering.Color IRON_STEEL_LINE_COLOR = new Rendering.Color(0.0F, 0.6F, 1.0F);
+    private static final Rendering.Color BRONZE_LINE_COLOR = new Rendering.Color(0.7F, 0.15F, 0.15F);
+    private static final Rendering.Color GOLD_LINE_COLOR = new Rendering.Color(0.9F, 0.85F, 0.0F);
+    private static final Rendering.Color ELECTRUM_LINE_COLOR = new Rendering.Color(0.7F, 0.8F, 0.2F);
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -103,6 +116,70 @@ public class ClientEventHandler {
             if (data.isUninvested()) {
                 return;
             }
+
+            narrowLines.clear();
+            mediumLines.clear();
+            thickLines.clear();
+
+            /*********************************************
+             * IRON AND STEEL LINES                      *
+             *********************************************/
+
+            if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
+                tracking.forEachMetallicEntity(
+                        entity -> mediumLines.add(new Rendering.Line(entity.position(), IRON_STEEL_LINE_COLOR)));
+
+                tracking.forEachMetalBlob(blob -> {
+                    Rendering.Line line = new Rendering.Line(blob.getCenter(), IRON_STEEL_LINE_COLOR);
+                    float perfectWidth = 0.3F + blob.size() * 0.4F;
+                    if (perfectWidth < 2.25f) {
+                        narrowLines.add(line);
+                    } else if (perfectWidth < 4) {
+                        mediumLines.add(line);
+                    } else {
+                        thickLines.add(line);
+                    }
+                });
+            }
+
+
+            /*********************************************
+             * BRONZE LINES                              *
+             *********************************************/
+            GlobalPos seeking = data.getSpecialSeekingLoc();
+            if (seeking != null && player.level().dimension() == seeking.dimension()) {
+                thickLines.add(new Rendering.Line(seeking.pos().getCenter(), BRONZE_LINE_COLOR));
+            }
+            if ((data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER)))) {
+                tracking.forEachSeeked(playerEntity -> thickLines.add(
+                        new Rendering.Line(playerEntity.position(), BRONZE_LINE_COLOR)));
+            }
+
+
+            /*********************************************
+             * GOLD AND ELECTRUM LINES                   *
+             *********************************************/
+
+            if (data.isBurning(Metal.GOLD)) {
+                player.getLastDeathLocation().ifPresent(death -> {
+                    if (player.level().dimension() == death.dimension()) {
+                        mediumLines.add(new Rendering.Line(Vec3.atCenterOf(death.pos()), GOLD_LINE_COLOR));
+                    }
+                });
+            }
+            if (data.isBurning(Metal.ELECTRUM)) {
+                GlobalPos spawn = data.getSpawnLoc();
+                if (spawn == null &&
+                    player.level().dimension() == Level.OVERWORLD) { // overworld, no spawn --> use world spawn
+                    var levelData = player.level().getLevelData();
+                    BlockPos spawnLoc =
+                            new BlockPos(levelData.getXSpawn(), levelData.getYSpawn(), levelData.getZSpawn());
+                    mediumLines.add(new Rendering.Line(Vec3.atCenterOf(spawnLoc), ELECTRUM_LINE_COLOR));
+                } else if (player.level().dimension() == spawn.dimension()) {
+                    mediumLines.add(new Rendering.Line(Vec3.atCenterOf(spawn.pos()), ELECTRUM_LINE_COLOR));
+                }
+            }
+
             float partialTick = event.getPartialTick();
 
             PoseStack stack = Rendering.prepareToDrawLines(event.getPoseStack(), partialTick);
@@ -116,57 +193,9 @@ public class ClientEventHandler {
                     .add(rho * Mth.sin(phi) * Mth.cos(theta), rho * Mth.cos(phi) - 0.35F,
                          rho * Mth.sin(phi) * Mth.sin(theta));
 
-            /*********************************************
-             * IRON AND STEEL LINES                      *
-             *********************************************/
-
-
-            if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
-                tracking.forEachMetallicEntity(
-                        entity -> Rendering.drawMetalLine(stack, playervec, entity.position(), 1.5F, 0F, 0.6F, 1F));
-
-                tracking.forEachMetalBlob(blob -> Rendering.drawMetalLine(stack, playervec, blob.getCenter(),
-                                                                          Mth.clamp(0.3F + blob.size() * 0.4F, 0.5F,
-                                                                                    7.5F), 0F, 0.6F, 1F));
-            }
-
-            /*********************************************
-             * BRONZE LINES                              *
-             *********************************************/
-            GlobalPos seeking = data.getSpecialSeekingLoc();
-            if (seeking != null && player.level().dimension() == seeking.dimension()) {
-                Rendering.drawMetalLine(stack, playervec, seeking.pos().getCenter(), 5.0F, 0.7F, 0.15F, 0.15F);
-            }
-            if ((data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER)))) {
-                tracking.forEachSeeked(
-                        playerEntity -> Rendering.drawMetalLine(stack, playervec, playerEntity.position(), 5.0F, 0.7F,
-                                                                0.15F, 0.15F));
-            }
-
-            /*********************************************
-             * GOLD AND ELECTRUM LINES                   *
-             *********************************************/
-            if (data.isBurning(Metal.GOLD)) {
-                player.getLastDeathLocation().ifPresent(death -> {
-                    if (player.level().dimension() == death.dimension()) {
-                        Rendering.drawMetalLine(stack, playervec, Vec3.atCenterOf(death.pos()), 3.0F, 0.9F, 0.85F,
-                                                0.0F);
-                    }
-                });
-
-            }
-            if (data.isBurning(Metal.ELECTRUM)) {
-                GlobalPos spawn = data.getSpawnLoc();
-                if (spawn == null &&
-                    player.level().dimension() == Level.OVERWORLD) { // overworld, no spawn --> use world spawn
-                    var levelData = player.level().getLevelData();
-                    BlockPos spawnLoc =
-                            new BlockPos(levelData.getXSpawn(), levelData.getYSpawn(), levelData.getZSpawn());
-                    Rendering.drawMetalLine(stack, playervec, Vec3.atCenterOf(spawnLoc), 3.0F, 0.7F, 0.8F, 0.2F);
-                } else if (spawn != null && player.level().dimension() == spawn.dimension()) {
-                    Rendering.drawMetalLine(stack, playervec, Vec3.atCenterOf(spawn.pos()), 3.0F, 0.7F, 0.8F, 0.2F);
-                }
-            }
+            Rendering.drawMetalLines(stack, playervec, narrowLines, 2.0f);
+            Rendering.drawMetalLines(stack, playervec, mediumLines, 4.5f);
+            Rendering.drawMetalLines(stack, playervec, thickLines, 6.5f);
 
             Rendering.doneDrawingLines(stack);
         });
