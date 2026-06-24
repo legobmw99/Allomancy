@@ -35,7 +35,6 @@ import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STO
 public final class ClientEventHandler {
     private static final Tracking tracking = new Tracking();
 
-    // TODO: a custom shader that includes linewidth as a in rather than a uniform?
     private static final List<Rendering.Line> narrowLines = new ArrayList<>(); // 1.5 wide
     private static final List<Rendering.Line> mediumLines = new ArrayList<>(); // 3 wide
     private static final List<Rendering.Line> thickLines = new ArrayList<>(); // 5 wide
@@ -116,7 +115,7 @@ public final class ClientEventHandler {
         event.getRenderState().setRenderData(ALLOMANCY_SOURCE, source);
     }
 
-    // TODO: split using ExtractLevelRenderStateEvent, c.f. https://github.com/neoforged/NeoForge/pull/2648
+    // TODO(someday): split using ExtractLevelRenderStateEvent, c.f. https://github.com/neoforged/NeoForge/pull/2648
     //  https://neoforged.net/news/21.9release/#level-rendering-changes
     @SubscribeEvent
     public static void onRenderLevelStage(final RenderLevelStageEvent.AfterWeather event) {
@@ -162,7 +161,7 @@ public final class ClientEventHandler {
          *********************************************/
         GlobalPos seeking = data.getSpecialSeekingLoc();
         if (seeking != null && player.level().dimension() == seeking.dimension()) {
-            thickLines.add(new Rendering.Line(seeking.pos().getCenter(), BRONZE_LINE_COLOR));
+            thickLines.add(new Rendering.Line(Vec3.atCenterOf(seeking.pos()), BRONZE_LINE_COLOR));
         }
         if ((data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER)))) {
             tracking.forEachSeeked(
@@ -197,7 +196,7 @@ public final class ClientEventHandler {
 
         var stack = event.getPoseStack();
         stack.pushPose();
-        // TODO: also account for view bobbing, FOV
+        // TODO(someday): also account for view bobbing, FOV
         //  See GameRenderer#bobView
         Vec3 view = event.getLevelRenderState().cameraRenderState.pos.reverse();
         stack.translate(view);
@@ -237,7 +236,7 @@ public final class ClientEventHandler {
      */
     @SubscribeEvent
     public static void updateInputEvent(final MovementInputUpdateEvent event) {
-        if (Minecraft.getInstance().screen instanceof MetalSelectScreen) {
+        if (Minecraft.getInstance().gui.screen() instanceof MetalSelectScreen) {
             Inputs.fakeMovement(event.getInput());
         }
     }

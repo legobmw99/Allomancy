@@ -11,14 +11,21 @@ import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnPlayerTrigg
 import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.DamageSourcePredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.predicates.LocationPredicate;
+import net.minecraft.advancements.predicates.TagPredicate;
+import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
+import net.minecraft.advancements.triggers.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -183,7 +190,7 @@ class Advancements implements AdvancementSubProvider {
         var ironGolemPredicate = EntityPredicate.wrap(EntityPredicate.Builder
                                                               .entity()
                                                               .of(registries.lookupOrThrow(Registries.ENTITY_TYPE),
-                                                                  EntityType.IRON_GOLEM));
+                                                                  EntityTypes.IRON_GOLEM));
 
         Advancement.Builder
                 .advancement()

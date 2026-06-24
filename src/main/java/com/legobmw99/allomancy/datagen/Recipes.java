@@ -9,7 +9,7 @@ import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
 import com.legobmw99.allomancy.util.AllomancyTags;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -49,7 +49,7 @@ final class Recipes extends RecipeProvider {
         add('S', ItemTags.WOODEN_SLABS);
         add('G', Tags.Items.GLASS_BLOCKS_COLORLESS);
         add('I', AllomancyTags.STORAGE_BLOCK_ITEM_TAGS.get(Metal.IRON.getIndex()));
-        add('W', Items.GRAY_WOOL);
+        add('W', Items.WOOL.gray());
         add('O', Tags.Items.OBSIDIANS);
         add('C', Tags.Items.COBBLESTONES);
         add('A', AllomancyTags.INGOT_TAGS.get(Metal.ALUMINUM.getIndex()));

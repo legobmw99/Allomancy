@@ -4,7 +4,7 @@ import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ public record SummonLightningConsumeEffect() implements ConsumeEffect {
 
     @Override
     public boolean apply(Level level, ItemStack stack, LivingEntity entity) {
-        LightningBolt lightning = new LightningBolt(EntityType.LIGHTNING_BOLT, level);
+        LightningBolt lightning = new LightningBolt(EntityTypes.LIGHTNING_BOLT, level);
         lightning.setVisualOnly(true);
         lightning.snapTo(entity.position().add(0, 3, 0));
         level.addFreshEntity(lightning);

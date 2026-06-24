@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "n": "allomancy:nicrosil_nugget",
     "t": "#c:nuggets/nicrosil"

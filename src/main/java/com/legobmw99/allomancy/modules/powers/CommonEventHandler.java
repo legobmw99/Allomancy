@@ -384,7 +384,6 @@ public final class CommonEventHandler {
              * COPPER (enhanced)                      *
              *********************************************/
             if (data.isEnhanced() && data.isBurning(Metal.COPPER)) {
-                // TODO should regular copper still set WAYPOINT_TRANSMIT_RANGE to -1?
                 curPlayer.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 50, true, false));
             }
         }

@@ -74,8 +74,8 @@ public final class ConsumeSetup {
     private static void onModifyComponents(final ModifyDefaultComponentsEvent event) {
         FlakeStorage gold = new FlakeStorage.Mutable().add(Metal.GOLD).toImmutable();
 
-        event.modify(Items.GOLDEN_APPLE, builder -> builder.set(FLAKE_STORAGE.get(), gold));
-        event.modify(Items.GOLDEN_CARROT, builder -> builder.set(FLAKE_STORAGE.get(), gold));
-        event.modify(Items.ENCHANTED_GOLDEN_APPLE, builder -> builder.set(FLAKE_STORAGE.get(), gold));
+        event.modify(Items.GOLDEN_APPLE, (builder, ctx, item) -> builder.set(FLAKE_STORAGE.get(), gold));
+        event.modify(Items.GOLDEN_CARROT, (builder, ctx, item) -> builder.set(FLAKE_STORAGE.get(), gold));
+        event.modify(Items.ENCHANTED_GOLDEN_APPLE, (builder, ctx, item) -> builder.set(FLAKE_STORAGE.get(), gold));
     }
 }

@@ -10,7 +10,7 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
@@ -59,7 +59,7 @@ public class CoinBagTest {
         var nugget = WorldSetup.NUGGETS.get(Metal.CADMIUM.getIndex()).get();
         player.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(nugget, 1));
 
-        var chicken = helper.spawnWithNoFreeWill(EntityType.CHICKEN, BlockPos.ZERO);
+        var chicken = helper.spawnWithNoFreeWill(EntityTypes.CHICKEN, BlockPos.ZERO);
         helper.withLowHealth(chicken);
 
         player.lookAt(EntityAnchorArgument.Anchor.EYES, chicken.position());
@@ -74,7 +74,7 @@ public class CoinBagTest {
                                        "Didn't spawn coin");
                 })
                 .thenExecuteAfter(1, () -> {
-                    helper.assertEntityNotPresent(EntityType.CHICKEN);
+                    helper.assertEntityNotPresent(EntityTypes.CHICKEN);
                 })
                 .thenExecuteAfter(2, () -> {
                     helper.assertItemEntityNotPresent(nugget);

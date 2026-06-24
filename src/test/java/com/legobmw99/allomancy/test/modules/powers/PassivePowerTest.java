@@ -10,7 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.RegisterStructureTemplate;
 import net.neoforged.testframework.annotation.TestHolder;
@@ -192,7 +193,7 @@ public class PassivePowerTest {
         var data2 = AllomancerAttachment.get(player2);
 
         var player3 = helper.makeMistbornPlayer();
-        player3.snapTo(helper.absoluteVec(new BlockPos(4, 1, 4).getCenter()).subtract(0, 0.5, 0));
+        player3.snapTo(helper.absoluteVec(Vec3.atCenterOf(new BlockPos(4, 1, 4))).subtract(0, 0.5, 0));
         var data3 = AllomancerAttachment.get(player3);
         helper.startSequence().thenExecute(() -> {
             data.setBurning(Metal.CHROMIUM, true);
@@ -249,7 +250,7 @@ public class PassivePowerTest {
 
         data.setBurning(Metal.CADMIUM, true);
 
-        var zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        var zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(1, 1, 1));
 
         helper.succeedOnTickWhen(1, () -> {
             helper.assertMobEffectPresent(zombie, MobEffects.SLOW_FALLING,
@@ -305,7 +306,7 @@ public class PassivePowerTest {
         var player = helper.makeMistbornPlayer();
         var data = AllomancerAttachment.get(player);
 
-        var zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        var zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(1, 1, 1));
 
         data.setBurning(Metal.BENDALLOY, true);
         data.setBurning(Metal.CADMIUM, true);

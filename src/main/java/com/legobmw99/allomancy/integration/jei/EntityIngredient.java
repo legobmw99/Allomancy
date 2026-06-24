@@ -15,10 +15,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -80,7 +77,7 @@ public record EntityIngredient(EntityType<?> type) {
                     Entity entity;
                     // players cannot be created using the type, but we can use the client player
                     // side effect is it renders armor/items
-                    if (type == EntityType.PLAYER) {
+                    if (type == EntityTypes.PLAYER) {
                         entity = Minecraft.getInstance().player;
                     } else {
                         // entity is created with the client world, but the entity map is thrown away when JEI

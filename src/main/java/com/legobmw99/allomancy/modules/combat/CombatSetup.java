@@ -39,7 +39,7 @@ public final class CombatSetup {
             ResourceKey.create(Registries.DAMAGE_TYPE, Allomancy.id("coin"));
     public static final ResourceKey<EquipmentAsset> WOOL =
             ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.id("wool"));
-    // TODO: would be nice if this used the iron_darker override
+    // TODO(someday): would be nice if this used the iron_darker override
     public static final ResourceKey<EquipmentAsset> ALUMINUM =
             ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.id("aluminum"));
 
