@@ -41,38 +41,38 @@ class Languages extends LanguageProvider {
 
         for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
             String metal = WorldSetup.ORE_METALS[i].name();
-            var ore = WorldSetup.ORE_BLOCKS.get(i).get();
-            var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i).get();
-            var rawb = WorldSetup.RAW_ORE_BLOCKS.get(i).get();
+            var ore = WorldSetup.ORE_BLOCKS.get(i);
+            var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i);
+            var rawb = WorldSetup.RAW_ORE_BLOCKS.get(i);
 
-            add(ore, toTitleCase(metal) + " Ore");
-            add(ds, "Deepslate " + toTitleCase(metal) + " Ore");
-            add(rawb, "Block of Raw " + toTitleCase(metal));
+            addBlock(ore, toTitleCase(metal) + " Ore");
+            addBlock(ds, "Deepslate " + toTitleCase(metal) + " Ore");
+            addBlock(rawb, "Block of Raw " + toTitleCase(metal));
 
         }
 
-        add(ExtrasSetup.IRON_BUTTON.get(), "Iron Button");
-        add(ExtrasSetup.INVERTED_IRON_BUTTON.get(), "Inverted Iron Button");
-        add(ExtrasSetup.IRON_LEVER.get(), "Iron Lever");
+        addBlock(ExtrasSetup.IRON_BUTTON, "Iron Button");
+        addBlock(ExtrasSetup.INVERTED_IRON_BUTTON, "Inverted Iron Button");
+        addBlock(ExtrasSetup.IRON_LEVER, "Iron Lever");
         add("block.allomancy.iron_activation.lore", "This item seems too heavy to activate by ordinary means");
-        add(WorldSetup.LIQUID_LERASIUM.get(), "Concentrated Leras");
+        addBlock(WorldSetup.LIQUID_LERASIUM, "Concentrated Leras");
         add("fluid_type.allomancy.lerasium", "Concentrated Leras");
 
-        add(ConsumeSetup.ALLOMANTIC_GRINDER.get(), "Hand Grinder");
-        add(ConsumeSetup.LERASIUM_NUGGET.get(), "Lerasium Nugget");
+        addItem(ConsumeSetup.ALLOMANTIC_GRINDER, "Hand Grinder");
+        addItem(ConsumeSetup.LERASIUM_NUGGET, "Lerasium Nugget");
         add("item.allomancy.lerasium_nugget.lore",
             "This item is endowed with strange powers, perhaps you should ingest it?");
-        add(CombatSetup.MISTCLOAK.get(), "Mistcloak");
-        add(ExtrasSetup.BRONZE_EARRING.get(), "Bronze Earring");
+        addItem(CombatSetup.MISTCLOAK, "Mistcloak");
+        addItem(ExtrasSetup.BRONZE_EARRING, "Bronze Earring");
         add("item.allomancy.bronze_earring.lore", "Useless, but sharp...");
-        add(ExtrasSetup.CHARGED_BRONZE_EARRING.get(), "Charged Bronze Earring");
+        addItem(ExtrasSetup.CHARGED_BRONZE_EARRING, "Charged Bronze Earring");
         add("item.allomancy.charged_bronze_earring.lore", "You hear a pulsing in the distance...");
-        add(CombatSetup.ALUMINUM_HELMET.get(), "Aluminum Helmet");
-        add(CombatSetup.COIN_BAG.get(), "Coin Bag");
-        add(CombatSetup.OBSIDIAN_DAGGER.get(), "Obsidian Dagger");
-        add(CombatSetup.KOLOSS_BLADE.get(), "Koloss Blade");
+        addItem(CombatSetup.ALUMINUM_HELMET, "Aluminum Helmet");
+        addItem(CombatSetup.COIN_BAG, "Coin Bag");
+        addItem(CombatSetup.OBSIDIAN_DAGGER, "Obsidian Dagger");
+        addItem(CombatSetup.KOLOSS_BLADE, "Koloss Blade");
         add("item.allomancy.koloss_blade.lore", "This item is too heavy for the average person to wield.");
-        add(ConsumeSetup.VIAL.get(), "Allomantic Vial");
+        addItem(ConsumeSetup.VIAL, "Allomantic Vial");
         add("allomancy.flake_storage.lore_single", "Contains %s");
         add("allomancy.flake_storage.lore_count", "Contains %s metals");
         add("allomancy.flake_storage.lore_inst", "Hold SHIFT to view");
@@ -82,34 +82,34 @@ class Languages extends LanguageProvider {
             add("metals." + mt.getName(), getDisplayName(mt));
             add("key.metals." + mt.getName(), "Toggle " + getDisplayName(mt));
 
-            add(WorldSetup.FLAKES.get(mt.getIndex()).get(), getDisplayName(mt) + " Flakes");
-            add(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get(), getDisplayName(mt) + " Banner Pattern");
+            addItem(WorldSetup.FLAKES.get(mt.getIndex()), getDisplayName(mt) + " Flakes");
+            addItem(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()), getDisplayName(mt) + " Banner Pattern");
 
             if (mt.isVanilla()) {
                 continue;
             }
 
-            add(WorldSetup.NUGGETS.get(mt.getIndex()).get(), getDisplayName(mt) + " Nugget");
-            add(WorldSetup.INGOTS.get(mt.getIndex()).get(), getDisplayName(mt) + " Ingot");
-            add(WorldSetup.STORAGE_BLOCKS.get(mt.getIndex()).get(), getDisplayName(mt) + " Block");
-            add(WorldSetup.RAW_ORE_ITEMS.get(mt.getIndex()).get(),
-                "Raw " + getDisplayName(mt) + (mt.isAlloy() ? " Blend" : ""));
+            addItem(WorldSetup.NUGGETS.get(mt.getIndex()), getDisplayName(mt) + " Nugget");
+            addItem(WorldSetup.INGOTS.get(mt.getIndex()), getDisplayName(mt) + " Ingot");
+            addBlock(WorldSetup.STORAGE_BLOCKS.get(mt.getIndex()), getDisplayName(mt) + " Block");
+            addItem(WorldSetup.RAW_ORE_ITEMS.get(mt.getIndex()),
+                    "Raw " + getDisplayName(mt) + (mt.isAlloy() ? " Blend" : ""));
 
         }
 
-        add(WorldSetup.FLAKES.get(WorldSetup.LEAD).get(), "Lead Flakes");
-        add(WorldSetup.NUGGETS.get(WorldSetup.LEAD).get(), "Lead Nugget");
-        add(WorldSetup.INGOTS.get(WorldSetup.LEAD).get(), "Lead Ingot");
-        add(WorldSetup.STORAGE_BLOCKS.get(WorldSetup.LEAD).get(), "Lead Block");
-        add(WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.LEAD).get(), "Raw Lead");
+        addItem(WorldSetup.FLAKES.get(WorldSetup.LEAD), "Lead Flakes");
+        addItem(WorldSetup.NUGGETS.get(WorldSetup.LEAD), "Lead Nugget");
+        addItem(WorldSetup.INGOTS.get(WorldSetup.LEAD), "Lead Ingot");
+        addBlock(WorldSetup.STORAGE_BLOCKS.get(WorldSetup.LEAD), "Lead Block");
+        addItem(WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.LEAD), "Raw Lead");
 
-        add(WorldSetup.FLAKES.get(WorldSetup.SILVER).get(), "Silver Flakes");
-        add(WorldSetup.NUGGETS.get(WorldSetup.SILVER).get(), "Silver Nugget");
-        add(WorldSetup.INGOTS.get(WorldSetup.SILVER).get(), "Silver Ingot");
-        add(WorldSetup.STORAGE_BLOCKS.get(WorldSetup.SILVER).get(), "Silver Block");
-        add(WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.SILVER).get(), "Raw Silver");
+        addItem(WorldSetup.FLAKES.get(WorldSetup.SILVER), "Silver Flakes");
+        addItem(WorldSetup.NUGGETS.get(WorldSetup.SILVER), "Silver Nugget");
+        addItem(WorldSetup.INGOTS.get(WorldSetup.SILVER), "Silver Ingot");
+        addBlock(WorldSetup.STORAGE_BLOCKS.get(WorldSetup.SILVER), "Silver Block");
+        addItem(WorldSetup.RAW_ORE_ITEMS.get(WorldSetup.SILVER), "Raw Silver");
 
-        add(CombatSetup.NUGGET_PROJECTILE.get(), "Nugget Projectile");
+        addEntityType(CombatSetup.NUGGET_PROJECTILE, "Nugget Projectile");
 
         add("advancements.allomancy.local_metallurgist.title", "Local Metallurgist!");
         add("advancements.allomancy.local_metallurgist.desc", "Craft a grinder to begin mixing metals");

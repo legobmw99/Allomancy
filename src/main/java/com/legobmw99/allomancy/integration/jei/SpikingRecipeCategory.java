@@ -34,7 +34,7 @@ public class SpikingRecipeCategory implements IRecipeCategory<SpikingRecipeCateg
     private final IDrawable icon;
 
     public SpikingRecipeCategory(IGuiHelper helper) {
-        icon = helper.createDrawableItemLike(ExtrasSetup.BRONZE_EARRING.get());
+        icon = helper.createDrawableItemLike(ExtrasSetup.BRONZE_EARRING);
     }
 
     @Override
@@ -85,8 +85,8 @@ public class SpikingRecipeCategory implements IRecipeCategory<SpikingRecipeCateg
 
         builder.createFocusLink(i, e);
 
-        builder.addInputSlot(20, 20).add(ExtrasSetup.BRONZE_EARRING.get());
-        builder.addOutputSlot(96, 32).add(ExtrasSetup.CHARGED_BRONZE_EARRING.get()).setOutputSlotBackground();
+        builder.addInputSlot(20, 20).add(ExtrasSetup.BRONZE_EARRING);
+        builder.addOutputSlot(96, 32).add(ExtrasSetup.CHARGED_BRONZE_EARRING).setOutputSlotBackground();
 
     }
 

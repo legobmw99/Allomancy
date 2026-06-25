@@ -26,7 +26,7 @@ public class InvestingRecipeCategory implements IRecipeCategory<RecipeHolder<Inv
     private final IDrawable icon;
 
     public InvestingRecipeCategory(IGuiHelper helper) {
-        icon = helper.createDrawableItemLike(ConsumeSetup.LERASIUM_NUGGET.get());
+        icon = helper.createDrawableItemLike(ConsumeSetup.LERASIUM_NUGGET);
     }
 
     @Override
