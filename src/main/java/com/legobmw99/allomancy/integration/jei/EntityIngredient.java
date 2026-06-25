@@ -83,7 +83,11 @@ public record EntityIngredient(EntityType<?> type) {
                         // entity is created with the client world, but the entity map is thrown away when JEI
                         // restarts
                         // so they should be okay I think
-                        entity = ENTITY_MAP.computeIfAbsent(type, t -> t.create(world, EntitySpawnReason.COMMAND));
+                        entity = ENTITY_MAP.computeIfAbsent(type, t -> {
+                            Entity e = t.create(world, new EntitySpawnRequest(EntitySpawnReason.COMMAND, true));
+                            e.setId(-1);
+                            return e;
+                        });
                     }
                     // only can draw living entities, plus non-living ones don't get recipes anyways
                     if (entity instanceof LivingEntity livingEntity) {

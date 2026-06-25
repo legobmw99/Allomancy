@@ -23,11 +23,9 @@ import java.util.OptionalDouble;
 public final class Rendering {
     private Rendering() {}
 
-
-    // TODO(soon): include line width
-    public record Line(Vec3 dest, int color) {
+    // TODO(valhalla): value
+    public record Line(Vec3 target, int color, float width) {
     }
-
 
     private static final RenderSystem.AutoStorageIndexBuffer indices =
             RenderSystem.getSequentialBuffer(PrimitiveTopology.LINES);
@@ -50,28 +48,28 @@ public final class Rendering {
      *
      * @param source location of the player
      * @param lines  locations to draw toward
-     * @param width  the width of the line
      */
-    public static void drawMetalLines(PoseStack stack, Vec3 source, List<Line> lines, float width) {
+    public static void drawMetalLines(PoseStack stack, Vec3 source, List<Line> lines) {
         if (lines.isEmpty()) {
             return;
         }
-        try (ByteBufferBuilder byteb = new ByteBufferBuilder(
-                lines.size() * 2 * DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH.getVertexSize())) {
 
-            BufferBuilder builder = new BufferBuilder(byteb, METAL_LINES.getPrimitiveTopology(),
-                                                      METAL_LINES.getVertexFormatBinding(0));
+        VertexFormat format = METAL_LINES.getVertexFormatBinding(0);
+        try (ByteBufferBuilder byteBufferBuilder = ByteBufferBuilder.exactlySized(
+                lines.size() * 4 * format.getVertexSize())) {
+
+            BufferBuilder builder = new BufferBuilder(byteBufferBuilder, METAL_LINES.getPrimitiveTopology(), format);
 
             PoseStack.Pose pose = stack.last();
             Vector3f src = source.toVector3f();
             Vector3f normal = new Vector3f();
 
             for (var line : lines) {
-                Vector3f dest = line.dest.toVector3f();
+                Vector3f dest = line.target.toVector3f();
                 dest.normalize(normal);
 
-                builder.addVertex(pose, src).setColor(line.color).setNormal(pose, normal).setLineWidth(width);
-                builder.addVertex(pose, dest).setColor(line.color).setNormal(pose, normal).setLineWidth(width);
+                builder.addVertex(pose, src).setColor(line.color).setNormal(pose, normal).setLineWidth(line.width);
+                builder.addVertex(pose, dest).setColor(line.color).setNormal(pose, normal).setLineWidth(line.width);
 
             }
             Matrix4fStack matrix4fStack = RenderSystem.getModelViewStack();
