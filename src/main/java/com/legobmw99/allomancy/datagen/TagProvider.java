@@ -37,9 +37,7 @@ public final class TagProvider {
         @Override
         protected void addTags(HolderLookup.Provider provider) {
 
-            tag(EntityTypeTags.IMPACT_PROJECTILES)
-                    .replace(false)
-                    .add(BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(CombatSetup.NUGGET_PROJECTILE.get()).getKey());
+            tag(EntityTypeTags.IMPACT_PROJECTILES).replace(false).add(CombatSetup.NUGGET_PROJECTILE.getKey());
 
             tag(AllomancyTags.HEMALURGIC_CHARGERS)
                     .replace(false)
