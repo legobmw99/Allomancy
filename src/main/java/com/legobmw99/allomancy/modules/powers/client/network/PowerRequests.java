@@ -33,7 +33,7 @@ public final class PowerRequests {
             return;
         }
 
-        if (data.getStored(metal) > 0) {
+        if (data.getStored(metal) > 0 || data.isBurning(metal)) {
             data.setBurning(metal, !data.isBurning(metal));
             sendToServer(new ToggleBurnPayload(metal, data.isBurning(metal)));
         }
