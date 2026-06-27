@@ -16,13 +16,12 @@ import com.legobmw99.allomancy.modules.powers.PowersConfig;
 import com.legobmw99.allomancy.modules.powers.client.network.PowerRequests;
 import com.legobmw99.allomancy.modules.powers.client.util.Inputs;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.mojang.blaze3d.PrimitiveTopology;
 import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.ColorTargetState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -31,8 +30,8 @@ import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
@@ -43,7 +42,6 @@ import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.event.RegisterPictureInPictureRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
 
 import java.util.Arrays;
 
@@ -149,7 +147,7 @@ public class MetalSelectScreen extends Screen {
     @Override
     public boolean keyReleased(KeyEvent evt) {
         if (Inputs.BURN.matches(evt)) {
-            this.mc.setScreen(null);
+            this.mc.gui.setScreen(null);
             this.mc.mouseHandler.grabMouse();
             return true;
         }
@@ -159,7 +157,7 @@ public class MetalSelectScreen extends Screen {
     @Override
     public boolean mouseReleased(MouseButtonEvent evt) {
         if (Inputs.BURN.matchesMouse(evt)) {
-            this.mc.setScreen(null);
+            this.mc.gui.setScreen(null);
             this.mc.mouseHandler.grabMouse();
             return true;
         }
@@ -217,17 +215,14 @@ public class MetalSelectScreen extends Screen {
                 .withFragmentShader("core/position_color")
                 .withCull(false)
                 .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
-                .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLE_FAN)
+                .withPrimitiveTopology(PrimitiveTopology.TRIANGLE_FAN)
+                .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
                 .build();
         private static final RenderSetup SELECTION_SETUP =
-                RenderSetup.builder(SELECTION_BACKGROUND).bufferSize(1536).sortOnUpload().createRenderSetup();
+                RenderSetup.builder(SELECTION_BACKGROUND).createRenderSetup();
         private static final RenderType SELECTION_BACKGROUND_TYPE =
                 RenderType.create("allomancy_selection", SELECTION_SETUP);
 
-
-        public SelectionWheelRenderer(MultiBufferSource.BufferSource s) {
-            super(s);
-        }
 
         @Override
         public Class<SelectionWheelState> getRenderStateClass() {
@@ -235,59 +230,61 @@ public class MetalSelectScreen extends Screen {
         }
 
         @Override
-        protected void renderToTexture(SelectionWheelState state, PoseStack stack) {
-            VertexConsumer vertexconsumer = this.bufferSource.getBuffer(SELECTION_BACKGROUND_TYPE);
-
+        protected void renderToTexture(SelectionWheelState state,
+                                       PoseStack stack,
+                                       SubmitNodeCollector submitNodeCollector) {
             var data = state.data;
 
             int x = (state.x0 + state.x1) / 2;
             int y = (state.y0 + state.y1) / 2;
             int maxRadius = 80;
-
             stack.translate(-x, -y, 0.0F);
-            Matrix4f matrix4f = stack.last().pose();
 
             int segments = METAL_NAMES.length;
             float step = (float) Math.PI / 180;
             float degPer = (float) Math.PI * 2 / segments;
 
+            submitNodeCollector.submitCustomGeometry(stack, SELECTION_BACKGROUND_TYPE, (pose, vertexconsumer) -> {
 
-            vertexconsumer.addVertex(matrix4f, x, y, 0).setColor(0x19, 0x19, 0x19, 0x05);
 
-            for (int seg = 0; seg < segments; seg++) {
-                Metal mt = Metal.getMetal(toMetalIndex(seg));
-                boolean mouseInSector = data.hasPower(mt) &&
-                                        (degPer * seg < state.mouseAngle && state.mouseAngle < degPer * (seg + 1));
-                float radius =
-                        Math.max(0.0F, Math.min((state.timeInPartial - seg * 6.0F / segments) * 40.0F, maxRadius));
-                if (mouseInSector) {
-                    radius *= 1.025f;
-                }
+                vertexconsumer.addVertex(pose, x, y, 0).setColor(0x19, 0x19, 0x19, 0x05);
 
-                int gs = 0x55;
-                if (seg % 2 == 0) {
-                    gs += 0x19;
-                }
-
-                gs = (!data.hasPower(mt) || data.getStored(mt) == 0) ? 0 : gs;
-
-                int r = data.isBurning(mt) ? 0xFF : gs;
-                int g = gs;
-                int b = gs;
-                int a = 0x99;
-
-                for (float v = 0; v < degPer + step / 2; v += step) {
-                    float rad = v + seg * degPer;
-                    float xp = x + Mth.cos(rad) * radius;
-                    float yp = y + Mth.sin(rad) * radius;
-
-                    if (v == 0) {
-                        vertexconsumer.addVertex(matrix4f, xp, yp, 0).setColor(r, g, b, a);
+                for (int seg = 0; seg < segments; seg++) {
+                    Metal mt = Metal.getMetal(toMetalIndex(seg));
+                    boolean mouseInSector = data.hasPower(mt) && (degPer * seg < state.mouseAngle &&
+                                                                  state.mouseAngle < degPer * (seg + 1));
+                    float radius = Math.max(0.0F, Math.min((state.timeInPartial - seg * 6.0F / segments) * 40.0F,
+                                                           maxRadius));
+                    if (mouseInSector) {
+                        radius *= 1.025f;
                     }
-                    vertexconsumer.addVertex(matrix4f, xp, yp, 0).setColor(r, g, b, a);
+
+                    int gs = 0x55;
+                    if (seg % 2 == 0) {
+                        gs += 0x19;
+                    }
+
+                    gs = (!data.hasPower(mt) || data.getStored(mt) == 0) ? 0 : gs;
+
+                    int r = data.isBurning(mt) ? 0xFF : gs;
+                    int g = gs;
+                    int b = gs;
+                    int a = 0x99;
+
+                    for (float v = 0; v < degPer + step / 2; v += step) {
+                        float rad = v + seg * degPer;
+                        float xp = x + Mth.cos(rad) * radius;
+                        float yp = y + Mth.sin(rad) * radius;
+
+                        if (v == 0) {
+                            vertexconsumer.addVertex(pose, xp, yp, 0).setColor(r, g, b, a);
+                        }
+                        vertexconsumer.addVertex(pose, xp, yp, 0).setColor(r, g, b, a);
+                    }
                 }
-            }
+            });
         }
+
 
         @Override
         protected float getTranslateY(int height, int guiScale) {

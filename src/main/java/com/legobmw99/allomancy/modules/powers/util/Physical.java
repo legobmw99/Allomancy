@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -243,14 +244,7 @@ public final class Physical {
         add(Blocks.NETHERITE_BLOCK);
         add(Blocks.LODESTONE);
         add(Blocks.GILDED_BLACKSTONE);
-        add(Blocks.LIGHTNING_ROD);
-        add(Blocks.EXPOSED_LIGHTNING_ROD);
-        add(Blocks.OXIDIZED_LIGHTNING_ROD);
-        add(Blocks.WEATHERED_LIGHTNING_ROD);
-        add(Blocks.WAXED_LIGHTNING_ROD);
-        add(Blocks.WAXED_EXPOSED_LIGHTNING_ROD);
-        add(Blocks.WAXED_OXIDIZED_LIGHTNING_ROD);
-        add(Blocks.WAXED_WEATHERED_LIGHTNING_ROD);
+        Blocks.LIGHTNING_ROD.forEach(Physical::add);
         add(Blocks.CRAFTER);
         add(Blocks.HEAVY_CORE);
 
@@ -261,13 +255,13 @@ public final class Physical {
         });
 
 
-        add(ConsumeSetup.VIAL.get());
-        add(ConsumeSetup.LERASIUM_NUGGET.get());
-        add(ConsumeSetup.ALLOMANTIC_GRINDER.get());
-        add(CombatSetup.COIN_BAG.get());
+        add(ConsumeSetup.VIAL);
+        add(ConsumeSetup.LERASIUM_NUGGET);
+        add(ConsumeSetup.ALLOMANTIC_GRINDER);
+        add(CombatSetup.COIN_BAG);
 
-        add(ExtrasSetup.BRONZE_EARRING.get()); // not charged, bc hemalurgy!
-        add(WorldSetup.LIQUID_LERASIUM.get());
+        add(ExtrasSetup.BRONZE_EARRING); // not charged, bc hemalurgy!
+        add(WorldSetup.LIQUID_LERASIUM.getId());
 
         BuiltInRegistries.ITEM
                 .keySet()
@@ -305,6 +299,10 @@ public final class Physical {
 
     private static void add(Item item) {
         add(BuiltInRegistries.ITEM.getKey(item));
+    }
+
+    private static void add(DeferredItem<?> item) {
+        add(item.getId());
     }
 
 }

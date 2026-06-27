@@ -13,7 +13,7 @@ import net.minecraft.server.permissions.PermissionSet;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -41,7 +41,7 @@ public class ConsumingTest {
                     helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty(),
                                       "Lerasium never got eaten");
                     helper.assertTrue(AllomancerAttachment.get(player).isMistborn(), "Player never got invested");
-                    helper.assertFalse(helper.getEntities(EntityType.LIGHTNING_BOLT).isEmpty(),
+                    helper.assertFalse(helper.getEntities(EntityTypes.LIGHTNING_BOLT).isEmpty(),
                                        "Didn't spawn lightning");
                     helper.assertPlayerHasAdvancement(player, Allomancy.id("main/become_mistborn"));
                 })

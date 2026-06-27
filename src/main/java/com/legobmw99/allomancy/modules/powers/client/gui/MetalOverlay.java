@@ -56,11 +56,11 @@ public final class MetalOverlay implements GuiLayer {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
 
-        if (mc.options.hideGui || !player.isAlive()) {
+        if (mc.gui.hud.isHidden() || !player.isAlive()) {
             return;
         }
 
-        if (!PowersConfig.enable_overlay.get() && !(mc.screen instanceof MetalSelectScreen)) {
+        if (!PowersConfig.enable_overlay.get() && !(mc.gui.screen() instanceof MetalSelectScreen)) {
             return;
         }
 
@@ -71,7 +71,7 @@ public final class MetalOverlay implements GuiLayer {
         }
 
         Metal highlight = null;
-        if (mc.screen instanceof MetalSelectScreen select) {
+        if (mc.gui.screen() instanceof MetalSelectScreen select) {
             highlight = select.selectedMetal;
         }
 
@@ -107,7 +107,7 @@ public final class MetalOverlay implements GuiLayer {
         }
 
         // Update the animation counters
-        if (mc.gui.getGuiTicks() % 6 == 0) {
+        if (mc.gui.hud.getGuiTicks() % 6 == 0) {
             currentFrame++;
             if (currentFrame > 3) {
                 currentFrame = 0;

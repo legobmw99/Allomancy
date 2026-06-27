@@ -8,13 +8,13 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "#allomancy:killing_charges_earring"
+              "minecraft:entity_type": "#allomancy:killing_charges_earring"
             }
           }
         ],
         "killing_blow": {
           "source_entity": {
-            "equipment": {
+            "minecraft:equipment": {
               "mainhand": {
                 "items": "allomancy:bronze_earring"
               }

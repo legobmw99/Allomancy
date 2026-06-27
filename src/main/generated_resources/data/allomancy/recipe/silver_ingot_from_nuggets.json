@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "n": "allomancy:silver_nugget",
     "t": "#c:nuggets/silver"

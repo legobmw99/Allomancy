@@ -11,14 +11,21 @@ import com.legobmw99.allomancy.modules.extras.advancement.MetalUsedOnPlayerTrigg
 import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.util.AllomancyTags;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.DamageSourcePredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.predicates.LocationPredicate;
+import net.minecraft.advancements.predicates.TagPredicate;
+import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
+import net.minecraft.advancements.triggers.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -36,18 +43,18 @@ class Advancements implements AdvancementSubProvider {
         var metallurgist = Advancement.Builder
                 .advancement()
                 .parent(Advancement.Builder.advancement().build(Identifier.withDefaultNamespace("adventure/root")))
-                .display(ConsumeSetup.ALLOMANTIC_GRINDER.get(),
+                .display(ConsumeSetup.ALLOMANTIC_GRINDER,
                          Component.translatable("advancements.allomancy.local_metallurgist.title"),
                          Component.translatable("advancements.allomancy.local_metallurgist.desc"), null,
                          AdvancementType.TASK, true, true, false)
                 .addCriterion("grinder",
-                              InventoryChangeTrigger.TriggerInstance.hasItems(ConsumeSetup.ALLOMANTIC_GRINDER.get()))
+                              InventoryChangeTrigger.TriggerInstance.hasItems(ConsumeSetup.ALLOMANTIC_GRINDER))
                 .save(saver, "allomancy:main/metallurgist");
 
         Advancement.Builder
                 .advancement()
                 .parent(metallurgist)
-                .display(ConsumeSetup.LERASIUM_NUGGET.get(),
+                .display(ConsumeSetup.LERASIUM_NUGGET,
                          Component.translatable("advancements.allomancy.dna_entangled.title"),
                          Component.translatable("advancements.allomancy.dna_entangled.desc"), null,
                          AdvancementType.TASK, true, false, true)
@@ -58,18 +65,17 @@ class Advancements implements AdvancementSubProvider {
         var bling = Advancement.Builder
                 .advancement()
                 .parent(metallurgist)
-                .display(ExtrasSetup.BRONZE_EARRING.get(),
+                .display(ExtrasSetup.BRONZE_EARRING,
                          Component.translatable("advancements.allomancy.blinged_out.title"),
                          Component.translatable("advancements.allomancy.blinged_out.desc"), null,
                          AdvancementType.TASK, true, false, false)
-                .addCriterion("earring",
-                              InventoryChangeTrigger.TriggerInstance.hasItems(ExtrasSetup.BRONZE_EARRING.get()))
+                .addCriterion("earring", InventoryChangeTrigger.TriggerInstance.hasItems(ExtrasSetup.BRONZE_EARRING))
                 .save(saver, "allomancy:main/bling");
 
         var bloody = Advancement.Builder
                 .advancement()
                 .parent(bling)
-                .display(ExtrasSetup.CHARGED_BRONZE_EARRING.get(),
+                .display(ExtrasSetup.CHARGED_BRONZE_EARRING,
                          Component.translatable("advancements.allomancy.bloody.title"),
                          Component.translatable("advancements.allomancy.bloody.desc"), null, AdvancementType.TASK,
                          true, false, false)
@@ -85,14 +91,13 @@ class Advancements implements AdvancementSubProvider {
                                                               ItemPredicate.Builder
                                                                       .item()
                                                                       .of(registries.lookupOrThrow(Registries.ITEM),
-                                                                          ExtrasSetup.BRONZE_EARRING.get()))))))
+                                                                          ExtrasSetup.BRONZE_EARRING))))))
                 .save(saver, "allomancy:main/bloody");
 
         var well = Advancement.Builder
                 .advancement()
                 .parent(bloody)
-                .display(ConsumeSetup.LERASIUM_NUGGET.get(),
-                         Component.translatable("advancements.allomancy.well.title"),
+                .display(ConsumeSetup.LERASIUM_NUGGET, Component.translatable("advancements.allomancy.well.title"),
                          Component.translatable("advancements.allomancy.well.desc"), null, AdvancementType.GOAL, true,
                          true, true)
                 .addCriterion("in_well", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(
@@ -102,12 +107,12 @@ class Advancements implements AdvancementSubProvider {
         Advancement.Builder
                 .advancement()
                 .parent(well)
-                .display(CombatSetup.MISTCLOAK.get(),
+                .display(CombatSetup.MISTCLOAK,
                          Component.translatable("advancements.allomancy.become_mistborn.title"),
                          Component.translatable("advancements.allomancy.become_mistborn.desc"), null,
                          AdvancementType.CHALLENGE, true, true, true)
                 .addCriterion("lerasium_nugget",
-                              ConsumeItemTrigger.TriggerInstance.usedItem(getter, ConsumeSetup.LERASIUM_NUGGET.get()))
+                              ConsumeItemTrigger.TriggerInstance.usedItem(getter, ConsumeSetup.LERASIUM_NUGGET))
                 .rewards(AdvancementRewards.Builder.experience(100))
                 .save(saver, "allomancy:main/become_mistborn");
 
@@ -124,7 +129,7 @@ class Advancements implements AdvancementSubProvider {
                          AdvancementType.CHALLENGE, true, true, false);
         for (var flake : WorldSetup.FLAKES) {
             allMetals.addCriterion("has_" + flake.getId().getPath(),
-                                   InventoryChangeTrigger.TriggerInstance.hasItems(flake.get()));
+                                   InventoryChangeTrigger.TriggerInstance.hasItems(flake));
         }
 
         allMetals.save(saver, "allomancy:main/metallic_collector");
@@ -133,7 +138,7 @@ class Advancements implements AdvancementSubProvider {
         var coinshot = Advancement.Builder
                 .advancement()
                 .parent(metallurgist)
-                .display(CombatSetup.COIN_BAG.get(), Component.translatable("advancements.allomancy.coinshot.title"),
+                .display(CombatSetup.COIN_BAG, Component.translatable("advancements.allomancy.coinshot.title"),
                          Component.translatable("advancements.allomancy.coinshot.desc"), null, AdvancementType.TASK,
                          true, true, false)
                 .addCriterion("nugget_kill", KilledTrigger.TriggerInstance.playerKilledEntity(Optional.empty(),
@@ -156,7 +161,7 @@ class Advancements implements AdvancementSubProvider {
         Advancement.Builder
                 .advancement()
                 .parent(metallurgist)
-                .display(CombatSetup.ALUMINUM_HELMET.get(),
+                .display(CombatSetup.ALUMINUM_HELMET,
                          Component.translatable("advancements.allomancy.tin_foil_hat.title"),
                          Component.translatable("advancements.allomancy.tin_foil_hat.desc"), null,
                          AdvancementType.TASK, true, false, true)
@@ -183,7 +188,7 @@ class Advancements implements AdvancementSubProvider {
         var ironGolemPredicate = EntityPredicate.wrap(EntityPredicate.Builder
                                                               .entity()
                                                               .of(registries.lookupOrThrow(Registries.ENTITY_TYPE),
-                                                                  EntityType.IRON_GOLEM));
+                                                                  EntityTypes.IRON_GOLEM));
 
         Advancement.Builder
                 .advancement()

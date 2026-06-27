@@ -27,11 +27,11 @@ import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.EnumMap;
-import java.util.function.Supplier;
 
 public final class CombatSetup {
 
@@ -39,7 +39,7 @@ public final class CombatSetup {
             ResourceKey.create(Registries.DAMAGE_TYPE, Allomancy.id("coin"));
     public static final ResourceKey<EquipmentAsset> WOOL =
             ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.id("wool"));
-    // TODO: would be nice if this used the iron_darker override
+    // TODO(someday): would be nice if this used the iron_darker override
     public static final ResourceKey<EquipmentAsset> ALUMINUM =
             ResourceKey.create(EquipmentAssets.ROOT_ID, Allomancy.id("aluminum"));
 
@@ -101,13 +101,12 @@ public final class CombatSetup {
             });
 
 
-    public static final Supplier<EntityType<ProjectileNuggetEntity>> NUGGET_PROJECTILE =
-            ENTITIES.register("nugget_projectile", () -> EntityType.Builder
-                    .<ProjectileNuggetEntity>of(ProjectileNuggetEntity::new, MobCategory.MISC)
-                    .setShouldReceiveVelocityUpdates(true)
-                    .setUpdateInterval(20)
-                    .sized(0.25F, 0.25F)
-                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Allomancy.id("nugget_projectile"))));
+    public static final DeferredHolder<EntityType<?>, EntityType<ProjectileNuggetEntity>> NUGGET_PROJECTILE =
+            ENTITIES.registerEntityType("nugget_projectile", ProjectileNuggetEntity::new, MobCategory.MISC,
+                                        (builder) -> builder
+                                                .setShouldReceiveVelocityUpdates(true)
+                                                .setUpdateInterval(20)
+                                                .sized(0.25F, 0.25F));
 
     private CombatSetup() {}
 

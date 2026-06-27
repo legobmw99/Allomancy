@@ -15,10 +15,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -80,22 +77,26 @@ public record EntityIngredient(EntityType<?> type) {
                     Entity entity;
                     // players cannot be created using the type, but we can use the client player
                     // side effect is it renders armor/items
-                    if (type == EntityType.PLAYER) {
+                    if (type == EntityTypes.PLAYER) {
                         entity = Minecraft.getInstance().player;
                     } else {
                         // entity is created with the client world, but the entity map is thrown away when JEI
                         // restarts
                         // so they should be okay I think
-                        entity = ENTITY_MAP.computeIfAbsent(type, t -> t.create(world, EntitySpawnReason.COMMAND));
+                        entity = ENTITY_MAP.computeIfAbsent(type, t -> {
+                            Entity e = t.create(world, new EntitySpawnRequest(EntitySpawnReason.COMMAND, true));
+                            e.setId(-1);
+                            return e;
+                        });
                     }
                     // only can draw living entities, plus non-living ones don't get recipes anyways
                     if (entity instanceof LivingEntity livingEntity) {
                         // scale down large mobs, but don't scale up small ones
                         int scale = size / 2;
-                        float height = entity.getBbHeight();
-                        float width = entity.getBbWidth();
-                        if (height > 2 || width > 2) {
-                            scale = (int) (size / (Math.max(height, width)) - 1);
+                        float height = entity.getType().getHeight();
+                        float width = entity.getType().getWidth();
+                        if (height > 2 || width > 2 || height + width > 3.8) {
+                            scale = (int) (size / (Math.max(height, width) * 1.5f));
                         }
                         // catch exceptions drawing the entity to be safe, any caught exceptions blacklist the entity
                         try {

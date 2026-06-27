@@ -18,6 +18,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.cubemob.SulfurCube;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
@@ -98,7 +99,8 @@ public final class ServerPayloadHandler {
                 ExtrasSetup.METAL_USED_ON_ENTITY_TRIGGER.get().trigger(player, target, which, data.isEnhanced());
 
                 // The player moves
-                if (target instanceof IronGolem || target instanceof ItemFrame) {
+                // TODO(soon): account for sulfur cube weight?
+                if (target instanceof IronGolem || target instanceof ItemFrame || target instanceof SulfurCube) {
                     Physical.lurch(payload.force(), player, target.blockPosition());
                 } else if (target instanceof ItemEntity || target instanceof FallingBlockEntity ||
                            target instanceof ArmorStand ||

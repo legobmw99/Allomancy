@@ -19,6 +19,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 
@@ -34,13 +35,13 @@ public final class ItemDisplay {
                     .icon(CombatSetup.MISTCLOAK::toStack)
                     .title(Component.translatable("tabs" + ".allomancy.main_tab"))
                     .displayItems((featureFlags, output) -> {
-                        output.accept(ConsumeSetup.LERASIUM_NUGGET.get());
+                        output.accept(ConsumeSetup.LERASIUM_NUGGET);
 
-                        output.accept(CombatSetup.ALUMINUM_HELMET.get());
-                        output.accept(CombatSetup.MISTCLOAK.get());
-                        output.accept(CombatSetup.COIN_BAG.get());
-                        output.accept(ConsumeSetup.ALLOMANTIC_GRINDER.get());
-                        output.accept(ConsumeSetup.VIAL.get());
+                        output.accept(CombatSetup.ALUMINUM_HELMET);
+                        output.accept(CombatSetup.MISTCLOAK);
+                        output.accept(CombatSetup.COIN_BAG);
+                        output.accept(ConsumeSetup.ALLOMANTIC_GRINDER);
+                        output.accept(ConsumeSetup.VIAL);
 
                         ItemStack fullVial = ConsumeSetup.VIAL.toStack();
                         FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
@@ -51,67 +52,27 @@ public final class ItemDisplay {
 
                         output.accept(fullVial);
 
-                        output.accept(CombatSetup.KOLOSS_BLADE.get());
-                        output.accept(CombatSetup.OBSIDIAN_DAGGER.get());
+                        output.accept(CombatSetup.KOLOSS_BLADE);
+                        output.accept(CombatSetup.OBSIDIAN_DAGGER);
 
-                        output.accept(ExtrasSetup.BRONZE_EARRING.get());
-                        output.accept(ExtrasSetup.CHARGED_BRONZE_EARRING.get());
+                        output.accept(ExtrasSetup.BRONZE_EARRING);
+                        output.accept(ExtrasSetup.CHARGED_BRONZE_EARRING);
 
-                        output.accept(ExtrasSetup.IRON_LEVER.get());
-                        output.accept(ExtrasSetup.IRON_BUTTON.get());
-                        output.accept(ExtrasSetup.INVERTED_IRON_BUTTON.get());
+                        output.accept(ExtrasSetup.IRON_LEVER);
+                        output.accept(ExtrasSetup.IRON_BUTTON);
+                        output.accept(ExtrasSetup.INVERTED_IRON_BUTTON);
 
-
-                        for (var block : WorldSetup.STORAGE_BLOCKS) {
-                            if (block == null) {
-                                continue;
-                            }
-                            output.accept(block.get());
-                        }
-
-                        for (var ingot : WorldSetup.INGOTS) {
-                            if (ingot == null) {
-                                continue;
-                            }
-                            output.accept(ingot.get());
-                        }
-
-                        for (var nug : WorldSetup.NUGGETS) {
-                            if (nug == null) {
-                                continue;
-                            }
-                            output.accept(nug.get());
-                        }
-
-                        for (var flake : WorldSetup.FLAKES) {
-                            if (flake == null) {
-                                continue;
-                            }
-                            output.accept(flake.get());
-                        }
-
+                        WorldSetup.STORAGE_BLOCKS.stream().filter(Objects::nonNull).forEach(output::accept);
+                        WorldSetup.INGOTS.stream().filter(Objects::nonNull).forEach(output::accept);
+                        WorldSetup.NUGGETS.stream().filter(Objects::nonNull).forEach(output::accept);
+                        WorldSetup.FLAKES.stream().filter(Objects::nonNull).forEach(output::accept);
                         for (Metal mt : Metal.values()) {
-                            output.accept(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()).get());
+                            output.accept(ExtrasSetup.PATTERN_ITEMS.get(mt.getIndex()));
                         }
-
-                        for (var ore : WorldSetup.ORE_BLOCKS) {
-                            output.accept(ore.get());
-                        }
-
-                        for (var ore : WorldSetup.DEEPSLATE_ORE_BLOCKS) {
-                            output.accept(ore.get());
-                        }
-
-                        for (var ore : WorldSetup.RAW_ORE_BLOCKS) {
-                            output.accept(ore.get());
-                        }
-
-                        for (var ore : WorldSetup.RAW_ORE_ITEMS) {
-                            if (ore != null) {
-                                output.accept(ore.get());
-                            }
-                        }
-
+                        WorldSetup.ORE_BLOCKS.forEach(output::accept);
+                        WorldSetup.DEEPSLATE_ORE_BLOCKS.forEach(output::accept);
+                        WorldSetup.RAW_ORE_BLOCKS.forEach(output::accept);
+                        WorldSetup.RAW_ORE_ITEMS.stream().filter(Objects::nonNull).forEach(output::accept);
                     })
                     .build());
 

@@ -9,7 +9,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "equipment": {
+              "minecraft:equipment": {
                 "head": {
                   "items": "#allomancy:tin_foil_hats"
                 }
@@ -28,7 +28,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "equipment": {
+              "minecraft:equipment": {
                 "head": {
                   "items": "#allomancy:tin_foil_hats"
                 }

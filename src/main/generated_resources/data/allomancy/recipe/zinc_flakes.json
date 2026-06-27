@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
     "allomancy:allomantic_grinder",
     "#c:ingots/zinc"

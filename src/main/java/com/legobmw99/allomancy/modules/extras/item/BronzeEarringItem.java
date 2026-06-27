@@ -23,7 +23,7 @@ public class BronzeEarringItem extends Item {
         if (target.isDeadOrDying() && target.is(AllomancyTags.HEMALURGIC_CHARGERS) &&
             stack.getItem() != ExtrasSetup.CHARGED_BRONZE_EARRING.get()) {
             attacker.setItemInHand(InteractionHand.MAIN_HAND,
-                                   stack.transmuteCopy(ExtrasSetup.CHARGED_BRONZE_EARRING.get()));
+                                   stack.transmuteCopy(ExtrasSetup.CHARGED_BRONZE_EARRING));
         }
     }
 

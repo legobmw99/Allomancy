@@ -10,11 +10,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelData;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
@@ -38,7 +39,7 @@ public class ActivePowerTest {
         var data2 = AllomancerAttachment.get(player2);
 
         var player3 = helper.makeMistbornPlayer();
-        player3.snapTo(helper.absoluteVec(new BlockPos(4, 1, 4).getCenter()).subtract(0, 0.5, 0));
+        player3.snapTo(helper.absoluteVec(Vec3.atCenterOf(new BlockPos(4, 1, 4))).subtract(0, 0.5, 0));
         var data3 = AllomancerAttachment.get(player3);
 
         helper.startSequence().thenExecute(() -> {
@@ -70,7 +71,7 @@ public class ActivePowerTest {
                     data.setBurning(Metal.DURALUMIN, true);
                 })
                 .thenIdle(1)
-                .thenMap(() -> helper.spawnWithNoFreeWill(EntityType.WITHER, 1, 0, 1))
+                .thenMap(() -> helper.spawnWithNoFreeWill(EntityTypes.WITHER, 1, 0, 1))
                 .thenExecute(
                         wither -> wither.hurtServer(player.level(), player.damageSources().playerAttack(player), 4))
                 .thenExecute(

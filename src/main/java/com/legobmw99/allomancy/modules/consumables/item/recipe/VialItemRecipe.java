@@ -20,7 +20,7 @@ public class VialItemRecipe extends CustomRecipe {
 
     private VialItemRecipe() {}
 
-    private static final Ingredient INGREDIENT_VIAL = Ingredient.of(ConsumeSetup.VIAL.get());
+    private static final Ingredient INGREDIENT_VIAL = Ingredient.of(ConsumeSetup.VIAL);
 
     public static final VialItemRecipe INSTANCE = new VialItemRecipe();
 

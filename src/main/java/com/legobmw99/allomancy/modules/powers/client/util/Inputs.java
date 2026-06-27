@@ -93,7 +93,7 @@ public final class Inputs {
 
     public static void acceptAllomancyKeybinds() {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.screen != null) {
+        if (mc.gui.screen() != null) {
             return;
         }
         Player player = mc.player;
@@ -120,7 +120,7 @@ public final class Inputs {
                     PowerRequests.toggleBurn(data.getPowers()[0], data);
                     break;
                 default:
-                    mc.setScreen(new MetalSelectScreen());
+                    mc.gui.setScreen(new MetalSelectScreen());
                     break;
             }
         }

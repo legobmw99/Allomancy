@@ -15,6 +15,7 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.Mth;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -35,10 +36,7 @@ import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STO
 public final class ClientEventHandler {
     private static final Tracking tracking = new Tracking();
 
-    // TODO: a custom shader that includes linewidth as a in rather than a uniform?
-    private static final List<Rendering.Line> narrowLines = new ArrayList<>(); // 1.5 wide
-    private static final List<Rendering.Line> mediumLines = new ArrayList<>(); // 3 wide
-    private static final List<Rendering.Line> thickLines = new ArrayList<>(); // 5 wide
+    private static final List<Rendering.Line> metalLines = new ArrayList<>(); // 3 wide
 
     private static final int IRON_STEEL_LINE_COLOR = ARGB.colorFromFloat(0.6f, 0.0F, 0.6F, 1.0F);
     private static final int BRONZE_LINE_COLOR = ARGB.colorFromFloat(0.6f, 0.7F, 0.15F, 0.15F);
@@ -116,11 +114,10 @@ public final class ClientEventHandler {
         event.getRenderState().setRenderData(ALLOMANCY_SOURCE, source);
     }
 
-    // TODO: split using ExtractLevelRenderStateEvent, c.f. https://github.com/neoforged/NeoForge/pull/2648
+    // TODO(someday): split using ExtractLevelRenderStateEvent, c.f. https://github.com/neoforged/NeoForge/pull/2648
     //  https://neoforged.net/news/21.9release/#level-rendering-changes
     @SubscribeEvent
     public static void onRenderLevelStage(final RenderLevelStageEvent.AfterWeather event) {
-
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (player == null || !player.isAlive()) {
@@ -133,28 +130,18 @@ public final class ClientEventHandler {
             return;
         }
 
-        narrowLines.clear();
-        mediumLines.clear();
-        thickLines.clear();
+        metalLines.clear();
 
         /*********************************************
          * IRON AND STEEL LINES                      *
          *********************************************/
         if ((data.isBurning(Metal.IRON) || data.isBurning(Metal.STEEL))) {
             tracking.forEachMetallicEntity(
-                    entity -> mediumLines.add(new Rendering.Line(entity.position(), IRON_STEEL_LINE_COLOR)));
+                    entity -> metalLines.add(new Rendering.Line(entity.position(), IRON_STEEL_LINE_COLOR, 4.5f)));
 
-            tracking.forEachMetalBlob(blob -> {
-                Rendering.Line line = new Rendering.Line(blob.getCenter(), IRON_STEEL_LINE_COLOR);
-                float perfectWidth = 0.3F + blob.size() * 0.4F;
-                if (perfectWidth < 2.25f) {
-                    narrowLines.add(line);
-                } else if (perfectWidth < 4) {
-                    mediumLines.add(line);
-                } else {
-                    thickLines.add(line);
-                }
-            });
+            tracking.forEachMetalBlob(blob -> metalLines.add(
+                    new Rendering.Line(blob.getCenter(), IRON_STEEL_LINE_COLOR,
+                                       Mth.clamp(0.3F + blob.size() * 0.4F, 0.5F, 7.5F))));
         }
 
         /*********************************************
@@ -162,11 +149,11 @@ public final class ClientEventHandler {
          *********************************************/
         GlobalPos seeking = data.getSpecialSeekingLoc();
         if (seeking != null && player.level().dimension() == seeking.dimension()) {
-            thickLines.add(new Rendering.Line(seeking.pos().getCenter(), BRONZE_LINE_COLOR));
+            metalLines.add(new Rendering.Line(Vec3.atCenterOf(seeking.pos()), BRONZE_LINE_COLOR, 7.0F));
         }
         if ((data.isBurning(Metal.BRONZE) && (data.isEnhanced() || !data.isBurning(Metal.COPPER)))) {
-            tracking.forEachSeeked(
-                    playerEntity -> thickLines.add(new Rendering.Line(playerEntity.position(), BRONZE_LINE_COLOR)));
+            tracking.forEachSeeked(playerEntity -> metalLines.add(
+                    new Rendering.Line(playerEntity.position(), BRONZE_LINE_COLOR, 5.0F)));
         }
 
         /*********************************************
@@ -175,7 +162,7 @@ public final class ClientEventHandler {
         if (data.isBurning(Metal.GOLD)) {
             player.getLastDeathLocation().ifPresent(death -> {
                 if (player.level().dimension() == death.dimension()) {
-                    mediumLines.add(new Rendering.Line(Vec3.atCenterOf(death.pos()), GOLD_LINE_COLOR));
+                    metalLines.add(new Rendering.Line(Vec3.atCenterOf(death.pos()), GOLD_LINE_COLOR, 3.0F));
                 }
             });
         }
@@ -185,10 +172,10 @@ public final class ClientEventHandler {
                 var globalSpawn = player.level().getLevelData().getRespawnData().globalPos();
 
                 if (player.level().dimension() == globalSpawn.dimension()) {
-                    mediumLines.add(new Rendering.Line(Vec3.atCenterOf(globalSpawn.pos()), ELECTRUM_LINE_COLOR));
+                    metalLines.add(new Rendering.Line(Vec3.atCenterOf(globalSpawn.pos()), ELECTRUM_LINE_COLOR, 3.0F));
                 }
             } else if (player.level().dimension() == spawn.dimension()) {
-                mediumLines.add(new Rendering.Line(Vec3.atCenterOf(spawn.pos()), ELECTRUM_LINE_COLOR));
+                metalLines.add(new Rendering.Line(Vec3.atCenterOf(spawn.pos()), ELECTRUM_LINE_COLOR, 3.0F));
             }
         }
 
@@ -197,13 +184,11 @@ public final class ClientEventHandler {
 
         var stack = event.getPoseStack();
         stack.pushPose();
-        // TODO: also account for view bobbing, FOV
+        // TODO(someday): also account for view bobbing, FOV
         //  See GameRenderer#bobView
         Vec3 view = event.getLevelRenderState().cameraRenderState.pos.reverse();
         stack.translate(view);
-        Rendering.drawMetalLines(stack, source, narrowLines, 2.0f);
-        Rendering.drawMetalLines(stack, source, mediumLines, 4.5f);
-        Rendering.drawMetalLines(stack, source, thickLines, 6.5f);
+        Rendering.drawMetalLines(stack, source, metalLines);
 
         stack.popPose();
     }
@@ -237,7 +222,7 @@ public final class ClientEventHandler {
      */
     @SubscribeEvent
     public static void updateInputEvent(final MovementInputUpdateEvent event) {
-        if (Minecraft.getInstance().screen instanceof MetalSelectScreen) {
+        if (Minecraft.getInstance().gui.screen() instanceof MetalSelectScreen) {
             Inputs.fakeMovement(event.getInput());
         }
     }
