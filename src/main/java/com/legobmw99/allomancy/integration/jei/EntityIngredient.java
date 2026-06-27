@@ -93,10 +93,10 @@ public record EntityIngredient(EntityType<?> type) {
                     if (entity instanceof LivingEntity livingEntity) {
                         // scale down large mobs, but don't scale up small ones
                         int scale = size / 2;
-                        float height = entity.getBbHeight();
-                        float width = entity.getBbWidth();
-                        if (height > 2 || width > 2) {
-                            scale = (int) (size / (Math.max(height, width)) - 1);
+                        float height = entity.getType().getHeight();
+                        float width = entity.getType().getWidth();
+                        if (height > 2 || width > 2 || height + width > 3.8) {
+                            scale = (int) (size / (Math.max(height, width) * 1.5f));
                         }
                         // catch exceptions drawing the entity to be safe, any caught exceptions blacklist the entity
                         try {
