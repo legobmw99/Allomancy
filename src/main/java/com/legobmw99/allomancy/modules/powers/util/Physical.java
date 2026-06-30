@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.ArrayList;
@@ -155,13 +156,16 @@ public final class Physical {
         return new Vec3(mag.x < e ? 0 : value.x, mag.y < e ? 0 : value.y, mag.z < e ? 0 : value.z);
     }
 
-    private static HashSet<String> defaultSet;
-    private static List<String> defaultList = null;
+    private static List<String> defaultList = List.of();
 
     public static List<String> default_whitelist() {
-        if (defaultList != null) {
-            return defaultList;
-        }
+        return defaultList;
+    }
+
+    private static HashSet<String> defaultSet;
+
+    // needs to run relatively late so our registry lookup finds modded items
+    public static void repopulateWhitelist(final FMLCommonSetupEvent event) {
 
         defaultSet = new HashSet<>();
 
@@ -280,8 +284,6 @@ public final class Physical {
 
         defaultList = new ArrayList<>(defaultSet);
         defaultList.sort(String::compareTo);
-        return defaultList;
-
     }
 
     private static void add(String s) {
