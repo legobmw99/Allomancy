@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:gold_pattern"
+        "recipes": "allomancy:gold_pattern"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

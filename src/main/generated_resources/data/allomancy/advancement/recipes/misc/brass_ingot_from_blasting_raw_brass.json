@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:brass_ingot_from_blasting_raw_brass"
+        "recipes": "allomancy:brass_ingot_from_blasting_raw_brass"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

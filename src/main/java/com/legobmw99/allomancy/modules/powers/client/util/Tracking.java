@@ -123,7 +123,7 @@ public class Tracking {
 
         while (!this.to_consider.isEmpty()) {
             var pos = this.to_consider.removeLast();
-            for (var next : BlockPos.withinManhattan(pos, 1, 1, 1)) {
+            for (var next : BlockPos.withinManhattan(pos, 1)) {
                 if (this.seen.add(next.asLong()) && origin.distToCenterSqr(Vec3.atCenterOf(next)) < range_sqr) {
                     var nextState = level.getBlockState(next);
                     if (Physical.isBlockStateMetallic(nextState)) {

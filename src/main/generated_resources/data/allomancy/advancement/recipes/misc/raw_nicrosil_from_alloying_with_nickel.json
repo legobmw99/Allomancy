@@ -22,7 +22,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:raw_nicrosil_from_alloying_with_nickel"
+        "recipes": "allomancy:raw_nicrosil_from_alloying_with_nickel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

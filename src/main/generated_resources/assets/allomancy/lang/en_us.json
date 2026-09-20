@@ -217,7 +217,7 @@
   "allomancy.jei.investing.description": "Seek the Well...",
   "allomancy.jei.spiking": "Spiking",
   "allomancy.jei.spiking.description": "Hemalurgy is bloody work",
-  "allomancy.jei.vial_input": "Vials can have pre-existing contents, as long as they are not the same as the new flakes.",
+  "allomancy.jei.vial_input": "Can have pre-existing contents, as long as they are not the same as the new flakes.",
   "allomancy.jei.vial_output": "Will contain both the new flakes and any old ones.",
   "allomancy.networking.failed": "Allomancy packet failed to play: %s",
   "allomancy.networking.kicked": "Requested illegal action: %s",

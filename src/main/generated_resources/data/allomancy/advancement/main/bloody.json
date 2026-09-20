@@ -3,15 +3,13 @@
   "criteria": {
     "earring": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "#allomancy:killing_charges_earring"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "#allomancy:killing_charges_earring"
           }
-        ],
+        },
         "killing_blow": {
           "source_entity": {
             "minecraft:equipment": {

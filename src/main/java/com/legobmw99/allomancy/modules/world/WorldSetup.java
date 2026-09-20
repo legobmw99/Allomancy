@@ -38,18 +38,18 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.BlockReplacement;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.OreFeature;
 import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
+import net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
-import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
@@ -69,10 +69,7 @@ import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredItem;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.neoforged.neoforge.registries.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +95,7 @@ public final class WorldSetup {
                     .canHydrate(false)
                     .canSwim(false)
                     .supportsBoating(false)
+                    .isWaterLike(true) // TODO: investigate, necessary to allow motion?
                     .canDrown(false)
                     .rarity(Rarity.EPIC)
                     .pathType(PathType.LAVA)));
@@ -109,7 +107,7 @@ public final class WorldSetup {
                 .levelDecreasePerBlock(8);
     }
 
-    public static final Supplier<FlowingFluid> LERASIUM_FLUID =
+    public static final DeferredHolder<Fluid, FlowingFluid> LERASIUM_FLUID =
             FLUIDS.register("lerasium", () -> new LerasiumFluid(makeProps()));
 
 
@@ -120,9 +118,9 @@ public final class WorldSetup {
                                          .mapColor(MapColor.SNOW)
                                          .noCollision()
                                          .strength(100.0F)
-                                         .pushReaction(PushReaction.DESTROY)
+                                         .pushReaction(PushReaction.POPPED)
                                          .noLootTable()
-                                         .lightLevel((state) -> 14)
+                                         .lightLevel((_) -> 14)
                                          .liquid()
                                          .sound(SoundType.EMPTY));
 
@@ -285,7 +283,7 @@ public final class WorldSetup {
     }
 
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> bootstrap) {
+    public static void bootstrapFeature(BootstrapContext<Feature> bootstrap) {
         RuleTest stone = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
         RuleTest deepslate = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
         for (int i = 0; i < ORE_METALS.length; i++) {
@@ -293,12 +291,10 @@ public final class WorldSetup {
             var ore_block = ORE_BLOCKS.get(i);
             var deepslate_ore_block = DEEPSLATE_ORE_BLOCKS.get(i);
 
-            bootstrap.register(ore.getRegistryKey(Registries.CONFIGURED_FEATURE, "_ore_feature"),
-                               new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(
-                                       List.of(OreConfiguration.target(stone, ore_block.get().defaultBlockState()),
-                                               OreConfiguration.target(deepslate, deepslate_ore_block
-                                                       .get()
-                                                       .defaultBlockState())), ore.size())));
+            bootstrap.register(ore.getRegistryKey(Registries.FEATURE, "_ore_feature"), new OreFeature(
+                    List.of(BlockReplacement.replace(stone, ore_block.get().defaultBlockState()),
+                            BlockReplacement.replace(deepslate, deepslate_ore_block.get().defaultBlockState())),
+                    ore.size()));
         }
     }
 
@@ -306,10 +302,10 @@ public final class WorldSetup {
 
         for (OreConfig ore : ORE_METALS) {
             // Get configured feature registry
-            HolderGetter<ConfiguredFeature<?, ?>> configured = bootstrap.lookup(Registries.CONFIGURED_FEATURE);
+            HolderGetter<Feature> configured = bootstrap.lookup(Registries.FEATURE);
 
             bootstrap.register(ore.getRegistryKey(Registries.PLACED_FEATURE, "_ore"), new PlacedFeature(
-                    configured.getOrThrow(ore.getRegistryKey(Registries.CONFIGURED_FEATURE, "_ore_feature")),
+                    configured.getOrThrow(ore.getRegistryKey(Registries.FEATURE, "_ore_feature")),
                     List.of(CountPlacement.of(ore.placementCount), InSquarePlacement.spread(),
                             HeightRangePlacement.triangle(VerticalAnchor.absolute(ore.minHeight),
                                                           VerticalAnchor.absolute(ore.maxHeight)),
@@ -363,7 +359,7 @@ public final class WorldSetup {
         bootstrapContext.register(WELLS,
                                   new StructureSet(bootstrapContext.lookup(Registries.STRUCTURE).getOrThrow(WELL),
                                                    new RandomSpreadStructurePlacement(Vec3i.ZERO,
-                                                                                      StructurePlacement.FrequencyReductionMethod.DEFAULT,
+                                                                                      AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT,
                                                                                       1, 161616, Optional.empty(), 16,
                                                                                       8, RandomSpreadType.LINEAR)));
     }

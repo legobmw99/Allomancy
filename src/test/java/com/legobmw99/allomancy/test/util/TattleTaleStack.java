@@ -16,23 +16,21 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public final class TattleTaleStack extends CommandSourceStack {
-    public static TattleTaleStack createCommandSourceStack(ServerPlayer player) {
-        return new TattleTaleStack(CommandSource.NULL, player.position(), player.getRotationVector(), player.level(),
-                                   player.permissions(), player.getName().getString(), player.getDisplayName(),
-                                   player.level().getServer(), player);
+    public TattleTaleStack(CommandSource source,
+                           Vec3 position,
+                           Vec2 rotation,
+                           ServerLevel level,
+                           PermissionSet permissions,
+                           MinecraftServer server,
+                           Entity entity) {
+        super(source, position, rotation, level, permissions, server, entity);
     }
 
-    public TattleTaleStack(CommandSource p_81302_,
-                           Vec3 p_81303_,
-                           Vec2 p_81304_,
-                           ServerLevel p_81305_,
-                           PermissionSet p_81306_,
-                           String p_81307_,
-                           Component p_81308_,
-                           MinecraftServer p_81309_,
-                           Entity p_81310_) {
-        super(p_81302_, p_81303_, p_81304_, p_81305_, p_81306_, p_81307_, p_81308_, p_81309_, p_81310_);
+    public static TattleTaleStack createCommandSourceStack(ServerPlayer player) {
+        return new TattleTaleStack(CommandSource.NULL, player.position(), player.getRotationVector(), player.level(),
+                                   player.permissions(), player.level().getServer(), player);
     }
+
 
     final List<Component> errors = new ArrayList<>();
     final List<Component> results = new ArrayList<>();

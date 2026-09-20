@@ -12,10 +12,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.*;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.*;
 import net.minecraft.world.entity.EntityTypeIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -120,6 +117,7 @@ public final class TagProvider {
             tag(ItemTags.SWORDS).replace(false).add(CombatSetup.KOLOSS_BLADE.getKey());
             tag(ItemTags.HEAD_ARMOR).replace(false).add(CombatSetup.ALUMINUM_HELMET.getKey());
             tag(ItemTags.GAZE_DISGUISE_EQUIPMENT).replace(false).add(CombatSetup.ALUMINUM_HELMET.getKey());
+            tag(ItemTags.MAP_INVISIBILITY_EQUIPMENT).replace().add(CombatSetup.ALUMINUM_HELMET.getKey());
             tag(ItemTags.CHEST_ARMOR).replace(false).add(CombatSetup.MISTCLOAK.getKey());
             tag(ItemTags.TRIMMABLE_ARMOR)
                     .replace(false)
@@ -255,6 +253,17 @@ public final class TagProvider {
             tag(DamageTypeTags.IS_PROJECTILE).add(CombatSetup.COIN_DAMAGE);
             tag(Tags.DamageTypes.IS_MAGIC).add(CombatSetup.COIN_DAMAGE);
             tag(AllomancyTags.IS_COIN_HIT).add(CombatSetup.COIN_DAMAGE);
+        }
+    }
+
+    static class Fluids extends FluidTagsProvider {
+        Fluids(PackOutput out, CompletableFuture<HolderLookup.Provider> lookup) {
+            super(out, lookup, Allomancy.MODID);
+        }
+
+        @Override
+        protected void addTags(HolderLookup.Provider lookup) {
+            tag(FluidTags.ENTITY_FLOATABLE).replace(false).add(WorldSetup.LERASIUM_FLUID.getKey());
         }
     }
 

@@ -8,7 +8,6 @@ import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
 import com.legobmw99.allomancy.test.util.AllomancyTestHelper;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.permissions.PermissionSet;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
@@ -67,8 +66,7 @@ public class ConsumingTest {
                         .performPrefixedCommand(new CommandSourceStack(player.commandSource(),
                                                                        Vec3.atCenterOf(player.blockPosition()),
                                                                        Vec2.ZERO, helper.getLevel(),
-                                                                       PermissionSet.ALL_PERMISSIONS, "Testing",
-                                                                       Component.literal("Testing"),
+                                                                       PermissionSet.ALL_PERMISSIONS,
                                                                        helper.getLevel().getServer(), null),
                                                 "/advancement grant @p only " + dna))
                 .thenExecute(() -> helper.assertPlayerHasAdvancement(player, dna))

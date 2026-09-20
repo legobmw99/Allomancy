@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:cadmium_flakes"
+        "recipes": "allomancy:cadmium_flakes"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

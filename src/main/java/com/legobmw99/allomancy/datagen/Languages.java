@@ -168,7 +168,7 @@ class Languages extends LanguageProvider {
 
         add("allomancy.jei.flake_input", "Multiple types of flake can be added at once.");
         add("allomancy.jei.vial_input",
-            "Vials can have pre-existing contents, as long as they are not the same as the new flakes.");
+            "Can have pre-existing contents, as long as they are not the same as the new flakes.");
         add("allomancy.jei.vial_output", "Will contain both the new flakes and any old ones.");
 
         add("allomancy.networking.failed", "Allomancy packet failed to play: %s");

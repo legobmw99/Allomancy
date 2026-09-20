@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:tin_pattern"
+        "recipes": "allomancy:tin_pattern"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

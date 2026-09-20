@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:silver_ingot_from_smelting_deepslate_silver_ore"
+        "recipes": "allomancy:silver_ingot_from_smelting_deepslate_silver_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

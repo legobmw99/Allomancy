@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:electrum_pattern"
+        "recipes": "allomancy:electrum_pattern"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

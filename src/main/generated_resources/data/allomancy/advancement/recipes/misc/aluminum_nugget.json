@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:aluminum_nugget"
+        "recipes": "allomancy:aluminum_nugget"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

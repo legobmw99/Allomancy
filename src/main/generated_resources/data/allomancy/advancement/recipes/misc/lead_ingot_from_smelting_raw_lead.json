@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:lead_ingot_from_smelting_raw_lead"
+        "recipes": "allomancy:lead_ingot_from_smelting_raw_lead"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

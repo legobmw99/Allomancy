@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:aluminum_ingot_from_smelting_aluminum_ore"
+        "recipes": "allomancy:aluminum_ingot_from_smelting_aluminum_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

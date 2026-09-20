@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:tin_ingot_from_blasting_raw_tin"
+        "recipes": "allomancy:tin_ingot_from_blasting_raw_tin"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

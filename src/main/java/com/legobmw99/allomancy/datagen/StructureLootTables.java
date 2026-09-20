@@ -5,7 +5,6 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.consumables.ConsumeSetup;
 import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.world.loot.PlayerInvestmentCondition;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableSubProvider;
@@ -20,16 +19,15 @@ import net.minecraft.world.level.storage.loot.functions.SetComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.Arrays;
-import java.util.function.BiConsumer;
 
-public record StructureLootTables(HolderLookup.Provider registries) implements LootTableSubProvider {
+public record StructureLootTables(LootTableSubProvider.Context output) implements LootTableSubProvider {
+
+
     @Override
-    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
-
+    public void run() {
         LootItemCondition.Builder is_mistborn = new AllOfCondition.Builder(Arrays
                                                                                    .stream(Metal.values())
                                                                                    .map(PlayerInvestmentCondition.Builder::new)
@@ -43,7 +41,7 @@ public record StructureLootTables(HolderLookup.Provider registries) implements L
                 .lootTable()
                 .withPool(LootPool
                                   .lootPool()
-                                  .setRolls(ConstantValue.exactly(1.0F))
+                                  .setRolls(ContextIntProviders.exactly(1))
                                   .add(LootItem.lootTableItem(ConsumeSetup.LERASIUM_NUGGET))
                                   .when(is_not_mistborn)));
 
@@ -60,11 +58,11 @@ public record StructureLootTables(HolderLookup.Provider registries) implements L
                 .lootTable()
                 .withPool(LootPool
                                   .lootPool()
-                                  .setRolls(ConstantValue.exactly(1.0F))
+                                  .setRolls(ContextIntProviders.exactly(1))
                                   .add(LootItem
                                                .lootTableItem(ConsumeSetup.VIAL)
                                                .apply(SetItemCountFunction.setCount(
-                                                       UniformGenerator.between(1.0F, 7.0F)))
+                                                       ContextIntProviders.between(1, 7)))
                                                .apply(SetComponentsFunction.setComponent(
                                                        ConsumeSetup.FLAKE_STORAGE.get(), storage))
                                                .apply(SetComponentsFunction.setComponent(DataComponents.USE_REMAINDER,
@@ -79,12 +77,12 @@ public record StructureLootTables(HolderLookup.Provider registries) implements L
                 .lootTable()
                 .withPool(LootPool
                                   .lootPool()
-                                  .setRolls(ConstantValue.exactly(1.0F))
+                                  .setRolls(ContextIntProviders.exactly(1))
                                   .add(LootItem.lootTableItem(ConsumeSetup.ALLOMANTIC_GRINDER))
                                   .add(LootItem
                                                .lootTableItem(ConsumeSetup.VIAL)
                                                .setWeight(5)
                                                .apply(SetItemCountFunction.setCount(
-                                                       UniformGenerator.between(5.0F, 18.0F))))));
+                                                       ContextIntProviders.between(5, 18))))));
     }
 }

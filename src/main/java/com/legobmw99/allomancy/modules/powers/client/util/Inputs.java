@@ -19,7 +19,6 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.component.UseEffects;
 import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 
@@ -76,15 +75,14 @@ public final class Inputs {
     public static void registerKeyBinding(final RegisterKeyMappingsEvent evt) {
         evt.registerCategory(ALLOMANCY_CATEGORY);
 
-        BURN = new KeyMapping("key.burn", GLFW.GLFW_KEY_V, ALLOMANCY_CATEGORY);
-        HUD = new KeyMapping("key.hud", GLFW.GLFW_KEY_UNKNOWN, ALLOMANCY_CATEGORY);
+        BURN = new KeyMapping("key.burn", InputConstants.KEY_V, ALLOMANCY_CATEGORY);
+        HUD = new KeyMapping("key.hud", 0, ALLOMANCY_CATEGORY);
         evt.register(BURN);
         evt.register(HUD);
 
         POWERS = new KeyMapping[Metal.values().length];
         for (int i = 0; i < POWERS.length; i++) {
-            POWERS[i] = new KeyMapping("key.metals." + Metal.getMetal(i).name().toLowerCase(), GLFW.GLFW_KEY_UNKNOWN,
-                                       ALLOMANCY_CATEGORY);
+            POWERS[i] = new KeyMapping("key.metals." + Metal.getMetal(i).name().toLowerCase(), 0, ALLOMANCY_CATEGORY);
             evt.register(POWERS[i]);
         }
 
@@ -143,13 +141,19 @@ public final class Inputs {
         }
 
         return switch (keybind.getKey().getType()) {
-            case KEYSYM -> InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), keybind.getKey().getValue());
-            case MOUSE -> GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().handle(),
-                                                  keybind.getKey().getValue()) == GLFW.GLFW_PRESS;
-            default -> false;
+            case KEYBOARD -> InputConstants.isKeyDown(keybind.getKey().getValue());
+            case MOUSE -> isMouseButtonDown(Minecraft.getInstance(), keybind.getKey().getValue());
         };
     }
 
+    private static boolean isMouseButtonDown(Minecraft minecraft, int mouseButton) {
+        return switch (mouseButton) {
+            case InputConstants.MOUSE_BUTTON_LEFT -> minecraft.mouseHandler.isLeftPressed();
+            case InputConstants.MOUSE_BUTTON_MIDDLE -> minecraft.mouseHandler.isMiddlePressed();
+            case InputConstants.MOUSE_BUTTON_RIGHT -> minecraft.mouseHandler.isRightPressed();
+            default -> false;
+        };
+    }
 
     private static boolean isKeyDown(KeyMapping keybind) {
         return isKeyDown0(keybind) && keybind.getKeyConflictContext().isActive() &&

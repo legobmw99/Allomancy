@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:cadmium_ingot_from_blasting_deepslate_cadmium_ore"
+        "recipes": "allomancy:cadmium_ingot_from_blasting_deepslate_cadmium_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
