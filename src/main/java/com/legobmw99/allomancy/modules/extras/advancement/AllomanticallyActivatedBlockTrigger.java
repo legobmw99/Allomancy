@@ -59,61 +59,22 @@ public class AllomanticallyActivatedBlockTrigger extends SimpleCriterionTrigger<
                             Holder.direct(MatchBlock.blockMatches(lookup, block).build())), Optional.empty()));
         }
 
-        //        public static Criterion<TriggerInstance> activatedBlock(LootItemCondition.Builder... p_301013_) {
-        //            ContextAwarePredicate contextawarepredicate = ContextAwarePredicate.create(
-        //                    Arrays.stream(p_301013_).map(LootItemCondition.Builder::build).toArray
-        //                    (LootItemCondition[]::new));
-        //            return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
-        //                    .get()
-        //                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of
-        //                    (contextawarepredicate),
-        //                                                         Optional.empty()));
-        //        }
-        //
-        //        public static Criterion<TriggerInstance> pushBlock(Block block) {
-        //            ContextAwarePredicate contextawarepredicate = ContextAwarePredicate.create(
-        //                    LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).build());
-        //            return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
-        //                    .get()
-        //                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of
-        //                    (contextawarepredicate),
-        //                                                         Optional.of(true)));
-        //        }
-        //
-        //        public static Criterion<TriggerInstance> pushBlock(LootItemCondition.Builder... p_301013_) {
-        //            LootItemCondition ctx = new LootItemCondition.Builder().and ContextAwarePredicate
-        //            contextawarepredicate =
-        //                    ContextAwarePredicate.create(Arrays
-        //                                                         .stream(p_301013_)
-        //                                                         .map(LootItemCondition.Builder::build)
-        //                                                         .toArray(LootItemCondition[]::new));
-        //            return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
-        //                    .get()
-        //                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of
-        //                    (contextawarepredicate),
-        //                                                         Optional.of(true)));
-        //        }
-        //
-        //        public static Criterion<TriggerInstance> pullBlock(Block block) {
-        //            ContextAwarePredicate contextawarepredicate = ContextAwarePredicate.create(
-        //                    LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).build());
-        //            return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
-        //                    .get()
-        //                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of
-        //                    (contextawarepredicate),
-        //                                                         Optional.of(false)));
-        //        }
-        //
-        //        public static Criterion<TriggerInstance> pullBlock(LootItemCondition.Builder... p_301013_) {
-        //            ContextAwarePredicate contextawarepredicate = ContextAwarePredicate.create(
-        //                    Arrays.stream(p_301013_).map(LootItemCondition.Builder::build).toArray
-        //                    (LootItemCondition[]::new));
-        //            return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
-        //                    .get()
-        //                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of
-        //                    (contextawarepredicate),
-        //                                                         Optional.of(false)));
-        //        }
+        public static Criterion<TriggerInstance> activatedBlock(HolderGetter<Block> lookup,
+                                                                Block block,
+                                                                boolean isPush) {
+            return ExtrasSetup.ALLOMANTICALLY_ACTIVATED_BLOCK_TRIGGER
+                    .get()
+                    .createCriterion(new TriggerInstance(Optional.empty(), Optional.of(
+                            Holder.direct(MatchBlock.blockMatches(lookup, block).build())), Optional.of(isPush)));
+        }
+
+        public static Criterion<TriggerInstance> pushBlock(HolderGetter<Block> lookup, Block block) {
+            return activatedBlock(lookup, block, true);
+        }
+
+        public static Criterion<TriggerInstance> pullBlock(HolderGetter<Block> lookup, Block block) {
+            return activatedBlock(lookup, block, false);
+        }
 
         boolean matches(LootContext ctx, boolean is_push) {
             return (this.isPush.isEmpty() || this.isPush.get() == is_push) &&

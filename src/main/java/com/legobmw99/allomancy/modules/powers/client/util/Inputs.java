@@ -99,18 +99,18 @@ public final class Inputs {
             return;
         }
 
-        if (isKeyDown(HUD)) {
+        if (HUD.isDown()) {
             PowersConfig.enable_overlay.set(!PowersConfig.enable_overlay.get());
             return;
         }
         var data = AllomancerAttachment.get(player);
 
         for (int i = 0; i < POWERS.length; i++) {
-            if (isKeyDown(POWERS[i])) {
+            if (POWERS[i].isDown()) {
                 PowerRequests.toggleBurn(Metal.getMetal(i), data);
             }
         }
-        if (isKeyDown(BURN)) {
+        if (BURN.isDown()) {
             switch (data.getPowerCount()) {
                 case 0:
                     break;
@@ -142,24 +142,14 @@ public final class Inputs {
 
         return switch (keybind.getKey().getType()) {
             case KEYBOARD -> InputConstants.isKeyDown(keybind.getKey().getValue());
-            case MOUSE -> isMouseButtonDown(Minecraft.getInstance(), keybind.getKey().getValue());
+            case MOUSE -> switch (keybind.getKey().getValue()) {
+                case InputConstants.MOUSE_BUTTON_LEFT -> Minecraft.getInstance().mouseHandler.isLeftPressed();
+                case InputConstants.MOUSE_BUTTON_MIDDLE -> Minecraft.getInstance().mouseHandler.isMiddlePressed();
+                case InputConstants.MOUSE_BUTTON_RIGHT -> Minecraft.getInstance().mouseHandler.isRightPressed();
+                default -> false;
+            };
         };
     }
-
-    private static boolean isMouseButtonDown(Minecraft minecraft, int mouseButton) {
-        return switch (mouseButton) {
-            case InputConstants.MOUSE_BUTTON_LEFT -> minecraft.mouseHandler.isLeftPressed();
-            case InputConstants.MOUSE_BUTTON_MIDDLE -> minecraft.mouseHandler.isMiddlePressed();
-            case InputConstants.MOUSE_BUTTON_RIGHT -> minecraft.mouseHandler.isRightPressed();
-            default -> false;
-        };
-    }
-
-    private static boolean isKeyDown(KeyMapping keybind) {
-        return isKeyDown0(keybind) && keybind.getKeyConflictContext().isActive() &&
-               keybind.getKeyModifier().isActive(keybind.getKeyConflictContext());
-    }
-
 
     public static void fakeMovement(ClientInput input) {
         // basically KeyboardInput.tick() and LocalPlayer.aiStep()
