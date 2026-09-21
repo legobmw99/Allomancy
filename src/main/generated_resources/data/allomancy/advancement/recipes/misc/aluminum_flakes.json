@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:aluminum_flakes"
+        "recipes": "allomancy:aluminum_flakes"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

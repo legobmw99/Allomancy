@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:duralumin_ingot_from_blasting_raw_duralumin"
+        "recipes": "allomancy:duralumin_ingot_from_blasting_raw_duralumin"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

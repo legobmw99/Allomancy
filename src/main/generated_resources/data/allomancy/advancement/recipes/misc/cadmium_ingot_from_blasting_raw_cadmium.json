@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:cadmium_ingot_from_blasting_raw_cadmium"
+        "recipes": "allomancy:cadmium_ingot_from_blasting_raw_cadmium"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

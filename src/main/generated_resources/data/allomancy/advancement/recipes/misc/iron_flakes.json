@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:iron_flakes"
+        "recipes": "allomancy:iron_flakes"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

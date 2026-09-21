@@ -4,38 +4,34 @@
     "attempted_chromium_manipulation": {
       "conditions": {
         "metal": "chromium",
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:equipment": {
-                "head": {
-                  "items": "#allomancy:tin_foil_hats"
-                }
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:equipment": {
+              "head": {
+                "items": "#allomancy:tin_foil_hats"
               }
             }
           }
-        ]
+        }
       },
       "trigger": "allomancy:metal_used_on_player"
     },
     "attempted_nicrosil_manipulation": {
       "conditions": {
         "metal": "nicrosil",
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:equipment": {
-                "head": {
-                  "items": "#allomancy:tin_foil_hats"
-                }
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:equipment": {
+              "head": {
+                "items": "#allomancy:tin_foil_hats"
               }
             }
           }
-        ]
+        }
       },
       "trigger": "allomancy:metal_used_on_player"
     }

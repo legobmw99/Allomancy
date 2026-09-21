@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:allomantic_grinder"
+        "recipes": "allomancy:allomantic_grinder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

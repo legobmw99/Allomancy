@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:electrum_ingot_from_smelting_raw_electrum"
+        "recipes": "allomancy:electrum_ingot_from_smelting_raw_electrum"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

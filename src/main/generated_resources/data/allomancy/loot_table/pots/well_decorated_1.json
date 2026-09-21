@@ -5,16 +5,17 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
+          "modifier": [
             {
+              "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 7.0,
-                "min": 1.0
-              },
-              "function": "minecraft:set_count"
+                "max": 7,
+                "min": 1
+              }
             },
             {
+              "type": "minecraft:set_components",
               "components": {
                 "allomancy:flake_storage": [
                   "iron",
@@ -34,28 +35,27 @@
                   "cadmium",
                   "bendalloy"
                 ]
-              },
-              "function": "minecraft:set_components"
+              }
             },
             {
+              "type": "minecraft:set_components",
               "components": {
                 "minecraft:use_remainder": {
                   "id": "allomancy:vial"
                 }
-              },
-              "function": "minecraft:set_components"
+              }
             },
             {
+              "type": "minecraft:set_components",
               "components": {
                 "minecraft:rarity": "uncommon"
-              },
-              "function": "minecraft:set_components"
+              }
             }
           ],
           "name": "allomancy:vial"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "allomancy:pots/well_decorated_1"

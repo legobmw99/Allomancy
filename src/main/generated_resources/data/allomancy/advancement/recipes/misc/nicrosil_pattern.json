@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:nicrosil_pattern"
+        "recipes": "allomancy:nicrosil_pattern"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

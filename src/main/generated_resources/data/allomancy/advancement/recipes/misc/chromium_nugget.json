@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:chromium_nugget"
+        "recipes": "allomancy:chromium_nugget"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

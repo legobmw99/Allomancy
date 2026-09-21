@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:aluminum_helmet"
+        "recipes": "allomancy:aluminum_helmet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

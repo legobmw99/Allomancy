@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:chromium_ingot_from_smelting_chromium_ore"
+        "recipes": "allomancy:chromium_ingot_from_smelting_chromium_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

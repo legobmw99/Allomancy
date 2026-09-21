@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:bronze_ingot_from_blasting_raw_bronze"
+        "recipes": "allomancy:bronze_ingot_from_blasting_raw_bronze"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

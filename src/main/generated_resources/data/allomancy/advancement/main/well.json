@@ -3,17 +3,15 @@
   "criteria": {
     "in_well": {
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:location": {
-                "structures": "allomancy:well"
-              }
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:location": {
+              "structures": "allomancy:well"
             }
           }
-        ]
+        }
       },
       "trigger": "minecraft:location"
     }

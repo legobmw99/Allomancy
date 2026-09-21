@@ -21,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
@@ -78,10 +79,10 @@ public class SpikingRecipeCategory implements IRecipeCategory<SpikingRecipeCateg
 
         var e = builder
                 .addInvisibleIngredients(RecipeIngredientRole.INPUT)
-                .addIngredients(VanillaTypes.ITEM_STACK, options.stream().map(t -> {
-                    var egg = SpawnEggItem.byId(t);
-                    return egg.map(ItemStack::new).orElse(ItemStack.EMPTY);
-                }).toList());
+                .addIngredients(VanillaTypes.ITEM_STACK, options
+                        .stream()
+                        .map(t -> new ItemStack(SpawnEggItem.byId(t).orElse(Holder.direct(Items.BARRIER))))
+                        .toList());
 
         builder.createFocusLink(i, e);
 
@@ -92,7 +93,7 @@ public class SpikingRecipeCategory implements IRecipeCategory<SpikingRecipeCateg
 
     @Override
     public void createRecipeExtras(IRecipeExtrasBuilder builder, Values recipe, IFocusGroup focuses) {
-        builder.addRecipeArrow().setPosition(64, 32);
+        builder.addRecipeArrowWidget().setPosition(64, 32);
         builder.addText(ItemDisplay.addColorToText("allomancy.jei.spiking.description", ChatFormatting.DARK_RED),
                         getWidth(), getHeight());
     }

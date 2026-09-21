@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:tin_ingot_from_nuggets"
+        "recipes": "allomancy:tin_ingot_from_nuggets"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

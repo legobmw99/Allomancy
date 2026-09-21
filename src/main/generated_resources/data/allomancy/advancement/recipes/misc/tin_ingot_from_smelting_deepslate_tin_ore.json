@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:tin_ingot_from_smelting_deepslate_tin_ore"
+        "recipes": "allomancy:tin_ingot_from_smelting_deepslate_tin_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

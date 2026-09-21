@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:brass_block"
+        "recipes": "allomancy:brass_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

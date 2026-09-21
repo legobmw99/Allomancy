@@ -22,7 +22,11 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.random.WeightedList;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -38,18 +42,18 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.BlockReplacement;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.OreFeature;
 import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
+import net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
-import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
@@ -63,16 +67,14 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredItem;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.neoforged.neoforge.registries.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +102,50 @@ public final class WorldSetup {
                     .supportsBoating(false)
                     .canDrown(false)
                     .rarity(Rarity.EPIC)
-                    .pathType(PathType.LAVA)));
+                    .pathType(PathType.LAVA)) {
+        @Override
+        public boolean move(LivingEntity entity, Vec3 movementVector, double gravity) {
+
+            // based on LivingEntity#travelInWater
+            boolean isFalling = entity.getDeltaMovement().y <= 0.0;
+            double oldY = entity.getY();
+
+            float slowDown = entity.isSprinting() ? 0.9F : 0.8F;
+            float speed = 0.02F;
+            float waterWalker = (float) entity.getAttributeValue(Attributes.WATER_MOVEMENT_EFFICIENCY);
+            if (!entity.onGround()) {
+                waterWalker *= 0.5F;
+            }
+
+            if (waterWalker > 0.0F) {
+                slowDown += (0.54600006F - slowDown) * waterWalker;
+                speed += (entity.getSpeed() - speed) * waterWalker;
+            }
+
+            if (entity.hasEffect(MobEffects.DOLPHINS_GRACE)) {
+                slowDown = 0.96F;
+            }
+
+            speed *= (float) entity.getAttributeValue(net.neoforged.neoforge.common.NeoForgeMod.SWIM_SPEED);
+            entity.moveRelative(speed, movementVector);
+            entity.move(MoverType.SELF, entity.getDeltaMovement());
+            Vec3 movement = entity.getDeltaMovement();
+            if (entity.horizontalCollision && entity.onClimbable()) {
+                movement = new Vec3(movement.x, 0.2, movement.z);
+            }
+
+            movement = movement.multiply(slowDown, 0.8F, slowDown);
+            entity.setDeltaMovement(entity.getFluidFallingAdjustedMovement(gravity, isFalling, movement));
+            Vec3 movement2 = entity.getDeltaMovement();
+            if (entity.horizontalCollision &&
+                entity.isFree(movement2.x, movement2.y + 0.6F - entity.getY() + oldY, movement2.z)) {
+                entity.setDeltaMovement(movement2.x, 0.3F, movement2.z);
+            }
+
+            return true;
+
+        }
+    });
 
     private static BaseFlowingFluid.Properties makeProps() {
         return new BaseFlowingFluid.Properties(LERAS_TYPE, LERASIUM_FLUID, LERASIUM_FLUID)
@@ -109,7 +154,7 @@ public final class WorldSetup {
                 .levelDecreasePerBlock(8);
     }
 
-    public static final Supplier<FlowingFluid> LERASIUM_FLUID =
+    public static final DeferredHolder<Fluid, FlowingFluid> LERASIUM_FLUID =
             FLUIDS.register("lerasium", () -> new LerasiumFluid(makeProps()));
 
 
@@ -120,9 +165,9 @@ public final class WorldSetup {
                                          .mapColor(MapColor.SNOW)
                                          .noCollision()
                                          .strength(100.0F)
-                                         .pushReaction(PushReaction.DESTROY)
+                                         .pushReaction(PushReaction.POPPED)
                                          .noLootTable()
-                                         .lightLevel((state) -> 14)
+                                         .lightLevel((_) -> 14)
                                          .liquid()
                                          .sound(SoundType.EMPTY));
 
@@ -285,7 +330,7 @@ public final class WorldSetup {
     }
 
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> bootstrap) {
+    public static void bootstrapFeature(BootstrapContext<Feature> bootstrap) {
         RuleTest stone = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
         RuleTest deepslate = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
         for (int i = 0; i < ORE_METALS.length; i++) {
@@ -293,12 +338,10 @@ public final class WorldSetup {
             var ore_block = ORE_BLOCKS.get(i);
             var deepslate_ore_block = DEEPSLATE_ORE_BLOCKS.get(i);
 
-            bootstrap.register(ore.getRegistryKey(Registries.CONFIGURED_FEATURE, "_ore_feature"),
-                               new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(
-                                       List.of(OreConfiguration.target(stone, ore_block.get().defaultBlockState()),
-                                               OreConfiguration.target(deepslate, deepslate_ore_block
-                                                       .get()
-                                                       .defaultBlockState())), ore.size())));
+            bootstrap.register(ore.getRegistryKey(Registries.FEATURE, "_ore_feature"), new OreFeature(
+                    List.of(BlockReplacement.replace(stone, ore_block.get().defaultBlockState()),
+                            BlockReplacement.replace(deepslate, deepslate_ore_block.get().defaultBlockState())),
+                    ore.size()));
         }
     }
 
@@ -306,10 +349,10 @@ public final class WorldSetup {
 
         for (OreConfig ore : ORE_METALS) {
             // Get configured feature registry
-            HolderGetter<ConfiguredFeature<?, ?>> configured = bootstrap.lookup(Registries.CONFIGURED_FEATURE);
+            HolderGetter<Feature> configured = bootstrap.lookup(Registries.FEATURE);
 
             bootstrap.register(ore.getRegistryKey(Registries.PLACED_FEATURE, "_ore"), new PlacedFeature(
-                    configured.getOrThrow(ore.getRegistryKey(Registries.CONFIGURED_FEATURE, "_ore_feature")),
+                    configured.getOrThrow(ore.getRegistryKey(Registries.FEATURE, "_ore_feature")),
                     List.of(CountPlacement.of(ore.placementCount), InSquarePlacement.spread(),
                             HeightRangePlacement.triangle(VerticalAnchor.absolute(ore.minHeight),
                                                           VerticalAnchor.absolute(ore.maxHeight)),
@@ -363,7 +406,7 @@ public final class WorldSetup {
         bootstrapContext.register(WELLS,
                                   new StructureSet(bootstrapContext.lookup(Registries.STRUCTURE).getOrThrow(WELL),
                                                    new RandomSpreadStructurePlacement(Vec3i.ZERO,
-                                                                                      StructurePlacement.FrequencyReductionMethod.DEFAULT,
+                                                                                      AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT,
                                                                                       1, 161616, Optional.empty(), 16,
                                                                                       8, RandomSpreadType.LINEAR)));
     }

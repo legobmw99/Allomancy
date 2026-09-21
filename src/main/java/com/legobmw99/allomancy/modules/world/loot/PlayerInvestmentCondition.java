@@ -26,10 +26,10 @@ public record PlayerInvestmentCondition(Metal power) implements LootItemConditio
 
     @Override
     public boolean test(LootContext lootContext) {
-        if (lootContext.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof Player player) {
+        if (lootContext.getOptional(LootContextParams.THIS_ENTITY) instanceof Player player) {
             return AllomancerAttachment.get(player).hasPower(this.power);
         }
-        if (lootContext.getOptionalParameter(LootContextParams.ATTACKING_ENTITY) instanceof Player player) {
+        if (lootContext.getOptional(LootContextParams.ATTACKING_ENTITY) instanceof Player player) {
             return AllomancerAttachment.get(player).hasPower(this.power);
         }
 

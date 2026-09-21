@@ -135,19 +135,18 @@ public record EntityIngredient(EntityType<?> type) {
             }
         }
 
-
         @Override
-        public List<Component> getTooltip(EntityIngredient type, TooltipFlag flag) {
-            List<Component> tooltip = new ArrayList<>();
-            tooltip.add(type.type().getDescription());
-            if (flag.isAdvanced()) {
-                tooltip.add(
-                        (Component.literal(BuiltInRegistries.ENTITY_TYPE.getKey(type.type()).toString())).withStyle(
-                                ChatFormatting.DARK_GRAY));
+        public List<Component> getTooltip(EntityIngredient ingredient, TooltipFlag tooltipFlag) {
+            ArrayList<Component> tooltip = new ArrayList<>();
+            tooltip.add(ingredient.type().getDescription());
+            if (tooltipFlag.isAdvanced()) {
+                tooltip.add((Component.literal(
+                        BuiltInRegistries.ENTITY_TYPE.getKey(ingredient.type()).toString())).withStyle(
+                        ChatFormatting.DARK_GRAY));
             }
+
             return tooltip;
         }
-
     }
 
     public static class Helper implements IIngredientHelper<EntityIngredient> {

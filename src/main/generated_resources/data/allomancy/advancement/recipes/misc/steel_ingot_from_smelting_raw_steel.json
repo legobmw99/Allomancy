@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:steel_ingot_from_smelting_raw_steel"
+        "recipes": "allomancy:steel_ingot_from_smelting_raw_steel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:silver_ingot_from_smelting_raw_silver"
+        "recipes": "allomancy:silver_ingot_from_smelting_raw_silver"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

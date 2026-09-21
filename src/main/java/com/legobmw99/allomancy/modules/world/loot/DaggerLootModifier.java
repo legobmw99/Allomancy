@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
@@ -15,6 +16,7 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class DaggerLootModifier extends LootModifier {
@@ -25,8 +27,8 @@ public class DaggerLootModifier extends LootModifier {
                     .and(Codec.INT.fieldOf("chance_one_in").forGetter(t -> t.chance_one_in))
                     .apply(inst, DaggerLootModifier::new)));
 
-    public DaggerLootModifier(LootItemCondition[] conditionsIn, int priority, int chance_one_in) {
-        super(conditionsIn, priority);
+    public DaggerLootModifier(Optional<Holder<LootItemCondition>> condition, int priority, int chance_one_in) {
+        super(condition, priority);
         this.chance_one_in = chance_one_in;
     }
 
