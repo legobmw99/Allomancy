@@ -22,7 +22,11 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.random.WeightedList;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -63,6 +67,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.world.BiomeModifier;
@@ -95,10 +100,52 @@ public final class WorldSetup {
                     .canHydrate(false)
                     .canSwim(false)
                     .supportsBoating(false)
-                    .isWaterLike(true) // TODO: investigate, necessary to allow motion?
                     .canDrown(false)
                     .rarity(Rarity.EPIC)
-                    .pathType(PathType.LAVA)));
+                    .pathType(PathType.LAVA)) {
+        @Override
+        public boolean move(LivingEntity entity, Vec3 movementVector, double gravity) {
+
+            // based on LivingEntity#travelInWater
+            boolean isFalling = entity.getDeltaMovement().y <= 0.0;
+            double oldY = entity.getY();
+
+            float slowDown = entity.isSprinting() ? 0.9F : 0.8F;
+            float speed = 0.02F;
+            float waterWalker = (float) entity.getAttributeValue(Attributes.WATER_MOVEMENT_EFFICIENCY);
+            if (!entity.onGround()) {
+                waterWalker *= 0.5F;
+            }
+
+            if (waterWalker > 0.0F) {
+                slowDown += (0.54600006F - slowDown) * waterWalker;
+                speed += (entity.getSpeed() - speed) * waterWalker;
+            }
+
+            if (entity.hasEffect(MobEffects.DOLPHINS_GRACE)) {
+                slowDown = 0.96F;
+            }
+
+            speed *= (float) entity.getAttributeValue(net.neoforged.neoforge.common.NeoForgeMod.SWIM_SPEED);
+            entity.moveRelative(speed, movementVector);
+            entity.move(MoverType.SELF, entity.getDeltaMovement());
+            Vec3 movement = entity.getDeltaMovement();
+            if (entity.horizontalCollision && entity.onClimbable()) {
+                movement = new Vec3(movement.x, 0.2, movement.z);
+            }
+
+            movement = movement.multiply(slowDown, 0.8F, slowDown);
+            entity.setDeltaMovement(entity.getFluidFallingAdjustedMovement(gravity, isFalling, movement));
+            Vec3 movement2 = entity.getDeltaMovement();
+            if (entity.horizontalCollision &&
+                entity.isFree(movement2.x, movement2.y + 0.6F - entity.getY() + oldY, movement2.z)) {
+                entity.setDeltaMovement(movement2.x, 0.3F, movement2.z);
+            }
+
+            return true;
+
+        }
+    });
 
     private static BaseFlowingFluid.Properties makeProps() {
         return new BaseFlowingFluid.Properties(LERAS_TYPE, LERASIUM_FLUID, LERASIUM_FLUID)
