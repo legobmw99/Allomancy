@@ -11,21 +11,21 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 public final class AllomancyConfig {
 
-    private static final ModConfigSpec COMMON_CONFIG;
+    private static final ModConfigSpec LOCAL_CONFIG;
     private static final ModConfigSpec CLIENT_CONFIG;
-    public static final ModConfigSpec SERVER_CONFIG;
+    public static final ModConfigSpec SYNCED_CONFIG;
 
 
     static {
-        var COMMON_BUILDER = new ModConfigSpec.Builder();
+        var LOCAL_BUILDER = new ModConfigSpec.Builder();
         var CLIENT_BUILDER = new ModConfigSpec.Builder();
-        var SERVER_BUILDER = new ModConfigSpec.Builder();
+        var SYNCED_BUILDER = new ModConfigSpec.Builder();
 
-        PowersConfig.init(SERVER_BUILDER, COMMON_BUILDER, CLIENT_BUILDER);
+        PowersConfig.init(SYNCED_BUILDER, LOCAL_BUILDER, CLIENT_BUILDER);
 
-        COMMON_CONFIG = COMMON_BUILDER.build();
+        LOCAL_CONFIG = LOCAL_BUILDER.build();
         CLIENT_CONFIG = CLIENT_BUILDER.build();
-        SERVER_CONFIG = SERVER_BUILDER.build();
+        SYNCED_CONFIG = SYNCED_BUILDER.build();
 
     }
 
@@ -40,9 +40,9 @@ public final class AllomancyConfig {
     }
 
     public static void register(ModContainer container, IEventBus bus) {
-        container.registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG);
+        container.registerConfig(ModConfig.Type.LOCAL, LOCAL_CONFIG);
         container.registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG);
-        container.registerConfig(ModConfig.Type.SERVER, SERVER_CONFIG);
+        container.registerConfig(ModConfig.Type.SYNCED, SYNCED_CONFIG);
 
         bus.addListener(AllomancyConfig::onLoad);
         bus.addListener(AllomancyConfig::onReload);
