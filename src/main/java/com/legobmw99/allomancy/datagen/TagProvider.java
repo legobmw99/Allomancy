@@ -34,7 +34,7 @@ public final class TagProvider {
         @Override
         protected void addTags(HolderLookup.Provider provider) {
 
-            tag(EntityTypeTags.IMPACT_PROJECTILES).replace(false).add(CombatSetup.NUGGET_PROJECTILE.getKey());
+            tag(EntityTypeTags.IMPACT_PROJECTILES).replace(false).add(CombatSetup.NUGGET_PROJECTILE.key());
 
             tag(AllomancyTags.HEMALURGIC_CHARGERS)
                     .replace(false)
@@ -73,10 +73,10 @@ public final class TagProvider {
 
 
         private void addMetalTags(int index) {
-            var nugget = WorldSetup.NUGGETS.get(index).getKey();
-            var ingot = WorldSetup.INGOTS.get(index).getKey();
-            var block = WorldSetup.STORAGE_BLOCK_ITEMS.get(index).getKey();
-            var raw = WorldSetup.RAW_ORE_ITEMS.get(index).getKey();
+            var nugget = WorldSetup.NUGGETS.get(index).key();
+            var ingot = WorldSetup.INGOTS.get(index).key();
+            var block = WorldSetup.STORAGE_BLOCK_ITEMS.get(index).key();
+            var raw = WorldSetup.RAW_ORE_ITEMS.get(index).key();
 
             addCommonTag("nuggets", nugget);
             tag(AllomancyTags.NUGGET_TAGS.get(index)).add(nugget);
@@ -101,9 +101,9 @@ public final class TagProvider {
             addMetalTags(WorldSetup.SILVER);
 
             for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
-                var ore = WorldSetup.ORE_BLOCKS_ITEMS.get(i).getKey();
-                var ds_ore = WorldSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).getKey();
-                var raw_block = WorldSetup.RAW_ORE_BLOCKS_ITEMS.get(i).getKey();
+                var ore = WorldSetup.ORE_BLOCKS_ITEMS.get(i).key();
+                var ds_ore = WorldSetup.DEEPSLATE_ORE_BLOCKS_ITEMS.get(i).key();
+                var raw_block = WorldSetup.RAW_ORE_BLOCKS_ITEMS.get(i).key();
 
                 addCommonTag("ores/" + WorldSetup.ORE_METALS[i], ore, ds_ore);
                 addCommonTag("ores", ore, ds_ore);
@@ -114,27 +114,27 @@ public final class TagProvider {
 
             }
 
-            tag(ItemTags.SWORDS).replace(false).add(CombatSetup.KOLOSS_BLADE.getKey());
-            tag(ItemTags.HEAD_ARMOR).replace(false).add(CombatSetup.ALUMINUM_HELMET.getKey());
-            tag(ItemTags.GAZE_DISGUISE_EQUIPMENT).replace(false).add(CombatSetup.ALUMINUM_HELMET.getKey());
-            tag(ItemTags.MAP_INVISIBILITY_EQUIPMENT).replace().add(CombatSetup.ALUMINUM_HELMET.getKey());
-            tag(ItemTags.CHEST_ARMOR).replace(false).add(CombatSetup.MISTCLOAK.getKey());
+            tag(ItemTags.SWORDS).replace(false).add(CombatSetup.KOLOSS_BLADE.key());
+            tag(ItemTags.HEAD_ARMOR).replace(false).add(CombatSetup.ALUMINUM_HELMET.key());
+            tag(ItemTags.GAZE_DISGUISE_EQUIPMENT).replace(false).add(CombatSetup.ALUMINUM_HELMET.key());
+            tag(ItemTags.MAP_INVISIBILITY_EQUIPMENT).replace().add(CombatSetup.ALUMINUM_HELMET.key());
+            tag(ItemTags.CHEST_ARMOR).replace(false).add(CombatSetup.MISTCLOAK.key());
             tag(ItemTags.TRIMMABLE_ARMOR)
                     .replace(false)
-                    .add(CombatSetup.ALUMINUM_HELMET.getKey())
-                    .add(CombatSetup.MISTCLOAK.getKey());
+                    .add(CombatSetup.ALUMINUM_HELMET.key())
+                    .add(CombatSetup.MISTCLOAK.key());
 
-            tag(AllomancyTags.FLAKES_TAG).addAll(WorldSetup.FLAKES.stream().map(DeferredItem::getKey));
+            tag(AllomancyTags.FLAKES_TAG).addAll(WorldSetup.FLAKES.stream().map(DeferredItem::key));
             tag(AllomancyTags.REPAIRS_MISTCLOAK).add(
-                    BuiltInRegistries.ITEM.wrapAsHolder(net.minecraft.world.item.Items.WOOL.gray()).getKey());
+                    BuiltInRegistries.ITEM.wrapAsHolder(net.minecraft.world.item.Items.WOOL.gray()).key());
             tag(AllomancyTags.OBSIDIAN_REPAIR).add(
-                    BuiltInRegistries.ITEM.wrapAsHolder(net.minecraft.world.item.Items.OBSIDIAN).getKey(),
-                    BuiltInRegistries.ITEM.wrapAsHolder(net.minecraft.world.item.Items.CRYING_OBSIDIAN).getKey());
+                    BuiltInRegistries.ITEM.wrapAsHolder(net.minecraft.world.item.Items.OBSIDIAN).key(),
+                    BuiltInRegistries.ITEM.wrapAsHolder(net.minecraft.world.item.Items.CRYING_OBSIDIAN).key());
             tag(AllomancyTags.REPAIRS_ALUMINUM).addTag(AllomancyTags.INGOT_TAGS.get(Metal.ALUMINUM.getIndex()));
             tag(AllomancyTags.LERASIUM_CONVERSION).addTag(Tags.Items.NETHER_STARS);
-            tag(AllomancyTags.TIN_FOIL_HATS).add(CombatSetup.ALUMINUM_HELMET.getKey());
-            tag(AllomancyTags.SPECIAL_EARRINGS).add(ExtrasSetup.CHARGED_BRONZE_EARRING.getKey());
-            tag(AllomancyTags.ONE_HIT_WEAPONS).add(CombatSetup.KOLOSS_BLADE.getKey());
+            tag(AllomancyTags.TIN_FOIL_HATS).add(CombatSetup.ALUMINUM_HELMET.key());
+            tag(AllomancyTags.SPECIAL_EARRINGS).add(ExtrasSetup.CHARGED_BRONZE_EARRING.key());
+            tag(AllomancyTags.ONE_HIT_WEAPONS).add(CombatSetup.KOLOSS_BLADE.key());
         }
 
         private void addCommonTag(String name, ResourceKey<Item>... items) {
@@ -156,9 +156,9 @@ public final class TagProvider {
         protected void addTags(HolderLookup.Provider provider) {
 
             for (int i = 0; i < WorldSetup.ORE_METALS.length; i++) {
-                var block = WorldSetup.ORE_BLOCKS.get(i).getKey();
-                var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i).getKey();
-                var raw = WorldSetup.RAW_ORE_BLOCKS.get(i).getKey();
+                var block = WorldSetup.ORE_BLOCKS.get(i).key();
+                var ds = WorldSetup.DEEPSLATE_ORE_BLOCKS.get(i).key();
+                var raw = WorldSetup.RAW_ORE_BLOCKS.get(i).key();
 
                 addCommonTag("ores/" + WorldSetup.ORE_METALS[i], block, ds);
                 addCommonTag("ores", block, ds);
@@ -175,7 +175,7 @@ public final class TagProvider {
                 if (mt.isVanilla()) {
                     continue;
                 }
-                var block = WorldSetup.STORAGE_BLOCKS.get(mt.getIndex()).getKey();
+                var block = WorldSetup.STORAGE_BLOCKS.get(mt.getIndex()).key();
                 tag(AllomancyTags.STORAGE_BLOCK_TAGS.get(mt.getIndex())).add(block);
                 addCommonTag("storage_blocks", block);
                 makePickaxeMineable(block);
@@ -185,10 +185,10 @@ public final class TagProvider {
 
             }
 
-            var lead = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.LEAD).getKey();
+            var lead = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.LEAD).key();
             tag(AllomancyTags.STORAGE_BLOCK_TAGS.get(WorldSetup.LEAD)).add(lead);
 
-            var silver = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.SILVER).getKey();
+            var silver = WorldSetup.STORAGE_BLOCKS.get(WorldSetup.SILVER).key();
             tag(AllomancyTags.STORAGE_BLOCK_TAGS.get(WorldSetup.SILVER)).add(silver);
             addBeacon(silver);
 
@@ -263,7 +263,7 @@ public final class TagProvider {
 
         @Override
         protected void addTags(HolderLookup.Provider lookup) {
-            tag(FluidTags.ENTITY_FLOATABLE).replace(false).add(WorldSetup.LERASIUM_FLUID.getKey());
+            tag(FluidTags.ENTITY_FLOATABLE).replace(false).add(WorldSetup.LERASIUM_FLUID.key());
         }
     }
 
