@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:bronze_flakes"
+        "recipes": "allomancy:bronze_flakes"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

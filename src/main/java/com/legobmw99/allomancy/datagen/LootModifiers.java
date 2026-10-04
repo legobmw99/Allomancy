@@ -2,15 +2,16 @@ package com.legobmw99.allomancy.datagen;
 
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.world.loot.DaggerLootModifier;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 class LootModifiers extends GlobalLootModifierProvider {
@@ -26,10 +27,12 @@ class LootModifiers extends GlobalLootModifierProvider {
     @Override
     protected void start() {
 
-        var daggerLocations = new LootItemCondition[]{
-                AnyOfCondition.anyOf(LootTableIdCondition.builder(WOODLAND), LootTableIdCondition.builder(END_CITY),
-                                     LootTableIdCondition.builder(OUTPOST)).build()};
+        var daggerLocations = AnyOfCondition
+                .anyOf(LootTableIdCondition.builder(WOODLAND), LootTableIdCondition.builder(END_CITY),
+                       LootTableIdCondition.builder(OUTPOST))
+                .build();
         add("unbreakable_dagger_loot",
-            new DaggerLootModifier(daggerLocations, IGlobalLootModifier.DEFAULT_PRIORITY, 20));
+            new DaggerLootModifier(Optional.of(Holder.direct(daggerLocations)), IGlobalLootModifier.DEFAULT_PRIORITY,
+                                   20));
     }
 }

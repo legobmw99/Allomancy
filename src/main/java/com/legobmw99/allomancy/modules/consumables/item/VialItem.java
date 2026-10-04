@@ -63,11 +63,13 @@ public class VialItem extends Item {
 
     public static void fillVial(ItemStack stack, @Nullable FlakeStorage storage) {
         stack.set(FLAKE_STORAGE, storage);
-        if (storage == null) {
-            stack.set(DataComponents.RARITY, Rarity.COMMON);
-        } else {
-            stack.set(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStackTemplate(ConsumeSetup.VIAL)));
-            stack.set(DataComponents.RARITY, Rarity.UNCOMMON);
+        if (stack.is(ConsumeSetup.VIAL)) {
+            if (storage == null) {
+                stack.set(DataComponents.RARITY, Rarity.COMMON);
+            } else {
+                stack.set(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStackTemplate(ConsumeSetup.VIAL)));
+                stack.set(DataComponents.RARITY, Rarity.UNCOMMON);
+            }
         }
     }
 }

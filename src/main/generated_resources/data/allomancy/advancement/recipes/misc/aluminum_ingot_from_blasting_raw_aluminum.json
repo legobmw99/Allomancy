@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:aluminum_ingot_from_blasting_raw_aluminum"
+        "recipes": "allomancy:aluminum_ingot_from_blasting_raw_aluminum"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:bronze_earring"
+        "recipes": "allomancy:bronze_earring"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

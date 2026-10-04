@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:iron_button_from_inverted"
+        "recipes": "allomancy:iron_button_from_inverted"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

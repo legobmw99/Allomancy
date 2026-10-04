@@ -3,30 +3,26 @@
   "criteria": {
     "pulled_iron_golem": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "minecraft:iron_golem"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "minecraft:iron_golem"
           }
-        ],
+        },
         "metal": "iron"
       },
       "trigger": "allomancy:metal_used_on_entity"
     },
     "pushed_iron_golem": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "minecraft:iron_golem"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "minecraft:iron_golem"
           }
-        ],
+        },
         "metal": "steel"
       },
       "trigger": "allomancy:metal_used_on_entity"

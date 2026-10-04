@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:silver_flakes"
+        "recipes": "allomancy:silver_flakes"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

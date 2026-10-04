@@ -10,6 +10,7 @@ import com.legobmw99.allomancy.modules.powers.client.util.Rendering;
 import com.legobmw99.allomancy.modules.powers.client.util.Sounds;
 import com.legobmw99.allomancy.modules.powers.client.util.Tracking;
 import com.legobmw99.allomancy.modules.powers.data.AllomancerAttachment;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.GlobalPos;
@@ -25,7 +26,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.event.sound.PlaySoundEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,14 +83,14 @@ public final class ClientEventHandler {
 
     @SubscribeEvent
     public static void onKeyInput(final InputEvent.Key event) {
-        if (event.getAction() == GLFW.GLFW_PRESS) {
+        if (event.getAction() == InputConstants.PRESS) {
             Inputs.acceptAllomancyKeybinds();
         }
     }
 
     @SubscribeEvent
     public static void onMouseInput(final InputEvent.MouseButton.Pre event) {
-        if (event.getAction() == GLFW.GLFW_PRESS) {
+        if (event.getAction() == InputConstants.PRESS) {
             Inputs.acceptAllomancyKeybinds();
         }
     }
@@ -188,7 +188,7 @@ public final class ClientEventHandler {
         //  See GameRenderer#bobView
         Vec3 view = event.getLevelRenderState().cameraRenderState.pos.reverse();
         stack.translate(view);
-        Rendering.drawMetalLines(stack, source, metalLines);
+        Rendering.drawMetalLines(event.getRenderPass(), stack, source, metalLines);
 
         stack.popPose();
     }

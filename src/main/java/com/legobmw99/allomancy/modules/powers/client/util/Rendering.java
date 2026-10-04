@@ -1,13 +1,11 @@
 package com.legobmw99.allomancy.modules.powers.client.util;
 
-import com.mojang.blaze3d.PrimitiveTopology;
-import com.mojang.blaze3d.buffers.GpuBuffer;
-import com.mojang.blaze3d.pipeline.*;
-import com.mojang.blaze3d.platform.CompareOp;
-import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.Minecraft;
+import com.mojang.renderpearl.api.buffers.GpuBuffer;
+import com.mojang.renderpearl.api.commands.RenderPass;
+import com.mojang.renderpearl.api.pipeline.*;
+import com.mojang.renderpearl.api.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
@@ -17,8 +15,6 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.OptionalDouble;
 
 public final class Rendering {
     private Rendering() {}
@@ -49,7 +45,7 @@ public final class Rendering {
      * @param source location of the player
      * @param lines  locations to draw toward
      */
-    public static void drawMetalLines(PoseStack stack, Vec3 source, List<Line> lines) {
+    public static void drawMetalLines(RenderPass renderPass, PoseStack stack, Vec3 source, List<Line> lines) {
         if (lines.isEmpty()) {
             return;
         }
@@ -85,25 +81,16 @@ public final class Rendering {
                         .getDevice()
                         .createBuffer(() -> "Allomancy lines", GpuBuffer.USAGE_VERTEX, meshData.vertexBuffer());
 
-                RenderTarget renderTarget = Minecraft.getInstance().gameRenderer.mainRenderTarget();
 
                 int indexCount = meshData.drawState().indexCount();
                 GpuBuffer gpuBuffer = indices.getBuffer(indexCount);
-                try (RenderPass renderPass = RenderSystem
-                        .getDevice()
-                        .createCommandEncoder()
-                        .createRenderPass(() -> "allomancy lines", renderTarget.getColorTextureView(),
-                                          Optional.empty(), renderTarget.getDepthTextureView(),
-                                          OptionalDouble.empty())) {
 
-                    renderPass.setPipeline(METAL_LINES);
-                    RenderSystem.bindDefaultUniforms(renderPass);
-                    renderPass.setVertexBuffer(0, vertexBuffer.slice());
-                    renderPass.setIndexBuffer(gpuBuffer, indices.type());
-                    renderPass.setUniform("DynamicTransforms", dynamic);
-                    renderPass.drawIndexed(indexCount, 1, 0, 0, 0);
-
-                }
+                renderPass.setPipeline(RenderSystem.getCompiledPipeline(METAL_LINES));
+                RenderSystem.bindDefaultUniforms(renderPass);
+                renderPass.setVertexBuffer(0, vertexBuffer.slice());
+                renderPass.setIndexBuffer(gpuBuffer, indices.type());
+                renderPass.setUniform("DynamicTransforms", dynamic);
+                renderPass.drawIndexed(indexCount, 1, 0, 0, 0);
             }
 
             matrix4fStack.popMatrix();

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:copper_flakes"
+        "recipes": "allomancy:copper_flakes"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

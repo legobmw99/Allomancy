@@ -3,12 +3,10 @@
   "criteria": {
     "allomantically_activate_bell": {
       "conditions": {
-        "entity": [
-          {
-            "block": "minecraft:bell",
-            "condition": "minecraft:block_state_property"
-          }
-        ]
+        "entity": {
+          "type": "minecraft:match_block",
+          "blocks": "minecraft:bell"
+        }
       },
       "trigger": "allomancy:activated_allomancy_block"
     }

@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:zinc_ingot_from_block"
+        "recipes": "allomancy:zinc_ingot_from_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

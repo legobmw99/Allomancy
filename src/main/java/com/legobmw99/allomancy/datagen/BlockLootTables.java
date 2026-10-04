@@ -3,8 +3,8 @@ package com.legobmw99.allomancy.datagen;
 import com.legobmw99.allomancy.Allomancy;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.world.WorldSetup;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 class BlockLootTables extends BlockLootSubProvider {
-    BlockLootTables(HolderLookup.Provider provider) {
+    BlockLootTables(LootTableSubProvider.Context provider) {
         super(Set.of(), FeatureFlags.REGISTRY.allFlags(), provider);
     }
 

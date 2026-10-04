@@ -9,21 +9,19 @@
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 18.0,
-                "min": 5.0
-              },
-              "function": "minecraft:set_count"
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 18,
+              "min": 5
             }
-          ],
+          },
           "name": "allomancy:vial",
           "weight": 5
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "allomancy:pots/well_decorated_2"

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:chromium_flakes"
+        "recipes": "allomancy:chromium_flakes"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

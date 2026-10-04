@@ -8,6 +8,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,7 @@ class EquipmentAssets implements DataProvider {
                                  .addLayers(EquipmentClientInfo.LayerType.HUMANOID,
                                             new EquipmentClientInfo.Layer(Allomancy.id("aluminum"), Optional.empty(),
                                                                           false))
+                                 .replaceTrimPalette(TrimMaterials.IRON, TrimMaterials.Palette.IRON_DARKER.id())
                                  .build());
 
         registrar.accept(ExtrasSetup.BRONZE.identifier(),

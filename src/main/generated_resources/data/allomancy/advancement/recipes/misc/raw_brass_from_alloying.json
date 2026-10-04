@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:raw_brass_from_alloying"
+        "recipes": "allomancy:raw_brass_from_alloying"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:silver_block"
+        "recipes": "allomancy:silver_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

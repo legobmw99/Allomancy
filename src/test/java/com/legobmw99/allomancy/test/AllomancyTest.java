@@ -1,6 +1,7 @@
 package com.legobmw99.allomancy.test;
 
 import com.legobmw99.allomancy.test.modules.consumables.recipe.GrinderCraftingTest;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -10,7 +11,6 @@ import net.neoforged.testframework.conf.Feature;
 import net.neoforged.testframework.conf.FrameworkConfiguration;
 import net.neoforged.testframework.impl.MutableTestFramework;
 import net.neoforged.testframework.summary.GitHubActionsStepSummaryDumper;
-import org.lwjgl.glfw.GLFW;
 
 @Mod(AllomancyTest.MODID)
 public class AllomancyTest {
@@ -21,8 +21,8 @@ public class AllomancyTest {
                 .builder(rl("tests"))
                 .clientConfiguration(() -> {
                     ClientConfiguration.Builder builder = ClientConfiguration.builder();
-                    builder.toggleOverlayKey(GLFW.GLFW_KEY_J);
-                    builder.openManagerKey(GLFW.GLFW_KEY_N);
+                    builder.toggleOverlayKey(InputConstants.KEY_J);
+                    builder.openManagerKey(InputConstants.KEY_N);
                     return builder.build();
                 })
                 .enable(Feature.CLIENT_SYNC, Feature.CLIENT_MODIFICATIONS, Feature.MAGIC_ANNOTATIONS,

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:raw_aluminum_block"
+        "recipes": "allomancy:raw_aluminum_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

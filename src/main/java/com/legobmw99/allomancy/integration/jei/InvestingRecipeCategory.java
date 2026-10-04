@@ -57,7 +57,7 @@ public class InvestingRecipeCategory implements IRecipeCategory<RecipeHolder<Inv
     public void createRecipeExtras(IRecipeExtrasBuilder builder,
                                    RecipeHolder<InvestingRecipe> recipe,
                                    IFocusGroup focuses) {
-        builder.addRecipeArrow().setPosition(64, 24);
+        builder.addRecipeArrowWidget().setPosition(64, 24);
         builder.addText(ItemDisplay.addColorToText("allomancy.jei.investing.description", ChatFormatting.DARK_PURPLE),
                         getWidth(), getHeight());
     }

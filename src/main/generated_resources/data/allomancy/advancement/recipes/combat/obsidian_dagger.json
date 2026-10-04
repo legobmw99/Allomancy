@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:obsidian_dagger"
+        "recipes": "allomancy:obsidian_dagger"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

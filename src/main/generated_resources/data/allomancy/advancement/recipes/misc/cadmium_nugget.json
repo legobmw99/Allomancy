@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:cadmium_nugget"
+        "recipes": "allomancy:cadmium_nugget"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

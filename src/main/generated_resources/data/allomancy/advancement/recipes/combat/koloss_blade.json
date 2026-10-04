@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:koloss_blade"
+        "recipes": "allomancy:koloss_blade"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

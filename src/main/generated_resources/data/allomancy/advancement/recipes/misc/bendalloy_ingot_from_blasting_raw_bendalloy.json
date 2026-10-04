@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:bendalloy_ingot_from_blasting_raw_bendalloy"
+        "recipes": "allomancy:bendalloy_ingot_from_blasting_raw_bendalloy"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

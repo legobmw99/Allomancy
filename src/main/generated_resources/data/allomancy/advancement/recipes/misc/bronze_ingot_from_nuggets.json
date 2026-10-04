@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:bronze_ingot_from_nuggets"
+        "recipes": "allomancy:bronze_ingot_from_nuggets"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

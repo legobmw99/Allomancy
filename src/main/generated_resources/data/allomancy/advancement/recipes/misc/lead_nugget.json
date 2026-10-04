@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:lead_nugget"
+        "recipes": "allomancy:lead_nugget"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

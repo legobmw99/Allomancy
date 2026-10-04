@@ -5,6 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 
@@ -136,7 +137,7 @@ public class AIAttackOnCollideExtended extends Goal {
                 this.attackTick = 20;
 
                 if (!this.attacker.getMainHandItem().isEmpty()) {
-                    this.attacker.swing(InteractionHand.MAIN_HAND);
+                    this.attacker.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT);
                 }
 
                 if (this.attacker instanceof Monster) {

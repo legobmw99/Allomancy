@@ -9,12 +9,13 @@ import com.legobmw99.allomancy.modules.consumables.item.component.FlakeStorage;
 import com.legobmw99.allomancy.modules.consumables.item.consume_effects.GrantAllomancyConsumeEffect;
 import com.legobmw99.allomancy.modules.consumables.item.consume_effects.SummonLightningConsumeEffect;
 import com.legobmw99.allomancy.modules.consumables.item.recipe.VialItemRecipe;
-import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
@@ -56,8 +57,11 @@ public final class ConsumeSetup {
     private static final DeferredRegister<RecipeSerializer<?>> RECIPES =
             DeferredRegister.create(Registries.RECIPE_SERIALIZER, Allomancy.MODID);
     public static final Supplier<RecipeSerializer<VialItemRecipe>> VIAL_RECIPE_SERIALIZER =
-            RECIPES.register("vial_filling", () -> new RecipeSerializer<>(MapCodec.unit(VialItemRecipe.INSTANCE),
-                                                                          StreamCodec.unit(VialItemRecipe.INSTANCE)));
+            RECIPES.register("vial_filling", () -> new RecipeSerializer<>(RecordCodecBuilder.mapCodec(
+                    instance -> instance
+                            .group(Ingredient.CODEC.fieldOf("base").forGetter(VialItemRecipe::getBase))
+                            .apply(instance, VialItemRecipe::new)), StreamCodec.composite(
+                    Ingredient.CONTENTS_STREAM_CODEC, VialItemRecipe::getBase, VialItemRecipe::new)));
 
     private ConsumeSetup() {}
 

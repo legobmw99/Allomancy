@@ -2,87 +2,85 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "conditions": [
-        {
-          "condition": "minecraft:inverted",
-          "term": {
-            "condition": "minecraft:all_of",
-            "terms": [
-              {
-                "condition": "allomancy:player_investment",
-                "power": "iron"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "steel"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "tin"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "pewter"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "zinc"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "brass"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "copper"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "bronze"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "aluminum"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "duralumin"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "chromium"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "nicrosil"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "gold"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "electrum"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "cadmium"
-              },
-              {
-                "condition": "allomancy:player_investment",
-                "power": "bendalloy"
-              }
-            ]
-          }
+      "condition": {
+        "type": "minecraft:inverted",
+        "term": {
+          "type": "minecraft:all_of",
+          "terms": [
+            {
+              "type": "allomancy:player_investment",
+              "power": "iron"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "steel"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "tin"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "pewter"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "zinc"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "brass"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "copper"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "bronze"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "aluminum"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "duralumin"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "chromium"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "nicrosil"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "gold"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "electrum"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "cadmium"
+            },
+            {
+              "type": "allomancy:player_investment",
+              "power": "bendalloy"
+            }
+          ]
         }
-      ],
+      },
       "entries": [
         {
           "type": "minecraft:item",
           "name": "allomancy:lerasium_nugget"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "allomancy:pots/well_plain"

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:coin_bag"
+        "recipes": "allomancy:coin_bag"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

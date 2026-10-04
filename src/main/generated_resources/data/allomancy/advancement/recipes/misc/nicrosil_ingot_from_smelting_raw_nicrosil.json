@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:nicrosil_ingot_from_smelting_raw_nicrosil"
+        "recipes": "allomancy:nicrosil_ingot_from_smelting_raw_nicrosil"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

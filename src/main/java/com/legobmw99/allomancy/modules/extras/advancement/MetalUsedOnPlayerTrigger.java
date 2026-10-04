@@ -4,11 +4,11 @@ import com.legobmw99.allomancy.api.enums.Metal;
 import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.predicates.ContextAwarePredicate;
-import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -27,22 +27,22 @@ public class MetalUsedOnPlayerTrigger extends SimpleCriterionTrigger<MetalUsedOn
         this.trigger(player, p_48112_ -> p_48112_.matches(mt, enhanced));
     }
 
-    public record TriggerInstance(Optional<ContextAwarePredicate> player, Metal mt,
+    public record TriggerInstance(Optional<Holder<LootItemCondition>> player, Metal mt,
                                   Optional<Boolean> enhanced) implements SimpleInstance {
         private static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(builder -> builder
-                .group(EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
+                .group(LootItemCondition.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
                        Metal.CODEC.fieldOf("metal").forGetter(TriggerInstance::mt),
                        Codec.BOOL.optionalFieldOf("enhanced").forGetter(TriggerInstance::enhanced))
                 .apply(builder, TriggerInstance::new));
 
 
-        public static Criterion<TriggerInstance> instance(@Nullable ContextAwarePredicate player, Metal mt) {
+        public static Criterion<TriggerInstance> instance(@Nullable Holder<LootItemCondition> player, Metal mt) {
             return ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER
                     .get()
                     .createCriterion(new TriggerInstance(Optional.ofNullable(player), mt, Optional.empty()));
         }
 
-        public static Criterion<TriggerInstance> instance(@Nullable ContextAwarePredicate player,
+        public static Criterion<TriggerInstance> instance(@Nullable Holder<LootItemCondition> player,
                                                           Metal mt,
                                                           boolean enhanced) {
             return ExtrasSetup.METAL_USED_ON_PLAYER_TRIGGER

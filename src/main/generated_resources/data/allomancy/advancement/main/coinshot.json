@@ -7,7 +7,7 @@
           "tags": [
             {
               "expected": true,
-              "id": "allomancy:is_coin_hit"
+              "id": "#allomancy:is_coin_hit"
             }
           ]
         }

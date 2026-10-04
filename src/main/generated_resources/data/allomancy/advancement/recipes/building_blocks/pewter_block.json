@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:pewter_block"
+        "recipes": "allomancy:pewter_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

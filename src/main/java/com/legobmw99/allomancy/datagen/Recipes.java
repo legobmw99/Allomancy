@@ -9,13 +9,13 @@ import com.legobmw99.allomancy.modules.extras.ExtrasSetup;
 import com.legobmw99.allomancy.modules.world.WorldSetup;
 import com.legobmw99.allomancy.modules.world.recipe.InvestingRecipe;
 import com.legobmw99.allomancy.util.AllomancyTags;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
@@ -26,22 +26,22 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.conditions.NotCondition;
 import net.neoforged.neoforge.common.conditions.TagEmptyCondition;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 final class Recipes extends RecipeProvider {
     private final Map<Character, Ingredient> defaultIngredients = new HashMap<>();
 
     private final HolderGetter<Item> items;
 
-    private Recipes(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output);
-        this.items = registries.lookupOrThrow(Registries.ITEM);
+    protected Recipes(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
+        super(recipeOutput, advancementOutput);
+        this.items = recipeOutput.lookup(Registries.ITEM);
 
         add('i', AllomancyTags.INGOT_TAGS.get(Metal.IRON.getIndex()));
         add('g', AllomancyTags.INGOT_TAGS.get(Metal.GOLD.getIndex()));
@@ -174,7 +174,7 @@ final class Recipes extends RecipeProvider {
             buildSmeltingAndBlasting(ingot, List.of(raw, ore, deep_ore), config.xp());
 
             ShapedRecipeBuilder
-                    .shaped(this.registries.lookupOrThrow(Registries.ITEM), RecipeCategory.BUILDING_BLOCKS, rawBlock)
+                    .shaped(this.items, RecipeCategory.BUILDING_BLOCKS, rawBlock)
                     .unlockedBy("has_" + raw.getId().getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(raw))
                     .showNotification(true)
                     .define('t', AllomancyTags.RAW_ORE_TAGS.get(config.index()))
@@ -219,7 +219,7 @@ final class Recipes extends RecipeProvider {
 
             // building up
             ShapedRecipeBuilder
-                    .shaped(this.registries.lookupOrThrow(Registries.ITEM), RecipeCategory.BUILDING_BLOCKS, block)
+                    .shaped(this.items, RecipeCategory.BUILDING_BLOCKS, block)
                     .unlockedBy("has_" + ingot.getId().getPath(),
                                 InventoryChangeTrigger.TriggerInstance.hasItems(ingot))
                     .showNotification(true)
@@ -231,7 +231,7 @@ final class Recipes extends RecipeProvider {
                     .save(consumer);
 
             ShapedRecipeBuilder
-                    .shaped(this.registries.lookupOrThrow(Registries.ITEM), RecipeCategory.MISC, ingot)
+                    .shaped(this.items, RecipeCategory.MISC, ingot)
                     .unlockedBy("has_" + nugget.getId().getPath(),
                                 InventoryChangeTrigger.TriggerInstance.hasItems(nugget))
                     .showNotification(true)
@@ -314,7 +314,7 @@ final class Recipes extends RecipeProvider {
 
         Allomancy.LOGGER.debug("Creating Shaped Recipe for allomancy:coin_bag");
         ShapedRecipeBuilder
-                .shaped(this.registries.lookupOrThrow(Registries.ITEM), RecipeCategory.COMBAT, CombatSetup.COIN_BAG)
+                .shaped(this.items, RecipeCategory.COMBAT, CombatSetup.COIN_BAG)
                 .unlockedBy("has_gold_nugget", InventoryChangeTrigger.TriggerInstance.hasItems(Items.GOLD_NUGGET))
                 .showNotification(true)
                 .define('#', Items.LEAD)
@@ -326,7 +326,9 @@ final class Recipes extends RecipeProvider {
                 .save(consumer);
 
         Allomancy.LOGGER.debug("Creating Special Recipe for Vial Filling");
-        SpecialRecipeBuilder.special(() -> VialItemRecipe.INSTANCE).save(consumer, "allomancy:vial_filling_recipe");
+        SpecialRecipeBuilder
+                .special(() -> new VialItemRecipe(Ingredient.of(ConsumeSetup.VIAL)))
+                .save(consumer, "allomancy:vial_filling_recipe");
 
         Allomancy.LOGGER.debug("Creating Special Recipe for Lerasium investing");
         consumer.accept(ResourceKey.create(Registries.RECIPE, Allomancy.id("lerasium_investing")),
@@ -342,8 +344,7 @@ final class Recipes extends RecipeProvider {
                              String... lines) {
         Allomancy.LOGGER.debug("Creating Shaped Recipe for {}", BuiltInRegistries.ITEM.getKey(result.asItem()));
 
-        ShapedRecipeBuilder builder =
-                ShapedRecipeBuilder.shaped(this.registries.lookupOrThrow(Registries.ITEM), cat, result, count);
+        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(this.items, cat, result, count);
 
         builder.unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(criterion.asItem()).getPath(),
                            InventoryChangeTrigger.TriggerInstance.hasItems(criterion));
@@ -384,21 +385,6 @@ final class Recipes extends RecipeProvider {
         this.defaultIngredients.put(c, ingredient);
     }
 
-    public static class Runner extends RecipeProvider.Runner {
-        public Runner(PackOutput out, CompletableFuture<HolderLookup.Provider> lookup) {
-            super(out, lookup);
-        }
-
-        @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-            return new Recipes(registries, output);
-        }
-
-        @Override
-        public String getName() {
-            return "Allomancy recipes";
-        }
-    }
 
     @Override
     protected <T extends AbstractCookingRecipe> void oreCooking(AbstractCookingRecipe.Factory<T> factory,

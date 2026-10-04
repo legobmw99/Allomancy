@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:zinc_ingot_from_smelting_zinc_ore"
+        "recipes": "allomancy:zinc_ingot_from_smelting_zinc_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

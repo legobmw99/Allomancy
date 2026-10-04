@@ -18,11 +18,15 @@ import static com.legobmw99.allomancy.modules.consumables.ConsumeSetup.FLAKE_STO
 
 public class VialItemRecipe extends CustomRecipe {
 
-    private VialItemRecipe() {}
+    private final Ingredient base;
 
-    private static final Ingredient INGREDIENT_VIAL = Ingredient.of(ConsumeSetup.VIAL);
+    public VialItemRecipe(Ingredient base) {
+        this.base = base;
+    }
 
-    public static final VialItemRecipe INSTANCE = new VialItemRecipe();
+    public Ingredient getBase() {
+        return base;
+    }
 
     @Override
     public boolean matches(CraftingInput input, Level worldIn) {
@@ -37,7 +41,7 @@ public class VialItemRecipe extends CustomRecipe {
             if (stack.isEmpty()) {
                 continue;
             }
-            if (INGREDIENT_VIAL.test(stack) && !hasVial) {
+            if (base.test(stack) && !hasVial) {
                 FlakeStorage storage = stack.get(FLAKE_STORAGE);
                 if (storage != null) {
                     for (Metal mt : Metal.values()) {
@@ -79,11 +83,13 @@ public class VialItemRecipe extends CustomRecipe {
 
         FlakeStorage.Mutable storage = new FlakeStorage.Mutable();
 
+        ItemStack item_result = null;
         for (var stack : input.items()) {
             if (stack.isEmpty()) {
                 continue;
             }
-            if (INGREDIENT_VIAL.test(stack)) {
+            if (base.test(stack)) {
+                item_result = stack.copyWithCount(1);
                 storage.addAll(stack.get(FLAKE_STORAGE));
                 continue;
             }
@@ -95,7 +101,6 @@ public class VialItemRecipe extends CustomRecipe {
             }
         }
 
-        var item_result = ConsumeSetup.VIAL.toStack();
         VialItem.fillVial(item_result, storage.toImmutable());
         return item_result;
 

@@ -131,7 +131,7 @@ public final class Physical {
         Vec3 motion = toMove.position().subtract(Vec3.atCenterOf(block)).normalize().scale(directionScalar * 1.1);
         Vec3 mod = clamp(cutoff(motion.add(toMove.getDeltaMovement()), 0.1), abs(motion).reverse(), abs(motion));
         toMove.setDeltaMovement(mod);
-        toMove.hurtMarked = true;
+        toMove.syncVelocity = true;
 
         // Only save players from fall damage
         if (toMove instanceof ServerPlayer) {

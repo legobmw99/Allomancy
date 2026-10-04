@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:duralumin_block"
+        "recipes": "allomancy:duralumin_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:zinc_nugget"
+        "recipes": "allomancy:zinc_nugget"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

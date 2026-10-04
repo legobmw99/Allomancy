@@ -19,6 +19,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.AttachFace;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplate;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.stream.Stream;
 
 class ModelFiles extends ModelProvider {
@@ -55,11 +57,12 @@ class ModelFiles extends ModelProvider {
 
     private static void createItemModels(ItemModelGenerators itemModels) {
 
-        itemModels.generateTrimmableItem(CombatSetup.MISTCLOAK.get(), CombatSetup.WOOL,
-                                         ItemModelGenerators.TRIM_PREFIX_CHESTPLATE, false);
+        itemModels.generateTrimmableItem(CombatSetup.MISTCLOAK.get(), ItemModelGenerators.TRIM_PREFIX_CHESTPLATE,
+                                         false, Map.of());
 
-        itemModels.generateTrimmableItem(CombatSetup.ALUMINUM_HELMET.get(), CombatSetup.ALUMINUM,
-                                         ItemModelGenerators.TRIM_PREFIX_HELMET, false);
+        itemModels.generateTrimmableItem(CombatSetup.ALUMINUM_HELMET.get(), ItemModelGenerators.TRIM_PREFIX_HELMET,
+                                         false,
+                                         Map.of(TrimMaterials.Palette.IRON, TrimMaterials.Palette.IRON_DARKER));
 
         itemModels.generateFlatItem(CombatSetup.COIN_BAG.get(), ModelTemplates.FLAT_ITEM);
 

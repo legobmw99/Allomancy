@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "allomancy:lead_flakes"
+        "recipes": "allomancy:lead_flakes"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
